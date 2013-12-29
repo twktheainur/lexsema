@@ -1,19 +1,19 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    
+
     <groupId>org.getalp</groupId>
-    <artifactId>dilssmllr</artifactId>
+    <artifactId>lexsema</artifactId>
     <version>1.0-SNAPSHOT</version>
-    <packaging>jar</packaging>
-    
-    <name>dilssmllr</name>
+    <packaging>pom</packaging>
+
+    <name>lexsema</name>
     <url>http://maven.apache.org</url>
-    
+
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
-    
+
     <build>
         <plugins>
             <plugin>
@@ -22,16 +22,88 @@
                     <source>1.7</source>
                     <target>1.7</target>
                 </configuration>
-            </plugin>    
+            </plugin>
         </plugins>
     </build>
-    
+
     <dependencies>
         <dependency>
-            <groupId>junit</groupId>
+            <groupId>com.tilab.jade</groupId>
+            <artifactId>jade</artifactId>
+            <version>4.3.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.tilab.jade</groupId>
+            <artifactId>jade-xml-codec</artifactId>
+            <version>1.10.0</version>
+        </dependency>
+        <dependency>
+        <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>4.6</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>net.sourceforge.parallelcolt</groupId>
+            <artifactId>parallelcolt</artifactId>
+            <version>0.10.0</version>
+        </dependency>
+        <dependency>
+            <groupId>hypergraphdb</groupId>
+            <artifactId>hypergraphdb</artifactId>
+            <version>1.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.jena</groupId>
+            <artifactId>apache-jena-libs</artifactId>
+            <type>pom</type>
+            <version>2.11.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.jena</groupId>
+            <artifactId>jena</artifactId>
+            <type>pom</type>
+            <version>2.11.0</version>
+        </dependency>
+        <dependency>
+            <groupId>net.sourceforge.owlapi</groupId>
+            <artifactId>owlapi-api</artifactId>
+            <version>3.4.8</version>
+        </dependency>
     </dependencies>
+
+    <repositories>
+        <repository>
+            <!-- Getalp third party stuff -->
+            <id>getalp.repository</id>
+            <url>http://getalp.imag.fr/m2/</url>
+        </repository>
+        <!-- For JADE & WADE -->
+        <repository>
+            <id>tilab</id>
+            <url>http://jade.tilab.com/maven/</url>
+        </repository>
+        <repository>
+            <id>HypergraphDB repo</id>
+            <url>http://www.hypergraphdb.org/maven/</url>
+        </repository>
+        <repository>
+            <id>info-bliki-repository</id>
+            <url>http://gwtwiki.googlecode.com/svn/maven-repository/</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+        <repository>
+            <id>apache-repo-snapshots</id>
+            <url>https://repository.apache.org/content/repositories/releases/</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+        </repository>
+
+    </repositories>
 </project>
