@@ -3,14 +3,24 @@
  */
 package org.getalp.lexsema.lexicalresource.lemon;
 
+import lombok.Getter;
+import lombok.ToString;
 import org.getalp.lexsema.lexicalresource.AbstractLexicalResourceEntity;
 import org.getalp.lexsema.lexicalresource.LexicalResource;
 
 /**
  * A Lemon LexicalEntry Java Wrapper Class
  */
+@ToString
 public class LexicalEntry extends AbstractLexicalResourceEntity {
 
+    /**
+     * --GETTER
+     *
+     * @return --SETTER
+     * @param lemma
+     */
+    @Getter
     private String lemma;
     private String partOfSpeech;
     private int number;
@@ -29,9 +39,9 @@ public class LexicalEntry extends AbstractLexicalResourceEntity {
     /**
      * @return The lemma of the LexicalEntry
      */
-    public String getLemma() {
-        return lemma;
-    }
+//    public String getLemma() {
+//        return lemma;
+//    }
 
     /**
      * Sets the lemma of the LexicalEntry
@@ -74,13 +84,13 @@ public class LexicalEntry extends AbstractLexicalResourceEntity {
         this.number = number;
     }
 
-    @Override
-    public String
-    toString() {
-        return "LexicalEntry{" +
-                "'" + lemma + '\'' +
-                ", partOfSpeech='" + partOfSpeech + '\'' +
-                ", number=" + number +
-                '}';
-    }
+//    @Override
+//    public String
+//    toString() {
+//        return "LexicalEntry{" +
+//                "'" + lemma + '\'' +
+//                ", partOfSpeech='" + partOfSpeech + '\'' +
+//                ", number=" + number +
+//                '}';
+//    }
 }
