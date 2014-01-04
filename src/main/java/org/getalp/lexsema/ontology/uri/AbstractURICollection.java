@@ -1,9 +1,11 @@
-package org.getalp.lexsema.ontology;
+package org.getalp.lexsema.ontology.uri;
+
+import org.getalp.lexsema.ontology.OntologyModel;
 
 /**
  *
  */
-public class DefaultClassURICollection implements ClassURICollection {
+public abstract class AbstractURICollection implements URICollection {
     private OntologyModel model;
     private String prefix;
     private String baseURI;
@@ -14,20 +16,20 @@ public class DefaultClassURICollection implements ClassURICollection {
         baseURI = "";
     }
 
-    public DefaultClassURICollection(OntologyModel model, String prefix) {
+    protected AbstractURICollection(OntologyModel model, String prefix) {
         this.model = model;
         this.prefix = prefix;
     }
 
     @Override
-    public String getClassURI(String className) {
-        return getBaseURI() + "#" + className;
+    public String forName(String className) {
+        return getBaseURI() + className;
     }
 
     @Override
     public String getBaseURI() {
         if (baseURI.isEmpty()) {
-            baseURI = model.getUri(prefix + ":").getURI();
+            baseURI = model.getNode(prefix + ":").getURI();
         }
         return baseURI;
     }

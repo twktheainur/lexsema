@@ -1,14 +1,16 @@
 package org.getalp.lexsema;
 
-import org.getalp.lexsema.lexicalresource.LexicalResource;
-import org.getalp.lexsema.lexicalresource.dbnary.DBNary;
+import org.getalp.lexsema.lexicalresource.lemon.LexicalEntry;
+import org.getalp.lexsema.lexicalresource.lemon.dbnary.DBNary;
+import org.getalp.lexsema.lexicalresource.lemon.dbnary.Vocable;
 import org.getalp.lexsema.ontology.OntologyModel;
-import org.getalp.lexsema.ontology.lemon.LexicalEntry;
 import org.getalp.lexsema.ontology.storage.Store;
 import org.getalp.lexsema.ontology.storage.StoreHandler;
 import org.getalp.lexsema.ontology.storage.VirtuosoTripleStore;
+import org.getalp.lexsema.util.exceptions.dbnary.NoSuchVocableException;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Locale;
 
 public final class Main {
@@ -29,10 +31,20 @@ public final class Main {
         OntologyModel otm = vts.getModel();
 
         // Creating DBnary wrapper
-        LexicalResource lr = new DBNary(otm, Locale.ENGLISH);
+        DBNary lr = new DBNary(otm, Locale.ENGLISH);
 
-        LexicalEntry len = new LexicalEntry(lr, "http://kaiko.getalp.org/dbnary/eng/be__Verb__1");
-        System.out.println(len.getURI());
+
+        try {
+            Vocable v = lr.getVocable("dog");
+            System.out.println(v);
+            List<LexicalEntry> les = v.getLexicalEntries();
+            for (LexicalEntry le : les) {
+                System.err.println(le);
+            }
+        } catch (NoSuchVocableException e) {
+            e.printStackTrace();
+        }
+
 
         //VirtuosoTripleStore.getInstance().
         /*OntologyModel model = new OntologyModel();
@@ -47,7 +59,6 @@ public final class Main {
 			}
 		}*/
 
-        StoreHandler.release();
 
     }
 
