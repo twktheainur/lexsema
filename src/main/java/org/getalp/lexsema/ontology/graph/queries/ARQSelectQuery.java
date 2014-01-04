@@ -29,16 +29,21 @@ public class ARQSelectQuery implements ARQQuery {
     public ARQSelectQuery() {
     }
 
+    @Override
+    public ResultSet runQuery() {
+        return runQuery(0);
+    }
 
     @Override
-    public ResultSet runQuery(int limit, String resultVar) {
+    public ResultSet runQuery(int limit) {
         ElementGroup eg = new ElementGroup();
         eg.addElement(whereBlock);
 
         query.setQueryPattern(eg);
         query.setQuerySelectType();
-        query.setLimit(limit);
-        query.addResultVar(resultVar);
+        if (limit > 0) {
+            query.setLimit(limit);
+        }
         Store vts = StoreHandler.getStore();
         return vts.runQuery(query);
     }
@@ -55,6 +60,17 @@ public class ARQSelectQuery implements ARQQuery {
 
     @Override
     public void addToFromStatement(Graph g) {
-        query.addGraphURI(g.getUri().toString());
+        String uri = g.getUri().toString();
+        //query.addGraphURI(uri.substring(0,uri.length()-1));
+        query.addGraphURI(uri);
+    }
+
+    /**
+     * Set whether the result n-uple should be distinct
+     *
+     * @param b when b is true, the DISTINCT keyword is added to the query.
+     */
+    public void setDistinct(boolean b) {
+        query.setDistinct(b);
     }
 }

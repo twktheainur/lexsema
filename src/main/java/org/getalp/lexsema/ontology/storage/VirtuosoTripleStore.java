@@ -6,7 +6,7 @@ package org.getalp.lexsema.ontology.storage;
 import com.hp.hpl.jena.graph.TransactionHandler;
 import com.hp.hpl.jena.query.*;
 import com.hp.hpl.jena.rdf.model.Model;
-import org.getalp.lexsema.ontology.DefaultOntologyModel;
+import org.getalp.lexsema.ontology.OWLOntologyModel;
 import org.getalp.lexsema.ontology.OntologyModel;
 import virtuoso.jena.driver.VirtGraph;
 import virtuoso.jena.driver.VirtModel;
@@ -23,7 +23,7 @@ public class VirtuosoTripleStore implements Store {
     public VirtuosoTripleStore(String uri, String username, String password) throws IOException {
         virtuosoGraph = new VirtGraph(uri, username, password);
         Model virtuosoModel = new VirtModel(virtuosoGraph);
-        model = new DefaultOntologyModel(virtuosoModel);
+        model = new OWLOntologyModel(virtuosoModel);
     }
 
     @Override
@@ -32,7 +32,7 @@ public class VirtuosoTripleStore implements Store {
         TransactionHandler th = virtuosoGraph.getTransactionHandler();
         VirtuosoQueryEngine.register();
         th.begin();
-        QueryExecution queryExecution = QueryExecutionFactory.create(q.toString(), model.getJenaModel());
+        QueryExecution queryExecution = QueryExecutionFactory.create(q, model.getJenaModel().getBaseModel());
         System.out.println(queryExecution.getQuery().toString(Syntax.defaultSyntax)); //TODO: Remove
         try {
             rs = queryExecution.execSelect();
@@ -52,8 +52,6 @@ public class VirtuosoTripleStore implements Store {
     @Override
     public synchronized void close() {
         model.getJenaModel().commit();
-        model.getJenaModel().getBaseModel().commit();
-        model.getJenaModel().getBaseModel().close();
         model.getJenaModel().close();
     }
 }

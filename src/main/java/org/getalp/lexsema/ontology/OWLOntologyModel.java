@@ -16,25 +16,41 @@ import java.io.IOException;
 import java.util.Properties;
 
 /**
- * @author tchechem
+ * An OWL ontology model wrapper around Jena
  */
-public class DefaultOntologyModel implements OntologyModel {
+public class OWLOntologyModel implements OntologyModel {
     private OntModel model;
-    private String propPath = "data" + File.pathSeparatorChar + "ontology.properties";
+    private String propPath = "data" + File.separatorChar + "ontology.properties";
     private Properties properties;
 
-
-    public DefaultOntologyModel() throws IOException {
+    /**
+     * Default constructor
+     *
+     * @throws IOException When loading the default properties fails (data/ontology.properties)
+     */
+    public OWLOntologyModel() throws IOException {
         loadProperties();
         createModel(null);
     }
 
-    public DefaultOntologyModel(Model m) throws IOException {
+    /**
+     * Build an <code>OWLOntologyModel</code> based on an existing model <code>m</code>
+     *
+     * @param m An existing base ontology model
+     * @throws IOException When loading the default properties fails (data/ontology.properties)
+     */
+    public OWLOntologyModel(Model m) throws IOException {
         loadProperties();
         createModel(m);
     }
 
-    public DefaultOntologyModel(String propPath) throws IOException {
+    /**
+     * Load an OWLOntologyModel with a custom properties path
+     *
+     * @param propPath The path to the properties file
+     * @throws IOException When the properties file at <code>propPath</code> cannot be loaded
+     */
+    public OWLOntologyModel(String propPath) throws IOException {
         this.propPath = propPath;
         loadProperties();
         createModel(null);
@@ -55,12 +71,21 @@ public class DefaultOntologyModel implements OntologyModel {
         }
     }
 
-    @Override
-    public void loadProperties() throws IOException {
+    /**
+     * Load the properties from the properties path
+     *
+     * @throws IOException When the properties cannot be loaded
+     */
+    protected void loadProperties() throws IOException {
         properties = new Properties();
         properties.load(new FileInputStream(propPath));
     }
 
+    /**
+     * Return a reference to the wrapped Jena <code>OntModel</code>
+     *
+     * @return
+     */
     @Override
     public OntModel getJenaModel() {
         return model;
@@ -68,7 +93,7 @@ public class DefaultOntologyModel implements OntologyModel {
 
 
     @Override
-    public Node getUri(String element) {
+    public Node getNode(String element) {
         return NodeFactory.createURI(getJenaModel().expandPrefix(element));
     }
 }
