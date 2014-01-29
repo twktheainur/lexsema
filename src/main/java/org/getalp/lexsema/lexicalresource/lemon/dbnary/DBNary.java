@@ -1,7 +1,6 @@
 package org.getalp.lexsema.lexicalresource.lemon.dbnary;
 
-import com.hp.hpl.jena.query.QuerySolution;
-import com.hp.hpl.jena.query.ResultSet;
+import org.getalp.lexsema.ontology.uri.DBnaryURICollection;
 import lombok.ToString;
 import org.getalp.lexsema.lexicalresource.LexicalResourceEntity;
 import org.getalp.lexsema.lexicalresource.lemon.LemonLexicalResource;
@@ -10,13 +9,17 @@ import org.getalp.lexsema.lexicalresource.lemon.LexicalSense;
 import org.getalp.lexsema.ontology.OntologyModel;
 import org.getalp.lexsema.ontology.graph.queries.ARQQuery;
 import org.getalp.lexsema.ontology.graph.queries.ARQSelectQuery;
-import org.getalp.lexsema.ontology.uri.DBNaryURICollection;
 import org.getalp.lexsema.ontology.uri.URICollection;
 import org.getalp.lexsema.util.exceptions.dbnary.NoSuchVocableException;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+
+import com.hp.hpl.jena.query.QuerySolution;
+import com.hp.hpl.jena.query.ResultSet;
+
+
 
 /**
  * A handler for the DBNary Lexical Resource
@@ -37,7 +40,7 @@ public final class DBNary extends LemonLexicalResource {
         super(model, model.getNode("dbnary:").getURI().split("#")[0] + "/" + language.getISO3Language() /*+ "/"*/);
         this.language = language;
 
-        dbnaryURI = new DBNaryURICollection(model);
+        dbnaryURI = new DBnaryURICollection(model);
     }
 
     /**

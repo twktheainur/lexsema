@@ -1,7 +1,5 @@
 package org.getalp.lexsema.lexicalresource.lemon.dbnary;
 
-import com.hp.hpl.jena.query.QuerySolution;
-import com.hp.hpl.jena.query.ResultSet;
 import lombok.Data;
 import lombok.ToString;
 import org.getalp.lexsema.lexicalresource.AbstractLexicalResourceEntity;
@@ -13,6 +11,9 @@ import org.getalp.lexsema.ontology.graph.queries.TripleFactory;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import com.hp.hpl.jena.query.ResultSet;
+import com.hp.hpl.jena.query.QuerySolution;
 
 /**
  * A Dbnary Vocable entry handler
