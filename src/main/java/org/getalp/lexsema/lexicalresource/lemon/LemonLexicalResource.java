@@ -10,7 +10,7 @@ import java.util.List;
 /**
  * A Lemon Lexical Resource Handler
  */
-public class LemonLexicalResource extends AbstractLexicalResource {
+public abstract class LemonLexicalResource extends AbstractLexicalResource implements LemonEntityFactory {
 
     private URICollection lemonUri;
     private String uri;
@@ -26,6 +26,7 @@ public class LemonLexicalResource extends AbstractLexicalResource {
      */
     protected LemonLexicalResource(OntologyModel model, String uri) {
         super(model);
+        this.uri = uri;
     }
 
     @Override

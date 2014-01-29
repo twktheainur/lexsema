@@ -2,7 +2,10 @@ package org.getalp.lexsema.lexicalresource.lemon.dbnary;
 
 import com.hp.hpl.jena.query.QuerySolution;
 import com.hp.hpl.jena.query.ResultSet;
+import lombok.Data;
+import lombok.ToString;
 import org.getalp.lexsema.lexicalresource.AbstractLexicalResourceEntity;
+import org.getalp.lexsema.lexicalresource.LexicalResourceEntity;
 import org.getalp.lexsema.lexicalresource.lemon.LexicalEntry;
 import org.getalp.lexsema.ontology.graph.queries.ARQQuery;
 import org.getalp.lexsema.ontology.graph.queries.ARQSelectQuery;
@@ -14,39 +17,24 @@ import java.util.List;
 /**
  * A Dbnary Vocable entry handler
  */
+@Data
+@ToString(callSuper = true)
 public class Vocable extends AbstractLexicalResourceEntity {
 
+    /**
+     * --GETTER
+     *  @return The vocable associated to the entry
+     *  --SETTER
+     *  @param vocable The value of the vocable
+     */
     private String vocable;
 
-    protected Vocable(DBNary r, String uri) {
-        super(r, uri);
+    protected Vocable(DBNary r, String uri, LexicalResourceEntity parent, String vocable) {
+        super(r, uri, parent);
         getOntologyModel();
-    }
-
-    /**
-     * Get the vocable associated to the Vocable entry
-     *
-     * @return The vocable associated to the entry
-     */
-    public String getVocable() {
-        return vocable;
-    }
-
-    /**
-     * Sets the value of the vocable
-     *
-     * @param vocable The value of the vocable
-     */
-    public void setVocable(String vocable) {
         this.vocable = vocable;
     }
 
-    @Override
-    public String toString() {
-        return "Vocable{'" + vocable + '\'' +
-                "In " + getLexicalResource() +
-                '}';
-    }
 
     /**
      * Returns the list of LexicalEntries associated (dbnary:relatedTo) with the Vocable
@@ -72,7 +60,8 @@ public class Vocable extends AbstractLexicalResourceEntity {
         while (rs.hasNext()) {
             QuerySolution qs = rs.next();
             String[] le = String.valueOf(qs.get("le")).split("/");
-            entries.add(new LexicalEntry(getLexicalResource(), le[le.length - 1]));
+
+            entries.add(getLexicalResource().createLexicalEntry(le[le.length - 1], this));
 
         }
 

@@ -1,15 +1,15 @@
 package org.getalp.lexsema.lexicalresource;
 
+import org.getalp.lexsema.lexicalresource.lemon.LemonEntityFactory;
 import org.getalp.lexsema.lexicalresource.lemon.LexicalEntry;
 import org.getalp.lexsema.ontology.graph.Graph;
-import org.getalp.lexsema.ontology.graph.Node;
 
 import java.util.List;
 
 /**
  * Generic Interface for LexicalResources
  */
-public interface LexicalResource extends URIParser {
+public interface LexicalResource extends LemonEntityFactory {
     /**
      * @return Returns the base URI of the lexical resource
      */
@@ -23,16 +23,7 @@ public interface LexicalResource extends URIParser {
     Graph getGraph();
 
     /**
-     * Parse the information contained in <code>n</code>'s URI to extract useful information
-     *
-     * @param n The node of which the URI needs to be parsed
-     */
-    @Override
-    void parseURI(Node n);
-
-    /**
      * Retrieve the lexical entries matching the entry provided
-     *
      * @param entry The entry to search for
      * @return The list of matching lexical entries
      */
