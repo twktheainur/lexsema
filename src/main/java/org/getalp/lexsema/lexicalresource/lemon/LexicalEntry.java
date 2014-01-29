@@ -1,30 +1,41 @@
-/**
- *
- */
 package org.getalp.lexsema.lexicalresource.lemon;
 
-import lombok.Getter;
-import lombok.ToString;
+import com.hp.hpl.jena.query.QuerySolution;
+import com.hp.hpl.jena.query.ResultSet;
+import com.hp.hpl.jena.rdf.model.RDFNode;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import org.getalp.lexsema.lexicalresource.AbstractLexicalResourceEntity;
 import org.getalp.lexsema.lexicalresource.LexicalResource;
+import org.getalp.lexsema.lexicalresource.LexicalResourceEntity;
+import org.getalp.lexsema.ontology.graph.queries.ARQQuery;
+import org.getalp.lexsema.ontology.graph.queries.ARQSelectQuery;
+import org.getalp.lexsema.ontology.graph.queries.TripleFactory;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A Lemon LexicalEntry Java Wrapper Class
  */
-@ToString
+@Data
+@EqualsAndHashCode
 public class LexicalEntry extends AbstractLexicalResourceEntity {
-
+    /**
+     * --GETTER
+     * @return Returns the lemma of the <code>LexicalEntry</code>
+     * --SETTER
+     * @param lemma Sets the lemma of the <code>LexicalEntry</code>
+     */
+    private String lemma;
     /**
      * --GETTER
      *
-     * @return --SETTER
-     * @param lemma
+     * @return Returns the part of speech tag of the <code>LexicalEntry</code>
+     * --SETTER
      */
-    @Getter
-    private String lemma;
     private String partOfSpeech;
     private int number;
-
 
     /**
      * Constructor
@@ -32,65 +43,37 @@ public class LexicalEntry extends AbstractLexicalResourceEntity {
      * @param r   The lexical resource in which the LexicalEntry is situated
      * @param uri The uri of the LexicalEntry
      */
-    public LexicalEntry(LexicalResource r, String uri) {
-        super(r, uri);
-    }
-
-    /**
-     * @return The lemma of the LexicalEntry
-     */
-//    public String getLemma() {
-//        return lemma;
-//    }
-
-    /**
-     * Sets the lemma of the LexicalEntry
-     *
-     * @param lemma The lemma to set
-     */
-    public void setLemma(String lemma) {
+    public LexicalEntry(LexicalResource r, String uri, LexicalResourceEntity parent, String lemma, String partOfSpeech, int number) {
+        super(r, uri, parent);
+        this.number = number;
         this.lemma = lemma;
-    }
-
-    /**
-     * @return Returns the part of speech tag of the LexicalEntry
-     */
-    public String getPartOfSpeech() {
-        return partOfSpeech;
-    }
-
-    /**
-     * Sets the part of speech tag
-     *
-     * @param partOfSpeech The part of speech tag to set
-     */
-    public void setPartOfSpeech(String partOfSpeech) {
         this.partOfSpeech = partOfSpeech;
     }
 
-    /**
-     * @return Returns the LexicalEntry number, 0 if not present
-     */
-    public Integer getNumber() {
-        return number;
-    }
+    public List<LexicalSense> getSenses() {
+        List<LexicalSense> senses = new ArrayList<>();
 
-    /**
-     * Sets the number of the LExicalEntry for the same POS and Lemma
-     *
-     * @param number
-     */
-    public void setNumber(int number) {
-        this.number = number;
-    }
+        TripleFactory tf = new TripleFactory(getOntologyModel());
 
-//    @Override
-//    public String
-//    toString() {
-//        return "LexicalEntry{" +
-//                "'" + lemma + '\'' +
-//                ", partOfSpeech='" + partOfSpeech + '\'' +
-//                ", number=" + number +
-//                '}';
-//    }
+
+        ARQQuery q = new ARQSelectQuery();
+
+        q.addToFromStatement(getLexicalResource().getGraph());
+        LemonLexicalResource llr = (LemonLexicalResource) getLexicalResource();
+        q.addToWhereStatement(tf.isAnyOfType("ls", llr.getLemonURI("LexicalSense")));
+        q.addToWhereStatement(tf.isURIRelatedToAny(getURI(), llr.getLemonURI("sense"), "ls"));
+        q.addResult("ls");
+
+        ResultSet rs = q.runQuery();
+
+        while (rs.hasNext()) {
+
+            QuerySolution qs = rs.next();
+            RDFNode resultUri = qs.get("ls");
+            String[] le = String.valueOf(resultUri).split("/");
+            senses.add(llr.createLexicalSense(le[le.length - 1], this));
+        }
+
+        return senses;
+    }
 }

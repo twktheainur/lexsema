@@ -1,6 +1,6 @@
 package org.getalp.lexsema;
 
-import org.getalp.lexsema.lexicalresource.lemon.LexicalEntry;
+import org.getalp.lexsema.lexicalresource.lemon.LexicalSense;
 import org.getalp.lexsema.lexicalresource.lemon.dbnary.DBNary;
 import org.getalp.lexsema.lexicalresource.lemon.dbnary.Vocable;
 import org.getalp.lexsema.ontology.OntologyModel;
@@ -10,7 +10,6 @@ import org.getalp.lexsema.ontology.storage.VirtuosoTripleStore;
 import org.getalp.lexsema.util.exceptions.dbnary.NoSuchVocableException;
 
 import java.io.IOException;
-import java.util.List;
 import java.util.Locale;
 
 public final class Main {
@@ -36,11 +35,16 @@ public final class Main {
 
         try {
             Vocable v = lr.getVocable("dog");
-            System.out.println(v);
+
+            LexicalSense ls = lr.createLexicalSense("__ws_1_Erstsprache__Substantiv__1", null);
+            String def = ls.getDefinition();
+            System.err.println(ls);
+            /*System.out.println(v);
             List<LexicalEntry> les = v.getLexicalEntries();
             for (LexicalEntry le : les) {
+                List<LexicalSense> senses;
                 System.err.println(le);
-            }
+            }*/
         } catch (NoSuchVocableException e) {
             e.printStackTrace();
         }

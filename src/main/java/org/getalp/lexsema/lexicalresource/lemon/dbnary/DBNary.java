@@ -2,10 +2,11 @@ package org.getalp.lexsema.lexicalresource.lemon.dbnary;
 
 import com.hp.hpl.jena.query.QuerySolution;
 import com.hp.hpl.jena.query.ResultSet;
+import lombok.ToString;
+import org.getalp.lexsema.lexicalresource.LexicalResourceEntity;
 import org.getalp.lexsema.lexicalresource.lemon.LemonLexicalResource;
 import org.getalp.lexsema.lexicalresource.lemon.LexicalEntry;
-import org.getalp.lexsema.lexicalresource.lemon.dbnary.uriparsers.DBNaryLexicalEntryURI;
-import org.getalp.lexsema.lexicalresource.lemon.dbnary.uriparsers.DBNaryVocableURI;
+import org.getalp.lexsema.lexicalresource.lemon.LexicalSense;
 import org.getalp.lexsema.ontology.OntologyModel;
 import org.getalp.lexsema.ontology.graph.queries.ARQQuery;
 import org.getalp.lexsema.ontology.graph.queries.ARQSelectQuery;
@@ -20,6 +21,7 @@ import java.util.Locale;
 /**
  * A handler for the DBNary Lexical Resource
  */
+@ToString
 public final class DBNary extends LemonLexicalResource {
 
     private final Locale language;
@@ -32,17 +34,10 @@ public final class DBNary extends LemonLexicalResource {
      * @param language The language of the dbnary to access
      */
     public DBNary(OntologyModel model, Locale language) {
-        super(model, model.getNode("dbnary:").getURI().split("#")[0] + "/" + language.getISO3Language() + "/");
+        super(model, model.getNode("dbnary:").getURI().split("#")[0] + "/" + language.getISO3Language() /*+ "/"*/);
         this.language = language;
-        addParser(LexicalEntry.class, new DBNaryLexicalEntryURI());
-        addParser(Vocable.class, new DBNaryVocableURI());
 
         dbnaryURI = new DBNaryURICollection(model);
-    }
-
-    @Override
-    public String getURI() {
-        return super.getURI();
     }
 
     /**
@@ -51,10 +46,10 @@ public final class DBNary extends LemonLexicalResource {
      * @param vocable the vocable to look for
      * @return <code>true</code> if the vocable exists, <code>false</code> otherwise
      */
-    private boolean checkExistence(String vocable) {
+    private boolean vocableExists(String vocable) {
         ARQSelectQuery q = new ARQSelectQuery();
         q.setDistinct(true);
-        q.addToWhereStatement(getTripleFactory().isURIToAny(getURI() + vocable, "r", "v"));
+        q.addToWhereStatement(getTripleFactory().isURIToAny(getURI() + "/" + vocable, "r", "v"));
         q.addToFromStatement(getGraph());
         q.addResult("v");
 
@@ -70,15 +65,19 @@ public final class DBNary extends LemonLexicalResource {
      * @throws NoSuchVocableException Thrown when the vocable does not exist in the ontology
      */
     public Vocable getVocable(String vocable) throws NoSuchVocableException {
-        if (!checkExistence(vocable)) {
+        return getVocable(vocable, true);
+    }
+
+    public Vocable getVocable(String vocable, boolean checkExistance) throws NoSuchVocableException {
+        if (checkExistance && !vocableExists(vocable)) {
             vocable = vocable.toLowerCase();
             vocable = vocable.substring(0, 1).toUpperCase() + vocable.substring(1);
-            if (!checkExistence(vocable)) {
+            if (checkExistance && !vocableExists(vocable)) {
                 throw new NoSuchVocableException(vocable, language.getDisplayName());
             }
         }
-
-        return new Vocable(this, vocable);
+        System.err.println(vocable);
+        return createVocable(vocable, null);
     }
 
     /**
@@ -109,21 +108,13 @@ public final class DBNary extends LemonLexicalResource {
                 try {
 
                     //Encapsulating in a <code>Vocable</code> instance
-                    vocables.add(getVocable(s[s.length - 1]));
+                    vocables.add(getVocable(s[s.length - 1], false));
                 } catch (NoSuchVocableException e) {
                     System.err.println(e.getMessage()); //TODO: Add logging call
                 }
             }
         }
         return vocables;
-    }
-
-    @Override
-    public String toString() {
-        return "DBNary{" +
-                "language=" + language.getDisplayLanguage() +
-                ", dbnaryURI=" + getURI() +
-                '}';
     }
 
     /**
@@ -134,5 +125,43 @@ public final class DBNary extends LemonLexicalResource {
      */
     public String getDBNaryURI(String s) {
         return dbnaryURI.forName(s);
+    }
+
+    public Vocable createVocable(String uri, LexicalEntry parent) {
+        String vocable;
+        if (uri.contains("/")) {
+            vocable = uri.split("/")[1];
+        } else {
+            vocable = uri;
+        }
+        return new Vocable(this, uri, parent, vocable);
+    }
+
+    @Override
+    public LexicalEntry createLexicalEntry(String uri, LexicalResourceEntity parent) {
+        String[] splitURI;
+        String[] canonicalURI;
+        if (uri.contains("/")) {
+            splitURI = uri.split("/");
+            canonicalURI = splitURI[splitURI.length - 1].split("__");
+        } else {
+            canonicalURI = uri.split("__");
+            ;
+        }
+        return new LexicalEntry(this, uri, parent, canonicalURI[0], canonicalURI[1], Integer.valueOf(canonicalURI[2]));
+    }
+
+    @Override
+    public LexicalSense createLexicalSense(String uri, LexicalResourceEntity parent) {
+
+        String[] splitUri;
+        String canonicalURI;
+        if (uri.contains("/")) {
+            splitUri = uri.split("/");
+            canonicalURI = splitUri[splitUri.length - 1].split("__")[1];
+        } else {
+            canonicalURI = uri.split("__")[1];
+        }
+        return new LexicalSense(this, uri, parent, Integer.valueOf(canonicalURI.split("_")[1]));
     }
 }

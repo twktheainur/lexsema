@@ -4,7 +4,7 @@
 package org.getalp.lexsema.ontology.graph.defaultimpl;
 
 import com.hp.hpl.jena.graph.NodeFactory;
-import org.getalp.lexsema.lexicalresource.URIParser;
+import lombok.EqualsAndHashCode;
 import org.getalp.lexsema.ontology.graph.Node;
 import org.getalp.lexsema.ontology.graph.Relation;
 
@@ -12,8 +12,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * An anstract node in and ontology graph
+ * An abstract node in and ontology graph
  */
+@EqualsAndHashCode
 public abstract class AbstractNode implements Node {
     private com.hp.hpl.jena.graph.Node node;
     private List<Relation> propertyCache;
@@ -22,13 +23,9 @@ public abstract class AbstractNode implements Node {
      * Constructor
      *
      * @param uri Uri of the node
-     * @param p   uri parser that can potentially extract informatiion from the URI
      */
-    protected AbstractNode(String uri, URIParser p) {
+    protected AbstractNode(String uri) {
         node = NodeFactory.createURI(uri);
-        if (p != null) {
-            p.parseURI(this);
-        }
     }
 
     private void loadProperties() {
