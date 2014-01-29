@@ -2,6 +2,7 @@ package org.getalp.lexsema.lexicalresource.lemon.dbnary;
 
 import com.hp.hpl.jena.query.QuerySolution;
 import com.hp.hpl.jena.query.ResultSet;
+
 import org.getalp.lexsema.lexicalresource.lemon.LemonLexicalResource;
 import org.getalp.lexsema.lexicalresource.lemon.LexicalEntry;
 import org.getalp.lexsema.lexicalresource.lemon.dbnary.uriparsers.DBNaryLexicalEntryURI;
@@ -9,7 +10,7 @@ import org.getalp.lexsema.lexicalresource.lemon.dbnary.uriparsers.DBNaryVocableU
 import org.getalp.lexsema.ontology.OntologyModel;
 import org.getalp.lexsema.ontology.graph.queries.ARQQuery;
 import org.getalp.lexsema.ontology.graph.queries.ARQSelectQuery;
-import org.getalp.lexsema.ontology.uri.DBNaryURICollection;
+import org.getalp.lexsema.ontology.uri.DBnaryURICollection;
 import org.getalp.lexsema.ontology.uri.URICollection;
 import org.getalp.lexsema.util.exceptions.dbnary.NoSuchVocableException;
 
@@ -37,7 +38,7 @@ public final class DBNary extends LemonLexicalResource {
         addParser(LexicalEntry.class, new DBNaryLexicalEntryURI());
         addParser(Vocable.class, new DBNaryVocableURI());
 
-        dbnaryURI = new DBNaryURICollection(model);
+        dbnaryURI = new DBnaryURICollection(model);
     }
 
     @Override
