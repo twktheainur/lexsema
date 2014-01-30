@@ -3,6 +3,7 @@ package org.getalp.lexsema;
 import org.getalp.lexsema.lexicalresource.lemon.LexicalSense;
 import org.getalp.lexsema.lexicalresource.lemon.dbnary.DBNary;
 import org.getalp.lexsema.lexicalresource.lemon.dbnary.Vocable;
+import org.getalp.lexsema.ontology.OWLTBoxModel;
 import org.getalp.lexsema.ontology.OntologyModel;
 import org.getalp.lexsema.ontology.storage.Store;
 import org.getalp.lexsema.ontology.storage.StoreHandler;
@@ -27,10 +28,10 @@ public final class Main {
         Store vts = new VirtuosoTripleStore("jdbc:virtuoso://localhost:1111", "dba", "dba");
         StoreHandler.registerStoreInstance(vts);
 
-        OntologyModel otm = vts.getModel();
+        OntologyModel tBox = new OWLTBoxModel();
 
         // Creating DBnary wrapper
-        DBNary lr = new DBNary(otm, Locale.ENGLISH);
+        DBNary lr = new DBNary(tBox, Locale.ENGLISH);
 
 
         try {

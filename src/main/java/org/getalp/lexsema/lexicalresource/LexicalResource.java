@@ -24,6 +24,7 @@ public interface LexicalResource extends LemonEntityFactory {
 
     /**
      * Retrieve the lexical entries matching the entry provided
+     *
      * @param entry The entry to search for
      * @return The list of matching lexical entries
      */
@@ -49,4 +50,8 @@ public interface LexicalResource extends LemonEntityFactory {
      * @return The list of matching lexical entries
      */
     public List<LexicalEntry> getLexicalEntries(String entry, String pos, int entryNumber);
+
+    public String getResourceURI(String name);
+
+
 }

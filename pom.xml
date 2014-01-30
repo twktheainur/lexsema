@@ -52,23 +52,23 @@
             <artifactId>hypergraphdb</artifactId>
             <version>1.0</version>
         </dependency>
-		<dependency>
-			<groupId>org.apache.jena</groupId>
-			<artifactId>apache-jena-libs</artifactId>
-			<type>pom</type>
-			<version>2.11.1</version>
-			<exclusions>
-				<exclusion>
-					<groupId>org.slf4j</groupId>
-					<artifactId>slf4j-log4j12</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>log4j</groupId>
-					<artifactId>log4j</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-		<dependency>
+        <dependency>
+            <groupId>org.apache.jena</groupId>
+            <artifactId>apache-jena-libs</artifactId>
+            <type>pom</type>
+            <version>2.11.1</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-log4j12</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>log4j</groupId>
+                    <artifactId>log4j</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
             <groupId>org.apache.jena</groupId>
             <artifactId>jena</artifactId>
             <type>pom</type>
@@ -79,7 +79,7 @@
             <artifactId>owlapi-api</artifactId>
             <version>3.4.8</version>
         </dependency>
-         <dependency>
+        <dependency>
             <groupId>com.openlinksw.virtuoso</groupId>
             <artifactId>virt_jena2</artifactId>
             <version>2.10.1_B1.9</version>

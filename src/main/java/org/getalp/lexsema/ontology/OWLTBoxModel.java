@@ -18,7 +18,7 @@ import java.util.Properties;
 /**
  * An OWL ontology model wrapper around Jena
  */
-public class OWLOntologyModel implements OntologyModel {
+public class OWLTBoxModel implements OntologyModel {
     private OntModel model;
     private String propPath = "data" + File.separatorChar + "ontology.properties";
     private Properties properties;
@@ -28,33 +28,32 @@ public class OWLOntologyModel implements OntologyModel {
      *
      * @throws IOException When loading the default properties fails (data/ontology.properties)
      */
-    public OWLOntologyModel() throws IOException {
+    public OWLTBoxModel() throws IOException {
         loadProperties();
         createModel(null);
     }
 
     /**
-     * Build an <code>OWLOntologyModel</code> based on an existing model <code>m</code>
+     * Build an <code>OWLTBoxModel</code> based on an existing model <code>m</code>
      *
      * @param m An existing base ontology model
      * @throws IOException When loading the default properties fails (data/ontology.properties)
      */
-    public OWLOntologyModel(Model m) throws IOException {
+    public OWLTBoxModel(Model m) throws IOException {
         loadProperties();
         createModel(m);
     }
 
     /**
-     * Load an OWLOntologyModel with a custom properties path
+     * Load an OWLTBoxModel with a custom properties path
      *
      * @param propPath The path to the properties file
      * @throws IOException When the properties file at <code>propPath</code> cannot be loaded
      */
-    public OWLOntologyModel(String propPath) throws IOException {
+    public OWLTBoxModel(String propPath) throws IOException {
         this.propPath = propPath;
         loadProperties();
         createModel(null);
-
     }
 
     private void createModel(Model m) {

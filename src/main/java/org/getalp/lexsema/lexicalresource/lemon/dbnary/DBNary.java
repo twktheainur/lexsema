@@ -1,6 +1,7 @@
 package org.getalp.lexsema.lexicalresource.lemon.dbnary;
 
-import org.getalp.lexsema.ontology.uri.DBnaryURICollection;
+import com.hp.hpl.jena.query.QuerySolution;
+import com.hp.hpl.jena.query.ResultSet;
 import lombok.ToString;
 import org.getalp.lexsema.lexicalresource.LexicalResourceEntity;
 import org.getalp.lexsema.lexicalresource.lemon.LemonLexicalResource;
@@ -9,16 +10,13 @@ import org.getalp.lexsema.lexicalresource.lemon.LexicalSense;
 import org.getalp.lexsema.ontology.OntologyModel;
 import org.getalp.lexsema.ontology.graph.queries.ARQQuery;
 import org.getalp.lexsema.ontology.graph.queries.ARQSelectQuery;
+import org.getalp.lexsema.ontology.uri.DBnaryURICollection;
 import org.getalp.lexsema.ontology.uri.URICollection;
 import org.getalp.lexsema.util.exceptions.dbnary.NoSuchVocableException;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-
-import com.hp.hpl.jena.query.QuerySolution;
-import com.hp.hpl.jena.query.ResultSet;
-
 
 
 /**
@@ -37,7 +35,7 @@ public final class DBNary extends LemonLexicalResource {
      * @param language The language of the dbnary to access
      */
     public DBNary(OntologyModel model, Locale language) {
-        super(model, model.getNode("dbnary:").getURI().split("#")[0] + "/" + language.getISO3Language() /*+ "/"*/);
+        super(model, model.getNode("dbnary:").getURI().split("#")[0] + "/" + language.getISO3Language() + "/");
         this.language = language;
 
         dbnaryURI = new DBnaryURICollection(model);
@@ -79,7 +77,7 @@ public final class DBNary extends LemonLexicalResource {
                 throw new NoSuchVocableException(vocable, language.getDisplayName());
             }
         }
-        System.err.println(vocable);
+        //System.err.println(vocable);
         return createVocable(vocable, null);
     }
 
@@ -127,7 +125,15 @@ public final class DBNary extends LemonLexicalResource {
      * @return
      */
     public String getDBNaryURI(String s) {
-        return dbnaryURI.forName(s);
+        if (dbnaryURI.forName(s) != null) {
+            return dbnaryURI.forName(s);
+        }
+        return super.getResourceURI(s);
+    }
+
+    @Override
+    public String getResourceURI(String s) {
+        return getDBNaryURI(s);
     }
 
     public Vocable createVocable(String uri, LexicalEntry parent) {

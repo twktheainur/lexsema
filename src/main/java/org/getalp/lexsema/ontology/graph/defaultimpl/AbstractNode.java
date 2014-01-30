@@ -6,7 +6,7 @@ package org.getalp.lexsema.ontology.graph.defaultimpl;
 import com.hp.hpl.jena.graph.NodeFactory;
 import lombok.EqualsAndHashCode;
 import org.getalp.lexsema.ontology.graph.Node;
-import org.getalp.lexsema.ontology.graph.Relation;
+import org.getalp.lexsema.ontology.graph.RelationIface;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +17,7 @@ import java.util.List;
 @EqualsAndHashCode
 public abstract class AbstractNode implements Node {
     private com.hp.hpl.jena.graph.Node node;
-    private List<Relation> propertyCache;
+    private List<RelationIface> propertyCache;
 
     /**
      * Constructor
@@ -38,7 +38,7 @@ public abstract class AbstractNode implements Node {
     }
 
     @Override
-    public List<Relation> getRelated() {
+    public List<RelationIface> getRelated() {
         if (propertyCache == null) {
             loadProperties();
         }

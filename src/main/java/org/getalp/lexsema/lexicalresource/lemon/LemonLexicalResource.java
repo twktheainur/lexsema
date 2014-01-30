@@ -39,6 +39,11 @@ public abstract class LemonLexicalResource extends AbstractLexicalResource imple
     }
 
     @Override
+    public String getResourceURI(String s) {
+        return getLemonURI(s);
+    }
+
+    @Override
     public List<LexicalEntry> getLexicalEntries(String entry) {
         return null;
     }
@@ -52,4 +57,5 @@ public abstract class LemonLexicalResource extends AbstractLexicalResource imple
     public List<LexicalEntry> getLexicalEntries(String lemma, String pos, int entryNumber) {
         return null;
     }
+
 }

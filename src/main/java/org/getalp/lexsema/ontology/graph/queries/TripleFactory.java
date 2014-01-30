@@ -10,8 +10,6 @@ import org.getalp.lexsema.ontology.uri.RDFURICollection;
  * A factory for triples that can be used as cunditions in a WHERE statement
  */
 public final class TripleFactory {
-
-    private final OntologyModel model;
     private final RDFURICollection rdfURI;
 
     /**
@@ -20,7 +18,7 @@ public final class TripleFactory {
      * @param model The ontology model in which the triples will be used
      */
     public TripleFactory(OntologyModel model) {
-        this.model = model;
+
         rdfURI = new RDFURICollection(model);
     }
 
