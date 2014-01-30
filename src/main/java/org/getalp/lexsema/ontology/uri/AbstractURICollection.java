@@ -1,5 +1,6 @@
 package org.getalp.lexsema.ontology.uri;
 
+import com.hp.hpl.jena.rdf.model.Resource;
 import org.getalp.lexsema.ontology.OntologyModel;
 
 /**
@@ -23,6 +24,10 @@ public abstract class AbstractURICollection implements URICollection {
 
     @Override
     public String forName(String className) {
+        Resource r = model.getJenaModel().getResource(baseURI + className);
+        if (r == null) {
+            return null;
+        }
         return getBaseURI() + className;
     }
 

@@ -23,7 +23,7 @@ public abstract class AbstractLexicalResourceEntity extends AbstractNode impleme
      * @param uri The uri of the entity
      */
     protected AbstractLexicalResourceEntity(LexicalResource r, String uri, LexicalResourceEntity parent) {
-        super(r.getURI() + "/" + uri);
+        super((r.getURI().charAt(r.getURI().length() - 1) != '/') ? r.getURI() + "/" : r.getURI() + uri);
         lexicalResource = r;
         model = r.getGraph().getModel();
         this.parent = parent;

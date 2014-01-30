@@ -4,10 +4,11 @@
 package org.getalp.lexsema.ontology.storage;
 
 import com.hp.hpl.jena.graph.TransactionHandler;
-import com.hp.hpl.jena.query.*;
+import com.hp.hpl.jena.query.Query;
+import com.hp.hpl.jena.query.QueryExecution;
+import com.hp.hpl.jena.query.QueryExecutionFactory;
+import com.hp.hpl.jena.query.ResultSet;
 import com.hp.hpl.jena.rdf.model.Model;
-import org.getalp.lexsema.ontology.OWLOntologyModel;
-import org.getalp.lexsema.ontology.OntologyModel;
 import virtuoso.jena.driver.VirtGraph;
 import virtuoso.jena.driver.VirtModel;
 import virtuoso.jena.driver.VirtuosoQueryEngine;
@@ -16,14 +17,14 @@ import java.io.IOException;
 
 public class VirtuosoTripleStore implements Store {
 
-    private OntologyModel model;
+    private Model model;
     private VirtGraph virtuosoGraph;
 
     // url = "jdbc:virtuoso://kopi.imag.fr:1982";"dba", "dba"
     public VirtuosoTripleStore(String uri, String username, String password) throws IOException {
         virtuosoGraph = new VirtGraph(uri, username, password);
-        Model virtuosoModel = new VirtModel(virtuosoGraph);
-        model = new OWLOntologyModel(virtuosoModel);
+        model = new VirtModel(virtuosoGraph);
+
     }
 
     @Override
@@ -32,8 +33,8 @@ public class VirtuosoTripleStore implements Store {
         TransactionHandler th = virtuosoGraph.getTransactionHandler();
         VirtuosoQueryEngine.register();
         th.begin();
-        QueryExecution queryExecution = QueryExecutionFactory.create(q, model.getJenaModel().getBaseModel());
-        System.out.println(queryExecution.getQuery().toString(Syntax.defaultSyntax)); //TODO: Remove
+        QueryExecution queryExecution = QueryExecutionFactory.create(q, model);
+        //System.out.println(queryExecution.getQuery().toString(Syntax.defaultSyntax)); //TODO: Remove
         try {
             rs = queryExecution.execSelect();
         } catch (RuntimeException e) {
@@ -45,13 +46,13 @@ public class VirtuosoTripleStore implements Store {
     }
 
     @Override
-    public OntologyModel getModel() {
+    public Model getABox() {
         return model;
     }
 
     @Override
     public synchronized void close() {
-        model.getJenaModel().commit();
-        model.getJenaModel().close();
+        model.commit();
+        model.close();
     }
 }

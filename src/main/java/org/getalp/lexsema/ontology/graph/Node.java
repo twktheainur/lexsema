@@ -12,7 +12,7 @@ public interface Node {
      *
      * @return list of all relations having the node as a source
      */
-    List<Relation> getRelated();
+    List<RelationIface> getRelated();
 
     /**
      * Get the URI of the node
