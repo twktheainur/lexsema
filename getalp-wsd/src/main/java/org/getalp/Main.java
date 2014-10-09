@@ -13,7 +13,7 @@ import org.getalp.similarity.local.string.TverskiIndex;
 public class Main {
     public static void main(String[] args){
         Semeval2007DocumentLoader dl = new Semeval2007DocumentLoader("/Users/tchechem/wsgetalp/data/senseval2007_task7/test/eng-coarse-all-words.xml",true);
-        WordnetLoader lrloader = new WordnetLoader("/Users/tchechem/wsgetalp/data/wordnet/2.1/dict", true,true);
+        WordnetLoader lrloader = new WordnetLoader("/Users/tchechem/wsgetalp/data/wordnet/2.1/dict", true,false);
         SimilarityMeasure sim;
 
         sim = new TverskiIndex(0d, 0d, false, false, new ScaledLevenstein());
