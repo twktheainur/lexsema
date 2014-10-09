@@ -78,7 +78,7 @@ public final class DBNary extends LemonLexicalResource {
             }
         }
         //System.err.println(vocable);
-        return createVocable(vocable, null);
+        return instantiateVocable(vocable, null);
     }
 
     /**
@@ -136,7 +136,7 @@ public final class DBNary extends LemonLexicalResource {
         return getDBNaryURI(s);
     }
 
-    public Vocable createVocable(String uri, LexicalEntry parent) {
+    public Vocable instantiateVocable(String uri, LexicalEntry parent) {
         String vocable;
         if (uri.contains("/")) {
             vocable = uri.split("/")[1];
@@ -147,7 +147,7 @@ public final class DBNary extends LemonLexicalResource {
     }
 
     @Override
-    public LexicalEntry createLexicalEntry(String uri, LexicalResourceEntity parent) {
+    public LexicalEntry instanciateLexicalEntry(String uri, LexicalResourceEntity parent) {
         String[] splitURI;
         String[] canonicalURI;
         if (uri.contains("/")) {
@@ -161,7 +161,7 @@ public final class DBNary extends LemonLexicalResource {
     }
 
     @Override
-    public LexicalSense createLexicalSense(String uri, LexicalResourceEntity parent) {
+    public LexicalSense instanciateLexicalSense(String uri, LexicalResourceEntity parent) {
 
         String[] splitUri;
         String canonicalURI;

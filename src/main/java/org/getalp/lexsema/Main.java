@@ -37,7 +37,7 @@ public final class Main {
         try {
             Vocable v = lr.getVocable("dog");
 
-            LexicalSense ls = lr.createLexicalSense("__ws_1_Erstsprache__Substantiv__1", null);
+            LexicalSense ls = lr.instanciateLexicalSense("__ws_1_Erstsprache__Substantiv__1", null);
             String def = ls.getDefinition();
             System.err.println(ls);
             /*System.out.println(v);
