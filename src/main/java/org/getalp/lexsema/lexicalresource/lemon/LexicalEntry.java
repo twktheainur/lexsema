@@ -71,7 +71,7 @@ public class LexicalEntry extends AbstractLexicalResourceEntity {
             QuerySolution qs = rs.next();
             RDFNode resultUri = qs.get("ls");
             String[] le = String.valueOf(resultUri).split("/");
-            senses.add(llr.createLexicalSense(le[le.length - 1], this));
+            senses.add(llr.instanciateLexicalSense(le[le.length - 1], this));
         }
 
         return senses;

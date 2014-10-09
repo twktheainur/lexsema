@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module org.jetbrains.idea.maven.project.MavenProjectsManager.isMavenModule="true" type="JAVA_MODULE" version="4">
+  <component name="NewModuleRootManager" inherit-compiler-output="false">
+    <output url="file://$MODULE_DIR$/target/classes" />
+    <output-test url="file://$MODULE_DIR$/target/test-classes" />
+    <content url="file://$MODULE_DIR$">
+      <sourceFolder url="file://$MODULE_DIR$/src/main/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/test/java" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/src/main/resources" type="java-resource" />
+      <excludeFolder url="file://$MODULE_DIR$/target" />
+    </content>
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="module-library" scope="TEST">
+      <library>
+        <CLASSES>
+          <root url="jar://$APPLICATION_HOME_DIR$/lib/junit-4.10.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="library" name="Maven: edu.mit:jwi:2.2.3" level="project" />
+    <orderEntry type="library" name="Maven: net.sourceforge.parallelcolt:parallelcolt:0.10.0" level="project" />
+    <orderEntry type="library" name="Maven: net.sourceforge.jplasma:jplasma:1.2.0" level="project" />
+    <orderEntry type="library" name="Maven: net.sourceforge.jplasma:core-lapack:0.1" level="project" />
+    <orderEntry type="library" name="Maven: net.sourceforge.f2j:arpack_combined_all:0.1" level="project" />
+    <orderEntry type="library" name="Maven: net.sourceforge.jtransforms:jtransforms:2.4.0" level="project" />
+    <orderEntry type="library" name="Maven: junit:junit:4.10" level="project" />
+    <orderEntry type="library" name="Maven: net.sourceforge.csparsej:csparsej:1.1.1" level="project" />
+    <orderEntry type="library" name="Maven: net.sourceforge.parallelcolt:optimization:1.0" level="project" />
+    <orderEntry type="library" name="Maven: org.hamcrest:hamcrest-core:1.1" level="project" />
+    <orderEntry type="library" name="Maven: com.googlecode.netlib-java:netlib-java:0.9.3" level="project" />
+    <orderEntry type="library" name="Maven: com.github.rwl:JKLU:1.0.0" level="project" />
+    <orderEntry type="library" name="Maven: com.github.rwl:BTFJ:1.0.1" level="project" />
+    <orderEntry type="library" name="Maven: com.github.rwl:AMDJ:1.0.1" level="project" />
+    <orderEntry type="library" name="Maven: com.github.rwl:COLAMDJ:1.0.1" level="project" />
+    <orderEntry type="library" name="Maven: com.wcohen:secondstring:20120620" level="project" />
+  </component>
+</module>
+

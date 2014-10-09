@@ -62,7 +62,7 @@ public class Vocable extends AbstractLexicalResourceEntity {
             QuerySolution qs = rs.next();
             String[] le = String.valueOf(qs.get("le")).split("/");
 
-            entries.add(getLexicalResource().createLexicalEntry(le[le.length - 1], this));
+            entries.add(getLexicalResource().instanciateLexicalEntry(le[le.length - 1], this));
 
         }
 
