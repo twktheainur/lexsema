@@ -1,147 +1,120 @@
 package org.getalp.similarity.local.string;
 
 import com.wcohen.ss.AbstractStringDistance;
-import org.getalp.encoding.CodePointWrapper;
+import org.getalp.disambiguation.Sense;
 import org.getalp.segmentation.Segmenter;
 import org.getalp.segmentation.SpaceSegmenter;
 import org.getalp.similarity.local.SimilarityMeasure;
-import org.getalp.disambiguation.Sense;
+import org.getalp.util.SubSequences;
 
 import java.util.List;
+import java.util.Map;
 
 public class TverskiIndex implements SimilarityMeasure {
     private Segmenter segmenter;
 
     private double alpha;
     private double beta;
+    private double gamma;
+    private boolean ratioComputation;
     private boolean fuzzyMatching;
     private boolean symmetric = false;
     private AbstractStringDistance distance;
-    private boolean lcss;
-    private boolean lcssConstraint = true;
+    private boolean extendedLesk;
+    private boolean quadraticOverlap;
 
-
-    public TverskiIndex(double alpha, double beta) {
-        segmenter = new SpaceSegmenter();
-        lcss = false;
-        this.alpha = alpha;
-        this.beta = beta;
-        fuzzyMatching = false;
-    }
-
-    public TverskiIndex(double alpha, double beta, boolean fuzzyMatching, boolean symmetric, AbstractStringDistance distance) {
+    public TverskiIndex(AbstractStringDistance distance, boolean ratioComputation, double alpha, double beta, double gamma, boolean fuzzyMatching, boolean quadraticOverlap, boolean symmetric, boolean extendedLesk) {
         this.distance = distance;
-        lcss = false;
         segmenter = new SpaceSegmenter();
         this.alpha = alpha;
         this.beta = beta;
         this.fuzzyMatching = fuzzyMatching;
         this.symmetric = symmetric;
+        this.ratioComputation = ratioComputation;
+        this.extendedLesk = extendedLesk;
+        this.quadraticOverlap = quadraticOverlap;
+        this.gamma = gamma;
+
     }
 
-    public TverskiIndex(double alpha, double beta, boolean fuzzyMatching, boolean symmetric) {
-        lcss = true;
-        segmenter = new SpaceSegmenter();
-        this.alpha = alpha;
-        this.beta = beta;
-        this.fuzzyMatching = fuzzyMatching;
-        this.symmetric = symmetric;
-    }
-
-    public TverskiIndex(Segmenter segmenter, double alpha, double beta) {
-        this.segmenter = segmenter;
-        this.alpha = alpha;
-        this.beta = beta;
-        fuzzyMatching = false;
-    }
-
-    public TverskiIndex(Segmenter segmenter, double alpha, double beta, boolean fuzzyMatching, boolean symmetric) {
-        this.segmenter = segmenter;
-        this.alpha = alpha;
-        this.beta = beta;
-        this.fuzzyMatching = fuzzyMatching;
-        if (!fuzzyMatching) {
-            lcss = false;
-        }
-        this.symmetric = symmetric;
-    }
-
-    public static int longestSubString(String first, String second) {
-        if (first == null || second == null || first.length() == 0 || second.length() == 0) {
-            return 0;
-        }
-
-        int maxLen = 0;
-        int fl = first.length();
-        int sl = second.length();
-        int[][] table = new int[fl][sl];
-        CodePointWrapper cpFirst = new CodePointWrapper(first);
-        int i = 0;
-        for (int cpi : cpFirst) {
-            CodePointWrapper cpSecond = new CodePointWrapper(second);
-            int j = 0;
-            for (int cpj : cpSecond) {
-                if (cpi == cpj) {
-                    if (i == 0 || j == 0) {
-                        table[i][j] = 1;
-                    } else {
-                        table[i][j] = table[i - 1][j - 1] + 1;
-                    }
-                    if (table[i][j] > maxLen) {
-                        maxLen = table[i][j];
-                    }
-                }
-                j++;
-            }
-            i++;
-        }
-        return maxLen;
-    }
-
-    private double compute(List<String> a, List<String> b,List<Double> weightsA, List<Double> weightsB) {
+    private double compute(List<String> a, List<String> b, Map<String, List<String>> relatedA, Map<String, List<String>> relatedB) {
         double overlap;
-        if (!fuzzyMatching) {
-            overlap = computeOverlap(a, b);
+
+        /*Overlap between the glosses of the two senses*/
+        if (quadraticOverlap) {
+            overlap = computeQuadraticFuzzyOverlap(a, b);
         } else {
-            overlap = computeFuzzyOverlap(a, b,weightsA,weightsB);
+            overlap = computeFuzzyOverlap(a, b);
         }
+
+        /*
+         * Extended lesk relation pair computation
+         */
+        if (extendedLesk && relatedA != null && relatedB != null) {
+            for (String rA : relatedA.keySet()) {
+                for (String rB : relatedA.keySet()) {
+                    overlap += computeQuadraticFuzzyOverlap(relatedA.get(rA), relatedB.get(rB));
+                }
+            }
+        } else if (extendedLesk && relatedA == null ^ relatedB == null) {
+            Map<String, List<String>> nonNullRelated;
+            List<String> other;
+            if (relatedA == null) {
+                nonNullRelated = relatedB;
+                other = a;
+            } else {
+                nonNullRelated = relatedA;
+                other = b;
+            }
+            for (String r : nonNullRelated.keySet()) {
+                overlap += computeQuadraticFuzzyOverlap(nonNullRelated.get(r), other);
+            }
+        }
+
         double diffA = a.size() - overlap;
         double diffB = b.size() - overlap;
-        if (symmetric) {
+        /*Standard lesk*/
+        if (!ratioComputation) {
+            return overlap;
+        }
+        /*Tverski index computation*/
+        else if (symmetric) {
             double factA = Math.min(diffA, diffB);
             double factB = Math.max(diffA, diffB);
-            return overlap / (beta * (alpha * factA + (1 - alpha) * factB) + overlap);
+            return alpha * overlap / (gamma * (beta * factA + (1 - beta) * factB) + overlap);
         } else {
-            return overlap / (overlap + diffA * alpha + diffB * beta);
+            return alpha * overlap / (alpha * overlap + diffA * beta + diffB * gamma);
         }
     }
 
+    @Override
     public double compute(List<String> a, List<String> b) {
-        return compute (a,b,null,null);
+        return compute(a, b, null, null);
     }
 
 
     @Override
     public double compute(Sense a, List<String> b) {
-        return compute(a.getSignature(),b,a.getWeights(),null);
+        return compute(a.getSignature(), b, a.getRelatedSignatures(), null);
     }
 
     @Override
     public double compute(List<String> a, Sense b) {
-        return compute(a,b.getSignature(),null,b.getWeights());
+        return compute(a, b.getSignature(), null, b.getRelatedSignatures());
     }
 
     @Override
     public double compute(Sense a, Sense b) {
-        return compute(a.getSignature(),b.getSignature(),a.getWeights(),b.getWeights());
+        return compute(a.getSignature(), b.getSignature(), a.getRelatedSignatures(), b.getRelatedSignatures());
     }
 
-    private double computeOverlap(List<String> la, List<String> lb) {
-        int size = Math.min(la.size(), lb.size());
+    private double computeFuzzyOverlap(List<String> la, List<String> lb) {
         double overlap = 0;
         for (String a : la) {
             for (String b : lb) {
-                if(a.equals(b)){
+                if (fuzzyMatching) {
+                    overlap += distance.score(distance.prepare(a), distance.prepare(b));
+                } else if (a.equals(b)) {
                     overlap++;
                 }
             }
@@ -149,52 +122,17 @@ public class TverskiIndex implements SimilarityMeasure {
         return overlap;
     }
 
-    private double computeFuzzyOverlap(List<String> la, List<String> lb, List<Double> weightsA, List<Double> weightsB) {
+    private double computeQuadraticFuzzyOverlap(List<String> la, List<String> lb) {
         double overlap = 0;
-        for (int i=0;i<la.size();i++) {
-            String a = la.get(i);
-            double wa = 1;
-            if(weightsA!=null){
-                wa = weightsA.get(i);
-            }
-            for (int j=0;j<lb.size();j++) {
-                String b = lb.get(j);
-                double wb =1;
-                if(weightsB!=null){
-                    wb = weightsB.get(j);
-                }
-                double score = 0;
-                double lcss = longestSubString(a, b);
-                double md = Math.max(Math.abs(lcss / a.length()), Math.abs(lcss / b.length()));
-                if (!this.lcss) {
-                    //score = ((wa+wb)/2d)*distance.score(distance.prepare(a), distance.prepare(b));
-                    score = ((wa*wb))*distance.score(distance.prepare(a), distance.prepare(b));
-                } else {
-                    score = md;
-                }
-                if (score > 0.999 || score < 1.0 && ((lcssConstraint && lcss >= 3) || !lcssConstraint)) {
-
-                    if (!this.lcss) {
-                        if (lcssConstraint) {
-                            overlap += score + (1 - score) * (md - 0.5);
-                        } else {
-                            overlap += score;
-                        }
-                    } else {
-                        overlap += md;
-                    }
-                }
-            }
+        List<Double> subsequenceLengths;
+        if (fuzzyMatching) {
+            subsequenceLengths = SubSequences.fuzzyLongestCommonSubSequences(la, lb, distance, 0.5);
+        } else {
+            subsequenceLengths = SubSequences.longestCommonSubSequences(la, lb);
         }
-
+        for (Double len : subsequenceLengths) {
+            overlap += len * len;
+        }
         return overlap;
-    }
-
-    public boolean isLcssConstraint() {
-        return lcssConstraint;
-    }
-
-    public void setLcssConstraint(boolean lcssConstraint) {
-        this.lcssConstraint = lcssConstraint;
     }
 }

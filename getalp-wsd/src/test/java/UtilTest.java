@@ -5,16 +5,14 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by tchechem on 10/13/14.
- */
+@SuppressWarnings("All")
 public class UtilTest {
 
     @Test
     public void testFLCSSSChars() throws Exception {
-        List<String> a = new ArrayList<String>();
-        List<String> b = new ArrayList<String>();
-        List<Double> res = new ArrayList<Double>();
+        List<String> a = new ArrayList<>();
+        List<String> b = new ArrayList<>();
+        List<Double> res;
 
 
         System.out.println("--FLCSS ([h, y, a, b, c, e, f] , [e, f, a, b, c, a, y, h])--");
@@ -36,11 +34,11 @@ public class UtilTest {
         b.add("h");
 
         res = SubSequences.fuzzyLongestCommonSubSequences(a, b, new ScaledLevenstein(), .5d);
-        System.out.print("Result="+res+"....");
-        assert(res.get(0)-2.0<0.001d);
-        assert(res.get(1)-3.0<0.001d);
-        assert(res.get(2)-1.0<0.001d);
-        assert(res.get(3)-1.0<0.001d);
+        System.out.print("Result=" + res + "....");
+        assert (res.get(0) - 2.0 < 0.001d);
+        assert (res.get(1) - 3.0 < 0.001d);
+        assert (res.get(2) - 1.0 < 0.001d);
+        assert (res.get(3) - 1.0 < 0.001d);
         System.out.println("Pass!");
         a.clear();
         b.clear();
@@ -49,9 +47,9 @@ public class UtilTest {
 
     @Test
     public void testFLCSSSWordExact() throws Exception {
-        List<String> a = new ArrayList<String>();
-        List<String> b = new ArrayList<String>();
-        List<Double> res = new ArrayList<Double>();
+        List<String> a = new ArrayList<>();
+        List<String> b = new ArrayList<>();
+        List<Double> res;
 
 
         System.out.println("--FLCSS ([the, cat, is, brown, and, very, soft] , [the, brown, and, very, soft, cat])--");
@@ -71,11 +69,10 @@ public class UtilTest {
         b.add("b");//cat
 
         res = SubSequences.fuzzyLongestCommonSubSequences(a, b, new ScaledLevenstein(), .5d);
-        System.out.print("Result="+res+"....");
-        assert(res.get(0)-4.0<0.001d);
-        assert(res.get(1)-1.0<0.001d);
+        System.out.print("Result=" + res + "....");
+        assert (res.get(0) - 4.0 < 0.001d);
+        assert (res.get(1) - 1.0 < 0.001d);
         System.out.println("Pass!");
     }
-
 
 }

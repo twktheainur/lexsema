@@ -1,8 +1,5 @@
 package org.getalp.optimisation.functions.setfunctions.input;
 
-/**
- * Created by tchechem on 10/7/14.
- */
 public class Interval {
 
     private int start;

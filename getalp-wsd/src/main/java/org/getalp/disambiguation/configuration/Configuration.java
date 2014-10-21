@@ -9,35 +9,59 @@ public class Configuration {
     DoubleMatrix1D confidence;
 
     public Configuration(Document d) {
-        assignments = new int[d.getWords().size()];
-        confidence = new DenseDoubleMatrix1D(d.getWords().size());
+        assignments = new int[d.getLexicalEntries().size()];
+        for (int i = 0; i < d.getLexicalEntries().size(); i++) {
+            assignments[i] = -1;
+        }
+        confidence = new DenseDoubleMatrix1D(d.getLexicalEntries().size());
     }
+
     public Configuration(Configuration d) {
         assignments = d.assignments.clone();
         confidence = d.confidence.copy();
     }
 
-    public void setSense(int wordIndex, int senseIndex){
+    public void setSense(int wordIndex, int senseIndex) {
         assignments[wordIndex] = senseIndex;
     }
 
-    public void setConfidence(int wordIndex, double confidence){
-        this.confidence.set(wordIndex,confidence);
+    public void setConfidence(int wordIndex, double confidence) {
+        this.confidence.set(wordIndex, confidence);
     }
 
-    public int getAssignment(int wordIndex){
+    public int getAssignment(int wordIndex) {
         return assignments[wordIndex];
     }
 
-    public double getConfidence(int wordIndex){
+    public double getConfidence(int wordIndex) {
         return confidence.get(wordIndex);
     }
 
-    public int size(){
-        return  assignments.length;
+    public int size() {
+        return assignments.length;
     }
 
-    public Configuration clone(){
+    @Override
+    public Configuration clone() throws CloneNotSupportedException {
+        super.clone();
         return new Configuration(this);
+    }
+
+    public int getStart() {
+        return 0;
+    }
+
+    public int getEnd() {
+        return assignments.length;
+    }
+
+    @Override
+    public String toString() {
+        String out = "[ ";
+        for (int i = getStart(); i < getEnd(); i++) {
+            out += assignments[i] + ", ";
+        }
+        out += "]";
+        return out;
     }
 }

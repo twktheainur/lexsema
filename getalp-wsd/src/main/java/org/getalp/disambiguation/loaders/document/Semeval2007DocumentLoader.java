@@ -1,7 +1,7 @@
 package org.getalp.disambiguation.loaders.document;
 
 import org.getalp.disambiguation.Document;
-import org.getalp.disambiguation.Word;
+import org.getalp.disambiguation.LexicalEntry;
 import org.xml.sax.Attributes;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.Locator;
@@ -9,13 +9,12 @@ import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLReaderFactory;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Semeval2007DocumentLoader extends DocumentLoader implements ContentHandler {
 
-    private boolean inDocument;
-    private boolean inSentence;
     private boolean inWord;
     private boolean loadExtra;
     private String currentSurfaceForm;
@@ -28,8 +27,6 @@ public class Semeval2007DocumentLoader extends DocumentLoader implements Content
 
 
     public Semeval2007DocumentLoader(String path, boolean loadExtra) {
-        inDocument = false;
-        inSentence = false;
         inWord = false;
         this.path = path;
         currentId = "";
@@ -67,15 +64,11 @@ public class Semeval2007DocumentLoader extends DocumentLoader implements Content
 
     @Override
     public void startElement(String uri, String localName, String qName, Attributes atts) throws SAXException {
-        if (localName.equals("corpus")) {
-
-        } else if (localName.equals("text")) {
-            inDocument = true;
+        if (localName.equals("text")) {
             Document d = new Document();
             d.setId(atts.getValue("id"));
             getDocuments().add(d);
-        } else if (localName.equals("sentence")) {
-            inSentence = true;
+
         } else if (localName.equals("instance")) {
             inWord = true;
             currentPos = atts.getValue("pos");
@@ -89,23 +82,21 @@ public class Semeval2007DocumentLoader extends DocumentLoader implements Content
         if (localName.equals("corpus")) {
 
         } else if (localName.equals("text")) {
-            inDocument = false;
         } else if (localName.equals("sentence")) {
-            inSentence = false;
         } else if (localName.equals("instance")) {
             inWord = false;
-            Word w = new Word(currentId, currentLemma, currentSurfaceForm, currentPos);
+            LexicalEntry w = new LexicalEntry(currentId, currentLemma, currentSurfaceForm, currentPos);
 
-            List<String> lextra = new ArrayList<String>();
+            List<String> lextra = new ArrayList<>();
             if (loadExtra) {
                 for (String e : extraWords.trim().split("\n")) {
-                    if (e.length() > 0) {
+                    if (!e.isEmpty()) {
                         lextra.add(e);
                     }
                 }
             }
-            w.setPreceedingNonInstances(lextra);
-            getDocuments().get(getDocuments().size() - 1).getWords().add(w);
+            w.setPrecedingNonInstances(lextra);
+            getDocuments().get(getDocuments().size() - 1).getLexicalEntries().add(w);
             currentId = "";
             currentLemma = "";
             currentPos = "";
@@ -150,7 +141,7 @@ public class Semeval2007DocumentLoader extends DocumentLoader implements Content
             saxReader
                     .setContentHandler(this);
             saxReader.parse(path);
-        } catch (Throwable t) {
+        } catch (IOException | SAXException t) {
             t.printStackTrace();
         }
     }

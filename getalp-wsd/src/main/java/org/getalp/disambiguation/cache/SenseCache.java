@@ -1,37 +1,34 @@
 package org.getalp.disambiguation.cache;
 
+import org.getalp.disambiguation.LexicalEntry;
 import org.getalp.disambiguation.Sense;
-import org.getalp.disambiguation.Word;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Created by tchechem on 9/16/14.
- */
 public class SenseCache {
 
-    Map<Word,List<Sense>> cache;
+    Map<LexicalEntry, List<Sense>> cache;
 
     private static SenseCache instance;
 
-    public static SenseCache getInstance(){
-        if(instance==null){
+    public static SenseCache getInstance() {
+        if (instance == null) {
             instance = new SenseCache();
         }
         return instance;
     }
 
-    private SenseCache(){
-        cache = new HashMap<Word, List<Sense>>(1000000);
+    private SenseCache() {
+        cache = new HashMap<>(1000000);
     }
 
-    public List<Sense> getSenses(Word w){
+    public List<Sense> getSenses(LexicalEntry w) {
         return cache.get(w);
     }
 
-    public void addCache(Word w, List<Sense> ls){
-        cache.put(w,ls);
+    public void addCache(LexicalEntry w, List<Sense> ls) {
+        cache.put(w, ls);
     }
 }

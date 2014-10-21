@@ -3,22 +3,19 @@ package org.getalp.disambiguation;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by tchechem on 9/16/14.
- */
 public class LexicalEntry {
     private String id;
     private String lemma;
     private String surfaceForm;
     private String pos;
-    private List<String> preceedingNonInstances;
+    private List<String> precedingNonInstances;
 
     public LexicalEntry(String id, String lemma, String surfaceForm, String pos) {
         this.id = id;
         this.lemma = lemma;
         this.surfaceForm = surfaceForm;
         this.pos = pos;
-        preceedingNonInstances = new ArrayList<String>();
+        precedingNonInstances = new ArrayList<>();
     }
 
     public String getId() {
@@ -37,28 +34,43 @@ public class LexicalEntry {
         return pos;
     }
 
-    public List<String> getPreceedingNonInstances() {
-        return preceedingNonInstances;
+    public List<String> getPrecedingNonInstances() {
+        return precedingNonInstances;
     }
 
-    public void setPreceedingNonInstances(List<String> preceedingNonInstances) {
-        this.preceedingNonInstances = preceedingNonInstances;
+    public void setPrecedingNonInstances(List<String> precedingNonInstances) {
+        this.precedingNonInstances = precedingNonInstances;
     }
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof LexicalEntry)) return false;
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof LexicalEntry)) {
+            return false;
+        }
 
         LexicalEntry lexicalEntry = (LexicalEntry) o;
 
-        if (!id.equals(lexicalEntry.id)) return false;
-
-        return true;
+        if (id.equals(lexicalEntry.id)) {
+            return true;
+        } else {
+            return true;
+        }
     }
 
     @Override
     public int hashCode() {
         return id.hashCode();
+    }
+
+    @Override
+    public String toString() {
+        return "LexicalEntry{" +
+                "pos='" + pos + '\'' +
+                ", lemma='" + lemma + '\'' +
+                ", id='" + id + '\'' +
+                '}';
     }
 }

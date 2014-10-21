@@ -21,9 +21,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Created by tchechem on 10/14/14.
- */
+@SuppressWarnings("all")
 public class SupervisedR implements Disambiguator {
 
     private int lemmamin;
@@ -56,12 +54,20 @@ public class SupervisedR implements Disambiguator {
 
     @Override
     public Configuration disambiguate(Document document) {
-        Configuration c = new Configuration(document);
-        for (int i = 0; i < document.getWords().size(); i++) {
-            System.err.print(String.format("\tDisambiguating: %.2f%%\r", ((double) i / (double) document.getWords().size()) * 100d));
+        return disambiguate(document, null);
+    }
 
-            String targetLemma = document.getWords().get(i).getLemma();
-            String targetPos = convertPos(document.getWords().get(i).getPos());
+    @Override
+    public Configuration disambiguate(Document document, Configuration c) {
+        boolean progressChecked = false;
+        if (c == null) {
+            c = new Configuration(document);
+        }
+        for (int i = 0; i < document.getLexicalEntries().size(); i++) {
+            System.err.print(String.format("\tDisambiguating: %.2f%%\r", ((double) i / (double) document.getLexicalEntries().size()) * 100d));
+
+            String targetLemma = document.getLexicalEntries().get(i).getLemma();
+            String targetPos = convertPos(document.getLexicalEntries().get(i).getPos());
 
             String header = "";
             String featureVector = "";
@@ -70,10 +76,10 @@ public class SupervisedR implements Disambiguator {
             for (int j = i - lemmamin; j <= i + lemmamax; j++) {
                 if (i != j) {
                     String lemmaFeature = "";
-                    if (j < 0 || j >= document.getWords().size()) {
+                    if (j < 0 || j >= document.getLexicalEntries().size()) {
                         lemmaFeature = "\"X\"";
                     } else {
-                        lemmaFeature = "\"" + document.getWords().get(j).getLemma() + "\"";
+                        lemmaFeature = "\"" + document.getLexicalEntries().get(j).getLemma() + "\"";
                     }
                     header += "A" + numfeatures + "\t";
                     featureVector += lemmaFeature + "\t";
@@ -84,10 +90,10 @@ public class SupervisedR implements Disambiguator {
             for (int j = i - posmin; j <= i + posmax; j++) {
                 if (j != i) {
                     String posFeature = "";
-                    if (j < 0 || j >= document.getWords().size()) {
+                    if (j < 0 || j >= document.getLexicalEntries().size()) {
                         posFeature = "\"0\"";
                     } else {
-                        posFeature = "\"" + convertPos(document.getWords().get(j).getPos()) + "\"";
+                        posFeature = "\"" + convertPos(document.getLexicalEntries().get(j).getPos()) + "\"";
                     }
                     header += "A" + numfeatures + "\t";
                     featureVector += posFeature + "\t";
@@ -111,7 +117,7 @@ public class SupervisedR implements Disambiguator {
 
             String output = runR(targetLemma);
             if (output.length() == 0) {
-                if(document.getSense().get(i).size()==1){
+                if (document.getSenses().get(i).size() == 1) {
                     c.setSense(i, 0);
                 } else {
                     c.setSense(i, -1);
@@ -132,13 +138,10 @@ public class SupervisedR implements Disambiguator {
                     Collections.sort(results);
                     String bestResult = results.get(0).getKey();
                     c.setSense(i, -1);
-                    for (int s = 0; s < document.getSense().get(i).size(); s++) {
-                        Sense cs = document.getSense().get(i).get(s);
-                        if (cs.getId().contains(bestResult)) {
-                            c.setSense(i, s);
-                            break;
-                        }
-                    }
+                    int s = -1;
+                    for (int re = 0; re < results.size() && (s = getMatchingSense(document, results.get(re).getKey(), i)) == -1; re++)
+                        ;
+                    c.setSense(i, s);
                 } else {
                     c.setSense(i, -1);
                 }
@@ -147,9 +150,14 @@ public class SupervisedR implements Disambiguator {
         return c;
     }
 
-    public int getMatchingSense(String tag, int wordIndex){
-        for (int s = 0; s < document.getSense().get(wordIndex).size(); s++) {
-            Sense cs = document.getSense().get(wordIndex).get(s);
+    @Override
+    public void release() {
+
+    }
+
+    public int getMatchingSense(Document d, String tag, int wordIndex) {
+        for (int s = 0; s < d.getSenses().get(wordIndex).size(); s++) {
+            Sense cs = d.getSenses().get(wordIndex).get(s);
             if (cs.getId().contains(tag)) {
                 return s;
             }
@@ -225,14 +233,14 @@ public class SupervisedR implements Disambiguator {
                     "#load(\"" + dataPath + File.separatorChar + "script" + File.separatorChar + lemma + ".RData\")\n" +
                     "#} else {\n" +
                     "examples <- read.table(\"" + dataPath + File.separatorChar + lemma + ".csv\", header=T);\n" +
+                    "examples <- Filter(function(x)!all(length(levels(x))==1), examples)\n" +
                     "library(e1071);\n" +
-                    "#examples <- apply(examples, 1, function(x) as.factor(x))\n" +
-                    lemma + " <- svm(SENSE ~ ., data=examples, type = \"C-classification\", kernel = \"linear\", degree = 2, gamma = 2, cost = 0.4, coef0 = 0);\n" +
+                    lemma + " <- svm(examples$SENSE~., data=examples, type = \"C-classification\", kernel = \"linear\", degree = 2, gamma = 2, cost = 0.4, coef0 = 0);\n" +
                     "save(" + lemma + ",file = \"" + dataPath + File.separatorChar + "script" + File.separatorChar + lemma + ".RData\");\n" +
                     "#}\n" +
                     "input = read.table(\"" + dataPath + File.separatorChar + "script" + File.separatorChar + "inputVector.csv\",header =T);\n" +
-                    "#input[] <- apply(input, 1, function(x) as.factor(x))\n" +
-                    "P <- predict(" + lemma + ", input, type=\"class    \");\n" +
+                    "input <- input[, which(colnames(input) %in% colnames(examples))]\n" +
+                    "P <- predict(" + lemma + ", input, type=\"class\");\n" +
                     "print(table(P));\n" +
                     "quit()";
         } else {

@@ -55,7 +55,15 @@ public class SupervisedWeka implements Disambiguator {
 
     @Override
     public Configuration disambiguate(Document document) {
-        Configuration c = new Configuration(document);
+        return disambiguate(document, null);
+    }
+
+    @Override
+    public Configuration disambiguate(Document document, Configuration c) {
+        boolean progressChecked = false;
+        if (c == null) {
+            c = new Configuration(document);
+        }
         for (int i = 0; i < document.getLexicalEntries().size(); i++) {
             System.err.print(String.format("\tDisambiguating: %.2f%%\r", ((double) i / (double) document.getLexicalEntries().size()) * 100d));
 
@@ -90,10 +98,9 @@ public class SupervisedWeka implements Disambiguator {
             features.add("\"" + targetPos + "\"");
 
 
-
-            List<WekaClassifier.ClassificationEntry> results = runClassifier(targetLemma,features);
+            List<WekaClassifier.ClassificationEntry> results = runClassifier(targetLemma, features);
             if (results.size() == 0) {
-                if (document.getSense().get(i).size() == 1) {
+                if (document.getSenses().get(i).size() == 1) {
                     c.setSense(i, 0);
                 } else {
                     c.setSense(i, -1);
@@ -101,16 +108,22 @@ public class SupervisedWeka implements Disambiguator {
             } else {
                 c.setSense(i, -1);
                 int s = -1;
-                for(int re=0;re<results.size() && (s= getMatchingSense(document,results.get(re).getKey(), i))==-1;re++);
+                for (int re = 0; re < results.size() && (s = getMatchingSense(document, results.get(re).getKey(), i)) == -1; re++)
+                    ;
                 c.setSense(i, s);
             }
         }
         return c;
     }
 
+    @Override
+    public void release() {
+
+    }
+
     public int getMatchingSense(Document d, String tag, int wordIndex) {
-        for (int s = 0; s < d.getSense().get(wordIndex).size(); s++) {
-            Sense cs = d.getSense().get(wordIndex).get(s);
+        for (int s = 0; s < d.getSenses().get(wordIndex).size(); s++) {
+            Sense cs = d.getSenses().get(wordIndex).get(s);
             if (cs.getId().contains(tag)) {
                 return s;
             }
@@ -121,10 +134,10 @@ public class SupervisedWeka implements Disambiguator {
     private List<WekaClassifier.ClassificationEntry> runClassifier(String lemma, List<String> instance) {
         WekaClassifier classifier;
         if (!classifiers.containsKey(lemma)) {
-            classifier = new WekaClassifier(classifierSetUp, dataPath + File.separatorChar + "models" + File.separatorChar+lemma+".model", false);
+            classifier = new WekaClassifier(classifierSetUp, dataPath + File.separatorChar + "models" + File.separatorChar + lemma + ".model", false);
             if (!classifier.isClassifierTrained()) {
                 try {
-                    classifier.loadTrainingData(featureIndex,dataPath + File.separatorChar + lemma + ".csv");
+                    classifier.loadTrainingData(featureIndex, dataPath + File.separatorChar + lemma + ".csv");
                     classifier.trainClassifier();
                 } catch (IOException e) {
                     return new ArrayList<WekaClassifier.ClassificationEntry>();
