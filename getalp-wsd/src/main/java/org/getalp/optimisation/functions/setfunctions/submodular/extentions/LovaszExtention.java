@@ -1,6 +1,4 @@
-package org.getalp.optimisation.functions.setfunctions.submodular.extentions;/**
- * Created by tchechem on 10/7/14.
- */
+package org.getalp.optimisation.functions.setfunctions.submodular.extentions;
 
 import cern.colt.matrix.tdouble.DoubleMatrix1D;
 import cern.colt.matrix.tdouble.impl.DenseDoubleMatrix1D;
@@ -20,7 +18,7 @@ public class LovaszExtention implements Extension {
 
     @Override
     public double F(FunctionInput input) {
-        return compute((SetFunctionInput)input);
+        return compute((SetFunctionInput) input);
     }
 
     @Override
@@ -29,21 +27,20 @@ public class LovaszExtention implements Extension {
     }
 
     @Override
-    public double compute(SetFunctionInput in)
-    {
+    public double compute(SetFunctionInput in) {
         in.setPermutation(Vectors.permutation(in.getInput()));
         double lovaszScore = 0;
-          for (int i = 0; i < in.getInput().size(); i++) {
+        for (int i = 0; i < in.getInput().size(); i++) {
 
-            double wval_c =in.getInput().get((int) in.getPermutation().get(i));
+            double wval_c = in.getInput().get((int) in.getPermutation().get(i));
             double wval_n;
-            if(i< in.getInput().size()-1){
-                wval_n =in.getInput().get((int) in.getPermutation().get(i+1));
+            if (i < in.getInput().size() - 1) {
+                wval_n = in.getInput().get((int) in.getPermutation().get(i + 1));
             } else {
-                wval_n=0;
+                wval_n = 0;
             }
-            in.setInterval(0,i);
-              double localScore =  (wval_c-wval_n)*function.F(in);
+            in.setInterval(0, i);
+            double localScore = (wval_c - wval_n) * function.F(in);
             lovaszScore += localScore;
 
         }
@@ -52,18 +49,18 @@ public class LovaszExtention implements Extension {
 
     @Override
     public DoubleMatrix1D computeGradient(FunctionInput in) {
-        SetFunctionInput sin= (SetFunctionInput)in;
-        DoubleMatrix1D gradient = new DenseDoubleMatrix1D((int)in.getInput().size());
+        SetFunctionInput sin = (SetFunctionInput) in;
+        DoubleMatrix1D gradient = new DenseDoubleMatrix1D((int) in.getInput().size());
         sin.setPermutation(Vectors.permutation(in.getInput()));
-        sin.setInterval(0,1);
-        gradient.setQuick(0,function.F(sin));
-        for (int i = 1; i < in.getInput().size()-1; i++) {
-            sin.setInterval(0,i);
-            double evalPrev =function.F(sin);
-            sin.setInterval(0,i+1);
+        sin.setInterval(0, 1);
+        gradient.setQuick(0, function.F(sin));
+        for (int i = 1; i < in.getInput().size() - 1; i++) {
+            sin.setInterval(0, i);
+            double evalPrev = function.F(sin);
+            sin.setInterval(0, i + 1);
             double evalCurr = function.F(sin);
-            double diff= (evalCurr - evalPrev);
-            gradient.setQuick(i,diff);
+            double diff = (evalCurr - evalPrev);
+            gradient.setQuick(i, diff);
         }
         return gradient;
     }
@@ -71,6 +68,11 @@ public class LovaszExtention implements Extension {
     @Override
     public boolean isDifferentiable() {
         return true;
+    }
+
+    @Override
+    public void clearCache() {
+
     }
 
     @Override
