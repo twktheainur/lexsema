@@ -1,7 +1,8 @@
 package org.getalp.disambiguation.loaders.document;
 
-import org.getalp.disambiguation.Document;
 import org.getalp.disambiguation.LexicalEntry;
+import org.getalp.disambiguation.Sentence;
+import org.getalp.disambiguation.Text;
 import org.xml.sax.Attributes;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.Locator;
@@ -13,7 +14,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Semeval2007DocumentLoader extends DocumentLoader implements ContentHandler {
+public class Semeval2007TextLoader extends TextLoader implements ContentHandler {
 
     private boolean inWord;
     private boolean loadExtra;
@@ -25,8 +26,10 @@ public class Semeval2007DocumentLoader extends DocumentLoader implements Content
 
     private String path;
 
+    private int currentSentence = 0;
 
-    public Semeval2007DocumentLoader(String path, boolean loadExtra) {
+
+    public Semeval2007TextLoader(String path, boolean loadExtra) {
         inWord = false;
         this.path = path;
         currentId = "";
@@ -65,10 +68,11 @@ public class Semeval2007DocumentLoader extends DocumentLoader implements Content
     @Override
     public void startElement(String uri, String localName, String qName, Attributes atts) throws SAXException {
         if (localName.equals("text")) {
-            Document d = new Document();
-            d.setId(atts.getValue("id"));
-            getDocuments().add(d);
-
+            Text t = new Text();
+            t.setId(atts.getValue("id"));
+            getTexts().add(t);
+        } else if (localName.equals("sentence")) {
+            getTexts().get(getTexts().size() - 1).getSentences().add(new Sentence(atts.getValue("id")));
         } else if (localName.equals("instance")) {
             inWord = true;
             currentPos = atts.getValue("pos");
@@ -96,7 +100,9 @@ public class Semeval2007DocumentLoader extends DocumentLoader implements Content
                 }
             }
             w.setPrecedingNonInstances(lextra);
-            getDocuments().get(getDocuments().size() - 1).getLexicalEntries().add(w);
+            getTexts().get(getTexts().size() - 1).getLexicalEntries().add(w);
+            getTexts().get(getTexts().size() - 1).getSentences().get(getTexts().get(getTexts().size() - 1)
+                    .getSentences().size() - 1).getLexicalEntries().add(w);
             currentId = "";
             currentLemma = "";
             currentPos = "";

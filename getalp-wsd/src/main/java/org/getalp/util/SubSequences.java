@@ -38,54 +38,40 @@ public final class SubSequences {
             }
         }
 
-        /*System.out.print("  ");
-        for (int i = 0; i < b.size(); i++) {
-            System.out.print(b.get(i) + " ");
-        }
-        System.out.println();
-        for (int i = 0; i < a.size(); i++) {
-            System.out.print(a.get(i) + " ");
-            for (int j = 0; j < b.size(); j++) {
-                System.out.print(lengths[i][j] + " ");
-            }
-            System.out.println();
-        }
-
-        System.out.print("  ");
-        for (int i = 0; i < b.size(); i++) {
-            System.out.print(b.get(i) + "   ");
-        }
-        System.out.println();
-        for (int i = 0; i < a.size(); i++) {
-            System.out.print(a.get(i) + " ");
-            for (int j = 0; j < b.size(); j++) {
-                System.out.print(scores[i][j] + " ");
-            }
-            System.out.println();
-        }*/
-
         int x = a.size() - 1;
         int y = b.size() - 1;
         double currentSequence = 0;
-        while (x > 0 && y > 0) {
-            double lendiff = lengths[x - 1][y - 1] - (lengths[x][y] - 1);
-            if (lendiff < 0.001d && lendiff > -0.001d && !processed[x][y]) {
-                currentSequence += scores[x][y];
-                int nx = x;
-                int ny = y;
-                while (!(nx <= 0 || ny <= 0 || lengths[nx][ny] == 0)) {
-                    processed[nx][ny] = true;
-                    ny--;
-                    nx--;
-                    currentSequence += scores[nx][ny];
+        while (x >= 0 && y >= 0) {
+            /*The case where the is a single word match at the beginning of the strings*/
+            if (((lengths[x][y] == 1 && (x == 0 || y == 0)) && !processed[x][y])) {
+                ret.add(scores[x][y]);
+                processed[x][y] = true;
+            } else {
+                int prevX = (x == 0) ? 0 : (x - 1);
+                int prevY = (y == 0) ? 0 : y - 1;
+                double lendiff = lengths[prevX][prevY] - (lengths[x][y] - 1);
+                if ((lendiff < 0.001d && lendiff > -0.001d) && !processed[x][y]) {
+                    currentSequence += scores[x][y];
+                    int nx = x;
+                    int ny = y;
+                    while (!(nx <= 0 || ny <= 0 || lengths[nx][ny] == 0)) {
+                        processed[nx][ny] = true;
+                        ny--;
+                        nx--;
+                        currentSequence += scores[nx][ny];
+                    }
+                    ret.add(currentSequence);
+                    currentSequence = 0;
                 }
-                ret.add(currentSequence);
-                currentSequence = 0;
             }
-            y--;
-            if (y == 0) {
+            if (y - 1 < 0 && x > 0) {
                 x--;
-                y = b.size() - 1;
+            } else {
+                y--;
+                if (y == 0 && x > 0) {
+                    x--;
+                    y = b.size() - 1;
+                }
             }
         }
         return ret;
@@ -113,32 +99,6 @@ public final class SubSequences {
                 }
             }
         }
-
-        /*System.out.print("  ");
-        for (int i = 0; i < b.size(); i++) {
-            System.out.print(b.get(i) + " ");
-        }
-        System.out.println();
-        for (int i = 0; i < a.size(); i++) {
-            System.out.print(a.get(i) + " ");
-            for (int j = 0; j < b.size(); j++) {
-                System.out.print(lengths[i][j] + " ");
-            }
-            System.out.println();
-        }
-
-        System.out.print("  ");
-        for (int i = 0; i < b.size(); i++) {
-            System.out.print(b.get(i) + "   ");
-        }
-        System.out.println();
-        for (int i = 0; i < a.size(); i++) {
-            System.out.print(a.get(i) + " ");
-            for (int j = 0; j < b.size(); j++) {
-                System.out.print(scores[i][j] + " ");
-            }
-            System.out.println();
-        }*/
 
         int x = a.size() - 1;
         int y = b.size() - 1;

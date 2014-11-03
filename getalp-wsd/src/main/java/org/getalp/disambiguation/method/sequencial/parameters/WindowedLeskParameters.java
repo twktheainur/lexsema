@@ -6,9 +6,9 @@ public class WindowedLeskParameters {
     private boolean minimize;
     private double deltaThreshold;
 
-    public WindowedLeskParameters(boolean fallbackFS, boolean minimize) {
-        this.fallbackFS = fallbackFS;
-        this.minimize = minimize;
+    public WindowedLeskParameters() {
+        fallbackFS = false;
+        minimize = false;
         deltaThreshold = 0.0001d;
     }
 
@@ -22,5 +22,20 @@ public class WindowedLeskParameters {
 
     public double getDeltaThreshold() {
         return deltaThreshold;
+    }
+
+    public WindowedLeskParameters setFallbackFS(boolean fallbackFS) {
+        this.fallbackFS = fallbackFS;
+        return this;
+    }
+
+    public WindowedLeskParameters setMinimize(boolean minimize) {
+        this.minimize = minimize;
+        return this;
+    }
+
+    public WindowedLeskParameters setDeltaThreshold(double deltaThreshold) {
+        this.deltaThreshold = deltaThreshold;
+        return this;
     }
 }

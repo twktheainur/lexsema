@@ -64,4 +64,18 @@ public class Configuration {
         out += "]";
         return out;
     }
+
+    public void initialize(int value) {
+        for (int i = getStart(); i < getEnd(); i++) {
+            assignments[i] = value;
+        }
+    }
+
+    public int countUnassigned() {
+        int unassignedCount = 0;
+        for (int i = 0; i < assignments.length; i++) {
+            unassignedCount++;
+        }
+        return unassignedCount;
+    }
 }

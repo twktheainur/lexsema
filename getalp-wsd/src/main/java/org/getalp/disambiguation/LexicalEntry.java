@@ -44,20 +44,14 @@ public class LexicalEntry {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (!(o instanceof LexicalEntry)) {
-            return false;
-        }
+        if (this == o) return true;
+        if (!(o instanceof LexicalEntry)) return false;
 
-        LexicalEntry lexicalEntry = (LexicalEntry) o;
+        LexicalEntry that = (LexicalEntry) o;
 
-        if (id.equals(lexicalEntry.id)) {
-            return true;
-        } else {
-            return true;
-        }
+        if (!id.equals(that.id)) return false;
+
+        return true;
     }
 
     @Override

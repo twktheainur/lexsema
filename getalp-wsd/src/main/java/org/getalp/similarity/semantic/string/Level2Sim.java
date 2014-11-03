@@ -1,8 +1,8 @@
-package org.getalp.similarity.local.string;
+package org.getalp.similarity.semantic.string;
 
 import com.wcohen.ss.AbstractTokenizedStringDistance;
-import org.getalp.similarity.local.SimilarityMeasure;
 import org.getalp.disambiguation.Sense;
+import org.getalp.similarity.semantic.SimilarityMeasure;
 
 import java.util.List;
 
@@ -15,7 +15,7 @@ public class Level2Sim implements SimilarityMeasure {
         this.distance = distance;
     }
 
-   private double compute(String a, String b) {
+    private double compute(String a, String b) {
 
         //Level2Levenstein me = new Level2Levenstein();
         //com.wcohen.ss.Level2Sim me = new com.wcohen.ss.Level2Sim();
@@ -24,32 +24,32 @@ public class Level2Sim implements SimilarityMeasure {
 
 
     public double compute(List<String> a, List<String> b) {
-        String sa="";
-        String sb="";
-        for(String s:a){
-            sa+=a+" ";
+        String sa = "";
+        String sb = "";
+        for (String s : a) {
+            sa += a + " ";
         }
         sa = sa.trim();
-        for(String s:b){
-            sb+=b+" ";
+        for (String s : b) {
+            sb += b + " ";
         }
         sb = sb.trim();
 
-        return compute(sa,sb);
+        return compute(sa, sb);
     }
 
     @Override
     public double compute(Sense a, List<String> b) {
-        return compute(a.getSignature(),b);
+        return compute(a.getSignature(), b);
     }
 
     @Override
     public double compute(List<String> a, Sense b) {
-        return compute(a,b.getSignature());
+        return compute(a, b.getSignature());
     }
 
     @Override
     public double compute(Sense a, Sense b) {
-        return compute(a.getSignature(),b.getSignature());
+        return compute(a.getSignature(), b.getSignature());
     }
 }

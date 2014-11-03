@@ -4,10 +4,10 @@ import org.getalp.disambiguation.Document;
 import org.getalp.disambiguation.configuration.Configuration;
 import org.getalp.disambiguation.configuration.SubConfiguration;
 import org.getalp.disambiguation.method.sequencial.parameters.WindowedLeskParameters;
-import org.getalp.optimisation.functions.Function;
-import org.getalp.optimisation.functions.setfunctions.input.SenseCombinationInput;
-import org.getalp.optimisation.functions.setfunctions.submodular.Sum;
-import org.getalp.similarity.local.SimilarityMeasure;
+import org.getalp.disambiguation.score.ConfigurationEntryPairwiseScoreInput;
+import org.getalp.optimization.functions.setfunctions.SetFunction;
+import org.getalp.optimization.functions.setfunctions.submodular.Sum;
+import org.getalp.similarity.semantic.SimilarityMeasure;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,20 +16,21 @@ import java.util.List;
 public class WindowedLeskLexicalEntryDisambiguator extends SequentialLexicalEntryDisambiguator {
 
     WindowedLeskParameters params;
+    SimilarityMeasure similarityMeasure;
 
     public WindowedLeskLexicalEntryDisambiguator(Configuration c, Document d, SimilarityMeasure sim,
                                                  WindowedLeskParameters params,
                                                  int start, int end, int currentIndex) {
-        super(c, d, sim, start, end, currentIndex);
+        super(c, d, start, end, currentIndex);
         this.params = params;
+        this.similarityMeasure = sim;
     }
 
     @Override
     public void run() {
         try {
-            List<SubConfiguration> combinations = getCombinations(getStart(),
-                    new SubConfiguration(getDocument(), getStart(), getEnd()),
-                    getDocument());
+            SubConfiguration nsc = new SubConfiguration(getDocument(), getStart(), getEnd());
+            List<SubConfiguration> combinations = getCombinations(0, nsc, getDocument());
             int selected = -1;
             if (getDocument().getSenses().get(getCurrentIndex()).size() == 1) {
                 selected = 0;
@@ -47,14 +48,21 @@ public class WindowedLeskLexicalEntryDisambiguator extends SequentialLexicalEntr
                 maxValue = -Double.MAX_VALUE;
                 prevMaxValue = 0;
 
-                Function f = new Sum(1);
+                List<Double> results = new ArrayList<>();
+                List<ConfigurationEntryPairwiseScoreInput> inputs = new ArrayList<>();
                 for (int cmb = 0; cmb < combinations.size(); cmb++) {
                     //String wordProgress = String.format("%.2f%%", (100d * ((double) cmb / (double) combinations.size())));
                     //System.err.print( progress + " ==> "+currentEntry.getLemma()+"#"+ currentEntry.getPos() + " ["+cmb+"/"+combinations.size()+" | "+wordProgress +"]\r");
                     SubConfiguration sc = combinations.get(cmb);
-                    SenseCombinationInput sci = new SenseCombinationInput(sc, getDocument(),
-                            getCurrentIndex() - sc.getStart(), getSimilarityMeasure());
+                    ConfigurationEntryPairwiseScoreInput sci = new ConfigurationEntryPairwiseScoreInput(sc, getDocument(),
+                            getCurrentIndex() - sc.getStart(), similarityMeasure);
+                    SetFunction f = new Sum(1);
+                    //LovaszExtention l = new LovaszExtention();
+                    //f.setExtension(l);
+                    //FunctionInput opt = l.optimize(new GradientOptimisation(), sci);
+                    //sci.setInput(opt.getInput());
                     double score = f.F(sci);
+                    //double score = l.compute(sci);
                     //System.err.println(score);
                     if (score <= minValue) {
                         prevMinValue = minValue;
@@ -66,14 +74,13 @@ public class WindowedLeskLexicalEntryDisambiguator extends SequentialLexicalEntr
                         maxValue = score;
                         maxIndex = cmb;
                     }
+                    results.add(score);
+                    inputs.add(sci);
                 }
                 double range = maxValue - minValue;
                 double delta = range * params.getDeltaThreshold();
 
-                if (((params.isMinimize() &&
-                        (minIndex == -1 || Math.abs(prevMinValue - minValue) < params.getDeltaThreshold())) ||
-                        (!params.isMinimize() &&
-                                (maxIndex == -1 || Math.abs(prevMaxValue - maxValue) < params.getDeltaThreshold())))) {
+                if ((params.isMinimize() && minIndex == -1) || (!params.isMinimize() && maxIndex == -1)) {
                     selected = -1;
                 } else if (params.isMinimize()) {
                     selected = combinations.get(minIndex).getAssignment(getCurrentIndex() - combinations.get(minIndex).getStart());
