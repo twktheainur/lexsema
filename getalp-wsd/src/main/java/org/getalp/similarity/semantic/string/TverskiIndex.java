@@ -1,10 +1,10 @@
-package org.getalp.similarity.local.string;
+package org.getalp.similarity.semantic.string;
 
 import com.wcohen.ss.AbstractStringDistance;
 import org.getalp.disambiguation.Sense;
 import org.getalp.segmentation.Segmenter;
 import org.getalp.segmentation.SpaceSegmenter;
-import org.getalp.similarity.local.SimilarityMeasure;
+import org.getalp.similarity.semantic.SimilarityMeasure;
 import org.getalp.util.SubSequences;
 
 import java.util.List;

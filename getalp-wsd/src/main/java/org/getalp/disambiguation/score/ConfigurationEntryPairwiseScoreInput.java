@@ -1,13 +1,15 @@
-package org.getalp.optimisation.functions.setfunctions.input;
+package org.getalp.disambiguation.score;
 
 import cern.colt.matrix.tdouble.impl.DenseDoubleMatrix1D;
 import org.getalp.disambiguation.Document;
 import org.getalp.disambiguation.Sense;
 import org.getalp.disambiguation.configuration.Configuration;
-import org.getalp.optimisation.functions.input.FunctionInput;
-import org.getalp.similarity.local.SimilarityMeasure;
+import org.getalp.optimization.functions.input.FunctionInput;
+import org.getalp.optimization.functions.setfunctions.input.Interval;
+import org.getalp.optimization.functions.setfunctions.input.SetFunctionInput;
+import org.getalp.similarity.semantic.SimilarityMeasure;
 
-public class SenseCombinationInput extends SetFunctionInput {
+public class ConfigurationEntryPairwiseScoreInput extends SetFunctionInput {
 
     private final SimilarityMeasure sim;
     private Configuration configuration;
@@ -15,7 +17,7 @@ public class SenseCombinationInput extends SetFunctionInput {
     private int currentIndex;
 
 
-    public SenseCombinationInput(Configuration c, Document d, int currentIndex, SimilarityMeasure sim) {
+    public ConfigurationEntryPairwiseScoreInput(Configuration c, Document d, int currentIndex, SimilarityMeasure sim) {
         document = d;
         configuration = c;
         this.sim = sim;
@@ -23,7 +25,7 @@ public class SenseCombinationInput extends SetFunctionInput {
         compute();
     }
 
-    public SenseCombinationInput(Configuration c, Document d, int currentIndex, SimilarityMeasure sim, boolean compute) {
+    public ConfigurationEntryPairwiseScoreInput(Configuration c, Document d, int currentIndex, SimilarityMeasure sim, boolean compute) {
         document = d;
         configuration = c;
         this.sim = sim;
@@ -64,7 +66,7 @@ public class SenseCombinationInput extends SetFunctionInput {
 
     @Override
     public FunctionInput copy() {
-        SenseCombinationInput nin = new SenseCombinationInput(configuration, document, currentIndex, sim, false);
+        ConfigurationEntryPairwiseScoreInput nin = new ConfigurationEntryPairwiseScoreInput(configuration, document, currentIndex, sim, false);
         nin.setInput(getInput().copy());
         nin.setValues(getValues().copy());
         if (getPermutation() != null) {

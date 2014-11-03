@@ -8,12 +8,12 @@ import java.util.List;
 public class Document {
     private String id;
     private List<LexicalEntry> lexicalEntries;
-    private List<List<Sense>> sense;
+    private List<List<Sense>> senses;
 
 
     public Document() {
         lexicalEntries = new ArrayList<>();
-        sense = new ArrayList<>();
+        senses = new ArrayList<>();
     }
 
     public String getId() {
@@ -29,7 +29,7 @@ public class Document {
     }
 
     public List<List<Sense>> getSenses() {
-        return sense;
+        return senses;
     }
 
     public LexicalEntry getLexicalEntry(Configuration c, int index) {
@@ -37,10 +37,14 @@ public class Document {
     }
 
     public List<Sense> getSenses(Configuration c, int index) {
-        return sense.get(index + c.getStart());
+        return senses.get(index + c.getStart());
+    }
+
+    public List<Sense> getSenses(int index) {
+        return senses.get(index);
     }
 
     public void setSenses(List<List<Sense>> sense) {
-        this.sense = sense;
+        this.senses = sense;
     }
 }

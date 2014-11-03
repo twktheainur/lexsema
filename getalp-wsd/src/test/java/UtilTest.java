@@ -1,5 +1,5 @@
 import com.wcohen.ss.ScaledLevenstein;
-import org.getalp.util.SubSequences;
+import org.getalp.util.CommonSubsequences;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -33,7 +33,9 @@ public class UtilTest {
         b.add("y");
         b.add("h");
 
-        res = SubSequences.fuzzyLongestCommonSubSequences(a, b, new ScaledLevenstein(), .5d);
+        CommonSubsequences cs = new CommonSubsequences(a, b);
+        cs.setFuzzyDistance(new ScaledLevenstein(), .5d);
+        res = cs.computeSubSequenceLengths();
         System.out.print("Result=" + res + "....");
         assert (res.get(0) - 2.0 < 0.001d);
         assert (res.get(1) - 3.0 < 0.001d);
@@ -68,11 +70,66 @@ public class UtilTest {
         b.add("g");//soft
         b.add("b");//cat
 
-        res = SubSequences.fuzzyLongestCommonSubSequences(a, b, new ScaledLevenstein(), .5d);
+        CommonSubsequences cs = new CommonSubsequences(a, b);
+        cs.setFuzzyDistance(new ScaledLevenstein(), .5d);
+        res = cs.computeSubSequenceLengths();
         System.out.print("Result=" + res + "....");
         assert (res.get(0) - 4.0 < 0.001d);
         assert (res.get(1) - 1.0 < 0.001d);
         System.out.println("Pass!");
+    }
+
+    @Test
+    public void testSingleA() throws Exception {
+        List<String> a = new ArrayList<>();
+        List<String> b = new ArrayList<>();
+        List<Double> res;
+
+
+        System.out.println("--FLCSS ([e] , [e, f, a])--");
+        a.add("e");
+
+        b.add("e");
+        b.add("f");
+        b.add("a");
+
+        CommonSubsequences cs = new CommonSubsequences(a, b);
+        cs.setFuzzyDistance(new ScaledLevenstein(), .5d);
+        res = cs.computeSubSequenceLengths();
+
+        System.out.print("Result=" + res + "....");
+        assert (res.get(0) - 1.0 < 0.001d);
+        System.out.println("Pass!");
+        a.clear();
+        b.clear();
+        System.out.println("---------------------------------------------------------");
+    }
+
+    @Test
+    public void testSingleB() throws Exception {
+        List<String> a = new ArrayList<>();
+        List<String> b = new ArrayList<>();
+        List<Double> res;
+
+
+        System.out.println("--FLCSS ([e, f, a], [e])--");
+        b.add("e");
+
+        a.add("e");
+        a.add("f");
+        a.add("a");
+
+
+        CommonSubsequences cs = new CommonSubsequences(a, b);
+        cs.setFuzzyDistance(new ScaledLevenstein(), .5d);
+        res = cs.computeSubSequenceLengths();
+
+        System.out.print("Result=" + res + "....");
+        assert (res.get(0) - 1.0 < 0.001d);
+        System.out.println("Pass!");
+        a.clear();
+        b.clear();
+        System.out.println("---------------------------------------------------------");
     }
 
 }

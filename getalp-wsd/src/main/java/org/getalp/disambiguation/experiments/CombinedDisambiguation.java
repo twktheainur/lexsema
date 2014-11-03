@@ -1,9 +1,9 @@
-package org.getalp;
+package org.getalp.disambiguation.experiments;
 
 import com.wcohen.ss.ScaledLevenstein;
 import org.getalp.disambiguation.Document;
 import org.getalp.disambiguation.configuration.Configuration;
-import org.getalp.disambiguation.loaders.document.Semeval2007DocumentLoader;
+import org.getalp.disambiguation.loaders.document.Semeval2007TextLoader;
 import org.getalp.disambiguation.loaders.resource.WordnetLoader;
 import org.getalp.disambiguation.method.Disambiguator;
 import org.getalp.disambiguation.method.sequencial.SimplifiedLesk;
@@ -11,29 +11,36 @@ import org.getalp.disambiguation.method.sequencial.WindowedLesk;
 import org.getalp.disambiguation.method.sequencial.parameters.SimplifiedLeskParameters;
 import org.getalp.disambiguation.method.sequencial.parameters.WindowedLeskParameters;
 import org.getalp.disambiguation.result.SemevalWriter;
-import org.getalp.similarity.local.SimilarityMeasure;
-import org.getalp.similarity.local.string.SubmodularTverski;
+import org.getalp.similarity.semantic.SimilarityMeasure;
+import org.getalp.similarity.semantic.string.SubmodularTverskiBuilder;
 
 @SuppressWarnings("all")
-public class ParallelMain {
-    public ParallelMain() {
+public class CombinedDisambiguation {
+    public CombinedDisambiguation() {
     }
 
     public static void main(String[] args) {
-        Semeval2007DocumentLoader dl = new Semeval2007DocumentLoader("../data/senseval2007_task7/test/eng-coarse-all-words.xml", false);
+        Semeval2007TextLoader dl = new Semeval2007TextLoader("../data/senseval2007_task7/test/eng-coarse-all-words.xml", false);
         WordnetLoader lrloader = new WordnetLoader("../data/wordnet/2.1/dict", true, false);
         SimilarityMeasure sim_lr_hp;
         SimilarityMeasure sim_full;
 
         //sim_lr_hp = new TverskiIndex(new ScaledLevenstein(),false, 1d, 0d, 0d, true, true,false ,true);
-        sim_lr_hp = new SubmodularTverski(new ScaledLevenstein(), true, 0.1d, 0.5d, 0.5d, true, false, false, false, 0.1, false, false, false, false);
+        sim_lr_hp = new SubmodularTverskiBuilder().distance(new ScaledLevenstein()).computeRatio(true).alpha(0.1d).beta(0.5d).gamma(0.5d).fuzzyMatching(true).quadraticWeighting(false).extendedLesk(false).randomInit(false).regularizeOverlapInput(false).optimizeOverlapInput(false).regularizeRelations(false).optimizeRelations(false).build();
 
-        SimplifiedLeskParameters slp = new SimplifiedLeskParameters(false, false, false, false, false, false, false);
+        SimplifiedLeskParameters slp = new SimplifiedLeskParameters()
+                .setAddSenseSignatures(false)
+                .setAllowTies(false)
+                .setIncludeTarget(false)
+                .setOnlyOverlapContexts(false)
+                .setOnlyUniqueWords(false)
+                .setFallbackFS(false)
+                .setMinimize(false);
         Disambiguator sl = new SimplifiedLesk(10, sim_lr_hp, slp, 4);
 
 
-        WindowedLeskParameters wlp = new WindowedLeskParameters(false, false);
-        sim_full = new SubmodularTverski(new ScaledLevenstein(), true, 1d, 0.5d, 0.5d, true, false, false, false, 0.1, false, false, false, false);
+        WindowedLeskParameters wlp = new WindowedLeskParameters().setFallbackFS(false).setMinimize(false);
+        sim_full = new SubmodularTverskiBuilder().distance(new ScaledLevenstein()).computeRatio(true).alpha(1d).beta(0.5d).gamma(0.5d).fuzzyMatching(true).quadraticWeighting(false).extendedLesk(false).randomInit(false).regularizeOverlapInput(false).optimizeOverlapInput(false).regularizeRelations(false).optimizeRelations(false).build();
         Disambiguator sl_full = new WindowedLesk(2, sim_full, wlp, 4);
 
 
@@ -44,7 +51,7 @@ public class ParallelMain {
         dl.load();
 
 
-        for (Document d : dl.getDocuments()) {
+        for (Document d : dl.getTexts()) {
             System.err.println("Starting document " + d.getId());
             System.err.println("\tLoading senses...");
             d.setSenses(lrloader.getAllSenses(d.getLexicalEntries()));

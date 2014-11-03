@@ -6,8 +6,8 @@ import edu.mit.jwi.item.IPointer;
 import edu.mit.jwi.item.IWord;
 import edu.mit.jwi.item.IWordID;
 import edu.mit.jwi.item.POS;
+import org.getalp.disambiguation.LexicalEntry;
 import org.getalp.disambiguation.Sense;
-import org.getalp.disambiguation.Word;
 import org.getalp.disambiguation.cache.SenseCache;
 
 import java.io.IOException;
@@ -22,13 +22,13 @@ import java.util.StringTokenizer;
 public class WordnetLoader implements LRLoader {
     private final Dictionary dictionary;
     String path;
-    private boolean isExtended;
+    private boolean hasExtendedSignature;
     private boolean shuffle;
 
 
-    public WordnetLoader(String path, boolean isExtended, boolean shuffle) {
+    public WordnetLoader(String path, boolean hasExtendedSignature, boolean shuffle) {
         this.path = path;
-        this.isExtended = isExtended;
+        this.hasExtendedSignature = hasExtendedSignature;
         this.shuffle = shuffle;
 
         URL url = null;
@@ -47,35 +47,55 @@ public class WordnetLoader implements LRLoader {
         }
     }
 
+    private List<Sense> getSenses(String lemma, String pos) {
+        List<Sense> senses = new ArrayList<>();
+        IIndexWord iw = getWord(lemma + "%" + pos);
+        if (iw != null) {
+            for (int j = 0; j < iw.getWordIDs().size(); j++) {
+                List<String> signature = new ArrayList<>();
+                List<Double> weights = new ArrayList<>();
+                IWord word = dictionary.getWord(iw.getWordIDs().get(j));
+                String def = word.getSynset().getGloss();
+                addToSignature(signature, weights, def);
+
+                Sense s = new Sense(word.getSenseKey().toString(), signature, weights);
+
+                Map<IPointer, List<IWordID>> rm = word.getRelatedMap();
+                for (IPointer p : rm.keySet()) {
+                    for (IWordID iwd : rm.get(p)) {
+                        List<String> localSignature = new ArrayList<String>();
+                        addToSignature(localSignature, weights, dictionary.getWord(iwd).getSynset().getGloss());
+                        if (hasExtendedSignature) {
+                            signature.addAll(localSignature);
+                        }
+                        s.getRelatedSignatures().put(p.getSymbol(), localSignature);
+                    }
+                }
+                if (hasExtendedSignature) {
+                    s.setSignature(signature);
+                }
+                senses.add(s);
+            }
+        }
+        return senses;
+    }
+
     @Override
-    public List<Sense> getSenses(Word w) {
-        boolean miss = false;
+    public List<Sense> getSenses(LexicalEntry w) {
         List<Sense> senses;
         senses = SenseCache.getInstance().getSenses(w);
         if (senses == null) {
-            senses = new ArrayList<Sense>();
-            IIndexWord iw = getWord(w.getLemma() + "%" + w.getPos());
             if (w != null) {
-                for (int j = 0; j < iw.getWordIDs().size(); j++) {
-
-                    List<String> signature = new ArrayList<String>();
-                    List<Double> weights = new ArrayList<Double>();
-                    IWord word = dictionary.getWord(iw.getWordIDs().get(j));
-                    String def = word.getSynset().getGloss();
-                    addToSignature(signature, weights, def);
-
-                    if (isExtended) {
-                        Map<IPointer, List<IWordID>> rm = word.getRelatedMap();
-                        for (IPointer p : rm.keySet()) {
-                            for (IWordID iwd : rm.get(p)) {
-                                addToSignature(signature, weights, dictionary.getWord(iwd).getSynset().getGloss());
-                            }
-                        }
-                    }
-                    senses.add(new Sense(word.getSenseKey().toString(), signature, weights));
+                if (w.getPos() == null || w.getPos().length() == 0) {
+                    senses = getSenses(w.getLemma(), "n");
+                    senses.addAll(getSenses(w.getLemma(), "r"));
+                    senses.addAll(getSenses(w.getLemma(), "a"));
+                    senses.addAll(getSenses(w.getLemma(), "v"));
+                } else {
+                    senses = getSenses(w.getLemma(), w.getPos());
                 }
             }
-            if(shuffle){
+            if (shuffle) {
                 Collections.shuffle(senses);
             }
             SenseCache.getInstance().addCache(w, senses);
@@ -90,62 +110,61 @@ public class WordnetLoader implements LRLoader {
             String token = st.nextToken();
             signature.add(token);
             weights.add(1.0);
-            //weights.add(1d/((double)numberOfSenses(token)+0.00001d));
-            //weights.add((double)numberOfSenses(token));
         }
     }
 
-    private int numberOfSenses(String word){
+    private int numberOfSenses(String word) {
         IIndexWord w = null;
         int senses = 0;
         w = dictionary.getIndexWord(word, POS.NOUN);
-        if(w!=null){
-            senses+=w.getWordIDs().size();
+        if (w != null) {
+            senses += w.getWordIDs().size();
         }
         w = dictionary.getIndexWord(word, POS.ADJECTIVE);
-        if(w!=null){
-            senses+=w.getWordIDs().size();
+        if (w != null) {
+            senses += w.getWordIDs().size();
         }
         w = dictionary.getIndexWord(word, POS.ADVERB);
-        if(w!=null){
-            senses+=w.getWordIDs().size();
+        if (w != null) {
+            senses += w.getWordIDs().size();
         }
         w = dictionary.getIndexWord(word, POS.VERB);
-        if(w!=null){
-            senses+=w.getWordIDs().size();
+        if (w != null) {
+            senses += w.getWordIDs().size();
         }
         return 0;
     }
 
     private IIndexWord getWord(String sid) {
-        String lemme = "";
-        String pos = "";
-        StringTokenizer st = new StringTokenizer(sid, "%");
+        String lemme;
+        String pos;
+        String[] st = sid.split("%");
         if (sid.contains("%%n")) {
             lemme = "%";
             pos = "n";
         } else {
-            lemme = st.nextToken();
-            pos = st.nextToken();
+            lemme = st[0].toLowerCase();
+            pos = st[1];
         }
         IIndexWord w = null;
-        if (pos.equals("n")) {
-            w = dictionary.getIndexWord(lemme, POS.NOUN);
-        } else if (pos.equals("v")) {
-            w = dictionary.getIndexWord(lemme, POS.VERB);
-        } else if (pos.equals("a")) {
-            w = dictionary.getIndexWord(lemme, POS.ADJECTIVE);
-        }
-        if (pos.equals("r")) {
-            w = dictionary.getIndexWord(lemme, POS.ADVERB);
+        if (lemme != null && lemme.length() > 0) {
+            if (pos.toLowerCase().startsWith("n")) {
+                w = dictionary.getIndexWord(lemme, POS.NOUN);
+            } else if (pos.toLowerCase().startsWith("v")) {
+                w = dictionary.getIndexWord(lemme, POS.VERB);
+            } else if (pos.toLowerCase().startsWith("a")) {
+                w = dictionary.getIndexWord(lemme, POS.ADJECTIVE);
+            } else if (pos.toLowerCase().startsWith("r")) {
+                w = dictionary.getIndexWord(lemme, POS.ADVERB);
+            }
         }
         return w;
     }
 
     @Override
-    public List<List<Sense>> getAllSenses(List<Word> wds) {
-        List<List<Sense>> senses = new ArrayList<List<Sense>>();
-        for (Word w : wds) {
+    public List<List<Sense>> getAllSenses(List<LexicalEntry> wds) {
+        List<List<Sense>> senses = new ArrayList<>();
+        for (LexicalEntry w : wds) {
             senses.add(getSenses(w));
         }
         return senses;

@@ -1,3 +1,3 @@
 Manifest-Version: 1.0
-Main-Class: org.getalp.SupervisedRMain
+Main-Class: org.getalp.disambiguation.experiments.SupervisedDisambiguation
 
