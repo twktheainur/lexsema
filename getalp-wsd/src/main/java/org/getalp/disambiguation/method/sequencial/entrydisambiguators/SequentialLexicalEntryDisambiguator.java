@@ -1,7 +1,7 @@
 package org.getalp.disambiguation.method.sequencial.entrydisambiguators;
 
-import org.getalp.disambiguation.Document;
 import org.getalp.disambiguation.configuration.Configuration;
+import org.getalp.io.Document;
 
 public abstract class SequentialLexicalEntryDisambiguator implements Runnable {
     private int start;

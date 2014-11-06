@@ -1,7 +1,7 @@
 package org.getalp.similarity.semantic;
 
 
-import org.getalp.disambiguation.Sense;
+import org.getalp.io.Sense;
 
 import java.util.List;
 

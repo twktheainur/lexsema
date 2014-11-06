@@ -1,9 +1,9 @@
 package org.getalp.disambiguation.score;
 
 import cern.colt.matrix.tdouble.impl.DenseDoubleMatrix1D;
-import org.getalp.disambiguation.Document;
-import org.getalp.disambiguation.Sense;
 import org.getalp.disambiguation.configuration.Configuration;
+import org.getalp.io.Document;
+import org.getalp.io.Sense;
 import org.getalp.optimization.functions.input.FunctionInput;
 import org.getalp.optimization.functions.setfunctions.input.SetFunctionInput;
 import org.getalp.similarity.semantic.SimilarityMeasure;

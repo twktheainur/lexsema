@@ -1,7 +1,7 @@
 package org.getalp.disambiguation.method;
 
-import org.getalp.disambiguation.Document;
 import org.getalp.disambiguation.configuration.Configuration;
+import org.getalp.io.Document;
 
 /**
  * Created by tchechem on 10/24/14.

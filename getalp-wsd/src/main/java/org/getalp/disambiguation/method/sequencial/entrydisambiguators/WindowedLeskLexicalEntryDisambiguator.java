@@ -1,10 +1,10 @@
 package org.getalp.disambiguation.method.sequencial.entrydisambiguators;
 
-import org.getalp.disambiguation.Document;
 import org.getalp.disambiguation.configuration.Configuration;
 import org.getalp.disambiguation.configuration.SubConfiguration;
 import org.getalp.disambiguation.method.sequencial.parameters.WindowedLeskParameters;
 import org.getalp.disambiguation.score.ConfigurationEntryPairwiseScoreInput;
+import org.getalp.io.Document;
 import org.getalp.optimization.functions.setfunctions.SetFunction;
 import org.getalp.optimization.functions.setfunctions.submodular.Sum;
 import org.getalp.similarity.semantic.SimilarityMeasure;

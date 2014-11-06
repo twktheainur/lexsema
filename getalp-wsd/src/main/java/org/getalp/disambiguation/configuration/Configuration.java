@@ -2,7 +2,7 @@ package org.getalp.disambiguation.configuration;
 
 import cern.colt.matrix.tdouble.DoubleMatrix1D;
 import cern.colt.matrix.tdouble.impl.DenseDoubleMatrix1D;
-import org.getalp.disambiguation.Document;
+import org.getalp.io.Document;
 
 public class Configuration {
     int[] assignments;

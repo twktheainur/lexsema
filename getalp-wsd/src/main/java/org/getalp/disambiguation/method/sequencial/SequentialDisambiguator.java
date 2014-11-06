@@ -1,9 +1,9 @@
 package org.getalp.disambiguation.method.sequencial;
 
-import org.getalp.disambiguation.Document;
 import org.getalp.disambiguation.configuration.Configuration;
 import org.getalp.disambiguation.method.Disambiguator;
 import org.getalp.disambiguation.method.sequencial.entrydisambiguators.SequentialLexicalEntryDisambiguator;
+import org.getalp.io.Document;
 
 import java.util.LinkedList;
 import java.util.List;
