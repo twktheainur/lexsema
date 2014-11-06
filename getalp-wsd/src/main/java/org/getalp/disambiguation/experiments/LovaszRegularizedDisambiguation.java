@@ -1,16 +1,16 @@
 package org.getalp.disambiguation.experiments;
 
 import com.wcohen.ss.ScaledLevenstein;
-import org.getalp.disambiguation.Document;
 import org.getalp.disambiguation.configuration.Configuration;
-import org.getalp.disambiguation.loaders.document.Semeval2007TextLoader;
-import org.getalp.disambiguation.loaders.resource.WordnetLoader;
 import org.getalp.disambiguation.method.Disambiguator;
 import org.getalp.disambiguation.method.sequencial.SimplifiedLesk;
 import org.getalp.disambiguation.method.sequencial.parameters.SimplifiedLeskParameters;
 import org.getalp.disambiguation.result.SemevalWriter;
+import org.getalp.io.Document;
+import org.getalp.io.document.Semeval2007TextLoader;
+import org.getalp.io.resource.WordnetLoader;
 import org.getalp.similarity.semantic.SimilarityMeasure;
-import org.getalp.similarity.semantic.string.SubmodularTverskiBuilder;
+import org.getalp.similarity.semantic.string.TverskiIndexSimilarityMeasureBuilder;
 import org.getalp.util.VisualVMTools;
 
 @SuppressWarnings("all")
@@ -26,7 +26,7 @@ public class LovaszRegularizedDisambiguation {
         WordnetLoader lrloader = new WordnetLoader("../data/wordnet/2.1/dict", true, true);
         SimilarityMeasure similarityMeasure;
 
-        similarityMeasure = new SubmodularTverskiBuilder()
+        similarityMeasure = new TverskiIndexSimilarityMeasureBuilder()
                 .distance(new ScaledLevenstein())
                 .computeRatio(false)
                 .alpha(1d)

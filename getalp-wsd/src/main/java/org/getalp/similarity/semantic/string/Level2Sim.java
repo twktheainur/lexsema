@@ -1,7 +1,7 @@
 package org.getalp.similarity.semantic.string;
 
 import com.wcohen.ss.AbstractTokenizedStringDistance;
-import org.getalp.disambiguation.Sense;
+import org.getalp.io.Sense;
 import org.getalp.similarity.semantic.SimilarityMeasure;
 
 import java.util.List;

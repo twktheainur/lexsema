@@ -1,10 +1,10 @@
 package org.getalp.disambiguation.method.sequencial;
 
-import org.getalp.disambiguation.Document;
 import org.getalp.disambiguation.configuration.Configuration;
 import org.getalp.disambiguation.method.sequencial.entrydisambiguators.SequentialLexicalEntryDisambiguator;
 import org.getalp.disambiguation.method.sequencial.entrydisambiguators.SimplifiedLeskLexicalEntryDisambiguator;
 import org.getalp.disambiguation.method.sequencial.parameters.SimplifiedLeskParameters;
+import org.getalp.io.Document;
 import org.getalp.similarity.semantic.SimilarityMeasure;
 
 public class SimplifiedLesk extends SequentialDisambiguator {

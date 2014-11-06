@@ -1,6 +1,6 @@
 package org.getalp.disambiguation.configuration;
 
-import org.getalp.disambiguation.Document;
+import org.getalp.io.Document;
 
 public class SubConfiguration extends Configuration {
 

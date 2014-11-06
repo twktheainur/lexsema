@@ -1,7 +1,7 @@
 package org.getalp.disambiguation.result;
 
-import org.getalp.disambiguation.Document;
 import org.getalp.disambiguation.configuration.Configuration;
+import org.getalp.io.Document;
 
 import java.io.FileNotFoundException;
 import java.io.PrintStream;

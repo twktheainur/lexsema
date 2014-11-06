@@ -1,8 +1,8 @@
 package org.getalp.disambiguation.method;
 
-import org.getalp.disambiguation.Document;
-import org.getalp.disambiguation.Sense;
 import org.getalp.disambiguation.configuration.Configuration;
+import org.getalp.io.Document;
+import org.getalp.io.Sense;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;

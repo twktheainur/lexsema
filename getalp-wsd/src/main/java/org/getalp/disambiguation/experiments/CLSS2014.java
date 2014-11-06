@@ -1,19 +1,19 @@
 package org.getalp.disambiguation.experiments;
 
 import com.wcohen.ss.ScaledLevenstein;
-import org.getalp.disambiguation.Sentence;
 import org.getalp.disambiguation.configuration.Configuration;
-import org.getalp.disambiguation.loaders.resource.WordnetLoader;
-import org.getalp.disambiguation.loaders.sentences.STS2013SentencePairLoader;
 import org.getalp.disambiguation.method.Disambiguator;
 import org.getalp.disambiguation.method.sequencial.SimplifiedLesk;
 import org.getalp.disambiguation.method.sequencial.parameters.SimplifiedLeskParameters;
 import org.getalp.disambiguation.score.ConfigurationPairScoreInput;
+import org.getalp.io.Sentence;
+import org.getalp.io.resource.WordnetLoader;
+import org.getalp.io.sentences.STS2013SentencePairLoader;
 import org.getalp.optimization.functions.Function;
 import org.getalp.optimization.functions.setfunctions.submodular.Sum;
 import org.getalp.segmentation.SpaceSegmenter;
 import org.getalp.similarity.semantic.SimilarityMeasure;
-import org.getalp.similarity.semantic.string.SubmodularTverskiBuilder;
+import org.getalp.similarity.semantic.string.TverskiIndexSimilarityMeasureBuilder;
 import org.getalp.util.ValueScale;
 
 import java.io.FileNotFoundException;
@@ -34,7 +34,7 @@ public class CLSS2014 {
         PrintWriter outputFile = new PrintWriter("STS.headlines.output.txt");
         SimilarityMeasure similarityMeasure;
 
-        similarityMeasure = new SubmodularTverskiBuilder()
+        similarityMeasure = new TverskiIndexSimilarityMeasureBuilder()
                 .distance(new ScaledLevenstein())
                 .computeRatio(true)
                 .alpha(1d)

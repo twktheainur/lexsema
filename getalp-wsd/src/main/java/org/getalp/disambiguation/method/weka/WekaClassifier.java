@@ -56,7 +56,7 @@ public class WekaClassifier {
                 classifier = classifierCreator.setUpClassifier();
             } catch (ClassifierSetUpException e) {
                 // TODO Auto-generated catch block
-                e.printStackTrace();
+                //e.printStackTrace();
             }
         }
     }
@@ -106,7 +106,7 @@ public class WekaClassifier {
             weka.core.SerializationHelper.write(modelPath, classifier);
         } catch (Exception e) {
             // TODO Auto-generated catch block
-            e.printStackTrace();
+            //e.printStackTrace();
         }
     }
 
@@ -125,7 +125,7 @@ public class WekaClassifier {
                 classifier.buildClassifier(instances);
                 classifierTrained = true;
             } catch (Exception e1) {
-                e1.printStackTrace();
+                // e1.printStackTrace();
             }
             saveModel();
         }
@@ -148,7 +148,7 @@ public class WekaClassifier {
             output = classifier.distributionForInstance(instance);
         } catch (Exception e) {
             // TODO Auto-generated catch block
-            e.printStackTrace();
+            //e.printStackTrace();
         }
 
         List<ClassificationEntry> result = new ArrayList<ClassificationEntry>();
@@ -160,7 +160,7 @@ public class WekaClassifier {
                 i++;
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            //e.printStackTrace();
         }
         Collections.sort(result);
         return result;

@@ -1,11 +1,11 @@
 package org.getalp.disambiguation.method.sequencial.entrydisambiguators;
 
 import com.wcohen.ss.ScaledLevenstein;
-import org.getalp.disambiguation.Document;
-import org.getalp.disambiguation.LexicalEntry;
-import org.getalp.disambiguation.Sense;
 import org.getalp.disambiguation.configuration.Configuration;
 import org.getalp.disambiguation.method.sequencial.parameters.SimplifiedLeskParameters;
+import org.getalp.io.Document;
+import org.getalp.io.LexicalEntry;
+import org.getalp.io.Sense;
 import org.getalp.similarity.semantic.SimilarityMeasure;
 
 import java.util.ArrayList;
