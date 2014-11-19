@@ -16,7 +16,7 @@ import java.io.IOException;
 import java.util.Properties;
 
 /**
- * An OWL graphapi model wrapper around Jena
+ * An OWL graph api model wrapper around Jena
  */
 public class OWLTBoxModel implements OntologyModel {
     private OntModel model;
@@ -28,6 +28,7 @@ public class OWLTBoxModel implements OntologyModel {
      *
      * @throws IOException When loading the default properties fails (data/graphapi.properties)
      */
+    @SuppressWarnings("unused")
     public OWLTBoxModel() throws IOException {
         loadProperties();
         createModel(null);
@@ -39,6 +40,7 @@ public class OWLTBoxModel implements OntologyModel {
      * @param m An existing base graphapi model
      * @throws IOException When loading the default properties fails (data/graphapi.properties)
      */
+    @SuppressWarnings("unused")
     public OWLTBoxModel(Model m) throws IOException {
         loadProperties();
         createModel(m);
@@ -80,19 +82,9 @@ public class OWLTBoxModel implements OntologyModel {
         properties.load(new FileInputStream(propPath));
     }
 
-    /**
-     * Return a reference to the wrapped Jena <code>OntModel</code>
-     *
-     * @return
-     */
-    @Override
-    public OntModel getJenaModel() {
-        return model;
-    }
-
 
     @Override
-    public Node getNode(String element) {
-        return NodeFactory.createURI(getJenaModel().expandPrefix(element));
+    public Node getNode(String uri) {
+        return NodeFactory.createURI(model.expandPrefix(uri));
     }
 }

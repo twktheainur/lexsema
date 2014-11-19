@@ -1,16 +1,16 @@
 package org.getalp.lexsema.ontolex.uri;
 
 
-import org.getalp.lexsema.ontolex.graph.Node;
+import java.util.Map;
 
 /**
- * Interface for URI parsers, whose aim is to extract information encoded in the URI
+ * Interface for URI parsers, whose aim is to extract information encoded in the URI of <code>LexicalResourceEntity</code>(ies).
  */
 public interface URIParser {
     /**
-     * Parse the information contained in the URI of the Node and possibly set relevant values in the <code>Node</code> instance
+     * Parse the information contained in a LexicalResourceEntity URI and return the resulting key/value map
      *
-     * @param entry The Node instance
+     * @param uri The URI to parse
      */
-    public void parseURI(Node entry);
+    public Map<String, String> parseURI(String uri);
 }

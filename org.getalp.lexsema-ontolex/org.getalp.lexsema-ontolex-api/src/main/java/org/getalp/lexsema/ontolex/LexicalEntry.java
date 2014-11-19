@@ -1,22 +1,16 @@
 package org.getalp.lexsema.ontolex;
 
-import java.util.List;
-
-/**
- * Created by tchechem on 11/6/14.
- */
+@SuppressWarnings("unused")
 public interface LexicalEntry extends LexicalResourceEntity {
-    List<LexicalSense> getSenses();
-
     String getLemma();
-
-    String getPartOfSpeech();
-
-    int getNumber();
 
     void setLemma(String lemma);
 
+    String getPartOfSpeech();
+
     void setPartOfSpeech(String partOfSpeech);
+
+    int getNumber();
 
     void setNumber(int number);
 }

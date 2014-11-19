@@ -1,61 +1,104 @@
 package org.getalp.lexsema.ontolex;
 
-
+import org.getalp.lexsema.ontolex.exceptions.NotRegisteredException;
+import org.getalp.lexsema.ontolex.factories.entities.LexicalResourceEntityFactory;
+import org.getalp.lexsema.ontolex.graph.Graph;
 import org.getalp.lexsema.ontolex.graph.OntologyModel;
-import org.getalp.lexsema.ontolex.uri.OntolexURICollection;
-import org.getalp.lexsema.ontolex.uri.URICollection;
+import org.getalp.lexsema.ontolex.graph.defaultimpl.DefaultGraph;
+import org.getalp.lexsema.ontolex.queries.LexicalEntriesFromLemmaPosQueryProcessor;
+import org.getalp.lexsema.ontolex.queries.LexicalSensesOfLexicalEntryQueryProcessor;
+import org.getalp.lexsema.ontolex.queries.QueryProcessor;
+import org.getalp.lexsema.ontolex.uri.URIParser;
+import org.getalp.lexsema.ontolex.uri.URIParserRegister;
 
 import java.util.List;
 
-/**
- * A Lemon Lexical Resource Handler
- */
-public abstract class OntolexLexicalResource extends AbstractLexicalResource implements OntolexEntityFactory {
 
-    private URICollection lemonUri;
+/**
+ * Operations and  attributes common to all classes implementing <code>LexicalResource</code>.
+ * - <code>getGraph</code>
+ * - <code>getFactory</code>
+ * - <code>getURIParser</code>
+ * - <code>getURIModel</code>
+ */
+public class OntolexLexicalResource implements LexicalResource {
+
+    private Graph graph;
+    private OntologyModel model;
+    private LexicalResourceEntityFactory lexicalResourceEntityFactory;
+    @SuppressWarnings("all")
+    private URIParserRegister uriParserRegister;
     private String uri;
 
-    {
-        lemonUri = new OntolexURICollection(getModel());
-    }
 
-    /**
-     * Default constructor
-     *
-     * @param model The underlying graphapi model
-     */
-    protected OntolexLexicalResource(OntologyModel model, String uri) {
-        super(model);
+    public OntolexLexicalResource(OntologyModel model, String uri, URIParserRegister uriParserRegister, LexicalResourceEntityFactory lexicalResourceEntityFactory) {
+        this.model = model;
+        this.uriParserRegister = uriParserRegister;
+        this.lexicalResourceEntityFactory = lexicalResourceEntityFactory;
         this.uri = uri;
+        lexicalResourceEntityFactory.setLexicalResource(this);
     }
 
     @Override
-    public String getURI() {
+    public Graph getGraph() {
+        if (graph == null) {
+            graph = new DefaultGraph(getResourceGraphURI(), model);
+        }
+        return graph;
+    }
+
+    @Override
+    public String getResourceGraphURI() {
         return uri;
     }
 
-    public String getLemonURI(String s) {
-        return lemonUri.forName(s);
+    @Override
+    public URIParser getURIParser(Class<? extends LexicalResourceEntity> entityClass) {
+        try {
+            return uriParserRegister.getFactory(entityClass);
+        } catch (NotRegisteredException e) {
+            return null;
+        }
     }
 
     @Override
-    public String getResourceURI(String s) {
-        return getLemonURI(s);
+    public OntologyModel getModel() {
+        return model;
     }
 
     @Override
     public List<LexicalEntry> getLexicalEntries(String entry) {
-        return null;
+        return null; //TODO: WRITE THIS API METHOD IMPL
     }
 
     @Override
     public List<LexicalEntry> getLexicalEntries(String lemma, String pos) {
-        return null;
+        QueryProcessor<LexicalEntry> getLexicalEntries = new LexicalEntriesFromLemmaPosQueryProcessor(getGraph(), getLexicalResourceEntityFactory(), lemma, pos);
+        getLexicalEntries.runQuery();
+        return getLexicalEntries.processResults();
     }
 
     @Override
-    public List<LexicalEntry> getLexicalEntries(String lemma, String pos, int entryNumber) {
-        return null;
+    public List<LexicalSense> getLexicalSenses(LexicalEntry lexicalEntry) {
+        QueryProcessor<LexicalSense> getLexicalSensesQuery =
+                new LexicalSensesOfLexicalEntryQueryProcessor(getGraph(), getLexicalResourceEntityFactory(), lexicalEntry);
+        getLexicalSensesQuery.runQuery();
+        return getLexicalSensesQuery.processResults();
     }
+
+    protected String getURI() {
+        return uri;
+    }
+
+    @Override
+    public void setURI(String uri) {
+        this.uri = uri;
+    }
+
+    @Override
+    public LexicalResourceEntityFactory getLexicalResourceEntityFactory() {
+        return lexicalResourceEntityFactory;
+    }
+
 
 }
