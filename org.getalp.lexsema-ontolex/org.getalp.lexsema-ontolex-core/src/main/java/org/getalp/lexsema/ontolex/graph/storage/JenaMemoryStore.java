@@ -10,16 +10,13 @@ import com.hp.hpl.jena.query.ResultSet;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
 import org.getalp.lexsema.ontolex.graph.store.Store;
-import virtuoso.jena.driver.VirtGraph;
 
 import java.io.IOException;
 
 public class JenaMemoryStore implements Store {
 
     private Model model;
-    private VirtGraph virtuosoGraph;
 
-    // url = "jdbc:virtuoso://kopi.imag.fr:1982";"dba", "dba"
     public JenaMemoryStore(String aBoxFile) throws IOException {
         model = ModelFactory.createOntologyModel();
         model.read(aBoxFile);

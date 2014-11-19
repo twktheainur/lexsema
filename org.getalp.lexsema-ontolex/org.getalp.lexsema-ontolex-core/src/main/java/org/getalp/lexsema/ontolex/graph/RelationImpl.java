@@ -3,26 +3,17 @@
  */
 package org.getalp.lexsema.ontolex.graph;
 
-import com.hp.hpl.jena.query.QuerySolution;
-import com.hp.hpl.jena.query.ResultSet;
-import com.hp.hpl.jena.rdf.model.RDFNode;
-import org.getalp.lexsema.ontolex.LexicalResource;
-import org.getalp.lexsema.ontolex.LexicalResourceEntity;
-import org.getalp.lexsema.ontolex.graph.queries.ARQQuery;
-import org.getalp.lexsema.ontolex.graph.queries.ARQSelectQuery;
-import org.getalp.lexsema.ontolex.graph.queries.TripleFactory;
-
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * @author tchechem
  */
-public class RelationImpl implements Relation {
-    private String start;
+@SuppressWarnings({"unused", "EmptyClass"})
+public class RelationImpl {
+    /*private String start;
     private String end;
+    private String uri;
 
-    protected RelationImpl() {
+    protected RelationImpl(String uri) {
+        this.uri = uri;
     }
 
     public static <S extends LexicalResourceEntity> List<Relation> findRelationsForSource(S n, RelationType t) {
@@ -30,25 +21,25 @@ public class RelationImpl implements Relation {
     }
 
 
-    public static <E extends LexicalResourceEntity> List<Relation> findRelationsForTarget(E n, RelationType t) {
-        TripleFactory tf = new TripleFactory(n.getOntologyModel());
+  /*  @SuppressWarnings("HardcodedFileSeparator")
+    public static <E extends LexicalResourceEntity> List<Relation> findRelationsForTarget(E n, RelationType t,OntologyURIModel uriModel, Graph graph) {
 
-        List<Node> entries = new ArrayList<>();
+        Collection<Triple> triples = new ArrayList<>(1);
+        Collection<String> resultVars = new ArrayList<>(1);
 
-        ARQQuery q = new ARQSelectQuery();
+        triples.add(Triple.create(Var.alloc("id"),
+                NodeFactory.createURI(uriForName(uriModel,t.getPrefix(), t.getType().toString())),
+                NodeFactory.createURI(n.getURI())));
+        resultVars.add("id");
 
-        LexicalResource llr = n.getLexicalResource();
-        q.addToFromStatement(llr.getGraph());
-        q.addToWhereStatement(tf.isAnyRelatedToURI("id", llr.getResourceURI(t.getType().toString()), n.getURI()));
+        ARQQuery q = new ARQSelectQueryImpl();
 
-        q.addResult("id");
-
-        ResultSet rs = q.runQuery();
+        ResultSet rs = q.runQuery(graph, triples, resultVars);
         List<Relation> rels = new ArrayList<>();
         while (rs.hasNext()) {
             QuerySolution qs = rs.next();
             RDFNode rn = qs.get("id");
-            RelationImpl rel = new RelationImpl();
+            Relation rel = new RelationImpl(rn.toString());
             String stStr = rn.toString();
             stStr = stStr.substring(stStr.lastIndexOf("/") + 1, stStr.length());
             String eStr = n.getURI();
@@ -60,11 +51,13 @@ public class RelationImpl implements Relation {
         return rels;
     }
 
-    protected void setStart(String start) {
+    @Override
+    public void setStart(String start) {
         this.start = start;
     }
 
-    protected void setEnd(String end) {
+    @Override
+    public void setEnd(String end) {
         this.end = end;
     }
 
@@ -78,4 +71,9 @@ public class RelationImpl implements Relation {
     public String getEnd() {
         return end;
     }
+
+    @Override
+    public String getURI() {
+        return uri;
+    }*/
 }

@@ -1,16 +1,14 @@
 package org.getalp.lexsema.ontolex;
 
-import org.getalp.lexsema.ontolex.graph.Node;
-
 /**
- * Created by tchechem on 11/6/14.
+ * An interface for <code>LexicalSense</code> instances
  */
-public interface LexicalSense extends Node, LexicalResourceEntity {
+public interface LexicalSense extends LexicalResourceEntity {
     String getDefinition();
-
-    int getSenseNumber();
 
     void setDefinition(String definition);
 
-    void setSenseNumber(int senseNumber);
+    String getSenseNumber();
+
+    void setSenseNumber(String senseNumber);
 }

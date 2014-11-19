@@ -1,13 +1,17 @@
 package org.getalp.lexsema.ontolex.graph;
 
-import com.hp.hpl.jena.ontology.OntModel;
-
 /**
  * Interface to the Jena OntModel Wrapper
  */
 public interface OntologyModel {
 
-    OntModel getJenaModel();
 
-    Node getNode(String element);
+    /**
+     * The graph node that corresponds to the <code>uri</code>.
+     * This method expands prefixes that are loaded into the model
+     *
+     * @param uri The uri of the node.
+     */
+    com.hp.hpl.jena.graph.Node getNode(String uri);
+
 }

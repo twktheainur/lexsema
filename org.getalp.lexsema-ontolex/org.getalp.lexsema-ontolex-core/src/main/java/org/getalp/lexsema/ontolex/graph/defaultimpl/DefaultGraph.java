@@ -27,8 +27,7 @@ public class DefaultGraph implements Graph {
     }
 
     @Override
-    public Node getUri() {
+    public Node getJenaNode() {
         return uri;
     }
-
 }

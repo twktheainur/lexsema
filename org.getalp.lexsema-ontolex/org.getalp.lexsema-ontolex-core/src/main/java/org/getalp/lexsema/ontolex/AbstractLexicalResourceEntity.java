@@ -1,20 +1,23 @@
 package org.getalp.lexsema.ontolex;
 
+import com.hp.hpl.jena.graph.Node;
+import com.hp.hpl.jena.graph.NodeFactory;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.getalp.lexsema.ontolex.graph.OntologyModel;
-import org.getalp.lexsema.ontolex.graph.defaultimpl.AbstractNode;
 
 /**
  * Generic Implementation of a Lexical Resource entity
  */
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode()
 @ToString
-public abstract class AbstractLexicalResourceEntity extends AbstractNode implements LexicalResourceEntity {
+public abstract class AbstractLexicalResourceEntity implements LexicalResourceEntity {
 
     private LexicalResource lexicalResource;
     private OntologyModel model;
     private LexicalResourceEntity parent;
+    private Node node;
+
 
     /**
      * Constructor for an Abstract Lexical Resource Entity
@@ -22,11 +25,22 @@ public abstract class AbstractLexicalResourceEntity extends AbstractNode impleme
      * @param r   The lexical resource to which the entity belongs
      * @param uri The uri of the entity
      */
+    @SuppressWarnings("HardcodedFileSeparator")
     protected AbstractLexicalResourceEntity(LexicalResource r, String uri, LexicalResourceEntity parent) {
-        super((r.getURI().charAt(r.getURI().length() - 1) != '/') ? r.getURI() + "/" : r.getURI() + uri);
         lexicalResource = r;
-        model = r.getGraph().getModel();
+        model = r.getModel();
         this.parent = parent;
+        String baseURI = r.getResourceGraphURI();
+        String newUri = "";
+        if (!uri.contains("/")) {
+            newUri = baseURI;
+            if (!baseURI.endsWith("/")) {
+                newUri += "/";
+            }
+        }
+
+        newUri += uri;
+        node = NodeFactory.createURI(newUri);
     }
 
     @Override
@@ -37,5 +51,10 @@ public abstract class AbstractLexicalResourceEntity extends AbstractNode impleme
     @Override
     public OntologyModel getOntologyModel() {
         return model;
+    }
+
+    @Override
+    public Node getNode() {
+        return node;
     }
 }
