@@ -34,6 +34,12 @@ public class DBNaryBuilder extends OntolexLexicalResourceBuilder {
 
     @Override
     public LexicalResource build(OntologyModel model, Locale language) {
-        return new DBNaryImpl(model, language, getUriParserRegister(), getEntityFactory());
+        String uri = String.format("%s/%s/", model.getNode("dbnary:").getURI().split("#")[0], language.getISO3Language());
+        return build(model, language, uri);
+    }
+
+    @Override
+    public LexicalResource build(OntologyModel model, Locale language, String uri) {
+        return new DBNaryImpl(model, language, uri, getUriParserRegister(), getEntityFactory());
     }
 }

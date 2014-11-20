@@ -7,6 +7,7 @@ import org.getalp.lexsema.ontolex.graph.OntologyModel;
 import org.getalp.lexsema.ontolex.uri.URIParser;
 
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Generic Interface for LexicalResources
@@ -77,5 +78,12 @@ public interface LexicalResource {
      * @param uri The base uri of the resource graph
      */
     public void setURI(String uri);
+
+    /**
+     * Returns the language of the lexical resource, null if the resource is not bound to a particualr language
+     *
+     * @return The language of the resource.
+     */
+    public Locale getLanguage();
 
 }

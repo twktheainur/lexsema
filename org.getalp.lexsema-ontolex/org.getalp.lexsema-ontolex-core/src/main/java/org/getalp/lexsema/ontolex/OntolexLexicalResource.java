@@ -12,6 +12,7 @@ import org.getalp.lexsema.ontolex.uri.URIParser;
 import org.getalp.lexsema.ontolex.uri.URIParserRegister;
 
 import java.util.List;
+import java.util.Locale;
 
 
 /**
@@ -21,7 +22,7 @@ import java.util.List;
  * - <code>getURIParser</code>
  * - <code>getURIModel</code>
  */
-public class OntolexLexicalResource implements LexicalResource {
+public abstract class OntolexLexicalResource implements LexicalResource {
 
     private Graph graph;
     private OntologyModel model;
@@ -73,7 +74,7 @@ public class OntolexLexicalResource implements LexicalResource {
 
     @Override
     public List<LexicalEntry> getLexicalEntries(String lemma, String pos) {
-        QueryProcessor<LexicalEntry> getLexicalEntries = new LexicalEntriesFromLemmaPosQueryProcessor(getGraph(), getLexicalResourceEntityFactory(), lemma, pos);
+        QueryProcessor<LexicalEntry> getLexicalEntries = new LexicalEntriesFromLemmaPosQueryProcessor(getGraph(), getLanguage(), getLexicalResourceEntityFactory(), lemma, pos);
         getLexicalEntries.runQuery();
         return getLexicalEntries.processResults();
     }
@@ -100,5 +101,6 @@ public class OntolexLexicalResource implements LexicalResource {
         return lexicalResourceEntityFactory;
     }
 
-
+    @Override
+    public abstract Locale getLanguage();
 }
