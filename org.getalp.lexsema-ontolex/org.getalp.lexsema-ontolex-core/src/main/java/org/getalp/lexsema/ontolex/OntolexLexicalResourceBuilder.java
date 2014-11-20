@@ -35,11 +35,7 @@ public abstract class OntolexLexicalResourceBuilder implements LexicalResourceBu
     }
 
     @Override
-    public LexicalResource build(OntologyModel model, Locale language, String uri) {
-        LexicalResource lr = new OntolexLexicalResource(model, uri, uriParserRegister, entityFactory);
-        lr.setURI("");
-        return lr;
-    }
+    public abstract LexicalResource build(OntologyModel model, Locale language, String uri);
 
     @Override
     public LexicalResource build(OntologyModel model, String uri) {

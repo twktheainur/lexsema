@@ -1,5 +1,6 @@
 package org.getalp.lexsema.ontolex.queries;
 
+import com.hp.hpl.jena.graph.NodeFactory;
 import com.hp.hpl.jena.query.QuerySolution;
 import com.hp.hpl.jena.rdf.model.RDFNode;
 import com.hp.hpl.jena.sparql.core.Var;
@@ -16,6 +17,7 @@ import org.getalp.lexsema.ontolex.graph.Graph;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 /**
@@ -31,14 +33,16 @@ public final class LexicalEntriesFromLemmaPosQueryProcessor extends AbstractQuer
 
     private String lemma = "";
     private String pos = "";
+    private Locale language;
 
-    public LexicalEntriesFromLemmaPosQueryProcessor(Graph graph,
+    public LexicalEntriesFromLemmaPosQueryProcessor(Graph graph, Locale language,
                                                     LexicalResourceEntityFactory lexicalResourceEntityFactory,
                                                     String lemma, String pos) {
         super(graph);
         this.lexicalResourceEntityFactory = lexicalResourceEntityFactory;
         this.lemma = lemma;
         this.pos = pos;
+        this.language = language;
         initialize();
     }
 
@@ -54,17 +58,23 @@ public final class LexicalEntriesFromLemmaPosQueryProcessor extends AbstractQuer
         addTriple(Var.alloc(ENTRY_RESULT_VAR),
                 getNode("lemon:canonicalForm"),
                 Var.alloc(LEMMA_CF_VAR));
-        addTriple(Var.alloc(LEMMA_CF_VAR),
-                getNode("lemon:writtenRep"),
-                Var.alloc(WRITTEN_REP_VAR));
+        if (language != null) {
+            addTriple(Var.alloc(LEMMA_CF_VAR),
+                    getNode("lemon:writtenRep"),
+                    NodeFactory.createLiteral(lemma, language.getLanguage(), null));
+        } else {
+            addTriple(Var.alloc(LEMMA_CF_VAR),
+                    getNode("lemon:writtenRep"),
+                    Var.alloc(WRITTEN_REP_VAR));
+            Expr lemmaRegexMatch = new E_Equals(new E_Str(new ExprVar(WRITTEN_REP_VAR)), new NodeValueString(lemma));
+            addFilter(lemmaRegexMatch);
+        }
+
         addTriple(Var.alloc(ENTRY_RESULT_VAR),
                 getNode("lexinfo:partOfSpeech"),
                 getNode(pos));
         addResultVar(ENTRY_RESULT_VAR);
-        addResultVar(WRITTEN_REP_VAR);
-
-        Expr lemmaRegexMatch = new E_Equals(new E_Str(new ExprVar(WRITTEN_REP_VAR)), new NodeValueString(lemma));
-        addFilter(lemmaRegexMatch);
+        //addResultVar(WRITTEN_REP_VAR);
     }
 
     private LexicalEntry getEntity(String uri, LexicalResourceEntity parent, Map<String, String> parameters) {
@@ -77,7 +87,6 @@ public final class LexicalEntriesFromLemmaPosQueryProcessor extends AbstractQuer
         while (hasNextResult()) {
             QuerySolution qs = nextSolution();
             RDFNode resultUri = qs.get(ENTRY_RESULT_VAR);
-            String lemma = qs.get(WRITTEN_REP_VAR).toString();
             String[] le = String.valueOf(resultUri).split("/");
 
             Map<String, String> properties = new HashMap<>();

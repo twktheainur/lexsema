@@ -37,10 +37,10 @@ public final class DBNaryImpl extends OntolexLexicalResource implements DBNary {
      * @param language The language of the dbnary to access
      */
     @SuppressWarnings("HardcodedFileSeparator")
-    public DBNaryImpl(OntologyModel model, Locale language,
+    public DBNaryImpl(OntologyModel model, Locale language, String uri,
                       URIParserRegister uriParserRegister,
                       LexicalResourceEntityFactory entityFactory) {
-        super(model, String.format("%s/%s/", model.getNode("dbnary:").getURI().split("#")[0], language.getISO3Language()), uriParserRegister, entityFactory);
+        super(model, uri, uriParserRegister, entityFactory);
         this.language = language;
     }
 
@@ -96,5 +96,10 @@ public final class DBNaryImpl extends OntolexLexicalResource implements DBNary {
     @Override
     public List<Translation> getTranslations(LexicalResourceEntity sourceEntity, Locale language) {
         return null;
+    }
+
+    @Override
+    public Locale getLanguage() {
+        return language;
     }
 }
