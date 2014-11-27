@@ -13,7 +13,6 @@
         <module>org.getalp.lexsema-io</module>
         <module>org.getalp.lexsema-util</module>
         <module>org.getalp.lexsema-optim</module>
-        <module/>
     </modules>
 
     <name>lexsema</name>
