@@ -24,6 +24,6 @@
     <orderEntry type="library" name="Maven: org.apache.httpcomponents:httpcore:4.2.2" level="project" />
     <orderEntry type="library" name="Maven: commons-codec:commons-codec:1.6" level="project" />
     <orderEntry type="library" name="Maven: org.slf4j:jcl-over-slf4j:1.6.4" level="project" />
+    <orderEntry type="library" name="Maven: com.google.code.findbugs:jsr305:3.0.0" level="project" />
   </component>
 </module>
-

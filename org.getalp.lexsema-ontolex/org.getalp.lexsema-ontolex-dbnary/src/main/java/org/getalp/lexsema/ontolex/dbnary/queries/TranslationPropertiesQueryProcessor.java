@@ -2,6 +2,7 @@ package org.getalp.lexsema.ontolex.dbnary.queries;
 
 import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.query.QuerySolution;
+import com.hp.hpl.jena.rdf.model.RDFNode;
 import com.hp.hpl.jena.sparql.core.Var;
 import org.getalp.lexsema.ontolex.graph.Graph;
 import org.getalp.lexsema.ontolex.queries.ARQQuery;
@@ -39,8 +40,7 @@ public final class TranslationPropertiesQueryProcessor extends AbstractQueryProc
         addTriple(translation,
                 getNode("dbnary:gloss"),
                 Var.alloc(GLOSS_RESULT));
-
-        addTriple(translation,
+        addOptionalTriple(translation,
                 getNode("dbnary:translationNumber"),
                 Var.alloc(TRANSLATION_NUMBER_RESULT));
 
@@ -66,7 +66,10 @@ public final class TranslationPropertiesQueryProcessor extends AbstractQueryProc
             QuerySolution qs = nextSolution();
             Map<String, String> properties = new HashMap<>();
             properties.put(GLOSS_RESULT, qs.get(GLOSS_RESULT).toString());
-            properties.put(TRANSLATION_NUMBER_RESULT, qs.get(TRANSLATION_NUMBER_RESULT).toString().split("\\^\\^")[0]);
+            RDFNode translationNumber = qs.get(TRANSLATION_NUMBER_RESULT);
+            if (translationNumber != null) {
+                properties.put(TRANSLATION_NUMBER_RESULT, translationNumber.toString().split("\\^\\^")[0]);
+            }
             properties.put(WRITTEN_FORM_RESULT, qs.get(WRITTEN_FORM_RESULT).toString());
             properties.put(TARGET_LANGUAGE_RESULT, qs.get(TARGET_LANGUAGE_RESULT).toString());
             vocables.add(properties);

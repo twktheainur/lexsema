@@ -1,17 +1,18 @@
 package org.getalp.lexsema.wsd.experiments;
 
 import com.wcohen.ss.ScaledLevenstein;
-import org.getalp.lexsema.io.Document;
+import org.getalp.lexsema.io.annotresult.SemevalWriter;
 import org.getalp.lexsema.io.document.Semeval2007TextLoader;
+import org.getalp.lexsema.io.document.TextLoader;
 import org.getalp.lexsema.io.resource.WordnetLoader;
-import org.getalp.lexsema.similarity.SimilarityMeasure;
-import org.getalp.lexsema.similarity.TverskiIndexSimilarityMeasureBuilder;
+import org.getalp.lexsema.similarity.Document;
+import org.getalp.lexsema.similarity.measures.SimilarityMeasure;
+import org.getalp.lexsema.similarity.measures.TverskiIndexSimilarityMeasureBuilder;
 import org.getalp.lexsema.util.VisualVMTools;
 import org.getalp.lexsema.wsd.configuration.Configuration;
 import org.getalp.lexsema.wsd.method.Disambiguator;
 import org.getalp.lexsema.wsd.method.sequencial.SimplifiedLesk;
 import org.getalp.lexsema.wsd.method.sequencial.parameters.SimplifiedLeskParameters;
-import org.getalp.lexsema.wsd.result.SemevalWriter;
 
 @SuppressWarnings("all")
 public class LovaszRegularizedDisambiguation {
@@ -22,8 +23,10 @@ public class LovaszRegularizedDisambiguation {
 
         VisualVMTools.delayUntilReturn();
 
-        Semeval2007TextLoader dl = new Semeval2007TextLoader("../data/senseval2007_task7/test/eng-coarse-all-words.xml", false);
-        WordnetLoader lrloader = new WordnetLoader("../data/wordnet/2.1/dict", true, true);
+        TextLoader dl = new Semeval2007TextLoader("../data/senseval2007_task7/test/eng-coarse-all-words.xml")
+                .loadNonInstances(false);
+        WordnetLoader lrloader = new WordnetLoader("../data/wordnet/2.1/dict")
+                .setHasExtendedSignature(true).setShuffle(true);
         SimilarityMeasure similarityMeasure;
 
         similarityMeasure = new TverskiIndexSimilarityMeasureBuilder()
@@ -61,15 +64,15 @@ public class LovaszRegularizedDisambiguation {
         dl.load();
 
 
-        for (Document d : dl.getTexts()) {
+        for (Document d : dl) {
             System.err.println("Starting document " + d.getId());
             System.err.println("\tLoading senses...");
-            d.setSenses(lrloader.getAllSenses(d.getLexicalEntries()));
+            lrloader.loadSenses(d);
             //System.err.println("\tDisambiguating... ");
             Configuration c = disambiguator.disambiguate(d);
             SemevalWriter sw = new SemevalWriter(d.getId() + ".ans");
             System.err.println("\n\tWriting results...");
-            sw.write(d, c);
+            sw.write(d, c.getAssignments());
             System.err.println("done!");
         }
         disambiguator.release();

@@ -6,7 +6,10 @@ import org.getalp.lexsema.ontolex.LexicalResourceEntity;
 import org.getalp.lexsema.ontolex.OntolexLexicalResource;
 import org.getalp.lexsema.ontolex.dbnary.exceptions.NoSuchVocableException;
 import org.getalp.lexsema.ontolex.dbnary.queries.LexicalEntriesForVocableQueryProcessor;
+import org.getalp.lexsema.ontolex.dbnary.queries.RelatedEntitiesForLexicalResourceEntityQueryProcessor;
 import org.getalp.lexsema.ontolex.dbnary.queries.RetrieveAllVocablesQueryProcessor;
+import org.getalp.lexsema.ontolex.dbnary.queries.TranslationsForLexicalResourceEntityQueryProcessor;
+import org.getalp.lexsema.ontolex.dbnary.relations.DBNaryRelationType;
 import org.getalp.lexsema.ontolex.factories.entities.LexicalResourceEntityFactory;
 import org.getalp.lexsema.ontolex.graph.OntologyModel;
 import org.getalp.lexsema.ontolex.queries.QueryProcessor;
@@ -88,14 +91,37 @@ public final class DBNaryImpl extends OntolexLexicalResource implements DBNary {
     @Override
     public List<LexicalEntry> getLexicalEntries(Vocable vocable) {
 
-        QueryProcessor<LexicalEntry> lexicalEntryQueryProcessor = new LexicalEntriesForVocableQueryProcessor(getGraph(), getLexicalResourceEntityFactory(), vocable);
+        QueryProcessor<LexicalEntry> lexicalEntryQueryProcessor =
+                new LexicalEntriesForVocableQueryProcessor(
+                        getGraph(),
+                        getLexicalResourceEntityFactory(),
+                        vocable);
         lexicalEntryQueryProcessor.runQuery();
         return lexicalEntryQueryProcessor.processResults();
     }
 
     @Override
     public List<Translation> getTranslations(LexicalResourceEntity sourceEntity, Locale language) {
-        return null;
+        QueryProcessor<Translation> translationTargets =
+                new TranslationsForLexicalResourceEntityQueryProcessor(
+                        getGraph(),
+                        getLexicalResourceEntityFactory(),
+                        sourceEntity,
+                        language);
+        translationTargets.runQuery();
+        return translationTargets.processResults();
+    }
+
+    @Override
+    public List<LexicalResourceEntity> getRelatedEntities(LexicalResourceEntity sourceEntity, DBNaryRelationType relationType) {
+        QueryProcessor<LexicalResourceEntity> relatedTargetsProcessor =
+                new RelatedEntitiesForLexicalResourceEntityQueryProcessor(
+                        getGraph(),
+                        getLexicalResourceEntityFactory(),
+                        sourceEntity,
+                        relationType);
+        relatedTargetsProcessor.runQuery();
+        return relatedTargetsProcessor.processResults();
     }
 
     @Override

@@ -1,12 +1,12 @@
 package org.getalp.lexsema.io.sentences;
 
-import org.getalp.lexsema.io.Loader;
-import org.getalp.lexsema.io.Sentence;
+
+import org.getalp.lexsema.similarity.Sentence;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class SentencePairLoader implements Loader {
+public abstract class SentencePairLoader {
     List<List<Sentence>> sentences;
 
     protected SentencePairLoader() {

@@ -1,9 +1,12 @@
 import org.getalp.lexsema.ontolex.LexicalEntry;
 import org.getalp.lexsema.ontolex.LexicalResource;
+import org.getalp.lexsema.ontolex.LexicalResourceEntity;
 import org.getalp.lexsema.ontolex.LexicalSense;
 import org.getalp.lexsema.ontolex.dbnary.DBNary;
+import org.getalp.lexsema.ontolex.dbnary.Translation;
 import org.getalp.lexsema.ontolex.dbnary.Vocable;
 import org.getalp.lexsema.ontolex.dbnary.exceptions.NoSuchVocableException;
+import org.getalp.lexsema.ontolex.dbnary.relations.DBNaryRelationType;
 import org.getalp.lexsema.ontolex.factories.resource.LexicalResourceFactory;
 import org.getalp.lexsema.ontolex.graph.OWLTBoxModel;
 import org.getalp.lexsema.ontolex.graph.OntologyModel;
@@ -55,7 +58,7 @@ public class TestAPI {
 
     @Test
     public void testGetVocable() throws InvocationTargetException, NoSuchMethodException, ClassNotFoundException, InstantiationException, IllegalAccessException {
-        Logger logger = getLogger("testVocables()");
+        Logger logger = getLogger("testGetVocable()");
         Vocable v = null;
         try {
             v = dbnary.getVocable(TEST_VOCABLE);
@@ -69,7 +72,7 @@ public class TestAPI {
 
     @Test
     public void testGetLexicalEntriesForVocable() throws InvocationTargetException, NoSuchMethodException, ClassNotFoundException, InstantiationException, IllegalAccessException {
-        Logger logger = getLogger("testVocables()");
+        Logger logger = getLogger("testGetLexicalEntriesForVocable()");
         Vocable v;
         List<LexicalEntry> les = null;
         try {
@@ -87,7 +90,7 @@ public class TestAPI {
 
     @Test
     public void testGetLexicalEntriesForLemmaPos() throws InvocationTargetException, NoSuchMethodException, ClassNotFoundException, InstantiationException, IllegalAccessException {
-        Logger logger = getLogger("testVocables()");
+        Logger logger = getLogger("testGetLexicalEntriesForLemmaPos()");
         List<LexicalEntry> les;
         les = dbnary.getLexicalEntries("chien", "lexinfo:noun");
         for (LexicalEntry le : les) {
@@ -97,13 +100,30 @@ public class TestAPI {
     }
 
     @Test
+    public void testListTranslationsForLexicalEntry() throws InvocationTargetException, NoSuchMethodException, ClassNotFoundException, InstantiationException, IllegalAccessException {
+        Logger logger = getLogger("testListTranslationsForLexicalEntry()");
+        List<Translation> translations;
+        LexicalResourceEntity le = dbnary.getLexicalResourceEntityFactory()
+                .getEntity(LexicalEntry.class,
+                        "http://kaiko.getalp.org/dbnary/fra/chien__nom__1", null);
+
+
+        logger.info(le.toString());
+        translations = dbnary.getTranslations(le, null);
+        for (Translation s : translations) {
+            logger.info(s.toString());
+        }
+        assert !translations.isEmpty();
+    }
+
+    @Test
     public void testListSensesForLexicalEntry() throws InvocationTargetException, NoSuchMethodException, ClassNotFoundException, InstantiationException, IllegalAccessException {
-        Logger logger = getLogger("testVocables()");
+        Logger logger = getLogger("testListSensesForLexicalEntry()");
         List<LexicalSense> senses = null;
         try {
             OntologyModel tBox = new OWLTBoxModel(ONTOLOGY_PROPERTIES);
 
-            // Creating DBnary wrapper
+            // Creating DBNary wrapper
             LexicalResource lr = LexicalResourceFactory.getLexicalResource(DBNary.class, tBox, Locale.FRENCH);
 
             LexicalEntry le = (LexicalEntry) dbnary.getLexicalResourceEntityFactory()
@@ -120,6 +140,23 @@ public class TestAPI {
             logger.error(e.toString());
         }
         assert senses != null && !senses.isEmpty();
+    }
+
+    @Test
+    public void testListRelatedForLexicalEntry() throws InvocationTargetException, NoSuchMethodException, ClassNotFoundException, InstantiationException, IllegalAccessException {
+        Logger logger = getLogger("testListRelatedForLexicalEntry()");
+        List<LexicalResourceEntity> related;
+        LexicalResourceEntity le = dbnary.getLexicalResourceEntityFactory()
+                .getEntity(LexicalEntry.class,
+                        "http://kaiko.getalp.org/dbnary/fra/chien__nom__1", null);
+
+
+        logger.info(le.toString());
+        related = dbnary.getRelatedEntities(le, DBNaryRelationType.hypernym);
+        for (LexicalResourceEntity s : related) {
+            logger.info(s.toString());
+        }
+        assert !related.isEmpty();
     }
 
     private Logger getLogger(String method) {

@@ -26,14 +26,7 @@ public interface ARQQuery {
     ResultSet runQuery();
 
     /**
-     * Add a condition triple to the where statement the query
-     *
-     * @param t The triple to add to the where statement
-     */
-    void addToWhereStatement(Triple t);
-
-    /**
-     * Adds a variable as a result variable in the ResultSet
+     * Adds a variable as a annotresult variable in the ResultSet
      *
      * @param var The variable name to add
      */
@@ -47,26 +40,19 @@ public interface ARQQuery {
     void addToFromStatement(Graph g);
 
     /**
-     * Adds an expression as a filter to the query
-     *
-     * @param filter The expression to ass as a filter.
-     */
-    void addFilter(Expr filter);
-
-    /**
      * Initialize the query on <code>Graph</code> <code>g</code> with where statement <code>Triple</code> defined in <code>triples</code>
-     * and result variables defined in <code>resultVars</code>
+     * and annotresult variables defined in <code>resultVars</code>
      *
      * @param g          The <code>Graph</code> from which to query
      * @param triples    The triples to add to the WHERE statement
      * @param resultVars Result variables to consider for the output
      * @return The results of the query
      */
-    public ResultSet runQuery(Graph g, Iterable<Triple> triples, Iterable<String> resultVars);
+    public ResultSet runQuery(Graph g, Iterable<Triple> triples, Iterable<Triple> optionalTriples, Iterable<String> resultVars);
 
     /**
      * Initialize the query on <code>Graph</code> <code>g</code> with where statement <code>Triple</code> defined in <code>triples</code>
-     * and result variables defined in <code>resultVars</code>. <code>filters</code> is a list of FILTER expressions for
+     * and annotresult variables defined in <code>resultVars</code>. <code>filters</code> is a list of FILTER expressions for
      * the query.
      *
      * @param g          The <code>Graph</code> from which to query
@@ -75,21 +61,21 @@ public interface ARQQuery {
      * @param filters    The filter list.
      * @return The results of the query
      */
-    public ResultSet runQuery(Graph g, Iterable<Triple> triples, Iterable<String> resultVars, Iterable<Expr> filters);
+    public ResultSet runQuery(Graph g, Iterable<Triple> triples, Iterable<Triple> optionalTriples, Iterable<String> resultVars, Iterable<Expr> filters);
 
     /**
      * Initialize the query on <code>Graph</code> <code>g</code> with where statement <code>Triple</code> defined in <code>triples</code>
-     * and result variables defined in <code>resultVars</code>
+     * and annotresult variables defined in <code>resultVars</code>
      *
      * @param g          The <code>Graph</code> from which to query
      * @param triples    The triples to add to the WHERE statement
      * @param resultVars Result variables to consider for the output
      */
-    public void initialize(Graph g, Iterable<Triple> triples, Iterable<String> resultVars);
+    public void initialize(Graph g, Iterable<Triple> triples, Iterable<Triple> optionalTriples, Iterable<String> resultVars);
 
     /**
      * Initialize the query on <code>Graph</code> <code>g</code> with where statement <code>Triple</code> defined in <code>triples</code>
-     * and result variables defined in <code>resultVars</code>. <code>filters</code> is a list of FILTER expressions for
+     * and annotresult variables defined in <code>resultVars</code>. <code>filters</code> is a list of FILTER expressions for
      * the query.
      *
      * @param g          The <code>Graph</code> from which to query.
@@ -97,6 +83,6 @@ public interface ARQQuery {
      * @param resultVars Result variables to consider for the output.
      * @param filters    The filter list.
      */
-    public void initialize(Graph g, Iterable<Triple> triples, Iterable<String> resultVars, Iterable<Expr> filters);
+    public void initialize(Graph g, Iterable<Triple> triples, Iterable<Triple> optionalTriples, Iterable<String> resultVars, Iterable<Expr> filters);
 
 }

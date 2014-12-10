@@ -1,7 +1,10 @@
 package org.getalp.lexsema.wsd.method.sequencial.entrydisambiguators;
 
-import org.getalp.lexsema.io.Document;
+import org.getalp.lexsema.similarity.Document;
+import org.getalp.lexsema.similarity.Sense;
 import org.getalp.lexsema.wsd.configuration.Configuration;
+
+import java.util.List;
 
 public abstract class SequentialLexicalEntryDisambiguator implements Runnable {
     private int start;
@@ -36,5 +39,9 @@ public abstract class SequentialLexicalEntryDisambiguator implements Runnable {
 
     public Document getDocument() {
         return document;
+    }
+
+    public List<Sense> getSenses(int offset, int index) {
+        return document.getSenses(offset, index);
     }
 }

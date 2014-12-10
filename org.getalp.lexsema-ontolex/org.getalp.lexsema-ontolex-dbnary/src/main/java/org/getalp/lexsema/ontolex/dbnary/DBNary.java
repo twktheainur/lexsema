@@ -4,6 +4,7 @@ import org.getalp.lexsema.ontolex.LexicalEntry;
 import org.getalp.lexsema.ontolex.LexicalResource;
 import org.getalp.lexsema.ontolex.LexicalResourceEntity;
 import org.getalp.lexsema.ontolex.dbnary.exceptions.NoSuchVocableException;
+import org.getalp.lexsema.ontolex.dbnary.relations.DBNaryRelationType;
 
 import java.util.List;
 import java.util.Locale;
@@ -60,4 +61,14 @@ public interface DBNary extends LexicalResource {
      * are no translation associated to the entity for the particular language.
      */
     public List<Translation> getTranslations(LexicalResourceEntity sourceEntity, Locale language);
+
+    /**
+     * Retrieve the related <code>LexicalResourceEntity</code> (ies) associated
+     * to <code>sourceEntity</code> through <code>relationType</code>
+     *
+     * @param sourceEntity The source <code>LexicalResourceEntity</code>
+     * @param relationType The relation type
+     * @return The list of related entities through for the source entity through the provided relation type.
+     */
+    public List<LexicalResourceEntity> getRelatedEntities(LexicalResourceEntity sourceEntity, DBNaryRelationType relationType);
 }

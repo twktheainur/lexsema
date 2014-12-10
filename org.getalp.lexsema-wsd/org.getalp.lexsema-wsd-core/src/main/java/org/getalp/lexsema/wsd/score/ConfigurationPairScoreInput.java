@@ -1,9 +1,9 @@
 package org.getalp.lexsema.wsd.score;
 
 import cern.colt.matrix.tdouble.impl.DenseDoubleMatrix1D;
-import org.getalp.lexsema.io.Document;
-import org.getalp.lexsema.io.Sense;
-import org.getalp.lexsema.similarity.SimilarityMeasure;
+import org.getalp.lexsema.similarity.Document;
+import org.getalp.lexsema.similarity.Sense;
+import org.getalp.lexsema.similarity.measures.SimilarityMeasure;
 import org.getalp.lexsema.util.ValueScale;
 import org.getalp.lexsema.wsd.configuration.Configuration;
 import org.getalp.optimization.functions.input.FunctionInput;
@@ -64,7 +64,14 @@ public class ConfigurationPairScoreInput extends SetFunctionInput {
                 }
                 double score = 0d;
                 if (sense1 != null && sense2 != null) {
-                    score = ValueScale.scaleValue(0, 1, 0, 5, sim.compute(sense1, sense2));
+                    score = ValueScale.scaleValue(
+                            0, 1, 0, 5,
+                            sim.compute(
+                                    sense1.getSemanticSignature(),
+                                    sense2.getSemanticSignature(),
+                                    sense1.getRelatedSignatures(),
+                                    sense2.getRelatedSignatures())
+                    );
                 }
                 getInput().setQuick(pairindex, 1d);
                 getValues().setQuick(pairindex, score);

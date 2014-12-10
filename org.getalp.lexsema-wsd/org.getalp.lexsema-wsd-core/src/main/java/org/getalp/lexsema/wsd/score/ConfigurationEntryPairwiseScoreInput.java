@@ -1,9 +1,9 @@
 package org.getalp.lexsema.wsd.score;
 
 import cern.colt.matrix.tdouble.impl.DenseDoubleMatrix1D;
-import org.getalp.lexsema.io.Document;
-import org.getalp.lexsema.io.Sense;
-import org.getalp.lexsema.similarity.SimilarityMeasure;
+import org.getalp.lexsema.similarity.Document;
+import org.getalp.lexsema.similarity.Sense;
+import org.getalp.lexsema.similarity.measures.SimilarityMeasure;
 import org.getalp.lexsema.wsd.configuration.Configuration;
 import org.getalp.optimization.functions.input.FunctionInput;
 import org.getalp.optimization.functions.setfunctions.input.Interval;
@@ -54,7 +54,7 @@ public class ConfigurationEntryPairwiseScoreInput extends SetFunctionInput {
                             .get(assig);
                     getInput().setQuick(pairIndex, 1d);
                     if (currentWordSelectedSense != null) {
-                        value = sim.compute(currentWordSelectedSense, otherWordSense);
+                        value = sim.compute(currentWordSelectedSense.getSemanticSignature(), otherWordSense.getSemanticSignature(), null, null);
                     }
                     getValues().setQuick(pairIndex, value);
                     pairIndex++;

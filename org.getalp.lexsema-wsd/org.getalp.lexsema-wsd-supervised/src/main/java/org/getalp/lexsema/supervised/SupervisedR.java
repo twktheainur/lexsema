@@ -1,7 +1,7 @@
 package org.getalp.lexsema.supervised;
 
-import org.getalp.lexsema.io.Document;
-import org.getalp.lexsema.io.Sense;
+import org.getalp.lexsema.similarity.Document;
+import org.getalp.lexsema.similarity.Sense;
 import org.getalp.lexsema.wsd.configuration.Configuration;
 import org.getalp.lexsema.wsd.method.Disambiguator;
 
@@ -64,11 +64,11 @@ public class SupervisedR implements Disambiguator {
         if (c == null) {
             c = new Configuration(document);
         }
-        for (int i = 0; i < document.getLexicalEntries().size(); i++) {
-            System.err.print(String.format("\tDisambiguating: %.2f%%\r", ((double) i / (double) document.getLexicalEntries().size()) * 100d));
+        for (int i = 0; i < document.size(); i++) {
+            System.err.print(String.format("\tDisambiguating: %.2f%%\r", ((double) i / (double) document.size()) * 100d));
 
-            String targetLemma = document.getLexicalEntries().get(i).getLemma();
-            String targetPos = convertPos(document.getLexicalEntries().get(i).getPos());
+            String targetLemma = document.getWord(0, i).getLemma();
+            String targetPos = convertPos(document.getWord(0, i).getPartOfSpeech());
 
             String header = "";
             String featureVector = "";
@@ -77,10 +77,10 @@ public class SupervisedR implements Disambiguator {
             for (int j = i - lemmamin; j <= i + lemmamax; j++) {
                 if (i != j) {
                     String lemmaFeature = "";
-                    if (j < 0 || j >= document.getLexicalEntries().size()) {
+                    if (j < 0 || j >= document.size()) {
                         lemmaFeature = "\"X\"";
                     } else {
-                        lemmaFeature = "\"" + document.getLexicalEntries().get(j).getLemma() + "\"";
+                        lemmaFeature = "\"" + document.getWord(0, j).getLemma() + "\"";
                     }
                     header += "A" + numfeatures + "\t";
                     featureVector += lemmaFeature + "\t";
@@ -91,10 +91,10 @@ public class SupervisedR implements Disambiguator {
             for (int j = i - posmin; j <= i + posmax; j++) {
                 if (j != i) {
                     String posFeature = "";
-                    if (j < 0 || j >= document.getLexicalEntries().size()) {
+                    if (j < 0 || j >= document.size()) {
                         posFeature = "\"0\"";
                     } else {
-                        posFeature = "\"" + convertPos(document.getLexicalEntries().get(j).getPos()) + "\"";
+                        posFeature = "\"" + convertPos(document.getWord(0, j).getPartOfSpeech()) + "\"";
                     }
                     header += "A" + numfeatures + "\t";
                     featureVector += posFeature + "\t";
@@ -118,7 +118,7 @@ public class SupervisedR implements Disambiguator {
 
             String output = runR(targetLemma);
             if (output.length() == 0) {
-                if (document.getSenses().get(i).size() == 1) {
+                if (document.getSenses(0, i).size() == 1) {
                     c.setSense(i, 0);
                 } else {
                     c.setSense(i, -1);
@@ -157,8 +157,8 @@ public class SupervisedR implements Disambiguator {
     }
 
     public int getMatchingSense(Document d, String tag, int wordIndex) {
-        for (int s = 0; s < d.getSenses().get(wordIndex).size(); s++) {
-            Sense cs = d.getSenses().get(wordIndex).get(s);
+        for (int s = 0; s < d.getSenses(0, wordIndex).size(); s++) {
+            Sense cs = d.getSenses(wordIndex).get(s);
             if (cs.getId().contains(tag)) {
                 return s;
             }

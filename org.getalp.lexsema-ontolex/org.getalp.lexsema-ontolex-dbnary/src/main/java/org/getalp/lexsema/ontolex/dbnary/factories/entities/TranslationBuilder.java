@@ -37,7 +37,13 @@ public class TranslationBuilder extends AbstractLexicalResourceEntityBuilder<Tra
 
         String gloss = translationProperties.get("gloss");
         String writtenForm = translationProperties.get("writtenForm");
-        int translationNumber = Integer.valueOf(translationProperties.get("translationNumber"));
+        String translationNumberString = translationProperties.get("translationNumber");
+        int translationNumber;
+        if (translationNumberString == null) {
+            translationNumber = -1;
+        } else {
+            translationNumber = Integer.valueOf(translationNumberString);
+        }
         String targetLanguage = translationProperties.get("targetLanguage");
 
         return new TranslationImpl(getLexicalResource(), getResourceGraphURI() + uri, parent,

@@ -7,23 +7,18 @@ import org.apache.uima.cas.Type;
 import org.apache.uima.cas.text.AnnotationFS;
 import org.apache.uima.fit.component.CasConsumer_ImplBase;
 import org.apache.uima.fit.util.CasUtil;
-import org.getalp.lexsema.io.LexicalEntry;
-import org.getalp.lexsema.io.Sentence;
+import org.getalp.lexsema.similarity.Sentence;
+import org.getalp.lexsema.similarity.SentenceImpl;
+import org.getalp.lexsema.similarity.Word;
+import org.getalp.lexsema.similarity.WordImpl;
 
 import java.util.Collection;
 
-/**
- * Created by tchechem on 10/31/14.
- */
+
 public class TokenAnnotationConsumer extends CasConsumer_ImplBase {
 
     private Sentence sentence;
 
-
-    private Type LEMMA_ANNOTATION;
-    private Type POS_ANNOTATION;
-    private Type TOKEN_ANNOTATION;
-    private Type DocID_ANNOTATION;
 
     public TokenAnnotationConsumer() {
 
@@ -33,22 +28,17 @@ public class TokenAnnotationConsumer extends CasConsumer_ImplBase {
     @Override
     public void process(CAS cas) throws AnalysisEngineProcessException {
 
-        POS_ANNOTATION = cas.getTypeSystem().getType("de.tudarmstadt.ukp.dkpro.ontolex.api.lexmorph.type.pos.POS");
-        LEMMA_ANNOTATION = cas.getTypeSystem().getType("de.tudarmstadt.ukp.dkpro.ontolex.api.segmentation.type.Lemma");
-        TOKEN_ANNOTATION = cas.getTypeSystem().getType("de.tudarmstadt.ukp.dkpro.ontolex.api.segmentation.type.Token");
-        TOKEN_ANNOTATION = cas.getTypeSystem().getType("de.tudarmstadt.ukp.dkpro.ontolex.api.segmentation.type.Token");
-        DocID_ANNOTATION = cas.getTypeSystem().getType("de.tudarmstadt.ukp.dkpro.ontolex.api.metadata.type.DocumentMetaData:documentId");
-
+        Type TOKEN_ANNOTATION = cas.getTypeSystem().getType("de.tudarmstadt.ukp.dkpro.ontolex.api.segmentation.type.Token");
         Collection<AnnotationFS> tokens = CasUtil.select(cas, TOKEN_ANNOTATION);
 
-        sentence = new Sentence("");
+        sentence = new SentenceImpl("");
         for (AnnotationFS tokenAnnot : tokens) {
             Token token = (Token) tokenAnnot;
             String lemma = token.getLemma().getValue();
             String pos = token.getPos().getPosValue();
             String sform = token.getCoveredText();
-            LexicalEntry lexEnt = new LexicalEntry("", lemma, sform, pos);
-            sentence.getLexicalEntries().add(lexEnt);
+            Word lexEnt = new WordImpl("", lemma, sform, pos);
+            sentence.addWord(lexEnt);
         }
     }
 

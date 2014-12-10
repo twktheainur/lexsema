@@ -1,12 +1,13 @@
 package org.getalp.lexsema.wsd.experiments;
 
 import com.wcohen.ss.ScaledLevenstein;
-import org.getalp.lexsema.io.Sentence;
 import org.getalp.lexsema.io.resource.WordnetLoader;
-import org.getalp.lexsema.io.segmentation.SpaceSegmenter;
 import org.getalp.lexsema.io.sentences.STS2013SentencePairLoader;
-import org.getalp.lexsema.similarity.SimilarityMeasure;
-import org.getalp.lexsema.similarity.TverskiIndexSimilarityMeasureBuilder;
+import org.getalp.lexsema.similarity.Sentence;
+import org.getalp.lexsema.similarity.measures.SimilarityMeasure;
+import org.getalp.lexsema.similarity.measures.TverskiIndexSimilarityMeasureBuilder;
+import org.getalp.lexsema.similarity.signatures.SemanticSignature;
+import org.getalp.lexsema.similarity.signatures.SemanticSignatureImpl;
 import org.getalp.lexsema.util.ValueScale;
 import org.getalp.lexsema.wsd.configuration.Configuration;
 import org.getalp.lexsema.wsd.method.Disambiguator;
@@ -29,7 +30,8 @@ public class CLSS2014 {
 
         //VisualVMTools.delayUntilReturn();
 
-        WordnetLoader lrloader = new WordnetLoader("../data/wordnet/2.1/dict", true, true);
+        WordnetLoader lrloader = new WordnetLoader("../data/wordnet/2.1/dict")
+                .setHasExtendedSignature(true).setShuffle(true);
         STS2013SentencePairLoader spl = new STS2013SentencePairLoader("STS.input.headlines.txt", lrloader);
         PrintWriter outputFile = new PrintWriter("STS.headlines.output.txt");
         SimilarityMeasure similarityMeasure;
@@ -76,7 +78,8 @@ public class CLSS2014 {
             System.err.println("\t" + sentence1);
             System.err.println("\t" + sentence2);
             System.err.println("\tLoading senses...");
-
+            lrloader.loadSenses(sentence1);
+            lrloader.loadSenses(sentence2);
             System.err.println("\tDisambiguating sentence 1... ");
             Configuration c1 = disambiguator.disambiguate(sentence1);
             System.err.println("\tDisambiguating sentence 2... ");
@@ -87,11 +90,14 @@ public class CLSS2014 {
                     similarityMeasure);
             Function f = new Sum(1);
             double wsdScore = f.F(pairScore);
-            wsdScore /= Math.max(sentence1.getLexicalEntries().size(), sentence2.getLexicalEntries().size());
+            wsdScore /= Math.max(sentence1.size(), sentence2.size());
 
-            SpaceSegmenter seg = new SpaceSegmenter();
-            double stringScore = similarityMeasure.compute(seg.segment(sentence1.toString()),
-                    seg.segment(sentence2.toString()));
+            SemanticSignature semanticSignature1 = new SemanticSignatureImpl();
+            SemanticSignature semanticSignature2 = new SemanticSignatureImpl();
+            semanticSignature1.addSymbolString(sentence1.toString());
+            semanticSignature2.addSymbolString(sentence2.toString());
+            double stringScore = similarityMeasure.compute(semanticSignature1,
+                    semanticSignature2, null, null);
             stringScore = ValueScale.scaleValue(0, 1, 0, 5, stringScore);
             if (Double.isNaN(stringScore)) {
                 stringScore = 0;

@@ -1,8 +1,8 @@
 package org.getalp.lexsema.supervised.entrydisambiguator;
 
 
-import org.getalp.lexsema.io.Document;
-import org.getalp.lexsema.io.Sense;
+import org.getalp.lexsema.similarity.Document;
+import org.getalp.lexsema.similarity.Sense;
 import org.getalp.lexsema.supervised.features.extractors.LocalTextFeatureExtractor;
 import org.getalp.lexsema.supervised.weka.FeatureIndex;
 import org.getalp.lexsema.supervised.weka.WekaClassifier;
@@ -36,13 +36,13 @@ public class WekaLexicalEntryDisambiguator extends SequentialLexicalEntryDisambi
     @Override
     public void run() {
         try {
-            String targetLemma = getDocument().getLexicalEntries().get(getCurrentIndex()).getLemma();
-            String targetPos = convertPos(getDocument().getLexicalEntries().get(getCurrentIndex()).getPos());
+            String targetLemma = getDocument().getWord(0, getCurrentIndex()).getLemma();
+            String targetPos = convertPos(getDocument().getWord(0, getCurrentIndex()).getPartOfSpeech());
 
             List<String> features = featureExtractor.getFeatures(getDocument(), getCurrentIndex());
 
             List<WekaClassifier.ClassificationEntry> results = runClassifier(targetLemma, features);
-            if (results.size() == 0) {
+            if (results.isEmpty()) {
                 getConfiguration().setSense(getCurrentIndex(), -1);
             } else {
                 getConfiguration().setSense(getCurrentIndex(), -1);
@@ -52,15 +52,15 @@ public class WekaLexicalEntryDisambiguator extends SequentialLexicalEntryDisambi
                 getConfiguration().setSense(getCurrentIndex(), s);
             }
             getConfiguration().setConfidence(getCurrentIndex(), 1d);
-        } catch (Exception e) {
+        } catch (RuntimeException e) {
             e.printStackTrace();
             System.exit(1);
         }
     }
 
     public int getMatchingSense(Document d, String tag, int wordIndex) {
-        for (int s = 0; s < d.getSenses().get(wordIndex).size(); s++) {
-            Sense cs = d.getSenses().get(wordIndex).get(s);
+        for (int s = 0; s < d.getSenses(wordIndex).size(); s++) {
+            Sense cs = d.getSenses(wordIndex).get(s);
             if (cs.getId().contains(tag)) {
                 return s;
             }

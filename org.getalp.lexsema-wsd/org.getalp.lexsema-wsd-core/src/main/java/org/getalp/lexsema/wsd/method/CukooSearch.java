@@ -1,6 +1,6 @@
 package org.getalp.lexsema.wsd.method;
 
-import org.getalp.lexsema.io.Document;
+import org.getalp.lexsema.similarity.Document;
 import org.getalp.lexsema.wsd.configuration.Configuration;
 
 /**

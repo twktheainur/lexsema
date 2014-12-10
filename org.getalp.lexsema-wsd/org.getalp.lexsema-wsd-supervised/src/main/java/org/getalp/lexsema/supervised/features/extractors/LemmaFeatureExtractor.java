@@ -1,13 +1,11 @@
 package org.getalp.lexsema.supervised.features.extractors;
 
-import org.getalp.lexsema.io.Document;
+import org.getalp.lexsema.similarity.Document;
 
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by tchechem on 11/5/14.
- */
+
 public class LemmaFeatureExtractor implements LocalTextFeatureExtractor {
 
     private int lemmamin;
@@ -24,10 +22,10 @@ public class LemmaFeatureExtractor implements LocalTextFeatureExtractor {
         for (int j = currentIndex - lemmamin; j <= currentIndex + lemmamax; j++) {
             if (j != currentIndex) {
                 String lemmaFeature;
-                if (j < 0 || j >= document.getLexicalEntries().size()) {
+                if (j < 0 || j >= document.size()) {
                     lemmaFeature = "\"X\"";
                 } else {
-                    lemmaFeature = "\"" + document.getLexicalEntries().get(j).getLemma();
+                    lemmaFeature = "\"" + document.getWord(0, j).getLemma();
                 }
                 features.add(lemmaFeature);
             }
