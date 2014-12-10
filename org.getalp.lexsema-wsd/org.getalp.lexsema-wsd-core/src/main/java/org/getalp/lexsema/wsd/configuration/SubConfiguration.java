@@ -1,6 +1,6 @@
 package org.getalp.lexsema.wsd.configuration;
 
-import org.getalp.lexsema.io.Document;
+import org.getalp.lexsema.similarity.Document;
 
 public class SubConfiguration extends Configuration {
 

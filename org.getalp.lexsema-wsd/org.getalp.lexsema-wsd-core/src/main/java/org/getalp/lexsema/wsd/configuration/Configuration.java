@@ -3,18 +3,18 @@ package org.getalp.lexsema.wsd.configuration;
 
 import cern.colt.matrix.tdouble.DoubleMatrix1D;
 import cern.colt.matrix.tdouble.impl.DenseDoubleMatrix1D;
-import org.getalp.lexsema.io.Document;
+import org.getalp.lexsema.similarity.Document;
 
 public class Configuration {
     int[] assignments;
     DoubleMatrix1D confidence;
 
     public Configuration(Document d) {
-        assignments = new int[d.getLexicalEntries().size()];
-        for (int i = 0; i < d.getLexicalEntries().size(); i++) {
+        assignments = new int[d.size()];
+        for (int i = 0; i < d.size(); i++) {
             assignments[i] = -1;
         }
-        confidence = new DenseDoubleMatrix1D(d.getLexicalEntries().size());
+        confidence = new DenseDoubleMatrix1D(d.size());
     }
 
     public Configuration(Configuration d) {
@@ -78,5 +78,10 @@ public class Configuration {
             unassignedCount++;
         }
         return unassignedCount;
+    }
+
+    @SuppressWarnings("ReturnOfCollectionOrArrayField")
+    public int[] getAssignments() {
+        return assignments;
     }
 }

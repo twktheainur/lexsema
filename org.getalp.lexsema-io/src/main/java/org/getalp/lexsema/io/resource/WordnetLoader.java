@@ -1,14 +1,21 @@
 package org.getalp.lexsema.io.resource;
 
+import com.sun.istack.internal.Nullable;
 import edu.mit.jwi.Dictionary;
 import edu.mit.jwi.item.IIndexWord;
 import edu.mit.jwi.item.IPointer;
 import edu.mit.jwi.item.IWord;
 import edu.mit.jwi.item.IWordID;
 import edu.mit.jwi.item.POS;
-import org.getalp.lexsema.io.LexicalEntry;
-import org.getalp.lexsema.io.Sense;
-import org.getalp.lexsema.io.cache.SenseCache;
+import org.getalp.lexsema.similarity.Document;
+import org.getalp.lexsema.similarity.Sense;
+import org.getalp.lexsema.similarity.SenseImpl;
+import org.getalp.lexsema.similarity.Word;
+import org.getalp.lexsema.similarity.cache.SenseCache;
+import org.getalp.lexsema.similarity.signatures.SemanticSignature;
+import org.getalp.lexsema.similarity.signatures.SemanticSignatureImpl;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -20,30 +27,30 @@ import java.util.Map;
 import java.util.StringTokenizer;
 
 public class WordnetLoader implements LRLoader {
+    private static Logger logger = LoggerFactory.getLogger(WordnetLoader.class);
+    @Nullable
     private final Dictionary dictionary;
-    String path;
     private boolean hasExtendedSignature;
     private boolean shuffle;
 
 
-    public WordnetLoader(String path, boolean hasExtendedSignature, boolean shuffle) {
-        this.path = path;
-        this.hasExtendedSignature = hasExtendedSignature;
-        this.shuffle = shuffle;
+    public WordnetLoader(String path) {
 
         URL url = null;
         try {
             url = new URL("file", null, path);
         } catch (MalformedURLException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            logger.info(e.getLocalizedMessage());
         }
-        dictionary = new Dictionary(url);
-        try {
-            dictionary.open();
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+        if (url != null) {
+            dictionary = new Dictionary(url);
+            try {
+                dictionary.open();
+            } catch (IOException e) {
+                logger.info(e.getLocalizedMessage());
+            }
+        } else {
+            dictionary = null;
         }
     }
 
@@ -52,27 +59,27 @@ public class WordnetLoader implements LRLoader {
         IIndexWord iw = getWord(lemma + "%" + pos);
         if (iw != null) {
             for (int j = 0; j < iw.getWordIDs().size(); j++) {
-                List<String> signature = new ArrayList<>();
-                List<Double> weights = new ArrayList<>();
+
+                SemanticSignature signature = new SemanticSignatureImpl();
                 IWord word = dictionary.getWord(iw.getWordIDs().get(j));
                 String def = word.getSynset().getGloss();
-                addToSignature(signature, weights, def);
+                addToSignature(signature, def);
 
-                Sense s = new Sense(word.getSenseKey().toString(), signature, weights);
+                Sense s = new SenseImpl(word.getSenseKey().toString());
 
                 Map<IPointer, List<IWordID>> rm = word.getRelatedMap();
                 for (IPointer p : rm.keySet()) {
                     for (IWordID iwd : rm.get(p)) {
-                        List<String> localSignature = new ArrayList<String>();
-                        addToSignature(localSignature, weights, dictionary.getWord(iwd).getSynset().getGloss());
+                        SemanticSignature localSignature = new SemanticSignatureImpl();
+                        addToSignature(localSignature, dictionary.getWord(iwd).getSynset().getGloss());
                         if (hasExtendedSignature) {
-                            signature.addAll(localSignature);
+                            signature.appendSignature(localSignature);
                         }
-                        s.getRelatedSignatures().put(p.getSymbol(), localSignature);
+                        s.addRelatedSignature(p.getSymbol(), localSignature);
                     }
                 }
                 if (hasExtendedSignature) {
-                    s.setSignature(signature);
+                    s.setSemanticSignature(signature);
                 }
                 senses.add(s);
             }
@@ -81,35 +88,34 @@ public class WordnetLoader implements LRLoader {
     }
 
     @Override
-    public List<Sense> getSenses(LexicalEntry w) {
+    public List<Sense> getSenses(Word w) {
         List<Sense> senses;
         senses = SenseCache.getInstance().getSenses(w);
         if (senses == null) {
             if (w != null) {
-                if (w.getPos() == null || w.getPos().length() == 0) {
+                if (w.getPartOfSpeech() == null || w.getPartOfSpeech().isEmpty()) {
                     senses = getSenses(w.getLemma(), "n");
                     senses.addAll(getSenses(w.getLemma(), "r"));
                     senses.addAll(getSenses(w.getLemma(), "a"));
                     senses.addAll(getSenses(w.getLemma(), "v"));
                 } else {
-                    senses = getSenses(w.getLemma(), w.getPos());
+                    senses = getSenses(w.getLemma(), w.getPartOfSpeech());
                 }
             }
             if (shuffle) {
                 Collections.shuffle(senses);
             }
-            SenseCache.getInstance().addCache(w, senses);
+            SenseCache.getInstance().addToCache(w, senses);
         }
 
         return senses;
     }
 
-    private void addToSignature(List<String> signature, List<Double> weights, String def) {
+    private void addToSignature(SemanticSignature signature, String def) {
         StringTokenizer st = new StringTokenizer(def, " ", false);
         while (st.hasMoreTokens()) {
             String token = st.nextToken();
-            signature.add(token);
-            weights.add(1.0);
+            signature.addSymbol(token, 1.0);
         }
     }
 
@@ -132,7 +138,7 @@ public class WordnetLoader implements LRLoader {
         if (w != null) {
             senses += w.getWordIDs().size();
         }
-        return 0;
+        return senses;
     }
 
     private IIndexWord getWord(String sid) {
@@ -147,7 +153,7 @@ public class WordnetLoader implements LRLoader {
             pos = st[1];
         }
         IIndexWord w = null;
-        if (lemme != null && lemme.length() > 0) {
+        if (!lemme.isEmpty()) {
             if (pos.toLowerCase().startsWith("n")) {
                 w = dictionary.getIndexWord(lemme, POS.NOUN);
             } else if (pos.toLowerCase().startsWith("v")) {
@@ -162,11 +168,28 @@ public class WordnetLoader implements LRLoader {
     }
 
     @Override
-    public List<List<Sense>> getAllSenses(List<LexicalEntry> wds) {
+    public List<List<Sense>> getAllSenses(List<Word> wds) {
         List<List<Sense>> senses = new ArrayList<>();
-        for (LexicalEntry w : wds) {
+        for (Word w : wds) {
             senses.add(getSenses(w));
         }
         return senses;
+    }
+
+    @Override
+    public void loadSenses(Document document) {
+        for (Word w : document) {
+            document.addWordSenses(getSenses(w));
+        }
+    }
+
+    public WordnetLoader setHasExtendedSignature(boolean hasExtendedSignature) {
+        this.hasExtendedSignature = hasExtendedSignature;
+        return this;
+    }
+
+    public WordnetLoader setShuffle(boolean shuffle) {
+        this.shuffle = shuffle;
+        return this;
     }
 }

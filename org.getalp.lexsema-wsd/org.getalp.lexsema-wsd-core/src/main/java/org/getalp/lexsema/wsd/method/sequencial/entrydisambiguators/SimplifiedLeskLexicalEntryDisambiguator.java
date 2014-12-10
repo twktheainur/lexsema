@@ -1,10 +1,14 @@
 package org.getalp.lexsema.wsd.method.sequencial.entrydisambiguators;
 
 import com.wcohen.ss.ScaledLevenstein;
-import org.getalp.lexsema.io.Document;
-import org.getalp.lexsema.io.LexicalEntry;
-import org.getalp.lexsema.io.Sense;
-import org.getalp.lexsema.similarity.SimilarityMeasure;
+import com.wcohen.ss.api.StringDistance;
+import org.getalp.lexsema.similarity.Document;
+import org.getalp.lexsema.similarity.Sense;
+import org.getalp.lexsema.similarity.Word;
+import org.getalp.lexsema.similarity.measures.SimilarityMeasure;
+import org.getalp.lexsema.similarity.signatures.SemanticSignature;
+import org.getalp.lexsema.similarity.signatures.SemanticSignatureImpl;
+import org.getalp.lexsema.similarity.signatures.SemanticSymbol;
 import org.getalp.lexsema.wsd.configuration.Configuration;
 import org.getalp.lexsema.wsd.method.sequencial.parameters.SimplifiedLeskParameters;
 
@@ -35,14 +39,14 @@ public class SimplifiedLeskLexicalEntryDisambiguator extends SequentialLexicalEn
                 context = new ArrayList<String>();
             }
 
-            ScaledLevenstein sl = new ScaledLevenstein();
+            StringDistance sl = new ScaledLevenstein();
             for (int j = getStart(); j < getEnd(); j++) {
-                if (params.isIncludeTarget() || (!params.isIncludeTarget() && j != getCurrentIndex())) {
-                    LexicalEntry cw = getDocument().getLexicalEntries().get(j);
+                if (params.isIncludeTarget() || !params.isIncludeTarget() && j != getCurrentIndex()) {
+                    Word cw = getDocument().getWord(0, j);
                     boolean isOverlap = false;
                     if (params.isOnlyOverlapContexts()) {
-                        for (Sense s : getDocument().getSenses().get(getCurrentIndex())) {
-                            for (String wd : s.getSignature()) {
+                        for (Sense s : getDocument().getSenses(0, getCurrentIndex())) {
+                            for (String wd : s.getSemanticSignature().getSymbols()) {
                                 if (sl.score(cw.getSurfaceForm(), wd) > 0) {
                                     isOverlap = true;
                                     break;
@@ -50,23 +54,24 @@ public class SimplifiedLeskLexicalEntryDisambiguator extends SequentialLexicalEn
                             }
                         }
                     }
-                    if ((params.isOnlyOverlapContexts() && isOverlap) || (!params.isOnlyOverlapContexts())) {
-                        for (String precWord : cw.getPrecedingNonInstances()) {
-                            context.add(precWord);
+                    if (params.isOnlyOverlapContexts() && isOverlap || !params.isOnlyOverlapContexts()) {
+                        for (String prevWord : cw) {
+                            context.add(prevWord);
                         }
                         context.add(cw.getSurfaceForm());
                     }
                     if (params.isAddSenseSignatures()) {
-                        for (Sense s : getDocument().getSenses().get(j)) {
-                            context.addAll(s.getSignature());
-
+                        for (Sense s : getSenses(0, j)) {
+                            for (SemanticSymbol ss : s.getSemanticSignature()) {
+                                context.add(ss.getSymbol());
+                            }
                         }
                     }
                 }
             }
-            List<String> lcontext = new ArrayList<String>();
-            lcontext.addAll(context);
-            int index = -1;
+            SemanticSignature lcontext = new SemanticSignatureImpl();
+            lcontext.addSymbolString(new ArrayList<>(context));
+            int index;
             int minIndex = -1;
             int maxIndex = -1;
             double minValue;
@@ -80,8 +85,10 @@ public class SimplifiedLeskLexicalEntryDisambiguator extends SequentialLexicalEn
             maxValue = -Double.MAX_VALUE;
             prevMaxValue = 0;
 
-            for (int s = 0; s < getDocument().getSenses().get(getCurrentIndex()).size(); s++) {
-                double score = similarityMeasure.compute(getDocument().getSenses().get(getCurrentIndex()).get(s), lcontext);
+
+            List<Sense> senses = getSenses(0, getCurrentIndex());
+            for (int s = 0; s < senses.size(); s++) {
+                double score = similarityMeasure.compute(senses.get(s).getSemanticSignature(), lcontext, null, null);
                 //System.err.println(score);
                 if (score <= minValue) {
                     prevMinValue = minValue;
@@ -95,9 +102,8 @@ public class SimplifiedLeskLexicalEntryDisambiguator extends SequentialLexicalEn
                 }
             }
             double range = maxValue - minValue;
-            double delta = range * params.getDeltaThreshold();
-            if (!params.isAllowTies() && ((params.isMinimize() && Math.abs(prevMinValue - minValue) < params.getDeltaThreshold()) ||
-                    (!params.isMinimize() && Math.abs(prevMaxValue - maxValue) < params.getDeltaThreshold()))) {
+            if (!params.isAllowTies() && (params.isMinimize() && Math.abs(prevMinValue - minValue) < params.getDeltaThreshold() ||
+                    !params.isMinimize() && Math.abs(prevMaxValue - maxValue) < params.getDeltaThreshold())) {
                 index = -1;
             } else if (params.isMinimize()) {
                 index = minIndex;
@@ -105,10 +111,12 @@ public class SimplifiedLeskLexicalEntryDisambiguator extends SequentialLexicalEn
                 index = maxIndex;
             }
 
-            if (params.isFallbackFS() && index == -1) index = 0;
+            if (params.isFallbackFS() && index == -1) {
+                index = 0;
+            }
             getConfiguration().setSense(getCurrentIndex(), index);
             getConfiguration().setConfidence(getCurrentIndex(), 1d);
-        } catch (Exception ex) {
+        } catch (RuntimeException ex) {
             ex.printStackTrace();
             System.exit(1);
         }

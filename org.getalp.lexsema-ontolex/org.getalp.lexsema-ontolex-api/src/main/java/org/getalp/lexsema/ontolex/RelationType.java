@@ -9,4 +9,6 @@ public interface RelationType {
     RelationType getType();
 
     RelationType getInverseType();
+
+    String getURI();
 }

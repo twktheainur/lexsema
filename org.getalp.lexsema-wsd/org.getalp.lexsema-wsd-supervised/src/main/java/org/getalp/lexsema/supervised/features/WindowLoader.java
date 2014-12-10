@@ -7,14 +7,10 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Created by Mohammad on 04/11/2014.
- */
 public class WindowLoader {
 
+    Map<String, WordWindow> wordWindows;
     private String file;
-
-    HashMap<String, WordWindow> wordWindows;
 
     public WindowLoader(String file) {
         this.file = file;

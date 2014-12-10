@@ -1,7 +1,7 @@
 package org.getalp.lexsema.wsd.method.sequencial;
 
-import org.getalp.lexsema.io.Document;
-import org.getalp.lexsema.similarity.SimilarityMeasure;
+import org.getalp.lexsema.similarity.Document;
+import org.getalp.lexsema.similarity.measures.SimilarityMeasure;
 import org.getalp.lexsema.wsd.configuration.Configuration;
 import org.getalp.lexsema.wsd.method.sequencial.entrydisambiguators.SequentialLexicalEntryDisambiguator;
 import org.getalp.lexsema.wsd.method.sequencial.entrydisambiguators.WindowedLeskLexicalEntryDisambiguator;

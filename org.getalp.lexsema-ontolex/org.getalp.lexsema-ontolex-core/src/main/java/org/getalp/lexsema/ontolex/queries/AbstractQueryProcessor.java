@@ -23,6 +23,7 @@ public abstract class AbstractQueryProcessor<T> implements QueryProcessor<T> {
     private ARQQuery query;
     private ResultSet results;
     private Collection<Triple> triples = new ArrayList<>();
+    private Collection<Triple> optionalTriples = new ArrayList<>();
     private Collection<String> resultVars = new ArrayList<>();
     private Collection<Expr> filters = new ArrayList<>();
 
@@ -43,11 +44,15 @@ public abstract class AbstractQueryProcessor<T> implements QueryProcessor<T> {
 
     protected void initialize() {
         defineQuery();
-        query.initialize(graph, triples, resultVars, filters);
+        query.initialize(graph, triples, optionalTriples, resultVars, filters);
     }
 
     protected void addTriple(Node a, Node b, Node c) {
         triples.add(Triple.create(a, b, c));
+    }
+
+    protected void addOptionalTriple(Node a, Node b, Node c) {
+        optionalTriples.add(Triple.create(a, b, c));
     }
 
     protected void addFilter(Expr e) {

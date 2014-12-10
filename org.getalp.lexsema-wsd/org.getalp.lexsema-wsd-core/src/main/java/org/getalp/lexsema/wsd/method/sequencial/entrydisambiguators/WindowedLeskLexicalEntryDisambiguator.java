@@ -1,7 +1,7 @@
 package org.getalp.lexsema.wsd.method.sequencial.entrydisambiguators;
 
-import org.getalp.lexsema.io.Document;
-import org.getalp.lexsema.similarity.SimilarityMeasure;
+import org.getalp.lexsema.similarity.Document;
+import org.getalp.lexsema.similarity.measures.SimilarityMeasure;
 import org.getalp.lexsema.wsd.configuration.Configuration;
 import org.getalp.lexsema.wsd.configuration.SubConfiguration;
 import org.getalp.lexsema.wsd.method.sequencial.parameters.WindowedLeskParameters;
@@ -32,7 +32,7 @@ public class WindowedLeskLexicalEntryDisambiguator extends SequentialLexicalEntr
             SubConfiguration nsc = new SubConfiguration(getDocument(), getStart(), getEnd());
             List<SubConfiguration> combinations = getCombinations(0, nsc, getDocument());
             int selected = -1;
-            if (getDocument().getSenses().get(getCurrentIndex()).size() == 1) {
+            if (getDocument().getSenses(getCurrentIndex()).size() == 1) {
                 selected = 0;
             } else {
                 int minIndex = -1;
@@ -78,9 +78,8 @@ public class WindowedLeskLexicalEntryDisambiguator extends SequentialLexicalEntr
                     inputs.add(sci);
                 }
                 double range = maxValue - minValue;
-                double delta = range * params.getDeltaThreshold();
 
-                if ((params.isMinimize() && minIndex == -1) || (!params.isMinimize() && maxIndex == -1)) {
+                if (params.isMinimize() && minIndex == -1 || !params.isMinimize() && maxIndex == -1) {
                     selected = -1;
                 } else if (params.isMinimize()) {
                     selected = combinations.get(minIndex).getAssignment(getCurrentIndex() - combinations.get(minIndex).getStart());
@@ -89,7 +88,9 @@ public class WindowedLeskLexicalEntryDisambiguator extends SequentialLexicalEntr
                 }
 
 
-                if (params.isFallbackFS() && selected == -1) selected = 0;
+                if (params.isFallbackFS() && selected == -1) {
+                    selected = 0;
+                }
             }
             getConfiguration().setSense(getCurrentIndex(), selected);
             getConfiguration().setConfidence(getCurrentIndex(), 1d);
@@ -100,7 +101,7 @@ public class WindowedLeskLexicalEntryDisambiguator extends SequentialLexicalEntr
     }
 
     public List<SubConfiguration> getCombinations(int currentIndex, SubConfiguration s, Document d) {
-        List<SubConfiguration> combinations = new ArrayList<SubConfiguration>();
+        List<SubConfiguration> combinations = new ArrayList<>();
         if (currentIndex < s.size()) {
             for (int i = 0; i < d.getSenses(s.getStart(), currentIndex).size(); i++) {
                 SubConfiguration newSub = new SubConfiguration(s);

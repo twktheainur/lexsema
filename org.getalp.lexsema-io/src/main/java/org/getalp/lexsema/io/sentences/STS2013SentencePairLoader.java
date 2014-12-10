@@ -14,13 +14,16 @@ import org.apache.uima.collection.CollectionReader;
 import org.apache.uima.collection.CollectionReaderDescription;
 import org.apache.uima.resource.ResourceInitializationException;
 import org.apache.uima.resource.ResourceManager;
+import org.apache.uima.resource.ResourceSpecifier;
 import org.apache.uima.util.CasCreationUtils;
-import org.getalp.lexsema.io.Sentence;
 import org.getalp.lexsema.io.resource.LRLoader;
-import org.getalp.lexsema.io.segmentation.SpaceSegmenter;
 import org.getalp.lexsema.io.uima.TokenAnnotationConsumer;
+import org.getalp.lexsema.similarity.Sentence;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -32,6 +35,8 @@ import static org.apache.uima.fit.factory.CollectionReaderFactory.createReaderDe
 
 public class STS2013SentencePairLoader extends SentencePairLoader {
 
+    private Logger logger = LoggerFactory.getLogger(STS2013SentencePairLoader.class);
+
     private String fileName;
     private LRLoader senseLoader;
 
@@ -41,15 +46,15 @@ public class STS2013SentencePairLoader extends SentencePairLoader {
         senseLoader = loader;
     }
 
-    public Sentence processSentence(final CollectionReaderDescription readerDesc,
-                                    AnalysisEngineDescription... descs) throws UIMAException, IOException {
+    private Sentence processSentence(final ResourceSpecifier readerDesc,
+                                     AnalysisEngineDescription... engineDescriptions) throws UIMAException, IOException {
         ResourceManager resMgr = UIMAFramework.newDefaultResourceManager();
 
         // Create the components
         final CollectionReader reader = UIMAFramework.produceCollectionReader(readerDesc, resMgr, null);
 
         // Create AAE
-        final AnalysisEngineDescription aaeDesc = createEngineDescription(descs);
+        final AnalysisEngineDescription aaeDesc = createEngineDescription(engineDescriptions);
 
         // Instantiate AAE
         final AnalysisEngine aae = UIMAFramework.produceAnalysisEngine(aaeDesc, resMgr, null);
@@ -80,7 +85,7 @@ public class STS2013SentencePairLoader extends SentencePairLoader {
         try {
             CollectionReaderDescription cr = createReaderDescription(
                     StringReader.class,
-                    StringReader.PARAM_DOCUMENT_ID, ("sp" + pairId + "s" + sentenceId),
+                    StringReader.PARAM_DOCUMENT_ID, "sp" + pairId + "s" + sentenceId,
                     StringReader.PARAM_DOCUMENT_TEXT, sentenceString,
                     StringReader.PARAM_LANGUAGE, "en");
 
@@ -91,24 +96,21 @@ public class STS2013SentencePairLoader extends SentencePairLoader {
             return processSentence(cr, seg, tagger, lemmatizer);
 
         } catch (ResourceInitializationException e) {
-            e.printStackTrace();
+            logger.error(e.getLocalizedMessage());
         } catch (UIMAException e) {
-            e.printStackTrace();
+            logger.error(e.getLocalizedMessage());
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error(e.getLocalizedMessage());
         }
         return null;
     }
 
-    @Override
     public void load() {
-        try {
-            BufferedReader br = new BufferedReader(new FileReader(fileName));
-            String line = null;
-            SpaceSegmenter s = new SpaceSegmenter();
+        try (BufferedReader br = new BufferedReader(new FileReader(fileName))) {
+            String line;
             int sentenceId = 1;
             line = br.readLine();
-            while (line != null && line.length() > 0) {
+            while (line != null && !line.isEmpty()) {
                 List<Sentence> sentencePair = new ArrayList<>();
                 String[] sentences = line.replace("-", "_").split("\t");
 
@@ -116,15 +118,18 @@ public class STS2013SentencePairLoader extends SentencePairLoader {
                 Sentence sentence1 = extractAndAnnotate(sentences[0], sentenceId, 1);
                 Sentence sentence2 = extractAndAnnotate(sentences[1], sentenceId, 2);
 
-                sentence1.setSenses(senseLoader.getAllSenses(sentence1.getLexicalEntries()));
-                sentence2.setSenses(senseLoader.getAllSenses(sentence2.getLexicalEntries()));
+                senseLoader.loadSenses(sentence1);
+                senseLoader.loadSenses(sentence2);
+
                 sentencePair.add(sentence1);
                 sentencePair.add(sentence2);
                 getSentencePairs().add(sentencePair);
                 line = br.readLine();
             }
+        } catch (FileNotFoundException e) {
+            logger.error(e.getLocalizedMessage());
         } catch (IOException e) {
-            System.err.println("Filed to load file" + fileName);
+            logger.error("Filed to load file" + fileName);
         }
     }
 }

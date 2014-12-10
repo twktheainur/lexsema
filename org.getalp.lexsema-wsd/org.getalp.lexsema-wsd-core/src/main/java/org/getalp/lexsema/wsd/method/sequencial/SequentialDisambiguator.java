@@ -1,6 +1,6 @@
 package org.getalp.lexsema.wsd.method.sequencial;
 
-import org.getalp.lexsema.io.Document;
+import org.getalp.lexsema.similarity.Document;
 import org.getalp.lexsema.wsd.configuration.Configuration;
 import org.getalp.lexsema.wsd.method.Disambiguator;
 import org.getalp.lexsema.wsd.method.sequencial.entrydisambiguators.SequentialLexicalEntryDisambiguator;
@@ -15,10 +15,9 @@ import java.util.concurrent.TimeUnit;
 
 public abstract class SequentialDisambiguator implements Disambiguator {
 
-    private int window;
     ExecutorService threadPool;
-
     List<Future> runningTasks;
+    private int window;
 
 
     protected SequentialDisambiguator(int window, int numThreads) {
@@ -44,9 +43,9 @@ public abstract class SequentialDisambiguator implements Disambiguator {
         }
         runningTasks = new LinkedList<>();
         int totalWords = 0;
-        for (int i = 0; i < document.getLexicalEntries().size(); i++) {
+        for (int i = 0; i < document.size(); i++) {
             int start = i <= window ? 0 : i - window;
-            int end = i + window < document.getLexicalEntries().size() ? i + window : document.getLexicalEntries().size();
+            int end = i + window < document.size() ? i + window : document.size();
             if (c.getAssignment(i) == -1) {
                 if (document.getSenses(i).size() == 1) {
                     c.setSense(i, 0);

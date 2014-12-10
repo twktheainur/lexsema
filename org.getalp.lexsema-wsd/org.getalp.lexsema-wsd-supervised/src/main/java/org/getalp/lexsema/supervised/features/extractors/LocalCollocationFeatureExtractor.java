@@ -1,6 +1,6 @@
 package org.getalp.lexsema.supervised.features.extractors;
 
-import org.getalp.lexsema.io.Document;
+import org.getalp.lexsema.similarity.Document;
 import org.getalp.lexsema.supervised.features.ContextWindow;
 
 import java.util.ArrayList;
@@ -21,10 +21,10 @@ public class LocalCollocationFeatureExtractor implements LocalTextFeatureExtract
             for (int j = currentIndex - contextWindows.get(a).getMin(); j <= currentIndex + contextWindows.get(a).getMax(); j++) {
                 String colFeature;
                 if (currentIndex != j) {
-                    if (j < 0 || j >= document.getLexicalEntries().size()) {
+                    if (j < 0 || j >= document.size()) {
                         colFeature = "\"∅\"";
                     } else {
-                        colFeature = "\"" + document.getLexicalEntries().get(j).getLemma() + "\"";
+                        colFeature = "\"" + document.getWord(0, j).getLemma() + "\"";
                     }
                     features.add(colFeature);
                 }

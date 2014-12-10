@@ -1,8 +1,14 @@
 package org.getalp.lexsema.io.document;
 
-import org.getalp.lexsema.io.LexicalEntry;
-import org.getalp.lexsema.io.Sentence;
-import org.getalp.lexsema.io.Text;
+
+import org.getalp.lexsema.similarity.Sentence;
+import org.getalp.lexsema.similarity.SentenceImpl;
+import org.getalp.lexsema.similarity.Text;
+import org.getalp.lexsema.similarity.TextImpl;
+import org.getalp.lexsema.similarity.Word;
+import org.getalp.lexsema.similarity.WordImpl;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.xml.sax.Attributes;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.Locator;
@@ -11,10 +17,11 @@ import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLReaderFactory;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
-public class Semeval2007TextLoader extends TextLoader implements ContentHandler {
+@SuppressWarnings({"BooleanParameter", "ClassWithTooManyFields"})
+public class Semeval2007TextLoader extends TextLoaderImpl implements ContentHandler {
+
+    private Logger logger = LoggerFactory.getLogger(Semeval2007TextLoader.class);
 
     private boolean inWord;
     private boolean loadExtra;
@@ -26,10 +33,11 @@ public class Semeval2007TextLoader extends TextLoader implements ContentHandler 
 
     private String path;
 
-    private int currentSentence = 0;
 
+    private Sentence currentSentence;
+    private Text currentDocument;
 
-    public Semeval2007TextLoader(String path, boolean loadExtra) {
+    public Semeval2007TextLoader(String path) {
         inWord = false;
         this.path = path;
         currentId = "";
@@ -37,7 +45,6 @@ public class Semeval2007TextLoader extends TextLoader implements ContentHandler 
         currentPos = "";
         currentSurfaceForm = "";
         extraWords = "";
-        this.loadExtra = loadExtra;
     }
 
     @Override
@@ -67,50 +74,52 @@ public class Semeval2007TextLoader extends TextLoader implements ContentHandler 
 
     @Override
     public void startElement(String uri, String localName, String qName, Attributes atts) throws SAXException {
-        if (localName.equals("text")) {
-            Text t = new Text();
-            t.setId(atts.getValue("id"));
-            getTexts().add(t);
-        } else if (localName.equals("sentence")) {
-            getTexts().get(getTexts().size() - 1).getSentences().add(new Sentence(atts.getValue("id")));
-        } else if (localName.equals("instance")) {
-            inWord = true;
-            currentPos = atts.getValue("pos");
-            currentLemma = atts.getValue("lemma");
-            currentId = atts.getValue("id");
+        switch (localName) {
+            case "text":
+                currentDocument = new TextImpl();
+                currentDocument.setId(atts.getValue("id"));
+                break;
+            case "sentence":
+                currentSentence = new SentenceImpl(atts.getValue("id"));
+                break;
+            case "instance":
+                inWord = true;
+                currentPos = atts.getValue("pos");
+                currentLemma = atts.getValue("lemma");
+                currentId = atts.getValue("id");
+                break;
         }
     }
 
     @Override
     public void endElement(String uri, String localName, String qName) throws SAXException {
-        if (localName.equals("corpus")) {
+        switch (localName) {
+            case "text":
+                addText(currentDocument);
+                break;
+            case "sentence":
+                currentDocument.addSentence(currentSentence);
+                break;
+            case "instance":
+                inWord = false;
+                Word w = new WordImpl(currentId, currentLemma, currentSurfaceForm, currentPos);
 
-        } else if (localName.equals("text")) {
-        } else if (localName.equals("sentence")) {
-        } else if (localName.equals("instance")) {
-            Text currentDocument = getTexts().get(getTexts().size() - 1);
-            Sentence currentSentence = currentDocument.getSentences().get(getTexts().get(getTexts().size() - 1)
-                    .getSentences().size() - 1);
-            inWord = false;
-            LexicalEntry w = new LexicalEntry(currentId, currentLemma, currentSurfaceForm, currentPos);
-
-            List<String> lextra = new ArrayList<>();
-            if (loadExtra) {
-                for (String e : extraWords.trim().split("\n")) {
-                    if (!e.isEmpty()) {
-                        lextra.add(e);
+                if (loadExtra) {
+                    for (String e : extraWords.trim().split(System.getProperty("line.separator"))) {
+                        if (!e.isEmpty()) {
+                            w.addPrecedingInstance(e);
+                        }
                     }
                 }
-            }
-            w.setPrecedingNonInstances(lextra);
-            currentDocument.getLexicalEntries().add(w);
-            w.setEnclosingSentence(currentSentence);
-            currentSentence.getLexicalEntries().add(w);
-            currentId = "";
-            currentLemma = "";
-            currentPos = "";
-            currentSurfaceForm = "";
-            extraWords = "";
+
+                w.setEnclosingSentence(currentSentence);
+                currentSentence.addWord(w);
+                currentId = "";
+                currentLemma = "";
+                currentPos = "";
+                currentSurfaceForm = "";
+                extraWords = "";
+                break;
         }
 
     }
@@ -151,7 +160,16 @@ public class Semeval2007TextLoader extends TextLoader implements ContentHandler 
                     .setContentHandler(this);
             saxReader.parse(path);
         } catch (IOException | SAXException t) {
-            t.printStackTrace();
+            logger.error(t.getLocalizedMessage());
         }
     }
+
+
+    @Override
+    public TextLoader loadNonInstances(boolean loadExtra) {
+        this.loadExtra = loadExtra;
+        return this;
+    }
+
+
 }

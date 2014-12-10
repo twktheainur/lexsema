@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public enum DBNaryRelationType implements RelationType {
-    isTranslationOf, hypernym, hyponym, meronym, holonym, antonym, synonym, allnym("^.*nym$");
+    hypernym, hyponym, meronym, holonym, antonym, synonym, allnym("^.*nym$");
 
     Map<RelationType, RelationType> inverses;
     Class<? extends LexicalResourceEntity> correspondingType;
@@ -35,6 +35,11 @@ public enum DBNaryRelationType implements RelationType {
         return "dbnary";
     }
 
+    @Override
+    public String getURI() {
+        return getPrefix() + ":" + getType().toString();
+    }
+
     private void initInverses() {
         inverses.put(DBNaryRelationType.hypernym, DBNaryRelationType.hyponym);
         inverses.put(DBNaryRelationType.hyponym, DBNaryRelationType.hypernym);
@@ -42,7 +47,6 @@ public enum DBNaryRelationType implements RelationType {
         inverses.put(DBNaryRelationType.antonym, DBNaryRelationType.synonym);
         inverses.put(DBNaryRelationType.meronym, DBNaryRelationType.holonym);
         inverses.put(DBNaryRelationType.holonym, DBNaryRelationType.meronym);
-        inverses.put(DBNaryRelationType.isTranslationOf, DBNaryRelationType.isTranslationOf);
         inverses.put(DBNaryRelationType.allnym, DBNaryRelationType.allnym);
     }
 

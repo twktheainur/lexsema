@@ -1,22 +1,14 @@
 package org.getalp.lexsema.io.document;
 
+import org.getalp.lexsema.similarity.Text;
 
-import org.getalp.lexsema.io.Loader;
-import org.getalp.lexsema.io.Text;
+public interface TextLoader extends Iterable<Text> {
+    /**
+     * Loads the resource
+     */
+    public void load();
 
-import java.util.ArrayList;
-import java.util.List;
+    @SuppressWarnings("all")
+    public TextLoader loadNonInstances(boolean loadExtra);
 
-public abstract class TextLoader implements Loader {
-    List<Text> documents;
-
-    protected TextLoader() {
-        documents = new ArrayList<>();
-    }
-
-    public List<Text> getTexts() {
-        return documents;
-    }
-
-    public abstract void load();
 }
