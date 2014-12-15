@@ -3,13 +3,7 @@
  */
 package org.getalp.lexsema.ontolex.graph.storage;
 
-import com.hp.hpl.jena.query.Dataset;
-import com.hp.hpl.jena.query.Query;
-import com.hp.hpl.jena.query.QueryExecution;
-import com.hp.hpl.jena.query.QueryExecutionFactory;
-import com.hp.hpl.jena.query.ReadWrite;
-import com.hp.hpl.jena.query.ResultSet;
-import com.hp.hpl.jena.query.Syntax;
+import com.hp.hpl.jena.query.*;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.tdb.TDBFactory;
 import org.getalp.lexsema.ontolex.graph.store.Store;
@@ -44,7 +38,9 @@ public class JenaTDBStore implements Store {
         }
         ResultSet rs = null;
         QueryExecution queryExecution = QueryExecutionFactory.create(q, model);
-        logger.info(queryExecution.getQuery().toString(Syntax.defaultSyntax));
+        if (StoreHandler.DEBUG_ON) {
+            logger.info(queryExecution.getQuery().toString(Syntax.defaultSyntax));
+        }
         try {
             rs = queryExecution.execSelect();
         } catch (RuntimeException e) {

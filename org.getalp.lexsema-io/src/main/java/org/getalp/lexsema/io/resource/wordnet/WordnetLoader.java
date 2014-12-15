@@ -1,12 +1,9 @@
-package org.getalp.lexsema.io.resource;
+package org.getalp.lexsema.io.resource.wordnet;
 
 import com.sun.istack.internal.Nullable;
 import edu.mit.jwi.Dictionary;
-import edu.mit.jwi.item.IIndexWord;
-import edu.mit.jwi.item.IPointer;
-import edu.mit.jwi.item.IWord;
-import edu.mit.jwi.item.IWordID;
-import edu.mit.jwi.item.POS;
+import edu.mit.jwi.item.*;
+import org.getalp.lexsema.io.resource.LRLoader;
 import org.getalp.lexsema.similarity.Document;
 import org.getalp.lexsema.similarity.Sense;
 import org.getalp.lexsema.similarity.SenseImpl;
@@ -20,11 +17,7 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.StringTokenizer;
+import java.util.*;
 
 public class WordnetLoader implements LRLoader {
     private static Logger logger = LoggerFactory.getLogger(WordnetLoader.class);
