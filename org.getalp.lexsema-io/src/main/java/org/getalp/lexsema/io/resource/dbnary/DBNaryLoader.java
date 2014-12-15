@@ -1,8 +1,10 @@
 package org.getalp.lexsema.io.resource.dbnary;
 
+
 import org.getalp.lexsema.io.resource.LRLoader;
 import org.getalp.lexsema.ontolex.LexicalEntry;
 import org.getalp.lexsema.ontolex.LexicalSense;
+import org.getalp.lexsema.ontolex.dbnary.DBNary;
 import org.getalp.lexsema.ontolex.dbnary.Vocable;
 import org.getalp.lexsema.ontolex.dbnary.exceptions.NoSuchVocableException;
 import org.getalp.lexsema.ontolex.factories.resource.LexicalResourceFactory;
