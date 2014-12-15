@@ -1,7 +1,6 @@
 package org.getalp.lexsema.similarity;
 
 import com.hp.hpl.jena.graph.Node;
-import com.sun.istack.internal.Nullable;
 import lombok.EqualsAndHashCode;
 import org.getalp.lexsema.ontolex.LexicalEntry;
 import org.getalp.lexsema.ontolex.LexicalResource;
@@ -18,7 +17,6 @@ public class WordImpl implements Word {
     private final String surfaceForm;
     private final String textPos;
     LexicalEntry lexicalEntry;
-    @Nullable
     private Sentence enclosingSentence = null;
     private List<String> precedingNonInstances;
 

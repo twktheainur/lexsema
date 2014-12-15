@@ -1,8 +1,6 @@
 package org.getalp.lexsema.similarity.measures;
 
 import cern.jet.math.tdouble.DoubleFunctions;
-import com.sun.istack.internal.NotNull;
-import com.sun.istack.internal.Nullable;
 import com.wcohen.ss.AbstractStringDistance;
 import com.wcohen.ss.ScaledLevenstein;
 import org.getalp.lexsema.similarity.input.FuzzyCommonSubsequenceInput;
@@ -47,9 +45,9 @@ public class TverskiIndexSimilarityMeasureImpl implements TverskiIndexSimilarity
 
 
     @Override
-    public double compute(@NotNull SemanticSignature sigA, @NotNull SemanticSignature sigB,
-                          @Nullable Map<String, SemanticSignature> relatedSignaturesA,
-                          @Nullable Map<String, SemanticSignature> relatedSignaturesB) {
+    public double compute(SemanticSignature sigA, SemanticSignature sigB,
+                          Map<String, SemanticSignature> relatedSignaturesA,
+                          Map<String, SemanticSignature> relatedSignaturesB) {
 
         List<String> a = sigA.getSymbols();
         List<String> b = sigB.getSymbols();
@@ -68,8 +66,8 @@ public class TverskiIndexSimilarityMeasureImpl implements TverskiIndexSimilarity
 
     @SuppressWarnings("FeatureEnvy")
     private double computeExtension(List<String> a, List<String> b,
-                                    @Nullable Map<String, SemanticSignature> relatedSignaturesA,
-                                    @Nullable Map<String, SemanticSignature> relatedSignaturesB) {
+                                    Map<String, SemanticSignature> relatedSignaturesA,
+                                    Map<String, SemanticSignature> relatedSignaturesB) {
         List<Double> values = new ArrayList<>();
             /*This case is for a similarity between two senses that have related senses*/
         if (relatedSignaturesA != null && relatedSignaturesB != null) {

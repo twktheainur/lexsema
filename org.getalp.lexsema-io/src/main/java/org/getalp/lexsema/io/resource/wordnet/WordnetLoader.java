@@ -1,6 +1,5 @@
 package org.getalp.lexsema.io.resource.wordnet;
 
-import com.sun.istack.internal.Nullable;
 import edu.mit.jwi.Dictionary;
 import edu.mit.jwi.item.*;
 import org.getalp.lexsema.io.resource.LRLoader;
@@ -21,7 +20,6 @@ import java.util.*;
 
 public class WordnetLoader implements LRLoader {
     private static Logger logger = LoggerFactory.getLogger(WordnetLoader.class);
-    @Nullable
     private final Dictionary dictionary;
     private boolean hasExtendedSignature;
     private boolean shuffle;
