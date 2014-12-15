@@ -1,12 +1,10 @@
 /**
  *
  */
-package org.getalp.lexsema.ontolex.graph.defaultimpl;
+package org.getalp.lexsema.ontolex.graph;
 
 import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.graph.NodeFactory;
-import org.getalp.lexsema.ontolex.graph.Graph;
-import org.getalp.lexsema.ontolex.graph.OntologyModel;
 
 
 /**

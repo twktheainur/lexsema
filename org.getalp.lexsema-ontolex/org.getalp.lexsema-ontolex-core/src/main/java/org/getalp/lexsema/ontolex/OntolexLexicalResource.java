@@ -2,9 +2,9 @@ package org.getalp.lexsema.ontolex;
 
 import org.getalp.lexsema.ontolex.exceptions.NotRegisteredException;
 import org.getalp.lexsema.ontolex.factories.entities.LexicalResourceEntityFactory;
+import org.getalp.lexsema.ontolex.graph.DefaultGraph;
 import org.getalp.lexsema.ontolex.graph.Graph;
 import org.getalp.lexsema.ontolex.graph.OntologyModel;
-import org.getalp.lexsema.ontolex.graph.defaultimpl.DefaultGraph;
 import org.getalp.lexsema.ontolex.queries.LexicalEntriesFromLemmaPosQueryProcessor;
 import org.getalp.lexsema.ontolex.queries.LexicalSensesOfLexicalEntryQueryProcessor;
 import org.getalp.lexsema.ontolex.queries.QueryProcessor;

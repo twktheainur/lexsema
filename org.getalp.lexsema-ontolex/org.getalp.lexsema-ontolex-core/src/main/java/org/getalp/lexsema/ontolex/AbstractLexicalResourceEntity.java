@@ -38,7 +38,6 @@ public abstract class AbstractLexicalResourceEntity implements LexicalResourceEn
                 newUri += "/";
             }
         }
-
         newUri += uri;
         node = NodeFactory.createURI(newUri);
     }

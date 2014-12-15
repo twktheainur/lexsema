@@ -3,18 +3,18 @@
  */
 package org.getalp.lexsema.ontolex.graph.storage;
 
-import com.hp.hpl.jena.query.Query;
-import com.hp.hpl.jena.query.QueryExecution;
-import com.hp.hpl.jena.query.QueryExecutionFactory;
-import com.hp.hpl.jena.query.ResultSet;
+import com.hp.hpl.jena.query.*;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
 import org.getalp.lexsema.ontolex.graph.store.Store;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 
 public class JenaMemoryStore implements Store {
 
+    private final Logger logger = LoggerFactory.getLogger(getClass());
     private Model model;
 
     public JenaMemoryStore(String aBoxFile) throws IOException {
@@ -26,11 +26,13 @@ public class JenaMemoryStore implements Store {
     public ResultSet runQuery(Query q) {
         ResultSet rs = null;
         QueryExecution queryExecution = QueryExecutionFactory.create(q, model);
-        //System.out.println(queryExecution.getQuery().toString(Syntax.defaultSyntax)); //TODO: Remove
+        if (StoreHandler.DEBUG_ON) {
+            logger.info(queryExecution.getQuery().toString(Syntax.defaultSyntax));
+        }
         try {
             rs = queryExecution.execSelect();
         } catch (RuntimeException e) {
-            e.printStackTrace(); //TODO: Logging
+            logger.error(e.getLocalizedMessage());
         }
         return rs;
     }

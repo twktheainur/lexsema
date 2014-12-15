@@ -8,6 +8,7 @@ import org.getalp.lexsema.ontolex.graph.store.Store;
  */
 public final class StoreHandler {
 
+    public static boolean DEBUG_ON = false;
     private static Store store;
 
     private StoreHandler() {

@@ -112,7 +112,7 @@ public class ARQSelectQueryImpl implements ARQSelectQuery {
         for (Triple t : triples) {
             addToWhereStatement(t);
         }
-        if (optionalTriples != null) {
+        if (optionalTriples != null && optionalTriples.iterator().hasNext()) {
             for (Triple t : optionalTriples) {
                 addOptionalToWhereStatement(t);
             }
@@ -135,7 +135,7 @@ public class ARQSelectQueryImpl implements ARQSelectQuery {
         for (Triple t : triples) {
             addToWhereStatement(t);
         }
-        if (optionalTriples != null) {
+        if (optionalTriples != null && optionalTriples.iterator().hasNext()) {
             for (Triple t : optionalTriples) {
                 addOptionalToWhereStatement(t);
             }

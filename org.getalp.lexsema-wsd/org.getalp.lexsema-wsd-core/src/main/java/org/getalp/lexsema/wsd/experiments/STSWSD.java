@@ -1,7 +1,7 @@
 package org.getalp.lexsema.wsd.experiments;
 
 import com.wcohen.ss.ScaledLevenstein;
-import org.getalp.lexsema.io.resource.WordnetLoader;
+import org.getalp.lexsema.io.resource.wordnet.WordnetLoader;
 import org.getalp.lexsema.io.sentences.STS2013SentencePairLoader;
 import org.getalp.lexsema.similarity.Sentence;
 import org.getalp.lexsema.similarity.measures.SimilarityMeasure;

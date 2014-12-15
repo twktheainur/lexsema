@@ -4,7 +4,7 @@ package org.getalp.lexsema.supervised.experiments;
 import org.getalp.lexsema.io.annotresult.SemevalWriter;
 import org.getalp.lexsema.io.document.Semeval2007TextLoader;
 import org.getalp.lexsema.io.document.TextLoader;
-import org.getalp.lexsema.io.resource.WordnetLoader;
+import org.getalp.lexsema.io.resource.wordnet.WordnetLoader;
 import org.getalp.lexsema.similarity.Document;
 import org.getalp.lexsema.supervised.WekaDisambiguator;
 import org.getalp.lexsema.supervised.features.ContextWindow;

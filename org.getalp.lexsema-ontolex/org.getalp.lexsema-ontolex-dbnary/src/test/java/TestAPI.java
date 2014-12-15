@@ -33,7 +33,7 @@ import java.util.Locale;
 public class TestAPI {
 
     private static final String TEST_VOCABLE = "chien";
-    private final String DB_PATH = ".." + File.separatorChar + "data" + File.separatorChar + "dbnary" + File.separatorChar + "dbnarutdb";
+    private final String DB_PATH = ".." + File.separatorChar + "data" + File.separatorChar + "dbnary" + File.separatorChar + "dbnarutdb_fr_en";
     private final String ONTOLOGY_PROPERTIES = "data" + File.separatorChar + "ontology.properties";
     OntologyModel tBox;
     private DBNary dbnary;
@@ -44,6 +44,7 @@ public class TestAPI {
         //VirtuosoTripleStore.connect("jdbc:virtuoso://kopi.imag.fr:1982","dba","dba");
         Store vts = new JenaTDBStore(DB_PATH);
         StoreHandler.registerStoreInstance(vts);
+        StoreHandler.DEBUG_ON = true;
 
         tBox = new OWLTBoxModel(ONTOLOGY_PROPERTIES);
         // Creating DBnary wrapper
