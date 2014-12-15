@@ -1,6 +1,5 @@
 package org.getalp.lexsema.similarity.signatures;
 
-import com.sun.istack.internal.NotNull;
 import lombok.Data;
 
 @Data
@@ -14,7 +13,7 @@ public class SemanticSymbolImpl implements SemanticSymbol {
     }
 
     @Override
-    public int compareTo(@NotNull SemanticSymbol o) {
+    public int compareTo(SemanticSymbol o) {
         int symbolCmp = symbol.compareTo(o.getSymbol());
         if (symbolCmp == 0) {
             symbolCmp = weight.compareTo(o.getWeight());

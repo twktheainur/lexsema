@@ -63,6 +63,11 @@
             <artifactId>org.getalp.lexsema-similarity</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
+        <dependency>
+            <groupId>org.getalp</groupId>
+            <artifactId>org.getalp.lexsema-ontolex-dbnary</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
     </dependencies>
 
 </project>

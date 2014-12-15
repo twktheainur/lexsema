@@ -1,10 +1,8 @@
 package org.getalp.lexsema.io.resource.dbnary;
 
-import com.sun.istack.internal.Nullable;
 import org.getalp.lexsema.io.resource.LRLoader;
 import org.getalp.lexsema.ontolex.LexicalEntry;
 import org.getalp.lexsema.ontolex.LexicalSense;
-import org.getalp.lexsema.ontolex.dbnary.DBNary;
 import org.getalp.lexsema.ontolex.dbnary.Vocable;
 import org.getalp.lexsema.ontolex.dbnary.exceptions.NoSuchVocableException;
 import org.getalp.lexsema.ontolex.factories.resource.LexicalResourceFactory;
@@ -30,7 +28,6 @@ import java.util.*;
 public class DBNaryLoader implements LRLoader {
     private static Logger logger = LoggerFactory.getLogger(DBNaryLoader.class);
     private final DBNary dbnary;
-    @Nullable
     private boolean hasExtendedSignature;
     private boolean shuffle;
 
