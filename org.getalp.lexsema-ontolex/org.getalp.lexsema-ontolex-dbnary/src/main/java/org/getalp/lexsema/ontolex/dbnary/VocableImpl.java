@@ -2,7 +2,6 @@ package org.getalp.lexsema.ontolex.dbnary;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.ToString;
 import org.getalp.lexsema.ontolex.AbstractLexicalResourceEntity;
 import org.getalp.lexsema.ontolex.LexicalResource;
 import org.getalp.lexsema.ontolex.LexicalResourceEntity;
@@ -12,7 +11,6 @@ import org.getalp.lexsema.ontolex.LexicalResourceEntity;
  */
 @EqualsAndHashCode(callSuper = false)
 @Data
-@ToString(callSuper = true)
 public class VocableImpl extends AbstractLexicalResourceEntity implements Vocable {
 
     private String vocable;
