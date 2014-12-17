@@ -1,7 +1,5 @@
 package org.getalp.lexsema.similarity.measures;
 
-import com.sun.istack.internal.NotNull;
-import com.sun.istack.internal.Nullable;
 import com.wcohen.ss.AbstractTokenizedStringDistance;
 import org.getalp.lexsema.similarity.signatures.SemanticSignature;
 
@@ -22,9 +20,9 @@ public class Level2Sim implements SimilarityMeasure {
     }
 
     @Override
-    public double compute(@NotNull SemanticSignature sigA, @NotNull SemanticSignature sigB,
-                          @Nullable Map<String, SemanticSignature> relatedSignaturesA,
-                          @Nullable Map<String, SemanticSignature> relatedSignaturesB) {
+    public double compute(SemanticSignature sigA, SemanticSignature sigB,
+                          Map<String, SemanticSignature> relatedSignaturesA,
+                          Map<String, SemanticSignature> relatedSignaturesB) {
         return compute(sigA.getSymbols(), sigB.getSymbols());
     }
 
