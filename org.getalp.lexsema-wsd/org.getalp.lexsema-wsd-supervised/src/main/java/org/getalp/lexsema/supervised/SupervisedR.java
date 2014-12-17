@@ -5,18 +5,7 @@ import org.getalp.lexsema.similarity.Sense;
 import org.getalp.lexsema.wsd.configuration.Configuration;
 import org.getalp.lexsema.wsd.method.Disambiguator;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
-import java.io.Reader;
-import java.io.StringWriter;
-import java.io.Writer;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -80,7 +69,7 @@ public class SupervisedR implements Disambiguator {
                     if (j < 0 || j >= document.size()) {
                         lemmaFeature = "\"X\"";
                     } else {
-                        lemmaFeature = "\"" + document.getWord(0, j).getLemma() + "\"";
+                        lemmaFeature = "\"" + document.getWord(0, i).getLemma() + "\"";
                     }
                     header += "A" + numfeatures + "\t";
                     featureVector += lemmaFeature + "\t";
@@ -118,7 +107,7 @@ public class SupervisedR implements Disambiguator {
 
             String output = runR(targetLemma);
             if (output.length() == 0) {
-                if (document.getSenses(0, i).size() == 1) {
+                if (document.getSenses(i).size() == 1) {
                     c.setSense(i, 0);
                 } else {
                     c.setSense(i, -1);
@@ -157,7 +146,7 @@ public class SupervisedR implements Disambiguator {
     }
 
     public int getMatchingSense(Document d, String tag, int wordIndex) {
-        for (int s = 0; s < d.getSenses(0, wordIndex).size(); s++) {
+        for (int s = 0; s < d.getSenses(wordIndex).size(); s++) {
             Sense cs = d.getSenses(wordIndex).get(s);
             if (cs.getId().contains(tag)) {
                 return s;

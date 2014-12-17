@@ -10,9 +10,7 @@ import org.getalp.lexsema.similarity.measures.SimilarityMeasure;
 import org.getalp.lexsema.similarity.measures.TverskiIndexSimilarityMeasureBuilder;
 import org.getalp.lexsema.wsd.configuration.Configuration;
 import org.getalp.lexsema.wsd.method.Disambiguator;
-import org.getalp.lexsema.wsd.method.sequencial.SimplifiedLesk;
 import org.getalp.lexsema.wsd.method.sequencial.WindowedLesk;
-import org.getalp.lexsema.wsd.method.sequencial.parameters.SimplifiedLeskParameters;
 import org.getalp.lexsema.wsd.method.sequencial.parameters.WindowedLeskParameters;
 
 @SuppressWarnings("all")
@@ -31,7 +29,7 @@ public class CombinedDisambiguation {
         //sim_lr_hp = new TverskiIndex(new ScaledLevenstein(),false, 1d, 0d, 0d, true, true,false ,true);
         sim_lr_hp = new TverskiIndexSimilarityMeasureBuilder().distance(new ScaledLevenstein()).computeRatio(true).alpha(0.1d).beta(0.5d).gamma(0.5d).fuzzyMatching(true).quadraticWeighting(false).extendedLesk(false).randomInit(false).regularizeOverlapInput(false).optimizeOverlapInput(false).regularizeRelations(false).optimizeRelations(false).build();
 
-        SimplifiedLeskParameters slp = new SimplifiedLeskParameters()
+        /*SimplifiedLeskParameters slp = new SimplifiedLeskParameters()
                 .setAddSenseSignatures(false)
                 .setAllowTies(false)
                 .setIncludeTarget(false)
@@ -39,12 +37,12 @@ public class CombinedDisambiguation {
                 .setOnlyUniqueWords(false)
                 .setFallbackFS(false)
                 .setMinimize(false);
-        Disambiguator sl = new SimplifiedLesk(10, sim_lr_hp, slp, 4);
+        Disambiguator sl = new SimplifiedLesk(10, sim_lr_hp, slp, 4);*/
 
 
         WindowedLeskParameters wlp = new WindowedLeskParameters().setFallbackFS(false).setMinimize(false);
-        sim_full = new TverskiIndexSimilarityMeasureBuilder().distance(new ScaledLevenstein()).computeRatio(true).alpha(1d).beta(0.5d).gamma(0.5d).fuzzyMatching(true).quadraticWeighting(false).extendedLesk(false).randomInit(false).regularizeOverlapInput(false).optimizeOverlapInput(false).regularizeRelations(false).optimizeRelations(false).build();
-        Disambiguator sl_full = new WindowedLesk(2, sim_full, wlp, 4);
+        sim_full = new TverskiIndexSimilarityMeasureBuilder().distance(new ScaledLevenstein()).computeRatio(true).alpha(1d).beta(0.5d).gamma(0.5d).fuzzyMatching(true).quadraticWeighting(true).extendedLesk(true).randomInit(false).regularizeOverlapInput(true).optimizeOverlapInput(false).regularizeRelations(true).optimizeRelations(false).build();
+        Disambiguator sl_full = new WindowedLesk(4, sim_full, wlp, 8);
 
 
         //Disambiguator sl = new LegacySimplifiedLesk(10,sim_lr_hp,);
@@ -58,18 +56,15 @@ public class CombinedDisambiguation {
             System.err.println("\tLoading senses...");
             lrloader.loadSenses(d);
             //System.err.println("\tDisambiguating... ");
-            System.err.println("Applying low recall high precision simplified lesk...");
-            Configuration c = sl.disambiguate(d);
 
-            System.err.println("Completing with average precision/recall simplified lesk...");
-            c = sl_full.disambiguate(d, c);
+            Configuration c = sl_full.disambiguate(d);
 
             SemevalWriter sw = new SemevalWriter(d.getId() + ".ans");
             System.err.println("\n\tWriting results...");
             sw.write(d, c.getAssignments());
             System.err.println("done!");
         }
-        sl.release();
+        //sl.release();
         sl_full.release();
     }
 }
