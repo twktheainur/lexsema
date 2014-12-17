@@ -23,7 +23,7 @@ public class SemevalWriter implements ConfigurationWriter {
             int wordIndex = 0;
             for (Word w : d) {
                 if (assignments[wordIndex] >= 0) {
-                    ps.println(id + " " + w.getId() + " " + d.getSenses(wordIndex).get(assignments[wordIndex]));
+                    ps.println(id + " " + w.getId() + " " + d.getSenses(wordIndex).get(assignments[wordIndex]).getId());
                 } else {
                     ps.println(id + " " + w.getId() + " ");
                 }
