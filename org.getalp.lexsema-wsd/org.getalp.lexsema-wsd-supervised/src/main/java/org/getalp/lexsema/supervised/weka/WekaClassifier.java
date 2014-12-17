@@ -1,5 +1,6 @@
 package org.getalp.lexsema.supervised.weka;
 
+import org.getalp.lexsema.supervised.ClassificationOutput;
 import weka.classifiers.Classifier;
 import weka.core.Attribute;
 import weka.core.FastVector;
@@ -10,13 +11,9 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.*;
 
-public class WekaClassifier {
+public class WekaClassifier implements org.getalp.lexsema.supervised.Classifier {
 
     Classifier classifier;
     WekaClassifierSetUp classifierCreator;
@@ -61,6 +58,7 @@ public class WekaClassifier {
         }
     }
 
+    @Override
     public void loadTrainingData(FeatureIndex featureIndex, String file) throws IOException {
         File trainingData = new File(file);
         BufferedReader br = new BufferedReader(new FileReader(trainingData));
@@ -101,6 +99,7 @@ public class WekaClassifier {
         }
     }
 
+    @Override
     public void saveModel() {
         try {
             weka.core.SerializationHelper.write(modelPath, classifier);
@@ -110,6 +109,7 @@ public class WekaClassifier {
         }
     }
 
+    @Override
     public void trainClassifier() {
         // train the neural network
 
@@ -131,7 +131,8 @@ public class WekaClassifier {
         }
     }
 
-    public List<ClassificationEntry> classify(FeatureIndex index, List<String> features) {
+    @Override
+    public List<ClassificationOutput> classify(FeatureIndex index, List<String> features) {
 
         Instance instance = new Instance(features.size() + 1);
         instance.setDataset(instances);
@@ -151,12 +152,12 @@ public class WekaClassifier {
             //e.printStackTrace();
         }
 
-        List<ClassificationEntry> result = new ArrayList<ClassificationEntry>();
+        List<ClassificationOutput> result = new ArrayList<ClassificationOutput>();
 
         try {
             int i = 0;
             for (String c : classes) {
-                result.add(new ClassificationEntry(c, Double.valueOf(output[i])));
+                result.add(new ClassificationOutput(c, Double.valueOf(output[i])));
                 i++;
             }
         } catch (Exception e) {
@@ -166,47 +167,8 @@ public class WekaClassifier {
         return result;
     }
 
+    @Override
     public boolean isClassifierTrained() {
         return classifierTrained;
-    }
-
-    public class ClassificationEntry implements Comparable<ClassificationEntry> {
-        private String key;
-        private double frequency;
-
-        public ClassificationEntry(String key, double frequency) {
-            this.key = key;
-            this.frequency = frequency;
-        }
-
-        public String getKey() {
-            return key;
-        }
-
-        public double getFrequency() {
-            return frequency;
-        }
-
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (!(o instanceof ClassificationEntry)) return false;
-
-            ClassificationEntry that = (ClassificationEntry) o;
-
-            if (key != null ? !key.equals(that.key) : that.key != null) return false;
-
-            return true;
-        }
-
-        @Override
-        public int hashCode() {
-            return key != null ? key.hashCode() : 0;
-        }
-
-        @Override
-        public int compareTo(ClassificationEntry o) {
-            return Double.valueOf(o.getFrequency()).compareTo(frequency);
-        }
     }
 }
