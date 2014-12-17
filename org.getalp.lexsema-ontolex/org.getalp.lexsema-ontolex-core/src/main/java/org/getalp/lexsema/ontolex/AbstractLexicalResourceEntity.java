@@ -2,15 +2,11 @@ package org.getalp.lexsema.ontolex;
 
 import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.graph.NodeFactory;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
 import org.getalp.lexsema.ontolex.graph.OntologyModel;
 
 /**
  * Generic Implementation of a Lexical Resource entity
  */
-@EqualsAndHashCode()
-@ToString
 public abstract class AbstractLexicalResourceEntity implements LexicalResourceEntity {
 
     private LexicalResource lexicalResource;

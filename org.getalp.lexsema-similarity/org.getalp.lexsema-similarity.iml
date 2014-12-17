@@ -29,10 +29,6 @@
     <orderEntry type="module" module-name="org.getalp.lexsema-ontolex-api" />
     <orderEntry type="library" name="Maven: org.slf4j:slf4j-api:1.7.7" level="project" />
     <orderEntry type="library" name="Maven: org.slf4j:slf4j-simple:1.7.7" level="project" />
-    <orderEntry type="library" name="Maven: com.hp.hpl.jena:jena:2.6.4" level="project" />
-    <orderEntry type="library" name="Maven: com.hp.hpl.jena:iri:0.8" level="project" />
-    <orderEntry type="library" name="Maven: com.ibm.icu:icu4j:3.4.4" level="project" />
-    <orderEntry type="library" name="Maven: xerces:xercesImpl:2.7.1" level="project" />
     <orderEntry type="library" name="Maven: com.openlinksw.virtuoso:virt_jena2:2.10.1_B1.9" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: junit:junit:4.6" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.projectlombok:lombok:1.14.8" level="project" />
@@ -44,6 +40,8 @@
     <orderEntry type="library" name="Maven: org.slf4j:jcl-over-slf4j:1.6.4" level="project" />
     <orderEntry type="library" name="Maven: org.apache.jena:jena-core:2.11.1" level="project" />
     <orderEntry type="library" name="Maven: org.apache.jena:jena-iri:1.0.1" level="project" />
+    <orderEntry type="library" name="Maven: xerces:xercesImpl:2.11.0" level="project" />
+    <orderEntry type="library" name="Maven: xml-apis:xml-apis:1.4.01" level="project" />
     <orderEntry type="library" name="Maven: com.google.code.findbugs:jsr305:3.0.0" level="project" />
   </component>
 </module>
