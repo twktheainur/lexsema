@@ -1,8 +1,6 @@
 package org.getalp.lexsema.similarity.measures;
 
 
-import com.sun.istack.internal.NotNull;
-import com.sun.istack.internal.Nullable;
 import org.getalp.lexsema.similarity.signatures.SemanticSignature;
 
 import java.util.Map;
@@ -23,7 +21,7 @@ public interface SimilarityMeasure {
      * @param relatedSignaturesB The related signatures for <code>b</code>, can be null.
      * @return The semantic similarity values between <code>a</code> and <code>b</code>.
      */
-    public double compute(@NotNull SemanticSignature sigA, @NotNull SemanticSignature sigB,
-                          @Nullable Map<String, SemanticSignature> relatedSignaturesA,
-                          @Nullable Map<String, SemanticSignature> relatedSignaturesB);
+    public double compute(SemanticSignature sigA, SemanticSignature sigB,
+                          Map<String, SemanticSignature> relatedSignaturesA,
+                          Map<String, SemanticSignature> relatedSignaturesB);
 }
