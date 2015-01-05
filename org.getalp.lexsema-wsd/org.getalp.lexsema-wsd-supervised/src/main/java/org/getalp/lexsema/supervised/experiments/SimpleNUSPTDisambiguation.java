@@ -2,13 +2,13 @@ package org.getalp.lexsema.supervised.experiments;
 
 
 import org.getalp.lexsema.io.annotresult.SemevalWriter;
+import org.getalp.lexsema.io.document.SemCorTextLoader;
 import org.getalp.lexsema.io.document.Semeval2007TextLoader;
 import org.getalp.lexsema.io.document.TextLoader;
 import org.getalp.lexsema.io.resource.wordnet.WordnetLoader;
 import org.getalp.lexsema.similarity.Document;
 import org.getalp.lexsema.supervised.WekaDisambiguator;
-import org.getalp.lexsema.supervised.features.ContextWindow;
-import org.getalp.lexsema.supervised.features.WindowLoader;
+import org.getalp.lexsema.supervised.features.*;
 import org.getalp.lexsema.supervised.features.extractors.AggregateLocalTextFeatureExtractor;
 import org.getalp.lexsema.supervised.features.extractors.AlignedContextFeatureExtractor;
 import org.getalp.lexsema.supervised.features.extractors.LocalCollocationFeatureExtractor;
@@ -27,6 +27,7 @@ public class SimpleNUSPTDisambiguation {
 
     public static void main(String[] args) throws IOException {
         TextLoader dl = new Semeval2007TextLoader("../data/senseval2007_task7/test/eng-coarse-all-words.xml").loadNonInstances(false);
+        TextLoader semCor = new SemCorTextLoader("../data/semcor3.0/semcor_full.xml");
         WordnetLoader lrloader = new WordnetLoader("../data/wordnet/2.1/dict").setHasExtendedSignature(true).setShuffle(false);
 
 //        LemmaFeatureExtractor lfe = new LemmaFeatureExtractor(3,1);
@@ -38,7 +39,8 @@ public class SimpleNUSPTDisambiguation {
 //        altfe.addExtractor(pfe);
 //        altfe.addExtractor(tplfe);
 
-        WindowLoader wloader = new WindowLoader("../data/indexes/windows.csv");
+        semCor.load();
+        WindowLoader wloader = new DocumentCollectionWindowLoader(semCor);
         wloader.load();
 
         List<ContextWindow> contextWindows = new ArrayList<>();
@@ -62,8 +64,11 @@ public class SimpleNUSPTDisambiguation {
         altfe.addExtractor(pfe);
         altfe.addExtractor(acfe);
 
+        TrainingDataExtractor trainingDataExtractor = new SemCorTrainingDataExtractor(altfe);
+        trainingDataExtractor.extract(semCor);
+
         //Le dernier argument est la taille de la poole de threads
-        WekaDisambiguator disambiguator = new WekaDisambiguator("../data/supervised", new NaiveBayesSetUp(), altfe, 2);
+        WekaDisambiguator disambiguator = new WekaDisambiguator("../data/supervised", new NaiveBayesSetUp(), altfe, 2, trainingDataExtractor);
         logger.info("Loading texts");
         dl.load();
         int i = 0;

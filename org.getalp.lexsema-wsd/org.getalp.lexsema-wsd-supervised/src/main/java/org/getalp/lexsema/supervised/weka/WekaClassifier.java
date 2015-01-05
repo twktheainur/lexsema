@@ -7,9 +7,6 @@ import weka.core.FastVector;
 import weka.core.Instance;
 import weka.core.Instances;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
 
@@ -59,41 +56,31 @@ public class WekaClassifier implements org.getalp.lexsema.supervised.Classifier 
     }
 
     @Override
-    public void loadTrainingData(FeatureIndex featureIndex, String file) throws IOException {
-        File trainingData = new File(file);
-        BufferedReader br = new BufferedReader(new FileReader(trainingData));
-
+    public void loadTrainingData(FeatureIndex featureIndex, List<List<String>> trainingInstances, List<String> attrs) throws IOException {
         classes = new TreeSet<String>();
-        String inst = "";
-        List<String[]> instanceTokens = new ArrayList<String[]>();
-        String[] attrs = br.readLine().trim().split("\t");
-        while ((inst = br.readLine()) != null) {
-            String[] tokens = inst.trim().split("\t");
-            classes.add(tokens[0]);
-            instanceTokens.add(tokens);
-
+        for (List<String> instance : trainingInstances) {
+            classes.add(instance.get(0));
         }
-
         FastVector classAttribute = new FastVector(classes.size());
+
         for (String className : classes) {
             classAttribute.addElement(className);
         }
-
-        attributes = new FastVector(attrs.length);
+        attributes = new FastVector(attrs.size());
         attributes.addElement(new Attribute("SENSE", classAttribute));
-        for (int i = 1; i < attrs.length; i++) {
-            attributes.addElement(new Attribute(attrs[i]));
+        for (int i = 1; i < attrs.size(); i++) {
+            attributes.addElement(new Attribute(attrs.get(i)));
         }
 
         instances = new Instances("Training Dataset", attributes, 1);
         instances.setClassIndex(0);
 
-        for (String[] tokens : instanceTokens) {
+        for (List<String> tokens : trainingInstances) {
             Instance instance = new Instance(attributes.size());
             instance.setDataset(instances);
-            instance.setValue(0, tokens[0]);
+            instance.setValue(0, tokens.get(0));
             for (int i = 1; i < attributes.size(); i++) {
-                instance.setValue(i, featureIndex.get(tokens[i]));
+                instance.setValue(i, featureIndex.get(tokens.get(i)));
             }
             instances.add(instance);
         }
@@ -135,16 +122,17 @@ public class WekaClassifier implements org.getalp.lexsema.supervised.Classifier 
     public List<ClassificationOutput> classify(FeatureIndex index, List<String> features) {
 
         Instance instance = new Instance(features.size() + 1);
-        instance.setDataset(instances);
-        for (int feat = 1; feat < features.size(); feat++) {
-            instance.setValue(feat, index.get(features.get(feat)));
-        }
         double[] output = null;
         if (loadSuccessful) {
             instances = new Instances("Training Dataset", attributes, 1);
-            this.instances.setClassIndex(0);
+            instances.setClassIndex(0);
         }
         instance.setDataset(instances);
+        //instance.setClassValue("\"\"");
+        //instance.setValue(0, "\"\"");
+        for (int feat = 0; feat < features.size(); feat++) {
+            instance.setValue(feat + 1, index.get(features.get(feat)));
+        }
         try {
             output = classifier.distributionForInstance(instance);
         } catch (Exception e) {

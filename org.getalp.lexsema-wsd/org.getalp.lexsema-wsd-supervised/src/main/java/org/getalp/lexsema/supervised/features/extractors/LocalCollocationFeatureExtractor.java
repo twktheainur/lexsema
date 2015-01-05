@@ -24,7 +24,11 @@ public class LocalCollocationFeatureExtractor implements LocalTextFeatureExtract
                     if (j < 0 || j >= document.size()) {
                         colFeature = "\"∅\"";
                     } else {
-                        colFeature = "\"" + document.getWord(0, j).getLemma() + "\"";
+                        String lemma = document.getWord(0, j).getLemma();
+                        if (lemma == null) {
+                            lemma = document.getWord(0, j).getSurfaceForm();
+                        }
+                        colFeature = "\"" + lemma + "\"";
                     }
                     features.add(colFeature);
                 }

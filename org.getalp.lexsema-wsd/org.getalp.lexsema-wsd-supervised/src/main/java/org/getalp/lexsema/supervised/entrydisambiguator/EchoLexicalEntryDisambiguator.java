@@ -5,6 +5,7 @@ import org.getalp.lexsema.similarity.Document;
 import org.getalp.lexsema.supervised.ClassificationOutput;
 import org.getalp.lexsema.supervised.Classifier;
 import org.getalp.lexsema.supervised.EchoClassifier;
+import org.getalp.lexsema.supervised.features.TrainingDataExtractor;
 import org.getalp.lexsema.supervised.features.extractors.LocalTextFeatureExtractor;
 import org.getalp.lexsema.supervised.weka.FeatureIndex;
 import org.getalp.lexsema.wsd.configuration.Configuration;
@@ -19,8 +20,8 @@ public class EchoLexicalEntryDisambiguator extends SupervisedSequentialLexicalEn
     private String dataPath;
     private FeatureIndex featureIndex;
 
-    public EchoLexicalEntryDisambiguator(Configuration c, Document d, int start, int end, int currentIndex, String dataPath, LocalTextFeatureExtractor featureExtractor) {
-        super(c, d, start, end, currentIndex, featureExtractor);
+    public EchoLexicalEntryDisambiguator(Configuration c, Document d, int start, int end, int currentIndex, String dataPath, LocalTextFeatureExtractor featureExtractor, TrainingDataExtractor trainingDataExtractor) {
+        super(c, d, start, end, currentIndex, featureExtractor, trainingDataExtractor);
         this.dataPath = dataPath;
         featureIndex = new FeatureIndex();
     }
@@ -32,13 +33,15 @@ public class EchoLexicalEntryDisambiguator extends SupervisedSequentialLexicalEn
             Classifier classifier;
             classifier = new EchoClassifier();
             try {
-                classifier.loadTrainingData(featureIndex, dataPath + File.separatorChar + lemma + ".csv");
+                List<List<String>> trainingDataFeatures = getLemmaFeatures(lemma);
+                if (trainingDataFeatures != null) {
+                    classifier.loadTrainingData(featureIndex, getLemmaFeatures(lemma), null);
+                    classifier.trainClassifier();
+                    return classifier.classify(featureIndex, instance);
+                }
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            classifier.trainClassifier();
-
-            return classifier.classify(featureIndex, instance);
         }
         return new ArrayList<>();
     }

@@ -4,7 +4,10 @@ import org.getalp.lexsema.supervised.weka.FeatureIndex;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
@@ -30,33 +33,22 @@ public class EchoClassifier implements Classifier {
     }
 
     @Override
-    public void loadTrainingData(FeatureIndex featureIndex, String file) throws IOException {
-        File trainingData = new File(file);
-        Collection<String[]> tokenInstances;
-        try (BufferedReader br = new BufferedReader(new FileReader(trainingData))) {
-
-            classes = new TreeSet<String>();
-            String inst = "";
-            String[] attrs = br.readLine().trim().split("\t");
-            tokenInstances = new ArrayList<>();
-            while ((inst = br.readLine()) != null) {
-                String[] tokens = inst.trim().split("\t");
-                classes.add(tokens[0]);
-                tokenInstances.add(tokens);
-            }
+    public void loadTrainingData(FeatureIndex featureIndex, List<List<String>> trainingInstances, List<String> attrs) {
+        classes = new TreeSet<>();
+        for (List<String> instance : trainingInstances) {
+            classes.add(instance.get(0));
         }
-
         for (String clazz : classes) {
             instances.put(clazz, new ArrayList<String>());
-            for (String[] tokens : tokenInstances) {
+            for (List<String> tokens : trainingInstances) {
                 String instance = "";
-                if (clazz.equals(tokens[0])) {
+                if (clazz.equals(tokens.get(0))) {
                     instance = String.format("%s %d ", clazz, 1);
                 } else {
                     instance = String.format("%s %d ", clazz, 2);
                 }
-                for (int i = 1; i < tokens.length; i++) {
-                    instance = String.format("%s %d", instance, featureIndex.get(tokens[i]));
+                for (int i = 1; i < tokens.size(); i++) {
+                    instance = String.format("%s %d", instance, featureIndex.get(tokens.get(i)));
                 }
                 instances.get(clazz).add(instance);
             }
@@ -128,8 +120,9 @@ public class EchoClassifier implements Classifier {
             data = String.format("%s%s ;", data, instance);
             String output = sendToEcho(data);
             String[] outputTokens = output.split("\"")[2].split(";")[0].split(":");
-            results.add(new ClassificationOutput(clazz, Double.valueOf(outputTokens[1]), Double.valueOf(outputTokens[2])));
+            results.add(new ClassificationOutput(clazz, Double.valueOf(outputTokens[outputTokens.length - 2].replace(",", ".")), Double.valueOf(outputTokens[outputTokens.length - 1].replace(",", "."))));
         }
+        Collections.sort(results);
         return results;
     }
 

@@ -69,9 +69,7 @@ public class WordnetLoader implements LRLoader {
                         s.addRelatedSignature(p.getSymbol(), localSignature);
                     }
                 }
-                if (hasExtendedSignature) {
-                    s.setSemanticSignature(signature);
-                }
+                s.setSemanticSignature(signature);
                 senses.add(s);
             }
         }

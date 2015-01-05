@@ -25,7 +25,11 @@ public class LemmaFeatureExtractor implements LocalTextFeatureExtractor {
                 if (j < 0 || j >= document.size()) {
                     lemmaFeature = "\"X\"";
                 } else {
-                    lemmaFeature = "\"" + document.getWord(0, j).getLemma();
+                    String lemma = document.getWord(0, j).getLemma();
+                    if (lemma != null) {
+                        lemma = document.getWord(0, j).getSurfaceForm();
+                    }
+                    lemmaFeature = "\"" + lemma;
                 }
                 features.add(lemmaFeature);
             }
