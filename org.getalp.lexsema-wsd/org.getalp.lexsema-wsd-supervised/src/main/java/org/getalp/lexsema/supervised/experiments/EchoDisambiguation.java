@@ -62,7 +62,10 @@ public class EchoDisambiguation {
         trainingDataExtractor.extract(semCor);
 
         //Le dernier argument est la taille de la poole de threads
+<<<<<<< HEAD
         // pour changer echo ou echo 2 changer dans EchoLexicalEntryDisambiguator
+=======
+>>>>>>> ac90cb19b3d880ff170fede97ed2cac02069e589
         Disambiguator disambiguator = new EchoDisambiguator("../data/supervised/", altfe, 1, trainingDataExtractor);
         logger.info("Loading texts");
         dl.load();

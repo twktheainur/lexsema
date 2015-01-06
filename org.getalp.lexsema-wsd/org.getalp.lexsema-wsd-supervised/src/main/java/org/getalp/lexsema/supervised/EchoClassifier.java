@@ -41,12 +41,20 @@ public class EchoClassifier implements Classifier {
         for (List<String> instance : trainingInstances) {
             classes.add(instance.get(0));
         }
-
         for (String clazz : classes) {
             instances.put(clazz, new ArrayList<String>());
             for (List<String> tokens : trainingInstances) {
+<<<<<<< HEAD
                 String instance = String.format("toto %s ", clazz);
                 
+=======
+                String instance = "";
+                if (clazz.equals(tokens.get(0))) {
+                    instance = String.format("%s %d ", clazz, 1);
+                } else {
+                    instance = String.format("%s %d ", clazz, 2);
+                }
+>>>>>>> ac90cb19b3d880ff170fede97ed2cac02069e589
                 for (int i = 1; i < tokens.size(); i++) {
                     instance = String.format("%s %d", instance, featureIndex.get(tokens.get(i)));
                 }
@@ -135,6 +143,7 @@ public class EchoClassifier implements Classifier {
         
             for (String instance : instances.get(clazz)) {
                 data += String.format("%s ;", instance);
+<<<<<<< HEAD
              }
         }
         
@@ -177,6 +186,19 @@ public class EchoClassifier implements Classifier {
         
         //System.out.println(results);
 		
+=======
+            }
+            String instance = clazz + " 0 ";
+            for (int i = 1; i < features.size(); i++) {
+                instance = String.format("%s %d", instance, index.get(features.get(i)));
+            }
+            data = String.format("%s%s ;", data, instance);
+            String output = sendToEcho(data);
+            String[] outputTokens = output.split("\"")[2].split(";")[0].split(":");
+            results.add(new ClassificationOutput(clazz, Double.valueOf(outputTokens[outputTokens.length - 2].replace(",", ".")), Double.valueOf(outputTokens[outputTokens.length - 1].replace(",", "."))));
+        }
+        Collections.sort(results);
+>>>>>>> ac90cb19b3d880ff170fede97ed2cac02069e589
         return results;
     }
 

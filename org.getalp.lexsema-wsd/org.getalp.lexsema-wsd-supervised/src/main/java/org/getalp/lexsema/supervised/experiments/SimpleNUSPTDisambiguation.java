@@ -68,7 +68,11 @@ public class SimpleNUSPTDisambiguation {
         trainingDataExtractor.extract(semCor);
 
         //Le dernier argument est la taille de la poole de threads
+<<<<<<< HEAD
         WekaDisambiguator disambiguator = new WekaDisambiguator("../data/supervised", new NaiveBayesSetUp(true, true), altfe, 2, trainingDataExtractor);
+=======
+        WekaDisambiguator disambiguator = new WekaDisambiguator("../data/supervised", new NaiveBayesSetUp(), altfe, 2, trainingDataExtractor);
+>>>>>>> ac90cb19b3d880ff170fede97ed2cac02069e589
         logger.info("Loading texts");
         dl.load();
         int i = 0;
