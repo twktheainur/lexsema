@@ -2,6 +2,7 @@ package org.getalp.lexsema.similarity;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 
 public class TextImpl extends DocumentImpl implements Text {
 
@@ -15,6 +16,11 @@ public class TextImpl extends DocumentImpl implements Text {
     @Override
     public int numberOfSentences() {
         return sentences.size();
+    }
+
+    @Override
+    public Iterable<Sentence> sentences() {
+        return Collections.unmodifiableCollection(sentences);
     }
 
     @Override
