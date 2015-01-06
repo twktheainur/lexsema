@@ -3,14 +3,14 @@ package org.getalp.lexsema.supervised.experiments;
 
 import org.getalp.lexsema.io.annotresult.ConfigurationWriter;
 import org.getalp.lexsema.io.annotresult.SemevalWriter;
+import org.getalp.lexsema.io.document.SemCorTextLoader;
 import org.getalp.lexsema.io.document.Semeval2007TextLoader;
 import org.getalp.lexsema.io.document.TextLoader;
 import org.getalp.lexsema.io.resource.LRLoader;
 import org.getalp.lexsema.io.resource.wordnet.WordnetLoader;
 import org.getalp.lexsema.similarity.Document;
 import org.getalp.lexsema.supervised.EchoDisambiguator;
-import org.getalp.lexsema.supervised.features.ContextWindow;
-import org.getalp.lexsema.supervised.features.WindowLoader;
+import org.getalp.lexsema.supervised.features.*;
 import org.getalp.lexsema.supervised.features.extractors.AggregateLocalTextFeatureExtractor;
 import org.getalp.lexsema.supervised.features.extractors.AlignedContextFeatureExtractor;
 import org.getalp.lexsema.supervised.features.extractors.LocalCollocationFeatureExtractor;
@@ -29,10 +29,12 @@ public class EchoDisambiguation {
 
     public static void main(String[] args) throws IOException {
         TextLoader dl = new Semeval2007TextLoader("../data/senseval2007_task7/test/eng-coarse-all-words.xml").loadNonInstances(false);
+        TextLoader semCor = new SemCorTextLoader("../data/semcor3.0/semcor_full.xml");
         LRLoader lrloader = new WordnetLoader("../data/wordnet/2.1/dict").setHasExtendedSignature(true).setShuffle(false);
-        WindowLoader wloader = new WindowLoader("../data/indexes/windows.csv");
-        wloader.load();
 
+        semCor.load();
+        WindowLoader wloader = new DocumentCollectionWindowLoader(semCor);
+        wloader.load();
 
         List<ContextWindow> contextWindows = new ArrayList<>();
         contextWindows.add(new ContextWindow(-1, -1));
@@ -50,13 +52,18 @@ public class EchoDisambiguation {
         PosFeatureExtractor pfe = new PosFeatureExtractor(3, 3);
         AlignedContextFeatureExtractor acfe = new AlignedContextFeatureExtractor(wloader);
 
+
         AggregateLocalTextFeatureExtractor altfe = new AggregateLocalTextFeatureExtractor();
         altfe.addExtractor(lcfe);
         altfe.addExtractor(pfe);
         altfe.addExtractor(acfe);
 
+        TrainingDataExtractor trainingDataExtractor = new SemCorTrainingDataExtractor(altfe);
+        trainingDataExtractor.extract(semCor);
+
         //Le dernier argument est la taille de la poole de threads
-        Disambiguator disambiguator = new EchoDisambiguator("../data/supervised/", altfe, 1);
+        // pour changer echo ou echo 2 changer dans EchoLexicalEntryDisambiguator
+        Disambiguator disambiguator = new EchoDisambiguator("../data/supervised/", altfe, 1, trainingDataExtractor);
         logger.info("Loading texts");
         dl.load();
         int i = 0;
