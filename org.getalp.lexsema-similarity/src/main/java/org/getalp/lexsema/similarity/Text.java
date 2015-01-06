@@ -35,4 +35,6 @@ public interface Text extends Document {
      * @return The number of sentences in the text.
      */
     public int numberOfSentences();
+
+    public Iterable<Sentence> sentences();
 }

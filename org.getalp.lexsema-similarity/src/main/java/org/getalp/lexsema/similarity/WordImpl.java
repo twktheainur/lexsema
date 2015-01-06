@@ -17,6 +17,7 @@ public class WordImpl implements Word {
     private final String surfaceForm;
     private final String textPos;
     LexicalEntry lexicalEntry;
+    private String semanticTag;
     private Sentence enclosingSentence = null;
     private List<String> precedingNonInstances;
 
@@ -115,5 +116,13 @@ public class WordImpl implements Word {
     @Override
     public Iterator<String> iterator() {
         return precedingNonInstances.iterator();
+    }
+
+    public String getSemanticTag() {
+        return semanticTag;
+    }
+
+    public void setSemanticTag(String semanticTag) {
+        this.semanticTag = semanticTag;
     }
 }
