@@ -21,13 +21,13 @@ public class CombinedDisambiguation {
     public static void main(String[] args) {
         TextLoader dl = new Semeval2007TextLoader("../data/senseval2007_task7/test/eng-coarse-all-words.xml").loadNonInstances(false);
         WordnetLoader lrloader = new WordnetLoader("../data/wordnet/2.1/dict")
-                .setHasExtendedSignature(true)
+                .setHasExtendedSignature(false)
                 .setShuffle(false);
         SimilarityMeasure sim_lr_hp;
         SimilarityMeasure sim_full;
 
         //sim_lr_hp = new TverskiIndex(new ScaledLevenstein(),false, 1d, 0d, 0d, true, true,false ,true);
-        sim_lr_hp = new TverskiIndexSimilarityMeasureBuilder().distance(new ScaledLevenstein()).computeRatio(true).alpha(0.1d).beta(0.5d).gamma(0.5d).fuzzyMatching(true).quadraticWeighting(false).extendedLesk(false).randomInit(false).regularizeOverlapInput(false).optimizeOverlapInput(false).regularizeRelations(false).optimizeRelations(false).build();
+        //sim_lr_hp = new TverskiIndexSimilarityMeasureBuilder().distance(new ScaledLevenstein()).computeRatio(true).alpha(0.1d).beta(0.5d).gamma(0.5d).fuzzyMatching(true).quadraticWeighting(false).extendedLesk(false).randomInit(false).regularizeOverlapInput(false).optimizeOverlapInput(false).regularizeRelations(false).optimizeRelations(false).build();
 
         /*SimplifiedLeskParameters slp = new SimplifiedLeskParameters()
                 .setAddSenseSignatures(false)
@@ -41,8 +41,20 @@ public class CombinedDisambiguation {
 
 
         WindowedLeskParameters wlp = new WindowedLeskParameters().setFallbackFS(false).setMinimize(false);
-        sim_full = new TverskiIndexSimilarityMeasureBuilder().distance(new ScaledLevenstein()).computeRatio(true).alpha(1d).beta(0.5d).gamma(0.5d).fuzzyMatching(true).quadraticWeighting(true).extendedLesk(true).randomInit(false).regularizeOverlapInput(true).optimizeOverlapInput(false).regularizeRelations(true).optimizeRelations(false).build();
-        Disambiguator sl_full = new WindowedLesk(4, sim_full, wlp, 8);
+        sim_full = new TverskiIndexSimilarityMeasureBuilder().distance(new ScaledLevenstein()).computeRatio(true)
+                .alpha(1d)
+                .beta(0.5d)
+                .gamma(0.5d)
+                .fuzzyMatching(true)
+                .quadraticWeighting(false)
+                .extendedLesk(false)
+                .randomInit(false)
+                .regularizeOverlapInput(false)
+                .optimizeOverlapInput(false)
+                .regularizeRelations(false)
+                .optimizeRelations(false)
+                .isDistance(false).build();
+        Disambiguator sl_full = new WindowedLesk(2, sim_full, wlp, 8);
 
 
         //Disambiguator sl = new LegacySimplifiedLesk(10,sim_lr_hp,);

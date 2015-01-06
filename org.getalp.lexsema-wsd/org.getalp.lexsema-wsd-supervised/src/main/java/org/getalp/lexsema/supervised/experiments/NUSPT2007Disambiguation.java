@@ -73,6 +73,7 @@ public final class NUSPT2007Disambiguation {
 
         TrainingDataExtractor trainingDataExtractor = new SemCorTrainingDataExtractor(altfe);
         trainingDataExtractor.extract(semCor);
+<<<<<<< HEAD
         
         //Disambiguator disambiguator = new WekaDisambiguator("../data/supervised", new SVMSetUp(), altfe, 16);
         //Disambiguator disambiguator = new WekaDisambiguator("../data/supervised", new BFTreeSetUp(), altfe, 16);
@@ -81,6 +82,10 @@ public final class NUSPT2007Disambiguation {
         //Disambiguator disambiguator = new WekaDisambiguator("../data/supervised", new RandomForestSetUp(Integer.parseInt(args[0]), Integer.parseInt(args[1]), Integer.parseInt(args[2]),Integer.parseInt(args[3])), altfe, Integer.parseInt(args[4]));
         Disambiguator disambiguator = new WekaDisambiguator("../data/supervised", new NaiveBayesSetUp(Boolean.parseBoolean(args[0]), Boolean.parseBoolean(args[1])), altfe, Integer.parseInt(args[2]), trainingDataExtractor);
         
+=======
+
+        Disambiguator disambiguator = new WekaDisambiguator("../data/supervised", new NaiveBayesSetUp(), altfe, 1, trainingDataExtractor);
+>>>>>>> ac90cb19b3d880ff170fede97ed2cac02069e589
         System.err.println("Loading texts");
         dl.load();
         int i = 0;

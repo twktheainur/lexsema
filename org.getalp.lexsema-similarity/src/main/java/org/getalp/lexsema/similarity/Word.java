@@ -16,5 +16,9 @@ public interface Word extends LexicalEntry, Iterable<String> {
     public String getId();
 
     public String getSurfaceForm();
+
+    public String getSemanticTag();
+
+    public void setSemanticTag(String semanticTag);
 }
 
