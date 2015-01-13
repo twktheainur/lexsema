@@ -1,19 +1,10 @@
 package org.getalp.lexsema.io.document;
 
 
-import org.getalp.lexsema.similarity.Sentence;
-import org.getalp.lexsema.similarity.SentenceImpl;
-import org.getalp.lexsema.similarity.Text;
-import org.getalp.lexsema.similarity.TextImpl;
-import org.getalp.lexsema.similarity.Word;
-import org.getalp.lexsema.similarity.WordImpl;
+import org.getalp.lexsema.similarity.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.xml.sax.Attributes;
-import org.xml.sax.ContentHandler;
-import org.xml.sax.Locator;
-import org.xml.sax.SAXException;
-import org.xml.sax.XMLReader;
+import org.xml.sax.*;
 import org.xml.sax.helpers.XMLReaderFactory;
 
 import java.io.IOException;
@@ -107,7 +98,7 @@ public class Semeval2007TextLoader extends TextLoaderImpl implements ContentHand
                 if (loadExtra) {
                     for (String e : extraWords.trim().split(System.getProperty("line.separator"))) {
                         if (!e.isEmpty()) {
-                            w.addPrecedingInstance(e);
+                            w.addPrecedingInstance(new WordImpl("non-target", "", e, ""));
                         }
                     }
                 }

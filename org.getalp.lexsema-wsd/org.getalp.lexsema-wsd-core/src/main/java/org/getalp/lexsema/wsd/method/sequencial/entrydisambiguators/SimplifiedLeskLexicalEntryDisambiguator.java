@@ -26,7 +26,7 @@ public class SimplifiedLeskLexicalEntryDisambiguator extends SequentialLexicalEn
     public SimplifiedLeskLexicalEntryDisambiguator(Configuration c, Document d, SimilarityMeasure sim, SimplifiedLeskParameters params, int start, int end, int currentIndex) {
         super(c, d, start, end, currentIndex);
         this.params = params;
-        this.similarityMeasure = sim;
+        similarityMeasure = sim;
     }
 
     @Override
@@ -55,8 +55,13 @@ public class SimplifiedLeskLexicalEntryDisambiguator extends SequentialLexicalEn
                         }
                     }
                     if (params.isOnlyOverlapContexts() && isOverlap || !params.isOnlyOverlapContexts()) {
-                        for (String prevWord : cw) {
-                            context.add(prevWord);
+                        for (Word prevWord : cw) {
+                            String lemma = prevWord.getLemma();
+                            if (lemma != null && !lemma.isEmpty()) {
+                                context.add(lemma);
+                            } else {
+                                context.add(prevWord.getSurfaceForm());
+                            }
                         }
                         context.add(cw.getSurfaceForm());
                     }

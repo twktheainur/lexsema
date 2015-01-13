@@ -2,7 +2,7 @@ package org.getalp.lexsema.wsd.experiments;
 
 import com.wcohen.ss.ScaledLevenstein;
 import org.getalp.lexsema.io.annotresult.SemevalWriter;
-import org.getalp.lexsema.io.document.Semeval2007TextLoader;
+import org.getalp.lexsema.io.document.Semeval2013Task13TextLoader;
 import org.getalp.lexsema.io.document.TextLoader;
 import org.getalp.lexsema.io.resource.LRLoader;
 import org.getalp.lexsema.io.resource.dbnary.DBNaryLoader;
@@ -18,7 +18,6 @@ import org.getalp.lexsema.wsd.method.sequencial.parameters.SimplifiedLeskParamet
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
-import java.util.Locale;
 
 @SuppressWarnings("all")
 public class DbnaryDisambiguationSimplifiedLesk {
@@ -33,9 +32,8 @@ public class DbnaryDisambiguationSimplifiedLesk {
 
         VisualVMTools.delayUntilReturn();
 
-        TextLoader dl = new Semeval2007TextLoader("../data/senseval2007_task7/test/eng-coarse-all-words.xml")
+        TextLoader dl = new Semeval2013Task13TextLoader("../data/semeval-2013-task12-test-data/data/multilingual-all-words.en.xml")
                 .loadNonInstances(false);
-        LRLoader lrloader = new DBNaryLoader(DB_PATH, ONTOLOGY_PROPERTIES, Locale.ENGLISH).setShuffle(true);
         SimilarityMeasure similarityMeasure;
 
         similarityMeasure = new TverskiIndexSimilarityMeasureBuilder()
@@ -74,6 +72,7 @@ public class DbnaryDisambiguationSimplifiedLesk {
 
 
         for (Document d : dl) {
+            LRLoader lrloader = new DBNaryLoader(DB_PATH, ONTOLOGY_PROPERTIES, d.getLanguage()).setShuffle(true);
             System.err.println("Starting document " + d.getId());
             System.err.println("\tLoading senses...");
             lrloader.loadSenses(d);
