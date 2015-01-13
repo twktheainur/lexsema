@@ -4,16 +4,24 @@ package org.getalp.lexsema.similarity;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 
 public class DocumentImpl implements Document {
     private String id;
     private List<Word> lexicalEntries;
     private List<List<Sense>> senses;
+    private Locale language;
 
 
     public DocumentImpl() {
         lexicalEntries = new ArrayList<>();
         senses = new ArrayList<>();
+    }
+
+    public DocumentImpl(Locale language) {
+        lexicalEntries = new ArrayList<>();
+        senses = new ArrayList<>();
+        this.language = language;
     }
 
     @Override
@@ -83,5 +91,13 @@ public class DocumentImpl implements Document {
     @Override
     public Iterator<Word> iterator() {
         return lexicalEntries.iterator();
+    }
+
+    public Locale getLanguage() {
+        return language;
+    }
+
+    public void setLanguage(Locale language) {
+        this.language = language;
     }
 }

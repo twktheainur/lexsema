@@ -3,12 +3,18 @@ package org.getalp.lexsema.similarity;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Locale;
 
 public class TextImpl extends DocumentImpl implements Text {
 
     private Collection<Sentence> sentences;
 
     public TextImpl() {
+        sentences = new ArrayList<>();
+    }
+
+    public TextImpl(Locale language) {
+        super(language);
         sentences = new ArrayList<>();
     }
 

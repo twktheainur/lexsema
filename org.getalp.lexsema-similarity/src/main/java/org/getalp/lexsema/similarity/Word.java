@@ -4,8 +4,8 @@ package org.getalp.lexsema.similarity;
 import org.getalp.lexsema.ontolex.LexicalEntry;
 
 
-public interface Word extends LexicalEntry, Iterable<String> {
-    public void addPrecedingInstance(String precedingNonInstance);
+public interface Word extends LexicalEntry, Iterable<Word> {
+    public void addPrecedingInstance(Word precedingNonInstance);
 
     public Sentence getEnclosingSentence();
 

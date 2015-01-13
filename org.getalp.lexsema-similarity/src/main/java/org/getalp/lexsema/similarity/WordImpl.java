@@ -19,7 +19,7 @@ public class WordImpl implements Word {
     LexicalEntry lexicalEntry;
     private String semanticTag;
     private Sentence enclosingSentence = null;
-    private List<String> precedingNonInstances;
+    private List<Word> precedingNonInstances;
 
     public WordImpl(String id, String lemma, String surfaceForm, String pos) {
         this.id = id;
@@ -31,7 +31,7 @@ public class WordImpl implements Word {
 
 
     @Override
-    public void addPrecedingInstance(String precedingNonInstance) {
+    public void addPrecedingInstance(Word precedingNonInstance) {
         precedingNonInstances.add(precedingNonInstance);
     }
 
@@ -114,7 +114,7 @@ public class WordImpl implements Word {
     }
 
     @Override
-    public Iterator<String> iterator() {
+    public Iterator<Word> iterator() {
         return precedingNonInstances.iterator();
     }
 

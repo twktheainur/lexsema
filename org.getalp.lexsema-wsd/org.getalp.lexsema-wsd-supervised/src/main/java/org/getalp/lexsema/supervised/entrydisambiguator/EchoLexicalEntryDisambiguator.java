@@ -4,7 +4,7 @@ package org.getalp.lexsema.supervised.entrydisambiguator;
 import org.getalp.lexsema.similarity.Document;
 import org.getalp.lexsema.supervised.ClassificationOutput;
 import org.getalp.lexsema.supervised.Classifier;
-import org.getalp.lexsema.supervised.EchoClassifier;
+import org.getalp.lexsema.supervised.Echo2Classifier;
 import org.getalp.lexsema.supervised.features.TrainingDataExtractor;
 import org.getalp.lexsema.supervised.features.extractors.LocalTextFeatureExtractor;
 import org.getalp.lexsema.supervised.weka.FeatureIndex;
@@ -31,7 +31,7 @@ public class EchoLexicalEntryDisambiguator extends SupervisedSequentialLexicalEn
         File dataFile = new File(String.format("%s%c%s.csv", dataPath, File.separatorChar, lemma.toLowerCase()));
         if (dataFile.exists()) {
             Classifier classifier;
-            classifier = new EchoClassifier();//changer ici pour echo/echo2
+            classifier = new Echo2Classifier();//changer ici pour echo/echo2
             try {
                 List<List<String>> trainingDataFeatures = getLemmaFeatures(lemma);
                 if (trainingDataFeatures != null) {
