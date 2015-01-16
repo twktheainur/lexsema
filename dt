@@ -1,0 +1,617 @@
+[INFO] Scanning for projects...
+[INFO] ------------------------------------------------------------------------
+[INFO] Reactor Build Order:
+[INFO] 
+[INFO] lexsema
+[INFO] org.getalp.lexsema-io
+[INFO] org.getalp.lexsema-util
+[INFO] org.getalp.lexsema-similarity
+[INFO] org.getalp.lexsema-wsd
+[INFO] org.getalp.lexsema-wsd-core
+[INFO] org.getalp.disambiguation.supervised
+[INFO] org.getalp.lexsema-ontolex
+[INFO] org.getalp.lexsema-ontolex-api
+[INFO] org.getalp.lexsema-ontolex-core
+[INFO] org.getalp.lexsema-ontolex-dbnary
+[INFO] org.getalp.lexsema-optim
+[INFO]                                                                         
+[INFO] ------------------------------------------------------------------------
+[INFO] Building lexsema 1.0-SNAPSHOT
+[INFO] ------------------------------------------------------------------------
+[INFO] 
+[INFO] --- maven-dependency-plugin:2.8:tree (default-cli) @ lexsema ---
+[INFO] org.getalp:lexsema:pom:1.0-SNAPSHOT
+[INFO] +- junit:junit:jar:4.6:test
+[INFO] \- org.apache.jena:apache-jena-libs:pom:2.11.1:compile
+[INFO]    +- org.apache.jena:jena-tdb:jar:1.0.1:compile
+[INFO]    |  +- org.apache.jena:jena-arq:jar:2.11.1:compile
+[INFO]    |  |  +- org.apache.httpcomponents:httpclient:jar:4.2.3:compile
+[INFO]    |  |  |  +- org.apache.httpcomponents:httpcore:jar:4.2.2:compile
+[INFO]    |  |  |  \- commons-codec:commons-codec:jar:1.6:compile
+[INFO]    |  |  \- org.slf4j:jcl-over-slf4j:jar:1.6.4:compile
+[INFO]    |  \- org.apache.jena:jena-core:jar:2.11.1:compile
+[INFO]    |     +- org.apache.jena:jena-iri:jar:1.0.1:compile
+[INFO]    |     \- xerces:xercesImpl:jar:2.11.0:compile
+[INFO]    |        \- xml-apis:xml-apis:jar:1.4.01:compile
+[INFO]    \- org.slf4j:slf4j-api:jar:1.6.4:compile
+[INFO]                                                                         
+[INFO] ------------------------------------------------------------------------
+[INFO] Building org.getalp.lexsema-io 1.0-SNAPSHOT
+[INFO] ------------------------------------------------------------------------
+[INFO] 
+[INFO] --- maven-dependency-plugin:2.8:tree (default-cli) @ org.getalp.lexsema-io ---
+[INFO] org.getalp:org.getalp.lexsema-io:jar:1.0-SNAPSHOT
+[INFO] +- edu.mit:jwi:jar:2.2.3:compile
+[INFO] +- de.tudarmstadt.ukp.dkpro.core:de.tudarmstadt.ukp.dkpro.core.stopwordremover-asl:jar:1.6.2:compile
+[INFO] |  +- org.apache.uima:uimaj-core:jar:2.6.0:compile
+[INFO] |  +- org.apache.uima:uimafit-core:jar:2.1.0:compile
+[INFO] |  |  +- commons-logging:commons-logging-api:jar:1.1:compile
+[INFO] |  |  +- org.springframework:spring-context:jar:3.1.2.RELEASE:compile
+[INFO] |  |  |  +- org.springframework:spring-aop:jar:3.1.2.RELEASE:compile
+[INFO] |  |  |  |  \- aopalliance:aopalliance:jar:1.0:compile
+[INFO] |  |  |  \- org.springframework:spring-expression:jar:3.1.2.RELEASE:compile
+[INFO] |  |  \- org.springframework:spring-beans:jar:3.1.2.RELEASE:compile
+[INFO] |  +- commons-io:commons-io:jar:2.0.1:compile
+[INFO] |  +- de.tudarmstadt.ukp.dkpro.core:de.tudarmstadt.ukp.dkpro.core.api.resources-asl:jar:1.6.2:compile
+[INFO] |  |  +- org.apache.commons:commons-compress:jar:1.4.1:compile
+[INFO] |  |  |  \- org.tukaani:xz:jar:1.0:compile
+[INFO] |  |  +- org.apache.maven:maven-model:jar:3.0.5:compile
+[INFO] |  |  +- org.apache.ivy:ivy:jar:2.3.0:compile
+[INFO] |  |  \- org.codehaus.plexus:plexus-utils:jar:2.0.6:compile
+[INFO] |  +- de.tudarmstadt.ukp.dkpro.core:de.tudarmstadt.ukp.dkpro.core.api.featurepath-asl:jar:1.6.2:compile
+[INFO] |  \- de.tudarmstadt.ukp.dkpro.core:de.tudarmstadt.ukp.dkpro.core.api.segmentation-asl:jar:1.6.2:compile
+[INFO] +- de.tudarmstadt.ukp.dkpro.core:de.tudarmstadt.ukp.dkpro.core.toolbox-asl:jar:1.6.2:compile
+[INFO] |  +- commons-lang:commons-lang:jar:2.6:compile
+[INFO] |  +- de.tudarmstadt.ukp.dkpro.core:de.tudarmstadt.ukp.dkpro.core.api.metadata-asl:jar:1.6.2:compile
+[INFO] |  |  \- org.apache.uima:uimaj-document-annotation:jar:2.6.0:compile
+[INFO] |  +- de.tudarmstadt.ukp.dkpro.core:de.tudarmstadt.ukp.dkpro.core.api.lexmorph-asl:jar:1.6.2:compile
+[INFO] |  +- de.tudarmstadt.ukp.dkpro.core:de.tudarmstadt.ukp.dkpro.core.treetagger-asl:jar:1.6.2:compile
+[INFO] |  |  \- org.annolab.tt4j:org.annolab.tt4j:jar:1.1.2:compile
+[INFO] |  +- de.tudarmstadt.ukp.dkpro.core:de.tudarmstadt.ukp.dkpro.core.io.negra-asl:jar:1.6.2:compile
+[INFO] |  |  \- de.tudarmstadt.ukp.dkpro.core:de.tudarmstadt.ukp.dkpro.core.io.penntree-asl:jar:1.6.2:compile
+[INFO] |  +- de.tudarmstadt.ukp.dkpro.core:de.tudarmstadt.ukp.dkpro.core.io.imscwb-asl:jar:1.6.2:compile
+[INFO] |  +- de.tudarmstadt.ukp.dkpro.core:de.tudarmstadt.ukp.dkpro.core.api.frequency-asl:jar:1.6.2:compile
+[INFO] |  |  \- it.unimi.dsi:fastutil:jar:6.5.13:compile
+[INFO] |  +- de.tudarmstadt.ukp.dkpro.core:de.tudarmstadt.ukp.dkpro.core.ngrams-asl:jar:1.6.2:compile
+[INFO] |  +- de.tudarmstadt.ukp.dkpro.core:de.tudarmstadt.ukp.dkpro.core.textcat-asl:jar:1.6.2:compile
+[INFO] |  |  \- org.knallgrau.utils:textcat:jar:1.0.1:compile
+[INFO] |  \- de.tudarmstadt.ukp.dkpro.core:de.tudarmstadt.ukp.dkpro.core.io.tei-asl:jar:1.6.2:compile
+[INFO] |     +- jaxen:jaxen:jar:1.1.1:compile
+[INFO] |     |  \- xerces:xercesImpl:jar:2.6.2:compile
+[INFO] |     +- dom4j:dom4j:jar:1.6.1:compile
+[INFO] |     \- xml-apis:xml-apis:jar:1.3.02:compile
+[INFO] +- de.tudarmstadt.ukp.dkpro.core:de.tudarmstadt.ukp.dkpro.core.stanfordnlp-gpl:jar:1.6.2:compile
+[INFO] |  +- edu.stanford.nlp:stanford-corenlp:jar:3.3.1:compile
+[INFO] |  |  +- com.io7m.xom:xom:jar:1.2.10:compile
+[INFO] |  |  |  \- xalan:xalan:jar:2.7.0:compile
+[INFO] |  |  +- joda-time:joda-time:jar:2.1:compile
+[INFO] |  |  +- de.jollyday:jollyday:jar:0.4.7:compile
+[INFO] |  |  |  \- javax.xml.bind:jaxb-api:jar:2.2.7:compile
+[INFO] |  |  \- com.googlecode.efficient-java-matrix-library:ejml:jar:0.23:compile
+[INFO] |  +- de.tudarmstadt.ukp.dkpro.core:de.tudarmstadt.ukp.dkpro.core.api.ner-asl:jar:1.6.2:compile
+[INFO] |  +- de.tudarmstadt.ukp.dkpro.core:de.tudarmstadt.ukp.dkpro.core.api.syntax-asl:jar:1.6.2:compile
+[INFO] |  +- de.tudarmstadt.ukp.dkpro.core:de.tudarmstadt.ukp.dkpro.core.api.coref-asl:jar:1.6.2:compile
+[INFO] |  \- de.tudarmstadt.ukp.dkpro.core:de.tudarmstadt.ukp.dkpro.core.api.parameter-asl:jar:1.6.2:compile
+[INFO] +- de.tudarmstadt.ukp.dkpro.core:de.tudarmstadt.ukp.dkpro.core.api.io-asl:jar:1.6.2:compile
+[INFO] |  +- org.apache.ant:ant:jar:1.8.1:compile
+[INFO] |  |  \- org.apache.ant:ant-launcher:jar:1.8.1:compile
+[INFO] |  \- org.springframework:spring-core:jar:3.1.2.RELEASE:compile
+[INFO] |     +- org.springframework:spring-asm:jar:3.1.2.RELEASE:compile
+[INFO] |     \- commons-logging:commons-logging:jar:1.1.1:compile
+[INFO] +- de.tudarmstadt.ukp.dkpro.core:de.tudarmstadt.ukp.dkpro.core.opennlp-asl:jar:1.6.2:compile
+[INFO] |  +- org.apache.opennlp:opennlp-tools:jar:1.5.3:compile
+[INFO] |  |  \- net.sf.jwordnet:jwnl:jar:1.3.3:compile
+[INFO] |  \- org.apache.opennlp:opennlp-maxent:jar:3.0.3:compile
+[INFO] +- de.tudarmstadt.ukp.dkpro.core:de.tudarmstadt.ukp.dkpro.core.tokit-asl:jar:1.6.2:compile
+[INFO] |  \- commons-jxpath:commons-jxpath:jar:1.3:compile
+[INFO] +- de.tudarmstadt.ukp.dkpro.core:de.tudarmstadt.ukp.dkpro.core.io.text-asl:jar:1.6.2:compile
+[INFO] |  \- com.ibm.icu:icu4j:jar:4.0.1:compile
+[INFO] +- de.tudarmstadt.ukp.dkpro.core:de.tudarmstadt.ukp.dkpro.core.dictionaryannotator-asl:jar:1.6.2:compile
+[INFO] |  \- de.tudarmstadt.ukp.dkpro.core:de.tudarmstadt.ukp.dkpro.core.api.semantics-asl:jar:1.6.2:compile
+[INFO] +- junit:junit:jar:4.6:test
+[INFO] \- org.apache.jena:apache-jena-libs:pom:2.11.1:compile
+[INFO]    +- org.apache.jena:jena-tdb:jar:1.0.1:compile
+[INFO]    |  +- org.apache.jena:jena-arq:jar:2.11.1:compile
+[INFO]    |  |  +- org.apache.httpcomponents:httpclient:jar:4.2.3:compile
+[INFO]    |  |  |  +- org.apache.httpcomponents:httpcore:jar:4.2.2:compile
+[INFO]    |  |  |  \- commons-codec:commons-codec:jar:1.6:compile
+[INFO]    |  |  \- org.slf4j:jcl-over-slf4j:jar:1.6.4:compile
+[INFO]    |  \- org.apache.jena:jena-core:jar:2.11.1:compile
+[INFO]    |     \- org.apache.jena:jena-iri:jar:1.0.1:compile
+[INFO]    \- org.slf4j:slf4j-api:jar:1.6.4:compile
+[INFO]                                                                         
+[INFO] ------------------------------------------------------------------------
+[INFO] Building org.getalp.lexsema-util 1.0-SNAPSHOT
+[INFO] ------------------------------------------------------------------------
+[INFO] 
+[INFO] --- maven-dependency-plugin:2.8:tree (default-cli) @ org.getalp.lexsema-util ---
+[INFO] org.getalp:org.getalp.lexsema-util:jar:1.0-SNAPSHOT
+[INFO] +- secondstring:secondstring:jar:20120620:compile
+[INFO] +- junit:junit:jar:4.6:test
+[INFO] \- org.apache.jena:apache-jena-libs:pom:2.11.1:compile
+[INFO]    +- org.apache.jena:jena-tdb:jar:1.0.1:compile
+[INFO]    |  +- org.apache.jena:jena-arq:jar:2.11.1:compile
+[INFO]    |  |  +- org.apache.httpcomponents:httpclient:jar:4.2.3:compile
+[INFO]    |  |  |  +- org.apache.httpcomponents:httpcore:jar:4.2.2:compile
+[INFO]    |  |  |  \- commons-codec:commons-codec:jar:1.6:compile
+[INFO]    |  |  \- org.slf4j:jcl-over-slf4j:jar:1.6.4:compile
+[INFO]    |  \- org.apache.jena:jena-core:jar:2.11.1:compile
+[INFO]    |     +- org.apache.jena:jena-iri:jar:1.0.1:compile
+[INFO]    |     \- xerces:xercesImpl:jar:2.11.0:compile
+[INFO]    |        \- xml-apis:xml-apis:jar:1.4.01:compile
+[INFO]    \- org.slf4j:slf4j-api:jar:1.6.4:compile
+[INFO]                                                                         
+[INFO] ------------------------------------------------------------------------
+[INFO] Building org.getalp.lexsema-similarity 1.0-SNAPSHOT
+[INFO] ------------------------------------------------------------------------
+[INFO] 
+[INFO] --- maven-dependency-plugin:2.8:tree (default-cli) @ org.getalp.lexsema-similarity ---
+[INFO] org.getalp:org.getalp.lexsema-similarity:jar:1.0-SNAPSHOT
+[INFO] +- secondstring:secondstring:jar:20120620:compile
+[INFO] +- org.getalp:org.getalp.lexsema-io:jar:1.0-SNAPSHOT:compile
+[INFO] |  +- edu.mit:jwi:jar:2.2.3:compile
+[INFO] |  +- de.tudarmstadt.ukp.dkpro.core:de.tudarmstadt.ukp.dkpro.core.stopwordremover-asl:jar:1.6.2:compile
+[INFO] |  |  +- org.apache.uima:uimaj-core:jar:2.6.0:compile
+[INFO] |  |  +- org.apache.uima:uimafit-core:jar:2.1.0:compile
+[INFO] |  |  |  +- commons-logging:commons-logging-api:jar:1.1:compile
+[INFO] |  |  |  +- org.springframework:spring-context:jar:3.1.2.RELEASE:compile
+[INFO] |  |  |  |  +- org.springframework:spring-aop:jar:3.1.2.RELEASE:compile
+[INFO] |  |  |  |  |  \- aopalliance:aopalliance:jar:1.0:compile
+[INFO] |  |  |  |  \- org.springframework:spring-expression:jar:3.1.2.RELEASE:compile
+[INFO] |  |  |  \- org.springframework:spring-beans:jar:3.1.2.RELEASE:compile
+[INFO] |  |  +- commons-io:commons-io:jar:2.0.1:compile
+[INFO] |  |  +- de.tudarmstadt.ukp.dkpro.core:de.tudarmstadt.ukp.dkpro.core.api.resources-asl:jar:1.6.2:compile
+[INFO] |  |  |  +- org.apache.commons:commons-compress:jar:1.4.1:compile
+[INFO] |  |  |  |  \- org.tukaani:xz:jar:1.0:compile
+[INFO] |  |  |  +- org.apache.maven:maven-model:jar:3.0.5:compile
+[INFO] |  |  |  +- org.apache.ivy:ivy:jar:2.3.0:compile
+[INFO] |  |  |  \- org.codehaus.plexus:plexus-utils:jar:2.0.6:compile
+[INFO] |  |  +- de.tudarmstadt.ukp.dkpro.core:de.tudarmstadt.ukp.dkpro.core.api.featurepath-asl:jar:1.6.2:compile
+[INFO] |  |  \- de.tudarmstadt.ukp.dkpro.core:de.tudarmstadt.ukp.dkpro.core.api.segmentation-asl:jar:1.6.2:compile
+[INFO] |  +- de.tudarmstadt.ukp.dkpro.core:de.tudarmstadt.ukp.dkpro.core.toolbox-asl:jar:1.6.2:compile
+[INFO] |  |  +- commons-lang:commons-lang:jar:2.6:compile
+[INFO] |  |  +- de.tudarmstadt.ukp.dkpro.core:de.tudarmstadt.ukp.dkpro.core.api.metadata-asl:jar:1.6.2:compile
+[INFO] |  |  |  \- org.apache.uima:uimaj-document-annotation:jar:2.6.0:compile
+[INFO] |  |  +- de.tudarmstadt.ukp.dkpro.core:de.tudarmstadt.ukp.dkpro.core.api.lexmorph-asl:jar:1.6.2:compile
+[INFO] |  |  +- de.tudarmstadt.ukp.dkpro.core:de.tudarmstadt.ukp.dkpro.core.treetagger-asl:jar:1.6.2:compile
+[INFO] |  |  |  \- org.annolab.tt4j:org.annolab.tt4j:jar:1.1.2:compile
+[INFO] |  |  +- de.tudarmstadt.ukp.dkpro.core:de.tudarmstadt.ukp.dkpro.core.io.negra-asl:jar:1.6.2:compile
+[INFO] |  |  |  \- de.tudarmstadt.ukp.dkpro.core:de.tudarmstadt.ukp.dkpro.core.io.penntree-asl:jar:1.6.2:compile
+[INFO] |  |  +- de.tudarmstadt.ukp.dkpro.core:de.tudarmstadt.ukp.dkpro.core.io.imscwb-asl:jar:1.6.2:compile
+[INFO] |  |  +- de.tudarmstadt.ukp.dkpro.core:de.tudarmstadt.ukp.dkpro.core.api.frequency-asl:jar:1.6.2:compile
+[INFO] |  |  |  \- it.unimi.dsi:fastutil:jar:6.5.13:compile
+[INFO] |  |  +- de.tudarmstadt.ukp.dkpro.core:de.tudarmstadt.ukp.dkpro.core.ngrams-asl:jar:1.6.2:compile
+[INFO] |  |  +- de.tudarmstadt.ukp.dkpro.core:de.tudarmstadt.ukp.dkpro.core.textcat-asl:jar:1.6.2:compile
+[INFO] |  |  |  \- org.knallgrau.utils:textcat:jar:1.0.1:compile
+[INFO] |  |  \- de.tudarmstadt.ukp.dkpro.core:de.tudarmstadt.ukp.dkpro.core.io.tei-asl:jar:1.6.2:compile
+[INFO] |  |     +- jaxen:jaxen:jar:1.1.1:compile
+[INFO] |  |     +- dom4j:dom4j:jar:1.6.1:compile
+[INFO] |  |     \- xml-apis:xml-apis:jar:1.3.02:compile
+[INFO] |  +- de.tudarmstadt.ukp.dkpro.core:de.tudarmstadt.ukp.dkpro.core.stanfordnlp-gpl:jar:1.6.2:compile
+[INFO] |  |  +- edu.stanford.nlp:stanford-corenlp:jar:3.3.1:compile
+[INFO] |  |  |  +- com.io7m.xom:xom:jar:1.2.10:compile
+[INFO] |  |  |  |  \- xalan:xalan:jar:2.7.0:compile
+[INFO] |  |  |  +- joda-time:joda-time:jar:2.1:compile
+[INFO] |  |  |  +- de.jollyday:jollyday:jar:0.4.7:compile
+[INFO] |  |  |  |  \- javax.xml.bind:jaxb-api:jar:2.2.7:compile
+[INFO] |  |  |  \- com.googlecode.efficient-java-matrix-library:ejml:jar:0.23:compile
+[INFO] |  |  +- de.tudarmstadt.ukp.dkpro.core:de.tudarmstadt.ukp.dkpro.core.api.ner-asl:jar:1.6.2:compile
+[INFO] |  |  +- de.tudarmstadt.ukp.dkpro.core:de.tudarmstadt.ukp.dkpro.core.api.syntax-asl:jar:1.6.2:compile
+[INFO] |  |  +- de.tudarmstadt.ukp.dkpro.core:de.tudarmstadt.ukp.dkpro.core.api.coref-asl:jar:1.6.2:compile
+[INFO] |  |  \- de.tudarmstadt.ukp.dkpro.core:de.tudarmstadt.ukp.dkpro.core.api.parameter-asl:jar:1.6.2:compile
+[INFO] |  +- de.tudarmstadt.ukp.dkpro.core:de.tudarmstadt.ukp.dkpro.core.api.io-asl:jar:1.6.2:compile
+[INFO] |  |  +- org.apache.ant:ant:jar:1.8.1:compile
+[INFO] |  |  |  \- org.apache.ant:ant-launcher:jar:1.8.1:compile
+[INFO] |  |  \- org.springframework:spring-core:jar:3.1.2.RELEASE:compile
+[INFO] |  |     +- org.springframework:spring-asm:jar:3.1.2.RELEASE:compile
+[INFO] |  |     \- commons-logging:commons-logging:jar:1.1.1:compile
+[INFO] |  +- de.tudarmstadt.ukp.dkpro.core:de.tudarmstadt.ukp.dkpro.core.opennlp-asl:jar:1.6.2:compile
+[INFO] |  |  +- org.apache.opennlp:opennlp-tools:jar:1.5.3:compile
+[INFO] |  |  |  \- net.sf.jwordnet:jwnl:jar:1.3.3:compile
+[INFO] |  |  \- org.apache.opennlp:opennlp-maxent:jar:3.0.3:compile
+[INFO] |  +- de.tudarmstadt.ukp.dkpro.core:de.tudarmstadt.ukp.dkpro.core.tokit-asl:jar:1.6.2:compile
+[INFO] |  |  \- commons-jxpath:commons-jxpath:jar:1.3:compile
+[INFO] |  +- de.tudarmstadt.ukp.dkpro.core:de.tudarmstadt.ukp.dkpro.core.io.text-asl:jar:1.6.2:compile
+[INFO] |  |  \- com.ibm.icu:icu4j:jar:4.0.1:compile
+[INFO] |  \- de.tudarmstadt.ukp.dkpro.core:de.tudarmstadt.ukp.dkpro.core.dictionaryannotator-asl:jar:1.6.2:compile
+[INFO] |     \- de.tudarmstadt.ukp.dkpro.core:de.tudarmstadt.ukp.dkpro.core.api.semantics-asl:jar:1.6.2:compile
+[INFO] +- net.sourceforge.parallelcolt:parallelcolt:jar:0.10.0:compile
+[INFO] |  +- net.sourceforge.jplasma:jplasma:jar:1.2.0:compile
+[INFO] |  |  +- net.sourceforge.jplasma:core-lapack:jar:0.1:compile
+[INFO] |  |  \- net.sourceforge.f2j:arpack_combined_all:jar:0.1:compile
+[INFO] |  +- net.sourceforge.jtransforms:jtransforms:jar:2.4.0:compile
+[INFO] |  +- net.sourceforge.csparsej:csparsej:jar:1.1.1:compile
+[INFO] |  +- net.sourceforge.parallelcolt:optimization:jar:1.0:compile
+[INFO] |  +- com.googlecode.netlib-java:netlib-java:jar:0.9.3:compile
+[INFO] |  \- com.github.rwl:JKLU:jar:1.0.0:compile
+[INFO] |     +- com.github.rwl:BTFJ:jar:1.0.1:compile
+[INFO] |     +- com.github.rwl:AMDJ:jar:1.0.1:compile
+[INFO] |     \- com.github.rwl:COLAMDJ:jar:1.0.1:compile
+[INFO] +- org.getalp:org.getalp.optimization:jar:1.0-SNAPSHOT:compile
+[INFO] +- org.getalp:org.getalp.lexsema-util:jar:1.0-SNAPSHOT:compile
+[INFO] +- junit:junit:jar:4.6:test
+[INFO] \- org.apache.jena:apache-jena-libs:pom:2.11.1:compile
+[INFO]    +- org.apache.jena:jena-tdb:jar:1.0.1:compile
+[INFO]    |  +- org.apache.jena:jena-arq:jar:2.11.1:compile
+[INFO]    |  |  +- org.apache.httpcomponents:httpclient:jar:4.2.3:compile
+[INFO]    |  |  |  +- org.apache.httpcomponents:httpcore:jar:4.2.2:compile
+[INFO]    |  |  |  \- commons-codec:commons-codec:jar:1.6:compile
+[INFO]    |  |  \- org.slf4j:jcl-over-slf4j:jar:1.6.4:compile
+[INFO]    |  \- org.apache.jena:jena-core:jar:2.11.1:compile
+[INFO]    |     +- org.apache.jena:jena-iri:jar:1.0.1:compile
+[INFO]    |     \- xerces:xercesImpl:jar:2.11.0:compile
+[INFO]    \- org.slf4j:slf4j-api:jar:1.6.4:compile
+[INFO]                                                                         
+[INFO] ------------------------------------------------------------------------
+[INFO] Building org.getalp.lexsema-wsd 1.0-SNAPSHOT
+[INFO] ------------------------------------------------------------------------
+[INFO] 
+[INFO] --- maven-dependency-plugin:2.8:tree (default-cli) @ org.getalp.lexsema-wsd ---
+[INFO] org.getalp:org.getalp.lexsema-wsd:pom:1.0-SNAPSHOT
+[INFO]                                                                         
+[INFO] ------------------------------------------------------------------------
+[INFO] Building org.getalp.lexsema-wsd-core 1.0-SNAPSHOT
+[INFO] ------------------------------------------------------------------------
+[INFO] 
+[INFO] --- maven-dependency-plugin:2.8:tree (default-cli) @ org.getalp.lexsema-wsd-core ---
+[INFO] org.getalp:org.getalp.lexsema-wsd-core:jar:1.0-SNAPSHOT
+[INFO] +- org.getalp:org.getalp.lexsema-io:jar:1.0-SNAPSHOT:compile
+[INFO] |  +- edu.mit:jwi:jar:2.2.3:compile
+[INFO] |  +- de.tudarmstadt.ukp.dkpro.core:de.tudarmstadt.ukp.dkpro.core.stopwordremover-asl:jar:1.6.2:compile
+[INFO] |  |  +- org.apache.uima:uimaj-core:jar:2.6.0:compile
+[INFO] |  |  +- org.apache.uima:uimafit-core:jar:2.1.0:compile
+[INFO] |  |  |  +- commons-logging:commons-logging-api:jar:1.1:compile
+[INFO] |  |  |  +- org.springframework:spring-context:jar:3.1.2.RELEASE:compile
+[INFO] |  |  |  |  +- org.springframework:spring-aop:jar:3.1.2.RELEASE:compile
+[INFO] |  |  |  |  |  \- aopalliance:aopalliance:jar:1.0:compile
+[INFO] |  |  |  |  \- org.springframework:spring-expression:jar:3.1.2.RELEASE:compile
+[INFO] |  |  |  \- org.springframework:spring-beans:jar:3.1.2.RELEASE:compile
+[INFO] |  |  +- commons-io:commons-io:jar:2.0.1:compile
+[INFO] |  |  +- de.tudarmstadt.ukp.dkpro.core:de.tudarmstadt.ukp.dkpro.core.api.resources-asl:jar:1.6.2:compile
+[INFO] |  |  |  +- org.apache.commons:commons-compress:jar:1.4.1:compile
+[INFO] |  |  |  |  \- org.tukaani:xz:jar:1.0:compile
+[INFO] |  |  |  +- org.apache.maven:maven-model:jar:3.0.5:compile
+[INFO] |  |  |  +- org.apache.ivy:ivy:jar:2.3.0:compile
+[INFO] |  |  |  \- org.codehaus.plexus:plexus-utils:jar:2.0.6:compile
+[INFO] |  |  +- de.tudarmstadt.ukp.dkpro.core:de.tudarmstadt.ukp.dkpro.core.api.featurepath-asl:jar:1.6.2:compile
+[INFO] |  |  \- de.tudarmstadt.ukp.dkpro.core:de.tudarmstadt.ukp.dkpro.core.api.segmentation-asl:jar:1.6.2:compile
+[INFO] |  +- de.tudarmstadt.ukp.dkpro.core:de.tudarmstadt.ukp.dkpro.core.toolbox-asl:jar:1.6.2:compile
+[INFO] |  |  +- commons-lang:commons-lang:jar:2.6:compile
+[INFO] |  |  +- de.tudarmstadt.ukp.dkpro.core:de.tudarmstadt.ukp.dkpro.core.api.metadata-asl:jar:1.6.2:compile
+[INFO] |  |  |  \- org.apache.uima:uimaj-document-annotation:jar:2.6.0:compile
+[INFO] |  |  +- de.tudarmstadt.ukp.dkpro.core:de.tudarmstadt.ukp.dkpro.core.api.lexmorph-asl:jar:1.6.2:compile
+[INFO] |  |  +- de.tudarmstadt.ukp.dkpro.core:de.tudarmstadt.ukp.dkpro.core.treetagger-asl:jar:1.6.2:compile
+[INFO] |  |  |  \- org.annolab.tt4j:org.annolab.tt4j:jar:1.1.2:compile
+[INFO] |  |  +- de.tudarmstadt.ukp.dkpro.core:de.tudarmstadt.ukp.dkpro.core.io.negra-asl:jar:1.6.2:compile
+[INFO] |  |  |  \- de.tudarmstadt.ukp.dkpro.core:de.tudarmstadt.ukp.dkpro.core.io.penntree-asl:jar:1.6.2:compile
+[INFO] |  |  +- de.tudarmstadt.ukp.dkpro.core:de.tudarmstadt.ukp.dkpro.core.io.imscwb-asl:jar:1.6.2:compile
+[INFO] |  |  +- de.tudarmstadt.ukp.dkpro.core:de.tudarmstadt.ukp.dkpro.core.api.frequency-asl:jar:1.6.2:compile
+[INFO] |  |  |  \- it.unimi.dsi:fastutil:jar:6.5.13:compile
+[INFO] |  |  +- de.tudarmstadt.ukp.dkpro.core:de.tudarmstadt.ukp.dkpro.core.ngrams-asl:jar:1.6.2:compile
+[INFO] |  |  +- de.tudarmstadt.ukp.dkpro.core:de.tudarmstadt.ukp.dkpro.core.textcat-asl:jar:1.6.2:compile
+[INFO] |  |  |  \- org.knallgrau.utils:textcat:jar:1.0.1:compile
+[INFO] |  |  \- de.tudarmstadt.ukp.dkpro.core:de.tudarmstadt.ukp.dkpro.core.io.tei-asl:jar:1.6.2:compile
+[INFO] |  |     +- jaxen:jaxen:jar:1.1.1:compile
+[INFO] |  |     |  \- xerces:xercesImpl:jar:2.6.2:compile
+[INFO] |  |     +- dom4j:dom4j:jar:1.6.1:compile
+[INFO] |  |     \- xml-apis:xml-apis:jar:1.3.02:compile
+[INFO] |  +- de.tudarmstadt.ukp.dkpro.core:de.tudarmstadt.ukp.dkpro.core.stanfordnlp-gpl:jar:1.6.2:compile
+[INFO] |  |  +- edu.stanford.nlp:stanford-corenlp:jar:3.3.1:compile
+[INFO] |  |  |  +- com.io7m.xom:xom:jar:1.2.10:compile
+[INFO] |  |  |  |  \- xalan:xalan:jar:2.7.0:compile
+[INFO] |  |  |  +- joda-time:joda-time:jar:2.1:compile
+[INFO] |  |  |  +- de.jollyday:jollyday:jar:0.4.7:compile
+[INFO] |  |  |  |  \- javax.xml.bind:jaxb-api:jar:2.2.7:compile
+[INFO] |  |  |  \- com.googlecode.efficient-java-matrix-library:ejml:jar:0.23:compile
+[INFO] |  |  +- de.tudarmstadt.ukp.dkpro.core:de.tudarmstadt.ukp.dkpro.core.api.ner-asl:jar:1.6.2:compile
+[INFO] |  |  +- de.tudarmstadt.ukp.dkpro.core:de.tudarmstadt.ukp.dkpro.core.api.syntax-asl:jar:1.6.2:compile
+[INFO] |  |  +- de.tudarmstadt.ukp.dkpro.core:de.tudarmstadt.ukp.dkpro.core.api.coref-asl:jar:1.6.2:compile
+[INFO] |  |  \- de.tudarmstadt.ukp.dkpro.core:de.tudarmstadt.ukp.dkpro.core.api.parameter-asl:jar:1.6.2:compile
+[INFO] |  +- de.tudarmstadt.ukp.dkpro.core:de.tudarmstadt.ukp.dkpro.core.api.io-asl:jar:1.6.2:compile
+[INFO] |  |  +- org.apache.ant:ant:jar:1.8.1:compile
+[INFO] |  |  |  \- org.apache.ant:ant-launcher:jar:1.8.1:compile
+[INFO] |  |  \- org.springframework:spring-core:jar:3.1.2.RELEASE:compile
+[INFO] |  |     +- org.springframework:spring-asm:jar:3.1.2.RELEASE:compile
+[INFO] |  |     \- commons-logging:commons-logging:jar:1.1.1:compile
+[INFO] |  +- de.tudarmstadt.ukp.dkpro.core:de.tudarmstadt.ukp.dkpro.core.opennlp-asl:jar:1.6.2:compile
+[INFO] |  |  +- org.apache.opennlp:opennlp-tools:jar:1.5.3:compile
+[INFO] |  |  |  \- net.sf.jwordnet:jwnl:jar:1.3.3:compile
+[INFO] |  |  \- org.apache.opennlp:opennlp-maxent:jar:3.0.3:compile
+[INFO] |  +- de.tudarmstadt.ukp.dkpro.core:de.tudarmstadt.ukp.dkpro.core.tokit-asl:jar:1.6.2:compile
+[INFO] |  |  \- commons-jxpath:commons-jxpath:jar:1.3:compile
+[INFO] |  +- de.tudarmstadt.ukp.dkpro.core:de.tudarmstadt.ukp.dkpro.core.io.text-asl:jar:1.6.2:compile
+[INFO] |  |  \- com.ibm.icu:icu4j:jar:4.0.1:compile
+[INFO] |  +- de.tudarmstadt.ukp.dkpro.core:de.tudarmstadt.ukp.dkpro.core.dictionaryannotator-asl:jar:1.6.2:compile
+[INFO] |  |  \- de.tudarmstadt.ukp.dkpro.core:de.tudarmstadt.ukp.dkpro.core.api.semantics-asl:jar:1.6.2:compile
+[INFO] |  \- org.apache.jena:apache-jena-libs:pom:2.11.1:compile
+[INFO] |     +- org.apache.jena:jena-tdb:jar:1.0.1:compile
+[INFO] |     |  +- org.apache.jena:jena-arq:jar:2.11.1:compile
+[INFO] |     |  |  +- org.apache.httpcomponents:httpclient:jar:4.2.3:compile
+[INFO] |     |  |  |  +- org.apache.httpcomponents:httpcore:jar:4.2.2:compile
+[INFO] |     |  |  |  \- commons-codec:commons-codec:jar:1.6:compile
+[INFO] |     |  |  \- org.slf4j:jcl-over-slf4j:jar:1.6.4:compile
+[INFO] |     |  \- org.apache.jena:jena-core:jar:2.11.1:compile
+[INFO] |     |     \- org.apache.jena:jena-iri:jar:1.0.1:compile
+[INFO] |     \- org.slf4j:slf4j-api:jar:1.6.4:compile
+[INFO] +- org.getalp:org.getalp.optimization:jar:1.0-SNAPSHOT:compile
+[INFO] +- org.getalp:org.getalp.lexsema-similarity:jar:1.0-SNAPSHOT:compile
+[INFO] +- org.getalp:org.getalp.lexsema-util:jar:1.0-SNAPSHOT:compile
+[INFO] +- net.sourceforge.parallelcolt:parallelcolt:jar:0.10.0:compile
+[INFO] |  +- net.sourceforge.jplasma:jplasma:jar:1.2.0:compile
+[INFO] |  |  +- net.sourceforge.jplasma:core-lapack:jar:0.1:compile
+[INFO] |  |  \- net.sourceforge.f2j:arpack_combined_all:jar:0.1:compile
+[INFO] |  +- net.sourceforge.jtransforms:jtransforms:jar:2.4.0:compile
+[INFO] |  +- net.sourceforge.csparsej:csparsej:jar:1.1.1:compile
+[INFO] |  +- net.sourceforge.parallelcolt:optimization:jar:1.0:compile
+[INFO] |  +- junit:junit:jar:4.10:compile
+[INFO] |  |  \- org.hamcrest:hamcrest-core:jar:1.1:compile
+[INFO] |  +- com.googlecode.netlib-java:netlib-java:jar:0.9.3:compile
+[INFO] |  \- com.github.rwl:JKLU:jar:1.0.0:compile
+[INFO] |     +- com.github.rwl:BTFJ:jar:1.0.1:compile
+[INFO] |     +- com.github.rwl:AMDJ:jar:1.0.1:compile
+[INFO] |     \- com.github.rwl:COLAMDJ:jar:1.0.1:compile
+[INFO] \- secondstring:secondstring:jar:20120620:compile
+[INFO]                                                                         
+[INFO] ------------------------------------------------------------------------
+[INFO] Building org.getalp.disambiguation.supervised 1.0-SNAPSHOT
+[INFO] ------------------------------------------------------------------------
+[INFO] 
+[INFO] --- maven-dependency-plugin:2.8:tree (default-cli) @ org.getalp.disambiguation.supervised ---
+[INFO] org.getalp:org.getalp.disambiguation.supervised:jar:1.0-SNAPSHOT
+[INFO] +- org.getalp:org.getalp.lexsema-wsd-core:jar:1.0-SNAPSHOT:compile
+[INFO] |  +- org.getalp:org.getalp.lexsema-io:jar:1.0-SNAPSHOT:compile
+[INFO] |  |  +- edu.mit:jwi:jar:2.2.3:compile
+[INFO] |  |  +- de.tudarmstadt.ukp.dkpro.core:de.tudarmstadt.ukp.dkpro.core.stopwordremover-asl:jar:1.6.2:compile
+[INFO] |  |  |  +- org.apache.uima:uimaj-core:jar:2.6.0:compile
+[INFO] |  |  |  +- org.apache.uima:uimafit-core:jar:2.1.0:compile
+[INFO] |  |  |  |  +- commons-logging:commons-logging-api:jar:1.1:compile
+[INFO] |  |  |  |  +- org.springframework:spring-context:jar:3.1.2.RELEASE:compile
+[INFO] |  |  |  |  |  +- org.springframework:spring-aop:jar:3.1.2.RELEASE:compile
+[INFO] |  |  |  |  |  |  \- aopalliance:aopalliance:jar:1.0:compile
+[INFO] |  |  |  |  |  \- org.springframework:spring-expression:jar:3.1.2.RELEASE:compile
+[INFO] |  |  |  |  \- org.springframework:spring-beans:jar:3.1.2.RELEASE:compile
+[INFO] |  |  |  +- commons-io:commons-io:jar:2.0.1:compile
+[INFO] |  |  |  +- de.tudarmstadt.ukp.dkpro.core:de.tudarmstadt.ukp.dkpro.core.api.resources-asl:jar:1.6.2:compile
+[INFO] |  |  |  |  +- org.apache.commons:commons-compress:jar:1.4.1:compile
+[INFO] |  |  |  |  |  \- org.tukaani:xz:jar:1.0:compile
+[INFO] |  |  |  |  +- org.apache.maven:maven-model:jar:3.0.5:compile
+[INFO] |  |  |  |  +- org.apache.ivy:ivy:jar:2.3.0:compile
+[INFO] |  |  |  |  \- org.codehaus.plexus:plexus-utils:jar:2.0.6:compile
+[INFO] |  |  |  +- de.tudarmstadt.ukp.dkpro.core:de.tudarmstadt.ukp.dkpro.core.api.featurepath-asl:jar:1.6.2:compile
+[INFO] |  |  |  \- de.tudarmstadt.ukp.dkpro.core:de.tudarmstadt.ukp.dkpro.core.api.segmentation-asl:jar:1.6.2:compile
+[INFO] |  |  +- de.tudarmstadt.ukp.dkpro.core:de.tudarmstadt.ukp.dkpro.core.toolbox-asl:jar:1.6.2:compile
+[INFO] |  |  |  +- commons-lang:commons-lang:jar:2.6:compile
+[INFO] |  |  |  +- de.tudarmstadt.ukp.dkpro.core:de.tudarmstadt.ukp.dkpro.core.api.metadata-asl:jar:1.6.2:compile
+[INFO] |  |  |  |  \- org.apache.uima:uimaj-document-annotation:jar:2.6.0:compile
+[INFO] |  |  |  +- de.tudarmstadt.ukp.dkpro.core:de.tudarmstadt.ukp.dkpro.core.api.lexmorph-asl:jar:1.6.2:compile
+[INFO] |  |  |  +- de.tudarmstadt.ukp.dkpro.core:de.tudarmstadt.ukp.dkpro.core.treetagger-asl:jar:1.6.2:compile
+[INFO] |  |  |  |  \- org.annolab.tt4j:org.annolab.tt4j:jar:1.1.2:compile
+[INFO] |  |  |  +- de.tudarmstadt.ukp.dkpro.core:de.tudarmstadt.ukp.dkpro.core.io.negra-asl:jar:1.6.2:compile
+[INFO] |  |  |  |  \- de.tudarmstadt.ukp.dkpro.core:de.tudarmstadt.ukp.dkpro.core.io.penntree-asl:jar:1.6.2:compile
+[INFO] |  |  |  +- de.tudarmstadt.ukp.dkpro.core:de.tudarmstadt.ukp.dkpro.core.io.imscwb-asl:jar:1.6.2:compile
+[INFO] |  |  |  +- de.tudarmstadt.ukp.dkpro.core:de.tudarmstadt.ukp.dkpro.core.api.frequency-asl:jar:1.6.2:compile
+[INFO] |  |  |  |  \- it.unimi.dsi:fastutil:jar:6.5.13:compile
+[INFO] |  |  |  +- de.tudarmstadt.ukp.dkpro.core:de.tudarmstadt.ukp.dkpro.core.ngrams-asl:jar:1.6.2:compile
+[INFO] |  |  |  +- de.tudarmstadt.ukp.dkpro.core:de.tudarmstadt.ukp.dkpro.core.textcat-asl:jar:1.6.2:compile
+[INFO] |  |  |  |  \- org.knallgrau.utils:textcat:jar:1.0.1:compile
+[INFO] |  |  |  \- de.tudarmstadt.ukp.dkpro.core:de.tudarmstadt.ukp.dkpro.core.io.tei-asl:jar:1.6.2:compile
+[INFO] |  |  |     +- jaxen:jaxen:jar:1.1.1:compile
+[INFO] |  |  |     |  \- xerces:xercesImpl:jar:2.6.2:compile
+[INFO] |  |  |     +- dom4j:dom4j:jar:1.6.1:compile
+[INFO] |  |  |     \- xml-apis:xml-apis:jar:1.3.02:compile
+[INFO] |  |  +- de.tudarmstadt.ukp.dkpro.core:de.tudarmstadt.ukp.dkpro.core.stanfordnlp-gpl:jar:1.6.2:compile
+[INFO] |  |  |  +- edu.stanford.nlp:stanford-corenlp:jar:3.3.1:compile
+[INFO] |  |  |  |  +- com.io7m.xom:xom:jar:1.2.10:compile
+[INFO] |  |  |  |  |  \- xalan:xalan:jar:2.7.0:compile
+[INFO] |  |  |  |  +- joda-time:joda-time:jar:2.1:compile
+[INFO] |  |  |  |  +- de.jollyday:jollyday:jar:0.4.7:compile
+[INFO] |  |  |  |  |  \- javax.xml.bind:jaxb-api:jar:2.2.7:compile
+[INFO] |  |  |  |  \- com.googlecode.efficient-java-matrix-library:ejml:jar:0.23:compile
+[INFO] |  |  |  +- de.tudarmstadt.ukp.dkpro.core:de.tudarmstadt.ukp.dkpro.core.api.ner-asl:jar:1.6.2:compile
+[INFO] |  |  |  +- de.tudarmstadt.ukp.dkpro.core:de.tudarmstadt.ukp.dkpro.core.api.syntax-asl:jar:1.6.2:compile
+[INFO] |  |  |  +- de.tudarmstadt.ukp.dkpro.core:de.tudarmstadt.ukp.dkpro.core.api.coref-asl:jar:1.6.2:compile
+[INFO] |  |  |  \- de.tudarmstadt.ukp.dkpro.core:de.tudarmstadt.ukp.dkpro.core.api.parameter-asl:jar:1.6.2:compile
+[INFO] |  |  +- de.tudarmstadt.ukp.dkpro.core:de.tudarmstadt.ukp.dkpro.core.api.io-asl:jar:1.6.2:compile
+[INFO] |  |  |  +- org.apache.ant:ant:jar:1.8.1:compile
+[INFO] |  |  |  |  \- org.apache.ant:ant-launcher:jar:1.8.1:compile
+[INFO] |  |  |  \- org.springframework:spring-core:jar:3.1.2.RELEASE:compile
+[INFO] |  |  |     +- org.springframework:spring-asm:jar:3.1.2.RELEASE:compile
+[INFO] |  |  |     \- commons-logging:commons-logging:jar:1.1.1:compile
+[INFO] |  |  +- de.tudarmstadt.ukp.dkpro.core:de.tudarmstadt.ukp.dkpro.core.opennlp-asl:jar:1.6.2:compile
+[INFO] |  |  |  +- org.apache.opennlp:opennlp-tools:jar:1.5.3:compile
+[INFO] |  |  |  |  \- net.sf.jwordnet:jwnl:jar:1.3.3:compile
+[INFO] |  |  |  \- org.apache.opennlp:opennlp-maxent:jar:3.0.3:compile
+[INFO] |  |  +- de.tudarmstadt.ukp.dkpro.core:de.tudarmstadt.ukp.dkpro.core.tokit-asl:jar:1.6.2:compile
+[INFO] |  |  |  \- commons-jxpath:commons-jxpath:jar:1.3:compile
+[INFO] |  |  +- de.tudarmstadt.ukp.dkpro.core:de.tudarmstadt.ukp.dkpro.core.io.text-asl:jar:1.6.2:compile
+[INFO] |  |  |  \- com.ibm.icu:icu4j:jar:4.0.1:compile
+[INFO] |  |  +- de.tudarmstadt.ukp.dkpro.core:de.tudarmstadt.ukp.dkpro.core.dictionaryannotator-asl:jar:1.6.2:compile
+[INFO] |  |  |  \- de.tudarmstadt.ukp.dkpro.core:de.tudarmstadt.ukp.dkpro.core.api.semantics-asl:jar:1.6.2:compile
+[INFO] |  |  \- org.apache.jena:apache-jena-libs:pom:2.11.1:compile
+[INFO] |  |     +- org.apache.jena:jena-tdb:jar:1.0.1:compile
+[INFO] |  |     |  +- org.apache.jena:jena-arq:jar:2.11.1:compile
+[INFO] |  |     |  |  +- org.apache.httpcomponents:httpclient:jar:4.2.3:compile
+[INFO] |  |     |  |  |  +- org.apache.httpcomponents:httpcore:jar:4.2.2:compile
+[INFO] |  |     |  |  |  \- commons-codec:commons-codec:jar:1.6:compile
+[INFO] |  |     |  |  \- org.slf4j:jcl-over-slf4j:jar:1.6.4:compile
+[INFO] |  |     |  \- org.apache.jena:jena-core:jar:2.11.1:compile
+[INFO] |  |     |     \- org.apache.jena:jena-iri:jar:1.0.1:compile
+[INFO] |  |     \- org.slf4j:slf4j-api:jar:1.6.4:compile
+[INFO] |  +- org.getalp:org.getalp.optimization:jar:1.0-SNAPSHOT:compile
+[INFO] |  +- org.getalp:org.getalp.lexsema-similarity:jar:1.0-SNAPSHOT:compile
+[INFO] |  +- org.getalp:org.getalp.lexsema-util:jar:1.0-SNAPSHOT:compile
+[INFO] |  +- net.sourceforge.parallelcolt:parallelcolt:jar:0.10.0:compile
+[INFO] |  |  +- net.sourceforge.jplasma:jplasma:jar:1.2.0:compile
+[INFO] |  |  |  +- net.sourceforge.jplasma:core-lapack:jar:0.1:compile
+[INFO] |  |  |  \- net.sourceforge.f2j:arpack_combined_all:jar:0.1:compile
+[INFO] |  |  +- net.sourceforge.jtransforms:jtransforms:jar:2.4.0:compile
+[INFO] |  |  +- net.sourceforge.csparsej:csparsej:jar:1.1.1:compile
+[INFO] |  |  +- net.sourceforge.parallelcolt:optimization:jar:1.0:compile
+[INFO] |  |  +- junit:junit:jar:4.10:compile
+[INFO] |  |  |  \- org.hamcrest:hamcrest-core:jar:1.1:compile
+[INFO] |  |  +- com.googlecode.netlib-java:netlib-java:jar:0.9.3:compile
+[INFO] |  |  \- com.github.rwl:JKLU:jar:1.0.0:compile
+[INFO] |  |     +- com.github.rwl:BTFJ:jar:1.0.1:compile
+[INFO] |  |     +- com.github.rwl:AMDJ:jar:1.0.1:compile
+[INFO] |  |     \- com.github.rwl:COLAMDJ:jar:1.0.1:compile
+[INFO] |  \- secondstring:secondstring:jar:20120620:compile
+[INFO] +- nz.ac.waikato.cms.weka:weka-stable:jar:3.6.6:compile
+[INFO] |  \- net.sf.squirrel-sql.thirdparty-non-maven:java-cup:jar:0.11a:compile
+[INFO] \- tw.edu.ntu.csie:libsvm:jar:3.17:compile
+[INFO]                                                                         
+[INFO] ------------------------------------------------------------------------
+[INFO] Building org.getalp.lexsema-ontolex 1.0-SNAPSHOT
+[INFO] ------------------------------------------------------------------------
+[INFO] 
+[INFO] --- maven-dependency-plugin:2.8:tree (default-cli) @ org.getalp.lexsema-ontolex ---
+[INFO] org.getalp:org.getalp.lexsema-ontolex:pom:1.0-SNAPSHOT
+[INFO] +- junit:junit:jar:4.6:test
+[INFO] +- org.apache.jena:apache-jena-libs:pom:2.11.1:compile
+[INFO] |  \- org.apache.jena:jena-tdb:jar:1.0.1:compile
+[INFO] |     +- org.apache.jena:jena-arq:jar:2.11.1:compile
+[INFO] |     |  +- org.apache.httpcomponents:httpclient:jar:4.2.3:compile
+[INFO] |     |  |  +- org.apache.httpcomponents:httpcore:jar:4.2.2:compile
+[INFO] |     |  |  \- commons-codec:commons-codec:jar:1.6:compile
+[INFO] |     |  \- org.slf4j:jcl-over-slf4j:jar:1.6.4:compile
+[INFO] |     \- org.apache.jena:jena-core:jar:2.11.1:compile
+[INFO] |        \- org.apache.jena:jena-iri:jar:1.0.1:compile
+[INFO] +- org.slf4j:slf4j-api:jar:1.7.7:compile
+[INFO] +- org.slf4j:slf4j-simple:jar:1.7.7:compile
+[INFO] +- org.projectlombok:lombok:jar:1.12.2:compile
+[INFO] +- com.hp.hpl.jena:jena:jar:2.6.4:compile
+[INFO] |  +- com.hp.hpl.jena:iri:jar:0.8:compile
+[INFO] |  +- com.ibm.icu:icu4j:jar:3.4.4:compile
+[INFO] |  \- xerces:xercesImpl:jar:2.7.1:compile
+[INFO] \- com.openlinksw.virtuoso:virt_jena2:jar:2.10.1_B1.9:compile
+[INFO]                                                                         
+[INFO] ------------------------------------------------------------------------
+[INFO] Building org.getalp.lexsema-ontolex-api 1.0-SNAPSHOT
+[INFO] ------------------------------------------------------------------------
+[INFO] 
+[INFO] --- maven-dependency-plugin:2.8:tree (default-cli) @ org.getalp.lexsema-ontolex-api ---
+[INFO] org.getalp:org.getalp.lexsema-ontolex-api:jar:1.0-SNAPSHOT
+[INFO] +- junit:junit:jar:4.6:test
+[INFO] +- org.apache.jena:apache-jena-libs:pom:2.11.1:compile
+[INFO] |  \- org.apache.jena:jena-tdb:jar:1.0.1:compile
+[INFO] |     +- org.apache.jena:jena-arq:jar:2.11.1:compile
+[INFO] |     |  +- org.apache.httpcomponents:httpclient:jar:4.2.3:compile
+[INFO] |     |  |  +- org.apache.httpcomponents:httpcore:jar:4.2.2:compile
+[INFO] |     |  |  \- commons-codec:commons-codec:jar:1.6:compile
+[INFO] |     |  \- org.slf4j:jcl-over-slf4j:jar:1.6.4:compile
+[INFO] |     \- org.apache.jena:jena-core:jar:2.11.1:compile
+[INFO] |        \- org.apache.jena:jena-iri:jar:1.0.1:compile
+[INFO] +- org.slf4j:slf4j-api:jar:1.7.7:compile
+[INFO] +- org.slf4j:slf4j-simple:jar:1.7.7:compile
+[INFO] +- org.projectlombok:lombok:jar:1.12.2:compile
+[INFO] +- com.hp.hpl.jena:jena:jar:2.6.4:compile
+[INFO] |  +- com.hp.hpl.jena:iri:jar:0.8:compile
+[INFO] |  +- com.ibm.icu:icu4j:jar:3.4.4:compile
+[INFO] |  \- xerces:xercesImpl:jar:2.7.1:compile
+[INFO] \- com.openlinksw.virtuoso:virt_jena2:jar:2.10.1_B1.9:compile
+[INFO]                                                                         
+[INFO] ------------------------------------------------------------------------
+[INFO] Building org.getalp.lexsema-ontolex-core 1.0-SNAPSHOT
+[INFO] ------------------------------------------------------------------------
+[INFO] 
+[INFO] --- maven-dependency-plugin:2.8:tree (default-cli) @ org.getalp.lexsema-ontolex-core ---
+[INFO] org.getalp:org.getalp.lexsema-ontolex-core:jar:1.0-SNAPSHOT
+[INFO] +- org.getalp:org.getalp.lexsema-ontolex-api:jar:1.0-SNAPSHOT:compile
+[INFO] +- junit:junit:jar:4.6:test
+[INFO] +- org.apache.jena:apache-jena-libs:pom:2.11.1:compile
+[INFO] |  \- org.apache.jena:jena-tdb:jar:1.0.1:compile
+[INFO] |     +- org.apache.jena:jena-arq:jar:2.11.1:compile
+[INFO] |     |  +- org.apache.httpcomponents:httpclient:jar:4.2.3:compile
+[INFO] |     |  |  +- org.apache.httpcomponents:httpcore:jar:4.2.2:compile
+[INFO] |     |  |  \- commons-codec:commons-codec:jar:1.6:compile
+[INFO] |     |  \- org.slf4j:jcl-over-slf4j:jar:1.6.4:compile
+[INFO] |     \- org.apache.jena:jena-core:jar:2.11.1:compile
+[INFO] |        \- org.apache.jena:jena-iri:jar:1.0.1:compile
+[INFO] +- org.slf4j:slf4j-api:jar:1.7.7:compile
+[INFO] +- org.slf4j:slf4j-simple:jar:1.7.7:compile
+[INFO] +- org.projectlombok:lombok:jar:1.12.2:compile
+[INFO] +- com.hp.hpl.jena:jena:jar:2.6.4:compile
+[INFO] |  +- com.hp.hpl.jena:iri:jar:0.8:compile
+[INFO] |  +- com.ibm.icu:icu4j:jar:3.4.4:compile
+[INFO] |  \- xerces:xercesImpl:jar:2.7.1:compile
+[INFO] \- com.openlinksw.virtuoso:virt_jena2:jar:2.10.1_B1.9:compile
+[INFO]                                                                         
+[INFO] ------------------------------------------------------------------------
+[INFO] Building org.getalp.lexsema-ontolex-dbnary 1.0-SNAPSHOT
+[INFO] ------------------------------------------------------------------------
+[INFO] 
+[INFO] --- maven-dependency-plugin:2.8:tree (default-cli) @ org.getalp.lexsema-ontolex-dbnary ---
+[INFO] org.getalp:org.getalp.lexsema-ontolex-dbnary:jar:1.0-SNAPSHOT
+[INFO] +- junit:junit:jar:4.6:test
+[INFO] +- org.apache.jena:apache-jena-libs:pom:2.11.1:compile
+[INFO] |  \- org.apache.jena:jena-tdb:jar:1.0.1:compile
+[INFO] |     +- org.apache.jena:jena-arq:jar:2.11.1:compile
+[INFO] |     |  +- org.apache.httpcomponents:httpclient:jar:4.2.3:compile
+[INFO] |     |  |  +- org.apache.httpcomponents:httpcore:jar:4.2.2:compile
+[INFO] |     |  |  \- commons-codec:commons-codec:jar:1.6:compile
+[INFO] |     |  \- org.slf4j:jcl-over-slf4j:jar:1.6.4:compile
+[INFO] |     \- org.apache.jena:jena-core:jar:2.11.1:compile
+[INFO] |        \- org.apache.jena:jena-iri:jar:1.0.1:compile
+[INFO] +- org.getalp:org.getalp.lexsema-ontolex-core:jar:1.0-SNAPSHOT:compile
+[INFO] +- org.getalp:org.getalp.lexsema-ontolex-api:jar:1.0-SNAPSHOT:compile
+[INFO] +- org.projectlombok:lombok:jar:1.12.2:compile
+[INFO] +- org.slf4j:slf4j-api:jar:1.7.7:compile
+[INFO] +- org.slf4j:slf4j-simple:jar:1.7.7:compile
+[INFO] +- com.hp.hpl.jena:jena:jar:2.6.4:compile
+[INFO] |  +- com.hp.hpl.jena:iri:jar:0.8:compile
+[INFO] |  +- com.ibm.icu:icu4j:jar:3.4.4:compile
+[INFO] |  \- xerces:xercesImpl:jar:2.7.1:compile
+[INFO] \- com.openlinksw.virtuoso:virt_jena2:jar:2.10.1_B1.9:compile
+[INFO]                                                                         
+[INFO] ------------------------------------------------------------------------
+[INFO] Building org.getalp.lexsema-optim 1.0-SNAPSHOT
+[INFO] ------------------------------------------------------------------------
+[INFO] 
+[INFO] --- maven-dependency-plugin:2.8:tree (default-cli) @ org.getalp.lexsema-optim ---
+[INFO] org.getalp:org.getalp.lexsema-optim:jar:1.0-SNAPSHOT
+[INFO] +- net.sourceforge.parallelcolt:parallelcolt:jar:0.10.0:compile
+[INFO] |  +- net.sourceforge.jplasma:jplasma:jar:1.2.0:compile
+[INFO] |  |  +- net.sourceforge.jplasma:core-lapack:jar:0.1:compile
+[INFO] |  |  \- net.sourceforge.f2j:arpack_combined_all:jar:0.1:compile
+[INFO] |  +- net.sourceforge.jtransforms:jtransforms:jar:2.4.0:compile
+[INFO] |  +- net.sourceforge.csparsej:csparsej:jar:1.1.1:compile
+[INFO] |  +- net.sourceforge.parallelcolt:optimization:jar:1.0:compile
+[INFO] |  +- com.googlecode.netlib-java:netlib-java:jar:0.9.3:compile
+[INFO] |  \- com.github.rwl:JKLU:jar:1.0.0:compile
+[INFO] |     +- com.github.rwl:BTFJ:jar:1.0.1:compile
+[INFO] |     +- com.github.rwl:AMDJ:jar:1.0.1:compile
+[INFO] |     \- com.github.rwl:COLAMDJ:jar:1.0.1:compile
+[INFO] +- junit:junit:jar:4.6:test
+[INFO] \- org.apache.jena:apache-jena-libs:pom:2.11.1:compile
+[INFO]    +- org.apache.jena:jena-tdb:jar:1.0.1:compile
+[INFO]    |  +- org.apache.jena:jena-arq:jar:2.11.1:compile
+[INFO]    |  |  +- org.apache.httpcomponents:httpclient:jar:4.2.3:compile
+[INFO]    |  |  |  +- org.apache.httpcomponents:httpcore:jar:4.2.2:compile
+[INFO]    |  |  |  \- commons-codec:commons-codec:jar:1.6:compile
+[INFO]    |  |  \- org.slf4j:jcl-over-slf4j:jar:1.6.4:compile
+[INFO]    |  \- org.apache.jena:jena-core:jar:2.11.1:compile
+[INFO]    |     +- org.apache.jena:jena-iri:jar:1.0.1:compile
+[INFO]    |     \- xerces:xercesImpl:jar:2.11.0:compile
+[INFO]    |        \- xml-apis:xml-apis:jar:1.4.01:compile
+[INFO]    \- org.slf4j:slf4j-api:jar:1.6.4:compile
+[INFO] ------------------------------------------------------------------------
+[INFO] Reactor Summary:
+[INFO] 
+[INFO] lexsema ........................................... SUCCESS [1.087s]
+[INFO] org.getalp.lexsema-io ............................. SUCCESS [0.425s]
+[INFO] org.getalp.lexsema-util ........................... SUCCESS [0.013s]
+[INFO] org.getalp.lexsema-similarity ..................... SUCCESS [0.159s]
+[INFO] org.getalp.lexsema-wsd ............................ SUCCESS [0.003s]
+[INFO] org.getalp.lexsema-wsd-core ....................... SUCCESS [0.120s]
+[INFO] org.getalp.disambiguation.supervised .............. SUCCESS [0.112s]
+[INFO] org.getalp.lexsema-ontolex ........................ SUCCESS [0.038s]
+[INFO] org.getalp.lexsema-ontolex-api .................... SUCCESS [0.017s]
+[INFO] org.getalp.lexsema-ontolex-core ................... SUCCESS [0.026s]
+[INFO] org.getalp.lexsema-ontolex-dbnary ................. SUCCESS [0.025s]
+[INFO] org.getalp.lexsema-optim .......................... SUCCESS [0.023s]
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time: 2.527s
+[INFO] Finished at: Thu Nov 13 14:55:00 CET 2014
+[INFO] Final Memory: 12M/29M
+[INFO] ------------------------------------------------------------------------
