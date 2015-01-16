@@ -68,7 +68,17 @@ public interface DBNary extends LexicalResource {
      *
      * @param sourceEntity The source <code>LexicalResourceEntity</code>
      * @param relationType The relation type
-     * @return The list of related entities through for the source entity through the provided relation type.
+     * @return The list of  entities related to the source entity through the provided relation type.
      */
     public List<LexicalResourceEntity> getRelatedEntities(LexicalResourceEntity sourceEntity, DBNaryRelationType relationType);
+
+    /**
+     * Retrieve the related <code>LexicalResourceEntity</code> (ies) associated
+     * to <code>sourceEntity</code> through <code>relationType</code>
+     *
+     * @param sourceEntity     The source <code>LexicalResourceEntity</code>
+     * @param relationTypeList The list relation types
+     * @return The list of  entities related to the source entity through the provided relation types.
+     */
+    List<LexicalResourceEntity> getRelatedEntities(LexicalResourceEntity sourceEntity, List<DBNaryRelationType> relationTypeList);
 }

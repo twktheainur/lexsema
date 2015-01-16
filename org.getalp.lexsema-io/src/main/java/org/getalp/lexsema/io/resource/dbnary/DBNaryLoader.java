@@ -105,23 +105,22 @@ public class DBNaryLoader implements LRLoader {
 
     private String posToLexvo(final String pos) {
         String convertedPos = "";
-        if (pos.contains("lexvo")) {
-            convertedPos = pos;
-        } else if (pos.toLowerCase().startsWith("n")
+        if (pos.toLowerCase().startsWith("n")
                 || pos.toLowerCase().contains("noun")) {
-            convertedPos = "lexvo:noun";
+            convertedPos = "Noun";
         } else if (pos.toLowerCase().startsWith("v")
                 || pos.toLowerCase().contains("verb")) {
-            convertedPos = "lexvo:verb";
+            convertedPos = "Verb";
         } else if (pos.toLowerCase().startsWith("j") ||
                 pos.toLowerCase().contains("adj") ||
                 pos.toLowerCase().contains("adjective") ||
-                pos.toLowerCase().contains("s")) {
-            convertedPos = "lexvo:adjective";
+                pos.toLowerCase().contains("s") ||
+                pos.toLowerCase().contains("a")) {
+            convertedPos = "Adjective";
         } else if (pos.toLowerCase().startsWith("r") ||
                 pos.toLowerCase().contains("adv") ||
                 pos.toLowerCase().contains("adverb")) {
-            convertedPos = "lexvo:adverb";
+            convertedPos = "Adverb";
         }
         return convertedPos;
     }
