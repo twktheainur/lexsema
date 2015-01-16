@@ -22,10 +22,12 @@ public class SemevalWriter implements ConfigurationWriter {
             String id = d.getId();
             int wordIndex = 0;
             for (Word w : d) {
-                if (assignments[wordIndex] >= 0) {
-                    ps.println(id + " " + w.getId() + " " + d.getSenses(wordIndex).get(assignments[wordIndex]).getId());
-                } else {
-                    ps.println(id + " " + w.getId() + " ");
+                if (w.getId() != null && !w.getId().isEmpty()) {
+                    if (assignments[wordIndex] >= 0) {
+                        ps.println(id + " " + w.getId() + " " + d.getSenses(wordIndex).get(assignments[wordIndex]).getId());
+                    } else {
+                        ps.println(id + " " + w.getId() + " ");
+                    }
                 }
                 wordIndex++;
             }

@@ -31,8 +31,6 @@ public final class DBNaryImpl extends OntolexLexicalResource implements DBNary {
     private final Locale language;
     private final Logger logger = LoggerFactory.getLogger(DBNary.class);
 
-    private QueryProcessor<Vocable> existVocableQueryProcessor;
-
     /**
      * Constructor for DBNary
      *
@@ -51,12 +49,9 @@ public final class DBNaryImpl extends OntolexLexicalResource implements DBNary {
     @Override
     public Vocable getVocable(final String vocable) throws NoSuchVocableException {
         String voc = vocable.toLowerCase();
-        if (existVocableQueryProcessor == null) {
-            existVocableQueryProcessor = new org.getalp.lexsema.ontolex.dbnary.queries.VocableExistsQueryProcessor(getGraph(), this, getLexicalResourceEntityFactory(), vocable);
-        }
+        QueryProcessor<Vocable> existVocableQueryProcessor = new org.getalp.lexsema.ontolex.dbnary.queries.VocableExistsQueryProcessor(getGraph(), this, getLexicalResourceEntityFactory(), vocable);
         existVocableQueryProcessor.runQuery();
         List<Vocable> vocables = existVocableQueryProcessor.processResults();
-
         if (vocables.isEmpty()) {
             throw new NoSuchVocableException(voc, language.getDisplayName());
         }
@@ -122,6 +117,14 @@ public final class DBNaryImpl extends OntolexLexicalResource implements DBNary {
                         relationType);
         relatedTargetsProcessor.runQuery();
         return relatedTargetsProcessor.processResults();
+    }
+
+    public List<LexicalResourceEntity> getRelatedEntities(LexicalResourceEntity sourceEntity, List<DBNaryRelationType> relationTypeList) {
+        List<LexicalResourceEntity> entities = new ArrayList<>();
+        for (DBNaryRelationType rt : relationTypeList) {
+            entities.addAll(getRelatedEntities(sourceEntity, rt));
+        }
+        return entities;
     }
 
     @Override

@@ -17,7 +17,6 @@
     <orderEntry type="library" name="Maven: org.apache.jena:jena-arq:javadoc:2.12.1" level="project" />
     <orderEntry type="library" name="Maven: org.apache.jena:jena-core:sources:2.12.1" level="project" />
     <orderEntry type="library" name="Maven: org.apache.jena:jena-core:javadoc:2.12.1" level="project" />
-    <orderEntry type="library" name="Maven: org.apache.jena:jena-tdb:1.1.1" level="project" />
     <orderEntry type="library" name="Maven: org.apache.jena:jena-tdb:sources:1.1.1" level="project" />
     <orderEntry type="library" name="Maven: org.apache.jena:jena-tdb:javadoc:1.1.1" level="project" />
     <orderEntry type="library" name="Maven: org.apache.jena:jena-sdb:1.5.1" level="project" />
