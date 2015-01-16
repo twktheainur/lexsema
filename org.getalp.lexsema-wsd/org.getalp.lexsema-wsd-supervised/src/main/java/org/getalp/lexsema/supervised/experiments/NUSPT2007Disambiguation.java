@@ -9,10 +9,7 @@ import org.getalp.lexsema.io.resource.wordnet.WordnetLoader;
 import org.getalp.lexsema.similarity.Document;
 import org.getalp.lexsema.supervised.WekaDisambiguator;
 import org.getalp.lexsema.supervised.features.*;
-import org.getalp.lexsema.supervised.features.extractors.AggregateLocalTextFeatureExtractor;
-import org.getalp.lexsema.supervised.features.extractors.AlignedContextFeatureExtractor;
-import org.getalp.lexsema.supervised.features.extractors.LocalCollocationFeatureExtractor;
-import org.getalp.lexsema.supervised.features.extractors.PosFeatureExtractor;
+import org.getalp.lexsema.supervised.features.extractors.*;
 import org.getalp.lexsema.supervised.weka.NaiveBayesSetUp;
 import org.getalp.lexsema.wsd.configuration.Configuration;
 import org.getalp.lexsema.wsd.method.Disambiguator;
@@ -56,7 +53,7 @@ public final class NUSPT2007Disambiguation {
         */
         LocalCollocationFeatureExtractor lcfe = new LocalCollocationFeatureExtractor(contextWindows);
         PosFeatureExtractor pfe = new PosFeatureExtractor(3,3);
-        AlignedContextFeatureExtractor acfe = new AlignedContextFeatureExtractor(wloader);
+        LocalTextFeatureExtractor acfe = new LemmaFeatureExtractor(3, 3);
 
         AggregateLocalTextFeatureExtractor altfe = new AggregateLocalTextFeatureExtractor();
         altfe.addExtractor(lcfe);
