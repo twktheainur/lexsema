@@ -15,7 +15,7 @@ import org.getalp.lexsema.similarity.WordImpl;
 import java.util.Collection;
 
 
-public class TokenAnnotationConsumer extends CasConsumer_ImplBase {
+public class TokenAnnotationConsumer extends CasConsumer_ImplBase implements SentenceLevelConsumer {
 
     private Sentence sentence;
 
@@ -43,6 +43,7 @@ public class TokenAnnotationConsumer extends CasConsumer_ImplBase {
     }
 
 
+    @Override
     public Sentence getSentence() {
         return sentence;
     }
