@@ -46,7 +46,7 @@ public class TranslationBuilder extends AbstractLexicalResourceEntityBuilder<Tra
         }
         String targetLanguage = translationProperties.get("targetLanguage");
 
-        return new TranslationImpl(getLexicalResource(), getResourceGraphURI() + uri, parent,
+        return new TranslationImpl(getLexicalResource(), uri, parent,
                 gloss, translationNumber, writtenForm, targetLanguage);
     }
 }

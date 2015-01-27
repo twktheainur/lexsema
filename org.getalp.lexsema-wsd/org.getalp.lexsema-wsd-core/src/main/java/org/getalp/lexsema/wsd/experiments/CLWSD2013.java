@@ -1,6 +1,7 @@
 package org.getalp.lexsema.wsd.experiments;
 
 import com.wcohen.ss.ScaledLevenstein;
+import org.getalp.lexsema.io.resource.LRLoader;
 import org.getalp.lexsema.io.resource.wordnet.WordnetLoader;
 import org.getalp.lexsema.io.sentences.STS2013SentencePairLoader;
 import org.getalp.lexsema.similarity.Sentence;
@@ -22,15 +23,15 @@ import java.io.PrintWriter;
 import java.util.List;
 
 @SuppressWarnings("all")
-public class CLSS2014 {
-    public CLSS2014() {
+public class CLWSD2013 {
+    public CLWSD2013() {
     }
 
     public static void main(String[] args) throws FileNotFoundException {
 
         //VisualVMTools.delayUntilReturn();
 
-        WordnetLoader lrloader = new WordnetLoader("../data/wordnet/2.1/dict")
+        LRLoader lrloader = new WordnetLoader("../data/wordnet/2.1/dict")
                 .setHasExtendedSignature(true).setShuffle(true);
         STS2013SentencePairLoader spl = new STS2013SentencePairLoader("STS.input.headlines.txt", lrloader);
         PrintWriter outputFile = new PrintWriter("STS.headlines.output.txt");
