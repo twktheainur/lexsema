@@ -1,7 +1,7 @@
 package org.getalp.lexsema.acceptali;
 
+import org.getalp.lexsema.language.Language;
 import org.getalp.lexsema.ontolex.LexicalEntry;
-import org.getalp.lexsema.ontolex.LexicalResourceEntity;
 import org.getalp.lexsema.ontolex.LexicalSense;
 import org.getalp.lexsema.ontolex.dbnary.DBNary;
 import org.getalp.lexsema.ontolex.dbnary.Translation;
@@ -14,57 +14,90 @@ import java.util.*;
 
 public class GenerateTranslationClosure {
     private static Logger logger = LoggerFactory.getLogger(GenerateTranslationClosure.class);
-    private Map<Locale, DBNary> dbnaryMap;
+    private Map<Language, DBNary> dbnaryMap;
 
-    public GenerateTranslationClosure(Map<Locale, DBNary> dbnaryMap) {
+    public GenerateTranslationClosure(Map<Language, DBNary> dbnaryMap) {
         this.dbnaryMap = dbnaryMap;
     }
 
-    public Map<Locale, Set<LexicalResourceEntity>> generateClosure(LexicalEntry entity, Locale language, int degree) {
-        Map<Locale, Set<LexicalResourceEntity>> output = new HashMap<>();
+    public Map<Language, Map<LexicalEntry,Set<LexicalSense>>> recurseClosure(LexicalEntry entity, Language startingLanguage, int degree) {
+        return recurseClosure(entity,startingLanguage,startingLanguage,degree,true);
+    }
+
+    public void showTranslations(LexicalEntry entity, Locale language) {
+        Map<Locale, Map<LexicalEntry, Set<LexicalSense>>> output = new HashMap<>();
         DBNary localLanguageDBnary = dbnaryMap.get(language);
         if (localLanguageDBnary != null) {
-
-            List<LexicalSense> senses = localLanguageDBnary.getLexicalSenses(entity);
-            if (!output.containsKey(language)) {
-                output.put(language, new TreeSet<LexicalResourceEntity>());
+            List<Translation> sourceTranslations = localLanguageDBnary.getTranslations(entity);
+            for (Translation translation : sourceTranslations) {
+                logger.info(translation.toString());
             }
-            output.get(language).addAll(senses);
+        }
+    }
+
+    private Map<Language, Map<LexicalEntry,Set<LexicalSense>>> recurseClosure(LexicalEntry entity, Language language, Language startingLanguage, int degree, boolean topLevel) {
+        Map<Language, Map<LexicalEntry,Set<LexicalSense>>> output = new HashMap<>();
+        DBNary localLanguageDBnary = dbnaryMap.get(language);
+
+        for(Language l : dbnaryMap.keySet()){
+                output.put(l, new HashMap<LexicalEntry, Set<LexicalSense>>());
+        }
+
+        if (localLanguageDBnary != null) {
+
+            if(!output.get(language).containsKey(entity)){
+                output.get(language).put(entity,new TreeSet<LexicalSense>());
+            }
+            List<LexicalSense> senses = localLanguageDBnary.getLexicalSenses(entity);
+            output.get(language).get(entity).addAll(senses);
 
             List<Translation> sourceTranslations = localLanguageDBnary.getTranslations(entity);
             String pos = entity.getPartOfSpeech();
 
-            if (degree > 0) {
+            if (degree >=    0) {
                 for (Translation translation : sourceTranslations) {
                     //The language code is the last token in the lexvo URI
-                    String languageCodeURI[] = translation.getLanguage().split("/");
-                    String languageCode = languageCodeURI[languageCodeURI.length - 1];
+                    Language lang = translation.getLanguage();
+                    if(lang!=null) {
+                        if (dbnaryMap.containsKey(lang) && !lang.equals(startingLanguage)) {
+                            try {
+                                /*
+                                 * Removing language tag...
+                                 */
+                                String writtenForm = translation.getWrittenForm();
+                                if (writtenForm.contains("@")) {
+                                    writtenForm = writtenForm.split("@")[0];
+                                }
+                                /*
+                                 * Removing tonic accent marker (Russian...)
+                                 */
+                                writtenForm = writtenForm.replace("́","");
+                                Vocable tv = dbnaryMap.get(lang).getVocable(writtenForm);
 
-                    Locale lang = Locale.forLanguageTag(languageCode);
-                    if (dbnaryMap.containsKey(lang)) {
-                        try {
-                            String writtenForm = translation.getWrittenForm();
-                            if (writtenForm.contains("@")) {
-                                writtenForm = writtenForm.split("@")[0];
-                            }
-                            Vocable tv = dbnaryMap.get(lang).getVocable(writtenForm);
+                                List<LexicalEntry> entries = dbnaryMap.get(lang).getLexicalEntries(tv);
 
-                            List<LexicalEntry> entries = dbnaryMap.get(lang).getLexicalEntries(tv);
+                                for (LexicalEntry le : entries) {
+                                    if (le.getPartOfSpeech().equals(pos)) {
+                                        Map<Language, Map<LexicalEntry, Set<LexicalSense>>> localClosure;
+                                        if(topLevel) {
 
-                            if (!output.containsKey(lang)) {
-                                output.put(lang, new TreeSet<LexicalResourceEntity>());
-                            }
-
-                            for (LexicalEntry le : entries) {
-                                if (le.getPartOfSpeech().equals(pos)) {
-                                    Map<Locale, Set<LexicalResourceEntity>> localClosure = generateClosure(le, Locale.forLanguageTag(languageCode), degree - 1);
-                                    for (Locale l : localClosure.keySet()) {
-                                        output.get(l).addAll(localClosure.get(l));
+                                                    localClosure = recurseClosure(le, lang,startingLanguage, degree,false);
+                                        } else {
+                                            localClosure = recurseClosure(le, lang,startingLanguage, degree - 1, false);
+                                        }
+                                        for (Language l : localClosure.keySet()) {
+                                            for(LexicalEntry localle: localClosure.get(l).keySet()) {
+                                                if(!output.get(l).containsKey(localle)){
+                                                    output.get(l).put(localle,new TreeSet<LexicalSense>());
+                                                }
+                                                output.get(l).get(localle).addAll(localClosure.get(l).get(localle));
+                                            }
+                                        }
                                     }
                                 }
+                            } catch (NoSuchVocableException e) {
+                                logger.warn(e.getLocalizedMessage());
                             }
-                        } catch (NoSuchVocableException e) {
-                            logger.error(e.getLocalizedMessage());
                         }
                     }
                 }
