@@ -1,6 +1,7 @@
 package org.getalp.lexsema.io.document;
 
 
+import org.getalp.lexsema.language.Language;
 import org.getalp.lexsema.similarity.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,7 +23,7 @@ public class Semeval2013Task13TextLoader extends TextLoaderImpl implements Conte
     private String currentPos;
     private String currentLemma;
     private String currentId;
-    private Locale language;
+    private Language language;
 
     private String path;
 
@@ -70,7 +71,8 @@ public class Semeval2013Task13TextLoader extends TextLoaderImpl implements Conte
     public void startElement(String uri, String localName, String qName, Attributes atts) throws SAXException {
         switch (localName) {
             case "corpus":
-                language = Locale.forLanguageTag(atts.getValue("lang"));
+                language = Language.fromCode(atts.getValue("lang"));
+                break;
             case "text":
                 currentDocument = new TextImpl(language);
                 currentDocument.setId(atts.getValue("id"));
@@ -90,7 +92,7 @@ public class Semeval2013Task13TextLoader extends TextLoaderImpl implements Conte
                 inWord = true;
                 currentPos = atts.getValue("pos");
                 currentLemma = atts.getValue("lemma");
-                currentId = "";
+                currentId = atts.getValue("id");
                 break;
         }
     }
@@ -106,6 +108,11 @@ public class Semeval2013Task13TextLoader extends TextLoaderImpl implements Conte
                 break;
             case "wf":
                 inWord = false;
+                currentSurfaceForm="";
+                currentId="";
+                currentLemma = "";
+                currentPos = "";
+                break;
             case "instance":
                 inWord = false;
                 Word w = new WordImpl(currentId, currentLemma, currentSurfaceForm, currentPos);

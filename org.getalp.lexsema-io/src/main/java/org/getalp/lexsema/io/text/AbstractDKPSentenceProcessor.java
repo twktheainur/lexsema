@@ -12,7 +12,7 @@ import org.apache.uima.resource.ResourceInitializationException;
 import org.apache.uima.resource.ResourceManager;
 import org.apache.uima.resource.ResourceSpecifier;
 import org.apache.uima.util.CasCreationUtils;
-import org.getalp.lexsema.io.uima.SentenceConsumer;
+import org.getalp.lexsema.io.uima.SentenceLevelConsumer;
 import org.getalp.lexsema.io.uima.TokenAnnotationConsumer;
 import org.getalp.lexsema.similarity.Sentence;
 import org.slf4j.Logger;
@@ -46,7 +46,7 @@ public abstract class AbstractDKPSentenceProcessor implements SentenceProcessor{
 
         try {
             // Process
-            SentenceConsumer sac = new TokenAnnotationConsumer();
+            SentenceLevelConsumer sac = new TokenAnnotationConsumer();
             while (reader.hasNext()) {
                 reader.getNext(cas);
                 aae.process(cas);
@@ -62,8 +62,9 @@ public abstract class AbstractDKPSentenceProcessor implements SentenceProcessor{
         }
     }
 
-    protected abstract AnalysisEngineDescription[] defineAnalysisEngine();
+    protected abstract AnalysisEngineDescription[] defineAnalysisEngine() throws ResourceInitializationException;
 
+    @SuppressWarnings("all")
     @Override
     public Sentence process(String sentenceText, String documentId, String language) {
         try {
