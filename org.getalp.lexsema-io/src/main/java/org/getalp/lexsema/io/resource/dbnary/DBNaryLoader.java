@@ -2,6 +2,7 @@ package org.getalp.lexsema.io.resource.dbnary;
 
 
 import org.getalp.lexsema.io.resource.LRLoader;
+import org.getalp.lexsema.language.Language;
 import org.getalp.lexsema.ontolex.LexicalEntry;
 import org.getalp.lexsema.ontolex.LexicalSense;
 import org.getalp.lexsema.ontolex.dbnary.DBNary;
@@ -18,6 +19,7 @@ import org.getalp.lexsema.similarity.Sense;
 import org.getalp.lexsema.similarity.SenseImpl;
 import org.getalp.lexsema.similarity.Word;
 import org.getalp.lexsema.similarity.cache.SenseCache;
+import org.getalp.lexsema.similarity.cache.SenseCacheImpl;
 import org.getalp.lexsema.similarity.signatures.SemanticSignature;
 import org.getalp.lexsema.similarity.signatures.SemanticSignatureImpl;
 import org.slf4j.Logger;
@@ -27,29 +29,35 @@ import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 
+@SuppressWarnings("OverlyCoupledClass")
 public class DBNaryLoader implements LRLoader {
     private static Logger logger = LoggerFactory.getLogger(DBNaryLoader.class);
     private final DBNary dbnary;
-    private boolean hasExtendedSignature;
+    private final OntologyModel model;
     private boolean shuffle;
+    SenseCache senseCache;
+    private boolean loadDefinitions;
+    private boolean loadRelated;
 
 
-    public DBNaryLoader(final String dbPath, final String ontologyPropertiesPath, final Locale language)
+    public DBNaryLoader(final String dbPath, final String ontologyPropertiesPath, final Language language)
             throws IOException, InvocationTargetException, NoSuchMethodException,
             ClassNotFoundException, InstantiationException, IllegalAccessException {
 
         Store vts = new JenaTDBStore(dbPath);
         StoreHandler.registerStoreInstance(vts);
-
-        OntologyModel tBox = new OWLTBoxModel(ontologyPropertiesPath);
+        model = new OWLTBoxModel(ontologyPropertiesPath);
         // Creating DBNary wrapper
-        dbnary = (DBNary) LexicalResourceFactory.getLexicalResource(DBNary.class, tBox, language);
+        dbnary = (DBNary) LexicalResourceFactory.getLexicalResource(DBNary.class, model, language);
+        senseCache = SenseCacheImpl.getInstance();
     }
 
-    private List<Sense> getSenses(String lemma, String pos) {
+    private List<Sense> getLexicalEntriesAndSenses(Word w) {
+        String lemma = w.getLemma();
+        String pos = w.getPartOfSpeech();
         String lexvoPos = posToLexvo(pos);
         Vocable v;
-        List<LexicalEntry> les = null;
+        List<LexicalEntry> les;
         List<Sense> senses = new ArrayList<>();
         try {
             v = dbnary.getVocable(lemma);
@@ -62,15 +70,18 @@ public class DBNaryLoader implements LRLoader {
                     les.remove(currentEntry);
                     size--;
                 } else {
+                    w.setLexicalEntry(le);
                     for (LexicalSense ls : dbnary.getLexicalSenses(le)) {
                         Sense s = new SenseImpl(ls);
                         SemanticSignature signature = new SemanticSignatureImpl();
-                        String def = ls.getDefinition();
-                        addToSignature(signature, def);
+                        if(loadDefinitions) {
+                            String def = ls.getDefinition();
+                            addToSignature(signature, def);
+                        }
                         s.setSemanticSignature(signature);
                         senses.add(s);
                     }
-                    currentEntry++;
+                    break;
                 }
             }
         } catch (NoSuchVocableException e) {
@@ -82,15 +93,15 @@ public class DBNaryLoader implements LRLoader {
     @Override
     public List<Sense> getSenses(Word w) {
         List<Sense> senses;
-        senses = SenseCache.getInstance().getSenses(w);
+        senses = senseCache.getSenses(w);
         if (senses == null) {
             if (w != null) {
-                senses = getSenses(w.getLemma(), w.getPartOfSpeech());
+                senses = getLexicalEntriesAndSenses(w);
             }
             if (shuffle && senses != null) {
                 Collections.shuffle(senses);
             }
-            SenseCache.getInstance().addToCache(w, senses);
+            senseCache.addToCache(w, senses);
         }
         return senses;
     }
@@ -107,31 +118,22 @@ public class DBNaryLoader implements LRLoader {
         String convertedPos = "";
         if (pos.toLowerCase().startsWith("n")
                 || pos.toLowerCase().contains("noun")) {
-            convertedPos = "Noun";
+            convertedPos = "lexinfo:noun";
         } else if (pos.toLowerCase().startsWith("v")
                 || pos.toLowerCase().contains("verb")) {
-            convertedPos = "Verb";
+            convertedPos = "lexinfo:verb";
         } else if (pos.toLowerCase().startsWith("j") ||
                 pos.toLowerCase().contains("adj") ||
                 pos.toLowerCase().contains("adjective") ||
                 pos.toLowerCase().contains("s") ||
                 pos.toLowerCase().contains("a")) {
-            convertedPos = "Adjective";
+            convertedPos = "lexinfo:adjective";
         } else if (pos.toLowerCase().startsWith("r") ||
                 pos.toLowerCase().contains("adv") ||
                 pos.toLowerCase().contains("adverb")) {
-            convertedPos = "Adverb";
+            convertedPos = "lexinfo:adverb";
         }
-        return convertedPos;
-    }
-
-    @Override
-    public List<List<Sense>> getAllSenses(List<Word> wds) {
-        List<List<Sense>> senses = new ArrayList<>();
-        for (Word w : wds) {
-            senses.add(getSenses(w));
-        }
-        return senses;
+        return model.getNode(convertedPos).toString();
     }
 
     @Override
@@ -141,8 +143,28 @@ public class DBNaryLoader implements LRLoader {
         }
     }
 
-    public DBNaryLoader setShuffle(boolean shuffle) {
+    @SuppressWarnings("BooleanParameter")
+    @Override
+    public LRLoader suffle(boolean shuffle) {
         this.shuffle = shuffle;
+        return this;
+    }
+
+    @SuppressWarnings("BooleanParameter")
+    @Override
+    public LRLoader extendedSignature(boolean hasExtendedSignature) {
+        return this;
+    }
+
+    @Override
+    public LRLoader loadDefinition(boolean loadDefinitions) {
+        this.loadDefinitions = loadDefinitions;
+        return this;
+    }
+
+    @Override
+    public LRLoader setLoadRelated(boolean loadRelated) {
+        this.loadRelated = loadRelated;
         return this;
     }
 }

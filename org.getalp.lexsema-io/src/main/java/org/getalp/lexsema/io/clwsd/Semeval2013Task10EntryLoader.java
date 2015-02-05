@@ -1,6 +1,10 @@
 package org.getalp.lexsema.io.clwsd;
 
 
+import edu.stanford.nlp.util.Pair;
+import org.getalp.lexsema.io.text.EnglishDKPSentenceProcessor;
+import org.getalp.lexsema.io.text.SentenceProcessor;
+import org.getalp.lexsema.language.Language;
 import org.getalp.lexsema.similarity.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,23 +13,31 @@ import org.xml.sax.helpers.XMLReaderFactory;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 @SuppressWarnings({"BooleanParameter", "ClassWithTooManyFields"})
-public class Semeval2013Task10EntryLoader implements ContentHandler {
+public class Semeval2013Task10EntryLoader implements ContentHandler, TargetEntryLoader {
 
     private Logger logger = LoggerFactory.getLogger(Semeval2013Task10EntryLoader.class);
 
-    private boolean inContext = false;
-    private boolean inHead = false;
-    String contextString = "";
-
     private String path;
+    private  SentenceProcessor sentenceProcessor;
+
+    private boolean inContext = false;
+    private int numberOfSpacesInContext;
+    private String contextString = "";
 
     private TargetWordEntry entry;
+    private String targetWordId = "";
+    private int currentContextId;
+    private int currentWordIndex;
+    private boolean inHead;
+
 
     public Semeval2013Task10EntryLoader(String path) {
         this.path = path;
+        sentenceProcessor = new EnglishDKPSentenceProcessor();
     }
 
     @Override
@@ -56,18 +68,25 @@ public class Semeval2013Task10EntryLoader implements ContentHandler {
     @Override
     public void startElement(String uri, String localName, String qName, Attributes atts) throws SAXException {
         switch (localName) {
-            case "lexlt":
-                String item = atts.getValue("item");
-                String lemma= item.split("\\.")[0];
-                String pos = item.split("\\.")[1];
-                entry = new TargetWordEntryImpl(new WordImpl(item,lemma,lemma,pos));
+            case "lexelt":
+                targetWordId = atts.getValue("item");
+                String lemma= targetWordId.split("\\.")[0];
+                String pos = targetWordId.split("\\.")[1];
+                entry = new TargetWordEntryImpl(new WordImpl(targetWordId,lemma,lemma,pos));
+                logger.info(String.format("Loading %s ...", targetWordId));
+                break;
+            case "instance":
+                contextString = "";
+                currentContextId = Integer.valueOf(atts.getValue("id"));
+                logger.info(String.format("Loading context %d ...", currentContextId));
                 break;
             case "context":
                 inContext = true;
+                currentWordIndex=0;
+                numberOfSpacesInContext=0;
                 break;
             case "head":
-                    inHead = true;
-                break;
+                inHead = true;
         }
     }
 
@@ -76,22 +95,19 @@ public class Semeval2013Task10EntryLoader implements ContentHandler {
         switch (localName) {
             case "context":
                 inContext = false;
-                contextString = contextString.replaceAll("\\p{Punct}","");
-                List<String> context = new ArrayList<>();
-                String [] token = contextString.split(" ");
-                int cIndex;
-                int targetWordIndex = 0;
-                for(cIndex =0; cIndex <token.length; cIndex++){
-                    if(token[cIndex].startsWith("<head>")){
-                        targetWordIndex = cIndex;
-                    } else {
+                //contextString = contextString.replaceAll("\\p{Punct}","");
 
-                    }
-                }
-                contextString = "";
-            case "head":
-                inHead = false;
+                contextString = contextString.replaceAll("<[/]?head>","");
+                try {
+                    Sentence s = sentenceProcessor.process(contextString, targetWordId+"#"+currentContextId, Language.ENGLISH.getISO2Code());
+                    entry.addContext(s,currentWordIndex);
+                } catch (RuntimeException e) {
+                    logger.warn(e.getLocalizedMessage());
+                    e.printStackTrace();
+               }
                 break;
+            case "head":
+                currentWordIndex=numberOfSpacesInContext;
         }
 
     }
@@ -100,7 +116,13 @@ public class Semeval2013Task10EntryLoader implements ContentHandler {
     public void characters(char[] ch, int start, int length) throws SAXException {
         if (inContext) {
             for (int i = start; i < start + length; i++) {
+                if(ch[i]==' '){
+                    numberOfSpacesInContext++;
+                }
                 contextString += ch[i];
+            }
+            if(inHead){
+
             }
         }
     }
@@ -120,17 +142,26 @@ public class Semeval2013Task10EntryLoader implements ContentHandler {
 
     }
 
-    public void load() {
+    @Override
+    public TargetWordEntry load() {
         try {
             XMLReader saxReader = XMLReaderFactory.createXMLReader();
             saxReader
                     .setContentHandler(this);
             saxReader.parse(path);
+            return entry;
         } catch (IOException | SAXException t) {
             logger.error(t.getLocalizedMessage());
         }
+        return null;
     }
 
+    @Override
+    public Iterator<Pair<Sentence, Integer>> iterator() {
+        return entry.iterator();
+    }
 
-
+    public TargetWordEntry getEntry() {
+        return entry;
+    }
 }

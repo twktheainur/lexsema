@@ -23,11 +23,11 @@ public class SemevalWriter implements ConfigurationWriter {
             int wordIndex = 0;
             for (Word w : d) {
                 if (w.getId() != null && !w.getId().isEmpty()) {
-                    if (assignments[wordIndex] >= 0) {
-                        ps.println(id + " " + w.getId() + " " + d.getSenses(wordIndex).get(assignments[wordIndex]).getId());
-                    } else {
-                        ps.println(id + " " + w.getId() + " ");
-                    }
+                    if (assignments[wordIndex] >= 0 && !d.getSenses(wordIndex).isEmpty()) {
+                        ps.println(id + " " + w.getId() + " " + d.getSenses(wordIndex).get(assignments[wordIndex]).getId() + "\t!! "+w.getLemma()+"#"+w.getPartOfSpeech());
+                    } /*else {
+                        ps.println(id + " " + w.getId() + " !! "+w.getLemma()+"#"+w.getPartOfSpeech());
+                    }*/
                 }
                 wordIndex++;
             }

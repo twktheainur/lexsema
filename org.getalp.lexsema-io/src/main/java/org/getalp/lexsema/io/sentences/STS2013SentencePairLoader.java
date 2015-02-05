@@ -17,6 +17,7 @@ import org.apache.uima.resource.ResourceManager;
 import org.apache.uima.resource.ResourceSpecifier;
 import org.apache.uima.util.CasCreationUtils;
 import org.getalp.lexsema.io.resource.LRLoader;
+import org.getalp.lexsema.io.uima.SentenceLevelConsumer;
 import org.getalp.lexsema.io.uima.TokenAnnotationConsumer;
 import org.getalp.lexsema.similarity.Sentence;
 import org.slf4j.Logger;
@@ -65,7 +66,7 @@ public class STS2013SentencePairLoader extends SentencePairLoader {
 
         try {
             // Process
-            TokenAnnotationConsumer sac = new TokenAnnotationConsumer();
+            SentenceLevelConsumer sac = new TokenAnnotationConsumer();
             while (reader.hasNext()) {
                 reader.getNext(cas);
                 aae.process(cas);
