@@ -1,5 +1,6 @@
 package org.getalp.lexsema.ontolex.dbnary;
 
+import org.getalp.lexsema.language.Language;
 import org.getalp.lexsema.ontolex.LexicalEntry;
 import org.getalp.lexsema.ontolex.LexicalResource;
 import org.getalp.lexsema.ontolex.LexicalResourceEntity;
@@ -7,7 +8,6 @@ import org.getalp.lexsema.ontolex.dbnary.exceptions.NoSuchVocableException;
 import org.getalp.lexsema.ontolex.dbnary.relations.DBNaryRelationType;
 
 import java.util.List;
-import java.util.Locale;
 
 /**
  * Access interface for the DBNary API
@@ -60,7 +60,26 @@ public interface DBNary extends LexicalResource {
      * @return A <code>List</code> of <code>Translation</code>s for the given entity and language, returns null when there
      * are no translation associated to the entity for the particular language.
      */
-    public List<Translation> getTranslations(LexicalResourceEntity sourceEntity, Locale language);
+    public List<Translation> getTranslations(LexicalResourceEntity sourceEntity, Language language);
+
+    /**
+     * Retrieves translations for the current <code>LexicalResourceEntity</code> in a given <code>language</code>
+     *
+     * @param sourceEntity The source lexical resource entity
+     * @param languages    The desired languages of the translations
+     * @return A <code>List</code> of <code>Translation</code>s for the given entity and language, returns null when there
+     * are no translation associated to the entity for the particular languages.
+     */
+    public List<Translation> getTranslations(LexicalResourceEntity sourceEntity, Language... languages);
+
+    /**
+     * Retrieves translations for the current <code>LexicalResourceEntity</code> in a given <code>language</code>
+     *
+     * @param sourceEntity The source lexical resource entity
+     * @return A <code>List</code> of <code>Translation</code>s for the given entity and language, returns null when there
+     * are no translation associated to the entity for the particular language.
+     */
+    public List<Translation> getTranslations(LexicalResourceEntity sourceEntity);
 
     /**
      * Retrieve the related <code>LexicalResourceEntity</code> (ies) associated

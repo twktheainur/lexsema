@@ -32,7 +32,7 @@ public class CLWSD2013 {
         //VisualVMTools.delayUntilReturn();
 
         LRLoader lrloader = new WordnetLoader("../data/wordnet/2.1/dict")
-                .setHasExtendedSignature(true).setShuffle(true);
+                .extendedSignature(true).suffle(true);
         STS2013SentencePairLoader spl = new STS2013SentencePairLoader("STS.input.headlines.txt", lrloader);
         PrintWriter outputFile = new PrintWriter("STS.headlines.output.txt");
         SimilarityMeasure similarityMeasure;

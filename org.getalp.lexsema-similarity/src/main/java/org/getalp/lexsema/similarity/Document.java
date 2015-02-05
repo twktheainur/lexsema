@@ -1,7 +1,8 @@
 package org.getalp.lexsema.similarity;
 
+import org.getalp.lexsema.language.Language;
+
 import java.util.List;
-import java.util.Locale;
 
 /**
  * Interface that represents a document (Sentence or Text).
@@ -40,7 +41,7 @@ public interface Document extends Iterable<Word> {
 
     public int indexOfWord(Word w);
 
-    public Locale getLanguage();
+    public Language getLanguage();
 
-    public void setLanguage(Locale language);
+    public void setLanguage(Language language);
 }

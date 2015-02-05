@@ -1,6 +1,7 @@
 package org.getalp.lexsema.wsd.experiments;
 
 import com.wcohen.ss.ScaledLevenstein;
+import org.getalp.lexsema.io.resource.LRLoader;
 import org.getalp.lexsema.io.resource.wordnet.WordnetLoader;
 import org.getalp.lexsema.io.sentences.STS2013SentencePairLoader;
 import org.getalp.lexsema.similarity.Sentence;
@@ -30,8 +31,8 @@ public class STSWSD {
 
         //VisualVMTools.delayUntilReturn();
 
-        WordnetLoader lrloader = new WordnetLoader("../data/wordnet/2.1/dict")
-                .setHasExtendedSignature(true).setShuffle(true);
+        LRLoader lrloader = new WordnetLoader("../data/wordnet/2.1/dict")
+                .extendedSignature(true).suffle(true);
         STS2013SentencePairLoader spl = new STS2013SentencePairLoader("STS.input.headlines.txt", lrloader);
         PrintWriter outputFile = new PrintWriter("STS.headlines.output.txt");
         SimilarityMeasure similarityMeasure;

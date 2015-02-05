@@ -21,4 +21,7 @@ public interface LRLoader {
 
     public LRLoader loadDefinition(boolean loadDefinitions);
     public LRLoader setLoadRelated(boolean loadRelated);
+
+	public LRLoader setStemming(boolean stemming);
+	public LRLoader setUsesStopWords(boolean usesStopWords);
 }

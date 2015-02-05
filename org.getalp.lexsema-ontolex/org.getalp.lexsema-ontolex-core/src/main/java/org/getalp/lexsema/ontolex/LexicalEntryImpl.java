@@ -6,8 +6,8 @@ import lombok.EqualsAndHashCode;
 /**
  * A Lemon LexicalEntry Java Wrapper Class
  */
+@EqualsAndHashCode(callSuper = false)
 @Data
-@EqualsAndHashCode(callSuper = true)
 public class LexicalEntryImpl extends AbstractLexicalResourceEntity implements LexicalEntry {
     /**
      * --GETTER

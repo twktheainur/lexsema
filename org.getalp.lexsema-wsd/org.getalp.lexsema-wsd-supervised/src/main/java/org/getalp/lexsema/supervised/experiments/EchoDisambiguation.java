@@ -30,7 +30,7 @@ public class EchoDisambiguation {
     public static void main(String[] args) throws IOException {
         TextLoader dl = new Semeval2007TextLoader("../data/senseval2007_task7/test/eng-coarse-all-words.xml").loadNonInstances(false);
         TextLoader semCor = new SemCorTextLoader("../data/semcor3.0/semcor_full.xml");
-        LRLoader lrloader = new WordnetLoader("../data/wordnet/2.1/dict").setHasExtendedSignature(true).setShuffle(false);
+        LRLoader lrloader = new WordnetLoader("../data/wordnet/2.1/dict").extendedSignature(true).suffle(false);
 
         semCor.load();
         WindowLoader wloader = new DocumentCollectionWindowLoader(semCor);

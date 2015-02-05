@@ -52,4 +52,33 @@ public abstract class AbstractLexicalResourceEntity implements LexicalResourceEn
     public Node getNode() {
         return node;
     }
+
+    @SuppressWarnings("all")
+    @Override
+    public int compareTo(LexicalResourceEntity o) {
+        return getNode().toString().compareTo(o.getNode().toString());
+    }
+
+    @Override
+    public LexicalResourceEntity getParent() {
+        return parent;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        @SuppressWarnings("LocalVariableOfConcreteClass")
+        AbstractLexicalResourceEntity that = (AbstractLexicalResourceEntity) o;
+        return !(node != null ? !node.equals(that.node) : that.node != null);
+    }
+
+    @Override
+    public int hashCode() {
+        return node != null ? node.hashCode() : 0;
+    }
 }

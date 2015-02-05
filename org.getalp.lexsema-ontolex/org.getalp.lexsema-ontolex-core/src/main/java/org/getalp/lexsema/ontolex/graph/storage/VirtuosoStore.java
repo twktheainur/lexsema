@@ -59,4 +59,10 @@ public class VirtuosoStore implements Store {
         model.commit();
         model.close();
     }
+
+    @SuppressWarnings("BooleanParameter")
+    @Override
+    public void setCachingEnabled(boolean cachingEnabled) {
+
+    }
 }

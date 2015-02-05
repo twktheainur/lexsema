@@ -1,47 +1,57 @@
 package org.getalp.lexsema.language;
+
 import java.io.Serializable;
 
-public final class Language implements Cloneable, Serializable {
+@SuppressWarnings("PublicMethodNotExposedInInterface")
+public enum Language implements Cloneable, Serializable {
 
-    /**
-     * Useful constant for language.
-     */
-    static public final java.util.Locale ENGLISH = java.util.Locale.forLanguageTag("eng");
+    ENGLISH("eng", "en", "English"),
+    FRENCH("fra", "fr", "French"),
+    GERMAN("deu", "de", "German"),
+    ITALIAN("ita", "it", "Italian"),
+    JAPANESE("jap", "jp", "Japanese"),
+    SPANISH("spa", "es", "Spanish"),
+    PORTUGUESE("por", "pt", "Portuguese"),
+    FINNISH("fin", "fi", "Finnish"),
+    BULGARIAN("bul", "bg", "Bulgarian"),
+    CATALAN("cat", "ca", "Catalan"),
+    RUSSIAN("rus", "ru", "Russian"),
+    GREEK("ell", "el", "Modern Greek"),
+    TURKISH("tur", "tr", "Turkish"),
+    UNSUPPORTED("", "", "");
 
-    /**
-     * Useful constant for language.
-     */
-    static public final java.util.Locale FRENCH = java.util.Locale.forLanguageTag("fra");
-
-    /**
-     * Useful constant for language.
-     */
-    static public final java.util.Locale GERMAN = java.util.Locale.forLanguageTag("deu");
-
-    /**
-     * Useful constant for language.
-     */
-    static public final java.util.Locale ITALIAN = java.util.Locale.forLanguageTag("ita");
-
-    /**
-     * Useful constant for language.
-     */
-    static public final java.util.Locale JAPANESE =java.util.Locale.forLanguageTag("jap");
+    private String iso3Code;
+    private String iso2Code;
+    private String languageName;
 
 
-    static public final java.util.Locale SPANISH = java.util.Locale.forLanguageTag("spa");
+    Language(String iso3Code, String iso2Code, String languageName) {
+        this.iso3Code = iso3Code;
+        this.iso2Code = iso2Code;
+        this.languageName = languageName;
+    }
 
-    static public final java.util.Locale PORTUGUESE = java.util.Locale.forLanguageTag("por");
-    static public final java.util.Locale FINNISH = java.util.Locale.forLanguageTag("fin");
+    public static Language fromCode(String code) {
+        try {
+            for (Language l : Language.values()) {
+                if (code.equals(l.getISO2Code()) || code.equals(l.getISO3Code()) || code.equals(l.getLanguageName())) {
+                    return l;
+                }
+            }
+        } catch (NullPointerException ignored) {
+        }
+        return Language.UNSUPPORTED;
+    }
 
-    static public final java.util.Locale BULGARIAN = java.util.Locale.forLanguageTag("bul");
+    public String getISO3Code() {
+        return iso3Code;
+    }
 
-    static public final java.util.Locale CATALAN = java.util.Locale.forLanguageTag("cat");
+    public String getISO2Code() {
+        return iso2Code;
+    }
 
-    static public final java.util.Locale RUSSIAN = java.util.Locale.forLanguageTag("rus");
-
-    static public final java.util.Locale GREEK = java.util.Locale.forLanguageTag("gre");
-
-    static public final java.util.Locale TURKISH = java.util.Locale.forLanguageTag("tur");
-
+    public String getLanguageName() {
+        return languageName;
+    }
 }

@@ -1,3 +1,4 @@
+import org.getalp.lexsema.language.Language;
 import org.getalp.lexsema.ontolex.LexicalEntry;
 import org.getalp.lexsema.ontolex.LexicalResource;
 import org.getalp.lexsema.ontolex.LexicalResourceEntity;
@@ -23,7 +24,6 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
-import java.util.Locale;
 
 
 /**
@@ -48,7 +48,7 @@ public class TestAPI {
 
         tBox = new OWLTBoxModel(ONTOLOGY_PROPERTIES);
         // Creating DBnary wrapper
-        dbnary = (DBNary) LexicalResourceFactory.getLexicalResource(DBNary.class, tBox, Locale.FRENCH);
+        dbnary = (DBNary) LexicalResourceFactory.getLexicalResource(DBNary.class, tBox, Language.FRENCH);
     }
 
     @After
@@ -110,7 +110,7 @@ public class TestAPI {
 
 
         logger.info(le.toString());
-        translations = dbnary.getTranslations(le, null);
+        translations = dbnary.getTranslations(le, null, null);
         for (Translation s : translations) {
             logger.info(s.toString());
         }
@@ -125,7 +125,7 @@ public class TestAPI {
             OntologyModel tBox = new OWLTBoxModel(ONTOLOGY_PROPERTIES);
 
             // Creating DBNary wrapper
-            LexicalResource lr = LexicalResourceFactory.getLexicalResource(DBNary.class, tBox, Locale.FRENCH);
+            LexicalResource lr = LexicalResourceFactory.getLexicalResource(DBNary.class, tBox, Language.FRENCH);
 
             LexicalEntry le = (LexicalEntry) dbnary.getLexicalResourceEntityFactory()
                     .getEntity(LexicalEntry.class,

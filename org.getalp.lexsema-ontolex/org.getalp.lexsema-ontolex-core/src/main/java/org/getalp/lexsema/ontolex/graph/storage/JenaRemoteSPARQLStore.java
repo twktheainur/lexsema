@@ -11,7 +11,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.net.URI;
 
 public class JenaRemoteSPARQLStore implements Store {
 
@@ -49,5 +48,11 @@ public class JenaRemoteSPARQLStore implements Store {
     public synchronized void close() {
         model.commit();
         model.close();
+    }
+
+    @SuppressWarnings("BooleanParameter")
+    @Override
+    public void setCachingEnabled(boolean cachingEnabled) {
+
     }
 }

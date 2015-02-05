@@ -2,7 +2,7 @@ package org.getalp.lexsema.wsd.configuration;
 
 import org.getalp.lexsema.similarity.Document;
 
-public class SubConfiguration extends Configuration {
+public class SubConfiguration extends ConfidenceConfiguration {
 
     int start;
     int end;
@@ -83,6 +83,6 @@ public class SubConfiguration extends Configuration {
     }
 
     public Configuration getConfiguration() {
-        return new Configuration(this);
+        return new ConfidenceConfiguration(this);
     }
 }

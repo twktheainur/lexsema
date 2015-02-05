@@ -221,11 +221,13 @@ public class WordnetLoader implements LRLoader {
         return this;
     }
     
+    @Override
     public WordnetLoader setStemming(boolean stemming) {
         this.stemming = stemming;
         return this;
     }
     
+    @Override
     public WordnetLoader setUsesStopWords(boolean usesStopWords) {
         this.usesStopWords = usesStopWords;
         return this;

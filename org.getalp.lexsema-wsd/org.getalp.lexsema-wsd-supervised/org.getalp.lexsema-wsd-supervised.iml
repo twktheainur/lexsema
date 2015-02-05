@@ -12,8 +12,6 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="Maven: org.projectlombok:lombok:1.12.2" level="project" />
-    <orderEntry type="library" name="Maven: com.hp.hpl.jena:jena:2.6.4" level="project" />
     <orderEntry type="module" module-name="org.getalp.lexsema-wsd-core" />
     <orderEntry type="module" module-name="org.getalp.lexsema-io" />
     <orderEntry type="library" name="Maven: edu.mit:jwi:2.2.3" level="project" />
@@ -83,9 +81,10 @@
     <orderEntry type="library" name="Maven: de.tudarmstadt.ukp.dkpro.core:de.tudarmstadt.ukp.dkpro.core.api.semantics-asl:1.6.2" level="project" />
     <orderEntry type="module" module-name="org.getalp.lexsema-ontolex-api" />
     <orderEntry type="library" name="Maven: com.google.code.findbugs:jsr305:3.0.0" level="project" />
-    <orderEntry type="module" module-name="org.getalp.lexsema-ontolex-dbnary" />
-    <orderEntry type="module" module-name="org.getalp.lexsema-ontolex-core" />
     <orderEntry type="library" name="Maven: org.apache.jena:jena-arq:2.12.1" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.jena:jena-core:2.12.1" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.jena:jena-iri:1.1.1" level="project" />
+    <orderEntry type="library" name="Maven: xerces:xercesImpl:2.11.0" level="project" />
     <orderEntry type="library" name="Maven: org.apache.httpcomponents:httpclient:4.2.6" level="project" />
     <orderEntry type="library" name="Maven: org.apache.httpcomponents:httpcore:4.2.5" level="project" />
     <orderEntry type="library" name="Maven: commons-codec:commons-codec:1.6" level="project" />
@@ -100,6 +99,8 @@
     <orderEntry type="library" name="Maven: org.apache.commons:commons-csv:1.0" level="project" />
     <orderEntry type="library" name="Maven: org.slf4j:slf4j-log4j12:1.7.6" level="project" />
     <orderEntry type="library" name="Maven: log4j:log4j:1.2.17" level="project" />
+    <orderEntry type="module" module-name="org.getalp.lexsema-ontolex-dbnary" />
+    <orderEntry type="module" module-name="org.getalp.lexsema-ontolex-core" />
     <orderEntry type="library" name="Maven: org.slf4j:slf4j-api:1.7.7" level="project" />
     <orderEntry type="library" name="Maven: org.slf4j:slf4j-simple:1.7.7" level="project" />
     <orderEntry type="library" name="Maven: com.openlinksw.virtuoso:virt_jena2:2.10.1_B1.9" level="project" />
@@ -122,9 +123,6 @@
     <orderEntry type="library" name="Maven: com.github.rwl:COLAMDJ:1.0.1" level="project" />
     <orderEntry type="library" name="Maven: secondstring:secondstring:20120620" level="project" />
     <orderEntry type="library" name="Maven: org.apache.jena:jena-tdb:1.0.1" level="project" />
-    <orderEntry type="library" name="Maven: org.apache.jena:jena-core:2.11.1" level="project" />
-    <orderEntry type="library" name="Maven: org.apache.jena:jena-iri:1.0.1" level="project" />
-    <orderEntry type="library" name="Maven: xerces:xercesImpl:2.11.0" level="project" />
     <orderEntry type="library" name="Maven: xml-apis:xml-apis:1.4.01" level="project" />
     <orderEntry type="library" name="Maven: nz.ac.waikato.cms.weka:weka-stable:3.6.6" level="project" />
     <orderEntry type="library" name="Maven: net.sf.squirrel-sql.thirdparty-non-maven:java-cup:0.11a" level="project" />
