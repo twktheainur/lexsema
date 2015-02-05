@@ -4,6 +4,7 @@ import com.wcohen.ss.ScaledLevenstein;
 import org.getalp.lexsema.io.annotresult.SemevalWriter;
 import org.getalp.lexsema.io.document.Semeval2007TextLoader;
 import org.getalp.lexsema.io.document.TextLoader;
+import org.getalp.lexsema.io.resource.LRLoader;
 import org.getalp.lexsema.io.resource.wordnet.WordnetLoader;
 import org.getalp.lexsema.similarity.Document;
 import org.getalp.lexsema.similarity.measures.SimilarityMeasure;
@@ -20,9 +21,9 @@ public class CombinedDisambiguation {
 
     public static void main(String[] args) {
         TextLoader dl = new Semeval2007TextLoader("../data/senseval2007_task7/test/eng-coarse-all-words.xml").loadNonInstances(false);
-        WordnetLoader lrloader = new WordnetLoader("../data/wordnet/2.1/dict")
-                .setHasExtendedSignature(false)
-                .setShuffle(false);
+        LRLoader lrloader = new WordnetLoader("../data/wordnet/2.1/dict")
+                .extendedSignature(false)
+                .suffle(false);
         SimilarityMeasure sim_lr_hp;
         SimilarityMeasure sim_full;
 

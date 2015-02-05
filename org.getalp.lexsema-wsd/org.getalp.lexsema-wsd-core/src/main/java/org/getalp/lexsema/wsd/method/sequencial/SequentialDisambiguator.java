@@ -1,6 +1,7 @@
 package org.getalp.lexsema.wsd.method.sequencial;
 
 import org.getalp.lexsema.similarity.Document;
+import org.getalp.lexsema.wsd.configuration.ConfidenceConfiguration;
 import org.getalp.lexsema.wsd.configuration.Configuration;
 import org.getalp.lexsema.wsd.method.Disambiguator;
 import org.getalp.lexsema.wsd.method.sequencial.entrydisambiguators.SequentialLexicalEntryDisambiguator;
@@ -39,7 +40,7 @@ public abstract class SequentialDisambiguator implements Disambiguator {
     public Configuration disambiguate(Document document, Configuration c) {
         boolean progressChecked = false;
         if (c == null) {
-            c = new Configuration(document);
+            c = new ConfidenceConfiguration(document);
         }
         runningTasks = new LinkedList<>();
         int totalWords = 0;

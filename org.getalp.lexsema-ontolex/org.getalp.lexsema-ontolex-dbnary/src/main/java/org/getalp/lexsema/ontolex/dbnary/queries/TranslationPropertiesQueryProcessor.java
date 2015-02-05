@@ -24,6 +24,7 @@ public final class TranslationPropertiesQueryProcessor extends AbstractQueryProc
     private final static String TRANSLATION_NUMBER_RESULT = "translationNumber";
     private final static String WRITTEN_FORM_RESULT = "writtenForm";
     private final static String TARGET_LANGUAGE_RESULT = "targetLanguage";
+    private final static String TARGET_LANGUAGE_CODE_RESULT = "targetLanguageCode";
     private final Node translation;
 
     public TranslationPropertiesQueryProcessor(Graph graph,
@@ -37,7 +38,7 @@ public final class TranslationPropertiesQueryProcessor extends AbstractQueryProc
     protected final void defineQuery() {
         ARQQuery q = new ARQSelectQueryImpl();
         setQuery(q);
-        addTriple(translation,
+        addOptionalTriple(translation,
                 getNode("dbnary:gloss"),
                 Var.alloc(GLOSS_RESULT));
         addOptionalTriple(translation,
@@ -48,14 +49,24 @@ public final class TranslationPropertiesQueryProcessor extends AbstractQueryProc
                 getNode("dbnary:writtenForm"),
                 Var.alloc(WRITTEN_FORM_RESULT));
 
-        addTriple(translation,
+        /*                      TODO: Remove this when the bug is fixed in dbnary (bug #475)
+         * Normally all translation have a targetLanguage property, however due to a bug in the dbnary extractors as of
+         * 19/01/2015, the Russian, Portuguese, Spanish and Polish editions contain the targetLanguageCode property
+         * instead
+         */
+        addOptionalTriple(translation,
                 getNode("dbnary:targetLanguage"),
                 Var.alloc(TARGET_LANGUAGE_RESULT));
+
+        addOptionalTriple(translation,
+                getNode("dbnary:targetLanguageCode"),
+                Var.alloc(TARGET_LANGUAGE_CODE_RESULT));
 
         addResultVar(GLOSS_RESULT);
         addResultVar(TRANSLATION_NUMBER_RESULT);
         addResultVar(WRITTEN_FORM_RESULT);
         addResultVar(TARGET_LANGUAGE_RESULT);
+        addResultVar(TARGET_LANGUAGE_CODE_RESULT);
     }
 
 
@@ -65,13 +76,23 @@ public final class TranslationPropertiesQueryProcessor extends AbstractQueryProc
         while (hasNextResult()) {
             QuerySolution qs = nextSolution();
             Map<String, String> properties = new HashMap<>();
-            properties.put(GLOSS_RESULT, qs.get(GLOSS_RESULT).toString());
+
+            RDFNode gloss = qs.get(GLOSS_RESULT);
+            if (gloss != null) {
+                properties.put(GLOSS_RESULT, gloss.toString());
+            }
             RDFNode translationNumber = qs.get(TRANSLATION_NUMBER_RESULT);
             if (translationNumber != null) {
                 properties.put(TRANSLATION_NUMBER_RESULT, translationNumber.toString().split("\\^\\^")[0]);
             }
             properties.put(WRITTEN_FORM_RESULT, qs.get(WRITTEN_FORM_RESULT).toString());
-            properties.put(TARGET_LANGUAGE_RESULT, qs.get(TARGET_LANGUAGE_RESULT).toString());
+            RDFNode targetLanguage = qs.get(TARGET_LANGUAGE_RESULT);
+            if (targetLanguage == null) {
+                targetLanguage = qs.get(TARGET_LANGUAGE_CODE_RESULT);
+            }
+            if (targetLanguage != null) {
+                properties.put(TARGET_LANGUAGE_RESULT, targetLanguage.toString());
+            }
             vocables.add(properties);
         }
         return vocables;

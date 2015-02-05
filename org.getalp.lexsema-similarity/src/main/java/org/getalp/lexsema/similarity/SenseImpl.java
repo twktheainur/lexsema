@@ -2,6 +2,7 @@ package org.getalp.lexsema.similarity;
 
 import com.hp.hpl.jena.graph.Node;
 import org.getalp.lexsema.ontolex.LexicalResource;
+import org.getalp.lexsema.ontolex.LexicalResourceEntity;
 import org.getalp.lexsema.ontolex.LexicalSense;
 import org.getalp.lexsema.ontolex.graph.OntologyModel;
 import org.getalp.lexsema.similarity.signatures.SemanticSignature;
@@ -100,6 +101,14 @@ public class SenseImpl implements Sense {
     }
 
     @Override
+    public LexicalResourceEntity getParent() {
+        if (lexicalSense != null) {
+            return lexicalSense.getParent();
+        }
+        return null;
+    }
+
+    @Override
     public SemanticSignature getSemanticSignature() {
         return semanticSignature;
     }
@@ -117,5 +126,11 @@ public class SenseImpl implements Sense {
     @Override
     public void setLexicalSense(LexicalSense lexicalSense) {
         this.lexicalSense = lexicalSense;
+        id = lexicalSense.getNode().toString();
+    }
+
+    @Override
+    public int compareTo(LexicalResourceEntity o) {
+        return id.compareTo(o.getNode().toString());
     }
 }
