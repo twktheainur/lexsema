@@ -1,7 +1,14 @@
 package org.getalp.lexsema.io.resource.wordnet;
 
-import edu.mit.jwi.Dictionary;
-import edu.mit.jwi.item.*;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.StringTokenizer;
+
 import org.getalp.lexsema.io.resource.LRLoader;
 import org.getalp.lexsema.similarity.Document;
 import org.getalp.lexsema.similarity.Sense;
@@ -10,19 +17,26 @@ import org.getalp.lexsema.similarity.Word;
 import org.getalp.lexsema.similarity.cache.SenseCache;
 import org.getalp.lexsema.similarity.signatures.SemanticSignature;
 import org.getalp.lexsema.similarity.signatures.SemanticSignatureImpl;
+import org.getalp.lexsema.util.StopList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.tartarus.snowball.SnowballStemmer;
+import org.tartarus.snowball.ext.englishStemmer;
 
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.*;
+import edu.mit.jwi.Dictionary;
+import edu.mit.jwi.item.IIndexWord;
+import edu.mit.jwi.item.IPointer;
+import edu.mit.jwi.item.IWord;
+import edu.mit.jwi.item.IWordID;
+import edu.mit.jwi.item.POS;
 
 public class WordnetLoader implements LRLoader {
     private static Logger logger = LoggerFactory.getLogger(WordnetLoader.class);
     private final Dictionary dictionary;
     private boolean hasExtendedSignature;
     private boolean shuffle;
+    private boolean usesStopWords;
+    private boolean stemming;
 
 
     public WordnetLoader(String path) {
@@ -69,7 +83,9 @@ public class WordnetLoader implements LRLoader {
                         s.addRelatedSignature(p.getSymbol(), localSignature);
                     }
                 }
-                s.setSemanticSignature(signature);
+                //if (hasExtendedSignature) {
+                    s.setSemanticSignature(signature);
+                //}
                 senses.add(s);
             }
         }
@@ -102,9 +118,20 @@ public class WordnetLoader implements LRLoader {
 
     private void addToSignature(SemanticSignature signature, String def) {
         StringTokenizer st = new StringTokenizer(def, " ", false);
+        SnowballStemmer stemmer = new englishStemmer();
+        int ww=0;
         while (st.hasMoreTokens()) {
-            String token = st.nextToken();
-            signature.addSymbol(token, 1.0);
+            String token = st.nextToken().replaceAll("\"|;", "").toLowerCase();
+            //Removing stop words from definitions
+	        if (!usesStopWords || !StopList.isStopWord(token)) {
+	           	if (stemming) {
+		           	stemmer.setCurrent(token);
+		            stemmer.stem();
+		           	signature.addSymbol(stemmer.getCurrent(), 1.0);
+	           	} else {
+	           		signature.addSymbol(token, 1.0);
+	           	}
+	        } 
         }
     }
 
@@ -179,6 +206,16 @@ public class WordnetLoader implements LRLoader {
 
     public WordnetLoader setShuffle(boolean shuffle) {
         this.shuffle = shuffle;
+        return this;
+    }
+    
+    public WordnetLoader setStemming(boolean stemming) {
+        this.stemming = stemming;
+        return this;
+    }
+    
+    public WordnetLoader setUsesStopWords(boolean usesStopWords) {
+        this.usesStopWords = usesStopWords;
         return this;
     }
 }
