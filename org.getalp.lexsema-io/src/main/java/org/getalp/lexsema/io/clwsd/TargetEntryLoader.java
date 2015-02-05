@@ -1,6 +1,6 @@
 package org.getalp.lexsema.io.clwsd;
 
-import javafx.util.Pair;
+import edu.stanford.nlp.util.Pair;
 import org.getalp.lexsema.similarity.Sentence;
 
 import java.util.Iterator;
