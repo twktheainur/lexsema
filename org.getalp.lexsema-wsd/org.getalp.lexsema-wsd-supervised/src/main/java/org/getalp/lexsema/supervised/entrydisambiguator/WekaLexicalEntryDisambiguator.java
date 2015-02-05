@@ -46,8 +46,8 @@ public class WekaLexicalEntryDisambiguator extends SupervisedSequentialLexicalEn
                             classifier.trainClassifier();
                             trainingSuccessful = true;
                         }
-                    } catch (IOException e) {
-                        e.printStackTrace();
+                    } catch (IOException ignored) {
+                        //e.printStackTrace();
                         //System.exit(0);
                         //return new ArrayList<>();
                     }

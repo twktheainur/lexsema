@@ -3,6 +3,7 @@ package org.getalp.lexsema.supervised.entrydisambiguator;
 
 import org.getalp.lexsema.similarity.Document;
 import org.getalp.lexsema.similarity.Sense;
+import org.getalp.lexsema.similarity.Word;
 import org.getalp.lexsema.supervised.ClassificationOutput;
 import org.getalp.lexsema.supervised.features.TrainingDataExtractor;
 import org.getalp.lexsema.supervised.features.extractors.LocalTextFeatureExtractor;
@@ -24,28 +25,33 @@ public abstract class SupervisedSequentialLexicalEntryDisambiguator extends Sequ
     @Override
     public void run() {
         try {
-            String targetLemma = getDocument().getWord(0, getCurrentIndex()).getLemma();
+            Word targetWord = getDocument().getWord(0, getCurrentIndex());
+            String targetLemma = targetWord.getLemma();
 
-            List<String> features = featureExtractor.getFeatures(getDocument(), getCurrentIndex());
-
-            List<ClassificationOutput> results = runClassifier(targetLemma, features);
-            if (results.size() == 0) {
-                getConfiguration().setSense(getCurrentIndex(), -1);
+            if (!targetWord.getId().isEmpty()) {
+                List<String> features = featureExtractor.getFeatures(getDocument(), getCurrentIndex());
+                List<ClassificationOutput> results = runClassifier(targetLemma, features);
+                if (results.isEmpty()) {
+                    //getConfiguration().setSense(getCurrentIndex(), 0);
+                    getConfiguration().setSense(getCurrentIndex(), -1);
+                } else {
+                    getConfiguration().setSense(getCurrentIndex(), -1);
+                    int s = -1;
+                    boolean matched = false;
+                    for (int re = 0; re < results.size() && !matched; re++) {
+                        //System.err.println("Checking: "+ results.get(re).getKey() );
+                        s = getMatchingSense(getDocument(), results.get(re).getKey(), getCurrentIndex());
+                        if (s != -1) {
+                            matched = true;
+                            //  System.err.println("Found at WN sense index: "+ s);
+                        }
+                    }
+                    getConfiguration().setSense(getCurrentIndex(), s);
+                }
+                getConfiguration().setConfidence(getCurrentIndex(), 1d);
             } else {
                 getConfiguration().setSense(getCurrentIndex(), -1);
-                int s = -1;
-                boolean matched = false;
-                for (int re = 0; re < results.size() && !matched; re++) {
-                    //System.err.println("Checking: "+ results.get(re).getKey() );
-                    s = getMatchingSense(getDocument(), results.get(re).getKey(), getCurrentIndex());
-                    if (s != -1) {
-                        matched = true;
-                        //  System.err.println("Found at WN sense index: "+ s);
-                    }
-                }
-                getConfiguration().setSense(getCurrentIndex(), s);
             }
-            getConfiguration().setConfidence(getCurrentIndex(), 1d);
         } catch (Exception e) {
             e.printStackTrace();
             System.exit(1);

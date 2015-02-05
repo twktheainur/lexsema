@@ -38,7 +38,7 @@
     <orderEntry type="library" name="Maven: org.slf4j:slf4j-simple:1.7.7" level="project" />
     <orderEntry type="library" name="Maven: com.openlinksw.virtuoso:virt_jena2:2.10.1_B1.9" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.projectlombok:lombok:1.14.8" level="project" />
-    <orderEntry type="library" name="Maven: org.apache.jena:jena-tdb:1.0.1" level="project" />
     <orderEntry type="library" name="Maven: com.google.code.findbugs:jsr305:3.0.0" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.jena:jena-tdb:1.1.1" level="project" />
   </component>
 </module>

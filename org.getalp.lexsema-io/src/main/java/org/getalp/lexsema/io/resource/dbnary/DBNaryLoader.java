@@ -167,4 +167,16 @@ public class DBNaryLoader implements LRLoader {
         this.loadRelated = loadRelated;
         return this;
     }
+
+	@Override
+	public LRLoader setStemming(boolean stemming) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public LRLoader setUsesStopWords(boolean usesStopWords) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

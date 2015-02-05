@@ -7,7 +7,7 @@ import org.getalp.lexsema.ontolex.graph.OntologyModel;
 /**
  * A node that is part of a Lexical Resource, i.e. corresponding to an instance of one of the Lemon classes
  */
-public interface LexicalResourceEntity {
+public interface LexicalResourceEntity extends Comparable<LexicalResourceEntity> {
     /**
      * @return The lexical resource the Entity belongs to
      */
@@ -26,4 +26,11 @@ public interface LexicalResourceEntity {
      * @return The graph model node that corresponds to the entity
      */
     public Node getNode();
+
+    /**
+     * Returns the parent LexicalResourceEntity of this entity, null if there is none
+     *
+     * @return Returns the parent LexicalResourceEntity of this entity, null if there is none
+     */
+    public LexicalResourceEntity getParent();
 }

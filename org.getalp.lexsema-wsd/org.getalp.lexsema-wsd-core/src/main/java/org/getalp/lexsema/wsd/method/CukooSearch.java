@@ -1,6 +1,7 @@
 package org.getalp.lexsema.wsd.method;
 
 import org.getalp.lexsema.similarity.Document;
+import org.getalp.lexsema.wsd.configuration.ConfidenceConfiguration;
 import org.getalp.lexsema.wsd.configuration.Configuration;
 
 /**
@@ -9,7 +10,7 @@ import org.getalp.lexsema.wsd.configuration.Configuration;
 public class CukooSearch implements Disambiguator {
     @Override
     public Configuration disambiguate(Document document) {
-        return disambiguate(document, new Configuration(document));
+        return disambiguate(document, new ConfidenceConfiguration(document));
     }
 
     @Override

@@ -62,4 +62,10 @@ public class CachableResultSet implements ResultSet {
     public Model getResourceModel() {
         return model;
     }
+
+	@Override
+	public void remove() {
+		// TODO Auto-generated method stub
+		
+	}
 }

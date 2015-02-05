@@ -4,6 +4,7 @@ import com.hp.hpl.jena.graph.Node;
 import lombok.EqualsAndHashCode;
 import org.getalp.lexsema.ontolex.LexicalEntry;
 import org.getalp.lexsema.ontolex.LexicalResource;
+import org.getalp.lexsema.ontolex.LexicalResourceEntity;
 import org.getalp.lexsema.ontolex.graph.OntologyModel;
 
 import java.util.ArrayList;
@@ -13,10 +14,10 @@ import java.util.List;
 @EqualsAndHashCode
 public class WordImpl implements Word {
     private final String id;
-    private final String lemma;
     private final String surfaceForm;
     private final String textPos;
     LexicalEntry lexicalEntry;
+    private String lemma;
     private String semanticTag;
     private Sentence enclosingSentence = null;
     private List<Word> precedingNonInstances;
@@ -61,7 +62,11 @@ public class WordImpl implements Word {
 
     @Override
     public void setLemma(String lemma) {
-        lexicalEntry.setLemma(lemma);
+        if (lexicalEntry != null) {
+            lexicalEntry.setLemma(lemma);
+        } else {
+            this.lemma = lemma;
+        }
     }
 
     @Override
@@ -104,6 +109,15 @@ public class WordImpl implements Word {
     }
 
     @Override
+    public LexicalResourceEntity getParent() {
+        if (lexicalEntry != null) {
+            return lexicalEntry.getParent();
+        }
+        return null;
+
+    }
+
+    @Override
     public String getId() {
         return id;
     }
@@ -118,11 +132,18 @@ public class WordImpl implements Word {
         return precedingNonInstances.iterator();
     }
 
+    @Override
     public String getSemanticTag() {
         return semanticTag;
     }
 
+    @Override
     public void setSemanticTag(String semanticTag) {
         this.semanticTag = semanticTag;
+    }
+
+    @Override
+    public int compareTo(LexicalResourceEntity o) {
+        return id.compareTo(o.getNode().toString());
     }
 }
