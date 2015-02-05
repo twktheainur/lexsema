@@ -14,7 +14,7 @@ import org.getalp.lexsema.similarity.Document;
 import org.getalp.lexsema.similarity.Sense;
 import org.getalp.lexsema.similarity.SenseImpl;
 import org.getalp.lexsema.similarity.Word;
-import org.getalp.lexsema.similarity.cache.SenseCache;
+import org.getalp.lexsema.similarity.cache.SenseCacheImpl;
 import org.getalp.lexsema.similarity.signatures.SemanticSignature;
 import org.getalp.lexsema.similarity.signatures.SemanticSignatureImpl;
 import org.getalp.lexsema.util.StopList;
@@ -37,6 +37,9 @@ public class WordnetLoader implements LRLoader {
     private boolean shuffle;
     private boolean usesStopWords;
     private boolean stemming;
+
+    private boolean loadDefinitions;
+    private boolean loadRelated;
 
 
     public WordnetLoader(String path) {
@@ -67,20 +70,24 @@ public class WordnetLoader implements LRLoader {
 
                 SemanticSignature signature = new SemanticSignatureImpl();
                 IWord word = dictionary.getWord(iw.getWordIDs().get(j));
-                String def = word.getSynset().getGloss();
-                addToSignature(signature, def);
+                if(loadDefinitions) {
+                    String def = word.getSynset().getGloss();
+                    addToSignature(signature, def);
+                }
 
                 Sense s = new SenseImpl(word.getSenseKey().toString());
 
-                Map<IPointer, List<IWordID>> rm = word.getRelatedMap();
-                for (IPointer p : rm.keySet()) {
-                    for (IWordID iwd : rm.get(p)) {
-                        SemanticSignature localSignature = new SemanticSignatureImpl();
-                        addToSignature(localSignature, dictionary.getWord(iwd).getSynset().getGloss());
-                        if (hasExtendedSignature) {
-                            signature.appendSignature(localSignature);
+                if(loadRelated) {
+                    Map<IPointer, List<IWordID>> rm = word.getRelatedMap();
+                    for (IPointer p : rm.keySet()) {
+                        for (IWordID iwd : rm.get(p)) {
+                            SemanticSignature localSignature = new SemanticSignatureImpl();
+                            addToSignature(localSignature, dictionary.getWord(iwd).getSynset().getGloss());
+                            if (hasExtendedSignature) {
+                                signature.appendSignature(localSignature);
+                            }
+                            s.addRelatedSignature(p.getSymbol(), localSignature);
                         }
-                        s.addRelatedSignature(p.getSymbol(), localSignature);
                     }
                 }
                 //if (hasExtendedSignature) {
@@ -95,7 +102,7 @@ public class WordnetLoader implements LRLoader {
     @Override
     public List<Sense> getSenses(Word w) {
         List<Sense> senses;
-        senses = SenseCache.getInstance().getSenses(w);
+        senses = SenseCacheImpl.getInstance().getSenses(w);
         if (senses == null) {
             if (w != null) {
                 if (w.getPartOfSpeech() == null || w.getPartOfSpeech().isEmpty()) {
@@ -110,7 +117,7 @@ public class WordnetLoader implements LRLoader {
             if (shuffle) {
                 Collections.shuffle(senses);
             }
-            SenseCache.getInstance().addToCache(w, senses);
+            SenseCacheImpl.getInstance().addToCache(w, senses);
         }
 
         return senses;
@@ -183,13 +190,9 @@ public class WordnetLoader implements LRLoader {
         return w;
     }
 
-    @Override
-    public List<List<Sense>> getAllSenses(List<Word> wds) {
-        List<List<Sense>> senses = new ArrayList<>();
-        for (Word w : wds) {
-            senses.add(getSenses(w));
-        }
-        return senses;
+    public LRLoader extendedSignature(boolean hasExtendedSignature) {
+        this.hasExtendedSignature = hasExtendedSignature;
+        return this;
     }
 
     @Override
@@ -199,13 +202,22 @@ public class WordnetLoader implements LRLoader {
         }
     }
 
-    public WordnetLoader setHasExtendedSignature(boolean hasExtendedSignature) {
-        this.hasExtendedSignature = hasExtendedSignature;
+    @SuppressWarnings("BooleanParameter")
+    @Override
+    public LRLoader suffle(boolean shuffle) {
+        this.shuffle = shuffle;
         return this;
     }
 
-    public WordnetLoader setShuffle(boolean shuffle) {
-        this.shuffle = shuffle;
+    @Override
+    public LRLoader loadDefinition(boolean loadDefinitions) {
+        this.loadDefinitions = loadDefinitions;
+        return this;
+    }
+
+    @Override
+    public LRLoader setLoadRelated(boolean loadRelated) {
+        this.loadRelated = loadRelated;
         return this;
     }
     
