@@ -9,6 +9,7 @@ import com.hp.hpl.jena.sparql.expr.E_Str;
 import com.hp.hpl.jena.sparql.expr.Expr;
 import com.hp.hpl.jena.sparql.expr.ExprVar;
 import com.hp.hpl.jena.sparql.expr.nodevalue.NodeValueString;
+import org.getalp.lexsema.language.Language;
 import org.getalp.lexsema.ontolex.LexicalEntry;
 import org.getalp.lexsema.ontolex.LexicalResourceEntity;
 import org.getalp.lexsema.ontolex.factories.entities.LexicalResourceEntityFactory;
@@ -17,7 +18,6 @@ import org.getalp.lexsema.ontolex.graph.Graph;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 /**
@@ -33,9 +33,9 @@ public final class LexicalEntriesFromLemmaPosQueryProcessor extends AbstractQuer
 
     private String lemma = "";
     private String pos = "";
-    private Locale language;
+    private Language language;
 
-    public LexicalEntriesFromLemmaPosQueryProcessor(Graph graph, Locale language,
+    public LexicalEntriesFromLemmaPosQueryProcessor(Graph graph, Language language,
                                                     LexicalResourceEntityFactory lexicalResourceEntityFactory,
                                                     String lemma, String pos) {
         super(graph);
@@ -61,7 +61,7 @@ public final class LexicalEntriesFromLemmaPosQueryProcessor extends AbstractQuer
         if (language != null) {
             addTriple(Var.alloc(LEMMA_CF_VAR),
                     getNode("lemon:writtenRep"),
-                    NodeFactory.createLiteral(lemma, language.getLanguage(), null));
+                    NodeFactory.createLiteral(lemma, language.getISO2Code(), null));
         } else {
             addTriple(Var.alloc(LEMMA_CF_VAR),
                     getNode("lemon:writtenRep"),

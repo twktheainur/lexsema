@@ -5,6 +5,7 @@ import org.getalp.lexsema.io.annotresult.SemevalWriter;
 import org.getalp.lexsema.io.document.SemCorTextLoader;
 import org.getalp.lexsema.io.document.Semeval2007TextLoader;
 import org.getalp.lexsema.io.document.TextLoader;
+import org.getalp.lexsema.io.resource.LRLoader;
 import org.getalp.lexsema.io.resource.wordnet.WordnetLoader;
 import org.getalp.lexsema.similarity.Document;
 import org.getalp.lexsema.supervised.WekaDisambiguator;
@@ -23,8 +24,8 @@ public final class NUSPT2007Disambiguation {
     public static void main(String[] args) throws IOException {
         TextLoader dl = new Semeval2007TextLoader("../data/senseval2007_task7/test/eng-coarse-all-words.xml")
                 .loadNonInstances(false);
-        WordnetLoader lrloader = new WordnetLoader("../data/wordnet/2.1/dict")
-                .setShuffle(false).setHasExtendedSignature(true);
+        LRLoader lrloader = new WordnetLoader("../data/wordnet/2.1/dict")
+                .suffle(false).extendedSignature(true);
         TextLoader semCor = new SemCorTextLoader("../data/semcor3.0/semcor_full.xml");
 
         semCor.load();

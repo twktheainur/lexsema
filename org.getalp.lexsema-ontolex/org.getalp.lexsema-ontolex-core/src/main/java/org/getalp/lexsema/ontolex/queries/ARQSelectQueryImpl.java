@@ -23,7 +23,7 @@ public class ARQSelectQueryImpl implements ARQSelectQuery {
 
     private Query query;
     private ElementTriplesBlock whereBlock;
-    private ElementTriplesBlock optionalBlock;
+    private List<ElementTriplesBlock> optionalBlocks;
     private List<Expr> filters;
     private Store store;
 
@@ -32,7 +32,8 @@ public class ARQSelectQueryImpl implements ARQSelectQuery {
      */ {
         query = QueryFactory.create();
         whereBlock = new ElementTriplesBlock();
-        optionalBlock = new ElementTriplesBlock();
+
+        optionalBlocks = new ArrayList<>();
         store = StoreHandler.getStore();
         filters = new ArrayList<>();
     }
@@ -49,7 +50,9 @@ public class ARQSelectQueryImpl implements ARQSelectQuery {
     public ResultSet runQuery(int limit) {
         ElementGroup eg = new ElementGroup();
         eg.addElement(whereBlock);
-        eg.addElement(new ElementOptional(optionalBlock));
+        for (ElementTriplesBlock ob : optionalBlocks) {
+            eg.addElement(new ElementOptional(ob));
+        }
         for (Expr filter : filters) {
             eg.addElementFilter(new ElementFilter(filter));
         }
@@ -68,7 +71,9 @@ public class ARQSelectQueryImpl implements ARQSelectQuery {
 
     @Override
     public void addOptionalToWhereStatement(Triple t) {
+        ElementTriplesBlock optionalBlock = new ElementTriplesBlock();
         optionalBlock.addTriple(t);
+        optionalBlocks.add(optionalBlock);
     }
 
     @Override

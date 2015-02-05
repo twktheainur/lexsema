@@ -2,6 +2,7 @@ package org.getalp.lexsema.ontolex.queries.properties;
 
 import com.hp.hpl.jena.graph.NodeFactory;
 import com.hp.hpl.jena.query.QuerySolution;
+import com.hp.hpl.jena.rdf.model.RDFNode;
 import com.hp.hpl.jena.sparql.core.Var;
 import lombok.Data;
 import org.getalp.lexsema.ontolex.LexicalResource;
@@ -24,7 +25,7 @@ public final class LexicalEntryPropertiesQueryProcessor extends AbstractQueryPro
     private String pos = "";
 
     private String WRITTEN_FORM_RESULT_VAR = "v";
-    private String POS_RESULT_VAR = "p";
+    private String LEXINFO_POS_RESULT_VAR = "p";
 
 
     public LexicalEntryPropertiesQueryProcessor(Graph graph,
@@ -41,14 +42,9 @@ public final class LexicalEntryPropertiesQueryProcessor extends AbstractQueryPro
     @Override
     protected final void defineQuery() {
         setQuery(new ARQSelectQueryImpl());
-        if (lemma.isEmpty()) {
-            String LEMMA_RESULT_VAR = "le";
+        if (lemma == null || lemma.isEmpty()) {
             String LEMMA_CF_VAR = "cf";
-            addTriple(Var.alloc(LEMMA_RESULT_VAR),
-                    getNode("rdf:type"),
-                    getNode("lemon:LexicalEntry"));
-
-            addTriple(Var.alloc(LEMMA_RESULT_VAR),
+            addTriple(NodeFactory.createURI(uri),
                     getNode("lemon:canonicalForm"),
                     Var.alloc(LEMMA_CF_VAR));
             addTriple(Var.alloc(LEMMA_CF_VAR),
@@ -56,10 +52,11 @@ public final class LexicalEntryPropertiesQueryProcessor extends AbstractQueryPro
                     Var.alloc(WRITTEN_FORM_RESULT_VAR));
             addResultVar(WRITTEN_FORM_RESULT_VAR);
         }
-        if (pos.isEmpty()) {
-            addTriple(NodeFactory.createURI(getResourceGraphURI() + uri),
+        if (pos == null || pos.isEmpty()) {
+            addOptionalTriple(NodeFactory.createURI(uri),
                     getNode("lexinfo:partOfSpeech"),
-                    Var.alloc(POS_RESULT_VAR));
+                    Var.alloc(LEXINFO_POS_RESULT_VAR));
+            addResultVar(LEXINFO_POS_RESULT_VAR);
         }
 
     }
@@ -72,13 +69,16 @@ public final class LexicalEntryPropertiesQueryProcessor extends AbstractQueryPro
         LexicalEntryProperties properties = new LexicalEntryProperties();
         while (hasNextResult()) {
             QuerySolution qs = nextSolution();
-            if (lemma.isEmpty()) {
+            if (lemma == null || lemma.isEmpty()) {
                 lemma = qs.get(WRITTEN_FORM_RESULT_VAR).toString().split("@")[0].replace(" ", "_");
                 properties.setLemma(lemma);
             }
-            if (pos.isEmpty()) {
-                pos = qs.get(POS_RESULT_VAR).toString();
-                properties.setPos(pos);
+            if (pos == null || pos.isEmpty()) {
+                RDFNode posNode = qs.get(LEXINFO_POS_RESULT_VAR);
+                if (posNode != null) {
+                    pos = posNode.toString();
+                    properties.setPos(pos);
+                }
             }
             entries.add(properties);
         }

@@ -2,6 +2,7 @@ package org.getalp.lexsema.ontolex.dbnary;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.getalp.lexsema.language.Language;
 import org.getalp.lexsema.ontolex.AbstractLexicalResourceEntity;
 import org.getalp.lexsema.ontolex.LexicalResource;
 import org.getalp.lexsema.ontolex.LexicalResourceEntity;
@@ -13,7 +14,7 @@ public class TranslationImpl extends AbstractLexicalResourceEntity implements Tr
     private String gloss;
     private Integer translationNumber;
     private String writtenForm;
-    private String language;
+    private Language language;
 
     /**
      * Constructor for a DBNary Translation
@@ -29,7 +30,17 @@ public class TranslationImpl extends AbstractLexicalResourceEntity implements Tr
         super(r, uri, parent);
         this.gloss = gloss;
         this.translationNumber = translationNumber;
-        this.writtenForm = writtenForm;
-        language = targetLanguage;
+        this.writtenForm = removeLanguageTag(writtenForm);
+        language = convertLexvoLanguageURI(targetLanguage);
+    }
+
+    private Language convertLexvoLanguageURI(String languageURI) {
+        String[] uriComponents = languageURI.split("/");
+        return Language.fromCode(uriComponents[uriComponents.length - 1]);
+
+    }
+
+    private String removeLanguageTag(String input) {
+        return input.split("@")[0];
     }
 }

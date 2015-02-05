@@ -3,19 +3,26 @@ package org.getalp.lexsema.supervised.features;
 import org.getalp.lexsema.similarity.Text;
 import org.getalp.lexsema.similarity.Word;
 import org.getalp.lexsema.supervised.features.extractors.LocalTextFeatureExtractor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.util.*;
 
 public class SemCorTrainingDataExtractor implements TrainingDataExtractor {
+
+    private static Logger logger = LoggerFactory.getLogger(SemCorTrainingDataExtractor.class);
     private LocalTextFeatureExtractor localTextFeatureExtractor;
     private Map<String, List<List<String>>> instanceVectors;
+
 
     public SemCorTrainingDataExtractor(LocalTextFeatureExtractor localTextFeatureExtractor) {
         this.localTextFeatureExtractor = localTextFeatureExtractor;
         instanceVectors = new HashMap<>();
     }
 
+
+    @SuppressWarnings("all")
     @Override
     public void extract(Iterable<Text> annotatedCorpus) {
 
@@ -23,29 +30,37 @@ public class SemCorTrainingDataExtractor implements TrainingDataExtractor {
         File attributeFile = new File("attributes.data");
 
         if (instanceFile.exists() && attributeFile.exists()) {
-            FileInputStream instanceFis = null;
-            FileInputStream attributeFis = null;
+            FileInputStream instanceFis;
+            ObjectInput instanceOis = null;
             try {
+                //noinspection IOResourceOpenedButNotSafelyClosed
                 instanceFis = new FileInputStream(instanceFile);
-                ObjectInputStream instanceOis = new ObjectInputStream(instanceFis);
+                //noinspection IOResourceOpenedButNotSafelyClosed
+                instanceOis = new ObjectInputStream(instanceFis);
                 instanceVectors = (Map<String, List<List<String>>>) instanceOis.readObject();
-                instanceOis.close();
+
             } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            } catch (ClassNotFoundException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
+                logger.error("instances.dat deleted during execution!");
+            } catch (ClassNotFoundException | IOException e) {
+                logger.error(e.getLocalizedMessage());
+            } finally {
+                assert instanceOis != null;
+                try {
+                    instanceOis.close();
+                } catch (IOException e) {
+                    logger.error(e.getLocalizedMessage());
+                }
             }
 
-
         } else {
+            /* The file does not exist, therefore we most extract the features and write the data file*/
             for (Text text : annotatedCorpus) {
                 int wordIndex = 0;
                 for (Word w : text) {
                     String lemma = w.getLemma();
                     List<String> instance = localTextFeatureExtractor.getFeatures(text, wordIndex);
-                    instance.add(0, String.format("\"%s\"", w.getSemanticTag()));
+                    String semanticTag = w.getSemanticTag();
+                    instance.add(0, String.format("\"%s\"", semanticTag));
                     if (!instanceVectors.containsKey(lemma)) {
                         instanceVectors.put(lemma, new ArrayList<List<String>>());
                     }
@@ -56,20 +71,23 @@ public class SemCorTrainingDataExtractor implements TrainingDataExtractor {
         }
         //Serializing instance vectors
         FileOutputStream instancesfos;
+        ObjectOutputStream instancesoos = null;
         try {
             instancesfos = new FileOutputStream(instanceFile);
-
-            ObjectOutputStream instancesoos = new ObjectOutputStream(instancesfos);
+            instancesoos = new ObjectOutputStream(instancesfos);
             instancesoos.writeObject(instanceVectors);
-            instancesoos.close();
 
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            logger.error(e.getLocalizedMessage());
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error(e.getLocalizedMessage());
+        } finally {
+            try {
+                instancesoos.close();
+            } catch (IOException e) {
+                logger.error(e.getLocalizedMessage());
+            }
         }
-
-
     }
 
     @Override
