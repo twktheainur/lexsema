@@ -1,7 +1,7 @@
 package org.getalp.lexsema.acceptali.evaluation;
 
 import com.wcohen.ss.ScaledLevenstein;
-import javafx.util.Pair;
+import edu.stanford.nlp.util.Pair;
 import org.getalp.lexsema.io.annotresult.CLWSDWriter;
 import org.getalp.lexsema.io.clwsd.CLWSDLoader;
 import org.getalp.lexsema.io.clwsd.TargetWordEntry;
@@ -70,7 +70,10 @@ public final class CLDisambiguator {
 
     public static void main(String args[]) throws IOException, ClassNotFoundException, NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
 
+        long startTime = System.currentTimeMillis();
+
         Store vts = new JenaTDBStore(DB_PATH);
+        //vts.setCachingEnabled(true);
         StoreHandler.registerStoreInstance(vts);
         //StoreHandler.DEBUG_ON = true;
         OntologyModel tBox = new OWLTBoxModel(ONTOLOGY_PROPERTIES);
@@ -114,8 +117,7 @@ public final class CLDisambiguator {
 
         clDisambiguator.processTargets(lrloader, disambiguator);
         disambiguator.release();
-
-
+        logger.info(String.format("runtime: %.2f m", (double) (System.currentTimeMillis() - startTime) / 1000d / 60d));
     }
 
     public void registerDBNary(Language language, DBNary dbNary) {
@@ -138,9 +140,9 @@ public final class CLDisambiguator {
             int contextIndex = 1;
             loggerInfoTargetWordProgress(targetWord);
             for (Pair<Sentence, Integer> context : entry) {
-                Sentence s = context.getKey();
+                Sentence s = context.first();
                 //Integer index = findTargetIndex(s, targetWord);
-                Integer index = context.getValue();
+                Integer index = context.second();
                 if (index != -1) {
                     logger.info(String.format("Loading senses for context %d ...", contextIndex));
                     lrLoader.loadSenses(s);
