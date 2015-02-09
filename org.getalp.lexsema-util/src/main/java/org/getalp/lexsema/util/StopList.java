@@ -13,7 +13,7 @@ import java.util.Set;
  * @since 2014-12-16
  */
 public class StopList {
-	private static String stopListFile = "../data/stoplist_long.txt";
+	private static String stopListFile = "../data/wordnet/2.1/WordNet-InfoContent-2.1/stoplist.txt";//"../data/stoplist_long.txt";
 	private static Set<String> stopWords = null;
 	
 	/**
