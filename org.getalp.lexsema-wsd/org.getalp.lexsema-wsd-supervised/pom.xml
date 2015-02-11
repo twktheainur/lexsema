@@ -9,8 +9,6 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <packaging>pom</packaging>
-
     <profiles>
         <profile>
             <id>babelnet</id>

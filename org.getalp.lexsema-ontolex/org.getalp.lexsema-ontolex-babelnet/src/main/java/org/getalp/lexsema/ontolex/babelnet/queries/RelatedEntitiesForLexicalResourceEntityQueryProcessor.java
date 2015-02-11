@@ -7,7 +7,6 @@ import org.getalp.lexsema.ontolex.LexicalEntry;
 import org.getalp.lexsema.ontolex.LexicalResourceEntity;
 import org.getalp.lexsema.ontolex.LexicalSense;
 import org.getalp.lexsema.ontolex.babelnet.relations.LexinfoRelationType;
-import org.getalp.lexsema.ontolex.dbnary.Vocable;
 import org.getalp.lexsema.ontolex.factories.entities.LexicalResourceEntityFactory;
 import org.getalp.lexsema.ontolex.graph.Graph;
 import org.getalp.lexsema.ontolex.queries.ARQSelectQueryImpl;
@@ -58,8 +57,6 @@ public final class RelatedEntitiesForLexicalResourceEntityQueryProcessor extends
         Class<? extends LexicalResourceEntity> targetEntityClass;
         if (type.contains("LexicalEntry")) {
             targetEntityClass = LexicalEntry.class;
-        } else if (type.contains("Vocable")) {
-            targetEntityClass = Vocable.class;
         } else if (type.contains("LexicalSense")) {
             targetEntityClass = LexicalSense.class;
         } else {

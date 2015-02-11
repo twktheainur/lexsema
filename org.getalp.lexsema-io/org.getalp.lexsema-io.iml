@@ -78,11 +78,10 @@
     <orderEntry type="library" name="Maven: de.tudarmstadt.ukp.dkpro.core:de.tudarmstadt.ukp.dkpro.core.dictionaryannotator-asl:1.6.2" level="project" />
     <orderEntry type="library" name="Maven: de.tudarmstadt.ukp.dkpro.core:de.tudarmstadt.ukp.dkpro.core.api.semantics-asl:1.6.2" level="project" />
     <orderEntry type="module" module-name="org.getalp.lexsema-ontolex-api" />
-    <orderEntry type="library" name="Maven: org.slf4j:slf4j-api:1.7.7" level="project" />
-    <orderEntry type="library" name="Maven: org.slf4j:slf4j-simple:1.7.7" level="project" />
     <orderEntry type="library" name="Maven: com.openlinksw.virtuoso:virt_jena2:2.10.1_B1.9" level="project" />
     <orderEntry type="module" module-name="org.getalp.lexsema-ontolex-dbnary" />
     <orderEntry type="module" module-name="org.getalp.lexsema-ontolex-core" />
+    <orderEntry type="library" name="Maven: org.slf4j:slf4j-api:1.7.7" level="project" />
     <orderEntry type="module" module-name="org.getalp.lexsema-similarity" />
     <orderEntry type="library" name="Maven: secondstring:secondstring:20120620" level="project" />
     <orderEntry type="library" name="Maven: net.sourceforge.parallelcolt:parallelcolt:0.10.0" level="project" />

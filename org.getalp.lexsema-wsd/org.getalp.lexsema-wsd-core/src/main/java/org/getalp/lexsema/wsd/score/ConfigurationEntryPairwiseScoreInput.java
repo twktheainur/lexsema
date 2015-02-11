@@ -9,6 +9,8 @@ import org.getalp.optimization.functions.input.FunctionInput;
 import org.getalp.optimization.functions.setfunctions.input.Interval;
 import org.getalp.optimization.functions.setfunctions.input.SetFunctionInput;
 
+import java.util.List;
+
 
 public class ConfigurationEntryPairwiseScoreInput extends SetFunctionInput {
 
@@ -34,6 +36,7 @@ public class ConfigurationEntryPairwiseScoreInput extends SetFunctionInput {
         if (compute) {
             compute();
         }
+
     }
 
     private void compute() {
@@ -41,8 +44,12 @@ public class ConfigurationEntryPairwiseScoreInput extends SetFunctionInput {
         setValues(new DenseDoubleMatrix1D(configuration.size() - 1));
         int currentAssignment = configuration.getAssignment(currentIndex);
         Sense currentWordSelectedSense = null;
+
         if (currentAssignment != -1) {
-            currentWordSelectedSense = document.getSenses(configuration.getStart(), currentIndex).get(currentAssignment);
+            List<Sense> senses = document.getSenses(configuration.getStart(), currentIndex);
+            if (!senses.isEmpty()) {
+                currentWordSelectedSense = senses.get(currentAssignment);
+            }
         }
         int pairIndex = 0;
         for (int i = 0; i < configuration.size(); i++) {
@@ -50,13 +57,18 @@ public class ConfigurationEntryPairwiseScoreInput extends SetFunctionInput {
             if (i != currentIndex) {
                 int assig = configuration.getAssignment(i);
                 if (assig != -1) {
-                    Sense otherWordSense = document.getSenses(configuration.getStart(), i)
-                            .get(assig);
-                    getInput().setQuick(pairIndex, 1d);
-                    if (currentWordSelectedSense != null) {
-                        value = sim.compute(currentWordSelectedSense.getSemanticSignature(), otherWordSense.getSemanticSignature(), null, null);
+                    List<Sense> senses = document.getSenses(configuration.getStart(), i);
+                    if (!senses.isEmpty()) {
+                        Sense otherWordSense = senses
+                                .get(assig);
+
+                        getInput().setQuick(pairIndex, 1d);
+                        if (currentWordSelectedSense != null && otherWordSense != null) {
+                            value = sim.compute(currentWordSelectedSense.getSemanticSignature(),
+                                    otherWordSense.getSemanticSignature(), null, null);
+                            getValues().setQuick(pairIndex, value);
+                        }
                     }
-                    getValues().setQuick(pairIndex, value);
                     pairIndex++;
                 }
             }

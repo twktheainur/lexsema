@@ -14,12 +14,12 @@ public interface LRLoader {
     public void loadSenses(Document document);
 
     @SuppressWarnings("BooleanParameter")
-    public LRLoader suffle(boolean shuffle);
+    public LRLoader shuffle(boolean shuffle);
 
     @SuppressWarnings("BooleanParameter")
     public LRLoader extendedSignature(boolean hasExtendedSignature);
 
-    public LRLoader loadDefinition(boolean loadDefinitions);
+    public LRLoader loadDefinitions(boolean loadDefinitions);
     public LRLoader setLoadRelated(boolean loadRelated);
 
 	public LRLoader setStemming(boolean stemming);

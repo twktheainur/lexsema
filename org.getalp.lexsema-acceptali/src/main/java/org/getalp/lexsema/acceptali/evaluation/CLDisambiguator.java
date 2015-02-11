@@ -6,8 +6,8 @@ import org.getalp.lexsema.io.annotresult.CLWSDWriter;
 import org.getalp.lexsema.io.clwsd.CLWSDLoader;
 import org.getalp.lexsema.io.clwsd.TargetWordEntry;
 import org.getalp.lexsema.io.clwsd.TargetedWSDLoader;
-import org.getalp.lexsema.io.resource.LRLoader;
 import org.getalp.lexsema.io.resource.dbnary.DBNaryLoader;
+import org.getalp.lexsema.io.resource.dbnary.DBNaryLoaderImpl;
 import org.getalp.lexsema.language.Language;
 import org.getalp.lexsema.ontolex.LexicalEntry;
 import org.getalp.lexsema.ontolex.dbnary.DBNary;
@@ -25,15 +25,15 @@ import org.getalp.lexsema.similarity.Word;
 import org.getalp.lexsema.similarity.measures.SimilarityMeasure;
 import org.getalp.lexsema.similarity.measures.TverskiIndexSimilarityMeasureBuilder;
 import org.getalp.lexsema.wsd.configuration.Configuration;
+import org.getalp.lexsema.wsd.method.AdaptiveSimulatedAnnealing;
 import org.getalp.lexsema.wsd.method.Disambiguator;
-import org.getalp.lexsema.wsd.method.sequencial.SimplifiedLesk;
-import org.getalp.lexsema.wsd.method.sequencial.parameters.SimplifiedLeskParameters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -48,7 +48,7 @@ public final class CLDisambiguator {
             "tchechem" + File.separatorChar + "wsgetalp" + File.separatorChar + "data" + File.separatorChar +
             "semeval2013_task10_clwsd" + File.separatorChar + "Result";
 
-    public static final String DB_PATH = ".." + File.separatorChar + "data" + File.separatorChar + "dbnary" + File.separatorChar + "dbnary_full";
+    public static final String DB_PATH = "/" + File.separatorChar + "Volumes" + File.separatorChar + "RAMDisk";
     public static final String ONTOLOGY_PROPERTIES = "data" + File.separatorChar + "ontology.properties";
     private final static Logger logger = LoggerFactory.getLogger(CLDisambiguator.class);
     static Language[] loadLanguages = {
@@ -73,7 +73,7 @@ public final class CLDisambiguator {
         long startTime = System.currentTimeMillis();
 
         Store vts = new JenaTDBStore(DB_PATH);
-        //vts.setCachingEnabled(true);
+        vts.setCachingEnabled(true);
         StoreHandler.registerStoreInstance(vts);
         //StoreHandler.DEBUG_ON = true;
         OntologyModel tBox = new OWLTBoxModel(ONTOLOGY_PROPERTIES);
@@ -89,7 +89,8 @@ public final class CLDisambiguator {
             }
         }
 
-        LRLoader lrloader = new DBNaryLoader(DB_PATH, ONTOLOGY_PROPERTIES, Language.ENGLISH).loadDefinition(true);
+
+        DBNaryLoader lrloader = (DBNaryLoader) new DBNaryLoaderImpl(DB_PATH, ONTOLOGY_PROPERTIES, Language.ENGLISH).loadDefinitions(true);
 
         SimilarityMeasure similarityMeasure;
 
@@ -111,20 +112,19 @@ public final class CLDisambiguator {
                 .isDistance(true)
                 .build();
 
-        SimplifiedLeskParameters algorithmParameters = new SimplifiedLeskParameters()
-                .setMinimize(false);
-        Disambiguator disambiguator = new SimplifiedLesk(20, similarityMeasure, algorithmParameters, 1);
+        Disambiguator disambiguator = new AdaptiveSimulatedAnnealing(0.8, 6, 6, 100, 4, similarityMeasure);
 
         clDisambiguator.processTargets(lrloader, disambiguator);
         disambiguator.release();
         logger.info(String.format("runtime: %.2f m", (double) (System.currentTimeMillis() - startTime) / 1000d / 60d));
     }
 
+
     public void registerDBNary(Language language, DBNary dbNary) {
         dbnaryMap.put(language, dbNary);
     }
 
-    public void processTargets(LRLoader lrLoader, Disambiguator disambiguator) {
+    public void processTargets(DBNaryLoader lrLoader, Disambiguator disambiguator) {
         CLWSDWriter writer = null;
         try {
             writer = new CLWSDWriter(outputCWSDDirectory);
@@ -137,6 +137,7 @@ public final class CLDisambiguator {
         targetWSDLoader.load();
         for (TargetWordEntry entry : targetWSDLoader) {
             Word targetWord = entry.getTargetWord();
+            lrLoader.retrieveLexicalEntryForWord(targetWord);
             int contextIndex = 1;
             loggerInfoTargetWordProgress(targetWord);
             for (Pair<Sentence, Integer> context : entry) {
@@ -149,24 +150,30 @@ public final class CLDisambiguator {
                     logger.info(String.format("Disambiguating context %d ...", contextIndex));
                     Configuration c = disambiguator.disambiguate(s);
                     Sense targetSense = getTargetSense(s, c, index);
-
                     if (targetSense != null) {
 
                         List<Translation> translations;
 
                         translations = sourceDbnary.getTranslations(targetSense, loadLanguages);
-
+                        Translation translation = null;
                         if (!translations.isEmpty()) {
-                            for(Language targetLanguage: loadLanguages) {
-                                Translation translation = null;
+                            for (Language targetLanguage : loadLanguages) {
                                 for (Translation candidateTranslation : translations) {
                                     Language candidateLanguage = candidateTranslation.getLanguage();
-                                    if(candidateLanguage.equals(targetLanguage)){
+                                    if (candidateLanguage.equals(targetLanguage)) {
                                         translation = candidateTranslation;
                                         break;
                                     }
                                 }
-                                if(translation!=null) {
+                                if (translation != null) {
+                                    writer.writeEntry(targetWord, contextIndex, translation, targetLanguage);
+                                }
+                            }
+                        } else {
+                            translations = sourceDbnary.getTranslations(targetWord, loadLanguages);
+                            for (Language targetLanguage : loadLanguages) {
+                                translation = selectFirstTranslation(translations, targetLanguage);
+                                if (translation != null) {
                                     writer.writeEntry(targetWord, contextIndex, translation, targetLanguage);
                                 }
                             }
@@ -179,15 +186,24 @@ public final class CLDisambiguator {
     }
 
 
-    private int findTargetIndex(Document s, LexicalEntry targetWord) {
-        for (int i = 0; i < s.size(); i++) {
-            Word currentWord = s.getWord(0, i);
-            if (matchLemma(currentWord, targetWord)) {
-                return i;
+    private Translation selectFirstTranslation(List<Translation> translations, Language targetLanguage) {
+        List<Translation> targetTrans = extractTargetLanguageTranslation(translations, targetLanguage);
+        if (!targetTrans.isEmpty()) {
+            return targetTrans.get(0);
+        }
+        return null;
+    }
+
+    private List<Translation> extractTargetLanguageTranslation(List<Translation> translations, Language targetLanguage) {
+        List<Translation> translationList = new ArrayList<>();
+        for (Translation t : translations) {
+            if (t.getLanguage().equals(targetLanguage)) {
+                translationList.add(t);
             }
         }
-        return -1;
+        return translationList;
     }
+
 
     @SuppressWarnings("LawOfDemeter")
     private boolean matchLemma(LexicalEntry a, LexicalEntry b) {

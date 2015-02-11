@@ -1,6 +1,10 @@
 package org.getalp.lexsema.util;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashSet;
@@ -12,42 +16,36 @@ import java.util.Set;
  * @author Amine Aït-Mouloud
  * @since 2014-12-16
  */
-public class StopList {
-	private static String stopListFile = "../data/stoplist_long.txt";
+public final class StopList {
+	private static String stopListFile = ".." + File.separator + "data" + File.separator + "stoplist_long.txt";
 	private static Set<String> stopWords = null;
-	
+
+	private static Logger logger = LoggerFactory.getLogger(StopList.class);
+
+	private StopList() {
+	}
+
 	/**
 	 * @return Success or not of loading the stop words from the stop list file
 	 */
 	private static boolean loadStopWords() {
-		BufferedReader br = null; 
-		try {
-			String currentLine;
- 
-			br = new BufferedReader(new FileReader(stopListFile));
- 
+		String currentLine;
+		try (BufferedReader br = new BufferedReader(new FileReader(stopListFile))) {
 			if (stopWords == null) {
 				stopWords = new HashSet<String>();
 			} else {
 				stopWords.clear();
 			}
-			
-			while ((currentLine = br.readLine()) != null) {
+
+			do {
+				currentLine = br.readLine();
 				stopWords.add(currentLine.toLowerCase().trim());
-			}
+			} while (currentLine != null);
  
 		} catch (IOException e) {
-			System.err.println(e.getLocalizedMessage());
-		} finally {
-			try {
-				if (br != null) {
-					br.close();
-				}
-			} catch (IOException ex) {
-				System.err.println(ex.getLocalizedMessage());
-			}
+			logger.error(e.getLocalizedMessage());
 		}
-		return (stopWords != null ^ !stopWords.isEmpty()); 
+		return stopWords != null ^ !stopWords.isEmpty();
 	}
 	
 	/**
@@ -72,8 +70,8 @@ public class StopList {
 	 * @param path path to the stop list file
 	 * @return Success of the operation (true) or not (false)
 	 */
-	public boolean setStopListFile(String path) {
-		if (path != stopListFile) {
+	public static boolean setStopListFile(String path) {
+		if (!path.equals(stopListFile)) {
 			stopListFile = path;
 			return loadStopWords();
 		}

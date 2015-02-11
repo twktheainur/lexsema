@@ -27,7 +27,7 @@ public class LovaszRegularizedDisambiguation {
         TextLoader dl = new Semeval2007TextLoader("../data/senseval2007_task7/test/eng-coarse-all-words.xml")
                 .loadNonInstances(false);
         LRLoader lrloader = new WordnetLoader("../data/wordnet/2.1/dict")
-                .extendedSignature(true).suffle(true);
+                .extendedSignature(true).shuffle(true);
         SimilarityMeasure similarityMeasure;
 
         similarityMeasure = new TverskiIndexSimilarityMeasureBuilder()

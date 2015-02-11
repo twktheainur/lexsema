@@ -1,14 +1,7 @@
 package org.getalp.lexsema.io.resource.wordnet;
 
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.StringTokenizer;
-
+import edu.mit.jwi.Dictionary;
+import edu.mit.jwi.item.*;
 import org.getalp.lexsema.io.resource.LRLoader;
 import org.getalp.lexsema.similarity.Document;
 import org.getalp.lexsema.similarity.Sense;
@@ -23,12 +16,10 @@ import org.slf4j.LoggerFactory;
 import org.tartarus.snowball.SnowballStemmer;
 import org.tartarus.snowball.ext.englishStemmer;
 
-import edu.mit.jwi.Dictionary;
-import edu.mit.jwi.item.IIndexWord;
-import edu.mit.jwi.item.IPointer;
-import edu.mit.jwi.item.IWord;
-import edu.mit.jwi.item.IWordID;
-import edu.mit.jwi.item.POS;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.*;
 
 public class WordnetLoader implements LRLoader {
     private static Logger logger = LoggerFactory.getLogger(WordnetLoader.class);
@@ -204,13 +195,13 @@ public class WordnetLoader implements LRLoader {
 
     @SuppressWarnings("BooleanParameter")
     @Override
-    public LRLoader suffle(boolean shuffle) {
+    public LRLoader shuffle(boolean shuffle) {
         this.shuffle = shuffle;
         return this;
     }
 
     @Override
-    public LRLoader loadDefinition(boolean loadDefinitions) {
+    public LRLoader loadDefinitions(boolean loadDefinitions) {
         this.loadDefinitions = loadDefinitions;
         return this;
     }
