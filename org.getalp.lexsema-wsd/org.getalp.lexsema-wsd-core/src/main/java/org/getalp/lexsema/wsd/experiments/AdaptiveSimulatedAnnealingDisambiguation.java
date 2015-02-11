@@ -43,7 +43,17 @@ public class AdaptiveSimulatedAnnealingDisambiguation {
                 .regularizeRelations(false).optimizeRelations(false)
                 .build();
 
-        Disambiguator sl_full = new AdaptiveSimulatedAnnealing(0.8, 1, 1, 10, 8, sim);
+        if (args.length < 5) {
+            System.err.println("Usage: aSAD [P0] [n] [m] [cT] [threads]");
+            System.exit(0);
+        }
+        double accptProb = Double.parseDouble(args[0]);
+        double n = Double.parseDouble(args[1]);
+        double m = Double.parseDouble(args[2]);
+        double convThresh = Double.parseDouble(args[3]);
+        int threads = Integer.parseInt(args[4]);
+
+        Disambiguator sl_full = new AdaptiveSimulatedAnnealing(0.8, 2, 2, 10, 8, sim);
 
         System.err.println("Loading texts");
         dl.load();
