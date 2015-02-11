@@ -21,11 +21,12 @@ public class TverskyConfigurationScorer implements ConfigurationScorer {
     private static Logger logger = LoggerFactory.getLogger(TverskyConfigurationScorer.class);
     private SimilarityMeasure similarityMeasure;
     private ExecutorService threadPool;
-    private List<Future<Pair<Integer, Double>>> runningTasks;
+    private List<Future<Pair<Integer, Double>>> completeTasks;
+    private List<EntryScoreCallable> tasks;
 
     public TverskyConfigurationScorer(SimilarityMeasure similarityMeasure, int numberThreads) {
         this.similarityMeasure = similarityMeasure;
-        runningTasks = new ArrayList<>();
+        tasks = new ArrayList<>();
         threadPool = Executors.newFixedThreadPool(numberThreads);
     }
 
@@ -33,13 +34,25 @@ public class TverskyConfigurationScorer implements ConfigurationScorer {
     public double computeScore(Document d, Configuration c) {
         Double[] scores = new Double[c.size()];
         for (int i = 0; i < c.size(); i++) {
-            runningTasks.add(threadPool.submit(new EntryScoreCallable(i, d, c)));
+            try {
+                tasks.add(new EntryScoreCallable(i, d, c));
+                //threadPool.submit();
+                //completeTasks.add(threadPool.submit(new EntryScoreCallable(i, d, c)));
+            } catch (RejectedExecutionException e) {
+                logger.debug("Threadpool rejected task " + i);
+            }
         }
 
+        try {
+            completeTasks = threadPool.invokeAll(tasks);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        tasks.clear();
         boolean progressChecked = false;
-        while (!progressChecked || !runningTasks.isEmpty()) {
-            for (int i = 0; i < runningTasks.size(); ) {
-                Future<Pair<Integer, Double>> current = runningTasks.get(i);
+        while (!progressChecked || !completeTasks.isEmpty()) {
+            for (int i = 0; i < completeTasks.size(); ) {
+                Future<Pair<Integer, Double>> current = completeTasks.get(i);
                 if (current.isDone()) {
                     try {
                         Pair<Integer, Double> pair = current.get();
@@ -51,7 +64,7 @@ public class TverskyConfigurationScorer implements ConfigurationScorer {
                     } catch (ExecutionException e) {
                         logger.debug("ExecutionException in configuration score entry calculation " + e.getLocalizedMessage());
                     }
-                    runningTasks.remove(i);
+                    completeTasks.remove(i);
                 } else {
                     i++;
                 }
@@ -63,17 +76,19 @@ public class TverskyConfigurationScorer implements ConfigurationScorer {
                 e.printStackTrace();
             }
         }
-
-        threadPool.shutdown();
-        try {
-            threadPool.awaitTermination(10, TimeUnit.MILLISECONDS);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
         Function sum = new Sum(1);
         FunctionInput valueListInput = new ValueListInput(Arrays.asList(scores), false, true);
         return sum.F(valueListInput);
+    }
+
+    @Override
+    public void release() {
+        threadPool.shutdown();
+        try {
+            threadPool.awaitTermination(1, TimeUnit.MINUTES);
+        } catch (InterruptedException e) {
+            logger.debug(e.getLocalizedMessage());
+        }
     }
 
 
