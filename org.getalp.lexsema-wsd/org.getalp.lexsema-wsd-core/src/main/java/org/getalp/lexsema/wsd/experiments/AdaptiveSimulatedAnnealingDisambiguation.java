@@ -22,12 +22,12 @@ public class AdaptiveSimulatedAnnealingDisambiguation {
     public static void main(String[] args) {
         VisualVMTools.delayUntilReturn();
         long startTime = System.currentTimeMillis();
-        TextLoader dl = new Semeval2007TextLoader("../data/senseval2007_task7/test/eng-coarse-all-words.xml").loadNonInstances(true);
+        TextLoader dl = new Semeval2007TextLoader("../data/senseval2007_task7/test/eng-coarse-all-words-t1.xml").loadNonInstances(true);
         LRLoader lrloader = new WordnetLoader("../data/wordnet/2.1/dict")
                 .extendedSignature(true)
-                .shuffle(false)
+                .shuffle(true)
                 .setUsesStopWords(false)
-                .setStemming(true)
+                .setStemming(false)
                 .loadDefinitions(true);
         SimilarityMeasure sim;
 
@@ -38,12 +38,12 @@ public class AdaptiveSimulatedAnnealingDisambiguation {
                 .gamma(0.5d)
                 .fuzzyMatching(false)
                 .quadraticWeighting(false)
-                .extendedLesk(false).randomInit(false)
+                .extendedLesk(true).randomInit(false)
                 .regularizeOverlapInput(false).optimizeOverlapInput(false)
                 .regularizeRelations(false).optimizeRelations(false)
                 .build();
 
-        Disambiguator sl_full = new AdaptiveSimulatedAnnealing(0.4, 3, 3, 5, 4, sim);
+        Disambiguator sl_full = new AdaptiveSimulatedAnnealing(0.8, 1, 1, 10, 8, sim);
 
         System.err.println("Loading texts");
         dl.load();
