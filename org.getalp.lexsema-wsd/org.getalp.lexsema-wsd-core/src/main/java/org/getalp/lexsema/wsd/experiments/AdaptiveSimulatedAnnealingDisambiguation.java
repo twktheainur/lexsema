@@ -53,7 +53,7 @@ public class AdaptiveSimulatedAnnealingDisambiguation {
         double convThresh = Double.parseDouble(args[3]);
         int threads = Integer.parseInt(args[4]);
 
-        Disambiguator sl_full = new AdaptiveSimulatedAnnealing(0.8, 2, 2, 10, 8, sim);
+        Disambiguator sl_full = new AdaptiveSimulatedAnnealing(accptProb, n, m, (int) convThresh, threads, sim);
 
         System.err.println("Loading texts");
         dl.load();
