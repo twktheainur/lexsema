@@ -25,7 +25,7 @@ public final class NUSPT2007Disambiguation {
         TextLoader dl = new Semeval2007TextLoader("../data/senseval2007_task7/test/eng-coarse-all-words.xml")
                 .loadNonInstances(false);
         LRLoader lrloader = new WordnetLoader("../data/wordnet/2.1/dict")
-                .suffle(false).extendedSignature(true);
+                .shuffle(false).extendedSignature(true);
         TextLoader semCor = new SemCorTextLoader("../data/semcor3.0/semcor_full.xml");
 
         semCor.load();

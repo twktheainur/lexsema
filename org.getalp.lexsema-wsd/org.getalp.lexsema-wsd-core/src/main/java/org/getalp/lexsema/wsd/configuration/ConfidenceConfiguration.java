@@ -5,6 +5,8 @@ import cern.colt.matrix.tdouble.DoubleMatrix1D;
 import cern.colt.matrix.tdouble.impl.DenseDoubleMatrix1D;
 import org.getalp.lexsema.similarity.Document;
 
+import java.util.Random;
+
 public class ConfidenceConfiguration implements Configuration {
     int[] assignments;
     DoubleMatrix1D confidence;
@@ -12,8 +14,23 @@ public class ConfidenceConfiguration implements Configuration {
     public ConfidenceConfiguration(Document d) {
         int documentSize = d.size();
         assignments = new int[documentSize];
-        for (int i = 0; i < documentSize; i++) {
-            assignments[i] = -1;
+        noAssignmentInit(documentSize);
+        confidence = new DenseDoubleMatrix1D(documentSize);
+    }
+
+    public ConfidenceConfiguration(Document d, InitializationType initializationType) {
+        int documentSize = d.size();
+        assignments = new int[documentSize];
+        switch (initializationType) {
+            case FIRST:
+                firstAssignment(documentSize);
+                break;
+            case NONE:
+                noAssignmentInit(documentSize);
+                break;
+            case RANDOM:
+                randomAssignment(d);
+                break;
         }
         confidence = new DenseDoubleMatrix1D(documentSize);
     }
@@ -22,6 +39,31 @@ public class ConfidenceConfiguration implements Configuration {
     public ConfidenceConfiguration(final ConfidenceConfiguration d) {
         assignments = d.assignments.clone();
         confidence = d.confidence.copy();
+    }
+
+    private void noAssignmentInit(int documentSize) {
+        for (int i = 0; i < documentSize; i++) {
+            assignments[i] = -1;
+        }
+    }
+
+    private void firstAssignment(int documentSize) {
+        for (int i = 0; i < documentSize; i++) {
+            assignments[i] = 0;
+        }
+    }
+
+    private void randomAssignment(Document d) {
+        int documentSize = d.size();
+        Random r = new Random(System.currentTimeMillis());
+        for (int i = 0; i < documentSize; i++) {
+            int numSenses = d.getSenses(i).size();
+            if (numSenses > 1) {
+                assignments[i] = r.nextInt(numSenses);
+            } else {
+                assignments[i] = 0;
+            }
+        }
     }
 
     @Override
@@ -97,5 +139,9 @@ public class ConfidenceConfiguration implements Configuration {
     @SuppressWarnings("ReturnOfCollectionOrArrayField")
     public int[] getAssignments() {
         return assignments;
+    }
+
+    public enum InitializationType {
+        NONE, FIRST, RANDOM
     }
 }

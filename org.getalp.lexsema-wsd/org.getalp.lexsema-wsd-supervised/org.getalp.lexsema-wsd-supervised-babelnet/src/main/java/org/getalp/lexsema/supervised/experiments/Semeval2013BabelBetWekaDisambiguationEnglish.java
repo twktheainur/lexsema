@@ -35,7 +35,7 @@ public class Semeval2013BabelBetWekaDisambiguationEnglish {
         TextLoader dl = new Semeval2013Task13TextLoader("../data/semeval-2013-task12-test-data/data/multilingual-all-words.en.xml")
                 .loadNonInstances(false);
         TextLoader semCor = new SemCorTextLoader("../data/semcor3.0/semcor_full.xml");
-        LRLoader lrloader = new BabelNetAPILoader(Language.ENGLISH).extendedSignature(false).suffle(false).loadDefinition(false).setLoadRelated(false);
+        LRLoader lrloader = new BabelNetAPILoader(Language.ENGLISH).extendedSignature(false).shuffle(false).loadDefinitions(false).setLoadRelated(false);
         semCor.load();
         WindowLoader wloader = new DocumentCollectionWindowLoader(semCor);
         wloader.load();

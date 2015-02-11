@@ -5,7 +5,6 @@ import org.getalp.lexsema.ontolex.LexicalResource;
 import org.getalp.lexsema.ontolex.LexicalSense;
 import org.getalp.lexsema.ontolex.OntolexLexicalResourceBuilder;
 import org.getalp.lexsema.ontolex.babelnet.factories.entities.BabelNetLexicalSenseBuilder;
-import org.getalp.lexsema.ontolex.babelnet.factories.entities.TranslationBuilder;
 import org.getalp.lexsema.ontolex.graph.OntologyModel;
 
 @SuppressWarnings("unused")
@@ -18,7 +17,7 @@ public class BabelNetBuilder extends OntolexLexicalResourceBuilder {
          * Registering Vocable factory
          */
         registerEntityFactory(LexicalSense.class, new BabelNetLexicalSenseBuilder());
-        registerEntityFactory(Translation.class, new TranslationBuilder());
+        //registerEntityFactory(Translation.class, new TranslationBuilder());
     }
 
     @SuppressWarnings("HardcodedFileSeparator")

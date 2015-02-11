@@ -144,7 +144,7 @@ public class BabelNetAPILoader implements LRLoader {
 
     @SuppressWarnings("BooleanParameter")
     @Override
-    public LRLoader suffle(boolean shuffle) {
+    public LRLoader shuffle(boolean shuffle) {
         this.shuffle = shuffle;
         return this;
     }
@@ -156,7 +156,7 @@ public class BabelNetAPILoader implements LRLoader {
         return this;
     }
 
-    public LRLoader loadDefinition(boolean loadDefinitions) {
+    public LRLoader loadDefinitions(boolean loadDefinitions) {
         this.loadDefinitions = loadDefinitions;
         return this;
     }
@@ -164,5 +164,15 @@ public class BabelNetAPILoader implements LRLoader {
     public LRLoader setLoadRelated(boolean loadRelated) {
         this.loadRelated = loadRelated;
         return this;
+    }
+
+    @Override
+    public LRLoader setStemming(boolean stemming) {
+        return null;
+    }
+
+    @Override
+    public LRLoader setUsesStopWords(boolean usesStopWords) {
+        return null;
     }
 }

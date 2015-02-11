@@ -32,7 +32,7 @@ public class CLWSD2013 {
         //VisualVMTools.delayUntilReturn();
 
         LRLoader lrloader = new WordnetLoader("../data/wordnet/2.1/dict")
-                .extendedSignature(true).suffle(true);
+                .extendedSignature(true).shuffle(true);
         STS2013SentencePairLoader spl = new STS2013SentencePairLoader("STS.input.headlines.txt", lrloader);
         PrintWriter outputFile = new PrintWriter("STS.headlines.output.txt");
         SimilarityMeasure similarityMeasure;
@@ -99,7 +99,7 @@ public class CLWSD2013 {
             semanticSignature2.addSymbolString(sentence2.toString());
             double stringScore = similarityMeasure.compute(semanticSignature1,
                     semanticSignature2, null, null);
-            stringScore = ValueScale.scaleValue(0, 1, 0, 5, stringScore);
+            stringScore = ValueScale.scaleValue(stringScore, 0, 1, 0, 5);
             if (Double.isNaN(stringScore)) {
                 stringScore = 0;
             }
