@@ -11,7 +11,6 @@ import org.xml.sax.helpers.XMLReaderFactory;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 @SuppressWarnings({"BooleanParameter", "ClassWithTooManyFields"})
 public class Semeval2013Task13TextLoader extends TextLoaderImpl implements ContentHandler {
@@ -85,7 +84,7 @@ public class Semeval2013Task13TextLoader extends TextLoaderImpl implements Conte
                 currentPos = atts.getValue("pos");
                 currentLemma = atts.getValue("lemma");
                 currentId = "";
-                currentPrecedingWords.add(new WordImpl("non-target",currentLemma,currentSurfaceForm,currentPos));
+                currentPrecedingWords.add(new WordImpl("non-target", currentLemma, currentSurfaceForm, currentPos));
                 inWord = true;
                 break;
             case "instance":
@@ -108,15 +107,15 @@ public class Semeval2013Task13TextLoader extends TextLoaderImpl implements Conte
                 break;
             case "wf":
                 inWord = false;
-                currentSurfaceForm="";
-                currentId="";
+                currentSurfaceForm = "";
+                currentId = "";
                 currentLemma = "";
                 currentPos = "";
                 break;
             case "instance":
                 inWord = false;
                 Word w = new WordImpl(currentId, currentLemma, currentSurfaceForm, currentPos);
-                for(Word pw: currentPrecedingWords) {
+                for (Word pw : currentPrecedingWords) {
                     w.addPrecedingInstance(pw);
                 }
                 currentPrecedingWords.clear();

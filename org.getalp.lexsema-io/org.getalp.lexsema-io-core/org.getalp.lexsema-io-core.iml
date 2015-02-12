@@ -5,36 +5,13 @@
     <output-test url="file://$MODULE_DIR$/target/test-classes" />
     <content url="file://$MODULE_DIR$">
       <sourceFolder url="file://$MODULE_DIR$/src/main/java" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/src/test/java" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/src/main/resources" type="java-resource" />
-      <excludeFolder url="file://$MODULE_DIR$/../../org.getalp.disambiguation.supervised/target" />
+      <sourceFolder url="file://$MODULE_DIR$/src/test/java" isTestSource="true" />
+      <excludeFolder url="file://$MODULE_DIR$/../../org.getalp.lexsema-io-core/target" />
       <excludeFolder url="file://$MODULE_DIR$/target" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="module" module-name="org.getalp.lexsema-wsd-core" />
-    <orderEntry type="module" module-name="org.getalp.lexsema-optim" />
-    <orderEntry type="module" module-name="org.getalp.lexsema-similarity" />
-    <orderEntry type="module" module-name="org.getalp.lexsema-util" />
-    <orderEntry type="library" name="Maven: net.sourceforge.parallelcolt:parallelcolt:0.10.0" level="project" />
-    <orderEntry type="library" name="Maven: net.sourceforge.jplasma:jplasma:1.2.0" level="project" />
-    <orderEntry type="library" name="Maven: net.sourceforge.jplasma:core-lapack:0.1" level="project" />
-    <orderEntry type="library" name="Maven: net.sourceforge.f2j:arpack_combined_all:0.1" level="project" />
-    <orderEntry type="library" name="Maven: net.sourceforge.jtransforms:jtransforms:2.4.0" level="project" />
-    <orderEntry type="library" name="Maven: net.sourceforge.csparsej:csparsej:1.1.1" level="project" />
-    <orderEntry type="library" name="Maven: net.sourceforge.parallelcolt:optimization:1.0" level="project" />
-    <orderEntry type="library" name="Maven: junit:junit:4.10" level="project" />
-    <orderEntry type="library" name="Maven: org.hamcrest:hamcrest-core:1.1" level="project" />
-    <orderEntry type="library" name="Maven: com.googlecode.netlib-java:netlib-java:0.9.3" level="project" />
-    <orderEntry type="library" name="Maven: com.github.rwl:JKLU:1.0.0" level="project" />
-    <orderEntry type="library" name="Maven: com.github.rwl:BTFJ:1.0.1" level="project" />
-    <orderEntry type="library" name="Maven: com.github.rwl:AMDJ:1.0.1" level="project" />
-    <orderEntry type="library" name="Maven: com.github.rwl:COLAMDJ:1.0.1" level="project" />
-    <orderEntry type="library" name="Maven: secondstring:secondstring:20120620" level="project" />
-    <orderEntry type="library" name="Maven: nz.ac.waikato.cms.weka:weka-stable:3.6.6" level="project" />
-    <orderEntry type="library" name="Maven: net.sf.squirrel-sql.thirdparty-non-maven:java-cup:0.11a" level="project" />
-    <orderEntry type="library" name="Maven: tw.edu.ntu.csie:libsvm:3.17" level="project" />
-    <orderEntry type="module" module-name="org.getalp.lexsema-io-core" />
     <orderEntry type="library" name="Maven: edu.mit:jwi:2.2.3" level="project" />
     <orderEntry type="library" name="Maven: org.apache.uima:uimaj-core:2.6.0" level="project" />
     <orderEntry type="library" name="Maven: org.apache.uima:uimafit-core:2.1.0" level="project" />
@@ -106,7 +83,25 @@
     <orderEntry type="module" module-name="org.getalp.lexsema-ontolex-dbnary" />
     <orderEntry type="module" module-name="org.getalp.lexsema-ontolex-core" />
     <orderEntry type="library" name="Maven: org.slf4j:slf4j-api:1.7.7" level="project" />
+    <orderEntry type="module" module-name="org.getalp.lexsema-similarity" />
+    <orderEntry type="library" name="Maven: secondstring:secondstring:20120620" level="project" />
+    <orderEntry type="library" name="Maven: net.sourceforge.parallelcolt:parallelcolt:0.10.0" level="project" />
+    <orderEntry type="library" name="Maven: net.sourceforge.jplasma:jplasma:1.2.0" level="project" />
+    <orderEntry type="library" name="Maven: net.sourceforge.jplasma:core-lapack:0.1" level="project" />
+    <orderEntry type="library" name="Maven: net.sourceforge.f2j:arpack_combined_all:0.1" level="project" />
+    <orderEntry type="library" name="Maven: net.sourceforge.jtransforms:jtransforms:2.4.0" level="project" />
+    <orderEntry type="library" name="Maven: net.sourceforge.csparsej:csparsej:1.1.1" level="project" />
+    <orderEntry type="library" name="Maven: net.sourceforge.parallelcolt:optimization:1.0" level="project" />
+    <orderEntry type="library" name="Maven: com.googlecode.netlib-java:netlib-java:0.9.3" level="project" />
+    <orderEntry type="library" name="Maven: com.github.rwl:JKLU:1.0.0" level="project" />
+    <orderEntry type="library" name="Maven: com.github.rwl:BTFJ:1.0.1" level="project" />
+    <orderEntry type="library" name="Maven: com.github.rwl:AMDJ:1.0.1" level="project" />
+    <orderEntry type="library" name="Maven: com.github.rwl:COLAMDJ:1.0.1" level="project" />
+    <orderEntry type="module" module-name="org.getalp.lexsema-optim" />
+    <orderEntry type="module" module-name="org.getalp.lexsema-util" />
     <orderEntry type="library" name="Maven: com.github.rholder:snowball-stemmer:1.3.0.581.1" level="project" />
+    <orderEntry type="library" scope="TEST" name="Maven: junit:junit:4.6" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: org.projectlombok:lombok:1.14.8" level="project" />
     <orderEntry type="library" name="Maven: com.google.code.findbugs:jsr305:3.0.0" level="project" />
     <orderEntry type="library" name="Maven: org.apache.jena:jena-arq:2.12.1" level="project" />
     <orderEntry type="library" name="Maven: org.apache.jena:jena-core:2.12.1" level="project" />

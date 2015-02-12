@@ -8,7 +8,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.HashMap;
@@ -42,13 +41,13 @@ public class CLWSDWriter {
                     languageDir.mkdirs();
                 }
                 String radix = String.format("%s_%s_answer.txt", targetWord.getId(), language.getISO2Code());
-                File outputFile = new File(String.format("%s%s%s",languageDir.getAbsolutePath(),File.separatorChar,radix));
-                if(!outputFile.exists()){
+                File outputFile = new File(String.format("%s%s%s", languageDir.getAbsolutePath(), File.separatorChar, radix));
+                if (!outputFile.exists()) {
                     //noinspection ResultOfMethodCallIgnored
                     outputFile.createNewFile();
                 }
                 writer = new PrintWriter(outputFile);
-                writers.put(id,writer);
+                writers.put(id, writer);
             } else {
                 writer = writers.get(id);
             }
@@ -61,8 +60,8 @@ public class CLWSDWriter {
         }
     }
 
-    private void release(){
-        for(PrintWriter pw: writers.values()){
+    private void release() {
+        for (PrintWriter pw : writers.values()) {
             pw.close();
         }
     }

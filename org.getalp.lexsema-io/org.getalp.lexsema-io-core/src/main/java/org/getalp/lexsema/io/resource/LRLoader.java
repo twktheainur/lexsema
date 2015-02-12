@@ -20,8 +20,10 @@ public interface LRLoader {
     public LRLoader extendedSignature(boolean hasExtendedSignature);
 
     public LRLoader loadDefinitions(boolean loadDefinitions);
+
     public LRLoader setLoadRelated(boolean loadRelated);
 
-	public LRLoader setStemming(boolean stemming);
-	public LRLoader setUsesStopWords(boolean usesStopWords);
+    public LRLoader setStemming(boolean stemming);
+
+    public LRLoader setUsesStopWords(boolean usesStopWords);
 }

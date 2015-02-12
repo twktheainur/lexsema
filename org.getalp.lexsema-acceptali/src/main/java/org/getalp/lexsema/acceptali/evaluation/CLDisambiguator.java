@@ -109,10 +109,10 @@ public final class CLDisambiguator {
                 .optimizeOverlapInput(false)
                 .regularizeRelations(false)
                 .optimizeRelations(false)
-                .isDistance(true)
+                .isDistance(false)
                 .build();
 
-        Disambiguator disambiguator = new AdaptiveSimulatedAnnealing(0.8, 6, 6, 100, 4, similarityMeasure);
+        Disambiguator disambiguator = new AdaptiveSimulatedAnnealing(0.8, 2.5, 2.5, 20, 8, similarityMeasure);
 
         clDisambiguator.processTargets(lrloader, disambiguator);
         disambiguator.release();

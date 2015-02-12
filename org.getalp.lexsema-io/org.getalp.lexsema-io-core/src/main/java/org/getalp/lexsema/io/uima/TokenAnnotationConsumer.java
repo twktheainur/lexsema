@@ -29,7 +29,7 @@ public class TokenAnnotationConsumer extends CasConsumer_ImplBase implements Sen
     public void process(CAS cas) throws AnalysisEngineProcessException {
 
         Type TOKEN_ANNOTATION = cas.getTypeSystem().getType("de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Token");
-        Collection<AnnotationFS> tokens = CasUtil.select    (cas, TOKEN_ANNOTATION);
+        Collection<AnnotationFS> tokens = CasUtil.select(cas, TOKEN_ANNOTATION);
 
         sentence = new SentenceImpl("");
         for (AnnotationFS tokenAnnot : tokens) {

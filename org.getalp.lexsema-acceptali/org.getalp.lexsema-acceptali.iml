@@ -32,7 +32,7 @@
     <orderEntry type="library" name="Maven: com.github.rwl:COLAMDJ:1.0.1" level="project" />
     <orderEntry type="module" module-name="org.getalp.lexsema-util" />
     <orderEntry type="module" module-name="org.getalp.lexsema-wsd-core" />
-    <orderEntry type="module" module-name="org.getalp.lexsema-io" />
+    <orderEntry type="module" module-name="org.getalp.lexsema-io-core" />
     <orderEntry type="library" name="Maven: edu.mit:jwi:2.2.3" level="project" />
     <orderEntry type="library" name="Maven: org.apache.uima:uimaj-core:2.6.0" level="project" />
     <orderEntry type="library" name="Maven: org.apache.uima:uimafit-core:2.1.0" level="project" />

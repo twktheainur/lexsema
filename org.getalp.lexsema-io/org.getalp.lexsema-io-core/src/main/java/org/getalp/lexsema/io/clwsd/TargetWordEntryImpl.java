@@ -10,7 +10,7 @@ import java.util.List;
 
 
 public class TargetWordEntryImpl implements TargetWordEntry {
-    private List<Pair<Sentence,Integer>> contexts;
+    private List<Pair<Sentence, Integer>> contexts;
     private Word targetWord;
 
     public TargetWordEntryImpl(Word targetWord) {
@@ -24,8 +24,8 @@ public class TargetWordEntryImpl implements TargetWordEntry {
     }
 
     @Override
-    public void addContext(Sentence sentence, int position){
-        contexts.add(new Pair<>(sentence,position));
+    public void addContext(Sentence sentence, int position) {
+        contexts.add(new Pair<>(sentence, position));
     }
 
     @Override

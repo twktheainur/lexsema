@@ -44,11 +44,13 @@ public class AdaptiveSimulatedAnnealing implements Disambiguator {
     /**
      * Current algorithm state
      */
-    private double latestDelta;
+    private double delta;
+    private double maxDelta;
     private double bestScore;
     private double prevScore;
-    private int currentCycle;
+    private double currentCycle;
     private int convergenceCycles;
+    private int numberOfAcceptanceEvents = 0;
 
     public AdaptiveSimulatedAnnealing(double p0, double m, double n, int convergenceThreshold, int numberThreads, SimilarityMeasure similarityMeasure) {
         this.convergenceThreshold = convergenceThreshold;
@@ -87,7 +89,8 @@ public class AdaptiveSimulatedAnnealing implements Disambiguator {
 
     private void initialize(Document document) {
         initialEvaluation(document);
-        T0 = findT0(latestDelta, p0);
+        maxDelta = delta;
+        T0 = findT0(delta, p0);
         T = T0;
         currentCycle = 0;
         convergenceCycles = 0;
@@ -102,10 +105,13 @@ public class AdaptiveSimulatedAnnealing implements Disambiguator {
      * @return the resulting temperature
      */
     private double calculateT(double T0, double cycle) {
-        double c = m * Math.exp(-n / configuration.size());
         return T0
-                * Math.exp(-c
+                * Math.exp(-calculateCi()
                 * Math.pow(cycle, 1.0 / (double) configuration.size()));
+    }
+
+    private double calculateCi() {
+        return m * Math.exp(-n / configuration.size());
     }
 
     private void initialEvaluation(Document document) {
@@ -136,7 +142,7 @@ public class AdaptiveSimulatedAnnealing implements Disambiguator {
         sumDelta /= scores.size() - 1;
         bestScore = currScore;
         prevScore = currScore;
-        latestDelta = sumDelta;
+        delta = sumDelta;
     }
 
     //TODO: Factor in new configuration subtype;
@@ -173,7 +179,9 @@ public class AdaptiveSimulatedAnnealing implements Disambiguator {
         for (int i = 0; i < numberOfChanges; i++) {
             int changeIndex = gu.nextInt(newConfiguration.size());
             int max = document.getSenses(changeIndex).size();
-            newConfiguration.setSense(changeIndex, gu.nextInt(max));
+            if (max > 0) {
+                newConfiguration.setSense(changeIndex, gu.nextInt(max));
+            }
         }
         return newConfiguration;
     }
@@ -193,7 +201,7 @@ public class AdaptiveSimulatedAnnealing implements Disambiguator {
         initialize(document);
 
         while (evaluate()) {
-            logger.info(String.format("[Cycle %s] [T=%s] [Convergence: %d/%d]", currentCycle, T, convergenceCycles, convergenceThreshold));
+            logger.info(String.format("[Cycle %.2f] [T=%.2f] [Convergence: %d/%d]", currentCycle, T, convergenceCycles, convergenceThreshold));
             changedSinceLast = false;
             for (int j = 0; j < ITERATIONS; j++) {
                 anneal(document);
@@ -214,26 +222,40 @@ public class AdaptiveSimulatedAnnealing implements Disambiguator {
 
         //Checking if the change is accepted (non-significant treated as inferior)
         if (score > prevScore) {
-            logger.info(String.format("\t[Cycle=%d][Better Score = %.2f][Best = %.2f][P(a)=%.2f][Ld=%.2f]", currentCycle, score, bestScore, Math.exp(-latestDelta / T), latestDelta));
+            logger.info(String.format("\t[Cycle=%f][Better Score = %.2f][Best = %.2f][P(a)=%.2f][Ld=%.2f]", currentCycle, score, bestScore, Math.exp(-delta / T), delta));
             configuration = cp;
             prevScore = score;
             if (score > bestScore) {
                 bestScore = score;
             }
             changedSinceLast = true;
+            numberOfAcceptanceEvents++;
         } else if (score <= prevScore) {
-            latestDelta = Math.abs(prevScore - score);
-            double delta = latestDelta;
+            delta = Math.abs(prevScore - score);
+            if (delta > maxDelta) {
+                maxDelta = delta;
+            }
             Random r = new Random();
             double choice = r.nextDouble();
             double prob = Math.exp(-delta / T);
             if (prob > choice) {
-                logger.info(String.format("\t[Cycle=%d][Accepted Lower Score = %.2f][Best = %.2f][P(a)=%.2f][Ld=%.2f]", currentCycle, score, bestScore, Math.exp(-latestDelta / T), latestDelta));
+                logger.info(String.format("\t[Cycle=%f][Accepted Lower Score = %.2f][Best = %.2f][P(a)=%.2f][Ld=%.2f]", currentCycle, score, bestScore, Math.exp(-delta / T), delta));
                 configuration = cp;
                 prevScore = score;
                 changedSinceLast = true;
+                numberOfAcceptanceEvents++;
             }
         }
+        if (numberOfAcceptanceEvents > 100) {
+            //    reanneal();
+            numberOfAcceptanceEvents = 0;
+        }
+    }
+
+    private void reanneal() {
+        T *= maxDelta / delta;
+        currentCycle = Math.pow(Math.log(T0 / T) / calculateCi(), configuration.size());
+        logger.info(String.format("Re-annealing T=%sCycle=%s", T, currentCycle));
     }
 
     private boolean evaluate() {
