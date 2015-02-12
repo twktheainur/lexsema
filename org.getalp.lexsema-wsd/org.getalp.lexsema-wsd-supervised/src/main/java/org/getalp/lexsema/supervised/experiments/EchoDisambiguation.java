@@ -48,6 +48,7 @@ public class EchoDisambiguation {
         contextWindows.add(new ContextWindow(-2, 1));
         contextWindows.add(new ContextWindow(-1, 2));
         contextWindows.add(new ContextWindow(1, 3));
+        
         LocalCollocationFeatureExtractor lcfe = new LocalCollocationFeatureExtractor(contextWindows);
         PosFeatureExtractor pfe = new PosFeatureExtractor(4, 4);
         LemmaFeatureExtractor acfe = new LemmaFeatureExtractor(4, 4);
@@ -63,7 +64,7 @@ public class EchoDisambiguation {
 
         //Le dernier argument est la taille de la poole de threads
         // pour changer echo ou echo 2 changer dans EchoLexicalEntryDisambiguator
-        Disambiguator disambiguator = new EchoDisambiguator("../data/supervised/", altfe, 1, trainingDataExtractor);
+        Disambiguator disambiguator = new EchoDisambiguator("../data/supervised/", altfe, Integer.parseInt(args[0]), trainingDataExtractor);
         logger.info("Loading texts");
         dl.load();
         int i = 0;
