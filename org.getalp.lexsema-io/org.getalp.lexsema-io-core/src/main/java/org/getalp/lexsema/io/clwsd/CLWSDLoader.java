@@ -8,8 +8,8 @@ import java.util.Iterator;
 import java.util.List;
 
 public class CLWSDLoader implements TargetedWSDLoader {
-    private String directory;
     List<TargetWordEntry> targetEntries;
+    private String directory;
 
     public CLWSDLoader(String directory) {
         this.directory = directory;
@@ -17,9 +17,9 @@ public class CLWSDLoader implements TargetedWSDLoader {
     }
 
     @Override
-    public void load(){
+    public void load() {
         File dir = new File(directory);
-        if(dir.exists()){
+        if (dir.exists()) {
             File[] datafiles = dir.listFiles(new FilenameFilter() {
                 @Override
                 public boolean accept(File dir, String name) {
@@ -27,7 +27,7 @@ public class CLWSDLoader implements TargetedWSDLoader {
                 }
             });
 
-            for(File datafile: datafiles){
+            for (File datafile : datafiles) {
                 TargetEntryLoader targetEntryLoader = new Semeval2013Task10EntryLoader(datafile.getAbsolutePath());
                 targetEntryLoader.load();
                 targetEntries.add(targetEntryLoader.getEntry());

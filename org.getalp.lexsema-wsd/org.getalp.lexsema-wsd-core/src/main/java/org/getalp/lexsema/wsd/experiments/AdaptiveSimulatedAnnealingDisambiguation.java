@@ -25,7 +25,7 @@ public class AdaptiveSimulatedAnnealingDisambiguation {
         TextLoader dl = new Semeval2007TextLoader("../data/senseval2007_task7/test/eng-coarse-all-words-t1.xml").loadNonInstances(true);
         LRLoader lrloader = new WordnetLoader("../data/wordnet/2.1/dict")
                 .extendedSignature(true)
-                .shuffle(true)
+                .shuffle(false)
                 .setUsesStopWords(false)
                 .setStemming(false)
                 .loadDefinitions(true);
@@ -36,9 +36,9 @@ public class AdaptiveSimulatedAnnealingDisambiguation {
                 .alpha(1d)
                 .beta(0.5d)
                 .gamma(0.5d)
-                .fuzzyMatching(false)
+                .fuzzyMatching(true)
                 .quadraticWeighting(false)
-                .extendedLesk(true).randomInit(false)
+                .extendedLesk(false).randomInit(false)
                 .regularizeOverlapInput(false).optimizeOverlapInput(false)
                 .regularizeRelations(false).optimizeRelations(false)
                 .build();

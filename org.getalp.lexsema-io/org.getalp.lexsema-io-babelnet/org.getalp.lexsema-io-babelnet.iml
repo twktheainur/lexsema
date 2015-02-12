@@ -11,7 +11,7 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="module" module-name="org.getalp.lexsema-io" />
+    <orderEntry type="module" module-name="org.getalp.lexsema-io-core" />
     <orderEntry type="library" name="Maven: it.uniroma1.lcl:babelnet-api:1.1.1" level="project" />
     <orderEntry type="library" name="Maven: net.sourceforge.collections:collections-generic:4.01" level="project" />
     <orderEntry type="library" name="Maven: commons-beanutils:commons-beanutils:20030211.134440" level="project" />

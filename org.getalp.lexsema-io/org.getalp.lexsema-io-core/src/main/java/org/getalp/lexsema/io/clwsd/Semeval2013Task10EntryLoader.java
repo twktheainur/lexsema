@@ -21,7 +21,7 @@ public class Semeval2013Task10EntryLoader implements ContentHandler, TargetEntry
     private Logger logger = LoggerFactory.getLogger(Semeval2013Task10EntryLoader.class);
 
     private String path;
-    private  SentenceProcessor sentenceProcessor;
+    private SentenceProcessor sentenceProcessor;
 
     private boolean inContext = false;
     private int numberOfSpacesInContext;
@@ -69,9 +69,9 @@ public class Semeval2013Task10EntryLoader implements ContentHandler, TargetEntry
         switch (localName) {
             case "lexelt":
                 targetWordId = atts.getValue("item");
-                String lemma= targetWordId.split("\\.")[0];
+                String lemma = targetWordId.split("\\.")[0];
                 String pos = targetWordId.split("\\.")[1];
-                entry = new TargetWordEntryImpl(new WordImpl(targetWordId,lemma,lemma,pos));
+                entry = new TargetWordEntryImpl(new WordImpl(targetWordId, lemma, lemma, pos));
                 logger.info(String.format("Loading %s ...", targetWordId));
                 break;
             case "instance":
@@ -81,8 +81,8 @@ public class Semeval2013Task10EntryLoader implements ContentHandler, TargetEntry
                 break;
             case "context":
                 inContext = true;
-                currentWordIndex=0;
-                numberOfSpacesInContext=0;
+                currentWordIndex = 0;
+                numberOfSpacesInContext = 0;
                 break;
             case "head":
                 inHead = true;
@@ -95,18 +95,18 @@ public class Semeval2013Task10EntryLoader implements ContentHandler, TargetEntry
             case "context":
                 inContext = false;
                 //contextString = contextString.replaceAll("\\p{Punct}","");
-                contextString = contextString.replaceAll("<[/]?head>","");
+                contextString = contextString.replaceAll("<[/]?head>", "");
                 contextString = contextString.replaceAll("/", "_");
                 try {
-                    Sentence s = sentenceProcessor.process(contextString, targetWordId+"#"+currentContextId, Language.ENGLISH.getISO2Code());
-                    entry.addContext(s,currentWordIndex);
+                    Sentence s = sentenceProcessor.process(contextString, targetWordId + "#" + currentContextId, Language.ENGLISH.getISO2Code());
+                    entry.addContext(s, currentWordIndex);
                 } catch (RuntimeException e) {
                     logger.warn(e.getLocalizedMessage());
                     e.printStackTrace();
-               }
+                }
                 break;
             case "head":
-                currentWordIndex=numberOfSpacesInContext;
+                currentWordIndex = numberOfSpacesInContext;
         }
 
     }
@@ -115,12 +115,12 @@ public class Semeval2013Task10EntryLoader implements ContentHandler, TargetEntry
     public void characters(char[] ch, int start, int length) throws SAXException {
         if (inContext) {
             for (int i = start; i < start + length; i++) {
-                if(ch[i]==' '){
+                if (ch[i] == ' ') {
                     numberOfSpacesInContext++;
                 }
                 contextString += ch[i];
             }
-            if(inHead){
+            if (inHead) {
 
             }
         }

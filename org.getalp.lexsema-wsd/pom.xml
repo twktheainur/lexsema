@@ -13,6 +13,15 @@
         <module>org.getalp.lexsema-wsd-supervised</module>
     </modules>
 
+    <profiles>
+        <profile>
+            <id>babelnet</id>
+            <modules>
+                <module>org.getalp.lexsema-wsd-supervised-babelnet</module>
+            </modules>
+        </profile>
+    </profiles>
+
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
@@ -70,7 +79,7 @@
     <dependencies>
         <dependency>
             <groupId>org.getalp</groupId>
-            <artifactId>org.getalp.lexsema-io</artifactId>
+            <artifactId>org.getalp.lexsema-io-core</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
     </dependencies>

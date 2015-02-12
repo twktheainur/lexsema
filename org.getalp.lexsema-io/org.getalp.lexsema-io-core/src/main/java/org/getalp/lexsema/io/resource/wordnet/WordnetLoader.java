@@ -61,14 +61,14 @@ public class WordnetLoader implements LRLoader {
 
                 SemanticSignature signature = new SemanticSignatureImpl();
                 IWord word = dictionary.getWord(iw.getWordIDs().get(j));
-                if(loadDefinitions) {
+                if (loadDefinitions) {
                     String def = word.getSynset().getGloss();
                     addToSignature(signature, def);
                 }
 
                 Sense s = new SenseImpl(word.getSenseKey().toString());
 
-                if(loadRelated) {
+                if (loadRelated) {
                     Map<IPointer, List<IWordID>> rm = word.getRelatedMap();
                     for (IPointer p : rm.keySet()) {
                         for (IWordID iwd : rm.get(p)) {
@@ -82,7 +82,7 @@ public class WordnetLoader implements LRLoader {
                     }
                 }
                 //if (hasExtendedSignature) {
-                    s.setSemanticSignature(signature);
+                s.setSemanticSignature(signature);
                 //}
                 senses.add(s);
             }
@@ -117,19 +117,19 @@ public class WordnetLoader implements LRLoader {
     private void addToSignature(SemanticSignature signature, String def) {
         StringTokenizer st = new StringTokenizer(def, " ", false);
         SnowballStemmer stemmer = new englishStemmer();
-        int ww=0;
+        int ww = 0;
         while (st.hasMoreTokens()) {
             String token = st.nextToken().replaceAll("\"|;", "").toLowerCase();
             //Removing stop words from definitions
-	        if (!usesStopWords || !StopList.isStopWord(token)) {
-	           	if (stemming) {
-		           	stemmer.setCurrent(token);
-		            stemmer.stem();
-		           	signature.addSymbol(stemmer.getCurrent(), 1.0);
-	           	} else {
-	           		signature.addSymbol(token, 1.0);
-	           	}
-	        } 
+            if (!usesStopWords || !StopList.isStopWord(token)) {
+                if (stemming) {
+                    stemmer.setCurrent(token);
+                    stemmer.stem();
+                    signature.addSymbol(stemmer.getCurrent(), 1.0);
+                } else {
+                    signature.addSymbol(token, 1.0);
+                }
+            }
         }
     }
 
@@ -211,13 +211,13 @@ public class WordnetLoader implements LRLoader {
         this.loadRelated = loadRelated;
         return this;
     }
-    
+
     @Override
     public WordnetLoader setStemming(boolean stemming) {
         this.stemming = stemming;
         return this;
     }
-    
+
     @Override
     public WordnetLoader setUsesStopWords(boolean usesStopWords) {
         this.usesStopWords = usesStopWords;

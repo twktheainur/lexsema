@@ -24,7 +24,7 @@ import static java.util.Arrays.asList;
 import static org.apache.uima.fit.factory.AnalysisEngineFactory.createEngineDescription;
 import static org.apache.uima.fit.factory.CollectionReaderFactory.createReaderDescription;
 
-public abstract class AbstractDKPSentenceProcessor implements SentenceProcessor{
+public abstract class AbstractDKPSentenceProcessor implements SentenceProcessor {
 
     private Logger logger = LoggerFactory.getLogger(AbstractDKPSentenceProcessor.class);
 
@@ -73,8 +73,8 @@ public abstract class AbstractDKPSentenceProcessor implements SentenceProcessor{
                     StringReader.PARAM_DOCUMENT_ID, documentId,
                     StringReader.PARAM_DOCUMENT_TEXT, sentenceText,
                     StringReader.PARAM_LANGUAGE, language);
-            return processSentence(cr,defineAnalysisEngine());
-        } catch (UIMAException |IOException e) {
+            return processSentence(cr, defineAnalysisEngine());
+        } catch (UIMAException | IOException e) {
             logger.error(e.getLocalizedMessage());
         }
         return null;

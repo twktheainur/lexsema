@@ -9,16 +9,6 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <profiles>
-        <profile>
-            <id>babelnet</id>
-            <modules>
-                <module>org.getalp.lexsema-wsd-supervised-babelnet</module>
-            </modules>
-        </profile>
-    </profiles>
-
-
     <build>
         <plugins>
             <plugin>
