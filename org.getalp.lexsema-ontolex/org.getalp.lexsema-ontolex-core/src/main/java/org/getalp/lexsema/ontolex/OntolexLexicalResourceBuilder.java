@@ -1,17 +1,12 @@
 package org.getalp.lexsema.ontolex;
 
-import org.getalp.lexsema.ontolex.factories.entities.LexicalEntryBuilder;
-import org.getalp.lexsema.ontolex.factories.entities.LexicalResourceEntityBuilder;
-import org.getalp.lexsema.ontolex.factories.entities.LexicalResourceEntityFactory;
-import org.getalp.lexsema.ontolex.factories.entities.LexicalResourceEntityFactoryImpl;
-import org.getalp.lexsema.ontolex.factories.entities.LexicalSenseBuilder;
+import org.getalp.lexsema.language.Language;
+import org.getalp.lexsema.ontolex.factories.entities.*;
 import org.getalp.lexsema.ontolex.factories.resource.LexicalResourceBuilder;
 import org.getalp.lexsema.ontolex.graph.OntologyModel;
 import org.getalp.lexsema.ontolex.uri.URIParser;
 import org.getalp.lexsema.ontolex.uri.URIParserRegister;
 import org.getalp.lexsema.ontolex.uri.URIParserRegisterImpl;
-
-import java.util.Locale;
 
 public abstract class OntolexLexicalResourceBuilder implements LexicalResourceBuilder {
     LexicalResourceEntityFactory entityFactory;
@@ -25,7 +20,7 @@ public abstract class OntolexLexicalResourceBuilder implements LexicalResourceBu
     }
 
     @Override
-    public LexicalResource build(OntologyModel model, Locale language) {
+    public LexicalResource build(OntologyModel model, Language language) {
         return build(model, language, null);
     }
 
@@ -35,7 +30,7 @@ public abstract class OntolexLexicalResourceBuilder implements LexicalResourceBu
     }
 
     @Override
-    public abstract LexicalResource build(OntologyModel model, Locale language, String uri);
+    public abstract LexicalResource build(OntologyModel model, Language language, String uri);
 
     @Override
     public LexicalResource build(OntologyModel model, String uri) {

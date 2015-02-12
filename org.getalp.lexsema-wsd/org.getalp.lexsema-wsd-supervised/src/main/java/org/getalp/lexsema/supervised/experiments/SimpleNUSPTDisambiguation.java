@@ -5,14 +5,12 @@ import org.getalp.lexsema.io.annotresult.SemevalWriter;
 import org.getalp.lexsema.io.document.SemCorTextLoader;
 import org.getalp.lexsema.io.document.Semeval2007TextLoader;
 import org.getalp.lexsema.io.document.TextLoader;
+import org.getalp.lexsema.io.resource.LRLoader;
 import org.getalp.lexsema.io.resource.wordnet.WordnetLoader;
 import org.getalp.lexsema.similarity.Document;
 import org.getalp.lexsema.supervised.WekaDisambiguator;
 import org.getalp.lexsema.supervised.features.*;
-import org.getalp.lexsema.supervised.features.extractors.AggregateLocalTextFeatureExtractor;
-import org.getalp.lexsema.supervised.features.extractors.AlignedContextFeatureExtractor;
-import org.getalp.lexsema.supervised.features.extractors.LocalCollocationFeatureExtractor;
-import org.getalp.lexsema.supervised.features.extractors.PosFeatureExtractor;
+import org.getalp.lexsema.supervised.features.extractors.*;
 import org.getalp.lexsema.supervised.weka.NaiveBayesSetUp;
 import org.getalp.lexsema.wsd.configuration.Configuration;
 import org.slf4j.Logger;
@@ -28,7 +26,7 @@ public class SimpleNUSPTDisambiguation {
     public static void main(String[] args) throws IOException {
         TextLoader dl = new Semeval2007TextLoader("../data/senseval2007_task7/test/eng-coarse-all-words.xml").loadNonInstances(false);
         TextLoader semCor = new SemCorTextLoader("../data/semcor3.0/semcor_full.xml");
-        WordnetLoader lrloader = new WordnetLoader("../data/wordnet/2.1/dict").setHasExtendedSignature(true).setShuffle(false);
+        LRLoader lrloader = new WordnetLoader("../data/wordnet/2.1/dict").extendedSignature(true).shuffle(false);
 
 //        LemmaFeatureExtractor lfe = new LemmaFeatureExtractor(3,1);
 //        PosFeatureExtractor pfe = new PosFeatureExtractor(1, 2);
@@ -57,7 +55,7 @@ public class SimpleNUSPTDisambiguation {
         contextWindows.add(new ContextWindow(1, 3));
         LocalCollocationFeatureExtractor lcfe = new LocalCollocationFeatureExtractor(contextWindows);
         PosFeatureExtractor pfe = new PosFeatureExtractor(3, 3);
-        AlignedContextFeatureExtractor acfe = new AlignedContextFeatureExtractor(wloader);
+        LocalTextFeatureExtractor acfe = new LemmaFeatureExtractor(3, 3);
 
         AggregateLocalTextFeatureExtractor altfe = new AggregateLocalTextFeatureExtractor();
         altfe.addExtractor(lcfe);

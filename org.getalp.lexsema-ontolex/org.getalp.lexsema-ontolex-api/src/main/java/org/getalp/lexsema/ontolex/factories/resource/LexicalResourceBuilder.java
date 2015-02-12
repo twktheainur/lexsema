@@ -1,9 +1,8 @@
 package org.getalp.lexsema.ontolex.factories.resource;
 
+import org.getalp.lexsema.language.Language;
 import org.getalp.lexsema.ontolex.LexicalResource;
 import org.getalp.lexsema.ontolex.graph.OntologyModel;
-
-import java.util.Locale;
 
 /**
  * Defines the interface for LexicalResource builders that are delegated the role of creating instances
@@ -30,7 +29,7 @@ public interface LexicalResourceBuilder {
      * @param language the language of the resource
      * @return The resulting instance
      */
-    public LexicalResource build(OntologyModel model, Locale language);
+    public LexicalResource build(OntologyModel model, Language language);
 
     /**
      * Build an instance of a particular <code>LexicalResource</code> implementation
@@ -40,7 +39,7 @@ public interface LexicalResourceBuilder {
      * @param uri      The uri of the resource's graph
      * @return The resulting instance
      */
-    public LexicalResource build(OntologyModel model, Locale language, String uri);
+    public LexicalResource build(OntologyModel model, Language language, String uri);
 
     /**
      * Build an instance of a particular <code>LexicalResource</code> implementation

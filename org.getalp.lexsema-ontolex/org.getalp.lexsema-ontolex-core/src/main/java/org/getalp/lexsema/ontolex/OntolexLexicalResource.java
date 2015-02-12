@@ -1,5 +1,6 @@
 package org.getalp.lexsema.ontolex;
 
+import org.getalp.lexsema.language.Language;
 import org.getalp.lexsema.ontolex.exceptions.NotRegisteredException;
 import org.getalp.lexsema.ontolex.factories.entities.LexicalResourceEntityFactory;
 import org.getalp.lexsema.ontolex.graph.DefaultGraph;
@@ -12,7 +13,6 @@ import org.getalp.lexsema.ontolex.uri.URIParser;
 import org.getalp.lexsema.ontolex.uri.URIParserRegister;
 
 import java.util.List;
-import java.util.Locale;
 
 
 /**
@@ -102,5 +102,5 @@ public abstract class OntolexLexicalResource implements LexicalResource {
     }
 
     @Override
-    public abstract Locale getLanguage();
+    public abstract Language getLanguage();
 }

@@ -2,6 +2,7 @@ package org.getalp.lexsema.supervised;
 
 import org.getalp.lexsema.similarity.Document;
 import org.getalp.lexsema.similarity.Sense;
+import org.getalp.lexsema.wsd.configuration.ConfidenceConfiguration;
 import org.getalp.lexsema.wsd.configuration.Configuration;
 import org.getalp.lexsema.wsd.method.Disambiguator;
 
@@ -51,7 +52,7 @@ public class SupervisedR implements Disambiguator {
     public Configuration disambiguate(Document document, Configuration c) {
         boolean progressChecked = false;
         if (c == null) {
-            c = new Configuration(document);
+            c = new ConfidenceConfiguration(document);
         }
         for (int i = 0; i < document.size(); i++) {
             System.err.print(String.format("\tDisambiguating: %.2f%%\r", ((double) i / (double) document.size()) * 100d));

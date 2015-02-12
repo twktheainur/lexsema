@@ -1,13 +1,13 @@
 package org.getalp.lexsema.ontolex;
 
 
+import org.getalp.lexsema.language.Language;
 import org.getalp.lexsema.ontolex.factories.entities.LexicalResourceEntityFactory;
 import org.getalp.lexsema.ontolex.graph.Graph;
 import org.getalp.lexsema.ontolex.graph.OntologyModel;
 import org.getalp.lexsema.ontolex.uri.URIParser;
 
 import java.util.List;
-import java.util.Locale;
 
 /**
  * Generic Interface for LexicalResources
@@ -84,6 +84,6 @@ public interface LexicalResource {
      *
      * @return The language of the resource.
      */
-    public Locale getLanguage();
+    public Language getLanguage();
 
 }

@@ -112,7 +112,7 @@ public class WekaClassifier implements org.getalp.lexsema.supervised.Classifier 
                 classifier.buildClassifier(instances);
                 classifierTrained = true;
             } catch (Exception e1) {
-                // e1.printStackTrace();
+                //e1.printStackTrace();
             }
             saveModel();
         }

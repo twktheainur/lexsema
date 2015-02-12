@@ -1,0 +1,260 @@
+Prefix: owl: <http://www.w3.org/2002/07/owl#>
+Prefix: rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+Prefix: xsd: <http://www.w3.org/2001/XMLSchema#>
+Prefix: rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+Prefix: skos: <http://www.w3.org/2004/02/skos/core#>
+Prefix: ontolex: <http://www.w3.org/ns/ontolex#>
+Prefix: semio: <http://www.ontologydesignpatterns.org/cp/owl/semiotics.owl#>
+
+Ontology: <http://www.w3.org/ns/ontolex#>
+Import: <http://www.w3.org/2004/02/skos/core>
+Import: <http://www.ontologydesignpatterns.org/cp/owl/semiotics.owl>
+
+# Required to read in Protege
+ObjectProperty: semio:denotes
+ObjectProperty: semio:hasInterpretant
+ObjectProperty: semio:isConceptualizationOf
+ObjectProperty: semio:hasConceptualization
+
+ObjectProperty: ontolex:contains
+    Annotations: 
+        rdfs:comment "The relation between a collection of senses and one particular sense included in it."@en
+
+    Domain: 
+        ontolex:LexicalConcept
+
+    Range: 
+        ontolex:LexicalSense
+    
+ObjectProperty: ontolex:isContainedBy
+    InverseOf: ontolex:contains
+
+ObjectProperty: ontolex:canonicalForm
+
+    Annotations: 
+        rdfs:comment "Indicates the canonical form used to index this lexical lexicalEntry"@en
+    
+    SubPropertyOf: 
+        ontolex:lexicalForm
+    
+    Characteristics: 
+        Functional
+    
+    Domain: 
+        ontolex:LexicalEntry
+    
+    Range: 
+        ontolex:Form
+    
+    
+ObjectProperty: ontolex:reference
+
+    Annotations: 
+        rdfs:comment "The relation between the lexical sense of a lexical lexicalEntry and the ontological predicate that represents the denotation."@en
+    
+    SubPropertyOf:
+        semio:isConceptualizationOf
+
+    Characteristics: 
+        Functional
+    
+    Domain: 
+        ontolex:LexicalSense
+    
+ObjectProperty: ontolex:isReferenceOf
+    InverseOf: ontolex:reference
+    
+ObjectProperty: ontolex:sense
+
+    Annotations: 
+        rdfs:comment "The relation between a lexical lexicalEntry and on of its lexical senses."@en
+        
+    SubPropertyOf:
+        semio:hasInterpretant
+
+    Domain: 
+        ontolex:LexicalEntry
+    
+    Range: 
+        ontolex:LexicalSense
+    
+ObjectProperty: ontolex:isSenseOf
+    InverseOf: ontolex:sense
+
+ObjectProperty: ontolex:otherForm
+
+    Annotations: 
+        rdfs:comment "Indicates a variant form of an lexicalEntry"@en
+    
+    SubPropertyOf: 
+        ontolex:lexicalForm
+    
+    Domain: 
+        ontolex:LexicalEntry
+    
+    Range: 
+        ontolex:Form
+    
+    
+ObjectProperty: ontolex:denotes
+
+    Annotations: 
+        rdfs:comment "The relation between a lexical lexicalEntry and the logical predicate in an ontology that represents its meaning and has some denotational / model-theoretic semantics."
+
+    EquivalentTo:
+        semio:denotes
+
+    SubPropertyChain: 
+        ontolex:sense o ontolex:reference
+    
+    Characteristics: 
+        Functional
+    
+    Domain: 
+        ontolex:LexicalEntry
+    
+ObjectProperty: ontolex:isDenotedBy
+    InverseOf: ontolex:denotes    
+
+ObjectProperty: ontolex:concept
+
+    Annotations: 
+        rdfs:comment "The relation between an ontology entity and the lexical concept that it corresponds to."@en
+
+    SubPropertyOf:
+        semio:hasConceptualization    
+
+    Range:
+        ontolex:LexicalConcept
+    
+ObjectProperty: ontolex:isConceptOf
+    InverseOf: ontolex:concept
+    
+ObjectProperty: ontolex:lexicalEntry
+
+    Annotations: 
+        rdfs:comment "Indicates that an lexicalEntry belongs to a lexicon"@en
+    
+    Domain: 
+        ontolex:Lexicon
+    
+    Range: 
+        ontolex:LexicalEntry
+        
+ObjectProperty: ontolex:isEntryOf
+    InverseOf: ontolex:lexicalEntry
+
+ObjectProperty: ontolex:lexicalForm
+
+    Annotations: 
+        rdfs:comment "Indicate a single form of an lexicalEntry"@en
+    
+    Domain: 
+        ontolex:LexicalEntry
+    
+    Range: 
+        ontolex:Form
+    
+    
+ObjectProperty: ontolex:evokes
+
+    Annotations: 
+        rdfs:comment "The relation between a lexical lexicalEntry and the mental concept that comes to the mind of an agent when reading or hearing the lexicalEntry."@en
+        
+    SubPropertyOf:
+        semio:hasInterpretant
+
+    SubPropertyChain: 
+        ontolex:sense o  inverse (ontolex:contains)
+    
+    Domain: 
+        ontolex:LexicalEntry
+    
+    Range: 
+        ontolex:LexicalConcept
+    
+ObjectProperty: ontolex:isEvokedBy
+    InverseOf: ontolex:evokes
+    
+DataProperty: ontolex:writtenRep
+
+    Annotations: 
+        rdfs:comment "Indicates the written representation of a form"@en
+    
+    Domain: 
+        ontolex:Form
+    
+    
+DataProperty: ontolex:language
+
+    Annotations: 
+        rdfs:comment "Indicates the language of a lexicon or lexical lexicalEntry, encoded as an ISO-639 code"@en
+    
+    Domain: 
+        ontolex:LexicalEntry
+         or ontolex:Lexicon
+    
+    Range: 
+        xsd:string
+    
+    
+# Required to read in Protege
+Class: semio:Expression    
+Class: semio:Meaning
+Class: skos:Concept
+Datatype: rdfs:Literal
+
+Class: ontolex:LexicalConcept
+
+    Annotations: 
+        rdfs:comment "A  language-specific collection of senses that have a common meaning."@en
+    
+    SubClassOf: 
+        skos:Concept,
+        semio:Meaning
+    
+    DisjointWith: 
+        ontolex:Lexicon, ontolex:LexicalEntry, ontolex:Form, ontolex:LexicalSense
+
+    
+Class: ontolex:Lexicon
+
+    Annotations: 
+        rdfs:comment "The lexicon represents a collection of entries describing the vocabular used by an ontology"@en
+    
+    SubClassOf: 
+        ontolex:language min 1 rdfs:Literal
+    
+    DisjointWith: 
+        ontolex:LexicalConcept, ontolex:LexicalEntry, ontolex:Form, ontolex:LexicalSense
+    
+Class: ontolex:LexicalEntry
+
+    Annotations: 
+        rdfs:comment "A single unit of analysis in the lexicon, i.e. a collection of morphologically related forms, all of which denote the same concept(s)."@en
+    
+    SubClassOf: 
+        semio:Expression
+    
+    DisjointWith: 
+        ontolex:LexicalConcept, ontolex:Lexicon, ontolex:Form, ontolex:LexicalSense
+            
+Class: ontolex:Form
+
+    Annotations: 
+        rdfs:comment "The form represents a single inflected unit of a lexical lexicalEntry with a single pronunciation, although potentially many orthographies"@en
+    
+    DisjointWith: 
+        ontolex:LexicalConcept, ontolex:LexicalEntry, ontolex:Lexicon, ontolex:LexicalSense
+    
+    
+Class: ontolex:LexicalSense
+
+    Annotations: 
+        rdfs:comment "A language-specific meaning of a lexical lexicalEntry which abstracts from specific occurrences of the lemma. This class is a lexical sense as it represents a sense of a lexical item."@en
+    
+    SubClassOf: 
+        semio:Meaning
+    
+    DisjointWith: 
+        ontolex:LexicalConcept, ontolex:Lexicon, ontolex:LexicalEntry, ontolex:Form

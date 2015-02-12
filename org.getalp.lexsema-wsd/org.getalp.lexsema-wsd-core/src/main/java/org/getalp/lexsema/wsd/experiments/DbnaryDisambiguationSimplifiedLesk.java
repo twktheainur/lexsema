@@ -5,7 +5,7 @@ import org.getalp.lexsema.io.annotresult.SemevalWriter;
 import org.getalp.lexsema.io.document.Semeval2013Task13TextLoader;
 import org.getalp.lexsema.io.document.TextLoader;
 import org.getalp.lexsema.io.resource.LRLoader;
-import org.getalp.lexsema.io.resource.dbnary.DBNaryLoader;
+import org.getalp.lexsema.io.resource.dbnary.DBNaryLoaderImpl;
 import org.getalp.lexsema.similarity.Document;
 import org.getalp.lexsema.similarity.measures.SimilarityMeasure;
 import org.getalp.lexsema.similarity.measures.TverskiIndexSimilarityMeasureBuilder;
@@ -59,9 +59,9 @@ public class DbnaryDisambiguationSimplifiedLesk {
         //Disambiguator sl = new WindowedLesk(2, similarityMeasure, algorithmParameters, 1);
 
         SimplifiedLeskParameters algorithmParameters = new SimplifiedLeskParameters()
-                .setMinimize(true);
-
+                .setMinimize(false);
         Disambiguator disambiguator = new SimplifiedLesk(1000, similarityMeasure, algorithmParameters, 1);
+
 
 
         //Disambiguator sl = new LegacySimplifiedLesk(10,sim_lr_hp,);
@@ -72,7 +72,7 @@ public class DbnaryDisambiguationSimplifiedLesk {
 
 
         for (Document d : dl) {
-            LRLoader lrloader = new DBNaryLoader(DB_PATH, ONTOLOGY_PROPERTIES, d.getLanguage()).setShuffle(true);
+            LRLoader lrloader = new DBNaryLoaderImpl(DB_PATH, ONTOLOGY_PROPERTIES, d.getLanguage()).shuffle(true);
             System.err.println("Starting document " + d.getId());
             System.err.println("\tLoading senses...");
             lrloader.loadSenses(d);

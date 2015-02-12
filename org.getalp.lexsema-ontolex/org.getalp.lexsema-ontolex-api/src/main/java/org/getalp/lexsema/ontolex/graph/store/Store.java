@@ -14,4 +14,7 @@ public interface Store {
 
     public void close();
 
+    @SuppressWarnings("BooleanParameter")
+    public void setCachingEnabled(boolean cachingEnabled);
+
 }

@@ -6,7 +6,8 @@ import org.getalp.lexsema.wsd.configuration.Configuration;
 import org.getalp.lexsema.wsd.configuration.SubConfiguration;
 import org.getalp.lexsema.wsd.method.sequencial.parameters.WindowedLeskParameters;
 import org.getalp.lexsema.wsd.score.ConfigurationEntryPairwiseScoreInput;
-import org.getalp.optimization.functions.setfunctions.SetFunction;
+import org.getalp.optimization.functions.Function;
+import org.getalp.optimization.functions.input.FunctionInput;
 import org.getalp.optimization.functions.setfunctions.submodular.Sum;
 
 import java.util.ArrayList;
@@ -23,7 +24,7 @@ public class WindowedLeskLexicalEntryDisambiguator extends SequentialLexicalEntr
                                                  int start, int end, int currentIndex) {
         super(c, d, start, end, currentIndex);
         this.params = params;
-        this.similarityMeasure = sim;
+        similarityMeasure = sim;
     }
 
     @Override
@@ -49,14 +50,14 @@ public class WindowedLeskLexicalEntryDisambiguator extends SequentialLexicalEntr
                 prevMaxValue = 0;
 
                 List<Double> results = new ArrayList<>();
-                List<ConfigurationEntryPairwiseScoreInput> inputs = new ArrayList<>();
+                List<FunctionInput> inputs = new ArrayList<>();
                 for (int cmb = 0; cmb < combinations.size(); cmb++) {
                     //String wordProgress = String.format("%.2f%%", (100d * ((double) cmb / (double) combinations.size())));
                     //System.err.print( progress + " ==> "+currentEntry.getLemma()+"#"+ currentEntry.getPos() + " ["+cmb+"/"+combinations.size()+" | "+wordProgress +"]\r");
-                    SubConfiguration sc = combinations.get(cmb);
-                    ConfigurationEntryPairwiseScoreInput sci = new ConfigurationEntryPairwiseScoreInput(sc, getDocument(),
+                    Configuration sc = combinations.get(cmb);
+                    FunctionInput sci = new ConfigurationEntryPairwiseScoreInput(sc, getDocument(),
                             getCurrentIndex() - sc.getStart(), similarityMeasure);
-                    SetFunction f = new Sum(1);
+                    Function f = new Sum(1);
                     //LovaszExtention l = new LovaszExtention();
                     //f.setExtension(l);
                     //FunctionInput opt = l.optimize(new GradientOptimisation(), sci);

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<catalog prefer="public" xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog">
+    <group id="Folder Repository, directory=, recursive=true, Auto-Update=true, version=2" prefer="public" xml:base="">
+        <uri id="Automatically generated lexicalEntry, Timestamp=1387902900395" name="duplicate:http://www.lemon-model.net/lemon" uri="lemon.rdf"/>
+        <uri id="Automatically generated lexicalEntry, Timestamp=1387902900395" name="duplicate:http://www.lemon-model.net/lemon" uri="prefixes.rdf"/>
+        <uri id="Automatically generated lexicalEntry, Timestamp=1387902900395" name="http://www.semanticweb.org/tchechem/ontologies/2013/10/axis" uri="axis.rdf"/>
+        <uri id="Automatically generated lexicalEntry, Timestamp=1387902900395" name="http://www.w3.org/ns/ontolex" uri="ontolex_core.rdf"/>
+    </group>
+</catalog>
