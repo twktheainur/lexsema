@@ -47,4 +47,10 @@ public class JenaMemoryStore implements Store {
         model.commit();
         model.close();
     }
+
+    @SuppressWarnings("BooleanParameter")
+    @Override
+    public void setCachingEnabled(boolean cachingEnabled) {
+
+    }
 }

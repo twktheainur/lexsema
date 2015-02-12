@@ -1,0 +1,63 @@
+Prefix: owl: <http://www.w3.org/2002/07/owl#>
+Prefix: rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+Prefix: xml: <http://www.w3.org/XML/1998/namespace>
+Prefix: xsd: <http://www.w3.org/2001/XMLSchema#>
+Prefix: rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+
+
+Ontology: <http://www.semanticweb.org/tchechem/ontologies/2013/10/axie>
+
+Import: <http://www.w3.org/ns/ontolex#>
+
+AnnotationProperty: rdfs:comment
+
+    
+Datatype: xsd:string
+
+    
+ObjectProperty: <http://www.w3.org/2004/02/skos/core#exactMatch>
+
+    
+ObjectProperty: <http://www.w3.org/2004/02/skos/core#relatedMatch>
+
+    
+ObjectProperty: <http://www.semanticweb.org/tchechem/ontologies/2013/10/axie#axis:equivalence>
+
+    SubPropertyOf: 
+        <http://www.w3.org/2004/02/skos/core#exactMatch>
+    
+    Domain: 
+        <http://www.w3.org/ns/ontolex#LexicalSense>
+    
+    Range: 
+        <http://www.semanticweb.org/tchechem/ontologies/2013/10/axie#EquivalenceClass>
+    
+    
+ObjectProperty: <http://www.semanticweb.org/tchechem/ontologies/2013/10/axie#axis:related>
+
+    SubPropertyOf: 
+        <http://www.w3.org/2004/02/skos/core#relatedMatch>
+    
+    Domain: 
+        <http://www.semanticweb.org/tchechem/ontologies/2013/10/axie#EquivalenceClass>
+    
+    Range: 
+        <http://www.semanticweb.org/tchechem/ontologies/2013/10/axie#EquivalenceClass>
+    
+    
+Class: <http://www.w3.org/ns/ontolex#LexicalConcept>
+
+    
+Class: <http://www.w3.org/ns/ontolex#LexicalSense>
+
+    
+Class: <http://www.semanticweb.org/tchechem/ontologies/2013/10/axie#EquivalenceClass>
+
+    Annotations: 
+        rdfs:comment "An equivalence class between ontolex:LexicalSense s in the same or a different ontolex:language"^^xsd:string
+    
+    SubClassOf: 
+        <http://www.w3.org/ns/ontolex#LexicalConcept>
+    
+    
