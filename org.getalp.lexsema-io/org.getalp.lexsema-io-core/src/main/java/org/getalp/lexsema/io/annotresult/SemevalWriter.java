@@ -10,10 +10,17 @@ import java.io.PrintStream;
 
 public class SemevalWriter implements ConfigurationWriter {
     private static Logger logger = LoggerFactory.getLogger(SemevalWriter.class);
-    String path;
+    private String path;
+    private String commentSeparator;
 
     public SemevalWriter(String path) {
         this.path = path;
+        commentSeparator = " ";
+    }
+
+    public SemevalWriter(String path, String commentSeparator) {
+        this.path = path;
+        this.commentSeparator = commentSeparator;
     }
 
     @Override
@@ -24,7 +31,7 @@ public class SemevalWriter implements ConfigurationWriter {
             for (Word w : d) {
                 if (w.getId() != null && !w.getId().isEmpty()) {
                     if (assignments[wordIndex] >= 0 && !d.getSenses(wordIndex).isEmpty()) {
-                        ps.println(id + " " + w.getId() + " " + d.getSenses(wordIndex).get(assignments[wordIndex]).getId() + "\t!! " + w.getLemma() + "#" + w.getPartOfSpeech());
+                        ps.printf("%s %s %s%s!! %s#%s%n", id, w.getId(), d.getSenses(wordIndex).get(assignments[wordIndex]).getId(), commentSeparator, w.getLemma(), w.getPartOfSpeech());
                     } /*else {
                         ps.println(id + " " + w.getId() + " !! "+w.getLemma()+"#"+w.getPartOfSpeech());
                     }*/
