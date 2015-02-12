@@ -45,6 +45,7 @@ public class FirstSenseDisambiguator implements Disambiguator {
     }
 
     public FirstSenseDisambiguator() {
+        mfsMapping = null;
     }
 
     @Override
@@ -52,7 +53,7 @@ public class FirstSenseDisambiguator implements Disambiguator {
         Configuration c = new ConfidenceConfiguration(document);
         for (int i = 0; i < document.size(); i++) {
             if (mfsMapping != null) {
-                int index = -1;
+                int index = 0;
                 List<Sense> sense = document.getSenses(i);
                 for (int j = 0; j < sense.size(); j++) {
                     Word target = document.getWord(0, i);
@@ -74,16 +75,16 @@ public class FirstSenseDisambiguator implements Disambiguator {
         for (int i = 0; i < document.size(); i++) {
             if (c.getAssignment(i) == -1) {
                 if (mfsMapping != null) {
-                    int index = -1;
+                    int index = 0;
                     List<Sense> sense = document.getSenses(i);
                     for (int j = 0; j < sense.size(); j++) {
                         if (sense.get(j).getId().equals(mfsMapping.get(document.getWord(0, i).getId()))) {
                             index = j;
                         }
                     }
-                    c.setSense(i, index);
+                    cret.setSense(i, index);
                 } else {
-                    c.setSense(i, 0);
+                    cret.setSense(i, 0);
                 }
             } else {
                 cret.setSense(i, c.getAssignment(i));
