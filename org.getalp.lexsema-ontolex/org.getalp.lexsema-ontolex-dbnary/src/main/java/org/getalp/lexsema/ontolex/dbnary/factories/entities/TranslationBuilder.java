@@ -7,6 +7,7 @@ import org.getalp.lexsema.ontolex.dbnary.Translation;
 import org.getalp.lexsema.ontolex.dbnary.TranslationImpl;
 import org.getalp.lexsema.ontolex.dbnary.queries.TranslationPropertiesQueryProcessor;
 import org.getalp.lexsema.ontolex.factories.entities.AbstractLexicalResourceEntityBuilder;
+import org.getalp.lexsema.ontolex.factories.entities.LexicalResourceEntityBuilder;
 import org.getalp.lexsema.ontolex.queries.QueryProcessor;
 
 import java.util.List;
@@ -48,5 +49,13 @@ public class TranslationBuilder extends AbstractLexicalResourceEntityBuilder<Tra
 
         return new TranslationImpl(getLexicalResource(), uri, parent,
                 gloss, translationNumber, writtenForm, targetLanguage);
+    }
+
+    @Override
+    public LexicalResourceEntityBuilder<Translation> clone() throws CloneNotSupportedException {
+        super.clone();
+        LexicalResourceEntityBuilder<Translation> clone = new TranslationBuilder();
+        clone.setLexicalResource(getLexicalResource());
+        return clone;
     }
 }

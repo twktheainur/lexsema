@@ -18,7 +18,6 @@ public class LexicalEntryBuilder extends AbstractLexicalResourceEntityBuilder<Le
     @Override
     public LexicalEntry buildEntity(final String uri, final LexicalResourceEntity parent, final Map<String, String> parameters) {
 
-
         String lemma = null;
         String pos = null;
         String lexicalEntryNumber = null;
@@ -67,6 +66,14 @@ public class LexicalEntryBuilder extends AbstractLexicalResourceEntityBuilder<Le
             instance.setNumber(Integer.valueOf(lexicalEntryNumber));
         }
         return instance;
+    }
+
+    @Override
+    public LexicalResourceEntityBuilder<LexicalEntry> clone() throws CloneNotSupportedException {
+        super.clone();
+        LexicalResourceEntityBuilder<LexicalEntry> clone = new LexicalEntryBuilder();
+        clone.setLexicalResource(getLexicalResource());
+        return clone;
     }
 
     private String processURI(String uri) {

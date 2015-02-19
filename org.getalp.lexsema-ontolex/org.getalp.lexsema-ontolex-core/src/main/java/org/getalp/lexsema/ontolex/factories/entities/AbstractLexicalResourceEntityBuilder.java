@@ -11,7 +11,6 @@ public abstract class AbstractLexicalResourceEntityBuilder<T extends LexicalReso
     private LexicalResource lexicalResource;
     private Graph graph;
     private URIParser uriParser;
-    private Map<String, String> parameters;
 
     protected AbstractLexicalResourceEntityBuilder() {
     }
@@ -22,8 +21,10 @@ public abstract class AbstractLexicalResourceEntityBuilder<T extends LexicalReso
 
     @Override
     public void setLexicalResource(LexicalResource lexicalResource) {
-        this.lexicalResource = lexicalResource;
-        graph = lexicalResource.getGraph();
+        if (lexicalResource != null) {
+            this.lexicalResource = lexicalResource;
+            graph = lexicalResource.getGraph();
+        }
     }
 
     protected Graph getGraph() {
@@ -53,5 +54,11 @@ public abstract class AbstractLexicalResourceEntityBuilder<T extends LexicalReso
     @Override
     public T buildEntity(String uri, LexicalResourceEntity parent) {
         return buildEntity(uri, parent, null);
+    }
+
+    @Override
+    public LexicalResourceEntityBuilder<T> clone() throws CloneNotSupportedException {
+        super.clone();
+        return this;
     }
 }

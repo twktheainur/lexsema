@@ -2,6 +2,7 @@ package org.getalp.lexsema.ontolex.dbnary;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.getalp.lexsema.language.Language;
 import org.getalp.lexsema.ontolex.AbstractLexicalResourceEntity;
 import org.getalp.lexsema.ontolex.LexicalResource;
 import org.getalp.lexsema.ontolex.LexicalResourceEntity;
@@ -14,10 +15,12 @@ import org.getalp.lexsema.ontolex.LexicalResourceEntity;
 public class VocableImpl extends AbstractLexicalResourceEntity implements Vocable {
 
     private String vocable;
+    private Language language;
 
     public VocableImpl(LexicalResource r, String uri, LexicalResourceEntity parent, String vocable) {
         super(r, uri, parent);
         getOntologyModel();
         this.vocable = vocable;
+        language = r.getLanguage();
     }
 }

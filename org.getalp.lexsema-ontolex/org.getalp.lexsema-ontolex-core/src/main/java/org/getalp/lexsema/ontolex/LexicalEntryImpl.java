@@ -2,6 +2,7 @@ package org.getalp.lexsema.ontolex;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.getalp.lexsema.language.Language;
 
 /**
  * A Lemon LexicalEntry Java Wrapper Class
@@ -26,6 +27,8 @@ public class LexicalEntryImpl extends AbstractLexicalResourceEntity implements L
     private String partOfSpeech;
     private int number;
 
+    private Language language;
+
     /**
      * Constructor
      *
@@ -36,5 +39,12 @@ public class LexicalEntryImpl extends AbstractLexicalResourceEntity implements L
         super(r, uri, parent);
         this.lemma = lemma;
         this.partOfSpeech = partOfSpeech;
+        language = r.getLanguage();
+    }
+
+    @Override
+    public String toString() {
+        String localPOS = partOfSpeech.split("#")[1];
+        return String.format("%s LexicalEntry|%s#%s|", language, lemma, localPOS);
     }
 }

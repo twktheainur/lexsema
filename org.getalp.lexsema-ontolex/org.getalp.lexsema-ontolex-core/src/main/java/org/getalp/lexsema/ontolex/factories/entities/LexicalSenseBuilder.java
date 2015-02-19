@@ -46,4 +46,12 @@ public class LexicalSenseBuilder extends AbstractLexicalResourceEntityBuilder<Le
         }
     }
 
+    @Override
+    public LexicalResourceEntityBuilder<LexicalSense> clone() throws CloneNotSupportedException {
+        super.clone();
+        LexicalResourceEntityBuilder<LexicalSense> clone = new LexicalSenseBuilder();
+        clone.setLexicalResource(getLexicalResource());
+        return clone;
+    }
+
 }

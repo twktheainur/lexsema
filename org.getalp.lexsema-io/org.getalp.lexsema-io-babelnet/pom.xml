@@ -18,11 +18,6 @@
             <artifactId>org.getalp.lexsema-io-core</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
-        <dependency>
-            <groupId>it.uniroma1.lcl</groupId>
-            <artifactId>babelnet-api</artifactId>
-            <version>1.1.1</version>
-        </dependency>
     </dependencies>
 
     <repositories>

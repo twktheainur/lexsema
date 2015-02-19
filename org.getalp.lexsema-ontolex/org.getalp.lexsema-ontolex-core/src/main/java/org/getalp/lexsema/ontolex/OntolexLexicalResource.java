@@ -37,7 +37,6 @@ public abstract class OntolexLexicalResource implements LexicalResource {
         this.uriParserRegister = uriParserRegister;
         this.lexicalResourceEntityFactory = lexicalResourceEntityFactory;
         this.uri = uri;
-        lexicalResourceEntityFactory.setLexicalResource(this);
     }
 
     @Override
@@ -49,8 +48,18 @@ public abstract class OntolexLexicalResource implements LexicalResource {
     }
 
     @Override
+    public Graph getGraph(Language language) {
+        return getGraph();
+    }
+
+    @Override
     public String getResourceGraphURI() {
         return uri;
+    }
+
+    @Override
+    public String getResourceGraphURI(Language language) {
+        return getResourceGraphURI();
     }
 
     @Override
@@ -92,13 +101,12 @@ public abstract class OntolexLexicalResource implements LexicalResource {
     }
 
     @Override
-    public void setURI(String uri) {
-        this.uri = uri;
-    }
-
-    @Override
     public LexicalResourceEntityFactory getLexicalResourceEntityFactory() {
         return lexicalResourceEntityFactory;
+    }
+
+    protected void registerSelfToLexicalEntityResourceFactory() {
+        lexicalResourceEntityFactory.setLexicalResource(this);
     }
 
     @Override

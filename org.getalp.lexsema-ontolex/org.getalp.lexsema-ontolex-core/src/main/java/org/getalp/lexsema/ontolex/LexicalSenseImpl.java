@@ -2,6 +2,7 @@ package org.getalp.lexsema.ontolex;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.getalp.lexsema.language.Language;
 
 /**
  * Class representing a ontolex LexicalSense entity
@@ -12,6 +13,7 @@ public class LexicalSenseImpl extends AbstractLexicalResourceEntity implements L
 
     private String definition;
     private String senseNumber;
+    private Language language;
 
     /**
      * Constructor for LexicalSense
@@ -23,6 +25,7 @@ public class LexicalSenseImpl extends AbstractLexicalResourceEntity implements L
         super(r, uri, parent);
         this.senseNumber = senseNumber;
         //fetchDefinition();
+        language = r.getLanguage();
     }
 
     @Override
@@ -32,11 +35,8 @@ public class LexicalSenseImpl extends AbstractLexicalResourceEntity implements L
 
     @Override
     public String toString() {
-        return "LexicalSenseImpl{" +
-                "definition='" + definition + '\'' +
-                ", senseNumber=" + senseNumber +
-                '}';
+        String[] uriParts = getNode().getURI().split("/");
+        String id = uriParts[uriParts.length - 1];
+        return String.format("LexicalSense|%s|{'%s'}", id, definition);
     }
-
-
 }

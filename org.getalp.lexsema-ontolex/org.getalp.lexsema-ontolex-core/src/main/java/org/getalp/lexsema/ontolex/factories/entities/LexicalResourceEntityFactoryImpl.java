@@ -47,4 +47,14 @@ public final class LexicalResourceEntityFactoryImpl implements LexicalResourceEn
             builder.setLexicalResource(lexicalResource);
         }
     }
+
+    @Override
+    public LexicalResourceEntityFactory clone() throws CloneNotSupportedException {
+        super.clone();
+        LexicalResourceEntityFactory clone = new LexicalResourceEntityFactoryImpl();
+        for (Class<? extends LexicalResourceEntity> key : factories.keySet()) {
+            clone.registerFactory(key, factories.get(key).clone());
+        }
+        return clone;
+    }
 }

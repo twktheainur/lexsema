@@ -7,14 +7,17 @@ import org.getalp.lexsema.ontolex.graph.OntologyModel;
 import org.getalp.lexsema.ontolex.uri.URIParser;
 import org.getalp.lexsema.ontolex.uri.URIParserRegister;
 import org.getalp.lexsema.ontolex.uri.URIParserRegisterImpl;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public abstract class OntolexLexicalResourceBuilder implements LexicalResourceBuilder {
+    private static Logger logger = LoggerFactory.getLogger(OntolexLexicalResource.class);
     LexicalResourceEntityFactory entityFactory;
     URIParserRegister uriParserRegister;
 
     protected OntolexLexicalResourceBuilder() {
-        entityFactory = new LexicalResourceEntityFactoryImpl();
         uriParserRegister = new URIParserRegisterImpl();
+        entityFactory = new LexicalResourceEntityFactoryImpl();
         entityFactory.registerFactory(LexicalEntry.class, new LexicalEntryBuilder());
         entityFactory.registerFactory(LexicalSense.class, new LexicalSenseBuilder());
     }
@@ -25,12 +28,20 @@ public abstract class OntolexLexicalResourceBuilder implements LexicalResourceBu
     }
 
     @Override
+    public LexicalResource build(OntologyModel model, Language... languages) {
+        return build(model, null, languages);
+    }
+
+    @Override
     public LexicalResource build(OntologyModel model) {
-        return build(model, null, null);
+        return build(model, null, (String) null);
     }
 
     @Override
     public abstract LexicalResource build(OntologyModel model, Language language, String uri);
+
+    @Override
+    public abstract LexicalResource build(OntologyModel model, String uri, Language... languages);
 
     @Override
     public LexicalResource build(OntologyModel model, String uri) {
@@ -39,6 +50,11 @@ public abstract class OntolexLexicalResourceBuilder implements LexicalResourceBu
 
 
     protected LexicalResourceEntityFactory getEntityFactory() {
+        try {
+            return entityFactory.clone();
+        } catch (CloneNotSupportedException e) {
+            logger.error(e.getLocalizedMessage());
+        }
         return entityFactory;
     }
 

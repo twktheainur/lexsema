@@ -70,7 +70,7 @@ public class Semeval2013BabelNetWekaDisambiguationFrench {
 
         TrainingDataExtractor trainingDataExtractor = new BabelLemmaTranslateSemCorTrainingDataExtractor(altfe, new File("../data/mapping/semcor_babelnet_mapping.fr.csv"), Language.FRENCH);
         //TrainingDataExtractor trainingDataExtractor = new SemCorTrainingDataExtractor(altfe);
-        //trainingDataExtractor.extract(semCor);
+        trainingDataExtractor.extract(semCor);
 
         //Le dernier argument est la taille de la poole de threads
         // pour changer echo ou echo 2 changer dans EchoLexicalEntryDisambiguator
@@ -84,11 +84,10 @@ public class Semeval2013BabelNetWekaDisambiguationFrench {
             System.err.println("Starting document " + d.getId());
             System.err.println("\tLoading senses...");
             lrloader.loadSenses(d);
-
-            //Configuration c = disambiguator.disambiguate(d);
+            Configuration c = disambiguator.disambiguate(d);
             //c = firstSense.disambiguate(d,c);
-            Configuration c = firstSense.disambiguate(d);
-            ConfigurationWriter sw = new SemevalWriter(d.getId() + ".ans");
+            //Configuration c = firstSense.disambiguate(d);
+            ConfigurationWriter sw = new SemevalWriter(d.getId() + ".ans", "\t");
             System.err.println("\n\tWriting results...");
             sw.write(d, c.getAssignments());
             System.err.println("done!");

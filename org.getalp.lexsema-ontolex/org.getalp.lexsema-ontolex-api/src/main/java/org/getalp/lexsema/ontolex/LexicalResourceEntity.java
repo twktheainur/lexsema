@@ -2,6 +2,7 @@ package org.getalp.lexsema.ontolex;
 
 
 import com.hp.hpl.jena.graph.Node;
+import org.getalp.lexsema.language.Language;
 import org.getalp.lexsema.ontolex.graph.OntologyModel;
 
 /**
@@ -33,4 +34,11 @@ public interface LexicalResourceEntity extends Comparable<LexicalResourceEntity>
      * @return Returns the parent LexicalResourceEntity of this entity, null if there is none
      */
     public LexicalResourceEntity getParent();
+
+    /**
+     * Returns the language of the LexicalResourceEntity, Language.UNSUPPORTED if none
+     *
+     * @return the language of the lexical resource entity
+     */
+    public Language getLanguage();
 }

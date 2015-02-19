@@ -74,6 +74,7 @@ public class Semeval2013BabelBetWekaDisambiguationEnglish {
         // pour changer echo ou echo 2 changer dans EchoLexicalEntryDisambiguator
         Disambiguator disambiguator = new WekaDisambiguator("../data/supervised", new NaiveBayesSetUp(true, true), altfe, 2, trainingDataExtractor);
         Disambiguator firstSense = new FirstSenseDisambiguator("../data/semeval-2013-task12-test-data/keys/baselines/babelnet/semcor.first-sense.en.key");
+        //Disambiguator firstSense = new FirstSenseDisambiguator();
         int i = 0;
         if (args.length == 1) {
             i = Integer.valueOf(args[0]) - 1;
@@ -85,8 +86,8 @@ public class Semeval2013BabelBetWekaDisambiguationEnglish {
 
             Configuration c = disambiguator.disambiguate(d);
             //Configuration c = firstSense.disambiguate(d);
-            c = firstSense.disambiguate(d, c);
-            ConfigurationWriter sw = new SemevalWriter(d.getId() + ".ans");
+            //c = firstSense.disambiguate(d, c);
+            ConfigurationWriter sw = new SemevalWriter(d.getId() + ".ans", "\t");
             System.err.println("\n\tWriting results...");
             sw.write(d, c.getAssignments());
             System.err.println("done!");
