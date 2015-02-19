@@ -15,7 +15,7 @@ import org.getalp.lexsema.ontolex.dbnary.Translation;
 import org.getalp.lexsema.ontolex.factories.resource.LexicalResourceFactory;
 import org.getalp.lexsema.ontolex.graph.OWLTBoxModel;
 import org.getalp.lexsema.ontolex.graph.OntologyModel;
-import org.getalp.lexsema.ontolex.graph.storage.JenaTDBStore;
+import org.getalp.lexsema.ontolex.graph.storage.JenaRemoteSPARQLStore;
 import org.getalp.lexsema.ontolex.graph.storage.StoreHandler;
 import org.getalp.lexsema.ontolex.graph.store.Store;
 import org.getalp.lexsema.similarity.Document;
@@ -72,7 +72,8 @@ public final class CLDisambiguator {
 
         long startTime = System.currentTimeMillis();
 
-        Store vts = new JenaTDBStore(DB_PATH);
+        //Store vts = new JenaTDBStore(DB_PATH);
+        Store vts = new JenaRemoteSPARQLStore("http://kaiko.getalp.org/sparql");
         vts.setCachingEnabled(true);
         StoreHandler.registerStoreInstance(vts);
         //StoreHandler.DEBUG_ON = true;

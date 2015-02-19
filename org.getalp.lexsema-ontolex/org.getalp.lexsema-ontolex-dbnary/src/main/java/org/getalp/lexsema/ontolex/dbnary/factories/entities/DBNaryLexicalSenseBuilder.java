@@ -6,6 +6,7 @@ import org.getalp.lexsema.ontolex.LexicalSense;
 import org.getalp.lexsema.ontolex.LexicalSenseImpl;
 import org.getalp.lexsema.ontolex.dbnary.queries.LexicalSenseDbnaryPropertiesQueryProcessor;
 import org.getalp.lexsema.ontolex.factories.entities.AbstractLexicalResourceEntityBuilder;
+import org.getalp.lexsema.ontolex.factories.entities.LexicalResourceEntityBuilder;
 import org.getalp.lexsema.ontolex.queries.QueryProcessor;
 
 import java.util.List;
@@ -37,6 +38,14 @@ public class DBNaryLexicalSenseBuilder extends AbstractLexicalResourceEntityBuil
         LexicalSense instance = new LexicalSenseImpl(getLexicalResource(), uri, parent, senseNumber);
         instance.setDefinition(results.get(0).get("definition"));
         return instance;
+    }
+
+    @Override
+    public LexicalResourceEntityBuilder<LexicalSense> clone() throws CloneNotSupportedException {
+        super.clone();
+        LexicalResourceEntityBuilder<LexicalSense> clone = new DBNaryLexicalSenseBuilder();
+        clone.setLexicalResource(getLexicalResource());
+        return clone;
     }
 
 }

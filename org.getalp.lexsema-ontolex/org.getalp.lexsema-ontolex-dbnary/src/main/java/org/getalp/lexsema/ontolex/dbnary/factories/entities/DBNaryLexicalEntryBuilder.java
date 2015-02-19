@@ -3,8 +3,9 @@ package org.getalp.lexsema.ontolex.dbnary.factories.entities;
 import org.getalp.lexsema.ontolex.LexicalEntry;
 import org.getalp.lexsema.ontolex.LexicalEntryImpl;
 import org.getalp.lexsema.ontolex.LexicalResourceEntity;
-import org.getalp.lexsema.ontolex.factories.entities.AbstractLexicalResourceEntityBuilder;
 import org.getalp.lexsema.ontolex.dbnary.queries.properties.DbnaryLexicalEntryPropertiesQueryProcessor;
+import org.getalp.lexsema.ontolex.factories.entities.AbstractLexicalResourceEntityBuilder;
+import org.getalp.lexsema.ontolex.factories.entities.LexicalResourceEntityBuilder;
 import org.getalp.lexsema.ontolex.queries.QueryProcessor;
 
 import java.util.List;
@@ -77,5 +78,13 @@ public class DBNaryLexicalEntryBuilder extends AbstractLexicalResourceEntityBuil
         } else {
             return getResourceGraphURI() + uri;
         }
+    }
+
+    @Override
+    public LexicalResourceEntityBuilder<LexicalEntry> clone() throws CloneNotSupportedException {
+        super.clone();
+        LexicalResourceEntityBuilder<LexicalEntry> clone = new DBNaryLexicalEntryBuilder();
+        clone.setLexicalResource(getLexicalResource());
+        return clone;
     }
 }

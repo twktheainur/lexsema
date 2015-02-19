@@ -43,6 +43,7 @@ public final class DBNaryImpl extends OntolexLexicalResource implements DBNary {
                       LexicalResourceEntityFactory entityFactory) {
         super(model, uri, uriParserRegister, entityFactory);
         this.language = language;
+        registerSelfToLexicalEntityResourceFactory();
     }
 
 
@@ -56,6 +57,11 @@ public final class DBNaryImpl extends OntolexLexicalResource implements DBNary {
             throw new NoSuchVocableException(voc, language.getLanguageName());
         }
         return vocables.get(0);
+    }
+
+    @Override
+    public Vocable getVocable(String vocable, Language language) throws NoSuchVocableException {
+        return getVocable(vocable);
     }
 
     @Override
@@ -81,6 +87,11 @@ public final class DBNaryImpl extends OntolexLexicalResource implements DBNary {
         } else {
             return output;
         }
+    }
+
+    @Override
+    public List<LexicalEntry> getLexicalEntries(String entry, String pos, int entryNumber, Language language) {
+        return getLexicalEntries(entry, pos, entryNumber);
     }
 
     @Override
@@ -150,6 +161,16 @@ public final class DBNaryImpl extends OntolexLexicalResource implements DBNary {
             entities.addAll(getRelatedEntities(sourceEntity, rt));
         }
         return entities;
+    }
+
+    @Override
+    public List<LexicalEntry> getLexicalEntries(String entry, Language language) {
+        return getLexicalEntries(entry);
+    }
+
+    @Override
+    public List<LexicalEntry> getLexicalEntries(String entry, String pos, Language language) {
+        return getLexicalEntries(entry, pos);
     }
 
     @Override

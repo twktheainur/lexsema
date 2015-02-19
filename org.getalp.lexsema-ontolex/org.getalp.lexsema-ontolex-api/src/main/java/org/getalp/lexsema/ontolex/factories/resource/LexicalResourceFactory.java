@@ -19,4 +19,13 @@ public final class LexicalResourceFactory {
         LexicalResourceBuilder builder = builderClassConstructor.newInstance();
         return builder.build(model, language);
     }
+
+    @SuppressWarnings({"all", "LawOfDemeter"})
+    public static LexicalResource getLexicalResource(Class<? extends LexicalResource> resourceType, OntologyModel model, Language... languages) throws IllegalAccessException, InvocationTargetException, InstantiationException, NoSuchMethodException, ClassNotFoundException {
+        String builderName = String.format("%sBuilder", resourceType.getName());
+        Class<? extends LexicalResourceBuilder> builderClass = (Class<? extends LexicalResourceBuilder>) Class.forName(builderName);
+        Constructor<? extends LexicalResourceBuilder> builderClassConstructor = builderClass.getConstructor();
+        LexicalResourceBuilder builder = builderClassConstructor.newInstance();
+        return builder.build(model, languages);
+    }
 }

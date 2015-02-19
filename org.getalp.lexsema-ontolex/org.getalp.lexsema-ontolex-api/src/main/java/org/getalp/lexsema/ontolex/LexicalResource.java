@@ -19,11 +19,23 @@ public interface LexicalResource {
     String getResourceGraphURI();
 
     /**
+     * @return Returns the base URI of the lexical resource
+     */
+    String getResourceGraphURI(Language language);
+
+    /**
      * Returns the <code>Graph</code> where the lexical resource is stored
      *
      * @return the graph where the lexical resource is stored
      */
     Graph getGraph();
+
+    /**
+     * Returns the <code>Graph</code> where the lexical resource is stored
+     * @param language the graph corresponding to this language
+     * @return the graph where the lexical resource is stored
+     */
+    Graph getGraph(Language language);
 
     /**
      * Returns the ontology <code>Model</code> where the lexical resource graph is represented
@@ -41,6 +53,15 @@ public interface LexicalResource {
     public List<LexicalEntry> getLexicalEntries(String entry);
 
     /**
+     * Retrieve the lexical entries matching the entry provided
+     *
+     * @param entry The entry to search for
+     * @param language The language for which to retrieve the entry
+     * @return The list of matching lexical entries
+     */
+    public List<LexicalEntry> getLexicalEntries(String entry, Language language);
+
+    /**
      * Retrieve the lexical entries matching the entry and part of speech tag provided
      *
      * @param entry The entry to search for
@@ -48,6 +69,16 @@ public interface LexicalResource {
      * @return The list of matching lexical entries
      */
     public List<LexicalEntry> getLexicalEntries(String entry, String pos);
+
+    /**
+     * Retrieve the lexical entries matching the entry and part of speech tag provided
+     *
+     * @param entry The entry to search for
+     * @param pos   A string containing the part of speech tag
+     * @param language The language for which to retrieve the entry
+     * @return The list of matching lexical entries
+     */
+    public List<LexicalEntry> getLexicalEntries(String entry, String pos, Language language);
 
     /**
      * Retrieves all the <code>LexicalSense</code>s associated with the <code>LexicalEntry</code> lexicalEntry.
@@ -71,13 +102,6 @@ public interface LexicalResource {
      * @return The <code>LexicalResourceEntityFactory</code>
      */
     public LexicalResourceEntityFactory getLexicalResourceEntityFactory();
-
-    /**
-     * Sets the base URI for the resource graph
-     *
-     * @param uri The base uri of the resource graph
-     */
-    public void setURI(String uri);
 
     /**
      * Returns the language of the lexical resource, null if the resource is not bound to a particualr language

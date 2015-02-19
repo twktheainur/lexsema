@@ -1,6 +1,7 @@
 package org.getalp.lexsema.similarity;
 
 import com.hp.hpl.jena.graph.Node;
+import org.getalp.lexsema.language.Language;
 import org.getalp.lexsema.ontolex.LexicalResource;
 import org.getalp.lexsema.ontolex.LexicalResourceEntity;
 import org.getalp.lexsema.ontolex.LexicalSense;
@@ -106,6 +107,15 @@ public class SenseImpl implements Sense {
             return lexicalSense.getParent();
         }
         return null;
+    }
+
+    @Override
+    public Language getLanguage() {
+        if (lexicalSense == null) {
+            return Language.UNSUPPORTED;
+        } else {
+            return lexicalSense.getLanguage();
+        }
     }
 
     @Override

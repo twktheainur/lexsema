@@ -90,7 +90,7 @@ public class ARQSelectQueryImpl implements ARQSelectQuery {
     public void addToFromStatement(Graph g) {
         String uri = g.getJenaNode().toString();
         //query.addGraphURI(uri.substring(0,uri.length()-1));
-        query.addGraphURI(uri);
+        //query.addGraphURI(uri);
     }
 
     /**

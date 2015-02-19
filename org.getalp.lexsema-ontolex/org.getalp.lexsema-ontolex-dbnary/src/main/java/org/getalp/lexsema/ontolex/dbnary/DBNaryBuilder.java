@@ -1,6 +1,7 @@
 package org.getalp.lexsema.ontolex.dbnary;
 
 import org.getalp.lexsema.language.Language;
+import org.getalp.lexsema.ontolex.LexicalEntry;
 import org.getalp.lexsema.ontolex.LexicalResource;
 import org.getalp.lexsema.ontolex.LexicalSense;
 import org.getalp.lexsema.ontolex.OntolexLexicalResourceBuilder;
@@ -12,7 +13,7 @@ import org.getalp.lexsema.ontolex.dbnary.uriparsers.DBNaryLexicalSenseURIParser;
 import org.getalp.lexsema.ontolex.dbnary.uriparsers.DBNaryVocableURIParser;
 import org.getalp.lexsema.ontolex.graph.OntologyModel;
 
-@SuppressWarnings("unused")
+@SuppressWarnings({"unused", "OverlyCoupledClass"})
 public class DBNaryBuilder extends OntolexLexicalResourceBuilder {
 
     public DBNaryBuilder() {
@@ -29,19 +30,31 @@ public class DBNaryBuilder extends OntolexLexicalResourceBuilder {
          */
         registerEntityFactory(Vocable.class, new VocableBuilder());
         registerEntityFactory(LexicalSense.class, new DBNaryLexicalSenseBuilder());
-        registerEntityFactory(Translation.class, new DBNaryLexicalEntryBuilder());
+        registerEntityFactory(LexicalEntry.class, new DBNaryLexicalEntryBuilder());
         registerEntityFactory(Translation.class, new TranslationBuilder());
     }
 
     @SuppressWarnings("HardcodedFileSeparator")
     @Override
     public LexicalResource build(OntologyModel model, Language language) {
-        String uri = String.format("%s/%s/", model.getNode("dbnary:").getURI().split("#")[0], language.getISO3Code());
+        String uri = String.format("%s/%s", model.getNode("dbnary:").getURI().split("#")[0], language.getISO3Code());
         return build(model, language, uri);
     }
 
     @Override
+    public LexicalResource build(OntologyModel model, Language... languages) {
+        String uri = String.format("%s", model.getNode("dbnary:").getURI().split("#")[0]);
+        return build(model, uri, languages);
+    }
+
+
+    @Override
     public LexicalResource build(OntologyModel model, Language language, String uri) {
         return new DBNaryImpl(model, language, uri, getUriParserRegister(), getEntityFactory());
+    }
+
+    @Override
+    public LexicalResource build(OntologyModel model, String uri, Language... languages) {
+        return new MultilingualDBNaryImpl(model, uri, getUriParserRegister(), getEntityFactory(), languages);
     }
 }

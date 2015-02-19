@@ -9,7 +9,7 @@ import java.util.Map;
  * A generic DPI factory for <code>LexicalResourceEntity</code> instances. Builders must be registered by
  * each <code>LexicalResource</code> implementation.
  */
-public interface LexicalResourceEntityFactory {
+public interface LexicalResourceEntityFactory extends Cloneable {
     /**
      * Register a <code>LexicalResourceEntityBuilder</code> <code>builder<code/> for <code>productType</code>
      *
@@ -46,4 +46,6 @@ public interface LexicalResourceEntityFactory {
      * @param lexicalResource The <code>LexicalResource</code> instance.
      */
     public void setLexicalResource(LexicalResource lexicalResource);
+
+    public LexicalResourceEntityFactory clone() throws CloneNotSupportedException;
 }

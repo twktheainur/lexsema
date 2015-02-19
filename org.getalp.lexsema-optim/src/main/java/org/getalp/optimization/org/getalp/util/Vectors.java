@@ -25,7 +25,7 @@ public class Vectors {
     }
 
     public static DoubleMatrix1D getDefaultPermutation(DoubleMatrix1D input) {
-        if (perm == null || input.size() > perm.size()) {
+        if (perm == null || input.size() >= perm.size()) {
             perm = new DenseDoubleMatrix1D((int) input.size());
             for (int i = 0; i < perm.size(); i++) {
                 perm.setQuick(i, i);
@@ -35,7 +35,7 @@ public class Vectors {
     }
 
     public static DoubleMatrix1D getIdentity(int size) {
-        DoubleMatrix1D perm = new DenseDoubleMatrix1D((int) size);
+        DoubleMatrix1D perm = new DenseDoubleMatrix1D(size);
         for (int i = 0; i < perm.size(); i++) {
             perm.setQuick(i, 1);
         }

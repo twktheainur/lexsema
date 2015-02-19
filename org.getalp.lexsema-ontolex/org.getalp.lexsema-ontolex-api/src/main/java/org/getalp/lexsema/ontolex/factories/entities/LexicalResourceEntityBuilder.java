@@ -12,7 +12,7 @@ import java.util.Map;
  *
  * @param <T>
  */
-public interface LexicalResourceEntityBuilder<T extends LexicalResourceEntity> {
+public interface LexicalResourceEntityBuilder<T extends LexicalResourceEntity> extends Cloneable {
     /**
      * Builds an instance of the <code>LexicalResourceEntity</code> with URI <code>uri</code> and parent <code>parent</code>
      *
@@ -37,4 +37,6 @@ public interface LexicalResourceEntityBuilder<T extends LexicalResourceEntity> {
      * @param lexicalResource The <code>LexicalResource</code> instance.
      */
     public void setLexicalResource(LexicalResource lexicalResource);
+
+    public LexicalResourceEntityBuilder<T> clone() throws CloneNotSupportedException;
 }

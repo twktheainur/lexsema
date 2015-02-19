@@ -4,6 +4,7 @@ import org.getalp.lexsema.ontolex.LexicalResourceEntity;
 import org.getalp.lexsema.ontolex.dbnary.Vocable;
 import org.getalp.lexsema.ontolex.dbnary.VocableImpl;
 import org.getalp.lexsema.ontolex.factories.entities.AbstractLexicalResourceEntityBuilder;
+import org.getalp.lexsema.ontolex.factories.entities.LexicalResourceEntityBuilder;
 
 import java.util.Map;
 
@@ -31,5 +32,13 @@ public class VocableBuilder extends AbstractLexicalResourceEntityBuilder<Vocable
             }
         }
         return new VocableImpl(getLexicalResource(), uri, parent, vocable);
+    }
+
+    @Override
+    public LexicalResourceEntityBuilder<Vocable> clone() throws CloneNotSupportedException {
+        super.clone();
+        LexicalResourceEntityBuilder<Vocable> clone = new VocableBuilder();
+        clone.setLexicalResource(getLexicalResource());
+        return clone;
     }
 }

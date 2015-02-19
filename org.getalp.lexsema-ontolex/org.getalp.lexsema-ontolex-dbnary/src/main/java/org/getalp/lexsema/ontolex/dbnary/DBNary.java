@@ -24,6 +24,17 @@ public interface DBNary extends LexicalResource {
     Vocable getVocable(String vocable) throws NoSuchVocableException;
 
     /**
+     * Retrieve the vocable instance that corresponds to the <code>vocable</code> string
+     *
+     * @param vocable the vocable string for which the instance needs to be retrieved
+     * @param language the language of the vocable
+     * @return The <code>Vocable</code> instance
+     * @throws NoSuchVocableException Thrown when the vocable does not exist in the resource
+     */
+    @SuppressWarnings("unused")
+    Vocable getVocable(String vocable, Language language) throws NoSuchVocableException;
+
+    /**
      * Returns a list of all vocables present in the resource
      *
      * @return a list of all the vocable present in the resource
@@ -39,10 +50,27 @@ public interface DBNary extends LexicalResource {
      *
      * @param entry The entry to search for
      * @param pos   A string containing the part of speech tag
+     * @param entryNumber the entry number (see method description)
      * @return The list of matching lexical entries
      */
     @SuppressWarnings("unused")
     List<LexicalEntry> getLexicalEntries(String entry, String pos, int entryNumber);
+
+    /**
+     * Retrieve the lexical entries matching the entry, the part of speech tag as well as the entry number
+     * In some resources (e.g. Wiktionary derivatives), there can be two entries with the same name and part
+     * of speech that are distinguished by a number. This is the case for example for two homonyms or words with
+     * different etymologies.
+     *
+     * @param entry       The entry to search for
+     * @param pos         A string containing the part of speech tag
+     * @param entryNumber the entry number (see method description)
+     * @param language    the language of the lexical entry
+     * @return The list of matching lexical entries
+     */
+    @SuppressWarnings("unused")
+    List<LexicalEntry> getLexicalEntries(String entry, String pos, int entryNumber, Language language);
+
 
     /**
      * Returns the list of <code>LexicalEntry</code>(ies) associated (dbnary:relatedTo) with the <code>Vocable</code> <code>vocable</code>

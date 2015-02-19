@@ -49,6 +49,27 @@ public interface LexicalResourceBuilder {
      * @return The resulting instance
      */
     public LexicalResource build(OntologyModel model, String uri);
+
+    /**
+     * Build an instance of a particular <code>LexicalResource</code> implementation
+     *
+     * @param model     The ontology model the resource is located in
+     * @param languages the set of language supported by the resource, if the resource supports only one language, the
+     *                  only the first language is considered.
+     * @param uri       The uri of the resource's graph
+     * @return The resulting instance
+     */
+    public LexicalResource build(OntologyModel model, String uri, Language... languages);
+
+    /**
+     * Build an instance of a particular <code>LexicalResource</code> implementation
+     *
+     * @param model     The ontology model the resource is located in
+     * @param languages the set of language supported by the resource, if the resource supports only one language, the
+     *                  only the first language is considered.
+     * @return The resulting instance
+     */
+    public LexicalResource build(OntologyModel model, Language... languages);
 }
 
 
