@@ -20,7 +20,7 @@ public class SVMSetUp implements WekaClassifierSetUp {
         LibSVM classifier = new LibSVM();
         classifier.setSVMType(new SelectedTag(LibSVM.SVMTYPE_C_SVC, LibSVM.TAGS_SVMTYPE));
         classifier.setKernelType(new SelectedTag(LibSVM.KERNELTYPE_LINEAR, LibSVM.TAGS_KERNELTYPE));
-        //classifier.setGamma(2);
+        //classifier.gamma(2);
         classifier.setCost(0.4);
         classifier.setCoef0(0);
         classifier.setDegree(2);

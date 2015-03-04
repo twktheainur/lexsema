@@ -15,8 +15,8 @@ import org.getalp.lexsema.wsd.method.Disambiguator;
 import org.getalp.lexsema.wsd.method.sequencial.SimplifiedLesk;
 import org.getalp.lexsema.wsd.method.sequencial.parameters.SimplifiedLeskParameters;
 import org.getalp.lexsema.wsd.score.ConfigurationPairScoreInput;
-import org.getalp.optimization.functions.Function;
-import org.getalp.optimization.functions.setfunctions.submodular.Sum;
+import org.getalp.ml.optimization.functions.Function;
+import org.getalp.ml.optimization.functions.setfunctions.submodular.Sum;
 
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;

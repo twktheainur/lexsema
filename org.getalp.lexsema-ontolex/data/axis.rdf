@@ -117,7 +117,7 @@
 
     <owl:Class rdf:about="http://kaiko.getalp.org/axis##EquivalenceClass">
         <rdfs:subClassOf rdf:resource="http://www.w3.org/ns/ontolex#LexicalConcept"/>
-        <rdfs:comment rdf:datatype="&xsd;string">An equivalence class between ontolex:LexicalSense s in the same or a different ontolex:language</rdfs:comment>
+        <rdfs:comment rdf:datatype="&xsd;string">An equivalence class between ontolex:LexicalSense s in the same or first different ontolex:language</rdfs:comment>
     </owl:Class>
     
 

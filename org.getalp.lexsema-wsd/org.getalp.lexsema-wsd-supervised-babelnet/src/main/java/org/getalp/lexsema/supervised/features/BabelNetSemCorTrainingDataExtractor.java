@@ -53,29 +53,29 @@ public class BabelNetSemCorTrainingDataExtractor implements TrainingDataExtracto
     @Override
     public void extract(Iterable<Text> annotatedCorpus) {
             /* The file does not exist, therefore we most extract the features and write the data file*/
-            for (Text text : annotatedCorpus) {
-                int wordIndex = 0;
-                for (Word w : text) {
-                    String lemma = w.getLemma();
-                    List<String> instance = localTextFeatureExtractor.getFeatures(text, wordIndex);
-                    String semanticTag = w.getSemanticTag();
-                    if (semanticTag != null && senseTagMap != null) {
-                        String semanticTagkey = String.format("%s%%%s", lemma, semanticTag);
-                        if (senseTagMap.containsKey(semanticTagkey)) {
-                            semanticTag = senseTagMap.get(semanticTagkey);
-                            successfulMappings++;
-                        } else {
-                            unsuccessfulMappings++;
-                        }
+        for (Text text : annotatedCorpus) {
+            int wordIndex = 0;
+            for (Word w : text) {
+                String lemma = w.getLemma();
+                List<String> instance = localTextFeatureExtractor.getFeatures(text, wordIndex);
+                String semanticTag = w.getSemanticTag();
+                if (semanticTag != null && senseTagMap != null) {
+                    String semanticTagkey = String.format("%s%%%s", lemma, semanticTag);
+                    if (senseTagMap.containsKey(semanticTagkey)) {
+                        semanticTag = senseTagMap.get(semanticTagkey);
+                        successfulMappings++;
+                    } else {
+                        unsuccessfulMappings++;
                     }
-                    instance.add(0, String.format("\"%s\"", semanticTag));
-                    if (!instanceVectors.containsKey(lemma)) {
-                        instanceVectors.put(lemma, new ArrayList<List<String>>());
-                    }
-                    instanceVectors.get(lemma).add(instance);
-                    wordIndex++;
                 }
+                instance.add(0, String.format("\"%s\"", semanticTag));
+                if (!instanceVectors.containsKey(lemma)) {
+                    instanceVectors.put(lemma, new ArrayList<List<String>>());
+                }
+                instanceVectors.get(lemma).add(instance);
+                wordIndex++;
             }
+        }
         int totalMappings = unsuccessfulMappings + successfulMappings;
         double pctSuccessful = ((double) successfulMappings / (double) totalMappings) * 100d;
         double pctFailed = ((double) unsuccessfulMappings / (double) totalMappings) * 100d;
