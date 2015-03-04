@@ -3,12 +3,9 @@ package org.getalp.lexsema.wsd.method;
 import org.getalp.lexsema.similarity.Document;
 import org.getalp.lexsema.similarity.measures.SimilarityMeasure;
 import org.getalp.lexsema.wsd.configuration.BatConfiguration;
-import org.getalp.lexsema.wsd.configuration.ConfidenceConfiguration;
 import org.getalp.lexsema.wsd.configuration.Configuration;
 import org.getalp.lexsema.wsd.score.ConfigurationScorer;
 import org.getalp.lexsema.wsd.score.TverskyConfigurationScorer;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,9 +45,11 @@ public class BatAlgorithm implements Disambiguator {
 		public int[] position;
 		public int[] velocity;
 		public float frequency;
-		public float rate;
 		public float initialRate;
+		public float rate;
 		public float loudness;
+		public int[] previousPosition;
+		public int[] previousVelocity;
 		
 		public void initialize(Document document) {
 			configuration = new BatConfiguration(document);
@@ -64,6 +63,7 @@ public class BatAlgorithm implements Disambiguator {
 			}
 			frequency = randomFloatInRange(minFrequency, maxFrequency);
 			initialRate = randomFloatInRange(0, 1);
+			rate = initialRate;
 			loudness = randomFloatInRange(minLoudness, maxLoudness);
 		}
 		
@@ -80,53 +80,56 @@ public class BatAlgorithm implements Disambiguator {
 	@Override
     public Configuration disambiguate(Document document) {
 		
+		this.document = document;
+		
     	for (int i = 0 ; i < batsNumber ; i++) {
     		bats.get(i).initialize(document);
     	}
     	computeBestBat();
     	
     	for (int currentIteration = 0 ; currentIteration < maxIterations ; currentIteration++) {
+    		
+    		System.out.println(((float)currentIteration / (float)maxIterations) * 100 + "%");
+    		
     		for (int i = 0 ; i < batsNumber ; i++) {
 
     			Bat currentBat = bats.get(i);
+
     			currentBat.frequency = randomFloatInRange(minFrequency, maxFrequency);
+    			
+    			currentBat.previousPosition = currentBat.position.clone();
+    			currentBat.previousVelocity = currentBat.velocity.clone();
+    			
     			currentBat.velocity = add(currentBat.velocity, 
     								      multiply(substract(currentBat.position, bestBat.position), 
     								    		   currentBat.frequency));
     			currentBat.position = add(currentBat.position, currentBat.velocity);
-    			currentBat.configuration.setSenses(currentBat.position);
-    			if (random.nextFloat() > currentBat.rate)
+    			
+    			if (randomFloatInRange(0, 1) > currentBat.rate)
     			{
-    				
+    				// ?
     			}
+    			
+    			currentBat.position = add(currentBat.position, randomFloatInRange(-1, 1) * computeAverageLoudness());
+    			
+    			if (randomFloatInRange(minLoudness, maxLoudness) < currentBat.loudness &&
+    				computeScoreOfBat(currentBat) > computeScoreOfBat(bestBat))
+    			{
+        			currentBat.configuration.setSenses(currentBat.position);
+        			currentBat.loudness *= alpha;
+        			currentBat.rate = (float) (currentBat.initialRate * (1 - Math.exp(-gamma * currentIteration)));
+    			}
+    			else
+    			{
+    				currentBat.position = currentBat.previousPosition.clone();
+    				currentBat.velocity = currentBat.previousVelocity.clone();
+    			}
+    			
+    			computeBestBat();
     		}
     	}
-    	
-    	
-    	/*
-	 	Objective function f (x), x = (x 1 , ..., x d ) T
-		Initialize the bat population x i (i = 1, 2, ..., n) and v i
-		Define pulse frequency f i at x i
-		Initialize pulse rates r i and the loudness A i
-		while (t <Max number of iterations)
-			Generate new solutions by adjusting frequency,
-			and updating velocities and locations/solutions [equations (2) to (4)]
-			if (rand > r i )
-				Select a solution among the best solutions
-				Generate a local solution around the selected best solution
-			end if
-			Generate a new solution by flying randomly
-			if (rand < A i & f (x i ) < f (x ∗ ))
-				Accept the new solutions
-				Increase r i and reduce A i
-			end if
-			Rank the bats and find the current best x ∗
-		 end while
-		 Postprocess results and visualization
-    	 */
-	
-	
-    	return c;
+
+    	return bestBat.configuration;
     }
 
     @Override
@@ -174,6 +177,16 @@ public class BatAlgorithm implements Disambiguator {
     	return result;
     }
     
+    private int[] add(int[] leftOperand, float rightOperand)
+    {
+    	int[] result = new int[leftOperand.length];
+    	for (int i = 0 ; i < result.length ; i++)
+    	{
+    		result[i] = (int) (leftOperand[i] + rightOperand);
+    	}
+    	return result;
+    }
+   
     private void computeBestBat()
     {
     	double bestScore = Double.MIN_VALUE;
@@ -186,5 +199,20 @@ public class BatAlgorithm implements Disambiguator {
     			bestBat = bats.get(i);
     		}
     	}
+    }
+    
+    private float computeAverageLoudness()
+    {
+    	float loudnessesSum = 0;
+    	for (int i = 0 ; i < batsNumber ; i++)
+    	{
+    		loudnessesSum += bats.get(i).loudness;
+    	}
+    	return loudnessesSum / (float)batsNumber;
+    }
+    
+    private double computeScoreOfBat(Bat bat)
+    {
+    	return configurationScorer.computeScore(document, bat.configuration);
     }
 }

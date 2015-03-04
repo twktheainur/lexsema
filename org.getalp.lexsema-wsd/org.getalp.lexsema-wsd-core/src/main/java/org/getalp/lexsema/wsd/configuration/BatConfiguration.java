@@ -12,10 +12,9 @@ public class BatConfiguration implements Configuration {
 	public BatConfiguration(Document d) {
 		document = d;
 		assignments = new int[d.size()];
-		Random r = new Random(System.currentTimeMillis());
+		Random r = new Random();
 		for (int i = 0; i < assignments.length ; i++) {
-			int numSenses = d.getSenses(i).size();
-			assignments[i] = r.nextInt(numSenses);
+			setSense(i, r.nextInt());
 		}
 	}
 	
@@ -23,14 +22,14 @@ public class BatConfiguration implements Configuration {
 	{
 		for (int i = 0 ; i < Math.min(senses.length, assignments.length) ; i++)
 		{
-			if (senses[i] < 0) assignments[i] = 0;
-			assignments[i] = senses[i] % document.getSenses(i).size();
+			setSense(i, senses[i]);
 		}
 	}
 
 	@Override
 	public void setSense(int wordIndex, int senseIndex) {
-		assignments[wordIndex] = senseIndex;
+		if (senseIndex < 0) senseIndex = 0;
+		assignments[wordIndex] = senseIndex % document.getSenses(wordIndex).size();;
 	}
 
 	@Override
@@ -66,7 +65,7 @@ public class BatConfiguration implements Configuration {
 	@Override
 	public void initialize(int value) {
 		for (int i = getStart(); i < getEnd(); i++) {
-			assignments[i] = value;
+			setSense(i, value);
 		}
 	}
 

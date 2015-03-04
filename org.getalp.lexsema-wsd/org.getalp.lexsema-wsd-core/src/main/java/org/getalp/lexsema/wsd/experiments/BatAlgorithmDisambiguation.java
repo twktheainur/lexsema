@@ -11,11 +11,8 @@ import org.getalp.lexsema.similarity.Document;
 import org.getalp.lexsema.similarity.measures.SimilarityMeasure;
 import org.getalp.lexsema.similarity.measures.TverskiIndexSimilarityMeasureBuilder;
 import org.getalp.lexsema.wsd.configuration.Configuration;
-import org.getalp.lexsema.wsd.method.AdaptiveSimulatedAnnealing;
 import org.getalp.lexsema.wsd.method.BatAlgorithm;
 import org.getalp.lexsema.wsd.method.Disambiguator;
-import org.getalp.lexsema.wsd.method.sequencial.WindowedLesk;
-import org.getalp.lexsema.wsd.method.sequencial.parameters.WindowedLeskParameters;
 
 public class BatAlgorithmDisambiguation {
 
@@ -23,7 +20,7 @@ public class BatAlgorithmDisambiguation {
 		
         long startTime = System.currentTimeMillis();
         
-        TextLoader dl = new Semeval2007TextLoader("../data/senseval2007_task7/test/eng-coarse-all-words-t1.xml").loadNonInstances(true);
+        TextLoader dl = new Semeval2007TextLoader("../data/senseval2007_task7/test/test-bat.xml").loadNonInstances(true);
         
         LRLoader lrloader = new WordnetLoader("../data/wordnet/2.1/dict")
                 .extendedSignature(true)
