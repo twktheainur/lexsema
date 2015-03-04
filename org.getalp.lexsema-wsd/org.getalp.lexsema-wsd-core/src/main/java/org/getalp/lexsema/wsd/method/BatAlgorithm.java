@@ -15,7 +15,7 @@ public class BatAlgorithm implements Disambiguator {
 
 	private static final int batsNumber = 10;
 	
-	private static final int maxIterations = 10;
+	private static final int iterationsNumber = 10;
 	
 	private static final float minFrequency = 0;
 	
@@ -25,19 +25,24 @@ public class BatAlgorithm implements Disambiguator {
 	
 	private static final float maxLoudness = 100;
 	
+	private static final float minRate = 0;
+	
+	private static final float maxRate = 1;
+	
 	private static final float alpha = 0.9f;
 	
-	private static final float gamma = alpha;
+	private static final float gamma = 0.9f;
 
 	private static final Random random = new Random();
+
+	
+	private Document currentDocument;
 	
 	private ConfigurationScorer configurationScorer;
 	
 	private List<Bat> bats = new ArrayList<Bat>();
 	
 	private Bat bestBat;
-	
-	private Document document;
 	
 	private class Bat {
 		
@@ -50,8 +55,10 @@ public class BatAlgorithm implements Disambiguator {
 		public float loudness;
 		public int[] previousPosition;
 		public int[] previousVelocity;
+		double score;
 		
 		public void initialize(Document document) {
+			
 			configuration = new BatConfiguration(document);
 			position = new int[document.size()];
 			for (int i = 0 ; i < position.length ; i++) {
@@ -62,16 +69,19 @@ public class BatAlgorithm implements Disambiguator {
 				velocity[i] = 0;
 			}
 			frequency = randomFloatInRange(minFrequency, maxFrequency);
-			initialRate = randomFloatInRange(0, 1);
+			initialRate = randomFloatInRange(minRate, maxRate);
 			rate = initialRate;
 			loudness = randomFloatInRange(minLoudness, maxLoudness);
+			previousPosition = position.clone();
+			previousVelocity = velocity.clone();
 		}
 		
 	}
 	
-    public BatAlgorithm(int numberThreads, SimilarityMeasure similarityMeasure) {
+    public BatAlgorithm(SimilarityMeasure similarityMeasure) {
     	
-    	configurationScorer = new TverskyConfigurationScorer(similarityMeasure, numberThreads);
+    	int threadsNumber = Runtime.getRuntime().availableProcessors();
+    	configurationScorer = new TverskyConfigurationScorer(similarityMeasure, threadsNumber);
     	for (int i = 0 ; i < batsNumber ; i++) {
     		bats.add(new Bat());
     	}
@@ -80,16 +90,17 @@ public class BatAlgorithm implements Disambiguator {
 	@Override
     public Configuration disambiguate(Document document) {
 		
-		this.document = document;
+		currentDocument = document;
 		
     	for (int i = 0 ; i < batsNumber ; i++) {
     		bats.get(i).initialize(document);
     	}
     	computeBestBat();
     	
-    	for (int currentIteration = 0 ; currentIteration < maxIterations ; currentIteration++) {
+    	for (int currentIteration = 0 ; currentIteration < iterationsNumber ; currentIteration++) {
     		
-    		System.out.println(((float)currentIteration / (float)maxIterations) * 100 + "%");
+    		int progress = (int) (((float)currentIteration / (float)iterationsNumber) * 100);
+    		System.out.println("Progress : " + progress + "%");
     		
     		for (int i = 0 ; i < batsNumber ; i++) {
 
@@ -107,13 +118,13 @@ public class BatAlgorithm implements Disambiguator {
     			
     			if (randomFloatInRange(0, 1) > currentBat.rate)
     			{
-    				// ?
+    				// fly randomly around best solutions ?
     			}
     			
     			currentBat.position = add(currentBat.position, randomFloatInRange(-1, 1) * computeAverageLoudness());
     			
     			if (randomFloatInRange(minLoudness, maxLoudness) < currentBat.loudness &&
-    				computeScoreOfBat(currentBat) > computeScoreOfBat(bestBat))
+    				computeScoreOfBat(currentBat) > bestBat.score)
     			{
         			currentBat.configuration.setSenses(currentBat.position);
         			currentBat.loudness *= alpha;
@@ -141,6 +152,7 @@ public class BatAlgorithm implements Disambiguator {
     @Override
     public void release() {
     	
+    	configurationScorer.release();
     }
     
     private float randomFloatInRange(float min, float max){
@@ -192,7 +204,7 @@ public class BatAlgorithm implements Disambiguator {
     	double bestScore = Double.MIN_VALUE;
     	for (int i = 0 ; i < batsNumber ; i++)
     	{
-    		double score = configurationScorer.computeScore(document, bats.get(i).configuration);
+    		double score = computeScoreOfBat(bats.get(i));
     		if (score > bestScore)
     		{
     			bestScore = score;
@@ -213,6 +225,7 @@ public class BatAlgorithm implements Disambiguator {
     
     private double computeScoreOfBat(Bat bat)
     {
-    	return configurationScorer.computeScore(document, bat.configuration);
+    	bat.score = configurationScorer.computeScore(currentDocument, bat.configuration);
+    	return bat.score;
     }
 }
