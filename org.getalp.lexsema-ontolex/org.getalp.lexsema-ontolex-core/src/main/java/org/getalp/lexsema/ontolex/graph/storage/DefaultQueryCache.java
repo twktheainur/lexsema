@@ -22,7 +22,7 @@ public class DefaultQueryCache implements QueryCache {
 
     @Override
     public synchronized void addResult(String query, ResultSet resultSet) {
-        cache.put(query,resultSet);
+        cache.put(query, resultSet);
     }
 
     @Override

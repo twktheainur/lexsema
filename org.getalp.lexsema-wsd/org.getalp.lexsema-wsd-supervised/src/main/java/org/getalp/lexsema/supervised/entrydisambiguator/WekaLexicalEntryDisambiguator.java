@@ -36,26 +36,26 @@ public class WekaLexicalEntryDisambiguator extends SupervisedSequentialLexicalEn
     protected final List<ClassificationOutput> runClassifier(String lemma, List<String> instance) {
         WekaClassifier classifier;
         boolean trainingSuccessful = false;
-            if (!classifiers.containsKey(lemma)) {
-                classifier = new WekaClassifier(classifierSetUp, dataPath + File.separatorChar + "models" + File.separatorChar + lemma + ".model", false);
-                if (!classifier.isClassifierTrained()) {
-                    try {
-                        List<List<String>> trainingInstances = trainingDataExtractor.getWordFeaturesInstances(lemma);
-                        if (trainingInstances != null) {
-                            classifier.loadTrainingData(featureIndex, trainingInstances, trainingDataExtractor.getAttributes(lemma));
-                            classifier.trainClassifier();
-                            trainingSuccessful = true;
-                        }
-                    } catch (IOException ignored) {
-                        //e.printStackTrace();
-                        //System.exit(0);
-                        //return new ArrayList<>();
+        if (!classifiers.containsKey(lemma)) {
+            classifier = new WekaClassifier(classifierSetUp, dataPath + File.separatorChar + "models" + File.separatorChar + lemma + ".model", false);
+            if (!classifier.isClassifierTrained()) {
+                try {
+                    List<List<String>> trainingInstances = trainingDataExtractor.getWordFeaturesInstances(lemma);
+                    if (trainingInstances != null) {
+                        classifier.loadTrainingData(featureIndex, trainingInstances, trainingDataExtractor.getAttributes(lemma));
+                        classifier.trainClassifier();
+                        trainingSuccessful = true;
                     }
-
+                } catch (IOException ignored) {
+                    //e.printStackTrace();
+                    //System.exit(0);
+                    //return new ArrayList<>();
                 }
-            } else {
-                classifier = classifiers.get(lemma);
+
             }
+        } else {
+            classifier = classifiers.get(lemma);
+        }
         if (classifier != null && trainingSuccessful && classifier.isClassifierTrained()) {
             return classifier.classify(featureIndex, instance);
         } else {

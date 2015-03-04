@@ -3,6 +3,7 @@ package org.getalp.lexsema.similarity.measures;
 import com.wcohen.ss.AbstractStringDistance;
 import com.wcohen.ss.ScaledLevenstein;
 
+@SuppressWarnings({"MethodReturnOfConcreteClass", "PublicMethodNotExposedInInterface", "BooleanParameter"})
 public class TverskiIndexSimilarityMeasureBuilder {
     private AbstractStringDistance distance = new ScaledLevenstein();
     private boolean computeRatio = true;
@@ -89,8 +90,9 @@ public class TverskiIndexSimilarityMeasureBuilder {
         return this;
     }
 
+    @SuppressWarnings("FeatureEnvy")
     public TverskiIndexSimilarityMeasure build() {
-        TverskiIndexSimilarityMeasure st = new TverskiIndexSimilarityMeasureImpl();
+        TverskiIndexSimilarityMeasureImpl st = new TverskiIndexSimilarityMeasureImpl();
         st.setAlpha(alpha);
         st.setBeta(beta);
         st.setGamma(gamma);
@@ -104,6 +106,7 @@ public class TverskiIndexSimilarityMeasureBuilder {
         st.setComputeRatio(computeRatio);
         st.setExtendedLesk(extendedLesk);
         st.setIsDistance(isDistance);
+        st.setDistance(distance);
         return st;
     }
 }
