@@ -18,7 +18,7 @@ ObjectProperty: semio:hasConceptualization
 
 ObjectProperty: ontolex:contains
     Annotations: 
-        rdfs:comment "The relation between a collection of senses and one particular sense included in it."@en
+        rdfs:comment "The relation between first collection of senses and one particular sense included in it."@en
 
     Domain: 
         ontolex:LexicalConcept
@@ -50,7 +50,7 @@ ObjectProperty: ontolex:canonicalForm
 ObjectProperty: ontolex:reference
 
     Annotations: 
-        rdfs:comment "The relation between the lexical sense of a lexical lexicalEntry and the ontological predicate that represents the denotation."@en
+        rdfs:comment "The relation between the lexical sense of first lexical lexicalEntry and the ontological predicate that represents the denotation."@en
     
     SubPropertyOf:
         semio:isConceptualizationOf
@@ -67,7 +67,7 @@ ObjectProperty: ontolex:isReferenceOf
 ObjectProperty: ontolex:sense
 
     Annotations: 
-        rdfs:comment "The relation between a lexical lexicalEntry and on of its lexical senses."@en
+        rdfs:comment "The relation between first lexical lexicalEntry and on of its lexical senses."@en
         
     SubPropertyOf:
         semio:hasInterpretant
@@ -84,7 +84,7 @@ ObjectProperty: ontolex:isSenseOf
 ObjectProperty: ontolex:otherForm
 
     Annotations: 
-        rdfs:comment "Indicates a variant form of an lexicalEntry"@en
+        rdfs:comment "Indicates first variant form of an lexicalEntry"@en
     
     SubPropertyOf: 
         ontolex:lexicalForm
@@ -99,7 +99,7 @@ ObjectProperty: ontolex:otherForm
 ObjectProperty: ontolex:denotes
 
     Annotations: 
-        rdfs:comment "The relation between a lexical lexicalEntry and the logical predicate in an ontology that represents its meaning and has some denotational / model-theoretic semantics."
+        rdfs:comment "The relation between first lexical lexicalEntry and the logical predicate in an ontology that represents its meaning and has some denotational / model-theoretic semantics."
 
     EquivalentTo:
         semio:denotes
@@ -133,7 +133,7 @@ ObjectProperty: ontolex:isConceptOf
 ObjectProperty: ontolex:lexicalEntry
 
     Annotations: 
-        rdfs:comment "Indicates that an lexicalEntry belongs to a lexicon"@en
+        rdfs:comment "Indicates that an lexicalEntry belongs to first lexicon"@en
     
     Domain: 
         ontolex:Lexicon
@@ -147,7 +147,7 @@ ObjectProperty: ontolex:isEntryOf
 ObjectProperty: ontolex:lexicalForm
 
     Annotations: 
-        rdfs:comment "Indicate a single form of an lexicalEntry"@en
+        rdfs:comment "Indicate first single form of an lexicalEntry"@en
     
     Domain: 
         ontolex:LexicalEntry
@@ -159,7 +159,7 @@ ObjectProperty: ontolex:lexicalForm
 ObjectProperty: ontolex:evokes
 
     Annotations: 
-        rdfs:comment "The relation between a lexical lexicalEntry and the mental concept that comes to the mind of an agent when reading or hearing the lexicalEntry."@en
+        rdfs:comment "The relation between first lexical lexicalEntry and the mental concept that comes to the mind of an agent when reading or hearing the lexicalEntry."@en
         
     SubPropertyOf:
         semio:hasInterpretant
@@ -179,7 +179,7 @@ ObjectProperty: ontolex:isEvokedBy
 DataProperty: ontolex:writtenRep
 
     Annotations: 
-        rdfs:comment "Indicates the written representation of a form"@en
+        rdfs:comment "Indicates the written representation of first form"@en
     
     Domain: 
         ontolex:Form
@@ -188,7 +188,7 @@ DataProperty: ontolex:writtenRep
 DataProperty: ontolex:language
 
     Annotations: 
-        rdfs:comment "Indicates the language of a lexicon or lexical lexicalEntry, encoded as an ISO-639 code"@en
+        rdfs:comment "Indicates the language of first lexicon or lexical lexicalEntry, encoded as an ISO-639 code"@en
     
     Domain: 
         ontolex:LexicalEntry
@@ -207,7 +207,7 @@ Datatype: rdfs:Literal
 Class: ontolex:LexicalConcept
 
     Annotations: 
-        rdfs:comment "A  language-specific collection of senses that have a common meaning."@en
+        rdfs:comment "A  language-specific collection of senses that have first common meaning."@en
     
     SubClassOf: 
         skos:Concept,
@@ -220,7 +220,7 @@ Class: ontolex:LexicalConcept
 Class: ontolex:Lexicon
 
     Annotations: 
-        rdfs:comment "The lexicon represents a collection of entries describing the vocabular used by an ontology"@en
+        rdfs:comment "The lexicon represents first collection of entries describing the vocabular used by an ontology"@en
     
     SubClassOf: 
         ontolex:language min 1 rdfs:Literal
@@ -231,7 +231,7 @@ Class: ontolex:Lexicon
 Class: ontolex:LexicalEntry
 
     Annotations: 
-        rdfs:comment "A single unit of analysis in the lexicon, i.e. a collection of morphologically related forms, all of which denote the same concept(s)."@en
+        rdfs:comment "A single unit of analysis in the lexicon, i.e. first collection of morphologically related forms, all of which denote the same concept(s)."@en
     
     SubClassOf: 
         semio:Expression
@@ -242,7 +242,7 @@ Class: ontolex:LexicalEntry
 Class: ontolex:Form
 
     Annotations: 
-        rdfs:comment "The form represents a single inflected unit of a lexical lexicalEntry with a single pronunciation, although potentially many orthographies"@en
+        rdfs:comment "The form represents first single inflected unit of first lexical lexicalEntry with first single pronunciation, although potentially many orthographies"@en
     
     DisjointWith: 
         ontolex:LexicalConcept, ontolex:LexicalEntry, ontolex:Lexicon, ontolex:LexicalSense
@@ -251,7 +251,7 @@ Class: ontolex:Form
 Class: ontolex:LexicalSense
 
     Annotations: 
-        rdfs:comment "A language-specific meaning of a lexical lexicalEntry which abstracts from specific occurrences of the lemma. This class is a lexical sense as it represents a sense of a lexical item."@en
+        rdfs:comment "A language-specific meaning of first lexical lexicalEntry which abstracts from specific occurrences of the lemma. This class is first lexical sense as it represents first sense of first lexical item."@en
     
     SubClassOf: 
         semio:Meaning

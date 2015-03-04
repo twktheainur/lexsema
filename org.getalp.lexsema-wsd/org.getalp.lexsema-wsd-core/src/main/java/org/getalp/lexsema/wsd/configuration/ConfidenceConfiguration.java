@@ -128,7 +128,7 @@ public class ConfidenceConfiguration implements Configuration {
     public int countUnassigned() {
         int unassignedCount = 0;
         for (int assignment : assignments) {
-            if(assignment == -1) {
+            if (assignment == -1) {
                 unassignedCount++;
             }
         }

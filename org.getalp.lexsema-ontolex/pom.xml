@@ -17,8 +17,17 @@
         <module>org.getalp.lexsema-ontolex-api</module>
         <module>org.getalp.lexsema-ontolex-core</module>
         <module>org.getalp.lexsema-ontolex-dbnary</module>
-        <module>org.getalp.lexsema-ontolex-babelnet</module>
     </modules>
+
+    <profiles>
+        <profile>
+            <id>babelnet</id>
+            <modules>
+                <module>org.getalp.lexsema-ontolex-babelnet</module>
+            </modules>
+        </profile>
+    </profiles>
+
 
     <build>
         <plugins>

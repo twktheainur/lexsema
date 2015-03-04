@@ -3,16 +3,16 @@ package org.getalp.lexsema.similarity.measures;
 import cern.jet.math.tdouble.DoubleFunctions;
 import com.wcohen.ss.AbstractStringDistance;
 import com.wcohen.ss.ScaledLevenstein;
-import org.getalp.lexsema.similarity.input.FuzzyCommonSubsequenceInput;
-import org.getalp.lexsema.similarity.input.OverlapInputSet;
+import org.getalp.lexsema.org.getalp.ml.optimization.functions.setfunctions.input.FuzzyCommonSubsequenceInput;
+import org.getalp.lexsema.org.getalp.ml.optimization.functions.setfunctions.input.OverlapInputSet;
 import org.getalp.lexsema.similarity.signatures.SemanticSignature;
-import org.getalp.optimization.functions.input.FunctionInput;
-import org.getalp.optimization.functions.setfunctions.extentions.Extension;
-import org.getalp.optimization.functions.setfunctions.extentions.LovaszExtention;
-import org.getalp.optimization.functions.setfunctions.input.SetFunctionInput;
-import org.getalp.optimization.functions.setfunctions.input.ValueListInput;
-import org.getalp.optimization.functions.setfunctions.submodular.Sum;
-import org.getalp.optimization.methods.GradientOptimisation;
+import org.getalp.ml.optimization.functions.input.FunctionInput;
+import org.getalp.ml.optimization.functions.setfunctions.extentions.Extension;
+import org.getalp.ml.optimization.functions.setfunctions.extentions.LovaszExtention;
+import org.getalp.ml.optimization.functions.setfunctions.input.SetFunctionInput;
+import org.getalp.ml.optimization.functions.setfunctions.input.ValueListInput;
+import org.getalp.ml.optimization.functions.setfunctions.submodular.Sum;
+import org.getalp.ml.optimization.methods.GradientOptimisation;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -144,9 +144,9 @@ public class TverskiIndexSimilarityMeasureImpl implements TverskiIndexSimilarity
                     fuzzyMatching, isDistance);
         } else {
             if (fuzzyMatching) {
-                input = new OverlapInputSet(la, lb, null, null, distance, isDistance);
+                input = new OverlapInputSet(la, lb, null, null, distance);
             } else {
-                input = new OverlapInputSet(la, lb, null, null, null, isDistance);
+                input = new OverlapInputSet(la, lb, null, null, null);
             }
         }
 
@@ -174,7 +174,7 @@ public class TverskiIndexSimilarityMeasureImpl implements TverskiIndexSimilarity
         return returnVal;
     }
 
-    @Override
+
     public void setDistance(AbstractStringDistance distance) {
         this.distance = distance;
     }
@@ -204,37 +204,37 @@ public class TverskiIndexSimilarityMeasureImpl implements TverskiIndexSimilarity
         this.fuzzyMatching = fuzzyMatching;
     }
 
-    @Override
+
     public void setRegularizeOverlapInput(boolean regularizeOverlapInput) {
         this.regularizeOverlapInput = regularizeOverlapInput;
     }
 
-    @Override
+
     public void setRegularizeRelations(boolean regularizeRelations) {
         this.regularizeRelations = regularizeRelations;
     }
 
-    @Override
+
     public void setOptimizeOverlapInput(boolean optimizeOverlapInput) {
         this.optimizeOverlapInput = optimizeOverlapInput;
     }
 
-    @Override
+
     public void setOptimizeRelations(boolean optimizeRelations) {
         this.optimizeRelations = optimizeRelations;
     }
 
-    @Override
+
     public void setQuadraticMatching(boolean quadraticMatching) {
         this.quadraticMatching = quadraticMatching;
     }
 
-    @Override
+
     public void setExtendedLesk(boolean extendedLesk) {
         this.extendedLesk = extendedLesk;
     }
 
-    @Override
+
     public void setRandomInit(boolean randomInit) {
         this.randomInit = randomInit;
     }
