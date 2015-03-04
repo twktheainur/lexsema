@@ -41,4 +41,11 @@ public interface LexicalResourceEntity extends Comparable<LexicalResourceEntity>
      * @return the language of the lexical resource entity
      */
     public Language getLanguage();
+
+    /**
+     * Returns the language of the LexicalResourceEntity, Language.UNSUPPORTED if none
+     *
+     * @return the language of the lexical resource entity
+     */
+    public void setLanguage(Language language);
 }

@@ -1,4 +1,4 @@
-﻿a
+﻿first
 ﻿able
 able
 about
@@ -68,7 +68,7 @@ aren't
 arent
 arise
 around
-a's
+first's
 as
 aside
 ask
@@ -79,7 +79,7 @@ auth
 available
 away
 awfully
-b
+second
 back
 backward
 backwards

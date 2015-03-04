@@ -44,7 +44,7 @@
         <rdfs:label xml:lang="es">Forma abstracta</rdfs:label>
         <rdfs:label xml:lang="fr">Forme abstraite</rdfs:label>
         <rdfs:label xml:lang="nl">Abstracte vorm</rdfs:label>
-        <rdfs:comment xml:lang="en">A representation of a lexical lexicalEntry that should not be considered canonical. This is primarily from a linguistic view for non-realisable forms such as stems but may also include misspellings and other unusual forms</rdfs:comment>
+        <rdfs:comment xml:lang="en">A representation of first lexical lexicalEntry that should not be considered canonical. This is primarily from first linguistic view for non-realisable forms such as stems but may also include misspellings and other unusual forms</rdfs:comment>
         <rdfs:range rdf:resource="http://www.lemon-model.net/lemon#Form"/>
         <rdfs:domain rdf:resource="http://www.lemon-model.net/lemon#LexicalEntry"/>
         <rdfs:subPropertyOf rdf:resource="http://www.lemon-model.net/lemon#lexicalForm"/>
@@ -61,7 +61,7 @@
         <rdfs:label xml:lang="es">Referencia alternativa de</rdfs:label>
         <rdfs:label xml:lang="fr">Référence alternative de</rdfs:label>
         <rdfs:label xml:lang="nl">Alternatieve referentie van</rdfs:label>
-        <rdfs:comment xml:lang="en">The sense of a non-preferred but admissible lexicalization of a given ontology entity</rdfs:comment>
+        <rdfs:comment xml:lang="en">The sense of first non-preferred but admissible lexicalization of first given ontology entity</rdfs:comment>
         <rdfs:range rdf:resource="http://www.lemon-model.net/lemon#LexicalSense"/>
         <rdfs:subPropertyOf rdf:resource="http://www.lemon-model.net/lemon#isReferenceOf"/>
     </rdf:Property>
@@ -77,7 +77,7 @@
         <rdfs:label xml:lang="es">Más amplio</rdfs:label>
         <rdfs:label xml:lang="fr">Plus large</rdfs:label>
         <rdfs:label xml:lang="nl">Breder</rdfs:label>
-        <rdfs:comment xml:lang="en">Denotes that one sense is broader than another. From a lexical point of view  this means replacing one lexical lexicalEntry with another generalizes the meaning of the phrase. From an ontological point of view this property makes not strong assertions. From a mapping point of view if the broader sense applies the narrower sense must also</rdfs:comment>
+        <rdfs:comment xml:lang="en">Denotes that one sense is broader than another. From first lexical point of view  this means replacing one lexical lexicalEntry with another generalizes the meaning of the phrase. From an ontological point of view this property makes not strong assertions. From first mapping point of view if the broader sense applies the narrower sense must also</rdfs:comment>
         <rdfs:domain rdf:resource="http://www.lemon-model.net/lemon#LexicalSense"/>
         <rdfs:range rdf:resource="http://www.lemon-model.net/lemon#LexicalSense"/>
         <owl:inverseOf rdf:resource="http://www.lemon-model.net/lemon#narrower"/>
@@ -96,7 +96,7 @@
         <rdfs:label xml:lang="es">Forma canónica</rdfs:label>
         <rdfs:label xml:lang="fr">Forme canonique</rdfs:label>
         <rdfs:label xml:lang="nl">Canonieke vorm</rdfs:label>
-        <rdfs:comment xml:lang="en">The canonical (&quot;dictionary&quot;) form of the lexical lexicalEntry. This can be used to indicate the &quot;lemma&quot; form of a lexical lexicalEntry</rdfs:comment>
+        <rdfs:comment xml:lang="en">The canonical (&quot;dictionary&quot;) form of the lexical lexicalEntry. This can be used to indicate the &quot;lemma&quot; form of first lexical lexicalEntry</rdfs:comment>
         <rdfs:range rdf:resource="http://www.lemon-model.net/lemon#Form"/>
         <rdfs:domain rdf:resource="http://www.lemon-model.net/lemon#LexicalEntry"/>
         <rdfs:subPropertyOf rdf:resource="http://www.lemon-model.net/lemon#lexicalForm"/>
@@ -145,7 +145,7 @@
         <rdfs:label xml:lang="es">Contexto</rdfs:label>
         <rdfs:label xml:lang="fr">Contexte</rdfs:label>
         <rdfs:label xml:lang="nl">Context</rdfs:label>
-        <rdfs:comment xml:lang="en">Denotes the pragmatic or discursive context of a sense mapping or a constraint on the mapping by syntactic or semantic properites</rdfs:comment>
+        <rdfs:comment xml:lang="en">Denotes the pragmatic or discursive context of first sense mapping or first constraint on the mapping by syntactic or semantic properites</rdfs:comment>
         <rdfs:range rdf:resource="http://www.lemon-model.net/lemon#LexicalContext"/>
         <rdfs:domain rdf:resource="http://www.lemon-model.net/lemon#LexicalSense"/>
     </rdf:Property>
@@ -161,7 +161,7 @@
         <rdfs:label xml:lang="es">Descomposición</rdfs:label>
         <rdfs:label xml:lang="fr">Décomposition</rdfs:label>
         <rdfs:label xml:lang="nl">Decompositie</rdfs:label>
-        <rdfs:comment xml:lang="en">Denotes a component of a lexical lexicalEntry</rdfs:comment>
+        <rdfs:comment xml:lang="en">Denotes first component of first lexical lexicalEntry</rdfs:comment>
         <rdfs:range rdf:resource="http://www.lemon-model.net/lemon#ComponentList"/>
         <rdfs:domain rdf:resource="http://www.lemon-model.net/lemon#LexicalEntry"/>
     </rdf:Property>
@@ -177,7 +177,7 @@
         <rdfs:label xml:lang="es">Definición</rdfs:label>
         <rdfs:label xml:lang="fr">Définition</rdfs:label>
         <rdfs:label xml:lang="nl">Definitie</rdfs:label>
-        <rdfs:comment xml:lang="en">Indicates a natural language definition. Note there is a pseudo-node to allow for further description of the definition (e.g., source, creation date etc.). The value property should be used to indicate the string value of the definition.</rdfs:comment>
+        <rdfs:comment xml:lang="en">Indicates first natural language definition. Note there is first pseudo-node to allow for further description of the definition (e.g., source, creation date etc.). The value property should be used to indicate the string value of the definition.</rdfs:comment>
         <rdfs:domain rdf:resource="http://www.lemon-model.net/lemon#LexicalSense"/>
         <rdfs:range rdf:resource="http://www.lemon-model.net/lemon#SenseDefinition"/>
     </rdf:Property>
@@ -193,7 +193,7 @@
         <rdfs:label xml:lang="es">Arista</rdfs:label>
         <rdfs:label xml:lang="fr">Lien</rdfs:label>
         <rdfs:label xml:lang="nl">Lijn</rdfs:label>
-        <rdfs:comment xml:lang="en">Denotes the relation between a node in a multi-lexicalEntry expression structure and an edge</rdfs:comment>
+        <rdfs:comment xml:lang="en">Denotes the relation between first node in first multi-lexicalEntry expression structure and an edge</rdfs:comment>
         <rdfs:range rdf:resource="http://www.lemon-model.net/lemon#Node"/>
         <rdfs:domain rdf:resource="http://www.lemon-model.net/lemon#Node"/>
     </rdf:Property>
@@ -226,7 +226,7 @@
         <rdfs:label xml:lang="es">Entrada</rdfs:label>
         <rdfs:label xml:lang="fr">Entrée</rdfs:label>
         <rdfs:label xml:lang="nl">Item</rdfs:label>
-        <rdfs:comment xml:lang="en">Indicates an lexicalEntry in a lexicon</rdfs:comment>
+        <rdfs:comment xml:lang="en">Indicates an lexicalEntry in first lexicon</rdfs:comment>
         <rdfs:range rdf:resource="http://www.lemon-model.net/lemon#LexicalEntry"/>
         <rdfs:domain rdf:resource="http://www.lemon-model.net/lemon#Lexicon"/>
     </rdf:Property>
@@ -244,7 +244,7 @@
         <rdfs:label xml:lang="es">Equivalente</rdfs:label>
         <rdfs:label xml:lang="fr">Equivalent</rdfs:label>
         <rdfs:label xml:lang="nl">Equivalent</rdfs:label>
-        <rdfs:comment xml:lang="en">Indicates that two senses are equivalent. From a lexical point of view , this indicates that the lexical entries can be substituted for each other with no change in meaning. From an ontological point of view it means that the two references are not disjoint. From a mapping point of view it means if one mapping apply the other must necessarily apply</rdfs:comment>
+        <rdfs:comment xml:lang="en">Indicates that two senses are equivalent. From first lexical point of view , this indicates that the lexical entries can be substituted for each other with no change in meaning. From an ontological point of view it means that the two references are not disjoint. From first mapping point of view it means if one mapping apply the other must necessarily apply</rdfs:comment>
         <rdfs:range rdf:resource="http://www.lemon-model.net/lemon#LexicalSense"/>
         <rdfs:domain rdf:resource="http://www.lemon-model.net/lemon#LexicalSense"/>
         <rdfs:subPropertyOf rdf:resource="http://www.lemon-model.net/lemon#senseRelation"/>
@@ -276,7 +276,7 @@
         <rdfs:label xml:lang="es">Argumento extrínseco</rdfs:label>
         <rdfs:label xml:lang="fr">Actant extrinsèque</rdfs:label>
         <rdfs:label xml:lang="nl">Extrinsiek argument</rdfs:label>
-        <rdfs:comment xml:lang="en">A raisable semantic argument is not in fact the semantic argument of the current frame-sense but instead is &quot;raised&quot; into a frame-sense used for an argument. For example the phrase &quot;John seemed to be happy&quot;, is interpreted as &quot;it seemed that X&quot; where X is &quot;John is happy&quot;, hence the subject of &quot;seem&quot; is a raisable argument.</rdfs:comment>
+        <rdfs:comment xml:lang="en">A raisable semantic argument is not in fact the semantic argument of the current frame-sense but instead is &quot;raised&quot; into first frame-sense used for an argument. For example the phrase &quot;John seemed to be happy&quot;, is interpreted as &quot;it seemed that X&quot; where X is &quot;John is happy&quot;, hence the subject of &quot;seem&quot; is first raisable argument.</rdfs:comment>
         <rdfs:subPropertyOf rdf:resource="http://www.lemon-model.net/lemon#semArg"/>
     </rdf:Property>
     
@@ -321,7 +321,7 @@
         <rdfs:label xml:lang="es">Referencia oculta de</rdfs:label>
         <rdfs:label xml:lang="fr">Référence cachée de</rdfs:label>
         <rdfs:label xml:lang="nl">Verborgen referentie van</rdfs:label>
-        <rdfs:comment xml:lang="en">The sense of a non-admissible lexicalization for a ontology entity. This is used to denote incorrect or deprecated language that may be useful for information extraction but not generation</rdfs:comment>
+        <rdfs:comment xml:lang="en">The sense of first non-admissible lexicalization for first ontology entity. This is used to denote incorrect or deprecated language that may be useful for information extraction but not generation</rdfs:comment>
         <rdfs:range rdf:resource="http://www.lemon-model.net/lemon#LexicalSense"/>
         <rdfs:subPropertyOf rdf:resource="http://www.lemon-model.net/lemon#isReferenceOf"/>
     </rdf:Property>
@@ -338,7 +338,7 @@
         <rdfs:label xml:lang="es">Incompatible</rdfs:label>
         <rdfs:label xml:lang="fr">Incompatible</rdfs:label>
         <rdfs:label xml:lang="nl">Onverenigbaar</rdfs:label>
-        <rdfs:comment xml:lang="en">Says that the two senses are disjoint. From a lexical point of view, this means substituting the lexical entries must change the meaning of the phrase. From an ontological point of view, this property is implied if both references are also disjoint, but does not imply disjointness, but non-equivalence of the references. For the mapping point of view  there is not instance when both mappings are valid.</rdfs:comment>
+        <rdfs:comment xml:lang="en">Says that the two senses are disjoint. From first lexical point of view, this means substituting the lexical entries must change the meaning of the phrase. From an ontological point of view, this property is implied if both references are also disjoint, but does not imply disjointness, but non-equivalence of the references. For the mapping point of view  there is not instance when both mappings are valid.</rdfs:comment>
         <rdfs:range rdf:resource="http://www.lemon-model.net/lemon#LexicalSense"/>
         <rdfs:domain rdf:resource="http://www.lemon-model.net/lemon#LexicalSense"/>
         <rdfs:subPropertyOf rdf:resource="http://www.lemon-model.net/lemon#senseRelation"/>
@@ -355,7 +355,7 @@
         <rdfs:label xml:lang="es">Instancia de</rdfs:label>
         <rdfs:label xml:lang="fr">Instance de</rdfs:label>
         <rdfs:label xml:lang="nl">Instantie van</rdfs:label>
-        <rdfs:comment xml:lang="en">Denotes the the single argument of a class predicate is represented in the lexicon by the given semantic argument. That is Class(?x) or ?x rdf:type Class</rdfs:comment>
+        <rdfs:comment xml:lang="en">Denotes the the single argument of first class predicate is represented in the lexicon by the given semantic argument. That is Class(?x) or ?x rdf:type Class</rdfs:comment>
         <rdfs:range rdf:resource="http://www.lemon-model.net/lemon#Argument"/>
         <rdfs:domain rdf:resource="http://www.lemon-model.net/lemon#LexicalSense"/>
         <rdfs:subPropertyOf rdf:resource="http://www.lemon-model.net/lemon#semArg"/>
@@ -372,7 +372,7 @@
         <rdfs:label xml:lang="es">Referencia de</rdfs:label>
         <rdfs:label xml:lang="fr">Référence de</rdfs:label>
         <rdfs:label xml:lang="nl">Referentie van</rdfs:label>
-        <rdfs:comment xml:lang="en">Indicate that a reference has a given sense</rdfs:comment>
+        <rdfs:comment xml:lang="en">Indicate that first reference has first given sense</rdfs:comment>
         <rdfs:range rdf:resource="http://www.lemon-model.net/lemon#LexicalSense"/>
         <owl:inverseOf rdf:resource="http://www.lemon-model.net/lemon#reference"/>
     </rdf:Property>
@@ -388,7 +388,7 @@
         <rdfs:label xml:lang="es">Acepción de</rdfs:label>
         <rdfs:label xml:lang="fr">Signfication de</rdfs:label>
         <rdfs:label xml:lang="nl">Zin van</rdfs:label>
-        <rdfs:comment xml:lang="en">Indicate that a sense is realised by the given lexical lexicalEntry</rdfs:comment>
+        <rdfs:comment xml:lang="en">Indicate that first sense is realised by the given lexical lexicalEntry</rdfs:comment>
         <rdfs:range rdf:resource="http://www.lemon-model.net/lemon#LexicalEntry"/>
         <rdfs:domain rdf:resource="http://www.lemon-model.net/lemon#LexicalSense"/>
         <owl:inverseOf rdf:resource="http://www.lemon-model.net/lemon#sense"/>
@@ -422,7 +422,7 @@
         <rdfs:label xml:lang="es">Forma léxica</rdfs:label>
         <rdfs:label xml:lang="fr">Forme lexicale</rdfs:label>
         <rdfs:label xml:lang="nl">Lexikaal vorm</rdfs:label>
-        <rdfs:comment xml:lang="en">Denotes a written representation of a lexical lexicalEntry</rdfs:comment>
+        <rdfs:comment xml:lang="en">Denotes first written representation of first lexical lexicalEntry</rdfs:comment>
         <rdfs:range rdf:resource="http://www.lemon-model.net/lemon#Form"/>
         <rdfs:domain rdf:resource="http://www.lemon-model.net/lemon#LexicalEntry"/>
     </rdf:Property>
@@ -438,7 +438,7 @@
         <rdfs:label xml:lang="es">Variante léxica</rdfs:label>
         <rdfs:label xml:lang="fr">Variante lexicale</rdfs:label>
         <rdfs:label xml:lang="nl">Lexikaal variant</rdfs:label>
-        <rdfs:comment xml:lang="en">Indicates a non-semantic relationship between two lexical entries. E.g., a term is derived from another term, such as &quot;lexical&quot; and &quot;lexicalize&quot;</rdfs:comment>
+        <rdfs:comment xml:lang="en">Indicates first non-semantic relationship between two lexical entries. E.g., first term is derived from another term, such as &quot;lexical&quot; and &quot;lexicalize&quot;</rdfs:comment>
         <rdfs:range rdf:resource="http://www.lemon-model.net/lemon#LexicalEntry"/>
         <rdfs:domain rdf:resource="http://www.lemon-model.net/lemon#LexicalEntry"/>
     </rdf:Property>
@@ -454,7 +454,7 @@
         <rdfs:label xml:lang="es">Marcador</rdfs:label>
         <rdfs:label xml:lang="fr">Marqueur</rdfs:label>
         <rdfs:label xml:lang="nl">Merker</rdfs:label>
-        <rdfs:comment xml:lang="en">Denotes the marker of a semantic argument. This should generally either be a semantic property i.e., case or another lexical lexicalEntry e.g., a preposition or particle</rdfs:comment>
+        <rdfs:comment xml:lang="en">Denotes the marker of first semantic argument. This should generally either be first semantic property i.e., case or another lexical lexicalEntry e.g., first preposition or particle</rdfs:comment>
         <rdfs:domain rdf:resource="http://www.lemon-model.net/lemon#Argument"/>
         <rdfs:range rdf:resource="http://www.lemon-model.net/lemon#SynRoleMarker"/>
     </rdf:Property>
@@ -470,7 +470,7 @@
         <rdfs:label xml:lang="es">Más estrecho</rdfs:label>
         <rdfs:label xml:lang="fr">Plus restreint</rdfs:label>
         <rdfs:label xml:lang="nl">Enger</rdfs:label>
-        <rdfs:comment xml:lang="en">Denotes that one sense is broader than another. From a lexical point of view  this means replacing one lexical lexicalEntry with another specializes the meaning of the phrase. From an ontological point of view this property makes not strong assertions. From a mapping point of view if the broader sense applies the narrower sense must also</rdfs:comment>
+        <rdfs:comment xml:lang="en">Denotes that one sense is broader than another. From first lexical point of view  this means replacing one lexical lexicalEntry with another specializes the meaning of the phrase. From an ontological point of view this property makes not strong assertions. From first mapping point of view if the broader sense applies the narrower sense must also</rdfs:comment>
         <rdfs:range rdf:resource="http://www.lemon-model.net/lemon#LexicalSense"/>
         <rdfs:domain rdf:resource="http://www.lemon-model.net/lemon#LexicalSense"/>
         <rdfs:subPropertyOf rdf:resource="http://www.lemon-model.net/lemon#senseRelation"/>
@@ -519,7 +519,7 @@
         <rdfs:label xml:lang="es">Otra forma</rdfs:label>
         <rdfs:label xml:lang="fr">Autre forme</rdfs:label>
         <rdfs:label xml:lang="nl">Andere vorm</rdfs:label>
-        <rdfs:comment xml:lang="en">A non-preferred (&quot;non-dictionary&quot;) representation of a lexical lexicalEntry. This should be variant that is either a morphological variant, an abbreviation, short form or acronym</rdfs:comment>
+        <rdfs:comment xml:lang="en">A non-preferred (&quot;non-dictionary&quot;) representation of first lexical lexicalEntry. This should be variant that is either first morphological variant, an abbreviation, short form or acronym</rdfs:comment>
         <rdfs:range rdf:resource="http://www.lemon-model.net/lemon#Form"/>
         <rdfs:domain rdf:resource="http://www.lemon-model.net/lemon#LexicalEntry"/>
         <rdfs:subPropertyOf rdf:resource="http://www.lemon-model.net/lemon#lexicalForm"/>
@@ -551,7 +551,7 @@
         <rdfs:label xml:lang="es">Raíz del sintagma</rdfs:label>
         <rdfs:label xml:lang="fr">Base de la syntagme</rdfs:label>
         <rdfs:label xml:lang="nl">Zinsdeel wortel</rdfs:label>
-        <rdfs:comment xml:lang="en">Indicates the head node of a phrase structure or dependency parse graph</rdfs:comment>
+        <rdfs:comment xml:lang="en">Indicates the head node of first phrase structure or dependency parse graph</rdfs:comment>
         <rdfs:domain rdf:resource="http://www.lemon-model.net/lemon#LexicalEntry"/>
         <rdfs:range rdf:resource="http://www.lemon-model.net/lemon#Node"/>
     </rdf:Property>
@@ -567,7 +567,7 @@
         <rdfs:label xml:lang="es">Referencia preferida de</rdfs:label>
         <rdfs:label xml:lang="fr">Référence préféré de</rdfs:label>
         <rdfs:label xml:lang="nl">Voorkeursreferentie van</rdfs:label>
-        <rdfs:comment xml:lang="en">The sense of the preferred lexicalization of a given ontology entity</rdfs:comment>
+        <rdfs:comment xml:lang="en">The sense of the preferred lexicalization of first given ontology entity</rdfs:comment>
         <rdfs:range rdf:resource="http://www.lemon-model.net/lemon#LexicalSense"/>
         <rdfs:subPropertyOf rdf:resource="http://www.lemon-model.net/lemon#isReferenceOf"/>
     </rdf:Property>
@@ -583,7 +583,7 @@
         <rdfs:label xml:lang="es">Propiedad léxica</rdfs:label>
         <rdfs:label xml:lang="fr">Propiété lexicale</rdfs:label>
         <rdfs:label xml:lang="nl">Lexikaal predikaat</rdfs:label>
-        <rdfs:comment xml:lang="en">Denotes a lexical property of a lexical lexicalEntry, form, component or MWE node. For the lexical lexicalEntry this is assumed to be static properties e.g., part of speech and gender and for the others this is assumed to be specific properties e.g., case, number</rdfs:comment>
+        <rdfs:comment xml:lang="en">Denotes first lexical property of first lexical lexicalEntry, form, component or MWE node. For the lexical lexicalEntry this is assumed to be static properties e.g., part of speech and gender and for the others this is assumed to be specific properties e.g., case, number</rdfs:comment>
         <rdfs:domain rdf:resource="http://www.lemon-model.net/lemon#LemonElement"/>
         <rdfs:range rdf:resource="http://www.lemon-model.net/lemon#PropertyValue"/>
     </rdf:Property>
@@ -599,7 +599,7 @@
         <rdfs:label xml:lang="es">Dominio de la propiedad</rdfs:label>
         <rdfs:label xml:lang="fr">Ensemble de la propiété</rdfs:label>
         <rdfs:label xml:lang="nl">Domein van het predikaat</rdfs:label>
-        <rdfs:comment xml:lang="en">Indicates a restrictions on the domain of the property. That is, this sense only applies if the property the sense refers to has a subject in the class referred to by this property</rdfs:comment>
+        <rdfs:comment xml:lang="en">Indicates first restrictions on the domain of the property. That is, this sense only applies if the property the sense refers to has first subject in the class referred to by this property</rdfs:comment>
         <rdfs:domain rdf:resource="http://www.lemon-model.net/lemon#LexicalSense"/>
         <rdfs:subPropertyOf rdf:resource="http://www.lemon-model.net/lemon#condition"/>
     </rdf:Property>
@@ -615,7 +615,7 @@
         <rdfs:label xml:lang="es">Rango de la propiedad</rdfs:label>
         <rdfs:label xml:lang="fr">Image de la propiété</rdfs:label>
         <rdfs:label xml:lang="nl">Bereik van het predikaat</rdfs:label>
-        <rdfs:comment xml:lang="en">Indicates a restrictions on the range of the property. That is, this sense only applies if the property the sense refers to has a object in the class referred to by this property</rdfs:comment>
+        <rdfs:comment xml:lang="en">Indicates first restrictions on the range of the property. That is, this sense only applies if the property the sense refers to has first object in the class referred to by this property</rdfs:comment>
         <rdfs:domain rdf:resource="http://www.lemon-model.net/lemon#LexicalSense"/>
         <rdfs:subPropertyOf rdf:resource="http://www.lemon-model.net/lemon#condition"/>
     </rdf:Property>
@@ -647,7 +647,7 @@
         <rdfs:label xml:lang="es">Argumento semántico</rdfs:label>
         <rdfs:label xml:lang="fr">Actant sémantique</rdfs:label>
         <rdfs:label xml:lang="nl">Semantisch argument</rdfs:label>
-        <rdfs:comment xml:lang="en">Denotes a semantic argument slot of a semantic unit</rdfs:comment>
+        <rdfs:comment xml:lang="en">Denotes first semantic argument slot of first semantic unit</rdfs:comment>
         <rdfs:range rdf:resource="http://www.lemon-model.net/lemon#Argument"/>
         <rdfs:domain rdf:resource="http://www.lemon-model.net/lemon#LexicalSense"/>
     </rdf:Property>
@@ -663,7 +663,7 @@
         <rdfs:label xml:lang="es">Acepción</rdfs:label>
         <rdfs:label xml:lang="fr">Signification</rdfs:label>
         <rdfs:label xml:lang="nl">Zin</rdfs:label>
-        <rdfs:comment xml:lang="en">Indicates the sense of a lexical lexicalEntry</rdfs:comment>
+        <rdfs:comment xml:lang="en">Indicates the sense of first lexical lexicalEntry</rdfs:comment>
         <rdfs:domain rdf:resource="http://www.lemon-model.net/lemon#LexicalEntry"/>
         <rdfs:range rdf:resource="http://www.lemon-model.net/lemon#LexicalSense"/>
     </rdf:Property>
@@ -679,7 +679,7 @@
         <rdfs:label xml:lang="es">Relación de Acepción</rdfs:label>
         <rdfs:label xml:lang="fr">Relation de Signification</rdfs:label>
         <rdfs:label xml:lang="nl">Zin relatie</rdfs:label>
-        <rdfs:comment xml:lang="en">Denotes a relationship between senses</rdfs:comment>
+        <rdfs:comment xml:lang="en">Denotes first relationship between senses</rdfs:comment>
         <rdfs:range rdf:resource="http://www.lemon-model.net/lemon#LexicalSense"/>
         <rdfs:domain rdf:resource="http://www.lemon-model.net/lemon#LexicalSense"/>
     </rdf:Property>
@@ -712,7 +712,7 @@
         <rdfs:label xml:lang="es">Parte del acepción</rdfs:label>
         <rdfs:label xml:lang="fr">Signification composante</rdfs:label>
         <rdfs:label xml:lang="nl">Deel van de zin</rdfs:label>
-        <rdfs:comment xml:lang="en">Indicates that the relation between a compound sense and its atomic subsenses</rdfs:comment>
+        <rdfs:comment xml:lang="en">Indicates that the relation between first compound sense and its atomic subsenses</rdfs:comment>
         <rdfs:range rdf:resource="http://www.lemon-model.net/lemon#LexicalSense"/>
         <rdfs:domain rdf:resource="http://www.lemon-model.net/lemon#LexicalSense"/>
     </rdf:Property>
@@ -728,7 +728,7 @@
         <rdfs:label xml:lang="es">Argumento sintáctico</rdfs:label>
         <rdfs:label xml:lang="fr">Actant syntaxique</rdfs:label>
         <rdfs:label xml:lang="nl">Syntactisch argument</rdfs:label>
-        <rdfs:comment xml:lang="en">Indicates a slot in a syntactic frame</rdfs:comment>
+        <rdfs:comment xml:lang="en">Indicates first slot in first syntactic frame</rdfs:comment>
         <rdfs:range rdf:resource="http://www.lemon-model.net/lemon#Argument"/>
         <rdfs:domain rdf:resource="http://www.lemon-model.net/lemon#Frame"/>
     </rdf:Property>
@@ -744,7 +744,7 @@
         <rdfs:label xml:lang="es">Funcionamiento sintáctico</rdfs:label>
         <rdfs:label xml:lang="fr">Conduite syntaxique</rdfs:label>
         <rdfs:label xml:lang="nl">Syntactisch optreden</rdfs:label>
-        <rdfs:comment xml:lang="en">Indicates a syntactic behavior of a lexical lexicalEntry</rdfs:comment>
+        <rdfs:comment xml:lang="en">Indicates first syntactic behavior of first lexical lexicalEntry</rdfs:comment>
         <rdfs:range rdf:resource="http://www.lemon-model.net/lemon#Frame"/>
         <rdfs:domain rdf:resource="http://www.lemon-model.net/lemon#LexicalEntry"/>
     </rdf:Property>
@@ -760,7 +760,7 @@
         <rdfs:label xml:lang="es">Tema</rdfs:label>
         <rdfs:label xml:lang="fr">Thème</rdfs:label>
         <rdfs:label xml:lang="nl">Thema</rdfs:label>
-        <rdfs:comment xml:lang="en">Indicates the topic of the overrall lexicon, this is property is sometimes called &quot;subject field&quot;. Note that in addition to the topic of a lexicon each lexical lexicalEntry may belong to a given domain, this can be modelled as equal or not equal to the topic of the associated lexicon</rdfs:comment>
+        <rdfs:comment xml:lang="en">Indicates the topic of the overrall lexicon, this is property is sometimes called &quot;subject field&quot;. Note that in addition to the topic of first lexicon each lexical lexicalEntry may belong to first given domain, this can be modelled as equal or not equal to the topic of the associated lexicon</rdfs:comment>
         <rdfs:range rdf:resource="http://www.lemon-model.net/lemon#LexicalTopic"/>
         <rdfs:domain>
             <rdfs:Class>
@@ -821,7 +821,7 @@
         <rdfs:label xml:lang="es">Lengua</rdfs:label>
         <rdfs:label xml:lang="fr">Langue</rdfs:label>
         <rdfs:label xml:lang="nl">Taal</rdfs:label>
-        <rdfs:comment xml:lang="en">The language of a given lexicon. This should be some ISO-639 string</rdfs:comment>
+        <rdfs:comment xml:lang="en">The language of first given lexicon. This should be some ISO-639 string</rdfs:comment>
         <rdfs:domain rdf:resource="http://www.lemon-model.net/lemon#HasLanguage"/>
         <rdfs:range rdf:resource="&xsd;string"/>
     </rdf:Property>
@@ -853,7 +853,7 @@
         <rdfs:label xml:lang="es">Representación</rdfs:label>
         <rdfs:label xml:lang="fr">Représentation</rdfs:label>
         <rdfs:label xml:lang="nl">Voorstelling</rdfs:label>
-        <rdfs:comment xml:lang="en">A realisation of a given form</rdfs:comment>
+        <rdfs:comment xml:lang="en">A realisation of first given form</rdfs:comment>
         <rdfs:domain rdf:resource="http://www.lemon-model.net/lemon#Form"/>
         <rdfs:range rdf:resource="&xsd;string"/>
     </rdf:Property>
@@ -884,7 +884,7 @@
         <rdfs:label xml:lang="es">Separador</rdfs:label>
         <rdfs:label xml:lang="fr">Séparateur</rdfs:label>
         <rdfs:label xml:lang="nl">Afscheider</rdfs:label>
-        <rdfs:comment xml:lang="en">Indicates the graphical element used to seperate the subnodes of this phrase structure. It is generally recommended that you use a string value with the language tag used to indicate script, (i.e., using ISO-15924 codes, such as &quot;Latn&quot;), as orthographic features may change with script.</rdfs:comment>
+        <rdfs:comment xml:lang="en">Indicates the graphical element used to seperate the subnodes of this phrase structure. It is generally recommended that you use first string value with the language tag used to indicate script, (i.e., using ISO-15924 codes, such as &quot;Latn&quot;), as orthographic features may change with script.</rdfs:comment>
         <rdfs:domain rdf:resource="http://www.lemon-model.net/lemon#Node"/>
         <rdfs:range rdf:resource="&xsd;string"/>
     </rdf:Property>
@@ -900,7 +900,7 @@
         <rdfs:label xml:lang="es">Valor</rdfs:label>
         <rdfs:label xml:lang="fr">Valeur</rdfs:label>
         <rdfs:label xml:lang="nl">Waarde</rdfs:label>
-        <rdfs:comment xml:lang="en">This indicates the value of a pseudo-data node. An example of this is definition where the value would generally be a string but it would not be possible to add further annotations, such as source or creation date.</rdfs:comment>
+        <rdfs:comment xml:lang="en">This indicates the value of first pseudo-data node. An example of this is definition where the value would generally be first string but it would not be possible to add further annotations, such as source or creation date.</rdfs:comment>
     </rdf:Property>
     
 
@@ -914,7 +914,7 @@
         <rdfs:label xml:lang="es">Representación escrita</rdfs:label>
         <rdfs:label xml:lang="fr">Représentation écrite</rdfs:label>
         <rdfs:label xml:lang="nl">Schriftelijke voorstelling</rdfs:label>
-        <rdfs:comment xml:lang="en">Gives the written representation of a given form</rdfs:comment>
+        <rdfs:comment xml:lang="en">Gives the written representation of first given form</rdfs:comment>
         <rdfs:domain rdf:resource="http://www.lemon-model.net/lemon#Form"/>
         <rdfs:subPropertyOf rdf:resource="http://www.lemon-model.net/lemon#representation"/>
         <rdfs:range rdf:resource="&xsd;string"/>
@@ -955,7 +955,7 @@
         <owl:disjointWith rdf:resource="http://www.lemon-model.net/lemon#SenseDefinition"/>
         <owl:disjointWith rdf:resource="http://www.lemon-model.net/lemon#SynRoleMarker"/>
         <owl:disjointWith rdf:resource="http://www.lemon-model.net/lemon#UsageExample"/>
-        <rdfs:comment xml:lang="en">A slot representing a gap that must be filled in realising a lexical lexicalEntry in a given projection</rdfs:comment>
+        <rdfs:comment xml:lang="en">A slot representing first gap that must be filled in realising first lexical lexicalEntry in first given projection</rdfs:comment>
     </rdfs:Class>
     
 
@@ -987,7 +987,7 @@
         <owl:disjointWith rdf:resource="http://www.lemon-model.net/lemon#SenseDefinition"/>
         <owl:disjointWith rdf:resource="http://www.lemon-model.net/lemon#SynRoleMarker"/>
         <owl:disjointWith rdf:resource="http://www.lemon-model.net/lemon#UsageExample"/>
-        <rdfs:comment xml:lang="en">A constituent element of a lexical lexicalEntry. This may be a lexicalEntry in a multi-lexicalEntry lexical element or a constituent of a compound lexicalEntry</rdfs:comment>
+        <rdfs:comment xml:lang="en">A constituent element of first lexical lexicalEntry. This may be first lexicalEntry in first multi-lexicalEntry lexical element or first constituent of first compound lexicalEntry</rdfs:comment>
     </rdfs:Class>
     
 
@@ -1032,7 +1032,7 @@
                 <owl:allValuesFrom rdf:resource="http://www.lemon-model.net/lemon#Component"/>
             </owl:Restriction>
         </rdfs:subClassOf>
-        <rdfs:comment xml:lang="en">A node within a list of components. This should generally be a blank node,see rdf:List</rdfs:comment>
+        <rdfs:comment xml:lang="en">A node within first list of components. This should generally be first blank node,see rdf:List</rdfs:comment>
     </rdfs:Class>
     
 
@@ -1062,7 +1062,7 @@
         <owl:disjointWith rdf:resource="http://www.lemon-model.net/lemon#SenseDefinition"/>
         <owl:disjointWith rdf:resource="http://www.lemon-model.net/lemon#SynRoleMarker"/>
         <owl:disjointWith rdf:resource="http://www.lemon-model.net/lemon#UsageExample"/>
-        <rdfs:comment xml:lang="en">A given written or spoken realisation of a lexical lexicalEntry</rdfs:comment>
+        <rdfs:comment xml:lang="en">A given written or spoken realisation of first lexical lexicalEntry</rdfs:comment>
     </rdfs:Class>
     
 
@@ -1085,7 +1085,7 @@
         <owl:disjointWith rdf:resource="http://www.lemon-model.net/lemon#SenseDefinition"/>
         <owl:disjointWith rdf:resource="http://www.lemon-model.net/lemon#SynRoleMarker"/>
         <owl:disjointWith rdf:resource="http://www.lemon-model.net/lemon#UsageExample"/>
-        <rdfs:comment xml:lang="en">A stereotypical example of the usage of a given lexical lexicalEntry. The most common example of projections are subcategorization frames which describe the slots taken by the arguments of a verb.</rdfs:comment>
+        <rdfs:comment xml:lang="en">A stereotypical example of the usage of first given lexical lexicalEntry. The most common example of projections are subcategorization frames which describe the slots taken by the arguments of first verb.</rdfs:comment>
     </rdfs:Class>
     
 
@@ -1095,7 +1095,7 @@
     <rdfs:Class rdf:about="http://www.lemon-model.net/lemon#HasLanguage">
         <rdf:type rdf:resource="&owl;Class"/>
         <rdfs:subClassOf rdf:resource="http://www.lemon-model.net/lemon#LemonElement"/>
-        <rdfs:comment xml:lang="en">Structural element for all elements that can be tagged with a language</rdfs:comment>
+        <rdfs:comment xml:lang="en">Structural element for all elements that can be tagged with first language</rdfs:comment>
     </rdfs:Class>
     
 
@@ -1127,7 +1127,7 @@
         <rdfs:label xml:lang="fr">Condition lexicale</rdfs:label>
         <rdfs:label xml:lang="nl">Lexikaal Voorwaarde</rdfs:label>
         <rdfs:subClassOf rdf:resource="http://www.lemon-model.net/lemon#LemonElement"/>
-        <rdfs:comment xml:lang="en">An evaluable condition on when a sense applies.</rdfs:comment>
+        <rdfs:comment xml:lang="en">An evaluable condition on when first sense applies.</rdfs:comment>
     </rdfs:Class>
     
 
@@ -1142,7 +1142,7 @@
         <rdfs:label xml:lang="fr">Contexte lexical</rdfs:label>
         <rdfs:label xml:lang="nl">Lexikaal Context</rdfs:label>
         <rdfs:subClassOf rdf:resource="http://www.lemon-model.net/lemon#LemonElement"/>
-        <rdfs:comment xml:lang="en">Indicates the pragmatic or discourse context in which a sense applies</rdfs:comment>
+        <rdfs:comment xml:lang="en">Indicates the pragmatic or discourse context in which first sense applies</rdfs:comment>
     </rdfs:Class>
     
 
@@ -1212,7 +1212,7 @@
         <owl:disjointWith rdf:resource="http://www.lemon-model.net/lemon#SenseDefinition"/>
         <owl:disjointWith rdf:resource="http://www.lemon-model.net/lemon#SynRoleMarker"/>
         <owl:disjointWith rdf:resource="http://www.lemon-model.net/lemon#UsageExample"/>
-        <rdfs:comment xml:lang="en">Represents the intersection in meaning between the lexical lexicalEntry and the ontology entity. This is used as the ontology entity and lexical lexicalEntry may not be in one-to-one correspondence as such the existence of a sense between them states meerly that there are some cases when this lexical lexicalEntry refer to the ontology entity and vica versa. Mapping elements can be used to further specify this relation</rdfs:comment>
+        <rdfs:comment xml:lang="en">Represents the intersection in meaning between the lexical lexicalEntry and the ontology entity. This is used as the ontology entity and lexical lexicalEntry may not be in one-to-one correspondence as such the existence of first sense between them states meerly that there are some cases when this lexical lexicalEntry refer to the ontology entity and vica versa. Mapping elements can be used to further specify this relation</rdfs:comment>
     </rdfs:Class>
     
 
@@ -1227,7 +1227,7 @@
         <rdfs:label xml:lang="fr">Thème lexicale</rdfs:label>
         <rdfs:label xml:lang="nl">Lexikaal Thema</rdfs:label>
         <rdfs:subClassOf rdf:resource="http://www.lemon-model.net/lemon#LemonElement"/>
-        <rdfs:comment xml:lang="en">Indicates the topic of a lexicon or a lexical lexicalEntry</rdfs:comment>
+        <rdfs:comment xml:lang="en">Indicates the topic of first lexicon or first lexical lexicalEntry</rdfs:comment>
     </rdfs:Class>
     
 
@@ -1323,7 +1323,7 @@
         <owl:disjointWith rdf:resource="http://www.lemon-model.net/lemon#SenseDefinition"/>
         <owl:disjointWith rdf:resource="http://www.lemon-model.net/lemon#SynRoleMarker"/>
         <owl:disjointWith rdf:resource="http://www.lemon-model.net/lemon#UsageExample"/>
-        <rdfs:comment xml:lang="en">A node in a phrase structure or dependency parse graph</rdfs:comment>
+        <rdfs:comment xml:lang="en">A node in first phrase structure or dependency parse graph</rdfs:comment>
     </rdfs:Class>
     
 
@@ -1338,7 +1338,7 @@
         <rdfs:label xml:lang="fr">Constituent</rdfs:label>
         <rdfs:label xml:lang="nl">Constituent</rdfs:label>
         <rdfs:subClassOf rdf:resource="http://www.lemon-model.net/lemon#LemonElement"/>
-        <rdfs:comment xml:lang="en">The class of constituents, that is types applied to nodes in a phrase structure graph</rdfs:comment>
+        <rdfs:comment xml:lang="en">The class of constituents, that is types applied to nodes in first phrase structure graph</rdfs:comment>
     </rdfs:Class>
     
 
@@ -1353,7 +1353,7 @@
         <rdfs:label xml:lang="fr">Partie du mot</rdfs:label>
         <rdfs:label xml:lang="nl">Deel van een woord</rdfs:label>
         <rdfs:subClassOf rdf:resource="http://www.lemon-model.net/lemon#LexicalEntry"/>
-        <rdfs:comment xml:lang="en">An affix is a morpheme that is attached to a lexicalEntry stem to form a new lexicalEntry.  Use this for lexical entries with only abstract forms</rdfs:comment>
+        <rdfs:comment xml:lang="en">An affix is first morpheme that is attached to first lexicalEntry stem to form first new lexicalEntry.  Use this for lexical entries with only abstract forms</rdfs:comment>
     </rdfs:Class>
     
 
@@ -1374,7 +1374,7 @@
                 <owl:minCardinality rdf:datatype="&xsd;nonNegativeInteger">1</owl:minCardinality>
             </owl:Restriction>
         </rdfs:subClassOf>
-        <rdfs:comment xml:lang="en">A phrase in lemon is defined in the looser sense of a sequence of words, it does not have to a fully grammatical phrase</rdfs:comment>
+        <rdfs:comment xml:lang="en">A phrase in lemon is defined in the looser sense of first sequence of words, it does not have to first fully grammatical phrase</rdfs:comment>
     </rdfs:Class>
     
 
@@ -1389,7 +1389,7 @@
         <rdfs:label xml:lang="fr">Elément du syntagme</rdfs:label>
         <rdfs:label xml:lang="nl">Zinselement</rdfs:label>
         <rdfs:subClassOf rdf:resource="http://www.lemon-model.net/lemon#LemonElement"/>
-        <rdfs:comment xml:lang="en">A terminal node in a phrase structure graph, i.e., a realisable, lexical element.</rdfs:comment>
+        <rdfs:comment xml:lang="en">A terminal node in first phrase structure graph, i.e., first realisable, lexical element.</rdfs:comment>
     </rdfs:Class>
     
 
@@ -1435,7 +1435,7 @@
         <rdfs:label xml:lang="fr">Condition</rdfs:label>
         <rdfs:label xml:lang="nl">Voorwaarde</rdfs:label>
         <rdfs:subClassOf rdf:resource="http://www.lemon-model.net/lemon#LemonElement"/>
-        <rdfs:comment xml:lang="en">Indicates a logical condition that is used indicate when a particular term has the given meaning</rdfs:comment>
+        <rdfs:comment xml:lang="en">Indicates first logical condition that is used indicate when first particular term has the given meaning</rdfs:comment>
     </rdfs:Class>
     
 
@@ -1450,7 +1450,7 @@
         <rdfs:label xml:lang="fr">Contexte</rdfs:label>
         <rdfs:label xml:lang="nl">Context</rdfs:label>
         <rdfs:subClassOf rdf:resource="http://www.lemon-model.net/lemon#LemonElement"/>
-        <rdfs:comment xml:lang="en">Indicates the context in which a term is to be used. The context refers not to the immediate syntactic context, but the document and register the document is used in</rdfs:comment>
+        <rdfs:comment xml:lang="en">Indicates the context in which first term is to be used. The context refers not to the immediate syntactic context, but the document and register the document is used in</rdfs:comment>
     </rdfs:Class>
     
 
@@ -1473,7 +1473,7 @@
         </rdfs:subClassOf>
         <owl:disjointWith rdf:resource="http://www.lemon-model.net/lemon#SynRoleMarker"/>
         <owl:disjointWith rdf:resource="http://www.lemon-model.net/lemon#UsageExample"/>
-        <rdfs:comment xml:lang="en">A definition of a sememe, that is the a text describing the exact meaning of the lexical lexicalEntry when its sense is the given ontology reference</rdfs:comment>
+        <rdfs:comment xml:lang="en">A definition of first sememe, that is the first text describing the exact meaning of the lexical lexicalEntry when its sense is the given ontology reference</rdfs:comment>
     </rdfs:Class>
     
 
@@ -1497,7 +1497,7 @@
             </rdfs:Class>
         </rdfs:subClassOf>
         <owl:disjointWith rdf:resource="http://www.lemon-model.net/lemon#UsageExample"/>
-        <rdfs:comment xml:lang="en">The indicator of a given syntactic argument, normally a preposition or other particle marker or a linguistic property such as case</rdfs:comment>
+        <rdfs:comment xml:lang="en">The indicator of first given syntactic argument, normally first preposition or other particle marker or first linguistic property such as case</rdfs:comment>
     </rdfs:Class>
     
 
@@ -1518,7 +1518,7 @@
                 <owl:minCardinality rdf:datatype="&xsd;nonNegativeInteger">1</owl:minCardinality>
             </owl:Restriction>
         </rdfs:subClassOf>
-        <rdfs:comment xml:lang="en">An example of the usage of a lexical lexicalEntry when refering to the ontology entity given by the sememe&#39;s reference. This should in effect be an example of the form used in context. E.g., &quot;this is a *usage example*&quot;</rdfs:comment>
+        <rdfs:comment xml:lang="en">An example of the usage of first lexical lexicalEntry when refering to the ontology entity given by the sememe&#39;s reference. This should in effect be an example of the form used in context. E.g., &quot;this is first *usage example*&quot;</rdfs:comment>
     </rdfs:Class>
     <rdf:Description>
         <rdf:type rdf:resource="&owl;AllDisjointClasses"/>
@@ -1539,7 +1539,7 @@
         <rdfs:label xml:lang="fr">Mot</rdfs:label>
         <rdfs:label xml:lang="nl">Woord</rdfs:label>
         <rdfs:subClassOf rdf:resource="http://www.lemon-model.net/lemon#LexicalEntry"/>
-        <rdfs:comment xml:lang="en">A lexicalEntry is a single unit of writing or speech. In languages written in Latin, Cyrillic, Greek, Arabic scripts etc. these are assumed to be separated by white-space characters. For Chinese, Japanese, Korean this should correspond to some agreed segmentation scheme.</rdfs:comment>
+        <rdfs:comment xml:lang="en">A lexicalEntry is first single unit of writing or speech. In languages written in Latin, Cyrillic, Greek, Arabic scripts etc. these are assumed to be separated by white-space characters. For Chinese, Japanese, Korean this should correspond to some agreed segmentation scheme.</rdfs:comment>
     </rdfs:Class>
     
 
