@@ -1,6 +1,3 @@
-
-
-
 package org.getalp.lexsema.supervised;
 
 import org.getalp.lexsema.supervised.weka.FeatureIndex;
@@ -28,7 +25,7 @@ public class EchoClassifier implements Classifier {
 
     public EchoClassifier() {
         try {
-        	url = new URL("http://ama.liglab.fr/~brouard/echo/echo2.php");
+            url = new URL("http://ama.liglab.fr/~brouard/echo/echo2.php");
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
@@ -48,9 +45,9 @@ public class EchoClassifier implements Classifier {
                 for (int i = 1; i < tokens.size(); i++) {
                     instance = String.format("%s %d", instance, featureIndex.get(tokens.get(i)));
                 }
-                
-               // System.out.println(instance);
-                
+
+                // System.out.println(instance);
+
                 instances.get(clazz).add(instance);
             }
         }
@@ -73,12 +70,12 @@ public class EchoClassifier implements Classifier {
         try {
             sendData = "data=" + data + "\n";
             //création de la connections
-        	URLConnection conn = url.openConnection();
-        	conn.setDoOutput(true);
+            URLConnection conn = url.openConnection();
+            conn.setDoOutput(true);
 
-        	//envoi de la requête
+            //envoi de la requête
             writer = new OutputStreamWriter(conn.getOutputStream());
-            
+
             writer.write(sendData);
             writer.flush();
             //lecture de la réponse
@@ -110,69 +107,69 @@ public class EchoClassifier implements Classifier {
 
     @Override
     public List<ClassificationOutput> classify(FeatureIndex index, List<String> features) {
-        
-    	List<ClassificationOutput> results = new ArrayList<>();
-        
+
+        List<ClassificationOutput> results = new ArrayList<>();
+
         String data = "";
-        
+
         String item = "toto";
-        
+
         Object[] T = classes.toArray();
-        
-        String id = (String)T[0];
-        
-        if(classes.size() == 1){
-        	
-        	results.add(new ClassificationOutput(id, 1,1));
-        	
-        	return results;	
+
+        String id = (String) T[0];
+
+        if (classes.size() == 1) {
+
+            results.add(new ClassificationOutput(id, 1, 1));
+
+            return results;
         }
-        
-        
+
+
         for (String clazz : classes) {
-        
+
             for (String instance : instances.get(clazz)) {
                 data += String.format("%s ;", instance);
-             }
+            }
         }
-        
+
         String instance = item + " 0 ";
         for (int i = 1; i < features.size(); i++) {
             instance = String.format("%s %d", instance, index.get(features.get(i)));
         }
         data += String.format("%s%s ;", data, instance);
-        
-      	System.out.println("data = " + data);
-      	
-      	String output = sendToEcho(data);
+
+        System.out.println("data = " + data);
+
+        String output = sendToEcho(data);
         System.out.println("output = " + output);
-        
+
         output = output.replace(',', '.');//patch virgule point
-            
+
         System.out.println("output = " + output);
-        
+
         System.exit(0);
-        
+
         String[] outputTokens = null;
         ClassificationOutput co = null;
-            
-           
+
+
         outputTokens = output.split("\"")[2].split(";")[0].split(":");
-        
-        for (int i = 0 ; i < outputTokens.length; i++){
-        	
-        	System.out.println(i + " = " + outputTokens[i]);	
+
+        for (int i = 0; i < outputTokens.length; i++) {
+
+            System.out.println(i + " = " + outputTokens[i]);
         }
-        
-     //   co = new ClassificationOutput(clazz, outputTokens[0],1);
-            
-            
+
+        //   co = new ClassificationOutput(clazz, outputTokens[0],1);
+
+
         results.add(co);
-         
+
         //System.out.println(results);
 
         Collections.sort(results);
-        
+
         //System.out.println(results);
 
         return results;

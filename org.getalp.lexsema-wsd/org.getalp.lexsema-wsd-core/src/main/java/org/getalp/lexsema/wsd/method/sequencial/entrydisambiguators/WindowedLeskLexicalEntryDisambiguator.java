@@ -6,9 +6,9 @@ import org.getalp.lexsema.wsd.configuration.Configuration;
 import org.getalp.lexsema.wsd.configuration.SubConfiguration;
 import org.getalp.lexsema.wsd.method.sequencial.parameters.WindowedLeskParameters;
 import org.getalp.lexsema.wsd.score.ConfigurationEntryPairwiseScoreInput;
-import org.getalp.optimization.functions.Function;
-import org.getalp.optimization.functions.input.FunctionInput;
-import org.getalp.optimization.functions.setfunctions.submodular.Sum;
+import org.getalp.ml.optimization.functions.Function;
+import org.getalp.ml.optimization.functions.input.FunctionInput;
+import org.getalp.ml.optimization.functions.setfunctions.submodular.Sum;
 
 import java.util.ArrayList;
 import java.util.List;

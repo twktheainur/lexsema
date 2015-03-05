@@ -128,6 +128,13 @@ public class WordImpl implements Word {
     }
 
     @Override
+    public void setLanguage(Language language) {
+        if (lexicalEntry != null) {
+            lexicalEntry.setLanguage(language);
+        }
+    }
+
+    @Override
     public String getId() {
         return id;
     }

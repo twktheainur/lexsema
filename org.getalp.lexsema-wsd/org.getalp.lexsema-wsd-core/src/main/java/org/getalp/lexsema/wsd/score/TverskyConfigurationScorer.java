@@ -1,13 +1,15 @@
 package org.getalp.lexsema.wsd.score;
 
-import edu.stanford.nlp.util.Pair;
+
 import org.getalp.lexsema.similarity.Document;
 import org.getalp.lexsema.similarity.measures.SimilarityMeasure;
+import org.getalp.lexsema.util.Pair;
+import org.getalp.lexsema.util.PairImpl;
 import org.getalp.lexsema.wsd.configuration.Configuration;
-import org.getalp.optimization.functions.Function;
-import org.getalp.optimization.functions.input.FunctionInput;
-import org.getalp.optimization.functions.setfunctions.input.ValueListInput;
-import org.getalp.optimization.functions.setfunctions.submodular.Sum;
+import org.getalp.ml.optimization.functions.Function;
+import org.getalp.ml.optimization.functions.input.FunctionInput;
+import org.getalp.ml.optimization.functions.setfunctions.input.ValueListInput;
+import org.getalp.ml.optimization.functions.setfunctions.submodular.Sum;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -55,6 +57,7 @@ public class TverskyConfigurationScorer implements ConfigurationScorer {
                 Future<Pair<Integer, Double>> current = completeTasks.get(i);
                 if (current.isDone()) {
                     try {
+                        //noinspection LocalVariableOfConcreteClass
                         Pair<Integer, Double> pair = current.get();
                         int index = pair.first();
                         double value = pair.second();
@@ -66,6 +69,7 @@ public class TverskyConfigurationScorer implements ConfigurationScorer {
                     }
                     completeTasks.remove(i);
                 } else {
+                    //noinspection AssignmentToForLoopParameter
                     i++;
                 }
             }
@@ -109,7 +113,7 @@ public class TverskyConfigurationScorer implements ConfigurationScorer {
             FunctionInput input = new ConfigurationEntryPairwiseScoreInput(configuration, document, index,
                     similarityMeasure, true);
             Function sum = new Sum(1);
-            return new Pair<>(index, sum.F(input));
+            return new PairImpl<>(index, sum.F(input));
         }
     }
 

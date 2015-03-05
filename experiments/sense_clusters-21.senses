@@ -143,7 +143,7 @@ Axis%1:14:01:: axis%1:14:00::
 Azerbaijani%1:10:00::
 Azerbaijani%1:18:00::
 B%1:10:00:: B%1:27:01:: B%1:27:00:: B%1:05:00:: B%1:08:00::
-B%1:23:03:: b%1:23:00::
+B%1:23:03:: second%1:23:00::
 BA%1:10:00:: Ba%1:27:00::
 BAN%1:10:02:: ban%1:10:00:: ban%1:10:01::
 BIN%1:10:00::
@@ -16267,7 +16267,7 @@ love%1:04:00:: love%1:18:00::
 love%1:09:00:: love%1:12:01:: love%1:12:00::
 love%1:23:00::
 love%2:37:01:: love%2:37:02:: love%2:37:00:: love%2:35:00::
-love-in-a-mist%1:20:03:: love-in-a-mist%1:20:01:: love-in-a-mist%1:20:02::
+love-in-first-mist%1:20:03:: love-in-first-mist%1:20:01:: love-in-first-mist%1:20:02::
 love_feast%1:04:00:: love_feast%1:14:00::
 lovebird%1:05:02:: lovebird%1:05:01::
 lovely%5:00:00:beautiful:00 lovely%5:00:00:lovable:00
@@ -19685,7 +19685,7 @@ pit%1:25:00::
 pit%2:30:00::
 pit%2:33:00::
 pit%2:35:00::
-pit-a-pat%4:02:01:: pit-a-pat%4:02:00::
+pit-first-pat%4:02:01:: pit-first-pat%4:02:00::
 pit_stop%1:04:01:: pit_stop%1:04:00::
 pitahaya%1:20:01:: pitahaya%1:13:00::
 pitch%1:04:01:: pitch%1:04:00::

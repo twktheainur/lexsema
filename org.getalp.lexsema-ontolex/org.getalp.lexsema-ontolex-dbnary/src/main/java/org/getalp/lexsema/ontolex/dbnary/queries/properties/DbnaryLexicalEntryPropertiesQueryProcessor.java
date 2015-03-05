@@ -43,7 +43,7 @@ public final class DbnaryLexicalEntryPropertiesQueryProcessor extends AbstractQu
     @Override
     protected final void defineQuery() {
         setQuery(new ARQSelectQueryImpl());
-        if (lemma==null || lemma.isEmpty()) {
+        if (lemma == null || lemma.isEmpty()) {
             String LEMMA_CF_VAR = "cf";
             addTriple(NodeFactory.createURI(uri),
                     getNode("lemon:canonicalForm"),
@@ -53,7 +53,7 @@ public final class DbnaryLexicalEntryPropertiesQueryProcessor extends AbstractQu
                     Var.alloc(WRITTEN_FORM_RESULT_VAR));
             addResultVar(WRITTEN_FORM_RESULT_VAR);
         }
-        if (pos ==null || pos.isEmpty()) {
+        if (pos == null || pos.isEmpty()) {
             addTriple(NodeFactory.createURI(uri),
                     getNode("dbnary:partOfSpeech"),
                     Var.alloc(DBNARY_POS_RESULT_VAR));
@@ -74,13 +74,13 @@ public final class DbnaryLexicalEntryPropertiesQueryProcessor extends AbstractQu
         LexicalEntryProperties properties = new LexicalEntryProperties();
         while (hasNextResult()) {
             QuerySolution qs = nextSolution();
-            if (lemma==null || lemma.isEmpty()) {
+            if (lemma == null || lemma.isEmpty()) {
                 lemma = qs.get(WRITTEN_FORM_RESULT_VAR).toString().split("@")[0].replace(" ", "_");
                 properties.setLemma(lemma);
             }
-            if (pos ==null || pos.isEmpty()) {
+            if (pos == null || pos.isEmpty()) {
                 RDFNode posNode = qs.get(LEXINFO_POS_RESULT_VAR);
-                if(posNode!=null) {
+                if (posNode != null) {
                     pos = posNode.toString();
                     properties.setPos(pos);
                 } else {
