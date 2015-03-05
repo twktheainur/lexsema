@@ -3,58 +3,69 @@ package org.getalp.lexsema.wsd.configuration;
 import java.util.Random;
 import org.getalp.lexsema.similarity.Document;
 
-public class BatConfiguration implements Configuration {
-	
+public class BatConfiguration implements Configuration
+{
 	int[] assignments;
 	
 	Document document;
 
-	public BatConfiguration(Document d) {
+	public BatConfiguration(Document d)
+	{
 		document = d;
 		assignments = new int[d.size()];
 		Random r = new Random();
-		for (int i = 0; i < assignments.length ; i++) {
-			setSense(i, r.nextInt());
+		for (int i = 0; i < assignments.length ; i++)
+		{
+			setSense(i, r.nextInt(d.getSenses(i).size()));
 		}
 	}
 	
-	public void setSenses(int[] senses) {
-		for (int i = 0 ; i < Math.min(senses.length, assignments.length) ; i++) {
+	public void setSenses(int[] senses)
+	{
+		for (int i = 0 ; i < Math.min(senses.length, assignments.length) ; i++)
+		{
 			setSense(i, senses[i]);
 		}
 	}
 
 	@Override
-	public void setSense(int wordIndex, int senseIndex) {
+	public void setSense(int wordIndex, int senseIndex)
+	{
 		int sensesNumber = document.getSenses(wordIndex).size();
 		while (senseIndex < 0) senseIndex += sensesNumber;
 		assignments[wordIndex] = senseIndex % sensesNumber;
 	}
 
 	@Override
-	public int getAssignment(int wordIndex) {
+	public int getAssignment(int wordIndex)
+	{
 		return assignments[wordIndex];
 	}
 
 	@Override
-	public int size() {
+	public int size()
+	{
 		return assignments.length;
 	}
 
 	@Override
-	public int getStart() {
+	public int getStart()
+	{
 		return 0;
 	}
 
 	@Override
-	public int getEnd() {
+	public int getEnd()
+	{
 		return assignments.length;
 	}
 
 	@Override
-	public String toString() {
+	public String toString()
+	{
 		String out = "[ ";
-		for (int i = getStart(); i < getEnd(); i++) {
+		for (int i = getStart(); i < getEnd(); i++) 
+		{
 			out += assignments[i] + ", ";
 		}
 		out += "]";
@@ -63,16 +74,20 @@ public class BatConfiguration implements Configuration {
 
 	@Override
 	public void initialize(int value) {
-		for (int i = getStart(); i < getEnd(); i++) {
+		for (int i = getStart(); i < getEnd(); i++) 
+		{
 			setSense(i, value);
 		}
 	}
 
 	@Override
-	public int countUnassigned() {
+	public int countUnassigned() 
+	{
 		int unassignedCount = 0;
-		for (int assignment : assignments) {
-			if (assignment == -1) {
+		for (int assignment : assignments) 
+		{
+			if (assignment == -1) 
+			{
 				unassignedCount++;
 			}
 		}
@@ -80,17 +95,20 @@ public class BatConfiguration implements Configuration {
 	}
 
 	@Override
-	public int[] getAssignments() {
+	public int[] getAssignments() 
+	{
 		return assignments;
 	}
 
 	@Override
-	public void setConfidence(int wordIndex, double confidence) {
+	public void setConfidence(int wordIndex, double confidence) 
+	{
 		
 	}
 
 	@Override
-	public double getConfidence(int wordIndex) {
+	public double getConfidence(int wordIndex) 
+	{
 		return 0;
 	}
 

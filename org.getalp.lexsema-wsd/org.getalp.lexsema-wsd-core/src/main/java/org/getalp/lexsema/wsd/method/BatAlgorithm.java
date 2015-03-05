@@ -123,6 +123,7 @@ public class BatAlgorithm implements Disambiguator
     {
         currentDocument = document;
 
+        System.out.println("BatInitialization...");
         for (int i = 0; i < batsNumber; i++)
         {
             bats.get(i).initialize(document);
@@ -166,9 +167,9 @@ public class BatAlgorithm implements Disambiguator
                 {
                     currentBat.restorePositionAndVelocity();
                 }
-
-                bestBat = getBestBat();
             }
+            
+            bestBat = getBestBat();
         }
 
         return bestBat.configuration;

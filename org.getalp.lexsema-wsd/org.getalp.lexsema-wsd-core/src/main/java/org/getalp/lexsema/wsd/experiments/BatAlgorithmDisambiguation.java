@@ -19,7 +19,7 @@ public class BatAlgorithmDisambiguation {
 		
         long startTime = System.currentTimeMillis();
         
-        TextLoader dl = new Semeval2007TextLoader("../data/senseval2007_task7/test/d001_s001_s003.xml")
+        TextLoader dl = new Semeval2007TextLoader("../data/senseval2007_task7/test/eng-coarse-all-words-t1s.xml")
         		.loadNonInstances(true);
         
         LRLoader lrloader = new WordnetLoader("../data/wordnet/2.1/dict")
@@ -51,17 +51,17 @@ public class BatAlgorithmDisambiguation {
         	
             System.err.println("Starting document " + d.getId());
             
-            System.err.println("\tLoading senses...");
+            System.err.println("Loading senses...");
             lrloader.loadSenses(d);
 
             System.err.println("Disambiguating...");
             Configuration c = batDisambiguator.disambiguate(d);
             
-            System.err.println("\n\tWriting results...");
+            System.err.println("Writing results...");
             SemevalWriter sw = new SemevalWriter(d.getId() + ".ans");
             sw.write(d, c.getAssignments());
             
-            System.err.println("done!");
+            System.err.println("Done!");
         }
         
         batDisambiguator.release();
