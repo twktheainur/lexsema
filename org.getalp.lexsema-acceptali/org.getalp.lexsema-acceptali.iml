@@ -70,6 +70,7 @@
     <orderEntry type="library" name="Maven: com.carrotsearch:hppc:0.6.1" level="project" />
     <orderEntry type="library" name="Maven: com.memetix:microsoft-translator-java-api:0.6.2" level="project" />
     <orderEntry type="library" name="Maven: com.googlecode.json-simple:json-simple:1.1" level="project" />
+    <orderEntry type="module" module-name="cluster" />
     <orderEntry type="library" name="Maven: commons-cli:commons-cli:1.2" level="project" />
     <orderEntry type="library" name="Maven: com.h2database:h2:1.4.185" level="project" />
     <orderEntry type="library" name="Maven: org.apache.uima:uimaj-core:2.6.0" level="project" />

@@ -2,6 +2,8 @@ package org.getalp.lexsema.acceptali.experiments;
 
 import cern.colt.matrix.tdouble.DoubleFactory2D;
 import cern.colt.matrix.tdouble.DoubleMatrix2D;
+import com.trickl.cluster.ClusterAlgorithm;
+import com.trickl.cluster.KMeans;
 import com.wcohen.ss.ScaledLevenstein;
 import org.getalp.lexsema.acceptali.closure.LexicalResourceTranslationClosure;
 import org.getalp.lexsema.acceptali.closure.LexicalResourceTranslationClosureImpl;
@@ -58,6 +60,18 @@ public final class BuildingLatticeExperiment {
     public static final String MATRIX_PATH = ".." + separator + "data" + separator + "acception_matrices";
     public static final String TRANSLATION_DB_PATH = String.format("..%sdata%stranslatorDB", separator, separator);
 
+    /**
+     * twk.theainur@live.co.uk account
+     */
+    //public static final String BING_APP_ID = "dbnary";
+    //public static final String BING_APP_KEY = "H2pC+d3b0L0tduSZzRafqPZyV6zmmzMmj9+AEpc9b1E=";
+
+    /**
+     * ainuros@outlook.com account
+     */
+    public static final String BING_APP_ID = "dbnary_hyper";
+    public static final String BING_APP_KEY = "IecT6H4OjaWo3OtH2pijfeNIx1y1bML3grXz/Gjo/+w=";
+
     public static final int DEPTH = 1;
     public static final double PERCENT_MAX = 100d;
     static Language[] loadLanguages = {
@@ -108,6 +122,13 @@ public final class BuildingLatticeExperiment {
             writeProjectedMatrix(matrix_time, mf.getV());
             writeMixingMatrix(matrix_time, mf.getU());
 
+            ClusterAlgorithm clusterAlgorithm = new KMeans();
+            clusterAlgorithm.cluster(mf.getV(), 10);
+            DoubleMatrix2D assignments = clusterAlgorithm.getPartition();
+            writeAssignmentMatrix(matrix_time, assignments);
+            logger.info(assignments.toString());
+
+
         } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException |
                 InstantiationException | ClassNotFoundException e) {
             logger.error(e.getLocalizedMessage());
@@ -152,7 +173,7 @@ public final class BuildingLatticeExperiment {
     }
 
     private static DoubleMatrix2D computeSimilarityMatrix(Collection<Sense> closureSet, SimilarityMeasure similarityMeasure) {
-        Translator translator = new CachedTranslator(TRANSLATION_DB_PATH, new BingAPITranslator("dbnary", "H2pC+d3b0L0tduSZzRafqPZyV6zmmzMmj9+AEpc9b1E="), false);
+        Translator translator = new CachedTranslator(TRANSLATION_DB_PATH, new BingAPITranslator(BING_APP_ID, BING_APP_KEY), false);
         CrossLingualSimilarity crossLingualSimilarity = new TranslatorCrossLingualSimilarity(similarityMeasure, translator);
 
         DoubleMatrix2D similarityMatrix = DoubleFactory2D.dense.make(closureSet.size(), closureSet.size(), -1d);
@@ -226,6 +247,15 @@ public final class BuildingLatticeExperiment {
             if (!result) {
                 logger.error("Cannot create " + MATRIX_PATH + separator + matrix_time);
             }
+        }
+    }
+
+    private static void writeAssignmentMatrix(long matrix_time, DoubleMatrix2D matrix) {
+        try (PrintWriter pw = new PrintWriter(MATRIX_PATH + separator + matrix_time + separator + "assignment.dat")) {
+            matrixCSVWriter(pw, matrix);
+            pw.close();
+        } catch (FileNotFoundException e) {
+            logger.error(e.getLocalizedMessage());
         }
     }
 

@@ -110,10 +110,15 @@ public class TverskyConfigurationScorer implements ConfigurationScorer {
 
         @Override
         public Pair<Integer, Double> call() throws Exception {
-            FunctionInput input = new ConfigurationEntryPairwiseScoreInput(configuration, document, index,
-                    similarityMeasure, true);
-            Function sum = new Sum(1);
-            return new PairImpl<>(index, sum.F(input));
+            try {
+                FunctionInput input = new ConfigurationEntryPairwiseScoreInput(configuration, document, index,
+                        similarityMeasure, true);
+                Function sum = new Sum(1);
+                return new PairImpl<>(index, sum.F(input));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return new PairImpl<>(index, 0d);
         }
     }
 

@@ -72,7 +72,7 @@ public class CachedTranslator implements Translator {
     public String translate(String source, Language sourceLanguage, Language targetLanguage) {
         String slangiso2 = sourceLanguage.getISO2Code();
         String tlangiso2 = targetLanguage.getISO2Code();
-        String target;
+        String target = "";
         try {
             PreparedStatement getCachedTranslation = db.prepareStatement(getTranslationMemory);
             getCachedTranslation.setString(1, source);
@@ -80,15 +80,22 @@ public class CachedTranslator implements Translator {
             getCachedTranslation.setString(3, tlangiso2);
 
             ResultSet rs = getCachedTranslation.executeQuery();
+            boolean doTranslate = false;
             if (rs.first()) {
                 target = rs.getString("target");
-                log.debug("Got cached translation:[{}] {}", slangiso2, target);
+                if (target.contains("TranslateApiException: ")) {
+                    doTranslate = true;
+                }
+                log.info("Got cached translation:[{}] {}", slangiso2, target);
             } else {
+                doTranslate = true;
+            }
+            if (doTranslate) {
                 // Ask for translation and update cache if asked to !
                 target = t.translate(source, sourceLanguage, targetLanguage);
-                log.debug("Computed translation:[{}] {}", targetLanguage, target);
+                log.info("Computed translation:[{}] {}", targetLanguage, target);
 
-                if (target != null && doUpdate) {
+                if (target != null && !target.contains("TranslateApiException: ") && doUpdate) {
                     PreparedStatement cacheTranslation = db.prepareStatement(setTranslationMemory);
                     cacheTranslation.setString(1, source);
                     cacheTranslation.setString(2, slangiso2);
