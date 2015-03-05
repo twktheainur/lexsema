@@ -11,221 +11,250 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class BatAlgorithm implements Disambiguator {
+public class BatAlgorithm implements Disambiguator
+{
+    private static final int batsNumber = 10;
 
-	private static final int batsNumber = 10;
-	
-	private static final int iterationsNumber = 10;
-	
-	private static final float minFrequency = 0;
-	
-	private static final float maxFrequency = 100;
-	
-	private static final float minLoudness = 0;
-	
-	private static final float maxLoudness = 100;
-	
-	private static final float minRate = 0;
-	
-	private static final float maxRate = 1;
-	
-	private static final float alpha = 0.9f;
-	
-	private static final float gamma = 0.9f;
+    private static final int iterationsNumber = 10;
 
-	private static final Random random = new Random();
+    private static final double minFrequency = 0;
 
-	
-	private Document currentDocument;
-	
-	private ConfigurationScorer configurationScorer;
-	
-	private List<Bat> bats = new ArrayList<Bat>();
-	
-	private Bat bestBat;
-	
-	private class Bat {
-		
-		public BatConfiguration configuration;
-		public int[] position;
-		public int[] velocity;
-		public float frequency;
-		public float initialRate;
-		public float rate;
-		public float loudness;
-		public int[] previousPosition;
-		public int[] previousVelocity;
-		double score;
-		
-		public void initialize(Document document) {
-			
-			configuration = new BatConfiguration(document);
-			position = new int[document.size()];
-			for (int i = 0 ; i < position.length ; i++) {
-				position[i] = configuration.getAssignment(i);
-			}
-			velocity = new int[document.size()];
-			for (int i = 0 ; i < velocity.length ; i++) {
-				velocity[i] = 0;
-			}
-			frequency = randomFloatInRange(minFrequency, maxFrequency);
-			initialRate = randomFloatInRange(minRate, maxRate);
-			rate = initialRate;
-			loudness = randomFloatInRange(minLoudness, maxLoudness);
-			previousPosition = position.clone();
-			previousVelocity = velocity.clone();
-		}
-		
-	}
-	
-    public BatAlgorithm(SimilarityMeasure similarityMeasure) {
-    	
-    	int threadsNumber = Runtime.getRuntime().availableProcessors();
-    	configurationScorer = new TverskyConfigurationScorer(similarityMeasure, threadsNumber);
-    	for (int i = 0 ; i < batsNumber ; i++) {
-    		bats.add(new Bat());
-    	}
-	}
+    private static final double maxFrequency = 20;
 
-	@Override
-    public Configuration disambiguate(Document document) {
-		
-		currentDocument = document;
-		
-    	for (int i = 0 ; i < batsNumber ; i++) {
-    		bats.get(i).initialize(document);
-    	}
-    	computeBestBat();
-    	
-    	for (int currentIteration = 0 ; currentIteration < iterationsNumber ; currentIteration++) {
-    		
-    		int progress = (int) (((float)currentIteration / (float)iterationsNumber) * 100);
-    		System.out.println("Progress : " + progress + "%");
-    		
-    		for (int i = 0 ; i < batsNumber ; i++) {
+    private static final double minLoudness = 0;
 
-    			Bat currentBat = bats.get(i);
+    private static final double maxLoudness = 100;
 
-    			currentBat.frequency = randomFloatInRange(minFrequency, maxFrequency);
-    			
-    			currentBat.previousPosition = currentBat.position.clone();
-    			currentBat.previousVelocity = currentBat.velocity.clone();
-    			
-    			currentBat.velocity = add(currentBat.velocity, 
-    								      multiply(substract(currentBat.position, bestBat.position), 
-    								    		   currentBat.frequency));
-    			currentBat.position = add(currentBat.position, currentBat.velocity);
-    			
-    			if (randomFloatInRange(0, 1) > currentBat.rate)
-    			{
-    				// fly randomly around best solutions ?
-    			}
-    			
-    			currentBat.position = add(currentBat.position, randomFloatInRange(-1, 1) * computeAverageLoudness());
-    			
-    			if (randomFloatInRange(minLoudness, maxLoudness) < currentBat.loudness &&
-    				computeScoreOfBat(currentBat) > bestBat.score)
-    			{
-        			currentBat.configuration.setSenses(currentBat.position);
-        			currentBat.loudness *= alpha;
-        			currentBat.rate = (float) (currentBat.initialRate * (1 - Math.exp(-gamma * currentIteration)));
-    			}
-    			else
-    			{
-    				currentBat.position = currentBat.previousPosition.clone();
-    				currentBat.velocity = currentBat.previousVelocity.clone();
-    			}
-    			
-    			computeBestBat();
-    		}
-    	}
+    private static final double minRate = 0;
 
-    	return bestBat.configuration;
+    private static final double maxRate = 1;
+
+    private static final double alpha = 0.9;
+
+    private static final double gamma = 0.9;
+
+    private static final Random random = new Random();
+
+    private Document currentDocument;
+
+    private ConfigurationScorer configurationScorer;
+
+    private List<Bat> bats = new ArrayList<Bat>();
+
+    private Bat bestBat;
+
+    private class Bat
+    {
+        private BatConfiguration configuration;
+        private int[] position;
+        private int[] velocity;
+        private double frequency;
+        private double initialRate;
+        private double rate;
+        private double loudness;
+        private int[] previousPosition;
+        private int[] previousVelocity;
+        private boolean needRecomputeScore;
+        private double score;
+
+        public void initialize(Document document)
+        {
+            configuration = new BatConfiguration(document);
+            position = new int[document.size()];
+            velocity = new int[document.size()];
+            for (int i = 0; i < document.size(); ++i)
+            {
+                position[i] = configuration.getAssignment(i);
+                velocity[i] = 0;
+            }
+            frequency = randomDoubleInRange(minFrequency, maxFrequency);
+            initialRate = randomDoubleInRange(minRate, maxRate);
+            rate = initialRate;
+            loudness = randomDoubleInRange(minLoudness, maxLoudness);
+            previousPosition = position;
+            previousVelocity = velocity;
+            needRecomputeScore = true;
+            score = getScore();
+        }
+
+        public void setPosition(int[] newPosition)
+        {
+            position = newPosition;
+            needRecomputeScore = true;
+        }
+
+        public double getScore()
+        {
+            if (needRecomputeScore)
+            {
+                configuration.setSenses(position);
+                score = configurationScorer.computeScore(currentDocument, configuration);
+                needRecomputeScore = false;
+            }
+            return score;
+        }
+
+        public void savePositionAndVelocity()
+        {
+            previousPosition = position.clone();
+            previousVelocity = velocity.clone();
+        }
+
+        public void restorePositionAndVelocity()
+        {
+            position = previousPosition;
+            velocity = previousVelocity;
+            needRecomputeScore = true;
+        }
+    }
+
+    public BatAlgorithm(SimilarityMeasure similarityMeasure)
+    {
+        int threadsNumber = Runtime.getRuntime().availableProcessors();
+        configurationScorer = new TverskyConfigurationScorer(similarityMeasure, threadsNumber);
+        for (int i = 0 ; i < batsNumber ; ++i)
+        {
+            bats.add(new Bat());
+        }
     }
 
     @Override
-    public Configuration disambiguate(Document document, Configuration c) {
+    public Configuration disambiguate(Document document)
+    {
+        currentDocument = document;
 
-    	return disambiguate(document);
+        for (int i = 0; i < batsNumber; i++)
+        {
+            bats.get(i).initialize(document);
+        }
+        bestBat = getBestBat();
+
+        for (int currentIteration = 0 ; currentIteration < iterationsNumber ; currentIteration++)
+        {
+            int progress = (int) (((double) currentIteration / (double) iterationsNumber) * 100);
+            System.out.println("BatProgress : " + progress + "%");
+
+            for (int i = 0; i < batsNumber; i++)
+            {
+                Bat currentBat = bats.get(i);
+
+                currentBat.frequency = randomDoubleInRange(minFrequency, maxFrequency);
+
+                currentBat.savePositionAndVelocity();
+
+                currentBat.velocity = add(
+                        currentBat.velocity,
+                        multiply(substract(currentBat.position, bestBat.position),
+                                currentBat.frequency));
+                currentBat.setPosition(add(currentBat.position, currentBat.velocity));
+
+                if (currentBat.rate < randomDoubleInRange(minRate, maxRate))
+                {
+                    // fly randomly around best solutions ?
+                }
+
+                currentBat.setPosition(add(currentBat.position, 
+                                           randomDoubleInRange(-1, 1) * computeAverageLoudness()));
+
+                if (currentBat.loudness > randomDoubleInRange(minLoudness, maxLoudness) &&
+                    currentBat.getScore() > bestBat.getScore())
+                {
+                    currentBat.loudness *= alpha;
+                    currentBat.rate = currentBat.initialRate * (1 - Math.exp(-gamma * currentIteration));
+                }
+                else
+                {
+                    currentBat.restorePositionAndVelocity();
+                }
+
+                bestBat = getBestBat();
+            }
+        }
+
+        return bestBat.configuration;
     }
 
     @Override
-    public void release() {
-    	
-    	configurationScorer.release();
+    public Configuration disambiguate(Document document, Configuration c)
+    {
+        return disambiguate(document);
     }
-    
-    private float randomFloatInRange(float min, float max){
-    	return min + (max - min) * random.nextFloat();
+
+    @Override
+    public void release()
+    {
+        configurationScorer.release();
     }
-    
+
+    private double randomDoubleInRange(double min, double max)
+    {
+        return min + (max - min) * random.nextDouble();
+    }
+
     private int[] substract(int[] leftOperand, int[] rightOperand)
     {
-    	int[] result = new int[Math.min(leftOperand.length, rightOperand.length)];
-    	for (int i = 0 ; i < result.length ; i++)
-    	{
-    		result[i] = leftOperand[i] - rightOperand[i];
-    	}
-    	return result;
+        int[] result = new int[Math.min(leftOperand.length, rightOperand.length)];
+        for (int i = 0; i < result.length; i++)
+        {
+            result[i] = leftOperand[i] - rightOperand[i];
+        }
+        return result;
     }
-    
-    private int[] multiply(int[] leftOperand, float rightOperand)
+
+    private int[] multiply(int[] leftOperand, double rightOperand)
     {
-    	int[] result = new int[leftOperand.length];
-    	for (int i = 0 ; i < result.length ; i++)
-    	{
-    		result[i] = (int)(leftOperand[i] * rightOperand);
-    	}
-    	return result;
+        int[] result = new int[leftOperand.length];
+        for (int i = 0; i < result.length; i++)
+        {
+            result[i] = (int) (leftOperand[i] * rightOperand);
+        }
+        return result;
     }
-    
+
     private int[] add(int[] leftOperand, int[] rightOperand)
     {
-    	int[] result = new int[Math.min(leftOperand.length, rightOperand.length)];
-    	for (int i = 0 ; i < result.length ; i++)
-    	{
-    		result[i] = leftOperand[i] + rightOperand[i];
-    	}
-    	return result;
+        int[] result = new int[Math.min(leftOperand.length, rightOperand.length)];
+        for (int i = 0; i < result.length; i++)
+        {
+            result[i] = leftOperand[i] + rightOperand[i];
+        }
+        return result;
     }
-    
-    private int[] add(int[] leftOperand, float rightOperand)
+
+    private int[] add(int[] leftOperand, double rightOperand)
     {
-    	int[] result = new int[leftOperand.length];
-    	for (int i = 0 ; i < result.length ; i++)
-    	{
-    		result[i] = (int) (leftOperand[i] + rightOperand);
-    	}
-    	return result;
+        int[] result = new int[leftOperand.length];
+        for (int i = 0; i < result.length; i++)
+        {
+            result[i] = (int) (leftOperand[i] + rightOperand);
+        }
+        return result;
     }
-   
-    private void computeBestBat()
+
+    private Bat getBestBat()
     {
-    	double bestScore = Double.MIN_VALUE;
-    	for (int i = 0 ; i < batsNumber ; i++)
-    	{
-    		double score = computeScoreOfBat(bats.get(i));
-    		if (score > bestScore)
-    		{
-    			bestScore = score;
-    			bestBat = bats.get(i);
-    		}
-    	}
+        Bat bestBat = this.bestBat;
+        for (int i = 0 ; i < batsNumber ; ++i)
+        {
+            bestBat = getBestBatBetween(bestBat, bats.get(i));
+        }
+        return bestBat;
     }
-    
-    private float computeAverageLoudness()
+
+    private double computeAverageLoudness()
     {
-    	float loudnessesSum = 0;
-    	for (int i = 0 ; i < batsNumber ; i++)
-    	{
-    		loudnessesSum += bats.get(i).loudness;
-    	}
-    	return loudnessesSum / (float)batsNumber;
+        double loudnessesSum = 0;
+        for (int i = 0; i < batsNumber; ++i)
+        {
+            loudnessesSum += bats.get(i).loudness;
+        }
+        return loudnessesSum / (double) batsNumber;
     }
-    
-    private double computeScoreOfBat(Bat bat)
+
+    private Bat getBestBatBetween(Bat bat1, Bat bat2)
     {
-    	bat.score = configurationScorer.computeScore(currentDocument, bat.configuration);
-    	return bat.score;
+        if (bat1 == null) return bat2;
+        if (bat2 == null) return bat1;
+        return bat1.getScore() > bat2.getScore() ? bat1 : bat2;
     }
 }
