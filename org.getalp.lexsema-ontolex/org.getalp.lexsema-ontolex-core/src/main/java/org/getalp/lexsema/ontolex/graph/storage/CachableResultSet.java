@@ -21,7 +21,7 @@ public class CachableResultSet implements ResultSet {
         resultVars = new ArrayList<>();
         resultVars.addAll(originalSet.getResultVars());
         model = originalSet.getResourceModel();
-        while(originalSet.hasNext()){
+        while (originalSet.hasNext()) {
             QuerySolutionMap copy = new QuerySolutionMap();
             copy.addAll(originalSet.next());
             querySolutionList.add(copy);
@@ -63,9 +63,9 @@ public class CachableResultSet implements ResultSet {
         return model;
     }
 
-	@Override
-	public void remove() {
-		// TODO Auto-generated method stub
-		
-	}
+    @Override
+    public void remove() {
+        // TODO Auto-generated method stub
+
+    }
 }

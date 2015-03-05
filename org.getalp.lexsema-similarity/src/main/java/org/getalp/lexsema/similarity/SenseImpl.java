@@ -42,9 +42,9 @@ public class SenseImpl implements Sense {
 
     @Override
     public String toString() {
-        return "Sense{" +
-                "id='" + id + '\'' +
-                '}';
+        String[] uriParts = getNode().getURI().split("/");
+        String id = uriParts[uriParts.length - 1];
+        return String.format("Sense|%s|{'%s'}", id, getDefinition());
     }
 
     @Override
@@ -115,6 +115,13 @@ public class SenseImpl implements Sense {
             return Language.UNSUPPORTED;
         } else {
             return lexicalSense.getLanguage();
+        }
+    }
+
+    @Override
+    public void setLanguage(Language language) {
+        if (lexicalSense != null) {
+            lexicalSense.setLanguage(language);
         }
     }
 

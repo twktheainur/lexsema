@@ -26,7 +26,7 @@ public interface DBNary extends LexicalResource {
     /**
      * Retrieve the vocable instance that corresponds to the <code>vocable</code> string
      *
-     * @param vocable the vocable string for which the instance needs to be retrieved
+     * @param vocable  the vocable string for which the instance needs to be retrieved
      * @param language the language of the vocable
      * @return The <code>Vocable</code> instance
      * @throws NoSuchVocableException Thrown when the vocable does not exist in the resource
@@ -48,8 +48,8 @@ public interface DBNary extends LexicalResource {
      * of speech that are distinguished by a number. This is the case for example for two homonyms or words with
      * different etymologies.
      *
-     * @param entry The entry to search for
-     * @param pos   A string containing the part of speech tag
+     * @param entry       The entry to search for
+     * @param pos         A string containing the part of speech tag
      * @param entryNumber the entry number (see method description)
      * @return The list of matching lexical entries
      */

@@ -10,16 +10,16 @@ public class ClassificationOutput implements Comparable<ClassificationOutput> {
         this.frequency = frequency;
         this.confidence = confidence;
     }
-    
-    public String toString(){
-    	
-    	return "[ " + key + ", " + frequency + ", " + confidence + " ]";
-    }
 
     public ClassificationOutput(String key, double frequency) {
         this.key = key;
         this.frequency = frequency;
         confidence = 1;
+    }
+
+    public String toString() {
+
+        return "[ " + key + ", " + frequency + ", " + confidence + " ]";
     }
 
     public String getKey() {

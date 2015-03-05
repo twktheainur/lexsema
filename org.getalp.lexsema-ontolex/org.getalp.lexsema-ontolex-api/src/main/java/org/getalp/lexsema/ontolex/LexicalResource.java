@@ -32,6 +32,7 @@ public interface LexicalResource {
 
     /**
      * Returns the <code>Graph</code> where the lexical resource is stored
+     *
      * @param language the graph corresponding to this language
      * @return the graph where the lexical resource is stored
      */
@@ -55,7 +56,7 @@ public interface LexicalResource {
     /**
      * Retrieve the lexical entries matching the entry provided
      *
-     * @param entry The entry to search for
+     * @param entry    The entry to search for
      * @param language The language for which to retrieve the entry
      * @return The list of matching lexical entries
      */
@@ -73,8 +74,8 @@ public interface LexicalResource {
     /**
      * Retrieve the lexical entries matching the entry and part of speech tag provided
      *
-     * @param entry The entry to search for
-     * @param pos   A string containing the part of speech tag
+     * @param entry    The entry to search for
+     * @param pos      A string containing the part of speech tag
      * @param language The language for which to retrieve the entry
      * @return The list of matching lexical entries
      */
@@ -82,6 +83,7 @@ public interface LexicalResource {
 
     /**
      * Retrieves all the <code>LexicalSense</code>s associated with the <code>LexicalEntry</code> lexicalEntry.
+     *
      * @param lexicalEntry The lexical entry for which the lexical senses should be returned
      * @return A list of lexical senses that correspond to the lexical entry
      */

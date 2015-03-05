@@ -55,7 +55,7 @@ Class: <http://www.w3.org/ns/ontolex#LexicalSense>
 Class: <http://www.semanticweb.org/tchechem/ontologies/2013/10/axie#EquivalenceClass>
 
     Annotations: 
-        rdfs:comment "An equivalence class between ontolex:LexicalSense s in the same or a different ontolex:language"^^xsd:string
+        rdfs:comment "An equivalence class between ontolex:LexicalSense s in the same or first different ontolex:language"^^xsd:string
     
     SubClassOf: 
         <http://www.w3.org/ns/ontolex#LexicalConcept>

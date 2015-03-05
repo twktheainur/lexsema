@@ -63,7 +63,6 @@ public class DbnaryDisambiguationSimplifiedLesk {
         Disambiguator disambiguator = new SimplifiedLesk(1000, similarityMeasure, algorithmParameters, 1);
 
 
-
         //Disambiguator sl = new LegacySimplifiedLesk(10,sim_lr_hp,);
         //WindowedLeskParameters wlp = new WindowedLeskParameters(false,false);
         //Disambiguator sl = new WindowedLesk(6, sim_lr_hp, wlp, 4);

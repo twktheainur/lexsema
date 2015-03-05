@@ -12,7 +12,7 @@
         <module>org.getalp.lexsema-similarity</module>
         <module>org.getalp.lexsema-io</module>
         <module>org.getalp.lexsema-util</module>
-        <module>org.getalp.lexsema-optim</module>
+        <module>org.getalp.lexsema-ml</module>
         <module>org.getalp.lexsema-acceptali</module>
     </modules>
 
@@ -21,6 +21,10 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <uima.core.version>2.6.0</uima.core.version>
+        <uima.as.version>2.4.0</uima.as.version>
+        <uima.fit.version>2.1.0</uima.fit.version>
+        <slf4j.version>1.6.1</slf4j.version>
     </properties>
 
     <build>
@@ -75,8 +79,17 @@
                 </exclusion>
             </exclusions>
         </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>1.7.7</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>log4j-over-slf4j</artifactId>
+            <version>1.7.2</version>
+        </dependency>
     </dependencies>
-
     <repositories>
         <repository>
             <!-- Getalp third party stuff -->
