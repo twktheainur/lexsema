@@ -18,18 +18,17 @@ public class BatConfiguration implements Configuration {
 		}
 	}
 	
-	public void setSenses(int[] senses)
-	{
-		for (int i = 0 ; i < Math.min(senses.length, assignments.length) ; i++)
-		{
+	public void setSenses(int[] senses) {
+		for (int i = 0 ; i < Math.min(senses.length, assignments.length) ; i++) {
 			setSense(i, senses[i]);
 		}
 	}
 
 	@Override
 	public void setSense(int wordIndex, int senseIndex) {
-		if (senseIndex < 0) senseIndex = 0;
-		assignments[wordIndex] = senseIndex % document.getSenses(wordIndex).size();;
+		int sensesNumber = document.getSenses(wordIndex).size();
+		while (senseIndex < 0) senseIndex += sensesNumber;
+		assignments[wordIndex] = senseIndex % sensesNumber;
 	}
 
 	@Override
