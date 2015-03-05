@@ -25,7 +25,9 @@ public class SenseImpl implements Sense {
     }
 
     public SenseImpl(LexicalSense sense) {
-        id = sense.getNode().getURI();
+        if (lexicalSense != null) {
+            id = sense.getNode().getURI();
+        }
         lexicalSense = sense;
         relatedSignatures = new HashMap<>();
     }
@@ -42,9 +44,13 @@ public class SenseImpl implements Sense {
 
     @Override
     public String toString() {
-        String[] uriParts = getNode().getURI().split("/");
-        String id = uriParts[uriParts.length - 1];
-        return String.format("Sense|%s|{'%s'}", id, getDefinition());
+        if (lexicalSense != null) {
+            String[] uriParts = getNode().getURI().split("/");
+            String id = uriParts[uriParts.length - 1];
+            return String.format("Sense|%s|{'%s'}", id, getDefinition());
+        } else {
+            return String.format("Sense|%s|{'%s'}", id, getSemanticSignature().toString());
+        }
     }
 
     @Override

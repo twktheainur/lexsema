@@ -17,19 +17,23 @@ public class OverlapInputSet extends SetFunctionInput {
     private List<Double> weightsA;
     private List<Double> weightsB;
     private boolean invert;
-    private boolean compute;
 
-    public OverlapInputSet(final List<String> la, final List<String> lb, final List<Double> weightsA, final List<Double> weightsB, final AbstractStringDistance distance) {
+    public OverlapInputSet(final List<String> la, final List<String> lb, final List<Double> weightsA, final List<Double> weightsB, final AbstractStringDistance distance, boolean compute) {
         this.la = Collections.unmodifiableList(la);
         this.lb = Collections.unmodifiableList(lb);
-        this.weightsA = Collections.unmodifiableList(weightsA);
-        this.weightsB = Collections.unmodifiableList(weightsB);
+        if (weightsA != null && weightsB != null) {
+            this.weightsA = Collections.unmodifiableList(weightsA);
+            this.weightsB = Collections.unmodifiableList(weightsB);
+        }
         this.distance = distance;
         if (compute) {
             compute();
         }
     }
 
+    public OverlapInputSet(final List<String> la, final List<String> lb, final List<Double> weightsA, final List<Double> weightsB, final AbstractStringDistance distance) {
+        this(la, lb, weightsA, weightsB, distance, true);
+    }
     private void compute() {
         setInput(new DenseDoubleMatrix1D(la.size() * lb.size()));
         setValues(new DenseDoubleMatrix1D(la.size() * lb.size()));
@@ -57,7 +61,7 @@ public class OverlapInputSet extends SetFunctionInput {
     @SuppressWarnings({"LawOfDemeter", "LocalVariableOfConcreteClass"})
     @Override
     public FunctionInput copy() {
-        OverlapInputSet nin = new OverlapInputSet(la, lb, weightsA, weightsB, distance).setCompute(false).setInvert(invert);
+        OverlapInputSet nin = new OverlapInputSet(la, lb, weightsA, weightsB, distance, false).setInvert(invert);
         nin.setInput(getInput().copy());
         nin.setValues(getValues().copy());
         if (getPermutation() != null) {
@@ -72,9 +76,4 @@ public class OverlapInputSet extends SetFunctionInput {
         return this;
     }
 
-    @SuppressWarnings({"PublicMethodNotExposedInInterface", "BooleanParameter", "MethodReturnOfConcreteClass"})
-    public OverlapInputSet setCompute(boolean compute) {
-        this.compute = compute;
-        return this;
-    }
 }
