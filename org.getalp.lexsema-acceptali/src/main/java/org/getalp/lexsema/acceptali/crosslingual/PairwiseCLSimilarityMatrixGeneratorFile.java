@@ -1,0 +1,48 @@
+package org.getalp.lexsema.acceptali.crosslingual;
+
+import cern.colt.matrix.tdouble.DoubleMatrix2D;
+import cern.colt.matrix.tdouble.impl.DenseDoubleMatrix2D;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+
+public class PairwiseCLSimilarityMatrixGeneratorFile implements PairwiseCrossLingualSimilarityMatrixGenerator {
+
+    private static Logger logger = LoggerFactory.getLogger(PairwiseCrossLingualSimilarityMatrixGenerator.class);
+
+    private DoubleMatrix2D similarityMatrix = null;
+    private String filename;
+
+    public PairwiseCLSimilarityMatrixGeneratorFile(String filename) {
+        this.filename = filename;
+    }
+
+    private void generateMatrix(){
+        try (BufferedReader br = new BufferedReader(new FileReader(filename))){
+            String line = br.readLine();
+            int row = 0;
+            while(line!=null){
+                String[] fields = line.split(",");
+                if(similarityMatrix==null) {
+                    similarityMatrix = new DenseDoubleMatrix2D(fields.length,fields.length);
+                }
+                for(int col=0;col < fields.length; col++){
+                    similarityMatrix.setQuick(row,col,Double.valueOf(fields[col]));
+                }
+                line = br.readLine();
+                row++;
+            }
+        } catch (IOException e){
+            logger.error(e.getLocalizedMessage());
+        }
+
+    }
+
+    @Override
+    public DoubleMatrix2D getScoreMatrix(){
+        return null;
+    }
+}
