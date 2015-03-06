@@ -66,7 +66,6 @@ public class MatrixFactorizationFilter implements Filter {
         return matrixFactorization.getV();
     }
 
-
     @Override
     public void setEnabled(boolean enabled) {
         this.enabled = true;
