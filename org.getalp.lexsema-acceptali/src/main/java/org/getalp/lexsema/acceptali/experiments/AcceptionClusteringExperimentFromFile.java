@@ -1,20 +1,20 @@
 package org.getalp.lexsema.acceptali.experiments;
 
 import cern.colt.matrix.tdouble.DoubleMatrix2D;
-import com.trickl.cluster.ClusterAlgorithm;
-import com.trickl.cluster.KernelKMeans;
-import com.wcohen.ss.ScaledLevenstein;
+import com.trickl.cluster.KernelPairwiseNearestNeighbour;
+import org.getalp.lexsema.acceptali.cli.org.getalp.lexsema.acceptali.acceptions.SenseCluster;
+import org.getalp.lexsema.acceptali.cli.org.getalp.lexsema.acceptali.acceptions.SenseClusterer;
+import org.getalp.lexsema.acceptali.cli.org.getalp.lexsema.acceptali.acceptions.SenseClustererImpl;
 import org.getalp.lexsema.acceptali.closure.LexicalResourceTranslationClosure;
-import org.getalp.lexsema.acceptali.closure.LexicalResourceTranslationClosureImpl;
 import org.getalp.lexsema.acceptali.closure.generator.TranslationClosureGenerator;
 import org.getalp.lexsema.acceptali.closure.generator.TranslationClosureGeneratorFactory;
 import org.getalp.lexsema.acceptali.closure.generator.TranslationClosureSemanticSignatureGenerator;
 import org.getalp.lexsema.acceptali.closure.generator.TranslationClosureSemanticSignatureGeneratorImpl;
+import org.getalp.lexsema.acceptali.crosslingual.PairwiseCLSimilarityMatrixGeneratorFile;
+import org.getalp.lexsema.acceptali.crosslingual.PairwiseCrossLingualSimilarityMatrixGenerator;
 import org.getalp.lexsema.language.Language;
-import org.getalp.lexsema.ontolex.LexicalEntry;
 import org.getalp.lexsema.ontolex.LexicalSense;
 import org.getalp.lexsema.ontolex.dbnary.DBNary;
-import org.getalp.lexsema.ontolex.dbnary.Vocable;
 import org.getalp.lexsema.ontolex.dbnary.exceptions.NoSuchVocableException;
 import org.getalp.lexsema.ontolex.factories.resource.LexicalResourceFactory;
 import org.getalp.lexsema.ontolex.graph.OWLTBoxModel;
@@ -23,17 +23,14 @@ import org.getalp.lexsema.ontolex.graph.storage.JenaTDBStore;
 import org.getalp.lexsema.ontolex.graph.storage.StoreHandler;
 import org.getalp.lexsema.ontolex.graph.store.Store;
 import org.getalp.lexsema.similarity.Sense;
-import org.getalp.lexsema.similarity.measures.SimilarityMeasure;
-import org.getalp.lexsema.similarity.measures.TverskiIndexSimilarityMeasureMatrixImplBuilder;
-import org.getalp.ml.matrix.factorization.*;
-import org.getalp.ml.matrix.filters.MatrixFactorizationFilter;
-import org.getalp.ml.matrix.score.SumMatrixScorer;
+import org.getalp.ml.matrix.filters.NeuralICAMatrixFactorizationFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -45,19 +42,7 @@ public final class AcceptionClusteringExperimentFromFile {
     public static final String ONTOLOGY_PROPERTIES = String.format("data%sontology.properties", separator);
     public static final File CLOSURE_SAVE_PATH = new File(String.format("..%sdata%sclosure_river", separator, separator));
     public static final String MATRIX_PATH = ".." + separator + "data" + separator + "acception_matrices";
-    public static final String TRANSLATION_DB_PATH = String.format("..%sdata%stranslatorDB", separator, separator);
-    public static final String SIM_MATRIX_PATH = String.format("%s%ssource.dat",MATRIX_PATH,separator);
-    /**
-     * twk.theainur@live.co.uk account
-     */
-    //public static final String BING_APP_ID = "dbnary";
-    //public static final String BING_APP_KEY = "H2pC+d3b0L0tduSZzRafqPZyV6zmmzMmj9+AEpc9b1E=";
-
-    /**
-     * ainuros@outlook.com account
-     */
-    public static final String BING_APP_ID = "dbnary_hyper";
-    public static final String BING_APP_KEY = "IecT6H4OjaWo3OtH2pijfeNIx1y1bML3grXz/Gjo/+w=";
+    public static final String SIM_MATRIX_PATH = String.format("%s%ssource.dat", MATRIX_PATH, separator);
 
     public static final int DEPTH = 1;
     static Language[] loadLanguages = {
@@ -75,63 +60,22 @@ public final class AcceptionClusteringExperimentFromFile {
 
 
     public static void main(String[] args) throws IOException, NoSuchVocableException {
-        Store vts = new JenaTDBStore(DB_PATH);
-        StoreHandler.registerStoreInstance(vts);
-        //StoreHandler.DEBUG_ON = true;
-        OntologyModel tBox = new OWLTBoxModel(ONTOLOGY_PROPERTIES);
-        // Creating DBNary wrapper
+
 
         try {
-            DBNary dbNary = (DBNary) LexicalResourceFactory.getLexicalResource(DBNary.class, tBox, loadLanguages);
+            Set<Sense> closureSet = generateTranslationClosureWithSignatures(instantiateDBNary());
+            PairwiseCrossLingualSimilarityMatrixGenerator matrixGenerator =
+                    new PairwiseCLSimilarityMatrixGeneratorFile(SIM_MATRIX_PATH);
+            matrixGenerator.generateMatrix();
+            SenseClusterer clusterer = new SenseClustererImpl(new KernelPairwiseNearestNeighbour());
+            clusterer.setKernelFilter(new NeuralICAMatrixFactorizationFilter(-1));
+            DoubleMatrix2D inputData = matrixGenerator.getScoreMatrix();
+            inputData.normalize();
+            List<SenseCluster> clusters = clusterer.cluster(inputData, 10, new ArrayList<>(closureSet));
 
-            LexicalResourceTranslationClosure<Sense> closureWithSignatures = generateTranslationClosureWithSignatures(dbNary);
-
-            //SimilarityMeasure similarityMeasure = createSimilarityMeasure();
-
-            Set<Sense> closureSet = closureWithSignatures.senseFlatClosure();
-            logger.info(closureWithSignatures.toString());
-
-            long matrix_time = System.currentTimeMillis();
-            //createMatrixDirectories(matrix_time);
-            //writeTextClosure(closureWithSignatures, matrix_time);
-            //printMatrixLabels(matrix_time, closureSet);
-
-            //DoubleMatrix2D similarityMatrix = computeSimilarityMatrix(closureSet, similarityMeasure);
-            DoubleMatrix2D similarityMatrix = loadSimilarityMatrix(closureSet, SIM_MATRIX_PATH);
-
-            //writeSourceMatrix(matrix_time, similarityMatrix);
-
-            ClusterAlgorithm clusterAlgorithm = new KernelKMeans();
-
-            /**
-             * Factorisation method
-             */
-            logger.info("Clustering with PSVD...");
-            MatrixFactorization mf = new PartialSingularValueDecompositionFactory().factorize(similarityMatrix);
-            cluster(mf.getV(),clusterAlgorithm,3,matrix_time,"PSVD");
-            mf = new NeuralICAMatrixFactorization(similarityMatrix);
-            mf.compute();
-            logger.info("Clustering with NICA...");
-            cluster(mf.getV(), clusterAlgorithm, 3, matrix_time, "NICA");
-            mf = new LocalNonnegativeMatrixFactorizationFactory().factorize(similarityMatrix);
-            logger.info("Clustering with LNMF...");
-            cluster(mf.getV(), clusterAlgorithm, 3, matrix_time, "LNMF");
-            mf = new NonnegativeMatrixFactorizationEDFactory().factorize(similarityMatrix);
-            logger.info("Clustering with NMFED...");
-            cluster(mf.getV(), clusterAlgorithm, 3, matrix_time, "NMFED");
-            mf = new NonnegativeMatrixFactorizationKLFactory().factorize(similarityMatrix);
-            logger.info("Clustering with NMFKL...");
-            cluster(mf.getV(), clusterAlgorithm, 3, matrix_time, "NMFKL");
-            //logger.info("Clustering with FICA...");
-            //mf = new FastICAMatrixFactorizationFactory().factorize(similarityMatrix);
-            //cluster(mf.getV(), clusterAlgorithm, 10, matrix_time, "FICA");
-            //writeProjectedMatrix(matrix_time, mf.getV());
-            //writeMixingMatrix(matrix_time, mf.getU());
-
-
-
-
-
+            for(SenseCluster sc: clusters){
+                logger.info(sc.toString());
+            }
 
         } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException |
                 InstantiationException | ClassNotFoundException e) {
@@ -139,48 +83,30 @@ public final class AcceptionClusteringExperimentFromFile {
         }
     }
 
-    private static void cluster(DoubleMatrix2D input,ClusterAlgorithm clusterAlgorithm, int numberOfClusters,long matrix_time, String name){
-        clusterAlgorithm.cluster(input, 10);
-        DoubleMatrix2D assignments = clusterAlgorithm.getPartition();
-        //writeAssignmentMatrix(matrix_time, assignments,name);
-        logger.info(assignments.toString());
+    private static DBNary instantiateDBNary() throws IOException, InvocationTargetException, NoSuchMethodException, ClassNotFoundException, InstantiationException, IllegalAccessException {
+        Store vts = new JenaTDBStore(DB_PATH);
+        StoreHandler.registerStoreInstance(vts);
+        //StoreHandler.DEBUG_ON = true;
+        OntologyModel tBox = new OWLTBoxModel(ONTOLOGY_PROPERTIES);
+        // Creating DBNary wrapper
+        return (DBNary) LexicalResourceFactory.getLexicalResource(DBNary.class, tBox, loadLanguages);
     }
 
-    @SuppressWarnings({"LawOfDemeter", "MagicNumber", "FeatureEnvy"})
-    private static SimilarityMeasure createSimilarityMeasure() {
-        return new TverskiIndexSimilarityMeasureMatrixImplBuilder()
-                .computeRatio(true)
-                .alpha(1d)
-                .beta(0.5d)
-                .gamma(0.5d)
-                .fuzzyMatching(true)
-                .isDistance(false)
-                .matrixScorer(new SumMatrixScorer())
-                .setDistance(new ScaledLevenstein())
-                .filter(new MatrixFactorizationFilter(new NeuralICAMAtrixFactoizationFactory()))
-                .build();
-
-    }
-
-    private static LexicalResourceTranslationClosure<Sense> generateTranslationClosureWithSignatures(DBNary dbNary) throws NoSuchVocableException {
+    private static Set<Sense> generateTranslationClosureWithSignatures(DBNary dbNary) throws NoSuchVocableException {
         LexicalResourceTranslationClosure<LexicalSense> closure;
 
-        if (CLOSURE_SAVE_PATH.exists()) {
-            TranslationClosureGenerator gtc = TranslationClosureGeneratorFactory.createFileGenerator(dbNary, CLOSURE_SAVE_PATH.getAbsolutePath());
-            closure = generateLexicalSenseClosure(gtc, DEPTH);
-        } else {
-            Vocable v = dbNary.getVocable("river", Language.ENGLISH);
-            List<LexicalEntry> ventries = dbNary.getLexicalEntries(v);
-            if (!ventries.isEmpty()) {
-                TranslationClosureGenerator gtc = TranslationClosureGeneratorFactory.createVocablePOSGenerator(v, "http://www.lexinfo.net/ontology/2.0/lexinfo#noun", dbNary);
-                closure = generateLexicalSenseClosure(gtc, DEPTH);
-            } else {
-                closure = new LexicalResourceTranslationClosureImpl();
-            }
-        }
+        TranslationClosureGenerator gtc = TranslationClosureGeneratorFactory
+                .createFileGenerator(dbNary, CLOSURE_SAVE_PATH.getAbsolutePath());
+        closure = generateLexicalSenseClosure(gtc, DEPTH);
 
-        TranslationClosureSemanticSignatureGenerator semanticSignatureGenerator = new TranslationClosureSemanticSignatureGeneratorImpl();
-        return semanticSignatureGenerator.generateSemanticSignatures(closure);
+        TranslationClosureSemanticSignatureGenerator semanticSignatureGenerator =
+                new TranslationClosureSemanticSignatureGeneratorImpl();
+
+        return flatSenseClosure(semanticSignatureGenerator.generateSemanticSignatures(closure));
+    }
+
+    private static Set<Sense> flatSenseClosure(LexicalResourceTranslationClosure<Sense> closure){
+        return closure.senseFlatClosure();
     }
 
     private static LexicalResourceTranslationClosure<LexicalSense> generateLexicalSenseClosure(TranslationClosureGenerator ctg, int degree) {

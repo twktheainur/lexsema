@@ -1,9 +1,9 @@
 package org.getalp.ml.matrix.filters;
 
-import org.getalp.ml.matrix.factorization.NonnegativeMatrixFactorizationKLFactory;
+import org.getalp.ml.matrix.factorization.NonnegativeMatrixFactorizationEDFactory;
 
 public class NMFEDMatrixFactorizationFilter extends MatrixFactorizationFilter {
     public NMFEDMatrixFactorizationFilter(int numberOfComponents) {
-        super(new NonnegativeMatrixFactorizationKLFactory(), numberOfComponents);
+        super(new NonnegativeMatrixFactorizationEDFactory(), numberOfComponents);
     }
 }

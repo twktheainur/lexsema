@@ -1,10 +1,11 @@
 package org.getalp.lexsema.acceptali.crosslingual;
 
 import cern.colt.matrix.tdouble.DoubleMatrix2D;
+import org.getalp.ml.matrix.filters.Filter;
 
-/**
- * Created by tchechem on 05/03/15.
- */
+
 public interface PairwiseCrossLingualSimilarityMatrixGenerator {
-    DoubleMatrix2D getScoreMatrix();
+    public DoubleMatrix2D getScoreMatrix();
+    public DoubleMatrix2D getScoreMatrix(Filter filter);
+    public void generateMatrix();
 }

@@ -19,7 +19,7 @@ public class BatAlgorithmDisambiguation {
 		
         long startTime = System.currentTimeMillis();
         
-        TextLoader dl = new Semeval2007TextLoader("../data/senseval2007_task7/test/d001_s001_s003.xml")
+        TextLoader dl = new Semeval2007TextLoader("../data/senseval2007_task7/test/eng-coarse-all-words.xml")
         		.loadNonInstances(true);
         
         LRLoader lrloader = new WordnetLoader("../data/wordnet/2.1/dict")

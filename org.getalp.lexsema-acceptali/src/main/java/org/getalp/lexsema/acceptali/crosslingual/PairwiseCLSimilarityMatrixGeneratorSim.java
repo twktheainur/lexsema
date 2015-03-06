@@ -7,6 +7,7 @@ import org.getalp.lexsema.similarity.Sense;
 import org.getalp.lexsema.similarity.measures.SimilarityMeasure;
 import org.getalp.lexsema.similarity.signatures.SemanticSignature;
 import org.getalp.lexsema.util.URIUtils;
+import org.getalp.ml.matrix.filters.Filter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -34,7 +35,8 @@ public class PairwiseCLSimilarityMatrixGeneratorSim implements PairwiseCrossLing
 
     }
 
-    private void generateMatrix(){
+    @Override
+    public void generateMatrix(){
         int totalPairs = closureSet.size() * closureSet.size();
         logger.info(String.format("Computing %d pairwise similarities with: %s", totalPairs, crossLingualSimilarity.toString()));
         int indexA = 0;
@@ -83,5 +85,12 @@ public class PairwiseCLSimilarityMatrixGeneratorSim implements PairwiseCrossLing
     @Override
     public DoubleMatrix2D getScoreMatrix(){
         return null;
+    }
+
+    @Override
+    public DoubleMatrix2D getScoreMatrix(Filter filter) {
+        DoubleMatrix2D processed = similarityMatrix.copy();
+        filter.apply(processed);
+        return processed;
     }
 }

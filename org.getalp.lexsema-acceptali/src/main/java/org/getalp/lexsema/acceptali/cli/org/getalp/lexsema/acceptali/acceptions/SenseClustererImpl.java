@@ -17,12 +17,13 @@ public class SenseClustererImpl implements SenseClusterer {
         this.clusterAlgorithm = clusterAlgorithm;
     }
 
+    @Override
     public List<SenseCluster> cluster(DoubleMatrix2D data, int numClusters, List<Sense> senses){
+        DoubleMatrix2D filteredData = data;
         if(kernelFilter!=null) {
-            clusterAlgorithm.cluster(kernelFilter.apply(data), numClusters);
-        } else {
-            clusterAlgorithm.cluster(data, numClusters);
+            filteredData = kernelFilter.apply(data);
         }
+        clusterAlgorithm.cluster(filteredData, numClusters);
         DoubleMatrix2D assignment = clusterAlgorithm.getPartition();
         return  extractClusters(assignment,senses, data);
     }
@@ -31,12 +32,12 @@ public class SenseClustererImpl implements SenseClusterer {
         List<SenseCluster> clusters = new ArrayList<>();
 
         for(int col=0;col<assignments.columns();col++){
-                clusters.add(new SenseClusterImpl(String.valueOf(col)));
+                clusters.add(new SenseClusterImpl(String.valueOf(col+1)));
         }
         for(int row=0;row<assignments.rows();row++){
             for(int col=0;col<assignments.columns();col++){
                 if(assignments.getQuick(row,col)>0){
-                    clusters.get(col).addMember(senses.get(col),data.viewRow(row),assignments.getQuick(row,col));
+                    clusters.get(col).addMember(senses.get(row),data.viewRow(row),assignments.getQuick(row,col));
                 }
             }
         }
@@ -48,6 +49,7 @@ public class SenseClustererImpl implements SenseClusterer {
         kernelFilter = null;
     }
 
+    @Override
     public void setKernelFilter(Filter filter){
         this.kernelFilter = filter;
     }

@@ -34,6 +34,9 @@ public class SenseImpl implements Sense {
 
     @Override
     public String getId() {
+        if(lexicalSense!=null){
+            return lexicalSense.toString();
+        }
         return id;
     }
 
@@ -154,6 +157,9 @@ public class SenseImpl implements Sense {
 
     @Override
     public int compareTo(LexicalResourceEntity o) {
-        return id.compareTo(o.getNode().toString());
+        if(lexicalSense!=null) {
+            return getNode().toString().compareTo(o.getNode().toString());
+        }
+        return -1;
     }
 }

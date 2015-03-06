@@ -1,7 +1,8 @@
 package org.getalp.lexsema.wsd.configuration;
 
-import java.util.Random;
 import org.getalp.lexsema.similarity.Document;
+
+import java.util.Random;
 
 public class BatConfiguration implements Configuration {
 	

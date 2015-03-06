@@ -55,7 +55,7 @@ public class SenseClusterImpl implements SenseCluster {
         retBuilder.append(String.format("Cluster|%s| {%s", id, System.lineSeparator()));
         retBuilder.append("\t");
         for(int i=0;i<members.size();i++) {
-            retBuilder.append(String.format("%s (%s)", URIUtils.getCanonicalURI(members.get(i).getId()), weights.get(i)));
+            retBuilder.append(String.format("\t%s (%s) -- %s %s", URIUtils.getCanonicalURI(members.get(i).getNode().toString()), weights.get(i),members.get(i).getDefinition(),System.lineSeparator()));
         }
         retBuilder.append(String.format("%s}", System.lineSeparator()));
         return retBuilder.toString();

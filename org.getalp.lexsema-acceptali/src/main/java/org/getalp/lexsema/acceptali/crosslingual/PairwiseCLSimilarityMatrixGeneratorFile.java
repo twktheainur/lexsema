@@ -2,6 +2,7 @@ package org.getalp.lexsema.acceptali.crosslingual;
 
 import cern.colt.matrix.tdouble.DoubleMatrix2D;
 import cern.colt.matrix.tdouble.impl.DenseDoubleMatrix2D;
+import org.getalp.ml.matrix.filters.Filter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,7 +21,9 @@ public class PairwiseCLSimilarityMatrixGeneratorFile implements PairwiseCrossLin
         this.filename = filename;
     }
 
-    private void generateMatrix(){
+
+    @Override
+    public void generateMatrix(){
         try (BufferedReader br = new BufferedReader(new FileReader(filename))){
             String line = br.readLine();
             int row = 0;
@@ -43,6 +46,13 @@ public class PairwiseCLSimilarityMatrixGeneratorFile implements PairwiseCrossLin
 
     @Override
     public DoubleMatrix2D getScoreMatrix(){
-        return null;
+        return similarityMatrix;
+    }
+
+    @Override
+    public DoubleMatrix2D getScoreMatrix(Filter filter) {
+        DoubleMatrix2D processed = similarityMatrix.copy();
+        filter.apply(processed);
+        return processed;
     }
 }

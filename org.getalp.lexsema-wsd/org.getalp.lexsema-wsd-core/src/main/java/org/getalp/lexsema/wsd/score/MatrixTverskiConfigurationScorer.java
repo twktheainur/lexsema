@@ -127,8 +127,9 @@ public class MatrixTverskiConfigurationScorer implements ConfigurationScorer {
                 Sense b = document.getSenses(indexB).get(configuration.getAssignment(indexB));
                 double sim = similarityMeasure.compute(a.getSemanticSignature(), b.getSemanticSignature(),null,null);
                 return new TripleImpl<>(indexA, indexB, sim);
-            } catch (Exception e) {
+            } catch (RuntimeException e) {
                 logger.error(e.getLocalizedMessage());
+                e.printStackTrace();
             }
             return new TripleImpl<>(indexA,indexB,0d);
         }

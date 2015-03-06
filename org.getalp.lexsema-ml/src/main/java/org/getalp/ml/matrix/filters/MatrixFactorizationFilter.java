@@ -32,11 +32,6 @@ import org.getalp.ml.matrix.factorization.MatrixFactorization;
 import org.getalp.ml.matrix.factorization.MatrixFactorizationFactory;
 
 
-/**
- * FastICA port of Python scikit-learn implementation.
- *
- * @author Chris Gearhart <cgearhart3@gatech.edu>
- */
 public class MatrixFactorizationFilter implements Filter {
 
     private MatrixFactorizationFactory factorizationFactory;
@@ -56,7 +51,7 @@ public class MatrixFactorizationFilter implements Filter {
     public DoubleMatrix2D apply(DoubleMatrix2D signal) {
         if (enabled) {
             MatrixFactorization factorization = factorizationFactory.factorize(signal);
-            DoubleMatrix2D result = factorization.getV();
+            DoubleMatrix2D result = projectedMatrix(factorization);
             if (numberOfComponents > 0) {
                 if (numberOfComponents <= result.columns()) {
                     result = result.viewPart(0, 0, result.rows(), numberOfComponents);
@@ -65,6 +60,10 @@ public class MatrixFactorizationFilter implements Filter {
             return result;
         }
         return signal;
+    }
+
+    private DoubleMatrix2D projectedMatrix(MatrixFactorization matrixFactorization){
+        return matrixFactorization.getV();
     }
 
 
