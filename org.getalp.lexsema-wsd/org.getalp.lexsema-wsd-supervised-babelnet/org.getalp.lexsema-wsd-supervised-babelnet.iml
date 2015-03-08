@@ -30,6 +30,8 @@
         <SOURCES />
       </library>
     </orderEntry>
+    <orderEntry type="module" module-name="org.getalp.lexsema-io-babelnet" />
+    <orderEntry type="module" module-name="org.getalp.lexsema-io-core" />
     <orderEntry type="module" module-name="org.getalp.lexsema-wsd-core" />
     <orderEntry type="module" module-name="org.getalp.lexsema-ml" />
     <orderEntry type="library" name="Maven: colt:colt:1.2.0" level="project" />
