@@ -18,12 +18,8 @@ public class BatAlgorithmDisambiguation {
 	public static void main(String[] args) {
 		
         long startTime = System.currentTimeMillis();
-        
-<<<<<<< HEAD
+
         TextLoader dl = new Semeval2007TextLoader("../data/senseval2007_task7/test/eng-coarse-all-words.xml")
-=======
-        TextLoader dl = new Semeval2007TextLoader("../data/senseval2007_task7/test/eng-coarse-all-words-t1s.xml")
->>>>>>> 3a3750340a3077643b79ee5d6a9dee67f9bcdbc9
         		.loadNonInstances(true);
         
         LRLoader lrloader = new WordnetLoader("../data/wordnet/2.1/dict")

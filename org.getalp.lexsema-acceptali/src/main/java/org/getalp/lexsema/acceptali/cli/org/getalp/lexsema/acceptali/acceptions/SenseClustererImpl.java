@@ -12,9 +12,16 @@ import java.util.List;
 public class SenseClustererImpl implements SenseClusterer {
     private ClusterAlgorithm clusterAlgorithm;
     private Filter kernelFilter;
+    private double threshold;
 
     public SenseClustererImpl(ClusterAlgorithm clusterAlgorithm) {
+        this(clusterAlgorithm, 0);
+
+    }
+
+    public SenseClustererImpl(ClusterAlgorithm clusterAlgorithm, double threshold) {
         this.clusterAlgorithm = clusterAlgorithm;
+        this.threshold = threshold;
     }
 
     @Override
@@ -36,7 +43,7 @@ public class SenseClustererImpl implements SenseClusterer {
         }
         for(int row=0;row<assignments.rows();row++){
             for(int col=0;col<assignments.columns();col++){
-                if(assignments.getQuick(row,col)>0){
+                if (assignments.getQuick(row, col) > threshold) {
                     clusters.get(col).addMember(senses.get(row),data.viewRow(row),assignments.getQuick(row,col));
                 }
             }
@@ -51,6 +58,6 @@ public class SenseClustererImpl implements SenseClusterer {
 
     @Override
     public void setKernelFilter(Filter filter){
-        this.kernelFilter = filter;
+        kernelFilter = filter;
     }
 }

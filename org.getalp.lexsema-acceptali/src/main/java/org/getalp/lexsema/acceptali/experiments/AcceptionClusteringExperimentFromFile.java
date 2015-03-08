@@ -1,7 +1,7 @@
 package org.getalp.lexsema.acceptali.experiments;
 
 import cern.colt.matrix.tdouble.DoubleMatrix2D;
-import com.trickl.cluster.KernelPairwiseNearestNeighbour;
+import com.trickl.cluster.FuzzyCMeans;
 import org.getalp.lexsema.acceptali.cli.org.getalp.lexsema.acceptali.acceptions.SenseCluster;
 import org.getalp.lexsema.acceptali.cli.org.getalp.lexsema.acceptali.acceptions.SenseClusterer;
 import org.getalp.lexsema.acceptali.cli.org.getalp.lexsema.acceptali.acceptions.SenseClustererImpl;
@@ -67,10 +67,10 @@ public final class AcceptionClusteringExperimentFromFile {
             PairwiseCrossLingualSimilarityMatrixGenerator matrixGenerator =
                     new PairwiseCLSimilarityMatrixGeneratorFile(SIM_MATRIX_PATH);
             matrixGenerator.generateMatrix();
-            SenseClusterer clusterer = new SenseClustererImpl(new KernelPairwiseNearestNeighbour());
-            clusterer.setKernelFilter(new NeuralICAMatrixFactorizationFilter(-1));
+            SenseClusterer clusterer = new SenseClustererImpl(new FuzzyCMeans(), .5);
+            clusterer.setKernelFilter(new NeuralICAMatrixFactorizationFilter(5));
             DoubleMatrix2D inputData = matrixGenerator.getScoreMatrix();
-            inputData.normalize();
+            //inputData.normalize();
             List<SenseCluster> clusters = clusterer.cluster(inputData, 10, new ArrayList<>(closureSet));
 
             for(SenseCluster sc: clusters){

@@ -1,7 +1,11 @@
 package org.getalp.lexsema.acceptali.experiments;
 
 import cern.colt.matrix.tdouble.DoubleMatrix2D;
+import com.trickl.cluster.KernelPairwiseNearestNeighbour;
 import com.wcohen.ss.ScaledLevenstein;
+import org.getalp.lexsema.acceptali.cli.org.getalp.lexsema.acceptali.acceptions.SenseCluster;
+import org.getalp.lexsema.acceptali.cli.org.getalp.lexsema.acceptali.acceptions.SenseClusterer;
+import org.getalp.lexsema.acceptali.cli.org.getalp.lexsema.acceptali.acceptions.SenseClustererImpl;
 import org.getalp.lexsema.acceptali.closure.LexicalResourceTranslationClosure;
 import org.getalp.lexsema.acceptali.closure.LexicalResourceTranslationClosureImpl;
 import org.getalp.lexsema.acceptali.closure.generator.TranslationClosureGenerator;
@@ -32,6 +36,7 @@ import org.getalp.lexsema.similarity.measures.SimilarityMeasure;
 import org.getalp.lexsema.similarity.measures.TverskiIndexSimilarityMeasureMatrixImplBuilder;
 import org.getalp.ml.matrix.factorization.NeuralICAMAtrixFactoizationFactory;
 import org.getalp.ml.matrix.filters.MatrixFactorizationFilter;
+import org.getalp.ml.matrix.filters.NeuralICAMatrixFactorizationFilter;
 import org.getalp.ml.matrix.score.SumMatrixScorer;
 import org.getalp.ml.optimization.org.getalp.util.Matrices;
 import org.slf4j.Logger;
@@ -42,6 +47,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -99,7 +105,19 @@ public final class AcceptionClusteringExperimentGenerationSim {
 
             PairwiseCrossLingualSimilarityMatrixGenerator matrixGenerator =
                     new PairwiseCLSimilarityMatrixGeneratorSim(crossLingualSimilarity, closureSet, similarityMeasure);
+            matrixGenerator.generateMatrix();
 
+            SenseClusterer clusterer = new SenseClustererImpl(new KernelPairwiseNearestNeighbour());
+            clusterer.setKernelFilter(new NeuralICAMatrixFactorizationFilter(-1));
+            DoubleMatrix2D inputData = matrixGenerator.getScoreMatrix();
+            inputData.normalize();
+            List<SenseCluster> clusters = clusterer.cluster(inputData, 10, new ArrayList<>(closureSet));
+
+            for (SenseCluster sc : clusters) {
+                logger.info(sc.toString());
+            }
+
+            createMatrixDirectories(matrix_time);
             writeSourceMatrix(matrix_time, matrixGenerator.getScoreMatrix());
 
         } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException |
@@ -170,6 +188,16 @@ public final class AcceptionClusteringExperimentGenerationSim {
             pw.close();
         } catch (FileNotFoundException e) {
             logger.error(e.getLocalizedMessage());
+        }
+    }
+
+    private static void createMatrixDirectories(long matrix_time) {
+        File dir = new File(MATRIX_PATH + separator + matrix_time);
+        if (!dir.exists()) {
+            boolean result = dir.mkdirs();
+            if (!result) {
+                logger.error("Cannot create " + MATRIX_PATH + separator + matrix_time);
+            }
         }
     }
 /*
