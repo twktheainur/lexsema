@@ -91,4 +91,6 @@ public interface SemanticSignature extends Iterable<SemanticSymbol> {
     public List<Double> getWeights();
 
     public SemanticSignature copy();
+
+    public int size();
 }

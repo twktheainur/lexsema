@@ -2,10 +2,12 @@ package org.getalp.lexsema.wsd.experiments;
 
 import com.wcohen.ss.ScaledLevenstein;
 import org.getalp.lexsema.io.annotresult.SemevalWriter;
+import org.getalp.lexsema.io.dictionary.DictionaryWriter;
+import org.getalp.lexsema.io.dictionary.DocumentDictionaryWriter;
 import org.getalp.lexsema.io.document.Semeval2007TextLoader;
 import org.getalp.lexsema.io.document.TextLoader;
 import org.getalp.lexsema.io.resource.LRLoader;
-import org.getalp.lexsema.io.resource.wordnet.WordnetLoader;
+import org.getalp.lexsema.io.resource.dictionary.DictionaryLRLoader;
 import org.getalp.lexsema.similarity.Document;
 import org.getalp.lexsema.similarity.measures.SimilarityMeasure;
 import org.getalp.lexsema.similarity.measures.TverskiIndexSimilarityMeasureBuilder;
@@ -13,6 +15,8 @@ import org.getalp.lexsema.wsd.configuration.Configuration;
 import org.getalp.lexsema.wsd.method.Disambiguator;
 import org.getalp.lexsema.wsd.method.sequencial.WindowedLesk;
 import org.getalp.lexsema.wsd.method.sequencial.parameters.WindowedLeskParameters;
+
+import java.io.File;
 
 @SuppressWarnings("all")
 public class CombinedDisambiguation {
@@ -22,17 +26,12 @@ public class CombinedDisambiguation {
     public static void main(String[] args) {
         long startTime = System.currentTimeMillis();
         TextLoader dl = new Semeval2007TextLoader("../data/senseval2007_task7/test/eng-coarse-all-words.xml").loadNonInstances(true);
-        LRLoader lrloader = new WordnetLoader("../data/wordnet/2.1/dict")
-                .extendedSignature(true)
-                .shuffle(true)
-                .setUsesStopWords(true)
-                .setStemming(true)
-                .loadDefinitions(true);
+        LRLoader lrloader = new DictionaryLRLoader(new File("dictTest.xml"));
         SimilarityMeasure sim_lr_hp;
         SimilarityMeasure sim_full;
 
         //sim_lr_hp = new TverskiIndex(new ScaledLevenstein(),false, 1d, 0d, 0d, true, true,false ,true);
-        sim_lr_hp = new TverskiIndexSimilarityMeasureBuilder().distance(new ScaledLevenstein()).computeRatio(true).alpha(1d).beta(0.5d).gamma(0.5d).fuzzyMatching(true).quadraticWeighting(false).extendedLesk(false).randomInit(false).regularizeOverlapInput(false).optimizeOverlapInput(false).regularizeRelations(false).optimizeRelations(false).build();
+        //sim_lr_hp = new TverskiIndexSimilarityMeasureBuilder().distance(new ScaledLevenstein()).computeRatio(true).alpha(1d).beta(0.5d).gamma(0.5d).fuzzyMatching(true).quadraticWeighting(false).extendedLesk(false).randomInit(false).regularizeOverlapInput(false).optimizeOverlapInput(false).regularizeRelations(false).optimizeRelations(false).build();
 
 		/*SimplifiedLeskParameters slp = new SimplifiedLeskParameters()
                 .setAddSenseSignatures(false)
@@ -75,6 +74,8 @@ public class CombinedDisambiguation {
             sw.write(d, c.getAssignments());
             System.err.println("done!");
         }
+        DictionaryWriter writer = new DocumentDictionaryWriter(dl);
+        writer.writeDictionary(new File("dictTest2.xml"));
         //sl.release();
         sl_full.release();
         long endTime = System.currentTimeMillis();

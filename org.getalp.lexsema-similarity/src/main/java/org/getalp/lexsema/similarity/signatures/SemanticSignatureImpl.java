@@ -115,4 +115,9 @@ public class SemanticSignatureImpl implements SemanticSignature {
     public SemanticSignature copy() {
         return new SemanticSignatureImpl(symbols);
     }
+
+    @Override
+    public int size() {
+        return symbols.size();
+    }
 }
