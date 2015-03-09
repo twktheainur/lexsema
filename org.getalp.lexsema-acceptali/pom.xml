@@ -66,6 +66,40 @@
                         </execution>
                     </executions>
                 </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-shade-plugin</artifactId>
+                    <version>1.5</version>
+                    <executions>
+                        <execution>
+                            <phase>package</phase>
+                            <goals>
+                                <goal>shade</goal>
+                            </goals>
+                            <configuration>
+                                <shadedArtifactAttached>true</shadedArtifactAttached>
+                                <shadedClassifierName>allinone</shadedClassifierName>
+                                <artifactSet>
+                                    <includes>
+                                        <include>*:*</include>
+                                    </includes>
+                                </artifactSet>
+                                <transformers>
+                                    <transformer
+                                            implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+                                        <resource>reference.conf</resource>
+                                    </transformer>
+                                    <!--transformer
+                                            implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                                        <manifestEntries>
+                                            <Main-Class>akka.Main</Main-Class>
+                                        </manifestEntries>
+                                    </transformer-->
+                                </transformers>
+                            </configuration>
+                        </execution>
+                    </executions>
+                </plugin>
             </plugins>
         </pluginManagement>
     </build>
@@ -108,7 +142,7 @@
         </dependency>
         <dependency>
             <groupId>org.deeplearning4j</groupId>
-            <artifactId>deeplearning4j-parent</artifactId>
+            <artifactId>deeplearning4j-core</artifactId>
             <version>0.0.3.3.3.alpha1-SNAPSHOT</version>
         </dependency>
         <dependency>
@@ -123,7 +157,17 @@
         </dependency>
         <dependency>
             <groupId>org.nd4j</groupId>
-            <artifactId>canova-parent</artifactId>
+            <artifactId>canova-api</artifactId>
+            <version>0.0.0.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.nd4j</groupId>
+            <artifactId>canova-data</artifactId>
+            <version>0.0.0.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.nd4j</groupId>
+            <artifactId>canova-nd4j-nlp</artifactId>
             <version>0.0.0.1</version>
         </dependency>
         <dependency>
