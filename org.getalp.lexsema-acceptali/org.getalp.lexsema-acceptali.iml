@@ -86,7 +86,6 @@
     <orderEntry type="library" name="Maven: org.nd4j:nd4j-jblas:0.0.3.5.5.2" level="project" />
     <orderEntry type="library" name="Maven: org.jblas:jblas:1.2.3" level="project" />
     <orderEntry type="library" name="Maven: org.nd4j:canova-api:0.0.0.1" level="project" />
-    <orderEntry type="library" name="Maven: org.nd4j:canova-data:0.0.0.1" level="project" />
     <orderEntry type="library" name="Maven: org.nd4j:canova-nd4j-nlp:0.0.0.1" level="project" />
     <orderEntry type="library" name="Maven: org.nd4j:canova-data-nlp:0.0.0.1" level="project" />
     <orderEntry type="library" name="Maven: org.deeplearning4j:deeplearning4j-nlp:0.0.3.3.3.alpha1-SNAPSHOT" level="project" />
