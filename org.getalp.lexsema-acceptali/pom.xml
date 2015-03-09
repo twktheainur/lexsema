@@ -246,7 +246,6 @@
             <artifactId>de.tudarmstadt.ukp.dkpro.core.dictionaryannotator-asl</artifactId>
             <version>1.6.2</version>
         </dependency>
-
         <dependency>
             <groupId>org.apache.jena</groupId>
             <artifactId>apache-jena-libs</artifactId>
