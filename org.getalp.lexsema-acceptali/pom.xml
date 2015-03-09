@@ -162,11 +162,6 @@
         </dependency>
         <dependency>
             <groupId>org.nd4j</groupId>
-            <artifactId>canova-data</artifactId>
-            <version>0.0.0.1</version>
-        </dependency>
-        <dependency>
-            <groupId>org.nd4j</groupId>
             <artifactId>canova-nd4j-nlp</artifactId>
             <version>0.0.0.1</version>
         </dependency>
