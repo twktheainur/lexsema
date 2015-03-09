@@ -38,6 +38,11 @@
                     <target>1.7</target>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>1.5</version>
+            </plugin>
         </plugins>
 
         <pluginManagement>
@@ -89,12 +94,12 @@
                                             implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
                                         <resource>reference.conf</resource>
                                     </transformer>
-                                    <!--transformer
+                                    <transformer
                                             implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
                                         <manifestEntries>
-                                            <Main-Class>akka.Main</Main-Class>
+                                            <Main-Class>Main</Main-Class>
                                         </manifestEntries>
-                                    </transformer-->
+                                    </transformer>
                                 </transformers>
                             </configuration>
                         </execution>
@@ -158,11 +163,6 @@
         <dependency>
             <groupId>org.nd4j</groupId>
             <artifactId>canova-api</artifactId>
-            <version>0.0.0.1</version>
-        </dependency>
-        <dependency>
-            <groupId>org.nd4j</groupId>
-            <artifactId>canova-data</artifactId>
             <version>0.0.0.1</version>
         </dependency>
         <dependency>
