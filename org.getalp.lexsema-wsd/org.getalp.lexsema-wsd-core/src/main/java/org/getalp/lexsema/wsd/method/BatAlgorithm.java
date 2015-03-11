@@ -233,7 +233,7 @@ public class BatAlgorithm implements Disambiguator
 
     private Bat getBestBat()
     {
-        Bat bestBat = this.bestBat;
+        Bat bestBat = null;
         for (int i = 0 ; i < batsNumber ; ++i)
         {
             bestBat = getBestBatBetween(bestBat, bats.get(i));
