@@ -101,7 +101,7 @@ public final class AcceptionClusteringExperimentGenerationSim {
             Translator translator = new JedisCachedTranslator("Bing", new BingAPITranslator(BING_APP_ID, BING_APP_KEY));
 
             logger.info("Loading Word2Vec...");
-            //MultilingualWord2VecLoader word2VecLoader = new MultilingualSerializedModelWord2VecLoader();
+            //MultilingualWord2VecLoader word2Vec   Loader = new MultilingualSerializedModelWord2VecLoader();
             //word2VecLoader.load(new File(WORD_2_VEC_MODEL));
             //MultilingualSignatureEnrichment signatureEnrichment = new MultilingualWord2VecSignatureEnrichment(word2VecLoader,10);
 

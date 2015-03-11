@@ -1,2 +1,2 @@
 #!/bin/bash
-redis-server ./redis.conf
+redis-server data/redis.conf
