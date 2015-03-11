@@ -14,7 +14,7 @@ public class BatConfiguration implements Configuration {
         assignments = new int[d.size()];
         Random r = new Random();
         for (int i = 0; i < assignments.length; i++) {
-            setSense(i, r.nextInt());
+            setSense(i, r.nextInt(d.getSenses(i).size()));
         }
     }
 
