@@ -4,6 +4,8 @@ import org.getalp.lexsema.io.resource.LRLoader;
 import org.getalp.lexsema.similarity.Document;
 import org.getalp.lexsema.similarity.Sense;
 import org.getalp.lexsema.similarity.Word;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
@@ -19,6 +21,8 @@ import java.util.Map;
 
 public class DictionaryLRLoader implements LRLoader {
 
+    private static Logger logger = LoggerFactory.getLogger(DictionaryLRLoader.class);
+
     Map<String, List<Sense>> wordSenses;
 
     public DictionaryLRLoader(File dictionaryFile) {
@@ -28,11 +32,11 @@ public class DictionaryLRLoader implements LRLoader {
             saxReader.setContentHandler(new DictionaryParser(wordSenses));
             saxReader.parse(new InputSource(new FileReader(dictionaryFile)));
         } catch (SAXException e) {
-            e.printStackTrace();
+            logger.error("Parser error :" + e.getLocalizedMessage());
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            logger.error("File not found :" + e.getLocalizedMessage());
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error("Read|Write error :" + e.getLocalizedMessage());
         }
     }
 
@@ -49,31 +53,37 @@ public class DictionaryLRLoader implements LRLoader {
         }
     }
 
+    @SuppressWarnings("BooleanParameter")
     @Override
     public LRLoader shuffle(boolean shuffle) {
         return this;
     }
 
+    @SuppressWarnings("BooleanParameter")
     @Override
     public LRLoader extendedSignature(boolean hasExtendedSignature) {
         return this;
     }
 
+    @SuppressWarnings("BooleanParameter")
     @Override
     public LRLoader loadDefinitions(boolean loadDefinitions) {
         return this;
     }
 
+    @SuppressWarnings("BooleanParameter")
     @Override
     public LRLoader setLoadRelated(boolean loadRelated) {
         return this;
     }
 
+    @SuppressWarnings("BooleanParameter")
     @Override
     public LRLoader setStemming(boolean stemming) {
         return this;
     }
 
+    @SuppressWarnings("BooleanParameter")
     @Override
     public LRLoader setUsesStopWords(boolean usesStopWords) {
         return this;

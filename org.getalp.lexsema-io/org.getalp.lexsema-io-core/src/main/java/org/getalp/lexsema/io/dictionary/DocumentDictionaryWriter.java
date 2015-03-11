@@ -23,10 +23,12 @@ public class DocumentDictionaryWriter implements DictionaryWriter {
     List<Text> documents;
 
 
+    @SuppressWarnings("unused")
     public DocumentDictionaryWriter(List<Text> documents) {
         this.documents = Collections.unmodifiableList(documents);
     }
 
+    @SuppressWarnings("unused")
     public DocumentDictionaryWriter(Text d) {
         documents = new ArrayList<>();
         documents.add(d);

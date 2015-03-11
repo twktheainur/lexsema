@@ -6,4 +6,6 @@ public interface Translator {
 
     public String translate(String source, Language sourceLanguage, Language targetLanguage);
 
+    public void close();
+
 }

@@ -7,3 +7,9 @@ target
 *.jar
 *.data
 out
+.project
+*.iml
+*.rdb
+tapkee_nle_server
+CMakeCache.txt
+CMakeFiles/

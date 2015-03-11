@@ -1,6 +1,6 @@
 package org.getalp.lexsema.similarity.measures;
 
-import cern.colt.matrix.tdouble.impl.DenseDoubleMatrix2D;
+import cern.colt.matrix.tdouble.DoubleMatrix2D;
 import com.wcohen.ss.AbstractStringDistance;
 import com.wcohen.ss.ScaledLevenstein;
 import org.getalp.lexsema.org.getalp.ml.matrix.score.generator.OverlapScoreMatrixGenerator;
@@ -76,7 +76,10 @@ public class TverskiIndexSimilarityMeasureMatrixImpl implements TverskiIndexSimi
         } else {
             matrixGenerator = new OverlapScoreMatrixGenerator(la, lb);
         }
-        DenseDoubleMatrix2D matrix = matrixGenerator.generateDenseScoreMatrix();
+        DoubleMatrix2D matrix = matrixGenerator.generateDenseScoreMatrix();
+        for (Filter filter : filters) {
+            matrix = filter.apply(matrix);
+        }
         matrixScorer.computeScore(matrix);
         return matrixScorer.computeScore(matrix);
     }

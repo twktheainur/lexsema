@@ -30,4 +30,8 @@ public class BingAPITranslator implements Translator {
 
         return translatedText;
     }
+
+    @Override
+    public void close() {
+    }
 }

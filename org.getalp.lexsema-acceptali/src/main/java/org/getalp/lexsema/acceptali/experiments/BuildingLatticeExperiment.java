@@ -14,7 +14,7 @@ import org.getalp.lexsema.acceptali.closure.generator.TranslationClosureSemantic
 import org.getalp.lexsema.acceptali.crosslingual.CrossLingualSimilarity;
 import org.getalp.lexsema.acceptali.crosslingual.TranslatorCrossLingualSimilarity;
 import org.getalp.lexsema.acceptali.crosslingual.translation.BingAPITranslator;
-import org.getalp.lexsema.acceptali.crosslingual.translation.CachedTranslator;
+import org.getalp.lexsema.acceptali.crosslingual.translation.H2CachedTranslator;
 import org.getalp.lexsema.acceptali.crosslingual.translation.Translator;
 import org.getalp.lexsema.language.Language;
 import org.getalp.lexsema.ontolex.LexicalEntry;
@@ -173,7 +173,7 @@ public final class BuildingLatticeExperiment {
     }
 
     private static DoubleMatrix2D computeSimilarityMatrix(Collection<Sense> closureSet, SimilarityMeasure similarityMeasure) {
-        Translator translator = new CachedTranslator(TRANSLATION_DB_PATH, new BingAPITranslator(BING_APP_ID, BING_APP_KEY), false);
+        Translator translator = new H2CachedTranslator(TRANSLATION_DB_PATH, new BingAPITranslator(BING_APP_ID, BING_APP_KEY), false);
         CrossLingualSimilarity crossLingualSimilarity = new TranslatorCrossLingualSimilarity(similarityMeasure, translator);
 
         DoubleMatrix2D similarityMatrix = DoubleFactory2D.dense.make(closureSet.size(), closureSet.size(), -1d);

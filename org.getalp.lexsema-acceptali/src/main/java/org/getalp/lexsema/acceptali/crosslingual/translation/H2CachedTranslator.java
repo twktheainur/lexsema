@@ -6,16 +6,16 @@ import org.slf4j.LoggerFactory;
 
 import java.sql.*;
 
-public class CachedTranslator implements Translator {
+public class H2CachedTranslator implements Translator {
 
     private static final String getTranslationMemory = "SELECT target FROM tm WHERE source = ? AND slang = ? AND tlang = ?";
     private static final String setTranslationMemory = "INSERT INTO tm (SOURCE, SLANG, TARGET, TLANG) VALUES (?, ?, ?, ?)";
     private Connection db;
     private Translator t;
     private boolean doUpdate;
-    private Logger log = LoggerFactory.getLogger(CachedTranslator.class);
+    private Logger log = LoggerFactory.getLogger(H2CachedTranslator.class);
 
-    public CachedTranslator(String dir, Translator t, boolean update) {
+    public H2CachedTranslator(String dir, Translator t, boolean update) {
         try {
             if (!dir.startsWith("jdbc:h2:")) {
                 dir = "jdbc:h2:" + dir;
@@ -111,6 +111,15 @@ public class CachedTranslator implements Translator {
             throw new RuntimeException("Caught an unexpected SQL Exception while retrieving a word.", e);
         }
         return target;
+    }
+
+    @Override
+    public void close() {
+        try {
+            db.close();
+        } catch (SQLException e) {
+            log.error(e.getLocalizedMessage());
+        }
     }
 
 }

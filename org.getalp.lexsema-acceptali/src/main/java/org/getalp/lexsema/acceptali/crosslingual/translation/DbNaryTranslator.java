@@ -51,6 +51,11 @@ public class DbNaryTranslator implements Translator {
         return outputBuilder.toString();
     }
 
+    @Override
+    public void close() {
+
+    }
+
     private String getWordTranslation(String form, Language sourceLanguage, Language targetLanguage) {
         StringBuilder outputBuilder = new StringBuilder();
         try {
