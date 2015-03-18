@@ -13,9 +13,9 @@ import java.util.Random;
 
 public class BatAlgorithm implements Disambiguator
 {
-    private static final int batsNumber = 10;
+    private static final int batsNumber = 20;
 
-    private static final int iterationsNumber = 10;
+    private static final int iterationsNumber = 20;
 
     private static final double minFrequency = 0;
 
@@ -23,13 +23,13 @@ public class BatAlgorithm implements Disambiguator
 
     private static final double minLoudness = 0;
 
-    private static final double maxLoudness = 100;
+    private static final double maxLoudness = 10;
 
     private static final double minRate = 0;
 
     private static final double maxRate = 1;
 
-    private static final double alpha = 0.9;
+    private static final double alpha = 0.95;
 
     private static final double gamma = 0.9;
 
@@ -127,7 +127,7 @@ public class BatAlgorithm implements Disambiguator
         {
             bats.get(i).initialize(document);
         }
-        bestBat = getBestBat();
+        updateBestBat();
 
         for (int currentIteration = 0 ; currentIteration < iterationsNumber ; currentIteration++)
         {
@@ -167,8 +167,9 @@ public class BatAlgorithm implements Disambiguator
                     currentBat.restorePositionAndVelocity();
                 }
 
-                bestBat = getBestBat();
             }
+            
+            updateBestBat();
         }
 
         return bestBat.configuration;
@@ -231,14 +232,19 @@ public class BatAlgorithm implements Disambiguator
         return result;
     }
 
-    private Bat getBestBat()
+    private void updateBestBat()
     {
-        Bat bestBat = null;
+        double bestScore = Double.MIN_VALUE;
         for (int i = 0 ; i < batsNumber ; ++i)
         {
-            bestBat = getBestBatBetween(bestBat, bats.get(i));
+            Bat currentBat = bats.get(i);
+            double currentScore = currentBat.getScore();
+            if (currentScore > bestScore)
+            {
+                bestScore = currentScore;
+                bestBat = currentBat;
+            }
         }
-        return bestBat;
     }
 
     private double computeAverageLoudness()
@@ -249,12 +255,5 @@ public class BatAlgorithm implements Disambiguator
             loudnessesSum += bats.get(i).loudness;
         }
         return loudnessesSum / (double) batsNumber;
-    }
-
-    private Bat getBestBatBetween(Bat bat1, Bat bat2)
-    {
-        if (bat1 == null) return bat2;
-        if (bat2 == null) return bat1;
-        return bat1.getScore() > bat2.getScore() ? bat1 : bat2;
     }
 }
