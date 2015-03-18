@@ -54,6 +54,7 @@ public class DictionaryParser implements ContentHandler {
      * @param value le locator a utiliser.
      * @see org.xml.sax.ContentHandler#setDocumentLocator(org.xml.sax.Locator)
      */
+    @Override
     public void setDocumentLocator(Locator value) {
         locator = value;
     }
@@ -65,6 +66,7 @@ public class DictionaryParser implements ContentHandler {
      *                      se lancer dans l'analyse du document.
      * @see org.xml.sax.ContentHandler#startDocument()
      */
+    @Override
     public void startDocument() throws SAXException {
     }
 
@@ -75,6 +77,7 @@ public class DictionaryParser implements ContentHandler {
      *                      considerer l'analyse du document comme etant complete.
      * @see org.xml.sax.ContentHandler#endDocument()
      */
+    @Override
     public void endDocument() throws SAXException {
     }
 
@@ -85,6 +88,7 @@ public class DictionaryParser implements ContentHandler {
      * @param URI    de l'espace de nommage.
      * @see org.xml.sax.ContentHandler#startPrefixMapping(java.lang.String, java.lang.String)
      */
+    @Override
     public void startPrefixMapping(String prefix, String URI) throws SAXException {
 
     }
@@ -95,6 +99,7 @@ public class DictionaryParser implements ContentHandler {
      * @param prefix le prefixe choisi a l'ouverture du traitement de l'espace nommage.
      * @see org.xml.sax.ContentHandler#endPrefixMapping(java.lang.String)
      */
+    @Override
     public void endPrefixMapping(String prefix) throws SAXException {
 
     }
@@ -109,16 +114,19 @@ public class DictionaryParser implements ContentHandler {
      *                      comme par exemple non respect d'une dtd.
      * @see org.xml.sax.ContentHandler#startElement(java.lang.String, java.lang.String, java.lang.String, org.xml.sax.Attributes)
      */
+    @Override
     public void startElement(String nameSpaceURI, String localName, String rawName, Attributes attributes) throws SAXException {
-        if (localName.equals("dict")) {
-
-        } else if (localName.equals("word")) {
-            word = attributes.getValue("tag");
-            mws = new ArrayList<>();
-        } else if (localName.equals("ids")) {
-            ids = true;
-        } else if (localName.equals("def")) {
-            def = true;
+        switch (localName) {
+            case "word":
+                word = attributes.getValue("tag");
+                mws = new ArrayList<>();
+                break;
+            case "ids":
+                ids = true;
+                break;
+            case "def":
+                def = true;
+                break;
         }
     }
 
@@ -129,19 +137,27 @@ public class DictionaryParser implements ContentHandler {
      */
     @Override
     public void endElement(String nameSpaceURI, String localName, String rawName) throws SAXException {
-        if (localName.equals("dict")) {
-        } else if (localName.equals("word")) {
-            dico.put(word, mws);
-        } else if (localName.equals("sense")) {
-            //System.out.println("Def " + mw.getDef());
-            if (mw.getSemanticSignature() != null && mw.getSemanticSignature().size() != 0) {
-                mws.add(mw);
-            }
-        } else if (localName.equals("ids")) {
-            ids = false;
-        } else if (localName.equals("def")) {
-            def = false;
+        switch (localName) {
+            case "word":
+                dico.put(word, mws);
+                break;
+            case "sense":
+                //System.out.println("Def " + mw.getDef());
+                if (mw.getSemanticSignature() != null && !isSignatureEmpty(mw.getSemanticSignature())) {
+                    mws.add(mw);
+                }
+                break;
+            case "ids":
+                ids = false;
+                break;
+            case "def":
+                def = false;
+                break;
         }
+    }
+
+    private boolean isSignatureEmpty(SemanticSignature semanticSignature) {
+        return semanticSignature.size() == 0;
     }
 
     /**
@@ -177,6 +193,7 @@ public class DictionaryParser implements ContentHandler {
      * @param end   le rang du dernier caractere a traiter effectivement
      * @see org.xml.sax.ContentHandler#ignorableWhitespace(char[], int, int)
      */
+    @Override
     public void ignorableWhitespace(char[] ch, int start, int end) throws SAXException {
         //System.out.println("espaces inutiles rencontres : ..." + new String(ch, start, end) +  "...");
     }
@@ -189,6 +206,7 @@ public class DictionaryParser implements ContentHandler {
      *               d'une serie de paires nom/valeur.
      * @see org.xml.sax.ContentHandler#processingInstruction(java.lang.String, java.lang.String)
      */
+    @Override
     public void processingInstruction(String target, String data) throws SAXException {
         //System.out.println("Instruction de fonctionnement : " + target);
         //System.out.println("  dont les arguments sont : " + data);
@@ -201,6 +219,7 @@ public class DictionaryParser implements ContentHandler {
      *
      * @see org.xml.sax.ContentHandler#skippedEntity(java.lang.String)
      */
+    @Override
     public void skippedEntity(String arg0) throws SAXException {
         // Je ne fais rien, ce qui se passe n'est pas franchement normal.
         // Pour eviter cet evenement, le mieux est quand meme de specifier une dtd pour vos

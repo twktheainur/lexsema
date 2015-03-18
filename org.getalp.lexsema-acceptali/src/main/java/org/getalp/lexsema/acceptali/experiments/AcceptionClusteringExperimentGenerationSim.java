@@ -1,7 +1,7 @@
 package org.getalp.lexsema.acceptali.experiments;
 
 import cern.colt.matrix.tdouble.DoubleMatrix2D;
-import com.trickl.cluster.KernelPairwiseNearestNeighbour;
+import com.trickl.cluster.KMeans;
 import com.wcohen.ss.ScaledLevenstein;
 import org.getalp.lexsema.acceptali.cli.org.getalp.lexsema.acceptali.acceptions.SenseCluster;
 import org.getalp.lexsema.acceptali.cli.org.getalp.lexsema.acceptali.acceptions.SenseClusterer;
@@ -17,7 +17,7 @@ import org.getalp.lexsema.acceptali.crosslingual.PairwiseCLSimilarityMatrixGener
 import org.getalp.lexsema.acceptali.crosslingual.PairwiseCrossLingualSimilarityMatrixGenerator;
 import org.getalp.lexsema.acceptali.crosslingual.TranslatorCrossLingualSimilarity;
 import org.getalp.lexsema.acceptali.crosslingual.translation.BingAPITranslator;
-import org.getalp.lexsema.acceptali.crosslingual.translation.CachedTranslator;
+import org.getalp.lexsema.acceptali.crosslingual.translation.JedisCachedTranslator;
 import org.getalp.lexsema.acceptali.crosslingual.translation.Translator;
 import org.getalp.lexsema.language.Language;
 import org.getalp.lexsema.ontolex.LexicalEntry;
@@ -34,9 +34,9 @@ import org.getalp.lexsema.ontolex.graph.store.Store;
 import org.getalp.lexsema.similarity.Sense;
 import org.getalp.lexsema.similarity.measures.SimilarityMeasure;
 import org.getalp.lexsema.similarity.measures.TverskiIndexSimilarityMeasureMatrixImplBuilder;
-import org.getalp.ml.matrix.factorization.NeuralICAMAtrixFactoizationFactory;
+import org.getalp.ml.matrix.factorization.TapkeeNLMatrixFactorization;
+import org.getalp.ml.matrix.factorization.TapkeeNLMatrixFactorizationFactory;
 import org.getalp.ml.matrix.filters.MatrixFactorizationFilter;
-import org.getalp.ml.matrix.filters.NeuralICAMatrixFactorizationFilter;
 import org.getalp.ml.matrix.score.SumMatrixScorer;
 import org.getalp.ml.optimization.org.getalp.util.Matrices;
 import org.slf4j.Logger;
@@ -61,6 +61,7 @@ public final class AcceptionClusteringExperimentGenerationSim {
     public static final String MATRIX_PATH = ".." + separator + "data" + separator + "acception_matrices";
     public static final String TRANSLATION_DB_PATH = String.format("..%sdata%stranslatorDB", separator, separator);
     public static final String SIM_MATRIX_PATH = String.format("%s%ssource.dat", MATRIX_PATH, separator);
+    public static final String WORD_2_VEC_MODEL = String.format("..%sdata%sword2vec", File.separator, File.separator);
     /**
      * twk.theainur@live.co.uk account
      */
@@ -90,25 +91,33 @@ public final class AcceptionClusteringExperimentGenerationSim {
 
     public static void main(String[] args) throws IOException, NoSuchVocableException {
         try {
+            logger.info("Generating or Loading Closure...");
             Set<Sense> closureSet =  generateTranslationClosureWithSignatures(instantiateDBNary());
-
 
             long matrix_time = System.currentTimeMillis();
 
             SimilarityMeasure similarityMeasure = createSimilarityMeasure();
 
-            Translator translator = new CachedTranslator(TRANSLATION_DB_PATH,
-                    new BingAPITranslator(BING_APP_ID, BING_APP_KEY), false);
+            Translator translator = new JedisCachedTranslator("Bing", new BingAPITranslator(BING_APP_ID, BING_APP_KEY));
 
+            logger.info("Loading Word2Vec...");
+            //MultilingualWord2VecLoader word2Vec   Loader = new MultilingualSerializedModelWord2VecLoader();
+            //word2VecLoader.load(new File(WORD_2_VEC_MODEL));
+            //MultilingualSignatureEnrichment signatureEnrichment = new MultilingualWord2VecSignatureEnrichment(word2VecLoader,10);
+
+            /*CrossLingualSimilarity crossLingualSimilarity =
+                    new TranslatorCrossLingualSimilarity(similarityMeasure, translator,signatureEnrichment);*/
             CrossLingualSimilarity crossLingualSimilarity =
                     new TranslatorCrossLingualSimilarity(similarityMeasure, translator);
 
+            logger.info("Generating matrix...");
             PairwiseCrossLingualSimilarityMatrixGenerator matrixGenerator =
                     new PairwiseCLSimilarityMatrixGeneratorSim(crossLingualSimilarity, closureSet, similarityMeasure);
             matrixGenerator.generateMatrix();
 
-            SenseClusterer clusterer = new SenseClustererImpl(new KernelPairwiseNearestNeighbour());
-            clusterer.setKernelFilter(new NeuralICAMatrixFactorizationFilter(-1));
+            logger.info("Clustering...");
+            SenseClusterer clusterer = new SenseClustererImpl(new KMeans());
+            clusterer.setKernelFilter(new MatrixFactorizationFilter(new TapkeeNLMatrixFactorizationFactory(TapkeeNLMatrixFactorization.Method.T_SNE)));
             DoubleMatrix2D inputData = matrixGenerator.getScoreMatrix();
             inputData.normalize();
             List<SenseCluster> clusters = clusterer.cluster(inputData, 10, new ArrayList<>(closureSet));
@@ -141,7 +150,7 @@ public final class AcceptionClusteringExperimentGenerationSim {
                 .isDistance(false)
                 .matrixScorer(new SumMatrixScorer())
                 .setDistance(new ScaledLevenstein())
-                .filter(new MatrixFactorizationFilter(new NeuralICAMAtrixFactoizationFactory()))
+                        //.filter(new MatrixFactorizationFilter(new TapkeeNLMatrixFactorizationFactory(TapkeeNLMatrixFactorization.Method.MS)))
                 .build();
 
     }

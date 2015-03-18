@@ -1,6 +1,7 @@
 package org.getalp.lexsema.acceptali.crosslingual;
 
 import org.getalp.lexsema.acceptali.crosslingual.translation.Translator;
+import org.getalp.lexsema.acceptali.word2vec.MultilingualSignatureEnrichment;
 import org.getalp.lexsema.similarity.Sense;
 import org.getalp.lexsema.similarity.measures.SimilarityMeasure;
 import org.getalp.lexsema.similarity.signatures.SemanticSignature;
@@ -14,10 +15,16 @@ public class TranslatorCrossLingualSimilarity implements CrossLingualSimilarity 
 
     private final SimilarityMeasure similarityMeasure;
     private Translator translator;
+    private MultilingualSignatureEnrichment enrichment;
 
-    public TranslatorCrossLingualSimilarity(final SimilarityMeasure similarityMeasure, final Translator translator) {
+    public TranslatorCrossLingualSimilarity(final SimilarityMeasure similarityMeasure, final Translator translator, final MultilingualSignatureEnrichment enrichment) {
         this.similarityMeasure = similarityMeasure;
         this.translator = translator;
+        this.enrichment = enrichment;
+    }
+
+    public TranslatorCrossLingualSimilarity(final SimilarityMeasure similarityMeasure, final Translator translator) {
+        this(similarityMeasure, translator, null);
     }
 
     @Override
@@ -28,13 +35,17 @@ public class TranslatorCrossLingualSimilarity implements CrossLingualSimilarity 
 
         SemanticSignature translatedSignature = new SemanticSignatureImpl();
         translatedSignature.addSymbolString(translatedDefinitionB);
-        logger.info(String.format("%s || %s", a.getDefinition(), translatedDefinitionB));
-        return similarityMeasure.compute(a.getSemanticSignature(), translatedSignature, null, null);
-    }
 
-    private double computeMonolingualSimilarity(Sense a, Sense b) {
-        return similarityMeasure.compute(a.getSemanticSignature(), b.getSemanticSignature(),
-                null, null);
+        SemanticSignature enrichedA = a.getSemanticSignature();
+        SemanticSignature enrichedTranslated = translatedSignature;
+
+        if (enrichment != null) {
+            enrichedA = enrichment.enrichSemanticSignature(a.getSemanticSignature(), a.getLanguage());
+            enrichedTranslated = enrichment.enrichSemanticSignature(translatedSignature, a.getLanguage());
+        }
+
+        logger.info(String.format("%s || %s", a.getDefinition(), translatedDefinitionB));
+        return similarityMeasure.compute(enrichedA, enrichedTranslated, null, null);
     }
 
     @Override

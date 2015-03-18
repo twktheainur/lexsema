@@ -1,8 +1,0 @@
-Index: org.getalp.lexsema-ontolex/org.getalp.lexsema-ontolex-dbnary/src/main/java/org/getalp/lexsema/ontolex/dbnary/DBNaryBuilder.java
-IDEA additional info:
-Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
-<+>UTF-8
-===================================================================
---- org.getalp.lexsema-ontolex/org.getalp.lexsema-ontolex-dbnary/src/main/java/org/getalp/lexsema/ontolex/dbnary/DBNaryBuilder.java	(date 1416483249000)
-+++ org.getalp.lexsema-ontolex/org.getalp.lexsema-ontolex-dbnary/src/main/java/org/getalp/lexsema/ontolex/dbnary/DBNaryBuilder.java	(revision )
-@@ -1,0 +1,0 @@

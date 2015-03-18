@@ -35,6 +35,10 @@ public class PairwiseCLSimilarityMatrixGeneratorSim implements PairwiseCrossLing
 
     }
 
+    private static double percentage(int current, int total) {
+        return (double) current / (double) total * PERCENT_MAX;
+    }
+
     @Override
     public void generateMatrix(){
         int totalPairs = closureSet.size() * closureSet.size();
@@ -62,10 +66,6 @@ public class PairwiseCLSimilarityMatrixGeneratorSim implements PairwiseCrossLing
 
     }
 
-    private static double percentage(int current, int total) {
-        return (double) current / (double) total * PERCENT_MAX;
-    }
-
     private void printSimilarityOutput(Sense a, Sense b, double value, int totalPairs, int currentPairIndex) {
         logger.info(String.format("\t[%.2f%%] Similarity (%s, %s) = %.4f",
                 percentage(currentPairIndex, totalPairs),
@@ -84,7 +84,7 @@ public class PairwiseCLSimilarityMatrixGeneratorSim implements PairwiseCrossLing
 
     @Override
     public DoubleMatrix2D getScoreMatrix(){
-        return null;
+        return similarityMatrix;
     }
 
     @Override
