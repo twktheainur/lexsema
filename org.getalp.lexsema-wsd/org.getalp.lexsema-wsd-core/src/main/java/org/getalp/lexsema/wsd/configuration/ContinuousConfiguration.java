@@ -4,16 +4,16 @@ import org.getalp.lexsema.similarity.Document;
 
 import java.util.Random;
 
-public class BatConfiguration implements Configuration
+public class ContinuousConfiguration implements Configuration
 {
-    int[] assignments;
+    private double[] assignments;
     
-    Document document;
+    private Document document;
 
-    public BatConfiguration(Document d)
+    public ContinuousConfiguration(Document d)
     {
         document = d;
-        assignments = new int[d.size()];
+        assignments = new double[d.size()];
         Random r = new Random();
         for (int i = 0; i < assignments.length; i++)
         {
@@ -21,7 +21,22 @@ public class BatConfiguration implements Configuration
         }
     }
 
+    public ContinuousConfiguration(Document d, double[] senses)
+    {
+        document = d;
+        assignments = new double[d.size()];
+        setSenses(senses);
+    }
+
     public void setSenses(int[] senses)
+    {
+        for (int i = 0 ; i < Math.min(senses.length, assignments.length) ; i++)
+        {
+            setSense(i, senses[i]);
+        }
+    }
+    
+    public void setSenses(double[] senses)
     {
         for (int i = 0 ; i < Math.min(senses.length, assignments.length) ; i++)
         {
@@ -36,9 +51,16 @@ public class BatConfiguration implements Configuration
         assignments[wordIndex] = senseIndex % sensesNumber;
     }
 
+    public void setSense(int wordIndex, double senseIndex)
+    {
+        int sensesNumber = document.getSenses(wordIndex).size();
+        while (senseIndex < 0) senseIndex += sensesNumber;
+        assignments[wordIndex] = senseIndex % sensesNumber;
+    }
+
     public int getAssignment(int wordIndex)
     {
-        return assignments[wordIndex];
+        return (int) assignments[wordIndex];
     }
 
     public int size()
@@ -61,7 +83,7 @@ public class BatConfiguration implements Configuration
         String out = "[ ";
         for (int i = getStart() ; i < getEnd() ; i++)
         {
-            out += assignments[i] + ", ";
+            out += (int) assignments[i] + ", ";
         }
         out += "]";
         return out;
@@ -77,22 +99,21 @@ public class BatConfiguration implements Configuration
 
     public int countUnassigned()
     {
-        int unassignedCount = 0;
-        for (int assignment : assignments)
-        {
-            if (assignment == -1)
-            {
-                unassignedCount++;
-            }
-        }
-        return unassignedCount;
+        return 0;
     }
 
     public int[] getAssignments()
     {
-        return assignments;
+        int[] ret = new int[assignments.length];
+        for (int i = 0 ; i < assignments.length ; i++) ret[i] = (int) assignments[i];
+        return ret;
     }
     
+    public double[] getAssignmentsAsDouble()
+    {
+        return assignments;
+    }
+
     public void setConfidence(int wordIndex, double confidence)
     {
         
@@ -102,4 +123,5 @@ public class BatConfiguration implements Configuration
     {
         return 0;
     }
+
 }

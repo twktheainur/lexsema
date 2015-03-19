@@ -10,16 +10,16 @@ import org.getalp.lexsema.similarity.Document;
 import org.getalp.lexsema.similarity.measures.SimilarityMeasure;
 import org.getalp.lexsema.similarity.measures.TverskiIndexSimilarityMeasureBuilder;
 import org.getalp.lexsema.wsd.configuration.Configuration;
-import org.getalp.lexsema.wsd.method.CukooSearch;
+import org.getalp.lexsema.wsd.method.CuckooSearch;
 import org.getalp.lexsema.wsd.method.Disambiguator;
 
-public class CukooSearchDisambiguation
+public class CuckooSearchDisambiguation
 {
     public static void main(String[] args)
     {
         long startTime = System.currentTimeMillis();
 
-        TextLoader dl = new Semeval2007TextLoader("../data/senseval2007_task7/test/eng-coarse-all-words-t1s.xml")
+        TextLoader dl = new Semeval2007TextLoader("../data/senseval2007_task7/test/eng-coarse-all-words-t1.xml")
                 .loadNonInstances(true);
         
         LRLoader lrloader = new WordnetLoader("../data/wordnet/2.1/dict")
@@ -42,7 +42,7 @@ public class CukooSearchDisambiguation
                 .regularizeRelations(false).optimizeRelations(false)
                 .build();
 
-        Disambiguator batDisambiguator = new CukooSearch(sim);
+        Disambiguator cukooDisambiguator = new CuckooSearch(sim);
 
         System.err.println("Loading texts");
         dl.load();
@@ -55,7 +55,7 @@ public class CukooSearchDisambiguation
             lrloader.loadSenses(d);
 
             System.err.println("Disambiguating...");
-            Configuration c = batDisambiguator.disambiguate(d);
+            Configuration c = cukooDisambiguator.disambiguate(d);
             
             System.err.println("\n\tWriting results...");
             SemevalWriter sw = new SemevalWriter(d.getId() + ".ans");
@@ -64,7 +64,7 @@ public class CukooSearchDisambiguation
             System.err.println("done!");
         }
         
-        batDisambiguator.release();
+        cukooDisambiguator.release();
         
         long endTime = System.currentTimeMillis();
         System.out.println("Total time elapsed in execution of Cukoo Search Algorithm is : ");
