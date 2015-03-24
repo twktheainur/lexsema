@@ -16,7 +16,9 @@ public class MultilingualWord2VecSignatureEnrichment implements MultilingualSign
     public MultilingualWord2VecSignatureEnrichment(MultilingualWord2VecLoader multilingualWord2VecLoader, int topN) {
         processors = new HashMap<>();
         for (Language language : multilingualWord2VecLoader.getLanguages()) {
-            processors.put(language, new JedisCachedSignatureEnrichment(new Word2VecLocalSignatureEnrichment(multilingualWord2VecLoader.getWord2Vec(language), topN)));
+            processors.put(language, new JedisCachedSignatureEnrichment(
+                    String.format("es%d", topN),
+                    new Word2VecLocalSignatureEnrichment(multilingualWord2VecLoader.getWord2Vec(language), topN)));
         }
     }
 

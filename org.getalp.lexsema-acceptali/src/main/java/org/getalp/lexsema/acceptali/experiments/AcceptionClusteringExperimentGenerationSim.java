@@ -47,13 +47,11 @@ import org.getalp.ml.optimization.org.getalp.util.Matrices;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.*;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 import java.util.Set;
 
 import static java.io.File.separator;
@@ -64,27 +62,35 @@ public final class AcceptionClusteringExperimentGenerationSim {
     public static final String ONTOLOGY_PROPERTIES = String.format("data%sontology.properties", separator);
     public static final File CLOSURE_SAVE_PATH = new File(String.format("..%sdata%sclosure_river", separator, separator));
     public static final String MATRIX_PATH = ".." + separator + "data" + separator + "acception_matrices";
-    public static final String TRANSLATION_DB_PATH = String.format("..%sdata%stranslatorDB", separator, separator);
     public static final String SIM_MATRIX_PATH = String.format("%s%ssource.dat", MATRIX_PATH, separator);
     public static final String WORD_2_VEC_MODEL = String.format("..%sdata%sword2vec", File.separator, File.separator);
-    /**
-     * twk.theainur@live.co.uk account
-     */
-    //public static final String BING_APP_ID = "dbnary";
-    //public static final String BING_APP_KEY = "H2pC+d3b0L0tduSZzRafqPZyV6zmmzMmj9+AEpc9b1E=";
-
+    public static final int NUMBER_OF_TOP_LEVEL_CLUSTERS = 30;
+    public static final int SIMILARITY_DIMENSIONS = 20;
+    public static final int CL_DIMENSIONS = 20;
+    public static final int ENRICHMENT_SIZE = 20;
     /**
      * ainuros@outlook.com account
      */
     public static final String BING_APP_ID = "dbnary_hyper";
     public static final String BING_APP_KEY = "IecT6H4OjaWo3OtH2pijfeNIx1y1bML3grXz/Gjo/+w=";
-
     public static final int DEPTH = 1;
     static Language[] loadLanguages = {
             Language.FRENCH, Language.ENGLISH, Language.ITALIAN, Language.SPANISH,
             Language.PORTUGUESE, Language.BULGARIAN, Language.CATALAN, Language.FINNISH,
             Language.GERMAN, Language.RUSSIAN, Language.GREEK, Language.TURKISH
     };
+    private static String dbPath = DB_PATH;
+
+
+    /**
+     * twk.theainur@live.co.uk account
+     */
+    //public static final String BING_APP_ID = "dbnary";
+    //public static final String BING_APP_KEY = "H2pC+d3b0L0tduSZzRafqPZyV6zmmzMmj9+AEpc9b1E=";
+    private static int numberOfTopLevelClusters = NUMBER_OF_TOP_LEVEL_CLUSTERS;
+    private static int similarityDimensions = SIMILARITY_DIMENSIONS;
+    private static int clDimensions = CL_DIMENSIONS;
+    private static int enrichmentSize = ENRICHMENT_SIZE;
     private static Logger logger = LoggerFactory.getLogger(AcceptionClusteringExperimentGenerationSim.class);
 
 
@@ -96,6 +102,9 @@ public final class AcceptionClusteringExperimentGenerationSim {
 
     public static void main(String[] args) throws IOException, NoSuchVocableException {
         try {
+
+            loadProperties();
+
             logger.info("Generating or Loading Closure...");
             Set<Sense> closureSet =  generateTranslationClosureWithSignatures(instantiateDBNary());
 
@@ -126,12 +135,12 @@ public final class AcceptionClusteringExperimentGenerationSim {
             inputData.normalize();
 
             //Filter filter = new MatrixFactorizationFilter(new NonnegativeMatrixFactorizationKLFactory(),20);
-            Filter filter2 = new MatrixFactorizationFilter(new TapkeeNLMatrixFactorizationFactory(TapkeeNLMatrixFactorization.Method.MS), 20);
+            Filter filter2 = new MatrixFactorizationFilter(new TapkeeNLMatrixFactorizationFactory(TapkeeNLMatrixFactorization.Method.MS), clDimensions);
 
             //filter.apply(inputData);
             filter2.apply(inputData);
 
-            List<SenseCluster> clusters = clusterer.cluster(inputData, 30, new ArrayList<>(closureSet));
+            List<SenseCluster> clusters = clusterer.cluster(inputData, numberOfTopLevelClusters, new ArrayList<>(closureSet));
 
             for (SenseCluster sc : clusters) {
                 logger.info(sc.toString());
@@ -143,6 +152,39 @@ public final class AcceptionClusteringExperimentGenerationSim {
         } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException |
                 InstantiationException | ClassNotFoundException e) {
             logger.error(e.getLocalizedMessage());
+        }
+    }
+
+    private static void loadProperties() {
+        final Properties properties = new Properties();
+        try (InputStream props = AcceptionClusteringExperimentGenerationSim.class.getResourceAsStream(separator + "acceptali.properties")) {
+            if (props != null) {
+                properties.load(props);
+                if (properties.containsKey("acceptali.config.tdbPath")) {
+                    dbPath = properties.getProperty("acceptali.config.tdbPath");
+                    logger.info(String.format("[CONFIG] Loaded tdbPath=%s", dbPath));
+                }
+                if (properties.containsKey("acceptali.config.numberOfClusters")) {
+                    numberOfTopLevelClusters = Integer.valueOf(properties.getProperty("acceptali.config.numberOfClusters"));
+                    logger.info(String.format("[CONFIG] Loaded numberOfClusters=%d", numberOfTopLevelClusters));
+                }
+                if (properties.containsKey("acceptali.config.similarityDimensions")) {
+                    similarityDimensions = Integer.valueOf(properties.getProperty("acceptali.config.similarityDimensions"));
+                    logger.info(String.format("[CONFIG] Loaded similarityDimensions=%d", similarityDimensions));
+                }
+                if (properties.containsKey("acceptali.config.clDimensions")) {
+                    clDimensions = Integer.valueOf(properties.getProperty("acceptali.config.clDimensions"));
+                    logger.info(String.format("[CONFIG] Loaded clDimensions=%d", clDimensions));
+                }
+                if (properties.containsKey("acceptali.config.enrichmentSize")) {
+                    enrichmentSize = Integer.valueOf(properties.getProperty("acceptali.config.enrichmentSize"));
+                    logger.info(String.format("[CONFIG] Loaded enrichmentSize=%d", enrichmentSize));
+                }
+            } else {
+                logger.info("No acceptali.properties in the classpath, using default configuration.");
+            }
+        } catch (IOException e) {
+            logger.info("No acceptali.properties in the classpath, using default configuration.");
         }
     }
 
@@ -195,7 +237,7 @@ public final class AcceptionClusteringExperimentGenerationSim {
     }
 
     private static DBNary instantiateDBNary() throws IOException, InvocationTargetException, NoSuchMethodException, ClassNotFoundException, InstantiationException, IllegalAccessException {
-        Store vts = new JenaTDBStore(DB_PATH);
+        Store vts = new JenaTDBStore(dbPath);
         StoreHandler.registerStoreInstance(vts);
         //StoreHandler.DEBUG_ON = true;
         OntologyModel tBox = new OWLTBoxModel(ONTOLOGY_PROPERTIES);
