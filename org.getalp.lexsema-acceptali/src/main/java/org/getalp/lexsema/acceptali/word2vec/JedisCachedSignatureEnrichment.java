@@ -23,9 +23,13 @@ public class JedisCachedSignatureEnrichment implements SignatureEnrichment {
 
     }
 
+    public JedisCachedSignatureEnrichment(String prefix) {
+        this(prefix, null);
+
+    }
+
     public JedisCachedSignatureEnrichment(SignatureEnrichment signatureEnrichmentEngine) {
         this("", signatureEnrichmentEngine);
-
     }
 
     private String produceKey(String key) {
@@ -46,15 +50,18 @@ public class JedisCachedSignatureEnrichment implements SignatureEnrichment {
     @Override
     public SemanticSignature enrichSemanticSignature(SemanticSignature semanticSignature) {
         String key = produceKey(semanticSignature.toString());
-        String extension;
         SemanticSignature signature;
         if (!jedis.exists(key)) {
-            signatureEnrichmentEngine.enrichSemanticSignature(semanticSignature);
+            if (signatureEnrichmentEngine != null) {
+                signatureEnrichmentEngine.enrichSemanticSignature(semanticSignature);
+                jedis.set(key, semanticSignature.toString());
+            }
             signature = semanticSignature;
-            jedis.set(key, semanticSignature.toString());
+
         } else {
             signature = signatureFromCachedString(jedis.get(key));
         }
+        logger.info(semanticSignature.toString());
         return signature;
     }
 }

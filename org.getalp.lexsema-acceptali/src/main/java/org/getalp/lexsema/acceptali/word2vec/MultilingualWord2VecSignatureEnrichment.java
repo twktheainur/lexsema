@@ -15,11 +15,15 @@ public class MultilingualWord2VecSignatureEnrichment implements MultilingualSign
 
     public MultilingualWord2VecSignatureEnrichment(MultilingualWord2VecLoader multilingualWord2VecLoader, int topN) {
         processors = new HashMap<>();
-        for (Language language : multilingualWord2VecLoader.getLanguages()) {
-            processors.put(language, new JedisCachedSignatureEnrichment(
-                    String.format("es%d", topN),
-                    new Word2VecLocalSignatureEnrichment(multilingualWord2VecLoader.getWord2Vec(language), topN)));
+        if (multilingualWord2VecLoader != null) {
+            for (Language language : multilingualWord2VecLoader.getLanguages()) {
+                processors.put(language, new JedisCachedSignatureEnrichment(
+                        String.format("es%d", topN),
+                        new Word2VecLocalSignatureEnrichment(multilingualWord2VecLoader.getWord2Vec(language), topN)));
+            }
         }
+        processors.put(Language.UNSUPPORTED, new JedisCachedSignatureEnrichment(
+                String.format("es%d", topN)));
     }
 
     @Override
@@ -42,6 +46,12 @@ public class MultilingualWord2VecSignatureEnrichment implements MultilingualSign
 
     @Override
     public SemanticSignature enrichSemanticSignature(SemanticSignature semanticSignature, Language language) {
-        return processors.get(language).enrichSemanticSignature(semanticSignature);
+        SignatureEnrichment processor;
+        if (processors.containsKey(language)) {
+            processor = processors.get(language);
+        } else {
+            processor = processors.get(Language.UNSUPPORTED);
+        }
+        return processor.enrichSemanticSignature(semanticSignature);
     }
 }

@@ -19,9 +19,7 @@ import org.getalp.lexsema.acceptali.crosslingual.TranslatorCrossLingualSimilarit
 import org.getalp.lexsema.acceptali.crosslingual.translation.BingAPITranslator;
 import org.getalp.lexsema.acceptali.crosslingual.translation.JedisCachedTranslator;
 import org.getalp.lexsema.acceptali.crosslingual.translation.Translator;
-import org.getalp.lexsema.acceptali.word2vec.MultilingualSerializedModelWord2VecLoader;
 import org.getalp.lexsema.acceptali.word2vec.MultilingualSignatureEnrichment;
-import org.getalp.lexsema.acceptali.word2vec.MultilingualWord2VecLoader;
 import org.getalp.lexsema.acceptali.word2vec.MultilingualWord2VecSignatureEnrichment;
 import org.getalp.lexsema.language.Language;
 import org.getalp.lexsema.ontolex.LexicalEntry;
@@ -115,9 +113,9 @@ public final class AcceptionClusteringExperimentGenerationSim {
             Translator translator = new JedisCachedTranslator("Bing", new BingAPITranslator(BING_APP_ID, BING_APP_KEY));
 
             logger.info("Loading Word2Vec...");
-            MultilingualWord2VecLoader word2VecLoader = new MultilingualSerializedModelWord2VecLoader();
-            word2VecLoader.load(new File(WORD_2_VEC_MODEL));
-            MultilingualSignatureEnrichment signatureEnrichment = new MultilingualWord2VecSignatureEnrichment(word2VecLoader, 10);
+            //MultilingualWord2VecLoader word2VecLoader = new MultilingualSerializedModelWord2VecLoader();
+//            /word2VecLoader.load(new File(WORD_2_VEC_MODEL));
+            MultilingualSignatureEnrichment signatureEnrichment = new MultilingualWord2VecSignatureEnrichment(null, enrichmentSize);
 
             CrossLingualSimilarity crossLingualSimilarity =
                     new TranslatorCrossLingualSimilarity(similarityMeasure, translator, signatureEnrichment);
@@ -135,7 +133,7 @@ public final class AcceptionClusteringExperimentGenerationSim {
             inputData.normalize();
 
             //Filter filter = new MatrixFactorizationFilter(new NonnegativeMatrixFactorizationKLFactory(),20);
-            Filter filter2 = new MatrixFactorizationFilter(new TapkeeNLMatrixFactorizationFactory(TapkeeNLMatrixFactorization.Method.MS), clDimensions);
+            Filter filter2 = new MatrixFactorizationFilter(new TapkeeNLMatrixFactorizationFactory(TapkeeNLMatrixFactorization.Method.HLLE), clDimensions);
 
             //filter.apply(inputData);
             filter2.apply(inputData);
