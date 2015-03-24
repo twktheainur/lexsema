@@ -91,6 +91,7 @@ public final class AcceptionClusteringExperimentGenerationSim {
     private static int similarityDimensions = SIMILARITY_DIMENSIONS;
     private static int clDimensions = CL_DIMENSIONS;
     private static int enrichmentSize = ENRICHMENT_SIZE;
+    private static String word2VecModel = WORD_2_VEC_MODEL;
     private static Logger logger = LoggerFactory.getLogger(AcceptionClusteringExperimentGenerationSim.class);
 
 
@@ -179,6 +180,10 @@ public final class AcceptionClusteringExperimentGenerationSim {
                 if (properties.containsKey("acceptali.config.enrichmentSize")) {
                     enrichmentSize = Integer.valueOf(properties.getProperty("acceptali.config.enrichmentSize"));
                     logger.info(String.format("[CONFIG] Loaded enrichmentSize=%d", enrichmentSize));
+                }
+                if (properties.containsKey("acceptali.config.word2vecModel")) {
+                    word2VecModel = properties.getProperty("acceptali.config.word2vecModel");
+                    logger.info(String.format("[CONFIG] Loaded word2vecModel=%s", word2VecModel));
                 }
             } else {
                 logger.info("No acceptali.properties in the classpath, using default configuration.");
