@@ -19,6 +19,10 @@ import org.getalp.lexsema.acceptali.crosslingual.TranslatorCrossLingualSimilarit
 import org.getalp.lexsema.acceptali.crosslingual.translation.BingAPITranslator;
 import org.getalp.lexsema.acceptali.crosslingual.translation.JedisCachedTranslator;
 import org.getalp.lexsema.acceptali.crosslingual.translation.Translator;
+import org.getalp.lexsema.acceptali.word2vec.MultilingualSerializedModelWord2VecLoader;
+import org.getalp.lexsema.acceptali.word2vec.MultilingualSignatureEnrichment;
+import org.getalp.lexsema.acceptali.word2vec.MultilingualWord2VecLoader;
+import org.getalp.lexsema.acceptali.word2vec.MultilingualWord2VecSignatureEnrichment;
 import org.getalp.lexsema.language.Language;
 import org.getalp.lexsema.ontolex.LexicalEntry;
 import org.getalp.lexsema.ontolex.LexicalSense;
@@ -36,6 +40,7 @@ import org.getalp.lexsema.similarity.measures.SimilarityMeasure;
 import org.getalp.lexsema.similarity.measures.TverskiIndexSimilarityMeasureMatrixImplBuilder;
 import org.getalp.ml.matrix.factorization.TapkeeNLMatrixFactorization;
 import org.getalp.ml.matrix.factorization.TapkeeNLMatrixFactorizationFactory;
+import org.getalp.ml.matrix.filters.Filter;
 import org.getalp.ml.matrix.filters.MatrixFactorizationFilter;
 import org.getalp.ml.matrix.score.SumMatrixScorer;
 import org.getalp.ml.optimization.org.getalp.util.Matrices;
@@ -101,14 +106,14 @@ public final class AcceptionClusteringExperimentGenerationSim {
             Translator translator = new JedisCachedTranslator("Bing", new BingAPITranslator(BING_APP_ID, BING_APP_KEY));
 
             logger.info("Loading Word2Vec...");
-            //MultilingualWord2VecLoader word2Vec   Loader = new MultilingualSerializedModelWord2VecLoader();
-            //word2VecLoader.load(new File(WORD_2_VEC_MODEL));
-            //MultilingualSignatureEnrichment signatureEnrichment = new MultilingualWord2VecSignatureEnrichment(word2VecLoader,10);
+            MultilingualWord2VecLoader word2VecLoader = new MultilingualSerializedModelWord2VecLoader();
+            word2VecLoader.load(new File(WORD_2_VEC_MODEL));
+            MultilingualSignatureEnrichment signatureEnrichment = new MultilingualWord2VecSignatureEnrichment(word2VecLoader, 10);
 
-            /*CrossLingualSimilarity crossLingualSimilarity =
-                    new TranslatorCrossLingualSimilarity(similarityMeasure, translator,signatureEnrichment);*/
             CrossLingualSimilarity crossLingualSimilarity =
-                    new TranslatorCrossLingualSimilarity(similarityMeasure, translator);
+                    new TranslatorCrossLingualSimilarity(similarityMeasure, translator, signatureEnrichment);
+            /*CrossLingualSimilarity crossLingualSimilarity =
+                    new TranslatorCrossLingualSimilarity(similarityMeasure, translator);*/
 
             logger.info("Generating matrix...");
             PairwiseCrossLingualSimilarityMatrixGenerator matrixGenerator =
@@ -117,10 +122,16 @@ public final class AcceptionClusteringExperimentGenerationSim {
 
             logger.info("Clustering...");
             SenseClusterer clusterer = new SenseClustererImpl(new KMeans());
-            clusterer.setKernelFilter(new MatrixFactorizationFilter(new TapkeeNLMatrixFactorizationFactory(TapkeeNLMatrixFactorization.Method.T_SNE)));
             DoubleMatrix2D inputData = matrixGenerator.getScoreMatrix();
             inputData.normalize();
-            List<SenseCluster> clusters = clusterer.cluster(inputData, 10, new ArrayList<>(closureSet));
+
+            //Filter filter = new MatrixFactorizationFilter(new NonnegativeMatrixFactorizationKLFactory(),20);
+            Filter filter2 = new MatrixFactorizationFilter(new TapkeeNLMatrixFactorizationFactory(TapkeeNLMatrixFactorization.Method.MS), 20);
+
+            //filter.apply(inputData);
+            filter2.apply(inputData);
+
+            List<SenseCluster> clusters = clusterer.cluster(inputData, 30, new ArrayList<>(closureSet));
 
             for (SenseCluster sc : clusters) {
                 logger.info(sc.toString());
@@ -147,10 +158,11 @@ public final class AcceptionClusteringExperimentGenerationSim {
                 .beta(0.5d)
                 .gamma(0.5d)
                 .fuzzyMatching(true)
-                .isDistance(false)
+                .isDistance(true)
                 .matrixScorer(new SumMatrixScorer())
                 .setDistance(new ScaledLevenstein())
-                        //.filter(new MatrixFactorizationFilter(new TapkeeNLMatrixFactorizationFactory(TapkeeNLMatrixFactorization.Method.MS)))
+                        //.filter(new NormalizationFilter())
+                        //.filter(new MatrixFactorizationFilter(new TapkeeNLMatrixFactorizationFactory(Method.HLLE)))
                 .build();
 
     }
@@ -209,76 +221,5 @@ public final class AcceptionClusteringExperimentGenerationSim {
             }
         }
     }
-/*
-    private static void writeTextClosure(LexicalResourceTranslationClosure<Sense> closureWithSignatures, long matrix_time) {
-        try (PrintWriter pw = new PrintWriter(MATRIX_PATH + separator + matrix_time + separator + "text_closure.txt")) {
-            //pw.println(similarityMatrix.toString());
-            pw.println(closureWithSignatures.toString());
-            pw.close();
-            pw.close();
-        } catch (FileNotFoundException e) {
-            logger.error(e.getLocalizedMessage());
-        }
-    }
-
-    private static void printMatrixLabels(long matrix_time, Iterable<Sense> closureSet) {
-        try (PrintWriter pw = new PrintWriter(MATRIX_PATH + separator + matrix_time + separator + "labels.txt")) {
-            for (Sense a : closureSet) {
-                pw.println(URIUtils.getCanonicalURI(a.getId()));
-            }
-            pw.flush();
-            pw.close();
-        } catch (FileNotFoundException e) {
-            logger.error(e.getLocalizedMessage());
-        }
-    }
-
-    private static void createMatrixDirectories(long matrix_time) {
-        File dir = new File(MATRIX_PATH + separator + matrix_time);
-        if (!dir.exists()) {
-            boolean result = dir.mkdirs();
-            if (!result) {
-                logger.error("Cannot create " + MATRIX_PATH + separator + matrix_time);
-            }
-        }
-    }
-
-    private static void writeAssignmentMatrix(long matrix_time, DoubleMatrix2D matrix, String suffix) {
-        try (PrintWriter pw = new PrintWriter(String.format("%s%s%d%sassignment_%s.dat", MATRIX_PATH, separator, matrix_time, separator, suffix))) {
-            Matrices.matrixCSVWriter(pw, matrix);
-            pw.close();
-        } catch (FileNotFoundException e) {
-            logger.error(e.getLocalizedMessage());
-        }
-    }
-
-    private static void writeSourceMatrix(long matrix_time, DoubleMatrix2D matrix) {
-        try (PrintWriter pw = new PrintWriter(MATRIX_PATH + separator + matrix_time + separator + "source.dat")) {
-            Matrices.matrixCSVWriter(pw, matrix);
-            pw.close();
-        } catch (FileNotFoundException e) {
-            logger.error(e.getLocalizedMessage());
-        }
-    }
-
-    private static void writeMixingMatrix(long matrix_time, DoubleMatrix2D matrix) {
-        try (PrintWriter pw = new PrintWriter(MATRIX_PATH + separator + matrix_time + separator + "mixing.dat")) {
-            Matrices.matrixCSVWriter(pw, matrix);
-            pw.close();
-        } catch (FileNotFoundException e) {
-            logger.error(e.getLocalizedMessage());
-        }
-    }
-
-    private static void writeProjectedMatrix(long matrix_time, DoubleMatrix2D matrix) {
-        try (PrintWriter pw = new PrintWriter(MATRIX_PATH + separator + matrix_time + separator + "projected.dat")) {
-            Matrices.matrixCSVWriter(pw, matrix);
-            pw.close();
-        } catch (FileNotFoundException e) {
-            logger.error(e.getLocalizedMessage());
-        }
-    }
-    */
-
 
 }

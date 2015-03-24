@@ -320,8 +320,7 @@ void manifold_sculpting_embed(RandomAccessIterator begin, RandomAccessIterator e
 					angles_and_neighbors.second,
 					adjusted_points,
 					initial_average_distance
-				};
-				adjust_point_at_index(current_point_index, data, target_dimension,
+				}; 				adjust_point_at_index(current_point_index, data, target_dimension,
 									learning_rate, error_func_data, point_error);
 				current_error += point_error;
 				/* Insert all neighbors into deque */

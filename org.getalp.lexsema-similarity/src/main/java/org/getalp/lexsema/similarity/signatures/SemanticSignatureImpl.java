@@ -100,6 +100,14 @@ public class SemanticSignatureImpl implements SemanticSignature {
         return this;
     }
 
+    public String toString() {
+        String output = "";
+        for (SemanticSymbol semanticSymbol : symbols) {
+            output += " " + semanticSymbol.getSymbol();
+        }
+        return output;
+    }
+
 
     @Override
     public SemanticSignature mergeSignatures(SemanticSignature other) {
