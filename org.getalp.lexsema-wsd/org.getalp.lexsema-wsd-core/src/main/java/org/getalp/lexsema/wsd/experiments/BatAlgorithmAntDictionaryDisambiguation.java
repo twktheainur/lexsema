@@ -23,7 +23,7 @@ public class BatAlgorithmAntDictionaryDisambiguation {
         TextLoader dl = new Semeval2007TextLoader("../data/senseval2007_task7/test/eng-coarse-all-words-t1.xml")
                 .loadNonInstances(true);
 
-        LRLoader lrloader = new DictionaryLRLoader(new File("/Users/tchechem/wsgetalp/data/dictionnaires-lesk/dict-adapted-all-relations.xml"));
+        LRLoader lrloader = new DictionaryLRLoader(new File("../data/dictionnaires-lesk/dict-adapted-all-relations.xml"));
 
         SimilarityMeasure sim = new IndexedOverlapSimilarity();
 
