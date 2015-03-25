@@ -173,7 +173,11 @@ public class DictionaryParser implements ContentHandler {
     public void characters(char[] ch, int start, int end) throws SAXException {
         if (ids) {
             StringTokenizer st = new StringTokenizer(new String(ch, start, end));
-            mw = new SenseImpl(st.nextToken());
+            if (st.hasMoreElements()) {
+                mw = new SenseImpl(st.nextToken());
+            } else {
+                mw = new SenseImpl(new String(ch, start, end).trim());
+            }
         } else if (def) {
             String defs = new String(ch, start, end);
             SemanticSignature semanticSignature = new SemanticSignatureImpl();

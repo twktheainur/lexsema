@@ -1,4 +1,4 @@
-package org.getalp.lexsema.util;
+package org.getalp.lexsema.util.dataitems;
 
 
 public class PairImpl<U, V> implements Pair<U, V> {

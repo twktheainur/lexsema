@@ -15,6 +15,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -43,13 +44,21 @@ public class DictionaryLRLoader implements LRLoader {
     @Override
     public List<Sense> getSenses(Word w) {
         String tag = w.getLemma() + "%" + w.getPartOfSpeech();
+        if (wordSenses.get(tag) == null) {
+            tag = w.getLemma().toLowerCase() + "%" + w.getPartOfSpeech();
+        }
         return wordSenses.get(tag);
     }
 
     @Override
     public void loadSenses(Document document) {
         for (Word w : document) {
-            document.addWordSenses(getSenses(w));
+            List<Sense> senses = getSenses(w);
+            if (senses != null) {
+                document.addWordSenses(senses);
+            } else {
+                document.addWordSenses(new ArrayList<Sense>());
+            }
         }
     }
 

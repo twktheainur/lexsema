@@ -1,21 +1,21 @@
 package org.getalp.lexsema.acceptali.crosslingual.translation;
 
 import org.getalp.lexsema.language.Language;
-import org.getalp.lexsema.util.JedisCachePool;
+import org.getalp.lexsema.util.caching.Cache;
+import org.getalp.lexsema.util.caching.CachePool;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import redis.clients.jedis.Jedis;
 
 
-public class JedisCachedTranslator implements Translator {
+public class CachedTranslator implements Translator {
 
-    private Logger logger = LoggerFactory.getLogger(JedisCachedTranslator.class);
+    private Logger logger = LoggerFactory.getLogger(CachedTranslator.class);
 
     private Translator translator;
     private String prefix;
-    private Jedis jedis = JedisCachePool.getResource();
+    private Cache jedis = CachePool.getResource();
 
-    public JedisCachedTranslator(String prefix, Translator translator) {
+    public CachedTranslator(String prefix, Translator translator) {
         this.prefix = prefix;
         this.translator = translator;
 

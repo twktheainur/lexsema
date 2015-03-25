@@ -1,4 +1,4 @@
-package org.getalp.lexsema.util;
+package org.getalp.lexsema.util.dataitems;
 
 
 public class TripleImpl<U, V, W> implements Triple<U, V, W> {

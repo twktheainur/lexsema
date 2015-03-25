@@ -4,9 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
 
-/**
- * Created by tchechem on 9/23/14.
- */
+
 public class Strings {
 
     public static String concat(List<String> a) {

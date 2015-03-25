@@ -3,10 +3,10 @@ package org.getalp.lexsema.acceptali.word2vec;
 import org.getalp.lexsema.similarity.signatures.SemanticSignature;
 import org.getalp.lexsema.similarity.signatures.SemanticSignatureImpl;
 import org.getalp.lexsema.similarity.signatures.SignatureEnrichment;
-import org.getalp.lexsema.util.JedisCachePool;
+import org.getalp.lexsema.util.caching.Cache;
+import org.getalp.lexsema.util.caching.CachePool;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import redis.clients.jedis.Jedis;
 
 
 public class JedisCachedSignatureEnrichment implements SignatureEnrichment {
@@ -15,7 +15,7 @@ public class JedisCachedSignatureEnrichment implements SignatureEnrichment {
 
     private SignatureEnrichment signatureEnrichmentEngine;
     private String prefix;
-    private Jedis jedis = JedisCachePool.getResource();
+    private Cache cache = CachePool.getResource();
 
     public JedisCachedSignatureEnrichment(String prefix, SignatureEnrichment signatureEnrichmentEngine) {
         this.prefix = prefix;
@@ -44,22 +44,22 @@ public class JedisCachedSignatureEnrichment implements SignatureEnrichment {
 
     @Override
     public void close() {
-        jedis.close();
+        cache.close();
     }
 
     @Override
     public SemanticSignature enrichSemanticSignature(SemanticSignature semanticSignature) {
         String key = produceKey(semanticSignature.toString());
         SemanticSignature signature;
-        if (!jedis.exists(key)) {
+        if (!cache.exists(key)) {
             if (signatureEnrichmentEngine != null) {
                 signatureEnrichmentEngine.enrichSemanticSignature(semanticSignature);
-                jedis.set(key, semanticSignature.toString());
+                cache.set(key, semanticSignature.toString());
             }
             signature = semanticSignature;
 
         } else {
-            signature = signatureFromCachedString(jedis.get(key));
+            signature = signatureFromCachedString(cache.get(key));
         }
         logger.info(semanticSignature.toString());
         return signature;

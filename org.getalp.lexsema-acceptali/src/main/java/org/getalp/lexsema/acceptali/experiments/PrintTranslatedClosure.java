@@ -7,7 +7,7 @@ import org.getalp.lexsema.acceptali.closure.generator.TranslationClosureGenerato
 import org.getalp.lexsema.acceptali.closure.generator.TranslationClosureSemanticSignatureGenerator;
 import org.getalp.lexsema.acceptali.closure.generator.TranslationClosureSemanticSignatureGeneratorImpl;
 import org.getalp.lexsema.acceptali.crosslingual.translation.BingAPITranslator;
-import org.getalp.lexsema.acceptali.crosslingual.translation.JedisCachedTranslator;
+import org.getalp.lexsema.acceptali.crosslingual.translation.CachedTranslator;
 import org.getalp.lexsema.acceptali.crosslingual.translation.Translator;
 import org.getalp.lexsema.language.Language;
 import org.getalp.lexsema.ontolex.LexicalEntry;
@@ -72,7 +72,7 @@ public final class PrintTranslatedClosure {
             logger.info("Generating or Loading Closure...");
             Set<Sense> closureSet = generateTranslationClosureWithSignatures(instantiateDBNary());
 
-            Translator translator = new JedisCachedTranslator("Bing", new BingAPITranslator(BING_APP_ID, BING_APP_KEY));
+            Translator translator = new CachedTranslator("Bing", new BingAPITranslator(BING_APP_ID, BING_APP_KEY));
 
             printTranslatedClosure(closureSet, translator, Language.ENGLISH);
 

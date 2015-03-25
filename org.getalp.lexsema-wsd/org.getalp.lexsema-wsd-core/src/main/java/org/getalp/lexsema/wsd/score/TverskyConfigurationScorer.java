@@ -3,8 +3,8 @@ package org.getalp.lexsema.wsd.score;
 
 import org.getalp.lexsema.similarity.Document;
 import org.getalp.lexsema.similarity.measures.SimilarityMeasure;
-import org.getalp.lexsema.util.Pair;
-import org.getalp.lexsema.util.PairImpl;
+import org.getalp.lexsema.util.dataitems.Pair;
+import org.getalp.lexsema.util.dataitems.PairImpl;
 import org.getalp.lexsema.wsd.configuration.Configuration;
 import org.getalp.ml.optimization.functions.Function;
 import org.getalp.ml.optimization.functions.input.FunctionInput;
