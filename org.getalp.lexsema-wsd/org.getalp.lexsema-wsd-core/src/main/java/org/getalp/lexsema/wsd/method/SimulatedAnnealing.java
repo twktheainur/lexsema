@@ -21,9 +21,9 @@ public class SimulatedAnnealing implements Disambiguator {
      * Constant parameters
      */
     public static final double T0_THRESHOLD = 0.01;
-    public static final double ITERATIONS = 100;
     public static final int NUMBER_OF_CHANGES = 20;
     private static Logger logger = LoggerFactory.getLogger(SimulatedAnnealing.class);
+    public double iterations = 1000;
     boolean changedSinceLast = false;
     private DoubleRandomEngine uniformGenerator = new DoubleMersenneTwister();
     /**
@@ -54,11 +54,12 @@ public class SimulatedAnnealing implements Disambiguator {
     private int convergenceCycles;
     private int numberOfAcceptanceEvents = 0;
 
-    public SimulatedAnnealing(double p0, double coolingRate, int convergenceThreshold, int numberThreads, SimilarityMeasure similarityMeasure) {
+    public SimulatedAnnealing(double p0, double coolingRate, int convergenceThreshold, int iterations, int numberThreads, SimilarityMeasure similarityMeasure) {
         this.convergenceThreshold = convergenceThreshold;
         this.p0 = p0;
         configurationScorer = new TverskyConfigurationScorer(similarityMeasure, numberThreads);
         this.coolingRate = coolingRate;
+        this.iterations = iterations;
 
     }
 
@@ -120,7 +121,7 @@ public class SimulatedAnnealing implements Disambiguator {
         configuration = new ConfidenceConfiguration(document, ConfidenceConfiguration.InitializationType.RANDOM);
 
         //Execution of the algorithm nbEvaluation times
-        for (int i = 0; i < ITERATIONS; i++) {
+        for (int i = 0; i < iterations; i++) {
             //First set of scores for the initial execution is also the set of best scores
             double score =
                     configurationScorer.computeScore(document, makeRandomChange(configuration, document, NUMBER_OF_CHANGES, uniformGenerator));
@@ -176,7 +177,7 @@ public class SimulatedAnnealing implements Disambiguator {
         while (evaluate()) {
             logger.info(String.format("[Cycle %.2f] [T=%.2f] [Convergence: %d/%d]", currentCycle, T, convergenceCycles, convergenceThreshold));
             changedSinceLast = false;
-            for (int j = 0; j < ITERATIONS; j++) {
+            for (int j = 0; j < iterations; j++) {
                 anneal(document, j);
             }
         }
@@ -195,7 +196,7 @@ public class SimulatedAnnealing implements Disambiguator {
 
         //Checking if the change is accepted (non-significant treated as inferior)
         if (score > prevScore) {
-            logger.info(String.format("\r\t[Cycle=%f | %.2f%%][Better Score = %.2f][Best = %.2f][P(a)=%.2f][Ld=%.2f]", currentCycle, (double) cycleNumber / ITERATIONS * 100d, score, bestScore, Math.exp(-delta / T), delta));
+            //logger.info(String.format("\r\t[Cycle=%f | %.2f%%][Better Score = %.2f][Best = %.2f][P(a)=%.2f][Ld=%.2f]", currentCycle, (double) cycleNumber / iterations * 100d, score, bestScore, Math.exp(-delta / T), delta));
             configuration = cp;
             prevScore = score;
             if (score > bestScore) {
@@ -211,7 +212,7 @@ public class SimulatedAnnealing implements Disambiguator {
             double choice = uniformGenerator.raw();
             double prob = Math.exp(-delta / T);
             if (prob > choice) {
-                logger.info(String.format("\r\t[Cycle=%f | %.2f%%][Accepted Lower Score = %.2f][Best = %.2f][P(a)=%.2f][Ld=%.2f]", currentCycle, (double) cycleNumber / ITERATIONS * 100d, score, bestScore, Math.exp(-delta / T), delta));
+                //logger.info(String.format("\r\t[Cycle=%f | %.2f%%][Accepted Lower Score = %.2f][Best = %.2f][P(a)=%.2f][Ld=%.2f]", currentCycle, (double) cycleNumber / iterations * 100d, score, bestScore, Math.exp(-delta / T), delta));
                 configuration = cp;
                 prevScore = score;
                 changedSinceLast = true;

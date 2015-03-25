@@ -29,21 +29,22 @@ public class AdaptiveSimulatedAnnealingDisambiguation {
 
         sim = new IndexedOverlapSimilarity();
 
-        if (args.length < 3) {
-            System.err.println("Usage: aSAD [P0] [cR] [cT] (threads)");
+        if (args.length < 4) {
+            System.err.println("Usage: aSAD [P0] [cR] [cT] [It] (threads)");
             System.exit(0);
         }
         double accptProb = Double.parseDouble(args[0]);
         double cR = Double.parseDouble(args[1]);
         double convThresh = Double.parseDouble(args[2]);
+        int iterations = Integer.parseInt(args[3]);
         int threads = 1;
-        if (args.length > 3) {
-            threads = Integer.parseInt(args[3]);
+        if (args.length > 4) {
+            threads = Integer.parseInt(args[4]);
         } else {
             threads = Runtime.getRuntime().availableProcessors();
         }
 
-        Disambiguator sl_full = new SimulatedAnnealing(accptProb, cR, (int) convThresh, threads, sim);
+        Disambiguator sl_full = new SimulatedAnnealing(accptProb, cR, (int) convThresh, iterations, threads, sim);
 
         System.err.println("Loading texts");
         dl.load();
