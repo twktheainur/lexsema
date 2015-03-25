@@ -37,7 +37,7 @@ public class AdaptiveSimulatedAnnealingDisambiguation {
         double cR = Double.parseDouble(args[1]);
         double convThresh = Double.parseDouble(args[2]);
         int threads = 1;
-        if (args.length == 3) {
+        if (args.length > 3) {
             threads = Integer.parseInt(args[3]);
         } else {
             threads = Runtime.getRuntime().availableProcessors();
