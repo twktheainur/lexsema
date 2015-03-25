@@ -115,6 +115,11 @@ public class SemanticSignatureImpl implements SemanticSignature {
     }
 
     @Override
+    public SemanticSymbol getSymbol(int index) {
+        return symbols.get(index);
+    }
+
+    @Override
     public void addSymbol(SemanticSymbol symbol) {
         symbols.add(symbol);
     }

@@ -1,6 +1,7 @@
 package org.getalp.lexsema.similarity.measures;
 
 import org.getalp.lexsema.similarity.signatures.SemanticSignature;
+import org.getalp.lexsema.similarity.signatures.SemanticSymbol;
 
 import java.util.Map;
 
@@ -30,7 +31,7 @@ public class IndexedOverlapSimilarity implements SimilarityMeasure {
         return count;
     }
 
-    private String getSignatureSymbolAt(int index, SemanticSignature signature) {
-        return signature.getSymbols().get(index);
+    private SemanticSymbol getSignatureSymbolAt(int index, SemanticSignature signature) {
+        return signature.getSymbol(index);
     }
 }
