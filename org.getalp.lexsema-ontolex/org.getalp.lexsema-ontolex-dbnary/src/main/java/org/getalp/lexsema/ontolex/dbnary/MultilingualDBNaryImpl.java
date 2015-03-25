@@ -92,7 +92,12 @@ public class MultilingualDBNaryImpl implements DBNary {
         if (!resourceMap.containsKey(language)) {
             return new ArrayList<>();
         }
-        return resourceMap.get(sourceEntity.getLanguage()).getTranslations(sourceEntity, language);
+        try {
+            return resourceMap.get(sourceEntity.getLanguage()).getTranslations(sourceEntity, language);
+        } catch (Exception e) {
+            logger.error(e.getLocalizedMessage());
+        }
+        return new ArrayList<>();
     }
 
     @Override

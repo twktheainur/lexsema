@@ -62,7 +62,9 @@ public class DbNaryTranslator implements Translator {
             Vocable v = dbNary.getVocable(form, sourceLanguage);
             List<Translation> translations = getDBNaryTranslation(v, targetLanguage);
             for (Translation translation : translations) {
-                outputBuilder.append(String.format("%s ", translation.getWrittenForm()));
+                if (translation.getLanguage().equals(targetLanguage)) {
+                    outputBuilder.append(String.format("%s ", translation.getWrittenForm()));
+                }
             }
             return outputBuilder.toString();
         } catch (NoSuchVocableException ignored) {

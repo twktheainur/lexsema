@@ -19,6 +19,10 @@ import org.getalp.lexsema.acceptali.crosslingual.TranslatorCrossLingualSimilarit
 import org.getalp.lexsema.acceptali.crosslingual.translation.BingAPITranslator;
 import org.getalp.lexsema.acceptali.crosslingual.translation.JedisCachedTranslator;
 import org.getalp.lexsema.acceptali.crosslingual.translation.Translator;
+import org.getalp.lexsema.acceptali.word2vec.MultilingualSerializedModelWord2VecLoader;
+import org.getalp.lexsema.acceptali.word2vec.MultilingualSignatureEnrichment;
+import org.getalp.lexsema.acceptali.word2vec.MultilingualWord2VecLoader;
+import org.getalp.lexsema.acceptali.word2vec.MultilingualWord2VecSignatureEnrichment;
 import org.getalp.lexsema.language.Language;
 import org.getalp.lexsema.ontolex.LexicalEntry;
 import org.getalp.lexsema.ontolex.LexicalSense;
@@ -36,19 +40,18 @@ import org.getalp.lexsema.similarity.measures.SimilarityMeasure;
 import org.getalp.lexsema.similarity.measures.TverskiIndexSimilarityMeasureMatrixImplBuilder;
 import org.getalp.ml.matrix.factorization.TapkeeNLMatrixFactorization;
 import org.getalp.ml.matrix.factorization.TapkeeNLMatrixFactorizationFactory;
+import org.getalp.ml.matrix.filters.Filter;
 import org.getalp.ml.matrix.filters.MatrixFactorizationFilter;
 import org.getalp.ml.matrix.score.SumMatrixScorer;
 import org.getalp.ml.optimization.org.getalp.util.Matrices;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.*;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 import java.util.Set;
 
 import static java.io.File.separator;
@@ -59,27 +62,36 @@ public final class AcceptionClusteringExperimentGenerationSim {
     public static final String ONTOLOGY_PROPERTIES = String.format("data%sontology.properties", separator);
     public static final File CLOSURE_SAVE_PATH = new File(String.format("..%sdata%sclosure_river", separator, separator));
     public static final String MATRIX_PATH = ".." + separator + "data" + separator + "acception_matrices";
-    public static final String TRANSLATION_DB_PATH = String.format("..%sdata%stranslatorDB", separator, separator);
     public static final String SIM_MATRIX_PATH = String.format("%s%ssource.dat", MATRIX_PATH, separator);
     public static final String WORD_2_VEC_MODEL = String.format("..%sdata%sword2vec", File.separator, File.separator);
-    /**
-     * twk.theainur@live.co.uk account
-     */
-    //public static final String BING_APP_ID = "dbnary";
-    //public static final String BING_APP_KEY = "H2pC+d3b0L0tduSZzRafqPZyV6zmmzMmj9+AEpc9b1E=";
-
+    public static final int NUMBER_OF_TOP_LEVEL_CLUSTERS = 30;
+    public static final int SIMILARITY_DIMENSIONS = 20;
+    public static final int CL_DIMENSIONS = 20;
+    public static final int ENRICHMENT_SIZE = 20;
     /**
      * ainuros@outlook.com account
      */
     public static final String BING_APP_ID = "dbnary_hyper";
     public static final String BING_APP_KEY = "IecT6H4OjaWo3OtH2pijfeNIx1y1bML3grXz/Gjo/+w=";
-
     public static final int DEPTH = 1;
     static Language[] loadLanguages = {
             Language.FRENCH, Language.ENGLISH, Language.ITALIAN, Language.SPANISH,
             Language.PORTUGUESE, Language.BULGARIAN, Language.CATALAN, Language.FINNISH,
             Language.GERMAN, Language.RUSSIAN, Language.GREEK, Language.TURKISH
     };
+    private static String dbPath = DB_PATH;
+
+
+    /**
+     * twk.theainur@live.co.uk account
+     */
+    //public static final String BING_APP_ID = "dbnary";
+    //public static final String BING_APP_KEY = "H2pC+d3b0L0tduSZzRafqPZyV6zmmzMmj9+AEpc9b1E=";
+    private static int numberOfTopLevelClusters = NUMBER_OF_TOP_LEVEL_CLUSTERS;
+    private static int similarityDimensions = SIMILARITY_DIMENSIONS;
+    private static int clDimensions = CL_DIMENSIONS;
+    private static int enrichmentSize = ENRICHMENT_SIZE;
+    private static String word2VecModel = WORD_2_VEC_MODEL;
     private static Logger logger = LoggerFactory.getLogger(AcceptionClusteringExperimentGenerationSim.class);
 
 
@@ -91,6 +103,9 @@ public final class AcceptionClusteringExperimentGenerationSim {
 
     public static void main(String[] args) throws IOException, NoSuchVocableException {
         try {
+
+            loadProperties();
+
             logger.info("Generating or Loading Closure...");
             Set<Sense> closureSet =  generateTranslationClosureWithSignatures(instantiateDBNary());
 
@@ -101,14 +116,14 @@ public final class AcceptionClusteringExperimentGenerationSim {
             Translator translator = new JedisCachedTranslator("Bing", new BingAPITranslator(BING_APP_ID, BING_APP_KEY));
 
             logger.info("Loading Word2Vec...");
-            //MultilingualWord2VecLoader word2Vec   Loader = new MultilingualSerializedModelWord2VecLoader();
-            //word2VecLoader.load(new File(WORD_2_VEC_MODEL));
-            //MultilingualSignatureEnrichment signatureEnrichment = new MultilingualWord2VecSignatureEnrichment(word2VecLoader,10);
+            MultilingualWord2VecLoader word2VecLoader = new MultilingualSerializedModelWord2VecLoader();
+            word2VecLoader.load(new File(WORD_2_VEC_MODEL));
+            MultilingualSignatureEnrichment signatureEnrichment = new MultilingualWord2VecSignatureEnrichment(null, enrichmentSize);
 
-            /*CrossLingualSimilarity crossLingualSimilarity =
-                    new TranslatorCrossLingualSimilarity(similarityMeasure, translator,signatureEnrichment);*/
             CrossLingualSimilarity crossLingualSimilarity =
-                    new TranslatorCrossLingualSimilarity(similarityMeasure, translator);
+                    new TranslatorCrossLingualSimilarity(similarityMeasure, translator, signatureEnrichment);
+            /*CrossLingualSimilarity crossLingualSimilarity =
+                    new TranslatorCrossLingualSimilarity(similarityMeasure, translator);*/
 
             logger.info("Generating matrix...");
             PairwiseCrossLingualSimilarityMatrixGenerator matrixGenerator =
@@ -117,10 +132,16 @@ public final class AcceptionClusteringExperimentGenerationSim {
 
             logger.info("Clustering...");
             SenseClusterer clusterer = new SenseClustererImpl(new KMeans());
-            clusterer.setKernelFilter(new MatrixFactorizationFilter(new TapkeeNLMatrixFactorizationFactory(TapkeeNLMatrixFactorization.Method.T_SNE)));
             DoubleMatrix2D inputData = matrixGenerator.getScoreMatrix();
             inputData.normalize();
-            List<SenseCluster> clusters = clusterer.cluster(inputData, 10, new ArrayList<>(closureSet));
+
+            //Filter filter = new MatrixFactorizationFilter(new NonnegativeMatrixFactorizationKLFactory(),20);
+            Filter filter2 = new MatrixFactorizationFilter(new TapkeeNLMatrixFactorizationFactory(TapkeeNLMatrixFactorization.Method.HLLE), clDimensions);
+
+            //filter.apply(inputData);
+            filter2.apply(inputData);
+
+            List<SenseCluster> clusters = clusterer.cluster(inputData, numberOfTopLevelClusters, new ArrayList<>(closureSet));
 
             for (SenseCluster sc : clusters) {
                 logger.info(sc.toString());
@@ -132,6 +153,43 @@ public final class AcceptionClusteringExperimentGenerationSim {
         } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException |
                 InstantiationException | ClassNotFoundException e) {
             logger.error(e.getLocalizedMessage());
+        }
+    }
+
+    private static void loadProperties() {
+        final Properties properties = new Properties();
+        try (InputStream props = AcceptionClusteringExperimentGenerationSim.class.getResourceAsStream(separator + "acceptali.properties")) {
+            if (props != null) {
+                properties.load(props);
+                if (properties.containsKey("acceptali.config.tdbPath")) {
+                    dbPath = properties.getProperty("acceptali.config.tdbPath");
+                    logger.info(String.format("[CONFIG] Loaded tdbPath=%s", dbPath));
+                }
+                if (properties.containsKey("acceptali.config.numberOfClusters")) {
+                    numberOfTopLevelClusters = Integer.valueOf(properties.getProperty("acceptali.config.numberOfClusters"));
+                    logger.info(String.format("[CONFIG] Loaded numberOfClusters=%d", numberOfTopLevelClusters));
+                }
+                if (properties.containsKey("acceptali.config.similarityDimensions")) {
+                    similarityDimensions = Integer.valueOf(properties.getProperty("acceptali.config.similarityDimensions"));
+                    logger.info(String.format("[CONFIG] Loaded similarityDimensions=%d", similarityDimensions));
+                }
+                if (properties.containsKey("acceptali.config.clDimensions")) {
+                    clDimensions = Integer.valueOf(properties.getProperty("acceptali.config.clDimensions"));
+                    logger.info(String.format("[CONFIG] Loaded clDimensions=%d", clDimensions));
+                }
+                if (properties.containsKey("acceptali.config.enrichmentSize")) {
+                    enrichmentSize = Integer.valueOf(properties.getProperty("acceptali.config.enrichmentSize"));
+                    logger.info(String.format("[CONFIG] Loaded enrichmentSize=%d", enrichmentSize));
+                }
+                if (properties.containsKey("acceptali.config.word2vecModel")) {
+                    word2VecModel = properties.getProperty("acceptali.config.word2vecModel");
+                    logger.info(String.format("[CONFIG] Loaded word2vecModel=%s", word2VecModel));
+                }
+            } else {
+                logger.info("No acceptali.properties in the classpath, using default configuration.");
+            }
+        } catch (IOException e) {
+            logger.info("No acceptali.properties in the classpath, using default configuration.");
         }
     }
 
@@ -147,10 +205,11 @@ public final class AcceptionClusteringExperimentGenerationSim {
                 .beta(0.5d)
                 .gamma(0.5d)
                 .fuzzyMatching(true)
-                .isDistance(false)
+                .isDistance(true)
                 .matrixScorer(new SumMatrixScorer())
                 .setDistance(new ScaledLevenstein())
-                        //.filter(new MatrixFactorizationFilter(new TapkeeNLMatrixFactorizationFactory(TapkeeNLMatrixFactorization.Method.MS)))
+                        //.filter(new NormalizationFilter())
+                        //.filter(new MatrixFactorizationFilter(new TapkeeNLMatrixFactorizationFactory(Method.HLLE)))
                 .build();
 
     }
@@ -183,7 +242,7 @@ public final class AcceptionClusteringExperimentGenerationSim {
     }
 
     private static DBNary instantiateDBNary() throws IOException, InvocationTargetException, NoSuchMethodException, ClassNotFoundException, InstantiationException, IllegalAccessException {
-        Store vts = new JenaTDBStore(DB_PATH);
+        Store vts = new JenaTDBStore(dbPath);
         StoreHandler.registerStoreInstance(vts);
         //StoreHandler.DEBUG_ON = true;
         OntologyModel tBox = new OWLTBoxModel(ONTOLOGY_PROPERTIES);
@@ -209,76 +268,5 @@ public final class AcceptionClusteringExperimentGenerationSim {
             }
         }
     }
-/*
-    private static void writeTextClosure(LexicalResourceTranslationClosure<Sense> closureWithSignatures, long matrix_time) {
-        try (PrintWriter pw = new PrintWriter(MATRIX_PATH + separator + matrix_time + separator + "text_closure.txt")) {
-            //pw.println(similarityMatrix.toString());
-            pw.println(closureWithSignatures.toString());
-            pw.close();
-            pw.close();
-        } catch (FileNotFoundException e) {
-            logger.error(e.getLocalizedMessage());
-        }
-    }
-
-    private static void printMatrixLabels(long matrix_time, Iterable<Sense> closureSet) {
-        try (PrintWriter pw = new PrintWriter(MATRIX_PATH + separator + matrix_time + separator + "labels.txt")) {
-            for (Sense a : closureSet) {
-                pw.println(URIUtils.getCanonicalURI(a.getId()));
-            }
-            pw.flush();
-            pw.close();
-        } catch (FileNotFoundException e) {
-            logger.error(e.getLocalizedMessage());
-        }
-    }
-
-    private static void createMatrixDirectories(long matrix_time) {
-        File dir = new File(MATRIX_PATH + separator + matrix_time);
-        if (!dir.exists()) {
-            boolean result = dir.mkdirs();
-            if (!result) {
-                logger.error("Cannot create " + MATRIX_PATH + separator + matrix_time);
-            }
-        }
-    }
-
-    private static void writeAssignmentMatrix(long matrix_time, DoubleMatrix2D matrix, String suffix) {
-        try (PrintWriter pw = new PrintWriter(String.format("%s%s%d%sassignment_%s.dat", MATRIX_PATH, separator, matrix_time, separator, suffix))) {
-            Matrices.matrixCSVWriter(pw, matrix);
-            pw.close();
-        } catch (FileNotFoundException e) {
-            logger.error(e.getLocalizedMessage());
-        }
-    }
-
-    private static void writeSourceMatrix(long matrix_time, DoubleMatrix2D matrix) {
-        try (PrintWriter pw = new PrintWriter(MATRIX_PATH + separator + matrix_time + separator + "source.dat")) {
-            Matrices.matrixCSVWriter(pw, matrix);
-            pw.close();
-        } catch (FileNotFoundException e) {
-            logger.error(e.getLocalizedMessage());
-        }
-    }
-
-    private static void writeMixingMatrix(long matrix_time, DoubleMatrix2D matrix) {
-        try (PrintWriter pw = new PrintWriter(MATRIX_PATH + separator + matrix_time + separator + "mixing.dat")) {
-            Matrices.matrixCSVWriter(pw, matrix);
-            pw.close();
-        } catch (FileNotFoundException e) {
-            logger.error(e.getLocalizedMessage());
-        }
-    }
-
-    private static void writeProjectedMatrix(long matrix_time, DoubleMatrix2D matrix) {
-        try (PrintWriter pw = new PrintWriter(MATRIX_PATH + separator + matrix_time + separator + "projected.dat")) {
-            Matrices.matrixCSVWriter(pw, matrix);
-            pw.close();
-        } catch (FileNotFoundException e) {
-            logger.error(e.getLocalizedMessage());
-        }
-    }
-    */
-
 
 }

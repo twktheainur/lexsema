@@ -49,4 +49,9 @@ public class Word2VecPerGlobalSignatureEnrichment implements SignatureEnrichment
         }
         return newSignature;
     }
+
+    @Override
+    public void close() {
+
+    }
 }

@@ -43,4 +43,9 @@ public class Word2VecLocalSignatureEnrichment implements SignatureEnrichment {
         }
         return newSignature;
     }
+
+    @Override
+    public void close() {
+
+    }
 }

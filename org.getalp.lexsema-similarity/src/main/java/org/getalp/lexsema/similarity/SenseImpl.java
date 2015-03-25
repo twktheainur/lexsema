@@ -50,9 +50,9 @@ public class SenseImpl implements Sense {
         if (lexicalSense != null) {
             String[] uriParts = getNode().getURI().split("/");
             String id = uriParts[uriParts.length - 1];
-            return String.format("Sense|%s|{'%s'}", id, getDefinition());
+            return String.format("Sense|%s|{'%s'}", id, semanticSignature.toString());
         } else {
-            return String.format("Sense|%s|{'%s'}", id, getSemanticSignature().toString());
+            return String.format("Sense|%s|{'%s'}", id, semanticSignature.toString());
         }
     }
 
