@@ -32,17 +32,21 @@ public class CuckooSearchDisambiguation
         SimilarityMeasure sim = new TverskiIndexSimilarityMeasureBuilder()
                 .distance(new ScaledLevenstein())
                 .computeRatio(true)
-                .alpha(1d)
-                .beta(0.5d)
-                .gamma(0.5d)
+                .alpha(1)
+                .beta(0)
+                .gamma(0)
                 .fuzzyMatching(false)
                 .quadraticWeighting(false)
-                .extendedLesk(false).randomInit(false)
-                .regularizeOverlapInput(false).optimizeOverlapInput(false)
-                .regularizeRelations(false).optimizeRelations(false)
+                .extendedLesk(true)
+                .randomInit(false)
+                .regularizeOverlapInput(false)
+                .optimizeOverlapInput(false)
+                .regularizeRelations(false)
+                .optimizeRelations(false)
+                .isDistance(false)
                 .build();
 
-        Disambiguator cukooDisambiguator = new CuckooSearch(sim);
+        Disambiguator cuckooDisambiguator = new CuckooSearch(sim);
 
         System.err.println("Loading texts");
         dl.load();
@@ -55,7 +59,7 @@ public class CuckooSearchDisambiguation
             lrloader.loadSenses(d);
 
             System.err.println("Disambiguating...");
-            Configuration c = cukooDisambiguator.disambiguate(d);
+            Configuration c = cuckooDisambiguator.disambiguate(d);
             
             System.err.println("\n\tWriting results...");
             SemevalWriter sw = new SemevalWriter(d.getId() + ".ans");
@@ -64,10 +68,10 @@ public class CuckooSearchDisambiguation
             System.err.println("done!");
         }
         
-        cukooDisambiguator.release();
+        cuckooDisambiguator.release();
         
         long endTime = System.currentTimeMillis();
-        System.out.println("Total time elapsed in execution of Cukoo Search Algorithm is : ");
+        System.out.println("Total time elapsed in execution of Cuckoo Search Algorithm is : ");
         System.out.println((endTime - startTime) + " ms.");
     }
 }

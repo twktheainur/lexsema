@@ -22,9 +22,9 @@ public class CuckooSearch implements Disambiguator
 
     private static final int nestsNumber = 15;
     
-    private static final int destroyedNestsNumber = 7;
+    private static final int destroyedNestsNumber = 5;
 
-    private static final int iterationsNumber = 1000;
+    private static final int iterationsNumber = 200;
 
     private class Nest implements Comparable<Nest>
     {
@@ -33,6 +33,11 @@ public class CuckooSearch implements Disambiguator
        public Nest()
        {
            configuration = new ContinuousConfiguration(currentDocument);
+           score = configurationScorer.computeScore(currentDocument, configuration);
+       }
+       public Nest(double[] position)
+       {
+           configuration = new ContinuousConfiguration(currentDocument, position);
            score = configurationScorer.computeScore(currentDocument, configuration);
        }
        public void setPosition(double[] position)
@@ -75,29 +80,30 @@ public class CuckooSearch implements Disambiguator
         
         for (int currentIteration = 0 ; currentIteration < iterationsNumber ; currentIteration++)
         {
-            int progress = (int) (((double) currentIteration / (double) iterationsNumber) * 100);
-            System.out.println("Cuckoo progress : " + progress + "%");
+            int progress = (int)(((double) currentIteration / (double) iterationsNumber) * 10000);
+            System.out.println("Cuckoo progress : " + (double)progress / 100.0 + "%");
             
             int i = random.nextInt(nests.length);
-            System.out.println("Choosing nest " + i);
-            randomWalk(nests[i]);
+            //System.out.println("Choosing nest " + i);
+            Nest movedNestI = randomWalk(nests[i]);
             
             int j = random.nextInt(nests.length);
-            System.out.println("Choosing nest " + j);
+            //System.out.println("Choosing nest " + j);
             
-            if (nests[i].score > nests[j].score)
+            if (movedNestI.score > nests[j].score)
             {
-                System.out.println("Replacing " + j + " by " + i);
-                System.out.println("Score of " + j + " : " + nests[j].score);
-                System.out.println("Score of " + i + " : " + nests[i].score);
-                nests[j] = nests[i].clone();
+                //System.out.println("Replacing " + j + " by " + i);
+                //System.out.println("Score of " + j + " : " + nests[j].score);
+                //System.out.println("Score of " + i + " : " + nests[i].score);
+                nests[j] = movedNestI;
             }
             
             sortNests();
             abandonWorthlessNests();
-            sortNests();    
+
+            System.out.println("Current best : " + nests[nestsNumber - 1].score);
         }
-        System.out.println("Score chosen : " + nests[nestsNumber - 1].score);
+        sortNests();
         return nests[nestsNumber - 1].configuration;
     }
 
@@ -118,12 +124,12 @@ public class CuckooSearch implements Disambiguator
         Arrays.sort(nests);
     }
     
-    private void randomWalk(Nest nest)
+    private Nest randomWalk(Nest nest)
     {
-        double[] position = nest.configuration.getAssignmentsAsDouble();
+        double[] position = nest.configuration.getAssignmentsAsDouble().clone();
 
         double distance = levyDistribution.sample();
-        System.out.println("Walking a distance of " + distance);
+        //System.out.println("Walking a distance of " + distance);
         
         double[] direction = randomDirection(position.length);
         
@@ -133,8 +139,7 @@ public class CuckooSearch implements Disambiguator
             position[i] += direction[i] * distance;
         }
         
-        nest.configuration.setSenses(position);
-        nest.score = configurationScorer.computeScore(currentDocument, nest.configuration);
+        return new Nest(position);
     }
     
     private double[] randomDirection(int dimension)
