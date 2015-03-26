@@ -23,7 +23,7 @@ public class ContinuousConfiguration implements Configuration
         setRandomSenses();
     }
 
-    public ContinuousConfiguration(Document d, double[] senses)
+    public ContinuousConfiguration(Document d, int[] senses)
     {
         document = d;
         size = d.size();

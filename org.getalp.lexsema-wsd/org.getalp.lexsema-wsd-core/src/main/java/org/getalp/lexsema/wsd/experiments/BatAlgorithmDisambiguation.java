@@ -37,9 +37,13 @@ public class BatAlgorithmDisambiguation {
                 .gamma(0.5d)
                 .fuzzyMatching(false)
                 .quadraticWeighting(false)
-                .extendedLesk(false).randomInit(false)
-                .regularizeOverlapInput(false).optimizeOverlapInput(false)
-                .regularizeRelations(false).optimizeRelations(false)
+                .extendedLesk(false)
+                .randomInit(false)
+                .regularizeOverlapInput(false)
+                .optimizeOverlapInput(false)
+                .regularizeRelations(false)
+                .optimizeRelations(false)
+                .isDistance(false)
                 .build();
 
         Disambiguator batDisambiguator = new BatAlgorithm(sim);

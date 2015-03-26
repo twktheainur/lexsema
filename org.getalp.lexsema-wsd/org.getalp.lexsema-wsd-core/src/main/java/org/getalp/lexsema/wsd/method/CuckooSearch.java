@@ -16,15 +16,15 @@ public class CuckooSearch implements Disambiguator
 {
     private static final Random random = new Random();
     
-    private static final LevyDistribution levyDistribution = new LevyDistribution(0, 0.5);
+    private static final LevyDistribution levyDistribution = new LevyDistribution(1, 0.5);
     
     private static final NormalDistribution normalDistribution = new NormalDistribution();
 
     private static final int nestsNumber = 15;
     
-    private static final int destroyedNestsNumber = 5;
+    private static final int destroyedNestsNumber = 4;
 
-    private static final int iterationsNumber = 200;
+    private static final int iterationsNumber = 1000;
 
     private class Nest implements Comparable<Nest>
     {
@@ -35,14 +35,9 @@ public class CuckooSearch implements Disambiguator
            configuration = new ContinuousConfiguration(currentDocument);
            score = configurationScorer.computeScore(currentDocument, configuration);
        }
-       public Nest(double[] position)
+       public Nest(int[] position)
        {
            configuration = new ContinuousConfiguration(currentDocument, position);
-           score = configurationScorer.computeScore(currentDocument, configuration);
-       }
-       public void setPosition(double[] position)
-       {
-           configuration.setSenses(position);
            score = configurationScorer.computeScore(currentDocument, configuration);
        }
        public int compareTo(Nest other)
@@ -51,9 +46,7 @@ public class CuckooSearch implements Disambiguator
        }
        public Nest clone()
        {
-           Nest ret = new Nest();
-           ret.setPosition(configuration.getAssignmentsAsDouble());
-           return ret;
+           return new Nest(configuration.getAssignments());
        }
     }
 
@@ -126,18 +119,28 @@ public class CuckooSearch implements Disambiguator
     
     private Nest randomWalk(Nest nest)
     {
-        double[] position = nest.configuration.getAssignmentsAsDouble().clone();
+        int[] position = nest.configuration.getAssignments().clone();
 
-        double distance = levyDistribution.sample();
-        //System.out.println("Walking a distance of " + distance);
+        int distance = (int) levyDistribution.sample();
+        System.out.println("Walking a distance of " + distance);
         
-        double[] direction = randomDirection(position.length);
+        for (int i = 0 ; i < distance ; i++)
+        {
+            position[random.nextInt(position.length)] += 1;
+        }
         
-        for (int i = 0 ; i < position.length ; i++)
+        //double[] direction = randomDirection(position.length);
+        
+        //System.out.print("Moving : [");
+        /*for (int i = 0 ; i < position.length ; i++)
         {
             //System.out.println("Movement " + i + " : " + direction[i] * distance);
-            position[i] += direction[i] * distance;
-        }
+            //position[i] += direction[i] * distance;
+            int randomStep = (int) levyDistribution.sample();
+            //System.out.print(randomStep + ", ");
+            position[i] += randomStep;
+        }*/
+        //System.out.println("]");
         
         return new Nest(position);
     }

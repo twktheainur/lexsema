@@ -15,7 +15,7 @@ public class BatAlgorithm implements Disambiguator
 {
     private static final int batsNumber = 20;
 
-    private static final int iterationsNumber = 20;
+    private static final int iterationsNumber = 100;
 
     private static final double minFrequency = 0;
 
