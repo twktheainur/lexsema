@@ -10,7 +10,6 @@ import org.getalp.lexsema.wsd.configuration.Configuration;
 import org.getalp.lexsema.wsd.score.ConfigurationScorer;
 import org.getalp.lexsema.wsd.score.TverskyConfigurationScorer;
 import org.apache.commons.math3.distribution.LevyDistribution;
-import org.apache.commons.math3.distribution.NormalDistribution;
 
 public class CuckooSearch implements Disambiguator
 {
@@ -18,13 +17,11 @@ public class CuckooSearch implements Disambiguator
     
     private static final LevyDistribution levyDistribution = new LevyDistribution(1, 0.5);
     
-    private static final NormalDistribution normalDistribution = new NormalDistribution();
-
-    private static final int nestsNumber = 15;
+    private static final int nestsNumber = 20;
     
-    private static final int destroyedNestsNumber = 4;
+    private static final int destroyedNestsNumber = 5;
 
-    private static final int iterationsNumber = 1000;
+    private static final int iterationsNumber = 5000;
 
     private class Nest implements Comparable<Nest>
     {
@@ -119,53 +116,13 @@ public class CuckooSearch implements Disambiguator
     
     private Nest randomWalk(Nest nest)
     {
-        int[] position = nest.configuration.getAssignments().clone();
-
+        Nest clone = nest.clone();
         int distance = (int) levyDistribution.sample();
         System.out.println("Walking a distance of " + distance);
-        
-        for (int i = 0 ; i < distance ; i++)
-        {
-            position[random.nextInt(position.length)] += 1;
-        }
-        
-        //double[] direction = randomDirection(position.length);
-        
-        //System.out.print("Moving : [");
-        /*for (int i = 0 ; i < position.length ; i++)
-        {
-            //System.out.println("Movement " + i + " : " + direction[i] * distance);
-            //position[i] += direction[i] * distance;
-            int randomStep = (int) levyDistribution.sample();
-            //System.out.print(randomStep + ", ");
-            position[i] += randomStep;
-        }*/
-        //System.out.println("]");
-        
-        return new Nest(position);
+        clone.configuration.makeRandomChanges(distance);
+        return clone;
     }
-    
-    private double[] randomDirection(int dimension)
-    {
-        double[] ret = new double[dimension];
-        double tmp = 0;
 
-        for (int i = 0 ; i < dimension ; i++)
-        {
-            ret[i] = normalDistribution.sample();
-            tmp = Math.max(tmp, Math.abs(ret[i]));
-            // tmp += ret[i] * ret[i]; // using norm-2
-        }
-        if (tmp == 0) return randomDirection(dimension);
-        // tmp = Math.sqrt(tmp); // using norm-2
-        for (int i = 0 ; i < dimension ; i++)
-        {
-            ret[i] /= tmp;
-        }
-        
-        return ret;
-    }
-    
     private void abandonWorthlessNests()
     {
         for (int i = 0 ; i < destroyedNestsNumber ; i++)
