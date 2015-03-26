@@ -1,18 +1,19 @@
 package org.getalp.lexsema.wsd.experiments;
 
-import com.wcohen.ss.ScaledLevenstein;
 import org.getalp.lexsema.io.annotresult.SemevalWriter;
 import org.getalp.lexsema.io.document.Semeval2007TextLoader;
 import org.getalp.lexsema.io.document.TextLoader;
 import org.getalp.lexsema.io.resource.LRLoader;
-import org.getalp.lexsema.io.resource.wordnet.WordnetLoader;
+import org.getalp.lexsema.io.resource.dictionary.DictionaryLRLoader;
 import org.getalp.lexsema.similarity.Document;
+import org.getalp.lexsema.similarity.measures.IndexedOverlapSimilarity;
 import org.getalp.lexsema.similarity.measures.SimilarityMeasure;
-import org.getalp.lexsema.similarity.measures.TverskiIndexSimilarityMeasureBuilder;
 import org.getalp.lexsema.util.VisualVMTools;
 import org.getalp.lexsema.wsd.configuration.Configuration;
-import org.getalp.lexsema.wsd.method.AdaptiveSimulatedAnnealing;
 import org.getalp.lexsema.wsd.method.Disambiguator;
+import org.getalp.lexsema.wsd.method.SimulatedAnnealing;
+
+import java.io.File;
 
 @SuppressWarnings("all")
 public class AdaptiveSimulatedAnnealingDisambiguation {
@@ -22,38 +23,28 @@ public class AdaptiveSimulatedAnnealingDisambiguation {
     public static void main(String[] args) {
         VisualVMTools.delayUntilReturn();
         long startTime = System.currentTimeMillis();
-        TextLoader dl = new Semeval2007TextLoader("../data/senseval2007_task7/test/eng-coarse-all-words-t1.xml").loadNonInstances(true);
-        LRLoader lrloader = new WordnetLoader("../data/wordnet/2.1/dict")
-                .extendedSignature(true)
-                .shuffle(false)
-                .setUsesStopWords(false)
-                .setStemming(false)
-                .loadDefinitions(true);
+        TextLoader dl = new Semeval2007TextLoader("../data/senseval2007_task7/test/eng-coarse-all-words-t1.xml");
+        LRLoader lrloader = new DictionaryLRLoader(new File("../data/dictionnaires-lesk/dict-adapted-all-relations.xml"));
         SimilarityMeasure sim;
 
-        sim = new TverskiIndexSimilarityMeasureBuilder().distance(new ScaledLevenstein())
-                .computeRatio(true)
-                .alpha(1d)
-                .beta(0.5d)
-                .gamma(0.5d)
-                .fuzzyMatching(true)
-                .quadraticWeighting(false)
-                .extendedLesk(false).randomInit(false)
-                .regularizeOverlapInput(false).optimizeOverlapInput(false)
-                .regularizeRelations(false).optimizeRelations(false)
-                .build();
+        sim = new IndexedOverlapSimilarity();
 
-        if (args.length < 5) {
-            System.err.println("Usage: aSAD [P0] [n] [m] [cT] [threads]");
+        if (args.length < 4) {
+            System.err.println("Usage: aSAD [P0] [cR] [cT] [It] (threads)");
             System.exit(0);
         }
         double accptProb = Double.parseDouble(args[0]);
-        double n = Double.parseDouble(args[1]);
-        double m = Double.parseDouble(args[2]);
-        double convThresh = Double.parseDouble(args[3]);
-        int threads = Integer.parseInt(args[4]);
+        double cR = Double.parseDouble(args[1]);
+        double convThresh = Double.parseDouble(args[2]);
+        int iterations = Integer.parseInt(args[3]);
+        int threads = 1;
+        if (args.length > 4) {
+            threads = Integer.parseInt(args[4]);
+        } else {
+            threads = Runtime.getRuntime().availableProcessors();
+        }
 
-        Disambiguator sl_full = new AdaptiveSimulatedAnnealing(accptProb, n, m, (int) convThresh, threads, sim);
+        Disambiguator sl_full = new SimulatedAnnealing(accptProb, cR, (int) convThresh, iterations, threads, sim);
 
         System.err.println("Loading texts");
         dl.load();

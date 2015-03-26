@@ -17,7 +17,7 @@ import org.getalp.lexsema.acceptali.crosslingual.PairwiseCLSimilarityMatrixGener
 import org.getalp.lexsema.acceptali.crosslingual.PairwiseCrossLingualSimilarityMatrixGenerator;
 import org.getalp.lexsema.acceptali.crosslingual.TranslatorCrossLingualSimilarity;
 import org.getalp.lexsema.acceptali.crosslingual.translation.BingAPITranslator;
-import org.getalp.lexsema.acceptali.crosslingual.translation.JedisCachedTranslator;
+import org.getalp.lexsema.acceptali.crosslingual.translation.CachedTranslator;
 import org.getalp.lexsema.acceptali.crosslingual.translation.Translator;
 import org.getalp.lexsema.acceptali.word2vec.MultilingualSerializedModelWord2VecLoader;
 import org.getalp.lexsema.acceptali.word2vec.MultilingualSignatureEnrichment;
@@ -113,7 +113,7 @@ public final class AcceptionClusteringExperimentGenerationSim {
 
             SimilarityMeasure similarityMeasure = createSimilarityMeasure();
 
-            Translator translator = new JedisCachedTranslator("Bing", new BingAPITranslator(BING_APP_ID, BING_APP_KEY));
+            Translator translator = new CachedTranslator("Bing", new BingAPITranslator(BING_APP_ID, BING_APP_KEY));
 
             logger.info("Loading Word2Vec...");
             MultilingualWord2VecLoader word2VecLoader = new MultilingualSerializedModelWord2VecLoader();

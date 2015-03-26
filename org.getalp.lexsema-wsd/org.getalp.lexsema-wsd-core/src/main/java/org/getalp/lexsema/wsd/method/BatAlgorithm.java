@@ -13,7 +13,7 @@ import java.util.Random;
 
 public class BatAlgorithm implements Disambiguator
 {
-    private static final int batsNumber = 20;
+    private static final int batsNumber = 10;
 
     private static final int iterationsNumber = 100;
 
@@ -43,71 +43,6 @@ public class BatAlgorithm implements Disambiguator
 
     private Bat bestBat;
 
-    private class Bat
-    {
-        private BatConfiguration configuration;
-        private int[] position;
-        private int[] velocity;
-        private double frequency;
-        private double initialRate;
-        private double rate;
-        private double loudness;
-        private int[] previousPosition;
-        private int[] previousVelocity;
-        private boolean needRecomputeScore;
-        private double score;
-
-        public void initialize(Document document)
-        {
-            configuration = new BatConfiguration(document);
-            position = new int[document.size()];
-            velocity = new int[document.size()];
-            for (int i = 0; i < document.size(); ++i)
-            {
-                position[i] = configuration.getAssignment(i);
-                velocity[i] = 0;
-            }
-            frequency = randomDoubleInRange(minFrequency, maxFrequency);
-            initialRate = randomDoubleInRange(minRate, maxRate);
-            rate = initialRate;
-            loudness = randomDoubleInRange(minLoudness, maxLoudness);
-            previousPosition = position;
-            previousVelocity = velocity;
-            needRecomputeScore = true;
-            score = getScore();
-        }
-
-        public void setPosition(int[] newPosition)
-        {
-            position = newPosition;
-            needRecomputeScore = true;
-        }
-
-        public double getScore()
-        {
-            if (needRecomputeScore)
-            {
-                configuration.setSenses(position);
-                score = configurationScorer.computeScore(currentDocument, configuration);
-                needRecomputeScore = false;
-            }
-            return score;
-        }
-
-        public void savePositionAndVelocity()
-        {
-            previousPosition = position.clone();
-            previousVelocity = velocity.clone();
-        }
-
-        public void restorePositionAndVelocity()
-        {
-            position = previousPosition;
-            velocity = previousVelocity;
-            needRecomputeScore = true;
-        }
-    }
-
     public BatAlgorithm(SimilarityMeasure similarityMeasure)
     {
         int threadsNumber = Runtime.getRuntime().availableProcessors();
@@ -131,7 +66,7 @@ public class BatAlgorithm implements Disambiguator
 
         for (int currentIteration = 0 ; currentIteration < iterationsNumber ; currentIteration++)
         {
-            int progress = (int) (((double) currentIteration / (double) iterationsNumber) * 100);
+            int progress = (int) ((double) currentIteration / (double) iterationsNumber * 100);
             System.out.println("BatProgress : " + progress + "%");
 
             for (int i = 0; i < batsNumber; i++)
@@ -153,7 +88,7 @@ public class BatAlgorithm implements Disambiguator
                     // fly randomly around best solutions ?
                 }
 
-                currentBat.setPosition(add(currentBat.position, 
+                currentBat.setPosition(add(currentBat.position,
                                            randomDoubleInRange(-1, 1) * computeAverageLoudness()));
 
                 if (currentBat.loudness > randomDoubleInRange(minLoudness, maxLoudness) &&
@@ -168,7 +103,7 @@ public class BatAlgorithm implements Disambiguator
                 }
 
             }
-            
+
             updateBestBat();
         }
 
@@ -255,5 +190,62 @@ public class BatAlgorithm implements Disambiguator
             loudnessesSum += bats.get(i).loudness;
         }
         return loudnessesSum / (double) batsNumber;
+    }
+
+    private class Bat {
+        private BatConfiguration configuration;
+        private int[] position;
+        private int[] velocity;
+        private double frequency;
+        private double initialRate;
+        private double rate;
+        private double loudness;
+        private int[] previousPosition;
+        private int[] previousVelocity;
+        private boolean needRecomputeScore;
+        private double score;
+
+        public void initialize(Document document) {
+            configuration = new BatConfiguration(document);
+            position = new int[document.size()];
+            velocity = new int[document.size()];
+            for (int i = 0; i < document.size(); ++i) {
+                position[i] = configuration.getAssignment(i);
+                velocity[i] = 0;
+            }
+            frequency = randomDoubleInRange(minFrequency, maxFrequency);
+            initialRate = randomDoubleInRange(minRate, maxRate);
+            rate = initialRate;
+            loudness = randomDoubleInRange(minLoudness, maxLoudness);
+            previousPosition = position;
+            previousVelocity = velocity;
+            needRecomputeScore = true;
+            score = getScore();
+        }
+
+        public void setPosition(int[] newPosition) {
+            position = newPosition;
+            needRecomputeScore = true;
+        }
+
+        public double getScore() {
+            if (needRecomputeScore) {
+                configuration.setSenses(position);
+                score = configurationScorer.computeScore(currentDocument, configuration);
+                needRecomputeScore = false;
+            }
+            return score;
+        }
+
+        public void savePositionAndVelocity() {
+            previousPosition = position.clone();
+            previousVelocity = velocity.clone();
+        }
+
+        public void restorePositionAndVelocity() {
+            position = previousPosition;
+            velocity = previousVelocity;
+            needRecomputeScore = true;
+        }
     }
 }

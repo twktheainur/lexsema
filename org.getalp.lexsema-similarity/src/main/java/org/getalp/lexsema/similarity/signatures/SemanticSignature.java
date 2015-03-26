@@ -86,6 +86,8 @@ public interface SemanticSignature extends Iterable<SemanticSymbol> {
      */
     public SemanticSignature mergeSignatures(SemanticSignature other);
 
+    public SemanticSymbol getSymbol(int index);
+
     public List<String> getSymbols();
 
     public List<Double> getWeights();
