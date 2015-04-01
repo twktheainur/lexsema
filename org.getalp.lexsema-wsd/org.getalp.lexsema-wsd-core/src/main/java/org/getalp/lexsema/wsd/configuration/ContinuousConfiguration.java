@@ -59,7 +59,7 @@ public class ContinuousConfiguration implements Configuration
     public void makeRandomChange()
     {
         int randomIndex = random.nextInt(documentSize);
-        assignments[randomIndex] += random.nextInt(getNumberOfSenses(randomIndex));
+        setSense(randomIndex, random.nextInt(getNumberOfSenses(randomIndex)));
     }
     
     public int getNumberOfSenses(int wordIndex)

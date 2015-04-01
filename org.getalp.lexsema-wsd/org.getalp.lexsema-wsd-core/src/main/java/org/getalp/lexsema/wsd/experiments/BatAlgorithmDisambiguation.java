@@ -26,38 +26,14 @@ public class BatAlgorithmDisambiguation {
         LRLoader lrloader = new DictionaryLRLoader(new File("../data/dictionnaires-lesk/dict-adapted-all-relations.xml"));
 
         SimilarityMeasure sim = new IndexedOverlapSimilarity();
-/*
-        LRLoader lrloader = new WordnetLoader("../data/wordnet/2.1/dict")
-                .extendedSignature(true)
-                .shuffle(false)
-                .setUsesStopWords(false)
-                .setStemming(false)
-                .loadDefinitions(true);
 
-        SimilarityMeasure sim = new TverskiIndexSimilarityMeasureBuilder()
-        		.distance(new ScaledLevenstein())
-                .computeRatio(true)
-                .alpha(1d)
-                .beta(0.5d)
-                .gamma(0.5d)
-                .fuzzyMatching(false)
-                .quadraticWeighting(false)
-                .extendedLesk(false)
-                .randomInit(false)
-                .regularizeOverlapInput(false)
-                .optimizeOverlapInput(false)
-                .regularizeRelations(false)
-                .optimizeRelations(false)
-                .isDistance(false)
-                .build();
-*/
         Disambiguator batDisambiguator = new BatAlgorithm(sim);
 
         System.err.println("Loading texts");
         dl.load();
 
-        for (Document d : dl) {
-        	
+        for (Document d : dl)
+        {	
             System.err.println("Starting document " + d.getId());
             
             System.err.println("\tLoading senses...");
@@ -78,5 +54,7 @@ public class BatAlgorithmDisambiguation {
         long endTime = System.currentTimeMillis();
         System.out.println("Total time elapsed in execution of Bat Algorithm is : ");
         System.out.println((endTime - startTime) + " ms.");
+        System.out.println(((endTime - startTime) / 1000l) + " s.");
+        System.out.println(((endTime - startTime) / 60000l) + " m.");
 	}
 }
