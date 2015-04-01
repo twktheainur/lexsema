@@ -30,6 +30,14 @@ public class ContinuousConfiguration implements Configuration
         setSenses(senses);
     }
 
+    public ContinuousConfiguration(Document d, int initialization_value)
+    {
+        document = d;
+        documentSize = d.size();
+        assignments = new int[documentSize];
+        initialize(initialization_value);
+    }
+
     public void setSenses(int[] senses)
     {
         if (senses.length != documentSize) return;
@@ -41,10 +49,9 @@ public class ContinuousConfiguration implements Configuration
 
     public void setRandomSenses()
     {
-        Random r = new Random();
         for (int i = 0 ; i < documentSize ; i++)
         {
-            setSense(i, r.nextInt(document.getSenses(i).size()));
+            setSense(i, random.nextInt(document.getSenses(i).size()));
         }
     }
     
@@ -97,7 +104,7 @@ public class ContinuousConfiguration implements Configuration
     public String toString()
     {
         String out = "[ ";
-        for (int i = getStart() ; i < getEnd() ; i++)
+        for (int i = 0 ; i < documentSize ; i++)
         {
             out += assignments[i] + ", ";
         }
@@ -107,7 +114,7 @@ public class ContinuousConfiguration implements Configuration
 
     public void initialize(int value)
     {
-        for (int i = getStart() ; i < getEnd(); i++)
+        for (int i = 0 ; i < documentSize ; i++)
         {
             setSense(i, value);
         }
@@ -131,6 +138,11 @@ public class ContinuousConfiguration implements Configuration
     public double getConfidence(int wordIndex)
     {
         return 0;
+    }
+    
+    public ContinuousConfiguration clone()
+    {
+        return new ContinuousConfiguration(document, assignments);
     }
 
 }

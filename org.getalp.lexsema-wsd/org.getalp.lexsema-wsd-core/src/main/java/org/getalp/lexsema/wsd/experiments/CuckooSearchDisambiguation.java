@@ -18,51 +18,48 @@ public class CuckooSearchDisambiguation
 {
     public static void main(String[] args)
     {
+        int iterations = 1000;
+        double levyScale = 0.5;
+        int nestsNumber = 20;
+        int destroyedNests = 5;
+        
+        if (args.length >= 1) iterations = Integer.valueOf(args[0]);
+        if (args.length >= 2) levyScale = Double.valueOf(args[1]);
+        if (args.length >= 3) nestsNumber = Integer.valueOf(args[2]);
+        if (args.length >= 4) destroyedNests = Integer.valueOf(args[3]);
+        
+        System.out.print("Parameters value : <iterations = " + iterations + "> <levy scale = " + levyScale + "> ");
+        System.out.println("<nests number = " + nestsNumber + "> <destroyed nests = " + destroyedNests + "> ");
+        
         long startTime = System.currentTimeMillis();
 
-        TextLoader dl = new Semeval2007TextLoader("../data/senseval2007_task7/test/eng-coarse-all-words-t1s.xml")
+        TextLoader dl = new Semeval2007TextLoader("../data/senseval2007_task7/test/eng-coarse-all-words.xml")
                 .loadNonInstances(true);
 
         LRLoader lrloader = new DictionaryLRLoader(new File("../data/dictionnaires-lesk/dict-adapted-all-relations.xml"));
 
         SimilarityMeasure sim = new IndexedOverlapSimilarity();
-/*
-        LRLoader lrloader = new WordnetLoader("../data/wordnet/2.1/dict")
-                .extendedSignature(true)
-                .shuffle(false)
-                .setUsesStopWords(false)
-                .setStemming(false)
-                .loadDefinitions(true);
-*/
-/*
-        SimilarityMeasure sim = new TverskiIndexSimilarityMeasureBuilder()
-                .distance(new ScaledLevenstein())
-                .computeRatio(false)
-                .alpha(1)
-                .beta(0)
-                .gamma(0)
-                .build();
-*/
-        Disambiguator cuckooDisambiguator = new CuckooSearch(sim);
 
-        System.err.println("Loading texts");
+        Disambiguator cuckooDisambiguator = new CuckooSearch(iterations, levyScale, nestsNumber, destroyedNests, sim);
+
+        System.out.println("Loading texts...");
         dl.load();
 
         for (Document d : dl)
         {    
-            System.err.println("Starting document " + d.getId());
+            System.out.println("Starting document " + d.getId());
             
-            System.err.println("\tLoading senses...");
+            System.out.println("Loading senses...");
             lrloader.loadSenses(d);
 
-            System.err.println("Disambiguating...");
+            System.out.println("Disambiguating...");
             Configuration c = cuckooDisambiguator.disambiguate(d);
             
-            System.err.println("\n\tWriting results...");
+            System.out.println("Writing results...");
             SemevalWriter sw = new SemevalWriter(d.getId() + ".ans");
             sw.write(d, c.getAssignments());
             
-            System.err.println("done!");
+            System.out.println("Done!");
         }
         
         cuckooDisambiguator.release();

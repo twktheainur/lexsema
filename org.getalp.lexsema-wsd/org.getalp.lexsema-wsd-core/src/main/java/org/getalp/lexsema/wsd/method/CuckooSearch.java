@@ -13,16 +13,22 @@ import org.apache.commons.math3.distribution.LevyDistribution;
 
 public class CuckooSearch implements Disambiguator
 {
-    private static final Random random = new Random();
-    
-    private static final LevyDistribution levyDistribution = new LevyDistribution(1, 0.5);
-    
-    private static final int nestsNumber = 20;
-    
-    private static final int destroyedNestsNumber = 5;
+    private Random random = new Random();
 
-    private static final int iterationsNumber = 5000;
+    private int iterationsNumber;
 
+    private LevyDistribution levyDistribution;
+    
+    private int nestsNumber;
+    
+    private int destroyedNestsNumber;
+
+    private Document currentDocument;
+
+    private ConfigurationScorer configurationScorer;
+
+    private Nest[] nests;
+    
     private class Nest implements Comparable<Nest>
     {
        public ContinuousConfiguration configuration;
@@ -32,10 +38,10 @@ public class CuckooSearch implements Disambiguator
            configuration = new ContinuousConfiguration(currentDocument);
            score = configurationScorer.computeScore(currentDocument, configuration);
        }
-       public Nest(int[] position)
+       public Nest(ContinuousConfiguration configuration, double score)
        {
-           configuration = new ContinuousConfiguration(currentDocument, position);
-           score = configurationScorer.computeScore(currentDocument, configuration);
+           this.configuration = configuration.clone();
+           this.score = score;
        }
        public int compareTo(Nest other)
        {
@@ -43,20 +49,27 @@ public class CuckooSearch implements Disambiguator
        }
        public Nest clone()
        {
-           return new Nest(configuration.getAssignments());
+           return new Nest(configuration.clone(), score);
+       }
+       public void randomFly()
+       {
+           int distance = (int) levyDistribution.sample();
+           System.out.println("Flying a distance of " + distance);
+           configuration.makeRandomChanges(distance);
+           score = configurationScorer.computeScore(currentDocument, configuration);
        }
     }
 
-    private Document currentDocument;
-
-    private ConfigurationScorer configurationScorer;
-
-    private Nest[] nests = new Nest[nestsNumber];
-    
-    public CuckooSearch(SimilarityMeasure similarityMeasure)
+    public CuckooSearch(int iterations, double levyScale, int nestsNumber, int destroyedNests,
+                        SimilarityMeasure similarityMeasure)
     {
+        iterationsNumber = iterations;
+        levyDistribution = new LevyDistribution(1, levyScale);
+        this.nestsNumber = nestsNumber;
+        destroyedNestsNumber = destroyedNests;
         int threadsNumber = Runtime.getRuntime().availableProcessors();
         configurationScorer = new TverskyConfigurationScorer(similarityMeasure, threadsNumber);
+        nests = new Nest[nestsNumber];
     }
 
     public Configuration disambiguate(Document document)
@@ -74,18 +87,13 @@ public class CuckooSearch implements Disambiguator
             System.out.println("Cuckoo progress : " + (double)progress / 100.0 + "%");
             
             int i = random.nextInt(nests.length);
-            //System.out.println("Choosing nest " + i);
-            Nest movedNestI = randomWalk(nests[i]);
+            nests[i].randomFly();
             
             int j = random.nextInt(nests.length);
-            //System.out.println("Choosing nest " + j);
             
-            if (movedNestI.score > nests[j].score)
+            if (nests[i].score > nests[j].score)
             {
-                //System.out.println("Replacing " + j + " by " + i);
-                //System.out.println("Score of " + j + " : " + nests[j].score);
-                //System.out.println("Score of " + i + " : " + nests[i].score);
-                nests[j] = movedNestI;
+                nests[j] = nests[i].clone();
             }
             
             sortNests();
@@ -112,15 +120,6 @@ public class CuckooSearch implements Disambiguator
     private void sortNests()
     {
         Arrays.sort(nests);
-    }
-    
-    private Nest randomWalk(Nest nest)
-    {
-        Nest clone = nest.clone();
-        int distance = (int) levyDistribution.sample();
-        System.out.println("Walking a distance of " + distance);
-        clone.configuration.makeRandomChanges(distance);
-        return clone;
     }
 
     private void abandonWorthlessNests()

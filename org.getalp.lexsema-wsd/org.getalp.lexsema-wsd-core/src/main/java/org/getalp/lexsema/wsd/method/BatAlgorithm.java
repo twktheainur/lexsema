@@ -10,27 +10,35 @@ import java.util.Random;
 
 public class BatAlgorithm implements Disambiguator
 {
-    private static final int batsNumber = 20;
-
-    private static final int iterationsNumber = 1000;
-
-    private static final double minFrequency = 0;
-
-    private static final double maxFrequency = 20;
-
-    private static final double minLoudness = 0;
-
-    private static final double maxLoudness = 10;
-
-    private static final double minRate = 0;
-
-    private static final double maxRate = 1;
-
-    private static final double alpha = 0.95;
-
-    private static final double gamma = 0.9;
-
     private static final Random random = new Random();
+
+    private int iterationsNumber;
+
+    private int batsNumber;
+
+    private double minFrequency;
+
+    private double maxFrequency;
+
+    private double minLoudness;
+
+    private double maxLoudness;
+
+    private double minRate;
+
+    private double maxRate;
+
+    private double alpha;
+
+    private double gamma;
+
+    private Document currentDocument;
+
+    private ConfigurationScorer configurationScorer;
+
+    private Bat[] bats;
+
+    private Bat bestBat;
 
     private class Bat
     {
@@ -97,18 +105,23 @@ public class BatAlgorithm implements Disambiguator
         }
     }
     
-    private Document currentDocument;
-
-    private ConfigurationScorer configurationScorer;
-
-    private Bat[] bats = new Bat[batsNumber];
-
-    private Bat bestBat;
-
-    public BatAlgorithm(SimilarityMeasure similarityMeasure)
+    public BatAlgorithm(int iterationsNumber, int batsNumber, double minFrequency, double maxFrequency, 
+                        double minLoudness, double maxLoudness, double minRate, double MaxRate, 
+                        double alpha, double gamma, SimilarityMeasure similarityMeasure)
     {
+        this.iterationsNumber = iterationsNumber;
+        this.batsNumber = batsNumber;
+        this.minFrequency = minFrequency;
+        this.maxFrequency = maxFrequency;
+        this.minLoudness = minLoudness;
+        this.maxLoudness= maxLoudness;
+        this.minRate = minRate;
+        this.maxRate = MaxRate;
+        this.alpha = alpha;
+        this.gamma = gamma;
         int threadsNumber = Runtime.getRuntime().availableProcessors();
         configurationScorer = new TverskyConfigurationScorer(similarityMeasure, threadsNumber);
+        bats = new Bat[batsNumber];
     }
 
     public Configuration disambiguate(Document document)
