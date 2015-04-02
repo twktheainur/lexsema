@@ -8,7 +8,7 @@ import org.getalp.lexsema.org.getalp.ml.optimization.functions.setfunctions.inpu
 import org.getalp.lexsema.similarity.signatures.SemanticSignature;
 import org.getalp.ml.optimization.functions.input.FunctionInput;
 import org.getalp.ml.optimization.functions.setfunctions.extentions.Extension;
-import org.getalp.ml.optimization.functions.setfunctions.extentions.LovaszExtention;
+import org.getalp.ml.optimization.functions.setfunctions.extentions.LovaszExtension;
 import org.getalp.ml.optimization.functions.setfunctions.input.SetFunctionInput;
 import org.getalp.ml.optimization.functions.setfunctions.input.ValueListInput;
 import org.getalp.ml.optimization.functions.setfunctions.submodular.Sum;
@@ -99,7 +99,7 @@ public class TverskiIndexSimilarityMeasureImpl implements TverskiIndexSimilarity
         Sum s = new Sum(1);
         if (regularizeRelations) {
             /*If requested, compute the Lovasz Extension (a.k.a. Choquet Integral)*/
-            Extension l = new LovaszExtention();
+            Extension l = new LovaszExtension();
             s.setExtension(l);
             if (optimizeRelations) {
                 /*If requested, find the subset that minimises the Lovasz extension value*/
@@ -159,7 +159,7 @@ public class TverskiIndexSimilarityMeasureImpl implements TverskiIndexSimilarity
         double returnVal;
         Sum s = new Sum(1);
         if (regularizeOverlapInput) {
-            Extension l = new LovaszExtention();
+            Extension l = new LovaszExtension();
             s.setExtension(l);
             if (optimizeOverlapInput) {
                 FunctionInput optimal = l.optimize(new GradientOptimisation(), input);

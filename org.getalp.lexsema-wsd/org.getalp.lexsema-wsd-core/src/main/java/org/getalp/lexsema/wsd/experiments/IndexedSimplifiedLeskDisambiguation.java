@@ -11,15 +11,22 @@ import org.getalp.lexsema.similarity.Document;
 import org.getalp.lexsema.similarity.measures.IndexedOverlapSimilarity;
 import org.getalp.lexsema.similarity.measures.SimilarityMeasure;
 import org.getalp.lexsema.wsd.configuration.Configuration;
+import org.getalp.lexsema.wsd.configuration.org.getalp.lexsema.wsd.evaluation.*;
 import org.getalp.lexsema.wsd.method.Disambiguator;
+import org.getalp.lexsema.wsd.method.FirstSenseDisambiguator;
 import org.getalp.lexsema.wsd.method.sequencial.WindowedLesk;
 import org.getalp.lexsema.wsd.method.sequencial.parameters.SimplifiedLeskParameters;
 import org.getalp.lexsema.wsd.method.sequencial.parameters.WindowedLeskParameters;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 
 @SuppressWarnings("all")
 public class IndexedSimplifiedLeskDisambiguation {
+
+    private static Logger logger = LoggerFactory.getLogger(IndexedSimplifiedLeskDisambiguation.class);
+
     public IndexedSimplifiedLeskDisambiguation() {
     }
 
@@ -29,6 +36,9 @@ public class IndexedSimplifiedLeskDisambiguation {
         LRLoader lrloader = new DictionaryLRLoader(new File("../data/dictionnaires-lesk/dict-adapted-all-relations.xml"));
         SimilarityMeasure sim = new IndexedOverlapSimilarity();
 
+        GoldStandard goldStandard = new Semeval2007GoldStandard();
+        Evaluation evaluation = new StandardEvaluation();
+
         SimplifiedLeskParameters slp = new SimplifiedLeskParameters()
                 .setAddSenseSignatures(false)
                 .setAllowTies(true)
@@ -37,23 +47,28 @@ public class IndexedSimplifiedLeskDisambiguation {
                 .setOnlyUniqueWords(false)
                         //.setFallbackFS(true)
                 .setMinimize(false);
-        Disambiguator sl = new WindowedLesk(2, sim, new WindowedLeskParameters(), 8);
+        Disambiguator sl = new WindowedLesk(2, sim, new WindowedLeskParameters(), 1);
+        Disambiguator firstSenseDisambiguator = new FirstSenseDisambiguator();
 
 
-        System.err.println("Loading texts");
+        logger.info("Loading texts");
         dl.load();
 
         for (Document d : dl) {
-            System.err.println("Starting document " + d.getId());
-            System.err.println("\tLoading senses...");
+            logger.info("Starting document " + d.getId());
+            logger.info("\tLoading senses...");
             lrloader.loadSenses(d);
-            System.err.println("\tDisambiguating... ");
+            logger.info("\tDisambiguating... ");
             Configuration c = sl.disambiguate(d);
+            c = firstSenseDisambiguator.disambiguate(d, c);
+
+            WSDResult result = evaluation.evaluate(goldStandard, c);
+            logger.info(result.toString());
 
             SemevalWriter sw = new SemevalWriter(d.getId() + ".ans");
-            System.err.println("\n\tWriting results...");
+            logger.info("\n\tWriting results...");
             sw.write(d, c.getAssignments());
-            System.err.println("done!");
+            logger.info("done!");
         }
         DictionaryWriter writer = new DocumentDictionaryWriter(dl);
         writer.writeDictionary(new File("dictTest2.xml"));

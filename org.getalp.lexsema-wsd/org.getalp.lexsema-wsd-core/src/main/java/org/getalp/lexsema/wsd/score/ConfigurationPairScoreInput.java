@@ -7,10 +7,10 @@ import org.getalp.lexsema.similarity.measures.SimilarityMeasure;
 import org.getalp.lexsema.util.ValueScale;
 import org.getalp.lexsema.wsd.configuration.Configuration;
 import org.getalp.ml.optimization.functions.input.FunctionInput;
-import org.getalp.ml.optimization.functions.setfunctions.input.SetFunctionInput;
+import org.getalp.ml.optimization.functions.setfunctions.input.AbstractSetFunctionInput;
 
 
-public class ConfigurationPairScoreInput extends SetFunctionInput {
+public class ConfigurationPairScoreInput extends AbstractSetFunctionInput {
     private final Configuration configuration1;
     private final Document document1;
 

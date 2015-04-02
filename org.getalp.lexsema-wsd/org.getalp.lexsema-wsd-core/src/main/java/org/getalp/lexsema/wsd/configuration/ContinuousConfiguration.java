@@ -59,6 +59,7 @@ public class ContinuousConfiguration implements Configuration
         }
     }
 
+    @Override
     public void setSense(int wordIndex, int senseIndex)
     {
         int sensesNumber = document.getSenses(wordIndex).size();
@@ -82,7 +83,7 @@ public class ContinuousConfiguration implements Configuration
 
     public int size()
     {
-        return this.size;
+        return size;
     }
 
     public int getStart()
@@ -123,7 +124,12 @@ public class ContinuousConfiguration implements Configuration
     {
         return discreteAssignments;
     }
-    
+
+    @Override
+    public Document getDocument() {
+        return document;
+    }
+
     public double[] getAssignmentsAsDouble()
     {
         return continuousAssignments;

@@ -1,5 +1,6 @@
 package org.getalp.lexsema.wsd.method;
 
+import cern.colt.matrix.Norm;
 import cern.jet.random.tdouble.engine.DoubleMersenneTwister;
 import cern.jet.random.tdouble.engine.DoubleRandomEngine;
 import org.getalp.lexsema.similarity.Document;
@@ -8,7 +9,8 @@ import org.getalp.lexsema.util.ValueScale;
 import org.getalp.lexsema.wsd.configuration.ConfidenceConfiguration;
 import org.getalp.lexsema.wsd.configuration.Configuration;
 import org.getalp.lexsema.wsd.score.ConfigurationScorer;
-import org.getalp.lexsema.wsd.score.TverskyConfigurationScorer;
+import org.getalp.lexsema.wsd.score.MatrixTverskiConfigurationScorer;
+import org.getalp.ml.matrix.score.NormMatrixScorer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,7 +23,7 @@ public class SimulatedAnnealing implements Disambiguator {
      * Constant parameters
      */
     public static final double T0_THRESHOLD = 0.01;
-    public static final int NUMBER_OF_CHANGES = 20;
+    public static final int NUMBER_OF_CHANGES = 10;
     private static Logger logger = LoggerFactory.getLogger(SimulatedAnnealing.class);
     public double iterations = 1000;
     boolean changedSinceLast = false;
@@ -41,6 +43,7 @@ public class SimulatedAnnealing implements Disambiguator {
      * Configuration state
      */
     private Configuration configuration;
+    private Configuration bestConfiguration;
     private Configuration previousConfiguration;
     private ConfigurationScorer configurationScorer;
     /**
@@ -57,7 +60,7 @@ public class SimulatedAnnealing implements Disambiguator {
     public SimulatedAnnealing(double p0, double coolingRate, int convergenceThreshold, int iterations, int numberThreads, SimilarityMeasure similarityMeasure) {
         this.convergenceThreshold = convergenceThreshold;
         this.p0 = p0;
-        configurationScorer = new TverskyConfigurationScorer(similarityMeasure, numberThreads);
+        configurationScorer = new MatrixTverskiConfigurationScorer(similarityMeasure, null, new NormMatrixScorer(Norm.Frobenius), numberThreads);
         this.coolingRate = coolingRate;
         this.iterations = iterations;
 
@@ -97,7 +100,7 @@ public class SimulatedAnnealing implements Disambiguator {
         T = T0;
         currentCycle = 0;
         convergenceCycles = 0;
-        Configuration bestConfiguration = configuration;
+        bestConfiguration = configuration;
     }
 
     /**
@@ -201,6 +204,7 @@ public class SimulatedAnnealing implements Disambiguator {
             prevScore = score;
             if (score > bestScore) {
                 bestScore = score;
+                bestConfiguration = configuration;
             }
             changedSinceLast = true;
             numberOfAcceptanceEvents++;

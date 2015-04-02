@@ -2,16 +2,21 @@ package org.getalp.lexsema.util.caching;
 
 
 import redis.clients.jedis.Jedis;
+import redis.clients.jedis.JedisPool;
+
+import java.lang.ref.WeakReference;
 
 
 /**
  * Wrapper for Jedis
  */
 class JedisCache implements Cache {
-    Jedis cache;
+    private Jedis cache;
+    private WeakReference<JedisPool> parentPool;
 
-    public JedisCache(Jedis cache) {
+    public JedisCache(Jedis cache, JedisPool parentPool) {
         this.cache = cache;
+        this.parentPool = new WeakReference<>(parentPool);
     }
 
     @Override
@@ -41,6 +46,9 @@ class JedisCache implements Cache {
 
     @Override
     public void close() {
-        cache.close();
+        if (parentPool.get() != null) {
+            //noinspection ConstantConditions
+            parentPool.get().returnResource(cache);
+        }
     }
 }

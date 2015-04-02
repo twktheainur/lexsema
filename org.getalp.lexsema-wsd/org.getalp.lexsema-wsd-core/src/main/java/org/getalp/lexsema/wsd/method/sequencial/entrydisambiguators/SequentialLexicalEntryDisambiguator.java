@@ -21,6 +21,14 @@ public abstract class SequentialLexicalEntryDisambiguator implements Runnable {
         document = d;
     }
 
+    protected List<Sense> getSenses(int index) {
+        return document.getSenses(index);
+    }
+
+    protected int numberOfSenses(int index) {
+        return getSenses(index).size();
+    }
+
     public int getStart() {
         return start;
     }

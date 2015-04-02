@@ -5,12 +5,12 @@ import cern.colt.matrix.tdouble.impl.DenseDoubleMatrix1D;
 import com.wcohen.ss.AbstractStringDistance;
 import org.getalp.lexsema.util.CommonSubSequences;
 import org.getalp.ml.optimization.functions.input.FunctionInput;
+import org.getalp.ml.optimization.functions.setfunctions.input.AbstractSetFunctionInput;
 import org.getalp.ml.optimization.functions.setfunctions.input.Interval;
-import org.getalp.ml.optimization.functions.setfunctions.input.SetFunctionInput;
 
 import java.util.List;
 
-public class FuzzyCommonSubsequenceInput extends SetFunctionInput {
+public class FuzzyCommonSubsequenceInput extends AbstractSetFunctionInput {
 
     private final AbstractStringDistance distance;
     private final List<String> la;

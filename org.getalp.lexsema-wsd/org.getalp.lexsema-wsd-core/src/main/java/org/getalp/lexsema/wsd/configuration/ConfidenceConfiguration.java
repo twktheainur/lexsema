@@ -10,12 +10,14 @@ import java.util.Random;
 public class ConfidenceConfiguration implements Configuration {
     int[] assignments;
     DoubleMatrix1D confidence;
+    Document document;
 
     public ConfidenceConfiguration(Document d) {
         int documentSize = d.size();
         assignments = new int[documentSize];
         noAssignmentInit(documentSize);
         confidence = new DenseDoubleMatrix1D(documentSize);
+        document = d;
     }
 
     public ConfidenceConfiguration(Document d, InitializationType initializationType) {
@@ -139,6 +141,11 @@ public class ConfidenceConfiguration implements Configuration {
     @SuppressWarnings("ReturnOfCollectionOrArrayField")
     public int[] getAssignments() {
         return assignments;
+    }
+
+    @Override
+    public Document getDocument() {
+        return document;
     }
 
     public enum InitializationType {

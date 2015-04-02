@@ -15,7 +15,6 @@ public class SubConfiguration extends ConfidenceConfiguration {
         } else {
             this.end = end;
         }
-
     }
 
     public SubConfiguration(SubConfiguration d) {
