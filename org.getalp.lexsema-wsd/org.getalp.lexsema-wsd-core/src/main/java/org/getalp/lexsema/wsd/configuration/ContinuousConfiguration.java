@@ -130,17 +130,11 @@ public class ContinuousConfiguration implements Configuration
         return assignments;
     }
 
-    @Override
-    public Document getDocument() {
+    public Document getDocument()
+    {
         return document;
     }
 
-    public double[] getAssignmentsAsDouble()
-    {
-        return continuousAssignments;
-    }
-
-    
     public void setConfidence(int wordIndex, double confidence)
     {
         
