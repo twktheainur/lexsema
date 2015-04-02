@@ -59,6 +59,7 @@ public class WindowedLeskLexicalEntryDisambiguator extends SequentialLexicalEntr
                     //String wordProgress = String.format("%.2f%%", (100d * ((double) cmb / (double) combinations.size())));
                     //System.err.print( progress + " ==> "+currentEntry.getLemma()+"#"+ currentEntry.getPos() + " ["+cmb+"/"+combinations.size()+" | "+wordProgress +"]\r");
                     Configuration sc = combinations.get(cmb);
+
                     FunctionInput sci = new ConfigurationEntryPairwiseScoreInput(sc, getDocument(),
                             getCurrentIndex() - sc.getStart(), similarityMeasure);
                     Function f = new Sum(1);
