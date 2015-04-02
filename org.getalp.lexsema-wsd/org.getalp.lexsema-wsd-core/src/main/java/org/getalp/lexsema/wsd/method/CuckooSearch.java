@@ -8,6 +8,7 @@ import org.getalp.lexsema.similarity.measures.SimilarityMeasure;
 import org.getalp.lexsema.wsd.configuration.ContinuousConfiguration;
 import org.getalp.lexsema.wsd.configuration.Configuration;
 import org.getalp.lexsema.wsd.score.ConfigurationScorer;
+import org.getalp.lexsema.wsd.score.SemEval2007Task7PerfectConfigurationScorer;
 import org.getalp.lexsema.wsd.score.TverskyConfigurationScorer;
 import org.apache.commons.math3.distribution.LevyDistribution;
 
@@ -53,7 +54,7 @@ public class CuckooSearch implements Disambiguator
        }
        public void randomFly()
        {
-           int distance = (int) levyDistribution.sample();
+           int distance = Math.min((int) levyDistribution.sample(), configuration.size());
            System.out.println("Flying a distance of " + distance);
            configuration.makeRandomChanges(distance);
            score = configurationScorer.computeScore(currentDocument, configuration);
@@ -69,6 +70,7 @@ public class CuckooSearch implements Disambiguator
         destroyedNestsNumber = destroyedNests;
         int threadsNumber = Runtime.getRuntime().availableProcessors();
         configurationScorer = new TverskyConfigurationScorer(similarityMeasure, threadsNumber);
+        configurationScorer = new SemEval2007Task7PerfectConfigurationScorer("../data/senseval2007_task7/key/scorer2.sh");
         nests = new Nest[nestsNumber];
     }
 
