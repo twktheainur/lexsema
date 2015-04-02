@@ -140,10 +140,8 @@ public class BatAlgorithm implements Disambiguator
             int progress = (int)(((double) currentIteration / (double) iterationsNumber) * 10000);
             System.out.println("Bat progress : " + (double)progress / 100.0 + "%");
 
-            for (int i = 0; i < batsNumber; i++)
+            for (Bat currentBat : bats)
             {
-                Bat currentBat = bats[i];
-
                 currentBat.frequency = randomDoubleInRange(minFrequency, maxFrequency);
 
                 currentBat.savePositionAndVelocity();
