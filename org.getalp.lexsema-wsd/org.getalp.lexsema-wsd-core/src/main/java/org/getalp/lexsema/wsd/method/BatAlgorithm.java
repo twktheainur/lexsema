@@ -2,77 +2,146 @@ package org.getalp.lexsema.wsd.method;
 
 import org.getalp.lexsema.similarity.Document;
 import org.getalp.lexsema.similarity.measures.SimilarityMeasure;
-import org.getalp.lexsema.wsd.configuration.BatConfiguration;
 import org.getalp.lexsema.wsd.configuration.Configuration;
+import org.getalp.lexsema.wsd.configuration.ContinuousConfiguration;
 import org.getalp.lexsema.wsd.score.ConfigurationScorer;
 import org.getalp.lexsema.wsd.score.TverskyConfigurationScorer;
-
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 
 public class BatAlgorithm implements Disambiguator
 {
-    private static final int batsNumber = 10;
-
-    private static final int iterationsNumber = 10;
-
-    private static final double minFrequency = 0;
-
-    private static final double maxFrequency = 20;
-
-    private static final double minLoudness = 0;
-
-    private static final double maxLoudness = 10;
-
-    private static final double minRate = 0;
-
-    private static final double maxRate = 1;
-
-    private static final double alpha = 0.95;
-
-    private static final double gamma = 0.9;
-
     private static final Random random = new Random();
+
+    private int iterationsNumber;
+
+    private int batsNumber;
+
+    private double minFrequency;
+
+    private double maxFrequency;
+
+    private double minLoudness;
+
+    private double maxLoudness;
+
+    private double minRate;
+
+    private double maxRate;
+
+    private double alpha;
+
+    private double gamma;
 
     private Document currentDocument;
 
     private ConfigurationScorer configurationScorer;
 
-    private List<Bat> bats = new ArrayList<Bat>();
+    private Bat[] bats;
 
     private Bat bestBat;
 
-    public BatAlgorithm(SimilarityMeasure similarityMeasure)
+    private class Bat
     {
-        int threadsNumber = Runtime.getRuntime().availableProcessors();
-        configurationScorer = new TverskyConfigurationScorer(similarityMeasure, threadsNumber);
-        for (int i = 0 ; i < batsNumber ; ++i)
+        private ContinuousConfiguration configuration;
+        private int[] position;
+        private int[] velocity;
+        private double frequency;
+        private double initialRate;
+        private double rate;
+        private double loudness;
+        private int[] previousPosition;
+        private int[] previousVelocity;
+        private boolean needRecomputeScore;
+        private double score;
+
+        public Bat()
         {
-            bats.add(new Bat());
+            configuration = new ContinuousConfiguration(currentDocument);
+            position = new int[currentDocument.size()];
+            velocity = new int[currentDocument.size()];
+            for (int i = 0; i < currentDocument.size(); ++i)
+            {
+                position[i] = configuration.getAssignment(i);
+                velocity[i] = 0;
+            }
+            frequency = randomDoubleInRange(minFrequency, maxFrequency);
+            initialRate = randomDoubleInRange(minRate, maxRate);
+            rate = initialRate;
+            loudness = randomDoubleInRange(minLoudness, maxLoudness);
+            previousPosition = position;
+            previousVelocity = velocity;
+            needRecomputeScore = true;
+            score = getScore();
+        }
+
+        public void setPosition(int[] newPosition)
+        {
+            position = newPosition;
+            needRecomputeScore = true;
+        }
+
+        public double getScore()
+        {
+            if (needRecomputeScore)
+            {
+                configuration.setSenses(position);
+                score = configurationScorer.computeScore(currentDocument, configuration);
+                needRecomputeScore = false;
+            }
+            return score;
+        }
+
+        public void savePositionAndVelocity()
+        {
+            previousPosition = position.clone();
+            previousVelocity = velocity.clone();
+        }
+
+        public void restorePositionAndVelocity()
+        {
+            position = previousPosition;
+            velocity = previousVelocity;
+            needRecomputeScore = true;
         }
     }
+    
+    public BatAlgorithm(int iterationsNumber, int batsNumber, double minFrequency, double maxFrequency, 
+                        double minLoudness, double maxLoudness, double minRate, double MaxRate, 
+                        double alpha, double gamma, SimilarityMeasure similarityMeasure)
+    {
+        this.iterationsNumber = iterationsNumber;
+        this.batsNumber = batsNumber;
+        this.minFrequency = minFrequency;
+        this.maxFrequency = maxFrequency;
+        this.minLoudness = minLoudness;
+        this.maxLoudness= maxLoudness;
+        this.minRate = minRate;
+        this.maxRate = MaxRate;
+        this.alpha = alpha;
+        this.gamma = gamma;
+        int threadsNumber = Runtime.getRuntime().availableProcessors();
+        configurationScorer = new TverskyConfigurationScorer(similarityMeasure, threadsNumber);
+        bats = new Bat[batsNumber];
+    }
 
-    @Override
     public Configuration disambiguate(Document document)
     {
         currentDocument = document;
-
-        for (int i = 0; i < batsNumber; i++)
+        
+        for (int i = 0 ; i < batsNumber ; ++i)
         {
-            bats.get(i).initialize(document);
+            bats[i] = new Bat();
         }
+
         updateBestBat();
 
         for (int currentIteration = 0 ; currentIteration < iterationsNumber ; currentIteration++)
         {
-            int progress = (int) ((double) currentIteration / (double) iterationsNumber * 100);
-            System.out.println("BatProgress : " + progress + "%");
+            int progress = (int)(((double) currentIteration / (double) iterationsNumber) * 10000);
+            System.out.println("Bat progress : " + (double)progress / 100.0 + "%");
 
-            for (int i = 0; i < batsNumber; i++)
+            for (Bat currentBat : bats)
             {
-                Bat currentBat = bats.get(i);
-
                 currentBat.frequency = randomDoubleInRange(minFrequency, maxFrequency);
 
                 currentBat.savePositionAndVelocity();
@@ -101,22 +170,21 @@ public class BatAlgorithm implements Disambiguator
                 {
                     currentBat.restorePositionAndVelocity();
                 }
-
             }
 
             updateBestBat();
+            
+            System.out.println("Current best : " + bestBat.getScore());
         }
 
         return bestBat.configuration;
     }
 
-    @Override
     public Configuration disambiguate(Document document, Configuration c)
     {
         return disambiguate(document);
     }
 
-    @Override
     public void release()
     {
         configurationScorer.release();
@@ -170,9 +238,8 @@ public class BatAlgorithm implements Disambiguator
     private void updateBestBat()
     {
         double bestScore = Double.MIN_VALUE;
-        for (int i = 0 ; i < batsNumber ; ++i)
+        for (Bat currentBat : bats)
         {
-            Bat currentBat = bats.get(i);
             double currentScore = currentBat.getScore();
             if (currentScore > bestScore)
             {
@@ -185,67 +252,11 @@ public class BatAlgorithm implements Disambiguator
     private double computeAverageLoudness()
     {
         double loudnessesSum = 0;
-        for (int i = 0; i < batsNumber; ++i)
+        for (Bat currentBat : bats)
         {
-            loudnessesSum += bats.get(i).loudness;
+            loudnessesSum += currentBat.loudness;
         }
         return loudnessesSum / (double) batsNumber;
     }
 
-    private class Bat {
-        private BatConfiguration configuration;
-        private int[] position;
-        private int[] velocity;
-        private double frequency;
-        private double initialRate;
-        private double rate;
-        private double loudness;
-        private int[] previousPosition;
-        private int[] previousVelocity;
-        private boolean needRecomputeScore;
-        private double score;
-
-        public void initialize(Document document) {
-            configuration = new BatConfiguration(document);
-            position = new int[document.size()];
-            velocity = new int[document.size()];
-            for (int i = 0; i < document.size(); ++i) {
-                position[i] = configuration.getAssignment(i);
-                velocity[i] = 0;
-            }
-            frequency = randomDoubleInRange(minFrequency, maxFrequency);
-            initialRate = randomDoubleInRange(minRate, maxRate);
-            rate = initialRate;
-            loudness = randomDoubleInRange(minLoudness, maxLoudness);
-            previousPosition = position;
-            previousVelocity = velocity;
-            needRecomputeScore = true;
-            score = getScore();
-        }
-
-        public void setPosition(int[] newPosition) {
-            position = newPosition;
-            needRecomputeScore = true;
-        }
-
-        public double getScore() {
-            if (needRecomputeScore) {
-                configuration.setSenses(position);
-                score = configurationScorer.computeScore(currentDocument, configuration);
-                needRecomputeScore = false;
-            }
-            return score;
-        }
-
-        public void savePositionAndVelocity() {
-            previousPosition = position.clone();
-            previousVelocity = velocity.clone();
-        }
-
-        public void restorePositionAndVelocity() {
-            position = previousPosition;
-            velocity = previousVelocity;
-            needRecomputeScore = true;
-        }
-    }
 }

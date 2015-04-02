@@ -6,84 +6,89 @@ import java.util.Random;
 
 public class ContinuousConfiguration implements Configuration
 {
+    private static final Random random = new Random();
+    
     private Document document;
 
-    private int size;
+    private int documentSize;
     
-    private double[] continuousAssignments;
-    
-    private int[] discreteAssignments;
+    private int[] assignments;
     
     public ContinuousConfiguration(Document d)
     {
         document = d;
-        size = d.size();
-        continuousAssignments = new double[size];
-        discreteAssignments = new int[size];
+        documentSize = d.size();
+        assignments = new int[documentSize];
         setRandomSenses();
     }
 
-    public ContinuousConfiguration(Document d, double[] senses)
+    public ContinuousConfiguration(Document d, int[] senses)
     {
         document = d;
-        size = d.size();
-        continuousAssignments = new double[size];
-        discreteAssignments = new int[size];
+        documentSize = d.size();
+        assignments = new int[documentSize];
         setSenses(senses);
+    }
+
+    public ContinuousConfiguration(Document d, int initialization_value)
+    {
+        document = d;
+        documentSize = d.size();
+        assignments = new int[documentSize];
+        initialize(initialization_value);
     }
 
     public void setSenses(int[] senses)
     {
-        if (senses.length != size) return;
-        for (int i = 0 ; i < size ; i++)
+        if (senses.length != documentSize) return;
+        for (int i = 0 ; i < documentSize ; i++)
         {
             setSense(i, senses[i]);
-        }
-    }
-    
-    public void setSenses(double[] senses)
-    {
-        if (senses.length != size) return;
-        for (int i = 0 ; i < size ; i++)
-        {
-            setSense(i, senses[i]);
-        }
-    }
-    
-    public void setRandomSenses()
-    {
-        Random r = new Random();
-        for (int i = 0 ; i < size ; i++)
-        {
-            setSense(i, r.nextInt(document.getSenses(i).size()));
         }
     }
 
-    @Override
+    public void setRandomSenses()
+    {
+        for (int i = 0 ; i < documentSize ; i++)
+        {
+            setSense(i, random.nextInt(document.getSenses(i).size()));
+        }
+    }
+    
+    public void makeRandomChanges(int numberOfChanges)
+    {
+        for (int i = 0 ; i < numberOfChanges ; i++)
+        {
+            makeRandomChange();
+        }
+    }
+    
+    public void makeRandomChange()
+    {
+        int randomIndex = random.nextInt(documentSize);
+        setSense(randomIndex, random.nextInt(getNumberOfSenses(randomIndex)));
+    }
+    
+    public int getNumberOfSenses(int wordIndex)
+    {
+        return document.getSenses(wordIndex).size();
+    }
+
     public void setSense(int wordIndex, int senseIndex)
     {
         int sensesNumber = document.getSenses(wordIndex).size();
         while (senseIndex < 0) senseIndex += sensesNumber;
-        continuousAssignments[wordIndex] = senseIndex % sensesNumber;
-        discreteAssignments[wordIndex] = senseIndex % sensesNumber;
-    }
-
-    public void setSense(int wordIndex, double senseIndex)
-    {
-        int sensesNumber = document.getSenses(wordIndex).size();
-        while (senseIndex < 0) senseIndex += sensesNumber;
-        continuousAssignments[wordIndex] = senseIndex % sensesNumber;
-        discreteAssignments[wordIndex] = (int) (senseIndex % sensesNumber);
+        assignments[wordIndex] = senseIndex % sensesNumber;
     }
 
     public int getAssignment(int wordIndex)
     {
-        return discreteAssignments[wordIndex];
+        return assignments[wordIndex];
     }
 
     public int size()
     {
-        return size;
+        return documentSize;
     }
 
     public int getStart()
@@ -93,15 +98,15 @@ public class ContinuousConfiguration implements Configuration
 
     public int getEnd()
     {
-        return size;
+        return documentSize;
     }
 
     public String toString()
     {
         String out = "[ ";
-        for (int i = getStart() ; i < getEnd() ; i++)
+        for (int i = 0 ; i < documentSize ; i++)
         {
-            out += discreteAssignments[i] + ", ";
+            out += assignments[i] + ", ";
         }
         out += "]";
         return out;
@@ -109,7 +114,7 @@ public class ContinuousConfiguration implements Configuration
 
     public void initialize(int value)
     {
-        for (int i = getStart() ; i < getEnd(); i++)
+        for (int i = 0 ; i < documentSize ; i++)
         {
             setSense(i, value);
         }
@@ -122,7 +127,7 @@ public class ContinuousConfiguration implements Configuration
 
     public int[] getAssignments()
     {
-        return discreteAssignments;
+        return assignments;
     }
 
     @Override
@@ -135,6 +140,7 @@ public class ContinuousConfiguration implements Configuration
         return continuousAssignments;
     }
 
+    
     public void setConfidence(int wordIndex, double confidence)
     {
         
@@ -143,6 +149,11 @@ public class ContinuousConfiguration implements Configuration
     public double getConfidence(int wordIndex)
     {
         return 0;
+    }
+    
+    public ContinuousConfiguration clone()
+    {
+        return new ContinuousConfiguration(document, assignments);
     }
 
 }
