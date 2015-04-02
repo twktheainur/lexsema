@@ -14,7 +14,7 @@ import static java.io.File.separator;
  */
 public final class CachePool {
 
-    public static final CacheProvider DEFAULT_CACHE_PROVIDER = CacheProvider.JEDIS;
+    public static final CacheProvider DEFAULT_CACHE_PROVIDER = CacheProvider.DUMMY;
     public final static String DEFAULT_HOST = "localhost";
     private final static CachePooledResourceProvider CACHE_POOLED_RESOURCE_PROVIDER = buildProvider();
     private static Logger logger = LoggerFactory.getLogger(CachePool.class);
@@ -44,7 +44,6 @@ public final class CachePool {
                     port = Integer.valueOf(properties.getProperty("lexsema.cache.port"));
                     logger.info(String.format("[CONFIG] Loaded lexsema.cache.port=%d", port));
                 }
-
             } else {
                 logger.info("No lexsema_cache.properties in the classpath, using default configuration.");
             }
@@ -64,8 +63,9 @@ public final class CachePool {
                     resourceProvider = new JedisCachePoolProvider(host);
                 }
                 break;
+            case DUMMY:
             default:
-                resourceProvider = new JedisCachePoolProvider(host);
+                resourceProvider = new DummyCachePoolProvider();
                 break;
         }
         return resourceProvider;
@@ -74,4 +74,5 @@ public final class CachePool {
     public synchronized static Cache getResource() {
         return CACHE_POOLED_RESOURCE_PROVIDER.getResource();
     }
+
 }

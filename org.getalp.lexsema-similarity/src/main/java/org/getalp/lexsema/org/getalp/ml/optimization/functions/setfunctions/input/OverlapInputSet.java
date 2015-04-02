@@ -3,13 +3,13 @@ package org.getalp.lexsema.org.getalp.ml.optimization.functions.setfunctions.inp
 import cern.colt.matrix.tdouble.impl.DenseDoubleMatrix1D;
 import com.wcohen.ss.AbstractStringDistance;
 import org.getalp.ml.optimization.functions.input.FunctionInput;
+import org.getalp.ml.optimization.functions.setfunctions.input.AbstractSetFunctionInput;
 import org.getalp.ml.optimization.functions.setfunctions.input.Interval;
-import org.getalp.ml.optimization.functions.setfunctions.input.SetFunctionInput;
 
 import java.util.Collections;
 import java.util.List;
 
-public class OverlapInputSet extends SetFunctionInput {
+public class OverlapInputSet extends AbstractSetFunctionInput {
 
     private final AbstractStringDistance distance;
     private List<String> la;

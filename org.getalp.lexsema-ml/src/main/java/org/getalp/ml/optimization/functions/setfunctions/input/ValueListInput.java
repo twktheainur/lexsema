@@ -5,7 +5,7 @@ import org.getalp.ml.optimization.functions.input.FunctionInput;
 
 import java.util.List;
 
-public class ValueListInput extends SetFunctionInput {
+public class ValueListInput extends AbstractSetFunctionInput {
 
     private List<Double> values;
     private boolean invert;

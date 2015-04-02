@@ -1,5 +1,7 @@
 package org.getalp.lexsema.wsd.configuration;
 
+import org.getalp.lexsema.similarity.Document;
+
 /**
  * A WSD sense assignment configuration. Allows to assign the index of a sense to a particular word of a Document.
  */
@@ -24,4 +26,6 @@ public interface Configuration {
 
     @SuppressWarnings("ReturnOfCollectionOrArrayField")
     int[] getAssignments();
+
+    public Document getDocument();
 }

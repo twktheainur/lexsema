@@ -92,7 +92,12 @@ public class BatConfiguration implements Configuration
     {
         return assignments;
     }
-    
+
+    @Override
+    public Document getDocument() {
+        return document;
+    }
+
     public void setConfidence(int wordIndex, double confidence)
     {
         

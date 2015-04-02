@@ -6,6 +6,8 @@ import cern.colt.matrix.tdouble.impl.DenseDoubleMatrix2D;
 import org.getalp.lexsema.similarity.Document;
 import org.getalp.lexsema.similarity.Sense;
 import org.getalp.lexsema.similarity.measures.SimilarityMeasure;
+import org.getalp.lexsema.util.caching.Cache;
+import org.getalp.lexsema.util.caching.CachePool;
 import org.getalp.lexsema.util.dataitems.Triple;
 import org.getalp.lexsema.util.dataitems.TripleImpl;
 import org.getalp.lexsema.wsd.configuration.Configuration;
@@ -23,10 +25,11 @@ public class MatrixTverskiConfigurationScorer implements ConfigurationScorer {
     private static Logger logger = LoggerFactory.getLogger(MatrixTverskiConfigurationScorer.class);
     private SimilarityMeasure similarityMeasure;
     private ExecutorService threadPool;
-    private List<Future<Triple<Integer,Integer,Double>>> completeTasks;
+    private List<Future<Triple<Integer, Integer, Double>>> completeTasks;
     private List<EntryScoreCallable> tasks;
     private Filter filter;
     private MatrixScorer matrixScorer;
+    private Cache cache;
 
     public MatrixTverskiConfigurationScorer(SimilarityMeasure similarityMeasure, Filter filter, MatrixScorer matrixScorer, int numberThreads) {
         this.similarityMeasure = similarityMeasure;
@@ -34,19 +37,39 @@ public class MatrixTverskiConfigurationScorer implements ConfigurationScorer {
         threadPool = Executors.newFixedThreadPool(numberThreads);
         this.filter = filter;
         this.matrixScorer = matrixScorer;
+        cache = CachePool.getResource();
+    }
+
+    private String generateKey(int index1, int index2) {
+        return String.format("sim____%s____%d____%d", similarityMeasure.toString(), index1, index2);
     }
 
     @Override
     public double computeScore(Document d, Configuration c) {
-        DoubleMatrix2D scoreMatrix = new DenseDoubleMatrix2D(c.size(),c.size());
+        DoubleMatrix2D scoreMatrix = new DenseDoubleMatrix2D(c.size(), c.size());
         for (int i = 0; i < c.size(); i++) {
             for (int j = 0; j < c.size(); j++) {
-                try {
-                    tasks.add(new EntryScoreCallable(i,j, d, c));
-                    //threadPool.submit();
-                    //completeTasks.add(threadPool.submit(new EntryScoreCallable(i, d, c)));
-                } catch (RejectedExecutionException e) {
-                    logger.debug("Threadpool rejected task " + i);
+
+
+                String key_ij = generateKey(i, j);
+                String key_ji = generateKey(j, i);
+                String value_ij = cache.get(key_ij);
+                String value_ji = cache.get(key_ji);
+
+                if (value_ij != null || value_ji != null) {
+                    double score;
+                    if (value_ij != null) {
+                        score = Double.valueOf(value_ij);
+                    } else {
+                        score = Double.valueOf(value_ji);
+                    }
+                    scoreMatrix.setQuick(i, j, score);
+                } else {
+                    try {
+                        tasks.add(new EntryScoreCallable(i, j, d, c));
+                    } catch (RejectedExecutionException e) {
+                        logger.debug("Thread pool rejected task " + i);
+                    }
                 }
             }
         }
@@ -54,13 +77,13 @@ public class MatrixTverskiConfigurationScorer implements ConfigurationScorer {
         try {
             completeTasks = threadPool.invokeAll(tasks);
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            logger.error(e.getLocalizedMessage());
         }
         tasks.clear();
         boolean progressChecked = false;
         while (!progressChecked || !completeTasks.isEmpty()) {
             for (int i = 0; i < completeTasks.size(); ) {
-                Future<Triple<Integer,Integer, Double>> current = completeTasks.get(i);
+                Future<Triple<Integer, Integer, Double>> current = completeTasks.get(i);
                 if (current.isDone()) {
                     try {
                         //noinspection LocalVariableOfConcreteClass
@@ -68,7 +91,9 @@ public class MatrixTverskiConfigurationScorer implements ConfigurationScorer {
                         int indexA = pair.first();
                         int indexB = pair.second();
                         double value = pair.third();
-                        scoreMatrix.setQuick(indexA,indexB,value);
+                        cache.set(generateKey(indexA, indexB), String.valueOf(value));
+                        cache.set(generateKey(indexB, indexA), String.valueOf(value));
+                        scoreMatrix.setQuick(indexA, indexB, value);
                     } catch (InterruptedException e) {
                         logger.debug("Interrupted in configuration score entry calculation" + e.getLocalizedMessage());
                     } catch (ExecutionException e) {
@@ -88,7 +113,7 @@ public class MatrixTverskiConfigurationScorer implements ConfigurationScorer {
             }
         }
 
-        if(filter!=null){
+        if (filter != null) {
             scoreMatrix = filter.apply(scoreMatrix);
         }
 
@@ -106,7 +131,7 @@ public class MatrixTverskiConfigurationScorer implements ConfigurationScorer {
     }
 
 
-    private class EntryScoreCallable implements Callable<Triple<Integer,Integer, Double>> {
+    private class EntryScoreCallable implements Callable<Triple<Integer, Integer, Double>> {
 
         private int indexA;
         private int indexB;
@@ -121,17 +146,16 @@ public class MatrixTverskiConfigurationScorer implements ConfigurationScorer {
         }
 
         @Override
-        public Triple<Integer,Integer, Double> call() throws Exception {
+        public Triple<Integer, Integer, Double> call() throws Exception {
             try {
                 Sense a = document.getSenses(indexA).get(configuration.getAssignment(indexA));
                 Sense b = document.getSenses(indexB).get(configuration.getAssignment(indexB));
-                double sim = similarityMeasure.compute(a.getSemanticSignature(), b.getSemanticSignature(),null,null);
+                double sim = similarityMeasure.compute(a.getSemanticSignature(), b.getSemanticSignature(), null, null);
                 return new TripleImpl<>(indexA, indexB, sim);
             } catch (RuntimeException e) {
                 logger.error(e.getLocalizedMessage());
-                e.printStackTrace();
             }
-            return new TripleImpl<>(indexA,indexB,0d);
+            return new TripleImpl<>(indexA, indexB, 0d);
         }
     }
 

@@ -17,6 +17,7 @@ final class JedisCachePoolProvider implements CachePooledResourceProvider {
 
     @Override
     public Cache getResource() {
-        return new JedisCache(jedisPool.getResource());
+        return new JedisCache(jedisPool.getResource(), jedisPool);
     }
+
 }

@@ -3,11 +3,11 @@ package org.getalp.ml.optimization.functions.setfunctions.submodular;
 import cern.colt.matrix.tdouble.DoubleMatrix1D;
 import org.getalp.ml.optimization.functions.cache.SetFunctionCache;
 import org.getalp.ml.optimization.functions.input.FunctionInput;
-import org.getalp.ml.optimization.functions.setfunctions.SetFunction;
+import org.getalp.ml.optimization.functions.setfunctions.AbstractSetFunction;
 import org.getalp.ml.optimization.functions.setfunctions.input.SetFunctionInput;
 
 
-public class Sum extends SetFunction {
+public class Sum extends AbstractSetFunction {
     private SetFunctionCache cache;
     private double multiplier;
 

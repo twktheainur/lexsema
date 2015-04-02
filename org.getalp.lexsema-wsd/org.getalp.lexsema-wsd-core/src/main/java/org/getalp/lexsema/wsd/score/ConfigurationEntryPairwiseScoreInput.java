@@ -6,13 +6,13 @@ import org.getalp.lexsema.similarity.Sense;
 import org.getalp.lexsema.similarity.measures.SimilarityMeasure;
 import org.getalp.lexsema.wsd.configuration.Configuration;
 import org.getalp.ml.optimization.functions.input.FunctionInput;
+import org.getalp.ml.optimization.functions.setfunctions.input.AbstractSetFunctionInput;
 import org.getalp.ml.optimization.functions.setfunctions.input.Interval;
-import org.getalp.ml.optimization.functions.setfunctions.input.SetFunctionInput;
 
 import java.util.List;
 
 
-public class ConfigurationEntryPairwiseScoreInput extends SetFunctionInput {
+public class ConfigurationEntryPairwiseScoreInput extends AbstractSetFunctionInput {
 
     private final SimilarityMeasure sim;
     private Configuration configuration;

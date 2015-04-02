@@ -8,11 +8,11 @@ import org.getalp.ml.optimization.functions.setfunctions.input.SetFunctionInput;
 import org.getalp.ml.optimization.methods.OptimisationMethod;
 import org.getalp.ml.optimization.org.getalp.util.Vectors;
 
-public class LovaszExtention implements Extension {
+public class LovaszExtension implements Extension {
 
     private SetFunction function;
 
-    public LovaszExtention() {
+    public LovaszExtension() {
     }
 
 
