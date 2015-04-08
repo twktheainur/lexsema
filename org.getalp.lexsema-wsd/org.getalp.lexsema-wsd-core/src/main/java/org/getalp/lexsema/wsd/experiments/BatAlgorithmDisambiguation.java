@@ -8,11 +8,11 @@ import org.getalp.lexsema.io.document.TextLoader;
 import org.getalp.lexsema.io.resource.LRLoader;
 import org.getalp.lexsema.io.resource.dictionary.DictionaryLRLoader;
 import org.getalp.lexsema.similarity.Document;
-import org.getalp.lexsema.similarity.measures.IndexedOverlapSimilarity;
-import org.getalp.lexsema.similarity.measures.SimilarityMeasure;
 import org.getalp.lexsema.wsd.configuration.Configuration;
 import org.getalp.lexsema.wsd.method.BatAlgorithm;
 import org.getalp.lexsema.wsd.method.Disambiguator;
+import org.getalp.lexsema.wsd.score.ConfigurationScorer;
+import org.getalp.lexsema.wsd.score.SemEval2007Task7PerfectConfigurationScorer;
 
 public class BatAlgorithmDisambiguation
 {
@@ -40,7 +40,7 @@ public class BatAlgorithmDisambiguation
         if (args.length >= 9) alpha = Double.valueOf(args[8]);
         if (args.length >= 10) gamma = Double.valueOf(args[9]);
         
-        System.out.print("Parameters value : " + 
+        System.out.println("Parameters value : " + 
                          "<iterations = " + iterationsNumber + "> " +
                          "<bats number = " + batsNumber + "> " +
                          "<min frequency = " + minFrequency + "> " +
@@ -56,15 +56,15 @@ public class BatAlgorithmDisambiguation
         long startTime = System.currentTimeMillis();
 
         TextLoader dl = new Semeval2007TextLoader("../data/senseval2007_task7/test/eng-coarse-all-words.xml")
-                .loadNonInstances(true);
+                .loadNonInstances(false);
 
         LRLoader lrloader = new DictionaryLRLoader(new File("../data/dictionnaires-lesk/dict-adapted-all-relations.xml"));
 
-        SimilarityMeasure sim = new IndexedOverlapSimilarity();
+        ConfigurationScorer scorer = new SemEval2007Task7PerfectConfigurationScorer();
 
         Disambiguator batDisambiguator = new BatAlgorithm(iterationsNumber, batsNumber, minFrequency, 
                                                           maxFrequency, minLoudness, maxLoudness,
-                                                          minRate, maxRate, alpha, gamma, sim);
+                                                          minRate, maxRate, alpha, gamma, scorer);
 
         System.out.println("Loading texts...");
         dl.load();

@@ -1,48 +1,27 @@
 package org.getalp.lexsema.wsd.score;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-
-import org.getalp.lexsema.io.annotresult.SemevalWriter;
 import org.getalp.lexsema.similarity.Document;
 import org.getalp.lexsema.wsd.configuration.Configuration;
+import org.getalp.lexsema.wsd.configuration.org.getalp.lexsema.wsd.evaluation.Semeval2007GoldStandard;
+import org.getalp.lexsema.wsd.configuration.org.getalp.lexsema.wsd.evaluation.StandardEvaluation;
+import org.getalp.lexsema.wsd.configuration.org.getalp.lexsema.wsd.evaluation.WSDResult;
 
 public class SemEval2007Task7PerfectConfigurationScorer implements ConfigurationScorer
 {
-    private String scorerScriptPath;
+    private Semeval2007GoldStandard goldStandard;
     
-    public SemEval2007Task7PerfectConfigurationScorer(String scorerScriptPath)
+    private StandardEvaluation evaluation;
+    
+    public SemEval2007Task7PerfectConfigurationScorer()
     {
-        this.scorerScriptPath = scorerScriptPath;
+        goldStandard = new Semeval2007GoldStandard();
+        evaluation = new StandardEvaluation();
     }
     
     public double computeScore(Document document, Configuration configuration)
     {
-        try
-        {
-            Process process = Runtime.getRuntime().exec("mktemp");
-            BufferedReader stdin = new BufferedReader(new InputStreamReader(process.getInputStream()));
-            process.waitFor();
-            String randomFilePath = stdin.readLine();
-
-            SemevalWriter sw = new SemevalWriter(randomFilePath);
-            sw.write(document, configuration.getAssignments());
-            
-            process = Runtime.getRuntime().exec(new String[]{scorerScriptPath, randomFilePath});
-            stdin = new BufferedReader(new InputStreamReader(process.getInputStream()));
-            process.waitFor();
-            double score = Double.valueOf(stdin.readLine());
-            
-            Runtime.getRuntime().exec(new String[]{"rm", randomFilePath});
-            
-            return score;
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
-        
-        return 0;
+        WSDResult result = evaluation.evaluate(goldStandard, configuration);
+        return result.getF1Score();
     }
 
     public void release()

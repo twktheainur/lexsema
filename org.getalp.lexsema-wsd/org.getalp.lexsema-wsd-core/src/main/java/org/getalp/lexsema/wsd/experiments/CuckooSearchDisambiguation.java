@@ -8,11 +8,11 @@ import org.getalp.lexsema.io.document.TextLoader;
 import org.getalp.lexsema.io.resource.LRLoader;
 import org.getalp.lexsema.io.resource.dictionary.DictionaryLRLoader;
 import org.getalp.lexsema.similarity.Document;
-import org.getalp.lexsema.similarity.measures.IndexedOverlapSimilarity;
-import org.getalp.lexsema.similarity.measures.SimilarityMeasure;
 import org.getalp.lexsema.wsd.configuration.Configuration;
 import org.getalp.lexsema.wsd.method.CuckooSearch;
 import org.getalp.lexsema.wsd.method.Disambiguator;
+import org.getalp.lexsema.wsd.score.ConfigurationScorer;
+import org.getalp.lexsema.wsd.score.SemEval2007Task7PerfectConfigurationScorer;
 
 public class CuckooSearchDisambiguation
 {
@@ -28,25 +28,28 @@ public class CuckooSearchDisambiguation
         if (args.length >= 3) nestsNumber = Integer.valueOf(args[2]);
         if (args.length >= 4) destroyedNests = Integer.valueOf(args[3]);
         
-        System.out.print("Parameters value : <iterations = " + iterations + "> <levy scale = " + levyScale + "> ");
-        System.out.println("<nests number = " + nestsNumber + "> <destroyed nests = " + destroyedNests + "> ");
+        System.out.println("Parameters value : " +
+                           "<iterations = " + iterations + "> " +
+                           "<levy scale = " + levyScale + "> " +
+                           "<nests number = " + nestsNumber + "> " +
+                           "<destroyed nests = " + destroyedNests + "> ");
         
         long startTime = System.currentTimeMillis();
 
         TextLoader dl = new Semeval2007TextLoader("../data/senseval2007_task7/test/eng-coarse-all-words.xml")
-                .loadNonInstances(true);
+                .loadNonInstances(false);
 
         LRLoader lrloader = new DictionaryLRLoader(new File("../data/dictionnaires-lesk/dict-adapted-all-relations.xml"));
+        
+        ConfigurationScorer scorer = new SemEval2007Task7PerfectConfigurationScorer();
 
-        SimilarityMeasure sim = new IndexedOverlapSimilarity();
-
-        Disambiguator cuckooDisambiguator = new CuckooSearch(iterations, levyScale, nestsNumber, destroyedNests, sim);
+        Disambiguator cuckooDisambiguator = new CuckooSearch(iterations, levyScale, nestsNumber, destroyedNests, scorer);
 
         System.out.println("Loading texts...");
         dl.load();
 
         for (Document d : dl)
-        {    
+        {
             System.out.println("Starting document " + d.getId());
             
             System.out.println("Loading senses...");
@@ -54,7 +57,7 @@ public class CuckooSearchDisambiguation
 
             System.out.println("Disambiguating...");
             Configuration c = cuckooDisambiguator.disambiguate(d);
-            
+
             System.out.println("Writing results...");
             SemevalWriter sw = new SemevalWriter(d.getId() + ".ans");
             sw.write(d, c.getAssignments());

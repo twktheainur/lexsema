@@ -1,17 +1,16 @@
 package org.getalp.lexsema.wsd.method;
 
 import org.getalp.lexsema.similarity.Document;
-import org.getalp.lexsema.similarity.measures.SimilarityMeasure;
 import org.getalp.lexsema.wsd.configuration.Configuration;
 import org.getalp.lexsema.wsd.configuration.ContinuousConfiguration;
 import org.getalp.lexsema.wsd.score.ConfigurationScorer;
-import org.getalp.lexsema.wsd.score.TverskyConfigurationScorer;
+
 import java.util.Random;
 
 public class BatAlgorithm implements Disambiguator
 {
     private static final Random random = new Random();
-
+    
     private int iterationsNumber;
 
     private int batsNumber;
@@ -32,14 +31,16 @@ public class BatAlgorithm implements Disambiguator
 
     private double gamma;
 
+    private ConfigurationScorer configurationScorer;
+
     private Document currentDocument;
 
-    private ConfigurationScorer configurationScorer;
+    private int dimension;
 
     private Bat[] bats;
 
     private Bat bestBat;
-
+    
     private class Bat
     {
         private ContinuousConfiguration configuration;
@@ -49,9 +50,6 @@ public class BatAlgorithm implements Disambiguator
         private double initialRate;
         private double rate;
         private double loudness;
-        private int[] previousPosition;
-        private int[] previousVelocity;
-        private boolean needRecomputeScore;
         private double score;
 
         public Bat()
@@ -68,46 +66,20 @@ public class BatAlgorithm implements Disambiguator
             initialRate = randomDoubleInRange(minRate, maxRate);
             rate = initialRate;
             loudness = randomDoubleInRange(minLoudness, maxLoudness);
-            previousPosition = position;
-            previousVelocity = velocity;
-            needRecomputeScore = true;
-            score = getScore();
+            recomputeScore();
         }
 
-        public void setPosition(int[] newPosition)
+        public void recomputeScore()
         {
-            position = newPosition;
-            needRecomputeScore = true;
+            configuration.setSenses(position);
+            score = configurationScorer.computeScore(currentDocument, configuration);
         }
-
-        public double getScore()
-        {
-            if (needRecomputeScore)
-            {
-                configuration.setSenses(position);
-                score = configurationScorer.computeScore(currentDocument, configuration);
-                needRecomputeScore = false;
-            }
-            return score;
-        }
-
-        public void savePositionAndVelocity()
-        {
-            previousPosition = position.clone();
-            previousVelocity = velocity.clone();
-        }
-
-        public void restorePositionAndVelocity()
-        {
-            position = previousPosition;
-            velocity = previousVelocity;
-            needRecomputeScore = true;
-        }
+                
     }
     
     public BatAlgorithm(int iterationsNumber, int batsNumber, double minFrequency, double maxFrequency, 
                         double minLoudness, double maxLoudness, double minRate, double MaxRate, 
-                        double alpha, double gamma, SimilarityMeasure similarityMeasure)
+                        double alpha, double gamma, ConfigurationScorer configurationScorer)
     {
         this.iterationsNumber = iterationsNumber;
         this.batsNumber = batsNumber;
@@ -119,14 +91,14 @@ public class BatAlgorithm implements Disambiguator
         this.maxRate = MaxRate;
         this.alpha = alpha;
         this.gamma = gamma;
-        int threadsNumber = Runtime.getRuntime().availableProcessors();
-        configurationScorer = new TverskyConfigurationScorer(similarityMeasure, threadsNumber);
+        this.configurationScorer = configurationScorer;
         bats = new Bat[batsNumber];
     }
 
     public Configuration disambiguate(Document document)
     {
         currentDocument = document;
+        dimension = document.size();
         
         for (int i = 0 ; i < batsNumber ; ++i)
         {
@@ -142,39 +114,47 @@ public class BatAlgorithm implements Disambiguator
 
             for (Bat currentBat : bats)
             {
+                int[] previousPosition = currentBat.position.clone();
+                int[] previousVelocity = currentBat.velocity.clone();
+                double previousScore = currentBat.score;
+
                 currentBat.frequency = randomDoubleInRange(minFrequency, maxFrequency);
-
-                currentBat.savePositionAndVelocity();
-
-                currentBat.velocity = add(
-                        currentBat.velocity,
-                        multiply(substract(currentBat.position, bestBat.position),
-                                currentBat.frequency));
-                currentBat.setPosition(add(currentBat.position, currentBat.velocity));
-
+                
+                for (int i = 0 ; i < dimension ; i++)
+                {
+                    currentBat.velocity[i] += (currentBat.position[i] - bestBat.position[i]) * currentBat.frequency;
+                    currentBat.position[i] += currentBat.velocity[i];
+                }
+                
                 if (currentBat.rate < randomDoubleInRange(minRate, maxRate))
                 {
-                    // fly randomly around best solutions ?
+                    for (int i = 0 ; i < dimension ; i++)
+                    {
+                        currentBat.position[i] = bestBat.position[i] + (int) random.nextGaussian();
+                    }
                 }
-
-                currentBat.setPosition(add(currentBat.position,
-                                           randomDoubleInRange(-1, 1) * computeAverageLoudness()));
+                
+                currentBat.recomputeScore();
 
                 if (currentBat.loudness > randomDoubleInRange(minLoudness, maxLoudness) &&
-                    currentBat.getScore() > bestBat.getScore())
+                    currentBat.score > previousScore)
                 {
                     currentBat.loudness *= alpha;
                     currentBat.rate = currentBat.initialRate * (1 - Math.exp(-gamma * currentIteration));
+                    if (currentBat.score > bestBat.score)
+                    {
+                        bestBat = currentBat;
+                    }
                 }
                 else
                 {
-                    currentBat.restorePositionAndVelocity();
+                    currentBat.position = previousPosition;
+                    currentBat.velocity = previousVelocity;
+                    currentBat.score = previousScore;
                 }
             }
-
-            updateBestBat();
             
-            System.out.println("Current best : " + bestBat.getScore());
+            System.out.println("Current best : " + bestBat.score);
         }
 
         return bestBat.configuration;
@@ -195,68 +175,18 @@ public class BatAlgorithm implements Disambiguator
         return min + (max - min) * random.nextDouble();
     }
 
-    private int[] substract(int[] leftOperand, int[] rightOperand)
-    {
-        int[] result = new int[Math.min(leftOperand.length, rightOperand.length)];
-        for (int i = 0; i < result.length; i++)
-        {
-            result[i] = leftOperand[i] - rightOperand[i];
-        }
-        return result;
-    }
-
-    private int[] multiply(int[] leftOperand, double rightOperand)
-    {
-        int[] result = new int[leftOperand.length];
-        for (int i = 0; i < result.length; i++)
-        {
-            result[i] = (int) (leftOperand[i] * rightOperand);
-        }
-        return result;
-    }
-
-    private int[] add(int[] leftOperand, int[] rightOperand)
-    {
-        int[] result = new int[Math.min(leftOperand.length, rightOperand.length)];
-        for (int i = 0; i < result.length; i++)
-        {
-            result[i] = leftOperand[i] + rightOperand[i];
-        }
-        return result;
-    }
-
-    private int[] add(int[] leftOperand, double rightOperand)
-    {
-        int[] result = new int[leftOperand.length];
-        for (int i = 0; i < result.length; i++)
-        {
-            result[i] = (int) (leftOperand[i] + rightOperand);
-        }
-        return result;
-    }
-
     private void updateBestBat()
     {
         double bestScore = Double.MIN_VALUE;
         for (Bat currentBat : bats)
         {
-            double currentScore = currentBat.getScore();
+            double currentScore = currentBat.score;
             if (currentScore > bestScore)
             {
                 bestScore = currentScore;
                 bestBat = currentBat;
             }
         }
-    }
-
-    private double computeAverageLoudness()
-    {
-        double loudnessesSum = 0;
-        for (Bat currentBat : bats)
-        {
-            loudnessesSum += currentBat.loudness;
-        }
-        return loudnessesSum / (double) batsNumber;
     }
 
 }
