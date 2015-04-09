@@ -3,8 +3,7 @@ package org.getalp.lexsema.io.resource.dictionary;
 
 import org.getalp.lexsema.similarity.Sense;
 import org.getalp.lexsema.similarity.SenseImpl;
-import org.getalp.lexsema.similarity.signatures.SemanticSignature;
-import org.getalp.lexsema.similarity.signatures.SemanticSignatureImpl;
+import org.getalp.lexsema.similarity.signatures.*;
 import org.xml.sax.Attributes;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.Locator;
@@ -27,15 +26,17 @@ public class DictionaryParser implements ContentHandler {
     Sense mw;
     boolean emptyDef;
     boolean ids, def;
+    boolean indexed;
     @SuppressWarnings("unused")
     private Locator locator;
+    private String currentSemanticSignature = "";
 
     /**
      * Constructeur par defaut.
      *
      * @throws FileNotFoundException
      */
-    public DictionaryParser(Map<String, List<Sense>> c) throws FileNotFoundException {
+    public DictionaryParser(Map<String, List<Sense>> c, boolean indexed) throws FileNotFoundException {
         super();
         //noinspection AssignmentToCollectionOrArrayFieldFromParameter
         dico = c;
@@ -44,6 +45,7 @@ public class DictionaryParser implements ContentHandler {
         // On definit le locator par defaut.
         locator = new LocatorImpl();
         emptyDef = false;
+        this.indexed = indexed;
     }
 
     /**
@@ -126,6 +128,7 @@ public class DictionaryParser implements ContentHandler {
                 break;
             case "def":
                 def = true;
+                currentSemanticSignature = "";
                 break;
         }
     }
@@ -152,6 +155,22 @@ public class DictionaryParser implements ContentHandler {
                 break;
             case "def":
                 def = false;
+                if (indexed) {
+                    IndexedSemanticSignature semanticSignature = new IndexedSemanticSignatureImpl();
+                    StringTokenizer st = new StringTokenizer(currentSemanticSignature);
+                    while (st.hasMoreTokens()) {
+                        semanticSignature.addSymbol(Integer.valueOf(st.nextToken()));
+                    }
+                    mw.setSemanticSignature(semanticSignature);
+                } else {
+                    StringSemanticSignature semanticSignature = new StringSemanticSignatureImpl();
+                    StringTokenizer st = new StringTokenizer(currentSemanticSignature);
+                    while (st.hasMoreTokens()) {
+                        semanticSignature.addSymbol(st.nextToken());
+                    }
+                    mw.setSemanticSignature(semanticSignature);
+                }
+
                 break;
         }
     }
@@ -180,9 +199,7 @@ public class DictionaryParser implements ContentHandler {
             }
         } else if (def) {
             String defs = new String(ch, start, end);
-            SemanticSignature semanticSignature = new SemanticSignatureImpl();
-            semanticSignature.addSymbolString(defs);
-            mw.setSemanticSignature(semanticSignature);
+            currentSemanticSignature += defs;
         }
     }
 

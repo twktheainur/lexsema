@@ -35,12 +35,14 @@ public class ConfidenceConfiguration implements Configuration {
                 break;
         }
         confidence = new DenseDoubleMatrix1D(documentSize);
+        document = d;
     }
 
     @SuppressWarnings("MethodParameterOfConcreteClass") // Copy constructor
     public ConfidenceConfiguration(final ConfidenceConfiguration d) {
         assignments = d.assignments.clone();
         confidence = d.confidence.copy();
+        document = d.getDocument();
     }
 
     private void noAssignmentInit(int documentSize) {

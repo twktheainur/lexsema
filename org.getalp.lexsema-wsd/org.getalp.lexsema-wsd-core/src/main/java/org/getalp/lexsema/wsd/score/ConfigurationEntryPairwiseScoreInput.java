@@ -52,7 +52,7 @@ public class ConfigurationEntryPairwiseScoreInput extends AbstractSetFunctionInp
             }
         }
         int pairIndex = 0;
-        for (int i = 0; i < configuration.size(); i++) {
+        for (int i = currentIndex; i < configuration.size(); i++) {
             double value = 0;
             if (i != currentIndex) {
                 int assig = configuration.getAssignment(i);
@@ -64,8 +64,8 @@ public class ConfigurationEntryPairwiseScoreInput extends AbstractSetFunctionInp
 
                         getInput().setQuick(pairIndex, 1d);
                         if (currentWordSelectedSense != null && otherWordSense != null) {
-                            value = sim.compute(currentWordSelectedSense.getSemanticSignature(),
-                                    otherWordSense.getSemanticSignature(), null, null);
+                            value = currentWordSelectedSense.computeSimilarityWith(sim, otherWordSense);
+                            //System.err.println(value);
                             getValues().setQuick(pairIndex, value);
                         }
                     }

@@ -66,11 +66,7 @@ public class ConfigurationPairScoreInput extends AbstractSetFunctionInput {
                 if (sense1 != null && sense2 != null) {
                     score = ValueScale.scaleValue(
                             0, 1, 0, 5,
-                            sim.compute(
-                                    sense1.getSemanticSignature(),
-                                    sense2.getSemanticSignature(),
-                                    sense1.getRelatedSignatures(),
-                                    sense2.getRelatedSignatures())
+                            sense1.computeSimilarityWith(sim, sense2)
                     );
                 }
                 getInput().setQuick(pairindex, 1d);

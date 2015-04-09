@@ -8,8 +8,8 @@ import org.getalp.lexsema.similarity.Sense;
 import org.getalp.lexsema.similarity.SenseImpl;
 import org.getalp.lexsema.similarity.Word;
 import org.getalp.lexsema.similarity.cache.SenseCacheImpl;
-import org.getalp.lexsema.similarity.signatures.SemanticSignature;
-import org.getalp.lexsema.similarity.signatures.SemanticSignatureImpl;
+import org.getalp.lexsema.similarity.signatures.StringSemanticSignature;
+import org.getalp.lexsema.similarity.signatures.StringSemanticSignatureImpl;
 import org.getalp.lexsema.util.StopList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -59,7 +59,7 @@ public class WordnetLoader implements LRLoader {
         if (iw != null) {
             for (int j = 0; j < iw.getWordIDs().size(); j++) {
 
-                SemanticSignature signature = new SemanticSignatureImpl();
+                StringSemanticSignature signature = new StringSemanticSignatureImpl();
                 IWord word = dictionary.getWord(iw.getWordIDs().get(j));
                 if (loadDefinitions) {
                     String def = word.getSynset().getGloss();
@@ -72,7 +72,7 @@ public class WordnetLoader implements LRLoader {
                     Map<IPointer, List<IWordID>> rm = word.getRelatedMap();
                     for (IPointer p : rm.keySet()) {
                         for (IWordID iwd : rm.get(p)) {
-                            SemanticSignature localSignature = new SemanticSignatureImpl();
+                            StringSemanticSignature localSignature = new StringSemanticSignatureImpl();
                             addToSignature(localSignature, dictionary.getWord(iwd).getSynset().getGloss());
                             if (hasExtendedSignature) {
                                 signature.appendSignature(localSignature);
@@ -114,7 +114,7 @@ public class WordnetLoader implements LRLoader {
         return senses;
     }
 
-    private void addToSignature(SemanticSignature signature, String def) {
+    private void addToSignature(StringSemanticSignature signature, String def) {
         StringTokenizer st = new StringTokenizer(def, " ", false);
         SnowballStemmer stemmer = new englishStemmer();
         int ww = 0;

@@ -6,9 +6,8 @@ import org.getalp.lexsema.similarity.Document;
 import org.getalp.lexsema.similarity.Sense;
 import org.getalp.lexsema.similarity.Word;
 import org.getalp.lexsema.similarity.measures.SimilarityMeasure;
-import org.getalp.lexsema.similarity.signatures.SemanticSignature;
-import org.getalp.lexsema.similarity.signatures.SemanticSignatureImpl;
-import org.getalp.lexsema.similarity.signatures.SemanticSymbol;
+import org.getalp.lexsema.similarity.signatures.StringSemanticSignature;
+import org.getalp.lexsema.similarity.signatures.StringSemanticSignatureImpl;
 import org.getalp.lexsema.wsd.configuration.Configuration;
 import org.getalp.lexsema.wsd.method.sequencial.parameters.SimplifiedLeskParameters;
 
@@ -43,18 +42,6 @@ public class SimplifiedLeskLexicalEntryDisambiguator extends SequentialLexicalEn
             for (int j = getStart(); j < getEnd(); j++) {
                 if (params.isIncludeTarget() || !params.isIncludeTarget() && j != getCurrentIndex()) {
                     Word cw = getDocument().getWord(0, j);
-                    boolean isOverlap = false;
-                    if (params.isOnlyOverlapContexts()) {
-                        for (Sense s : getDocument().getSenses(0, getCurrentIndex())) {
-                            for (String wd : s.getSemanticSignature().getSymbols()) {
-                                if (sl.score(cw.getSurfaceForm(), wd) > 0) {
-                                    isOverlap = true;
-                                    break;
-                                }
-                            }
-                        }
-                    }
-                    if (params.isOnlyOverlapContexts() && isOverlap || !params.isOnlyOverlapContexts()) {
                         for (Word prevWord : cw) {
                             String lemma = prevWord.getLemma();
                             if (lemma != null && !lemma.isEmpty()) {
@@ -65,16 +52,8 @@ public class SimplifiedLeskLexicalEntryDisambiguator extends SequentialLexicalEn
                         }
                         context.add(cw.getSurfaceForm());
                     }
-                    if (params.isAddSenseSignatures()) {
-                        for (Sense s : getSenses(0, j)) {
-                            for (SemanticSymbol ss : s.getSemanticSignature()) {
-                                context.add(ss.getSymbol());
-                            }
-                        }
-                    }
-                }
             }
-            SemanticSignature lcontext = new SemanticSignatureImpl();
+            StringSemanticSignature lcontext = new StringSemanticSignatureImpl();
             lcontext.addSymbolString(new ArrayList<>(context));
             int index;
             int minIndex = -1;
@@ -93,7 +72,7 @@ public class SimplifiedLeskLexicalEntryDisambiguator extends SequentialLexicalEn
 
             List<Sense> senses = getSenses(0, getCurrentIndex());
             for (int s = 0; s < senses.size(); s++) {
-                double score = similarityMeasure.compute(senses.get(s).getSemanticSignature(), lcontext, null, null);
+                double score = lcontext.computeSimilarityWith(similarityMeasure, senses.get(s).getSemanticSignature(), null, null);
                 //System.err.println(score);
                 if (score <= minValue) {
                     prevMinValue = minValue;

@@ -5,10 +5,12 @@ import org.getalp.lexsema.io.resource.LRLoader;
 import org.getalp.lexsema.io.resource.wordnet.WordnetLoader;
 import org.getalp.lexsema.io.sentences.STS2013SentencePairLoader;
 import org.getalp.lexsema.similarity.Sentence;
+import org.getalp.lexsema.similarity.Word;
 import org.getalp.lexsema.similarity.measures.SimilarityMeasure;
 import org.getalp.lexsema.similarity.measures.TverskiIndexSimilarityMeasureBuilder;
-import org.getalp.lexsema.similarity.signatures.SemanticSignature;
-import org.getalp.lexsema.similarity.signatures.SemanticSignatureImpl;
+import org.getalp.lexsema.similarity.signatures.StringSemanticSignature;
+import org.getalp.lexsema.similarity.signatures.StringSemanticSignatureImpl;
+import org.getalp.lexsema.similarity.signatures.StringSemanticSymbolImpl;
 import org.getalp.lexsema.util.ValueScale;
 import org.getalp.lexsema.wsd.configuration.Configuration;
 import org.getalp.lexsema.wsd.method.Disambiguator;
@@ -93,10 +95,15 @@ public class CLWSD2013 {
             double wsdScore = f.F(pairScore);
             wsdScore /= Math.max(sentence1.size(), sentence2.size());
 
-            SemanticSignature semanticSignature1 = new SemanticSignatureImpl();
-            SemanticSignature semanticSignature2 = new SemanticSignatureImpl();
-            semanticSignature1.addSymbolString(sentence1.toString());
-            semanticSignature2.addSymbolString(sentence2.toString());
+            StringSemanticSignature semanticSignature1 = new StringSemanticSignatureImpl();
+            StringSemanticSignature semanticSignature2 = new StringSemanticSignatureImpl();
+            for (Word w : sentence1) {
+                semanticSignature1.addSymbol(new StringSemanticSymbolImpl(w.getSurfaceForm(), 1.0));
+            }
+            for (Word w : sentence2) {
+                semanticSignature2.addSymbol(new StringSemanticSymbolImpl(w.getSurfaceForm(), 1.0));
+            }
+
             double stringScore = similarityMeasure.compute(semanticSignature1,
                     semanticSignature2, null, null);
             stringScore = ValueScale.scaleValue(stringScore, 0, 1, 0, 5);

@@ -23,7 +23,9 @@ import org.getalp.lexsema.ontolex.graph.storage.StoreHandler;
 import org.getalp.lexsema.ontolex.graph.store.Store;
 import org.getalp.lexsema.similarity.Sense;
 import org.getalp.lexsema.similarity.signatures.SemanticSignature;
-import org.getalp.lexsema.similarity.signatures.SemanticSignatureImpl;
+import org.getalp.lexsema.similarity.signatures.StringSemanticSignature;
+import org.getalp.lexsema.similarity.signatures.StringSemanticSignatureImpl;
+import org.getalp.lexsema.similarity.signatures.StringSemanticSymbolImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -32,6 +34,7 @@ import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.Set;
+import java.util.StringTokenizer;
 
 import static java.io.File.separator;
 
@@ -128,8 +131,11 @@ public final class PrintTranslatedClosure {
             SemanticSignature originalSignature = sense.getSemanticSignature();
             String definition = sense.getDefinition();
             String translatedDefinition = translator.translate(definition, sense.getLanguage(), targetLanguage);
-            SemanticSignature translatedSignature = new SemanticSignatureImpl();
-            translatedSignature.addSymbolString(translatedDefinition);
+            StringSemanticSignature translatedSignature = new StringSemanticSignatureImpl();
+            StringTokenizer tokenizer = new StringTokenizer(translatedDefinition);
+            while (tokenizer.hasMoreTokens()) {
+                translatedSignature.addSymbol(new StringSemanticSymbolImpl(tokenizer.nextToken(), 1d));
+            }
             sense.setSemanticSignature(translatedSignature);
             logger.info(sense.toString());
             sense.setSemanticSignature(originalSignature);

@@ -24,21 +24,21 @@ public class Word2VecLocalSignatureEnrichment implements SignatureEnrichment {
         this.topN = topN;
     }
 
-    private List<SemanticSymbol> enrichSemanticSymbol(SemanticSymbol semanticSymbol) {
+    private List<StringSemanticSymbol> enrichSemanticSymbol(StringSemanticSymbol semanticSymbol) {
         String word = semanticSymbol.getSymbol();
         word = word.replaceAll("\\p{Punct}", "");
         Collection<String> related = word2Vec.wordsNearest(word, topN);
-        List<SemanticSymbol> symbols = new ArrayList<>();
+        List<StringSemanticSymbol> symbols = new ArrayList<>();
         for (String sword : related) {
-            symbols.add(new SemanticSymbolImpl(sword, 1.0));
+            symbols.add(new StringSemanticSymbolImpl(sword, 1.0));
         }
         return symbols;
     }
 
     @Override
-    public SemanticSignature enrichSemanticSignature(SemanticSignature semanticSignature) {
-        SemanticSignature newSignature = new SemanticSignatureImpl();
-        for (SemanticSymbol semanticSymbol : semanticSignature) {
+    public StringSemanticSignature enrichSemanticSignature(StringSemanticSignature semanticSignature) {
+        StringSemanticSignature newSignature = new StringSemanticSignatureImpl();
+        for (StringSemanticSymbol semanticSymbol : semanticSignature) {
             newSignature.addSymbols(enrichSemanticSymbol(semanticSymbol));
         }
         return newSignature;

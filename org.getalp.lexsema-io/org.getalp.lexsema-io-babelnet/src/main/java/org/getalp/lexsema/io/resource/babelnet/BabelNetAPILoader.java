@@ -15,8 +15,8 @@ import org.getalp.lexsema.similarity.SenseImpl;
 import org.getalp.lexsema.similarity.Word;
 import org.getalp.lexsema.similarity.cache.SenseCache;
 import org.getalp.lexsema.similarity.cache.SenseCacheImpl;
-import org.getalp.lexsema.similarity.signatures.SemanticSignature;
-import org.getalp.lexsema.similarity.signatures.SemanticSignatureImpl;
+import org.getalp.lexsema.similarity.signatures.StringSemanticSignature;
+import org.getalp.lexsema.similarity.signatures.StringSemanticSignatureImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -53,7 +53,7 @@ public class BabelNetAPILoader implements LRLoader {
 
 
             for (BabelSense bs : babelSenses) {
-                SemanticSignature signature = new SemanticSignatureImpl();
+                StringSemanticSignature signature = new StringSemanticSignatureImpl();
                 if (loadDefinitions) {
                     String def = "";
                     List<BabelGloss> glosses = bs.getSynset().getGlosses(toBabelNetLanguage(language));
@@ -74,7 +74,7 @@ public class BabelNetAPILoader implements LRLoader {
                             for (BabelGloss rbg : relatedGlosses) {
                                 localDef += rbg.getGloss();
                             }
-                            SemanticSignature localSignature = new SemanticSignatureImpl();
+                            StringSemanticSignature localSignature = new StringSemanticSignatureImpl();
                             addToSignature(localSignature, localDef);
                             if (hasExtendedSignature) {
                                 signature.appendSignature(localSignature);
@@ -109,7 +109,7 @@ public class BabelNetAPILoader implements LRLoader {
         return senses;
     }
 
-    private void addToSignature(SemanticSignature signature, String def) {
+    private void addToSignature(StringSemanticSignature signature, String def) {
         StringTokenizer st = new StringTokenizer(def, " ", false);
         while (st.hasMoreTokens()) {
             String token = st.nextToken();

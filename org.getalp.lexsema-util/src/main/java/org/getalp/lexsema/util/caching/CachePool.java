@@ -33,7 +33,7 @@ public final class CachePool {
             if (props != null) {
                 properties.load(props);
                 if (properties.containsKey("lexsema.cache.provider")) {
-                    provider = CacheProvider.valueOf(properties.getProperty("lexsema.cache.provider"));
+                    provider = CacheProvider.valueOf(properties.getProperty("lexsema.cache.provider").toUpperCase());
                     logger.info(String.format("[CONFIG] Loaded lexsema.cache.provider=%s", provider.toString()));
                 }
                 if (properties.containsKey("lexsema.cache.host")) {
@@ -62,6 +62,9 @@ public final class CachePool {
                 } else {
                     resourceProvider = new JedisCachePoolProvider(host);
                 }
+                break;
+            case MAP:
+                resourceProvider = new GenericPooledResourceProvider();
                 break;
             case DUMMY:
             default:

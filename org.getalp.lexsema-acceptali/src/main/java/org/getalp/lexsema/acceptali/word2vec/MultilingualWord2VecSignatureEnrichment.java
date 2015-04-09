@@ -2,9 +2,9 @@ package org.getalp.lexsema.acceptali.word2vec;
 
 
 import org.getalp.lexsema.language.Language;
-import org.getalp.lexsema.similarity.signatures.SemanticSignature;
-import org.getalp.lexsema.similarity.signatures.SemanticSignatureImpl;
 import org.getalp.lexsema.similarity.signatures.SignatureEnrichment;
+import org.getalp.lexsema.similarity.signatures.StringSemanticSignature;
+import org.getalp.lexsema.similarity.signatures.StringSemanticSignatureImpl;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -27,8 +27,8 @@ public class MultilingualWord2VecSignatureEnrichment implements MultilingualSign
     }
 
     @Override
-    public SemanticSignature enrichSemanticSignature(SemanticSignature semanticSignature) {
-        SemanticSignature finalSig = new SemanticSignatureImpl();
+    public StringSemanticSignature enrichSemanticSignature(StringSemanticSignature semanticSignature) {
+        StringSemanticSignature finalSig = new StringSemanticSignatureImpl();
         for (Language language : processors.keySet()) {
             finalSig.appendSignature(processors.get(language).enrichSemanticSignature(semanticSignature));
         }
@@ -45,7 +45,7 @@ public class MultilingualWord2VecSignatureEnrichment implements MultilingualSign
     }
 
     @Override
-    public SemanticSignature enrichSemanticSignature(SemanticSignature semanticSignature, Language language) {
+    public StringSemanticSignature enrichSemanticSignature(StringSemanticSignature semanticSignature, Language language) {
         SignatureEnrichment processor;
         if (processors.containsKey(language)) {
             processor = processors.get(language);

@@ -1,12 +1,15 @@
 package org.getalp.lexsema.acceptali.word2vec;
 
-import org.getalp.lexsema.similarity.signatures.SemanticSignature;
-import org.getalp.lexsema.similarity.signatures.SemanticSignatureImpl;
 import org.getalp.lexsema.similarity.signatures.SignatureEnrichment;
+import org.getalp.lexsema.similarity.signatures.StringSemanticSignature;
+import org.getalp.lexsema.similarity.signatures.StringSemanticSignatureImpl;
 import org.getalp.lexsema.util.caching.Cache;
 import org.getalp.lexsema.util.caching.CachePool;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 
 
 public class JedisCachedSignatureEnrichment implements SignatureEnrichment {
@@ -36,9 +39,10 @@ public class JedisCachedSignatureEnrichment implements SignatureEnrichment {
         return String.format("%s____%s____%s", prefix, getClass().getCanonicalName(), key);
     }
 
-    private SemanticSignature signatureFromCachedString(String cachedString) {
-        SemanticSignature semanticSignature = new SemanticSignatureImpl();
-        semanticSignature.addSymbolString(cachedString);
+    private StringSemanticSignature signatureFromCachedString(String cachedString) {
+        StringSemanticSignature semanticSignature = new StringSemanticSignatureImpl();
+
+        semanticSignature.addSymbolString(new ArrayList<>(Arrays.asList(cachedString.split(" "))));
         return semanticSignature;
     }
 
@@ -48,9 +52,9 @@ public class JedisCachedSignatureEnrichment implements SignatureEnrichment {
     }
 
     @Override
-    public SemanticSignature enrichSemanticSignature(SemanticSignature semanticSignature) {
+    public StringSemanticSignature enrichSemanticSignature(StringSemanticSignature semanticSignature) {
         String key = produceKey(semanticSignature.toString());
-        SemanticSignature signature;
+        StringSemanticSignature signature;
         if (!cache.exists(key)) {
             if (signatureEnrichmentEngine != null) {
                 signatureEnrichmentEngine.enrichSemanticSignature(semanticSignature);

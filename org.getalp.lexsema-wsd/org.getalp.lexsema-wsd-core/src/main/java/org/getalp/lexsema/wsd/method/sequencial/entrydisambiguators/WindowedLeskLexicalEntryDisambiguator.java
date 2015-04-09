@@ -5,10 +5,8 @@ import org.getalp.lexsema.similarity.measures.SimilarityMeasure;
 import org.getalp.lexsema.wsd.configuration.Configuration;
 import org.getalp.lexsema.wsd.configuration.SubConfiguration;
 import org.getalp.lexsema.wsd.method.sequencial.parameters.WindowedLeskParameters;
-import org.getalp.lexsema.wsd.score.ConfigurationEntryPairwiseScoreInput;
-import org.getalp.ml.optimization.functions.Function;
-import org.getalp.ml.optimization.functions.input.FunctionInput;
-import org.getalp.ml.optimization.functions.setfunctions.submodular.Sum;
+import org.getalp.lexsema.wsd.score.ACSimilarityConfigurationScorer;
+import org.getalp.lexsema.wsd.score.ConfigurationScorer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,8 +17,9 @@ public class WindowedLeskLexicalEntryDisambiguator extends SequentialLexicalEntr
 
     private final static Logger logger = LoggerFactory.getLogger(WindowedLeskLexicalEntryDisambiguator.class);
 
-    WindowedLeskParameters params;
-    SimilarityMeasure similarityMeasure;
+    private WindowedLeskParameters params;
+    private SimilarityMeasure similarityMeasure;
+    private ConfigurationScorer configurationScorer;
 
     public WindowedLeskLexicalEntryDisambiguator(Configuration c, Document d, SimilarityMeasure sim,
                                                  WindowedLeskParameters params,
@@ -28,6 +27,7 @@ public class WindowedLeskLexicalEntryDisambiguator extends SequentialLexicalEntr
         super(c, d, start, end, currentIndex);
         this.params = params;
         similarityMeasure = sim;
+        configurationScorer = new ACSimilarityConfigurationScorer(sim);
     }
 
     @Override
@@ -60,10 +60,11 @@ public class WindowedLeskLexicalEntryDisambiguator extends SequentialLexicalEntr
                     //System.err.print( progress + " ==> "+currentEntry.getLemma()+"#"+ currentEntry.getPos() + " ["+cmb+"/"+combinations.size()+" | "+wordProgress +"]\r");
                     Configuration sc = combinations.get(cmb);
 
-                    FunctionInput sci = new ConfigurationEntryPairwiseScoreInput(sc, getDocument(),
+                    /*FunctionInput sci = new ConfigurationEntryPairwiseScoreInput(sc, getDocument(),
                             getCurrentIndex() - sc.getStart(), similarityMeasure);
                     Function f = new Sum(1);
-                    double score = f.F(sci) / sc.size();
+                    double score = f.F(sci) / sc.size();*/
+                    double score = configurationScorer.computeScore(getDocument(), sc);
                     //System.err.println(score);
                     if (score <= minValue) {
                         prevMinValue = minValue;
@@ -122,7 +123,7 @@ public class WindowedLeskLexicalEntryDisambiguator extends SequentialLexicalEntr
             getConfiguration().setSense(getCurrentIndex(), selected);
             getConfiguration().setConfidence(getCurrentIndex(), 1d);
         } catch (RuntimeException ex) {
-            //ex.printStackTrace();
+            ex.printStackTrace();
             logger.error(ex.getLocalizedMessage());
             System.exit(1);
         }

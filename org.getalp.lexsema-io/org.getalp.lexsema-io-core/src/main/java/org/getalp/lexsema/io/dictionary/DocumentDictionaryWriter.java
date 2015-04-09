@@ -4,7 +4,6 @@ import org.getalp.lexsema.ontolex.LexicalEntry;
 import org.getalp.lexsema.similarity.Document;
 import org.getalp.lexsema.similarity.Sense;
 import org.getalp.lexsema.similarity.Text;
-import org.getalp.lexsema.similarity.signatures.SemanticSymbol;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -85,11 +84,7 @@ public class DocumentDictionaryWriter implements DictionaryWriter {
     private void writeSenseContent(PrintWriter pw, Sense sense) {
         pw.println(String.format("<ids>%s</ids>", sense.getId()));
         pw.print("<def>");
-        StringBuilder symbolBuilder = new StringBuilder();
-        for (SemanticSymbol symbol : sense.getSemanticSignature()) {
-            symbolBuilder.append(String.format("%s ", symbol.getSymbol()));
-        }
-        pw.print(symbolBuilder.toString().trim());
+        pw.print(sense.getSemanticSignature().toString());
         pw.println("</def>");
     }
 }

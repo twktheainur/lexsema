@@ -5,7 +5,8 @@ import com.wcohen.ss.AbstractStringDistance;
 import com.wcohen.ss.ScaledLevenstein;
 import org.getalp.lexsema.org.getalp.ml.optimization.functions.setfunctions.input.FuzzyCommonSubsequenceInput;
 import org.getalp.lexsema.org.getalp.ml.optimization.functions.setfunctions.input.OverlapInputSet;
-import org.getalp.lexsema.similarity.signatures.SemanticSignature;
+import org.getalp.lexsema.similarity.signatures.IndexedSemanticSignature;
+import org.getalp.lexsema.similarity.signatures.StringSemanticSignature;
 import org.getalp.ml.optimization.functions.input.FunctionInput;
 import org.getalp.ml.optimization.functions.setfunctions.extentions.Extension;
 import org.getalp.ml.optimization.functions.setfunctions.extentions.LovaszExtension;
@@ -45,9 +46,9 @@ public class TverskiIndexSimilarityMeasureImpl implements TverskiIndexSimilarity
 
 
     @Override
-    public double compute(SemanticSignature sigA, SemanticSignature sigB,
-                          Map<String, SemanticSignature> relatedSignaturesA,
-                          Map<String, SemanticSignature> relatedSignaturesB) {
+    public double compute(StringSemanticSignature sigA, StringSemanticSignature sigB,
+                          Map<String, StringSemanticSignature> relatedSignaturesA,
+                          Map<String, StringSemanticSignature> relatedSignaturesB) {
 
         List<String> a = sigA.getSymbols();
         List<String> b = sigB.getSymbols();
@@ -64,10 +65,21 @@ public class TverskiIndexSimilarityMeasureImpl implements TverskiIndexSimilarity
         return computeTverski(overlap, a.size(), b.size());
     }
 
+    @Override
+    public double compute(IndexedSemanticSignature sigA, IndexedSemanticSignature sigB, Map<String, IndexedSemanticSignature> relatedSignaturesA, Map<String, IndexedSemanticSignature> relatedSignaturesB) {
+        List<Integer> a = sigA.getSymbols();
+        List<Integer> b = sigA.getSymbols();
+
+        double overlap = computeIntegerOverlap(a, b);
+                /*If extendedLesk is enabled, creating the similarity values for relation pairs*/
+
+        return computeTverski(overlap, a.size(), b.size());
+    }
+
     @SuppressWarnings("FeatureEnvy")
     private double computeExtension(List<String> a, List<String> b,
-                                    Map<String, SemanticSignature> relatedSignaturesA,
-                                    Map<String, SemanticSignature> relatedSignaturesB) {
+                                    Map<String, StringSemanticSignature> relatedSignaturesA,
+                                    Map<String, StringSemanticSignature> relatedSignaturesB) {
         List<Double> values = new ArrayList<>();
             /*This case is for a similarity between two senses that have related senses*/
         if (relatedSignaturesA != null && relatedSignaturesB != null) {
@@ -79,7 +91,7 @@ public class TverskiIndexSimilarityMeasureImpl implements TverskiIndexSimilarity
             /*This case corresponds to the overlap between a sense' related synsets' glosses
              *and an arbitrary string of text */
         } else if (relatedSignaturesA == null ^ relatedSignaturesB == null) {
-            Map<String, SemanticSignature> nonNullRelated;
+            Map<String, StringSemanticSignature> nonNullRelated;
             List<String> other;
             if (relatedSignaturesA == null) {
                 nonNullRelated = relatedSignaturesB;
@@ -135,6 +147,29 @@ public class TverskiIndexSimilarityMeasureImpl implements TverskiIndexSimilarity
         }
     }
 
+    private double computeIntegerOverlap(List<Integer> la, List<Integer> lb) {
+        int aSize = la.size();
+        int bSize = lb.size();
+        int count = 0;
+        int i = 0;
+        int j = 0;
+        while (i < aSize && j < bSize) {
+            if (la.get(i).compareTo(lb.get(j)) == 0 && !lb.get(j).equals(-1)) {
+                count++;
+                i++;
+                j++;
+            } else if (la.get(i).compareTo(lb.get(j)) == -1) {
+                i++;
+            } else {
+                j++;
+            }
+        }
+        //if (normalize) {
+        //    return (double) count / Math.min(aSize, bSize);
+        //}
+        return count;
+    }
+
     private double computeOverlap(List<String> la, List<String> lb) {
 
         SetFunctionInput input;
@@ -170,7 +205,7 @@ public class TverskiIndexSimilarityMeasureImpl implements TverskiIndexSimilarity
             returnVal = s.F(input);
         }
         //returnVal *= (double)Math.min(lb.size(),la.size())/(double)Math.max(lb.size(),la.size());
-        returnVal /= input.getValues().size();
+        //returnVal /= input.getValues().size();
         return returnVal;
     }
 

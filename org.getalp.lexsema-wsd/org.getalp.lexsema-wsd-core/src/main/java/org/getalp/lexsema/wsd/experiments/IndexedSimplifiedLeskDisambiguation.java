@@ -32,18 +32,16 @@ public class IndexedSimplifiedLeskDisambiguation {
 
     public static void main(String[] args) {
         long startTime = System.currentTimeMillis();
-        TextLoader dl = new Semeval2007TextLoader("../data/senseval2007_task7/test/eng-coarse-all-words.xml").loadNonInstances(true);
-        LRLoader lrloader = new DictionaryLRLoader(new File("../data/dictionnaires-lesk/dict-adapted-all-relations.xml"));
+        TextLoader dl = new Semeval2007TextLoader("../data/senseval2007_task7/test/eng-coarse-all-words-t1s1.xml").loadNonInstances(true);
+        LRLoader lrloader = new DictionaryLRLoader(new File("../data/dictionnaires-lesk/dict-adapted-all-relations.xml"), true);
         SimilarityMeasure sim = new ACExtendedLeskSimilarity();
 
         GoldStandard goldStandard = new Semeval2007GoldStandard();
         Evaluation evaluation = new StandardEvaluation();
 
         SimplifiedLeskParameters slp = new SimplifiedLeskParameters()
-                .setAddSenseSignatures(false)
                 .setAllowTies(true)
                 .setIncludeTarget(false)
-                .setOnlyOverlapContexts(false)
                 .setOnlyUniqueWords(false)
                         //.setFallbackFS(true)
                 .setMinimize(false);

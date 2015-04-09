@@ -1,8 +1,10 @@
 package org.getalp.lexsema.similarity.measures;
 
-import org.getalp.lexsema.similarity.signatures.SemanticSignature;
+import org.getalp.lexsema.similarity.signatures.IndexedSemanticSignature;
 import org.getalp.lexsema.similarity.signatures.SemanticSymbol;
+import org.getalp.lexsema.similarity.signatures.StringSemanticSignature;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -10,28 +12,48 @@ import java.util.Map;
  * project.
  */
 public class IndexedOverlapSimilarity implements SimilarityMeasure {
+
+
+    private boolean normalize;
+
     @Override
-    public double compute(SemanticSignature sigA, SemanticSignature sigB, Map<String, SemanticSignature> relatedSignaturesA, Map<String, SemanticSignature> relatedSignaturesB) {
-        int aSize = sigA.size();
-        int bSize = sigB.size();
+    public double compute(StringSemanticSignature sigA, StringSemanticSignature sigB, Map<String, StringSemanticSignature> relatedSignaturesA, Map<String, StringSemanticSignature> relatedSignaturesB) {
+        return 0;
+    }
+
+    @Override
+    public double compute(IndexedSemanticSignature sigA, IndexedSemanticSignature sigB, Map<String, IndexedSemanticSignature> relatedSignaturesA, Map<String, IndexedSemanticSignature> relatedSignaturesB) {
+        List<Integer> la = sigA.getSymbols();
+        List<Integer> lb = sigB.getSymbols();
+        int aSize = la.size();
+        int bSize = lb.size();
         int count = 0;
         int i = 0;
         int j = 0;
         while (i < aSize && j < bSize) {
-            if (getSignatureSymbolAt(i, sigA).equals(getSignatureSymbolAt(j, sigB)) && !getSignatureSymbolAt(j, sigB).equals("-1")) {
+            if (la.get(i).compareTo(lb.get(j)) == 0 && !lb.get(j).equals(-1)) {
                 count++;
                 i++;
                 j++;
-            } else if (getSignatureSymbolAt(i, sigA).compareTo(getSignatureSymbolAt(j, sigB)) == -1) {
+            } else if (la.get(i).compareTo(lb.get(j)) == -1) {
                 i++;
             } else {
                 j++;
             }
         }
+        if (normalize) {
+            return (double) count / Math.min(aSize, bSize);
+        }
         return count;
     }
 
-    private SemanticSymbol getSignatureSymbolAt(int index, SemanticSignature signature) {
+    private SemanticSymbol getSignatureSymbolAt(int index, IndexedSemanticSignature signature) {
         return signature.getSymbol(index);
+    }
+
+    @SuppressWarnings({"MethodReturnOfConcreteClass", "BooleanParameter", "PublicMethodNotExposedInInterface"})
+    public IndexedOverlapSimilarity normalize(boolean value) {
+        normalize = value;
+        return this;
     }
 }

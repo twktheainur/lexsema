@@ -1,15 +1,15 @@
 package org.getalp.lexsema.wsd.score;
 
 import org.getalp.lexsema.similarity.Document;
+import org.getalp.lexsema.similarity.Sense;
 import org.getalp.lexsema.similarity.measures.SimilarityMeasure;
-import org.getalp.lexsema.similarity.signatures.SemanticSignature;
 import org.getalp.lexsema.wsd.configuration.Configuration;
 
 public class ACSimilarityConfigurationScorer implements ConfigurationScorer {
 
     private SimilarityMeasure similarityMeasure;
 
-    private ACSimilarityConfigurationScorer(SimilarityMeasure similarityMeasure) {
+    public ACSimilarityConfigurationScorer(SimilarityMeasure similarityMeasure) {
         this.similarityMeasure = similarityMeasure;
     }
 
@@ -19,24 +19,29 @@ public class ACSimilarityConfigurationScorer implements ConfigurationScorer {
         double totalScore = 0d;
         for (int i = 0; i < c.size(); i++) {
             if (c.getAssignment(i) != -1) {
-                totalScore += computeSimilarity(i, c, d);
+                double similarity = computeSimilarity(i, c, d);
+                //System.err.println("Word "+(i+1)+" score = "+similarity);
+                totalScore += similarity;
             }
         }
         return totalScore;
     }
 
     private double computeSimilarity(int wordIndex, Configuration configuration, Document document) {
-        int[] possibilities = configuration.getAssignments();
-        SemanticSignature sigA = document.getSenses(wordIndex)
-                .get(possibilities[wordIndex]).getSemanticSignature();
-        SemanticSignature nextSig;
+        Sense senseA = document.getSenses(configuration.getStart(), wordIndex)
+                .get(configuration.getAssignment(wordIndex));
+        Sense senseB;
         int index = 0;
         double totalScore = 0.0D;
 
-        for (int i = index; i < configuration.size(); ++i) {
-            nextSig = document.getSenses(i)
-                    .get(possibilities[i]).getSemanticSignature();
-            totalScore += similarityMeasure.compute(sigA, nextSig, null, null);
+        for (int i = wordIndex; i < configuration.size(); ++i) {
+            if (wordIndex != i) {
+                senseB = document.getSenses(configuration.getStart(), i)
+                        .get(configuration.getAssignment(i));
+                double score = senseA.computeSimilarityWith(similarityMeasure, senseB);
+                //System.err.println(String.format("\tScore(%d,%d)=%f",wordIndex,i,score));
+                totalScore += score;
+            }
         }
         return totalScore;
     }
