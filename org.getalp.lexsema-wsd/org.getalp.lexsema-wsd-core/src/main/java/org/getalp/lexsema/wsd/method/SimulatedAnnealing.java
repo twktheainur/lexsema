@@ -1,7 +1,5 @@
 package org.getalp.lexsema.wsd.method;
 
-import cern.jet.random.tdouble.engine.DoubleMersenneTwister;
-import cern.jet.random.tdouble.engine.DoubleRandomEngine;
 import org.getalp.lexsema.similarity.Document;
 import org.getalp.lexsema.util.ValueScale;
 import org.getalp.lexsema.wsd.configuration.ConfidenceConfiguration;
@@ -16,6 +14,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 
 public class SimulatedAnnealing implements Disambiguator {
@@ -27,7 +26,8 @@ public class SimulatedAnnealing implements Disambiguator {
     private static Logger logger = LoggerFactory.getLogger(SimulatedAnnealing.class);
     public double iterations = 1000;
     boolean changedSinceLast = false;
-    private DoubleRandomEngine uniformGenerator = new DoubleMersenneTwister(1);
+    //private DoubleRandomEngine uniformGenerator = new DoubleMersenneTwister(1);
+    private Random uniformGenerator = new Random();
     /**
      * Estimated parameters
      */
@@ -110,7 +110,7 @@ public class SimulatedAnnealing implements Disambiguator {
     }
 
     private void initialize(Document document) {
-        configuration = new ConfidenceConfiguration(document, ConfidenceConfiguration.InitializationType.RANDOM);
+        //configuration = new ConfidenceConfiguration(document, ConfidenceConfiguration.InitializationType.RANDOM);
         maxDelta = delta;
         if (T0 < 0) {
             initialEvaluation(document);
@@ -138,7 +138,7 @@ public class SimulatedAnnealing implements Disambiguator {
     }
 
     private void firstSenseBaseline(Document document) {
-        Configuration configuration = new ConfidenceConfiguration(document, ConfidenceConfiguration.InitializationType.FIRST);
+        configuration = new ConfidenceConfiguration(document, ConfidenceConfiguration.InitializationType.FIRST);
         double score =
                 configurationScorer.computeScore(document, configuration);
         if (goldStandard != null) {
@@ -183,12 +183,12 @@ public class SimulatedAnnealing implements Disambiguator {
         prevScore = 0;
     }
 
-    private int nextRandomNatural(DoubleRandomEngine randomEngine, int max) {
-        return (int) ValueScale.scaleValue(randomEngine.raw(), 0d, 1d, 0, max);
+    private int nextRandomNatural(Random randomEngine, int max) {
+        return (int) ValueScale.scaleValue(randomEngine.nextDouble(), 0d, 1d, 0, max);
     }
 
     //TODO: Factor in new configuration subtype;
-    private Configuration makeRandomChange(Configuration source, Document document, int numberOfChanges, DoubleRandomEngine gu) {
+    private Configuration makeRandomChange(Configuration source, Document document, int numberOfChanges, Random gu) {
         Configuration newConfiguration = new ConfidenceConfiguration((ConfidenceConfiguration) source);
 
         for (int i = 0; i < numberOfChanges; i++) {
@@ -200,7 +200,7 @@ public class SimulatedAnnealing implements Disambiguator {
         return newConfiguration;
     }
 
-    private Configuration makeRandomChange(Configuration source, Document document, DoubleRandomEngine gu) {
+    private Configuration makeRandomChange(Configuration source, Document document, Random gu) {
         return makeRandomChange(source, document, 1, gu);
     }
 
@@ -232,7 +232,7 @@ public class SimulatedAnnealing implements Disambiguator {
         double f1score = 0;
         //Making random changes -- Uniformly selects a number of parameters to change, and changes their value randomly
         //Following the formula from Adaptive SA (http://www.ingber.com/#ASA)
-        //Configuration cp = makeRandomChange(configuration, document, (int) (.3d * configuration.size()), uniformGenerator);
+        //Configuration cp = makeRandomChange(configuration, document, (int) (.02d * configuration.size()), uniformGenerator);
 
         Configuration cp = makeRandomChange(configuration, document, 1, uniformGenerator);
         score = configurationScorer.computeScore(document, cp);
@@ -260,7 +260,7 @@ public class SimulatedAnnealing implements Disambiguator {
             if (delta > maxDelta) {
                 maxDelta = delta;
             }
-            double choice = uniformGenerator.raw();
+            double choice = uniformGenerator.nextDouble();
             double prob = Math.exp(-delta / T);
             if (prob > choice) {
                 //logger.info(String.format("\r\t[Cycle=%f | %.2f%%][Accepted Lower Score = %.2f][Best = %.2f][P(a)=%.2f][Ld=%.2f]", currentCycle, (double) cycleNumber / iterations * 100d, score, bestScore, Math.exp(-delta / T), delta));
