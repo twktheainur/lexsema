@@ -12,6 +12,8 @@ import org.apache.commons.math3.distribution.LevyDistribution;
 public class CuckooSearch implements Disambiguator
 {
     private static final Random random = new Random();
+    
+    private static final boolean verbose = false;
 
     private int iterationsNumber;
 
@@ -52,7 +54,7 @@ public class CuckooSearch implements Disambiguator
        public void randomFly()
        {
            int distance = Math.min((int) levyDistribution.sample(), configuration.size());
-           System.out.println("Flying a distance of " + distance);
+           if (verbose) System.out.println("Flying a distance of " + distance);
            ContinuousConfiguration configurationBackup = configuration.clone();
            double scoreBackup = score;
            configuration.makeRandomChanges(distance);
@@ -103,8 +105,8 @@ public class CuckooSearch implements Disambiguator
             sortNests();
             abandonWorthlessNests();
 
-            System.out.println("Cuckoo Progress : " + progressPercent + "% - " +
-                               "Current best : " + nests[nestsNumber - 1].score);
+            if (verbose) System.out.println("Cuckoo Progress : " + progressPercent + "% - " +
+                                            "Current best : " + nests[nestsNumber - 1].score);
         }
         sortNests();
         return nests[nestsNumber - 1].configuration;
