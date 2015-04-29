@@ -1,29 +1,31 @@
-package org.getalp.lexsema.wsd.experiments.cuckoo;
+package org.getalp.lexsema.wsd.experiments.cuckoo.parameters;
 
 import java.util.Random;
 
-public class CuckooParameters
+import org.getalp.lexsema.wsd.experiments.cuckoo.generic.CuckooSolution;
+
+public class CuckooParameters implements CuckooSolution
 {
     public static final Random random = new Random();
     
-    public DoubleParameter levyScale;
+    public ScalarParameter levyScale;
     
-    public IntegerParameter nestsNumber;
+    public ScalarParameter nestsNumber;
     
-    public DoubleParameter destroyedNests;
+    public ScalarParameter destroyedNests;
     
     public CuckooParameters()
     {
-        levyScale = new DoubleParameter(0, 5, 0.1);
-        nestsNumber = new IntegerParameter(5, 100, 5);
-        destroyedNests = new DoubleParameter(0, 0.8, 0.1);
+        levyScale = new ScalarParameter(0, 5, 0.1);
+        nestsNumber = new ScalarParameter(5, 100, 2);
+        destroyedNests = new ScalarParameter(0, 0.8, 0.016);
     }
 
-    public CuckooParameters(double levyScale, int nestsNumber, double destroyedNests)
+    public CuckooParameters(double levyScale, double nestsNumber, double destroyedNests)
     {
-        this.levyScale = new DoubleParameter(0, 5, 0.1, levyScale);
-        this.nestsNumber = new IntegerParameter(5, 100, 5, nestsNumber);
-        this.destroyedNests = new DoubleParameter(0, 0.8, 0.1, destroyedNests);
+        this.levyScale = new ScalarParameter(0, 5, 0.1, levyScale);
+        this.nestsNumber = new ScalarParameter(5, 100, 2, nestsNumber);
+        this.destroyedNests = new ScalarParameter(0, 0.8, 0.016, destroyedNests);
     }
     
     public CuckooParameters clone()
@@ -40,9 +42,8 @@ public class CuckooParameters
         x /= norm;
         y /= norm;
         z /= norm;
-        //System.out.println("Add " + x * distance + " to ");
         levyScale.add(x * distance);
-        nestsNumber.add((int)(y * distance));
+        nestsNumber.add(y * distance);
         destroyedNests.add(z * distance);
     }
     

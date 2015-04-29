@@ -1,13 +1,15 @@
-package org.getalp.lexsema.wsd.experiments.cuckoo;
+package org.getalp.lexsema.wsd.experiments.cuckoo.parameters;
 
 import org.getalp.lexsema.io.document.TextLoader;
 import org.getalp.lexsema.similarity.Document;
 import org.getalp.lexsema.wsd.configuration.Configuration;
-import org.getalp.lexsema.wsd.method.CuckooSearch;
+import org.getalp.lexsema.wsd.experiments.cuckoo.generic.CuckooSolution;
+import org.getalp.lexsema.wsd.experiments.cuckoo.generic.CuckooSolutionScorer;
+import org.getalp.lexsema.wsd.experiments.cuckoo.wsd.CuckooSearchDisambiguator;
 import org.getalp.lexsema.wsd.method.Disambiguator;
 import org.getalp.lexsema.wsd.score.ConfigurationScorer;
 
-public class CuckooParametersScorer
+public class CuckooParametersScorer implements CuckooSolutionScorer
 {
     private ConfigurationScorer scorer; 
     
@@ -30,9 +32,9 @@ public class CuckooParametersScorer
         double res = 0;
         for (int i = 0 ; i < iterationsOutside ; i++)
         {
-            Disambiguator cuckooDisambiguator = new CuckooSearch(iterationsInside, 
+            Disambiguator cuckooDisambiguator = new CuckooSearchDisambiguator(iterationsInside, 
                     params.levyScale.currentValue, 
-                    params.nestsNumber.currentValue, 
+                    (int)params.nestsNumber.currentValue, 
                     (int)(params.destroyedNests.currentValue * params.nestsNumber.currentValue), 
                     scorer);
             double tmpres = 0;
@@ -47,5 +49,10 @@ public class CuckooParametersScorer
             res += tmpres / ((double) nbTexts);
         }
         return res / ((double) iterationsOutside);
+    }
+
+    public double computeScore(CuckooSolution configuration)
+    {
+        return computeScore((CuckooParameters) configuration);
     }
 }

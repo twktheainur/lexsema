@@ -9,7 +9,7 @@ import org.getalp.lexsema.io.resource.LRLoader;
 import org.getalp.lexsema.io.resource.dictionary.DictionaryLRLoader;
 import org.getalp.lexsema.similarity.Document;
 import org.getalp.lexsema.wsd.configuration.Configuration;
-import org.getalp.lexsema.wsd.method.CuckooSearch;
+import org.getalp.lexsema.wsd.experiments.cuckoo.wsd.CuckooSearchDisambiguator;
 import org.getalp.lexsema.wsd.method.Disambiguator;
 import org.getalp.lexsema.wsd.score.ConfigurationScorer;
 import org.getalp.lexsema.wsd.score.SemEval2007Task7PerfectConfigurationScorer;
@@ -43,7 +43,7 @@ public class CuckooSearchDisambiguation
         
         ConfigurationScorer scorer = new SemEval2007Task7PerfectConfigurationScorer();
 
-        Disambiguator cuckooDisambiguator = new CuckooSearch(iterations, levyScale, nestsNumber, destroyedNests, scorer);
+        Disambiguator cuckooDisambiguator = new CuckooSearchDisambiguator(iterations, levyScale, nestsNumber, destroyedNests, scorer);
 
         System.out.println("Loading texts...");
         dl.load();

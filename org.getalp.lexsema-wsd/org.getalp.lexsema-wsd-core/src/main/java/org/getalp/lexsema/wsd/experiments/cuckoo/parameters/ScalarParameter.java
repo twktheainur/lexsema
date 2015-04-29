@@ -1,8 +1,8 @@
-package org.getalp.lexsema.wsd.experiments.cuckoo;
+package org.getalp.lexsema.wsd.experiments.cuckoo.parameters;
 
 import java.util.Random;
 
-public class DoubleParameter
+public class ScalarParameter
 {
     private static final Random random = new Random();
     
@@ -14,12 +14,12 @@ public class DoubleParameter
     
     public double currentValue;
     
-    public DoubleParameter(double minValue, double maxValue, double step)
+    public ScalarParameter(double minValue, double maxValue, double step)
     {
         this(minValue, maxValue, step, (random.nextDouble() * (maxValue - minValue)) + minValue);
     }
     
-    public DoubleParameter(double minValue, double maxValue, double step, double currentValue)
+    public ScalarParameter(double minValue, double maxValue, double step, double currentValue)
     {
         this.minValue = minValue;
         this.maxValue = maxValue;
@@ -34,8 +34,8 @@ public class DoubleParameter
         if (currentValue < minValue) currentValue = minValue;
     }
     
-    public DoubleParameter clone()
+    public ScalarParameter clone()
     {
-        return new DoubleParameter(minValue, maxValue, step, currentValue);
+        return new ScalarParameter(minValue, maxValue, step, currentValue);
     }
 }

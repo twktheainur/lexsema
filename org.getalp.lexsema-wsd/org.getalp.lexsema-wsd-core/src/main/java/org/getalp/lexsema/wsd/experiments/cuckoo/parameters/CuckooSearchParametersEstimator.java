@@ -1,12 +1,15 @@
-package org.getalp.lexsema.wsd.experiments.cuckoo;
+package org.getalp.lexsema.wsd.experiments.cuckoo.parameters;
 
 import java.io.File;
 import java.io.PrintWriter;
+
 import org.getalp.lexsema.io.document.Semeval2007TextLoader;
 import org.getalp.lexsema.io.document.TextLoader;
 import org.getalp.lexsema.io.resource.LRLoader;
 import org.getalp.lexsema.io.resource.dictionary.DictionaryLRLoader;
 import org.getalp.lexsema.similarity.Document;
+import org.getalp.lexsema.wsd.experiments.cuckoo.generic.CuckooSolution;
+import org.getalp.lexsema.wsd.experiments.cuckoo.generic.CuckooSearch;
 import org.getalp.lexsema.wsd.score.ConfigurationScorer;
 import org.getalp.lexsema.wsd.score.SemEval2007Task7PerfectConfigurationScorer;
 
@@ -14,11 +17,11 @@ public class CuckooSearchParametersEstimator
 {
     public static void main(String[] args) throws Exception
     {
-        int iterations = 100;
+        int iterations = 1000;
         double levyScale = 0.5;
         int nestsNumber = 20;
         int destroyedNests = 5;
-        int insideIterations = 5000;
+        int insideIterations = 1000;
         
         if (args.length >= 1) iterations = Integer.valueOf(args[0]);
         if (args.length >= 2) levyScale = Double.valueOf(args[1]);
@@ -46,9 +49,12 @@ public class CuckooSearchParametersEstimator
         
         CuckooParametersScorer scorer = new CuckooParametersScorer(configScorer, dl, 5, insideIterations); 
         
-        CuckooSearchParameters cuckoo = new CuckooSearchParameters(iterations, levyScale, nestsNumber, destroyedNests, scorer);
+        CuckooParametersFactory configFactory = new CuckooParametersFactory();
         
-        CuckooParameters params = cuckoo.run();
+        CuckooSearch cuckoo = new CuckooSearch(iterations, levyScale, nestsNumber, destroyedNests, 
+                                                 scorer, configFactory);
+        
+        CuckooSolution params = cuckoo.run();
         
         PrintWriter writer = new PrintWriter("cuckoo_parameters.txt");
         writer.println(params.toString());
