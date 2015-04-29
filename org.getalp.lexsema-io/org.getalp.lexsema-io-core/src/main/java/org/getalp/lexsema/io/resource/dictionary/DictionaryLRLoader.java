@@ -20,17 +20,24 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@SuppressWarnings("BooleanParameter")
 public class DictionaryLRLoader implements LRLoader {
 
     private static Logger logger = LoggerFactory.getLogger(DictionaryLRLoader.class);
 
     Map<String, List<Sense>> wordSenses;
+    boolean indexed = false;
 
     public DictionaryLRLoader(File dictionaryFile) {
+        this(dictionaryFile, true);
+    }
+
+    public DictionaryLRLoader(File dictionaryFile, boolean indexed) {
+        this.indexed = true;
         wordSenses = new HashMap<>();
         try {
             XMLReader saxReader = XMLReaderFactory.createXMLReader();
-            saxReader.setContentHandler(new DictionaryParser(wordSenses));
+            saxReader.setContentHandler(new DictionaryParser(wordSenses, indexed));
             saxReader.parse(new InputSource(new FileReader(dictionaryFile)));
         } catch (SAXException e) {
             logger.error("Parser error :" + e.getLocalizedMessage());

@@ -3,8 +3,10 @@ package org.getalp.lexsema.similarity.measures;
 import cern.colt.matrix.tdouble.DoubleMatrix2D;
 import com.wcohen.ss.AbstractStringDistance;
 import com.wcohen.ss.ScaledLevenstein;
+import org.getalp.lexsema.org.getalp.ml.matrix.score.generator.IndexedOverlapScoreMatrixGenerator;
 import org.getalp.lexsema.org.getalp.ml.matrix.score.generator.OverlapScoreMatrixGenerator;
-import org.getalp.lexsema.similarity.signatures.SemanticSignature;
+import org.getalp.lexsema.similarity.signatures.IndexedSemanticSignature;
+import org.getalp.lexsema.similarity.signatures.StringSemanticSignature;
 import org.getalp.ml.matrix.filters.Filter;
 import org.getalp.ml.matrix.score.MatrixScorer;
 import org.getalp.ml.matrix.score.generator.DenseScoreMatrixGenerator;
@@ -34,9 +36,9 @@ public class TverskiIndexSimilarityMeasureMatrixImpl implements TverskiIndexSimi
     }
 
     @Override
-    public double compute(SemanticSignature sigA, SemanticSignature sigB,
-                          Map<String, SemanticSignature> relatedSignaturesA,
-                          Map<String, SemanticSignature> relatedSignaturesB) {
+    public double compute(StringSemanticSignature sigA, StringSemanticSignature sigB,
+                          Map<String, StringSemanticSignature> relatedSignaturesA,
+                          Map<String, StringSemanticSignature> relatedSignaturesB) {
 
 
         List<String> a = sigA.getSymbols();
@@ -44,6 +46,18 @@ public class TverskiIndexSimilarityMeasureMatrixImpl implements TverskiIndexSimi
 
         /*Computing overlap between the semantic signatures*/
         double overlap = computeOverlap(a, b);
+        return computeTverski(overlap, a.size(), b.size());
+    }
+
+    @Override
+    public double compute(IndexedSemanticSignature sigA, IndexedSemanticSignature sigB,
+                          Map<String, IndexedSemanticSignature> relatedSignaturesA,
+                          Map<String, IndexedSemanticSignature> relatedSignaturesB) {
+        List<Integer> a = sigA.getSymbols();
+        List<Integer> b = sigB.getSymbols();
+
+        /*Computing overlap between the semantic signatures*/
+        double overlap = computeIndexedOverlap(a, b);
         return computeTverski(overlap, a.size(), b.size());
     }
 
@@ -76,6 +90,17 @@ public class TverskiIndexSimilarityMeasureMatrixImpl implements TverskiIndexSimi
         } else {
             matrixGenerator = new OverlapScoreMatrixGenerator(la, lb);
         }
+        DoubleMatrix2D matrix = matrixGenerator.generateDenseScoreMatrix();
+        for (Filter filter : filters) {
+            matrix = filter.apply(matrix);
+        }
+        matrixScorer.computeScore(matrix);
+        return matrixScorer.computeScore(matrix);
+    }
+
+    private double computeIndexedOverlap(List<Integer> la, List<Integer> lb) {
+        DenseScoreMatrixGenerator matrixGenerator;
+        matrixGenerator = new IndexedOverlapScoreMatrixGenerator(la, lb);
         DoubleMatrix2D matrix = matrixGenerator.generateDenseScoreMatrix();
         for (Filter filter : filters) {
             matrix = filter.apply(matrix);

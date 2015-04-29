@@ -4,10 +4,12 @@ import org.getalp.lexsema.acceptali.crosslingual.translation.Translator;
 import org.getalp.lexsema.acceptali.word2vec.MultilingualSignatureEnrichment;
 import org.getalp.lexsema.similarity.Sense;
 import org.getalp.lexsema.similarity.measures.SimilarityMeasure;
-import org.getalp.lexsema.similarity.signatures.SemanticSignature;
-import org.getalp.lexsema.similarity.signatures.SemanticSignatureImpl;
+import org.getalp.lexsema.similarity.signatures.StringSemanticSignature;
+import org.getalp.lexsema.similarity.signatures.StringSemanticSignatureImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.Arrays;
 
 public class TranslatorCrossLingualSimilarity implements CrossLingualSimilarity {
 
@@ -33,14 +35,14 @@ public class TranslatorCrossLingualSimilarity implements CrossLingualSimilarity 
         String definitionB = b.getDefinition();
         String translatedDefinitionB = translator.translate(definitionB, b.getLanguage(), a.getLanguage());
 
-        SemanticSignature translatedSignature = new SemanticSignatureImpl();
-        translatedSignature.addSymbolString(translatedDefinitionB);
+        StringSemanticSignature translatedSignature = new StringSemanticSignatureImpl();
+        translatedSignature.addSymbolString(Arrays.asList(translatedDefinitionB.split(" ")));
 
-        SemanticSignature enrichedA = a.getSemanticSignature();
-        SemanticSignature enrichedTranslated = translatedSignature;
+        StringSemanticSignature enrichedA = (StringSemanticSignature) a.getSemanticSignature();
+        StringSemanticSignature enrichedTranslated = translatedSignature;
 
         if (enrichment != null) {
-            enrichedA = enrichment.enrichSemanticSignature(a.getSemanticSignature(), a.getLanguage());
+            enrichedA = enrichment.enrichSemanticSignature((StringSemanticSignature) a.getSemanticSignature(), a.getLanguage());
             enrichedTranslated = enrichment.enrichSemanticSignature(translatedSignature, a.getLanguage());
         }
 

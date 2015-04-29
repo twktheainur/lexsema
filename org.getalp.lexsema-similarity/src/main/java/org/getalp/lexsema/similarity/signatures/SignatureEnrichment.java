@@ -2,7 +2,6 @@ package org.getalp.lexsema.similarity.signatures;
 
 
 public interface SignatureEnrichment {
-    public SemanticSignature enrichSemanticSignature(SemanticSignature semanticSignature);
-
+    public StringSemanticSignature enrichSemanticSignature(StringSemanticSignature semanticSignature);
     public void close();
 }

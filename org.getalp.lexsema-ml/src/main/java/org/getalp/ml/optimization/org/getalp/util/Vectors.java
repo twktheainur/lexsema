@@ -24,7 +24,7 @@ public class Vectors {
         return output;
     }
 
-    public static DoubleMatrix1D getDefaultPermutation(DoubleMatrix1D input) {
+    public static synchronized DoubleMatrix1D getDefaultPermutation(DoubleMatrix1D input) {
         if (perm == null || input.size() >= perm.size()) {
             perm = new DenseDoubleMatrix1D((int) input.size());
             for (int i = 0; i < perm.size(); i++) {

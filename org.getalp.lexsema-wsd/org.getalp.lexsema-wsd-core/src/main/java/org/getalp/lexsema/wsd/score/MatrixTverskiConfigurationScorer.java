@@ -31,6 +31,10 @@ public class MatrixTverskiConfigurationScorer implements ConfigurationScorer {
     private MatrixScorer matrixScorer;
     private Cache cache;
 
+    public MatrixTverskiConfigurationScorer(SimilarityMeasure similarityMeasure, MatrixScorer matrixScorer, int numberThreads) {
+        this(similarityMeasure, null, matrixScorer, numberThreads);
+    }
+
     public MatrixTverskiConfigurationScorer(SimilarityMeasure similarityMeasure, Filter filter, MatrixScorer matrixScorer, int numberThreads) {
         this.similarityMeasure = similarityMeasure;
         tasks = new ArrayList<>();
@@ -47,22 +51,13 @@ public class MatrixTverskiConfigurationScorer implements ConfigurationScorer {
     @Override
     public double computeScore(Document d, Configuration c) {
         DoubleMatrix2D scoreMatrix = new DenseDoubleMatrix2D(c.size(), c.size());
+        scoreMatrix.assign(0);
         for (int i = 0; i < c.size(); i++) {
-            for (int j = 0; j < c.size(); j++) {
-
-
+            for (int j = i; j < c.size(); j++) {
                 String key_ij = generateKey(i, j);
-                String key_ji = generateKey(j, i);
                 String value_ij = cache.get(key_ij);
-                String value_ji = cache.get(key_ji);
-
-                if (value_ij != null || value_ji != null) {
-                    double score;
-                    if (value_ij != null) {
-                        score = Double.valueOf(value_ij);
-                    } else {
-                        score = Double.valueOf(value_ji);
-                    }
+                if (value_ij != null) {
+                    double score = Double.valueOf(value_ij);
                     scoreMatrix.setQuick(i, j, score);
                 } else {
                     try {
@@ -92,7 +87,6 @@ public class MatrixTverskiConfigurationScorer implements ConfigurationScorer {
                         int indexB = pair.second();
                         double value = pair.third();
                         cache.set(generateKey(indexA, indexB), String.valueOf(value));
-                        cache.set(generateKey(indexB, indexA), String.valueOf(value));
                         scoreMatrix.setQuick(indexA, indexB, value);
                     } catch (InterruptedException e) {
                         logger.debug("Interrupted in configuration score entry calculation" + e.getLocalizedMessage());
@@ -148,9 +142,9 @@ public class MatrixTverskiConfigurationScorer implements ConfigurationScorer {
         @Override
         public Triple<Integer, Integer, Double> call() throws Exception {
             try {
-                Sense a = document.getSenses(indexA).get(configuration.getAssignment(indexA));
-                Sense b = document.getSenses(indexB).get(configuration.getAssignment(indexB));
-                double sim = similarityMeasure.compute(a.getSemanticSignature(), b.getSemanticSignature(), null, null);
+                Sense a = document.getSenses(configuration.getStart(), indexA).get(configuration.getAssignment(indexA));
+                Sense b = document.getSenses(configuration.getStart(), indexB).get(configuration.getAssignment(indexB));
+                double sim = a.computeSimilarityWith(similarityMeasure, b);
                 return new TripleImpl<>(indexA, indexB, sim);
             } catch (RuntimeException e) {
                 logger.error(e.getLocalizedMessage());

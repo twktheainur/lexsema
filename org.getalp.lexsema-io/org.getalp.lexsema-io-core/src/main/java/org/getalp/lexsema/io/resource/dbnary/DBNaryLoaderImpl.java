@@ -20,8 +20,8 @@ import org.getalp.lexsema.similarity.SenseImpl;
 import org.getalp.lexsema.similarity.Word;
 import org.getalp.lexsema.similarity.cache.SenseCache;
 import org.getalp.lexsema.similarity.cache.SenseCacheImpl;
-import org.getalp.lexsema.similarity.signatures.SemanticSignature;
-import org.getalp.lexsema.similarity.signatures.SemanticSignatureImpl;
+import org.getalp.lexsema.similarity.signatures.StringSemanticSignature;
+import org.getalp.lexsema.similarity.signatures.StringSemanticSignatureImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -93,7 +93,7 @@ public class DBNaryLoaderImpl implements DBNaryLoader {
         if (le != null) {
             for (LexicalSense ls : dbnary.getLexicalSenses(le)) {
                 Sense s = new SenseImpl(ls);
-                SemanticSignature signature = new SemanticSignatureImpl();
+                StringSemanticSignature signature = new StringSemanticSignatureImpl();
                 if (loadDefinitions) {
                     String def = ls.getDefinition();
                     addToSignature(signature, def);
@@ -121,7 +121,7 @@ public class DBNaryLoaderImpl implements DBNaryLoader {
         return senses;
     }
 
-    private void addToSignature(SemanticSignature signature, String def) {
+    private void addToSignature(StringSemanticSignature signature, String def) {
         StringTokenizer st = new StringTokenizer(def, " ", false);
         while (st.hasMoreTokens()) {
             String token = st.nextToken();

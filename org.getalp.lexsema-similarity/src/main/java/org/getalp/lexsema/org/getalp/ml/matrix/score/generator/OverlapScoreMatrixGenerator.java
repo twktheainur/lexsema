@@ -46,10 +46,10 @@ public class OverlapScoreMatrixGenerator implements DenseScoreMatrixGenerator, S
     }
 
     private void generateScoreMatrix(DoubleMatrix2D matrix2D) {
-        matrix2D.assign(-1);
+        matrix2D.assign(0);
         for (int i = 0; i < la.size(); i++) {
             String a = la.get(i);
-            for (int j = 0; j < lb.size(); j++) {
+            for (int j = i; j < lb.size(); j++) {
                 String b = lb.get(j);
                 double value = 1d;
                 if (distance != null) {

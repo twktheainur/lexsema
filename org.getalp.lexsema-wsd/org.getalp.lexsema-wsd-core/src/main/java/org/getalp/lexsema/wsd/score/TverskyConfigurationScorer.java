@@ -62,6 +62,7 @@ public class TverskyConfigurationScorer implements ConfigurationScorer {
                         int index = pair.first();
                         double value = pair.second();
                         scores[index] = value;
+                        //System.err.println(value);
                     } catch (InterruptedException e) {
                         logger.debug("Interrupted in configuration score entry calculation" + e.getLocalizedMessage());
                     } catch (ExecutionException e) {

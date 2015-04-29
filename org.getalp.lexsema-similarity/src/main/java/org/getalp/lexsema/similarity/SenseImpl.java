@@ -6,6 +6,7 @@ import org.getalp.lexsema.ontolex.LexicalResource;
 import org.getalp.lexsema.ontolex.LexicalResourceEntity;
 import org.getalp.lexsema.ontolex.LexicalSense;
 import org.getalp.lexsema.ontolex.graph.OntologyModel;
+import org.getalp.lexsema.similarity.measures.SimilarityMeasure;
 import org.getalp.lexsema.similarity.signatures.SemanticSignature;
 
 import java.util.Collections;
@@ -147,6 +148,12 @@ public class SenseImpl implements Sense {
     @Override
     public void addRelatedSignature(String key, SemanticSignature semanticSignature) {
         relatedSignatures.put(key, semanticSignature);
+    }
+
+    @Override
+    public double computeSimilarityWith(SimilarityMeasure measure, Sense other) {
+        return semanticSignature.computeSimilarityWith(measure, other.getSemanticSignature(),
+                getRelatedSignatures(), other.getRelatedSignatures());
     }
 
     @Override
