@@ -17,14 +17,14 @@ public class CuckooParameters implements CuckooSolution
     public CuckooParameters()
     {
         levyScale = new ScalarParameter(0, 5, 0.1);
-        nestsNumber = new ScalarParameter(5, 100, 2);
+        nestsNumber = new ScalarParameter(1, 100, 2);
         destroyedNests = new ScalarParameter(0, 0.8, 0.016);
     }
 
     public CuckooParameters(double levyScale, double nestsNumber, double destroyedNests)
     {
         this.levyScale = new ScalarParameter(0, 5, 0.1, levyScale);
-        this.nestsNumber = new ScalarParameter(5, 100, 2, nestsNumber);
+        this.nestsNumber = new ScalarParameter(1, 100, 2, nestsNumber);
         this.destroyedNests = new ScalarParameter(0, 0.8, 0.016, destroyedNests);
     }
     
@@ -42,6 +42,9 @@ public class CuckooParameters implements CuckooSolution
         x /= norm;
         y /= norm;
         z /= norm;
+        //System.out.println("Move levyScale : " + x * distance * levyScale.step);
+        //System.out.println("Move nestsNumber : " + y * distance * nestsNumber.step);
+        //System.out.println("Move destroyedNests : " + z * distance * destroyedNests.step);
         levyScale.add(x * distance);
         nestsNumber.add(y * distance);
         destroyedNests.add(z * distance);
