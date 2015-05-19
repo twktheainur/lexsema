@@ -25,4 +25,9 @@ public class CuckooConfiguration extends ContinuousConfiguration implements Cuck
     {
         return new CuckooConfiguration(super.getDocument(), super.getAssignments());
     }
+    
+    public String toString()
+    {
+        return "";
+    }
 }

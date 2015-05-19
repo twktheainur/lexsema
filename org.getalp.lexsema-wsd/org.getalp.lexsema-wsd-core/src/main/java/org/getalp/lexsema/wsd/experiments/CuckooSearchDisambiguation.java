@@ -43,7 +43,7 @@ public class CuckooSearchDisambiguation
         
         ConfigurationScorer scorer = new SemEval2007Task7PerfectConfigurationScorer();
 
-        Disambiguator cuckooDisambiguator = new CuckooSearchDisambiguator(iterations, levyScale, nestsNumber, destroyedNests, scorer);
+        Disambiguator cuckooDisambiguator = new CuckooSearchDisambiguator(iterations, levyScale, nestsNumber, destroyedNests, scorer, true);
 
         System.out.println("Loading texts...");
         dl.load();

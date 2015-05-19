@@ -36,7 +36,7 @@ public class CuckooParametersScorer implements CuckooSolutionScorer
                     params.levyScale.currentValue, 
                     (int)params.nestsNumber.currentValue, 
                     (int)(params.destroyedNests.currentValue * params.nestsNumber.currentValue), 
-                    scorer);
+                    scorer, false);
             double tmpres = 0;
             int nbTexts = 0;
             for (Document d : dl)

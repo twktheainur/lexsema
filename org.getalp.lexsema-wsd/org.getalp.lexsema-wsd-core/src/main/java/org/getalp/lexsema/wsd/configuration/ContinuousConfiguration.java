@@ -57,6 +57,7 @@ public class ContinuousConfiguration implements Configuration
     
     public void makeRandomChanges(int numberOfChanges)
     {
+        numberOfChanges = Math.min(numberOfChanges, documentSize);
         for (int i = 0 ; i < numberOfChanges ; i++)
         {
             makeRandomChange();

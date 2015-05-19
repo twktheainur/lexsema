@@ -22,8 +22,10 @@ public class CuckooSearch
     private CuckooSolutionFactory solutionFactory;
 
     private CuckooNest[] nests;
+    
+    private boolean verbose;
 
-    public CuckooSearch(int iterations, double levyScale, int nestsNumber, int destroyedNests, CuckooSolutionScorer solutionScorer, CuckooSolutionFactory solutionFactory)
+    public CuckooSearch(int iterations, double levyScale, int nestsNumber, int destroyedNests, CuckooSolutionScorer solutionScorer, CuckooSolutionFactory solutionFactory, boolean verbose)
     {
         this.iterationsNumber = iterations;
         this.levyDistribution = new LevyDistribution(1, levyScale);
@@ -32,6 +34,7 @@ public class CuckooSearch
         this.solutionScorer = solutionScorer;
         this.solutionFactory = solutionFactory;
         nests = new CuckooNest[nestsNumber];
+        this.verbose = verbose;
     }
 
     public CuckooSolution run()
@@ -59,8 +62,12 @@ public class CuckooSearch
             sortNests();
             abandonWorthlessNests();
 
-            System.out.println("Cuckoo Progress : " + progressPercent + "% - " +
-                               "Current best : " + nests[nestsNumber - 1].score);
+            if (verbose)
+            {
+                System.out.println("Cuckoo Progress : " + progressPercent + "% - " +
+                                   "Current best : " + nests[nestsNumber - 1].score + 
+                                   " [" + nests[nestsNumber - 1].solution + "]");
+            }
         }
         sortNests();
         return nests[nestsNumber - 1].solution;

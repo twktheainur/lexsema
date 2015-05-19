@@ -52,7 +52,7 @@ public class CuckooSearchParametersEstimator
         CuckooParametersFactory configFactory = new CuckooParametersFactory();
         
         CuckooSearch cuckoo = new CuckooSearch(iterations, levyScale, nestsNumber, destroyedNests, 
-                                                 scorer, configFactory);
+                                                 scorer, configFactory, true);
         
         CuckooSolution params = cuckoo.run();
         

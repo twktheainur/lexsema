@@ -50,7 +50,7 @@ public class CuckooParameters implements CuckooSolution
     public String toString()
     {
         return "levy scale = " + levyScale.currentValue + 
-                ", nests number = " + nestsNumber.currentValue + 
-                ", destroyed nests = " + destroyedNests.currentValue * nestsNumber.currentValue;
+                ", nests number = " + (int) nestsNumber.currentValue + 
+                ", destroyed nests = " + (int) (destroyedNests.currentValue * nestsNumber.currentValue);
     }
 }
