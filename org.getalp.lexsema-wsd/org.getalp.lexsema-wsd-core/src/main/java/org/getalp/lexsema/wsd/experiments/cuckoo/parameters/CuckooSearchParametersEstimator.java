@@ -38,7 +38,7 @@ public class CuckooSearchParametersEstimator
 
         long startTime = System.currentTimeMillis();
 
-        TextLoader dl = new Semeval2007TextLoader("../data/senseval2007_task7/test/eng-coarse-all-words-t1.xml");
+        TextLoader dl = new Semeval2007TextLoader("../data/senseval2007_task7/test/eng-coarse-all-words.xml");
         dl.loadNonInstances(false);
         dl.load();
         

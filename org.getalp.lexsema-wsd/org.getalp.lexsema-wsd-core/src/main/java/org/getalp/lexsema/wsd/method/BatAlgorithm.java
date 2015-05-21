@@ -43,9 +43,8 @@ public class BatAlgorithm implements Disambiguator
     
     private class Bat
     {
-        private ContinuousConfiguration configuration;
-        private int[] position;
-        private int[] velocity;
+        private ContinuousConfiguration position;
+        private int velocity;
         private double frequency;
         private double initialRate;
         private double rate;
@@ -54,14 +53,8 @@ public class BatAlgorithm implements Disambiguator
 
         public Bat()
         {
-            configuration = new ContinuousConfiguration(currentDocument);
-            position = new int[currentDocument.size()];
-            velocity = new int[currentDocument.size()];
-            for (int i = 0; i < currentDocument.size(); ++i)
-            {
-                position[i] = configuration.getAssignment(i);
-                velocity[i] = 0;
-            }
+            position = new ContinuousConfiguration(currentDocument);
+            velocity = 0;
             frequency = randomDoubleInRange(minFrequency, maxFrequency);
             initialRate = randomDoubleInRange(minRate, maxRate);
             rate = initialRate;
@@ -69,10 +62,10 @@ public class BatAlgorithm implements Disambiguator
             recomputeScore();
         }
 
-        public void recomputeScore()
+        public double recomputeScore()
         {
-            configuration.setSenses(position);
-            score = configurationScorer.computeScore(currentDocument, configuration);
+            score = configurationScorer.computeScore(currentDocument, position);
+            return score;
         }
                 
     }
@@ -114,30 +107,31 @@ public class BatAlgorithm implements Disambiguator
 
             for (Bat currentBat : bats)
             {
-                int[] previousPosition = currentBat.position.clone();
-                int[] previousVelocity = currentBat.velocity.clone();
+                ContinuousConfiguration previousPosition = currentBat.position.clone();
+                int previousVelocity = currentBat.velocity;
                 double previousScore = currentBat.score;
 
                 currentBat.frequency = randomDoubleInRange(minFrequency, maxFrequency);
                 
+                currentBat.velocity = 0;
                 for (int i = 0 ; i < dimension ; i++)
                 {
-                    currentBat.velocity[i] += (currentBat.position[i] - bestBat.position[i]) * currentBat.frequency;
-                    currentBat.position[i] += currentBat.velocity[i];
+                    if (currentBat.position.getAssignment(i) != bestBat.position.getAssignment(i))
+                    {
+                        currentBat.velocity++;
+                    }
                 }
+                currentBat.velocity *= currentBat.frequency;
+                currentBat.position.makeRandomChanges(currentBat.velocity);
                 
                 if (currentBat.rate < randomDoubleInRange(minRate, maxRate))
                 {
-                    for (int i = 0 ; i < dimension ; i++)
-                    {
-                        currentBat.position[i] = bestBat.position[i] + (int) random.nextGaussian();
-                    }
+                    currentBat.position = bestBat.position.clone();
+                    currentBat.position.makeRandomChanges((int) random.nextGaussian());
                 }
                 
-                currentBat.recomputeScore();
-
                 if (currentBat.loudness > randomDoubleInRange(minLoudness, maxLoudness) &&
-                    currentBat.score > previousScore)
+                    currentBat.recomputeScore() > previousScore)
                 {
                     currentBat.loudness *= alpha;
                     currentBat.rate = currentBat.initialRate * (1 - Math.exp(-gamma * currentIteration));
@@ -157,7 +151,7 @@ public class BatAlgorithm implements Disambiguator
             System.out.println("Current best : " + bestBat.score);
         }
 
-        return bestBat.configuration;
+        return bestBat.position;
     }
 
     public Configuration disambiguate(Document document, Configuration c)

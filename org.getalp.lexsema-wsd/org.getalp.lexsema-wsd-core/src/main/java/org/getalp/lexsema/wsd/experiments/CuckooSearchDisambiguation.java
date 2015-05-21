@@ -20,8 +20,8 @@ public class CuckooSearchDisambiguation
     {
         int iterations = 1000;
         double levyScale = 0.5;
-        int nestsNumber = 20;
-        int destroyedNests = 5;
+        int nestsNumber = 1;
+        int destroyedNests = 0;
         
         if (args.length >= 1) iterations = Integer.valueOf(args[0]);
         if (args.length >= 2) levyScale = Double.valueOf(args[1]);
@@ -36,13 +36,17 @@ public class CuckooSearchDisambiguation
         
         long startTime = System.currentTimeMillis();
 
-        TextLoader dl = new Semeval2007TextLoader("../data/senseval2007_task7/test/eng-coarse-all-words.xml")
-                .loadNonInstances(false);
+        TextLoader dl = new Semeval2007TextLoader("../data/senseval2007_task7/test/eng-coarse-all-words.xml");
 
         LRLoader lrloader = new DictionaryLRLoader(new File("../data/dictionnaires-lesk/dict-adapted-all-relations.xml"));
         
         ConfigurationScorer scorer = new SemEval2007Task7PerfectConfigurationScorer();
-
+        //ConfigurationScorer scorer = new ACSimilarityConfigurationScorer(new ACExtendedLeskSimilarity());
+        //ConfigurationScorer scorer = new ACSimilarityConfigurationScorer(new IndexedOverlapSimilarity());
+        //ConfigurationScorer scorer = new TverskyConfigurationScorer(new ACExtendedLeskSimilarity(), Runtime.getRuntime().availableProcessors());
+        //ConfigurationScorer scorer = new ConfigurationScorerWithCache(new ACExtendedLeskSimilarity());
+        //ConfigurationScorer scorer = new TestScorer(new TverskyConfigurationScorer(new IndexedOverlapSimilarity(), Runtime.getRuntime().availableProcessors()));
+        
         Disambiguator cuckooDisambiguator = new CuckooSearchDisambiguator(iterations, levyScale, nestsNumber, destroyedNests, scorer, true);
 
         System.out.println("Loading texts...");
