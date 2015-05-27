@@ -78,8 +78,8 @@ public class BatAlgorithm implements Disambiguator
 
             for (Bat currentBat : bats)
             {
-                Integer[] previousPosition = currentBat.position.clone();
-                Integer[] previousVelocity = currentBat.velocity.clone();
+                int[] previousPosition = currentBat.position.clone();
+                int[] previousVelocity = currentBat.velocity.clone();
                 double previousScore = currentBat.score;
 
                 currentBat.frequency = randomDoubleInRange(minFrequency, maxFrequency);
@@ -155,8 +155,8 @@ public class BatAlgorithm implements Disambiguator
 
     private class Bat {
         private ContinuousConfiguration configuration;
-        private Integer[] position;
-        private Integer[] velocity;
+        private int[] position;
+        private int[] velocity;
         private double frequency;
         private double initialRate;
         private double rate;
@@ -165,8 +165,8 @@ public class BatAlgorithm implements Disambiguator
 
         public Bat() {
             configuration = new ContinuousConfiguration(currentDocument);
-            position = new Integer[currentDocument.size()];
-            velocity = new Integer[currentDocument.size()];
+            position = new int[currentDocument.size()];
+            velocity = new int[currentDocument.size()];
             for (int i = 0; i < currentDocument.size(); ++i) {
                 position[i] = configuration.getAssignment(i);
                 velocity[i] = 0;
