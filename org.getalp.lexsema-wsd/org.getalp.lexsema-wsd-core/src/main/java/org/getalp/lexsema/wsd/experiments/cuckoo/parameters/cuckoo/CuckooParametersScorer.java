@@ -1,4 +1,11 @@
-package org.getalp.lexsema.wsd.experiments.cuckoo.parameters;
+package org.getalp.lexsema.wsd.experiments.cuckoo.parameters.cuckoo;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 import org.getalp.lexsema.io.document.TextLoader;
 import org.getalp.lexsema.similarity.Document;
@@ -18,19 +25,58 @@ public class CuckooParametersScorer implements CuckooSolutionScorer
     private int iterationsOutside;
     
     private int iterationsInside;
-    
+
+    private ExecutorService threadPool;
+
     public CuckooParametersScorer(ConfigurationScorer scorer, TextLoader dl, int iterationsOutside, int iterationsInside)
     {
         this.scorer = scorer;
         this.dl = dl;
         this.iterationsOutside = iterationsOutside;
         this.iterationsInside = iterationsInside;
+        int nbThreads = Runtime.getRuntime().availableProcessors();
+        threadPool = Executors.newFixedThreadPool(nbThreads);
     }
     
     public double computeScore(CuckooParameters params)
     {
-        double res = 0;
+        ArrayList<IntermediateScorer> scorers = new ArrayList<IntermediateScorer>();
         for (int i = 0 ; i < iterationsOutside ; i++)
+        {
+            scorers.add(new IntermediateScorer(params));
+        }
+
+        double res = 0;
+        try
+        {
+            List<Future<Double>> intermediateScores = threadPool.invokeAll(scorers);
+            for (Future<Double> intermediateScore : intermediateScores)
+            {
+                res += intermediateScore.get();
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        return res / ((double) iterationsOutside);
+    }
+
+    public double computeScore(CuckooSolution configuration)
+    {
+        return computeScore((CuckooParameters) configuration);
+    }
+
+    private class IntermediateScorer implements Callable<Double>
+    {
+        private CuckooParameters params;
+        
+        public IntermediateScorer(CuckooParameters params)
+        {
+            this.params = params;
+        }
+
+        public Double call() throws Exception
         {
             Disambiguator cuckooDisambiguator = new CuckooSearchDisambiguator(iterationsInside, 
                     params.levyScale.currentValue, 
@@ -46,13 +92,12 @@ public class CuckooParametersScorer implements CuckooSolutionScorer
                 nbTexts++;
             }
             cuckooDisambiguator.release();
-            res += tmpres / ((double) nbTexts);
+            return tmpres / ((double) nbTexts);
         }
-        return res / ((double) iterationsOutside);
     }
-
-    public double computeScore(CuckooSolution configuration)
+    
+    public void finalize()
     {
-        return computeScore((CuckooParameters) configuration);
+        threadPool.shutdown();
     }
 }

@@ -1,8 +1,9 @@
-package org.getalp.lexsema.wsd.experiments.cuckoo.parameters;
+package org.getalp.lexsema.wsd.experiments.cuckoo.parameters.cuckoo;
 
 import java.util.Random;
 
 import org.getalp.lexsema.wsd.experiments.cuckoo.generic.CuckooSolution;
+import org.getalp.lexsema.wsd.experiments.cuckoo.parameters.ScalarParameter;
 
 public class CuckooParameters implements CuckooSolution
 {
@@ -16,21 +17,18 @@ public class CuckooParameters implements CuckooSolution
     
     public CuckooParameters()
     {
-        levyScale = new ScalarParameter(0, 5, 0.1);
-        nestsNumber = new ScalarParameter(1, 100, 2);
-        destroyedNests = new ScalarParameter(0, 0.8, 0.016);
+        levyScale = new ScalarParameter(0, 5);
+        nestsNumber = new ScalarParameter(1, 100);
+        destroyedNests = new ScalarParameter(0, 1);
     }
 
-    public CuckooParameters(double levyScale, double nestsNumber, double destroyedNests)
-    {
-        this.levyScale = new ScalarParameter(0, 5, 0.1, levyScale);
-        this.nestsNumber = new ScalarParameter(1, 100, 2, nestsNumber);
-        this.destroyedNests = new ScalarParameter(0, 0.8, 0.016, destroyedNests);
-    }
-    
     public CuckooParameters clone()
     {
-        return new CuckooParameters(levyScale.currentValue, nestsNumber.currentValue, destroyedNests.currentValue);
+        CuckooParameters ret = new CuckooParameters();
+        ret.levyScale.currentValue = levyScale.currentValue;
+        ret.nestsNumber.currentValue =  nestsNumber.currentValue;
+        ret.destroyedNests.currentValue = destroyedNests.currentValue;
+        return ret;
     }
     
     public void makeRandomChanges(double distance)
@@ -42,12 +40,12 @@ public class CuckooParameters implements CuckooSolution
         x /= norm;
         y /= norm;
         z /= norm;
-        //System.out.println("Move levyScale : " + x * distance * levyScale.step);
-        //System.out.println("Move nestsNumber : " + y * distance * nestsNumber.step);
-        //System.out.println("Move destroyedNests : " + z * distance * destroyedNests.step);
         levyScale.add(x * distance);
         nestsNumber.add(y * distance);
         destroyedNests.add(z * distance);
+        System.out.println("Move levyScale : " + x * distance * levyScale.step);
+        System.out.println("Move nestsNumber : " + y * distance * nestsNumber.step);
+        System.out.println("Move destroyedNests : " + z * distance * destroyedNests.step);
     }
     
     public String toString()

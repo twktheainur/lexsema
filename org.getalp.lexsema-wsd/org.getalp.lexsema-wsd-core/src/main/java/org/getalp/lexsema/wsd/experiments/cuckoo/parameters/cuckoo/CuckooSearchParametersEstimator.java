@@ -1,4 +1,4 @@
-package org.getalp.lexsema.wsd.experiments.cuckoo.parameters;
+package org.getalp.lexsema.wsd.experiments.cuckoo.parameters.cuckoo;
 
 import java.io.File;
 import java.io.PrintWriter;
@@ -19,7 +19,7 @@ public class CuckooSearchParametersEstimator
     {
         int iterations = 1000;
         double levyScale = 0.5;
-        int nestsNumber = 20;
+        int nestsNumber = 10;
         int destroyedNests = 5;
         int insideIterations = 1000;
         
@@ -38,7 +38,7 @@ public class CuckooSearchParametersEstimator
 
         long startTime = System.currentTimeMillis();
 
-        TextLoader dl = new Semeval2007TextLoader("../data/senseval2007_task7/test/eng-coarse-all-words.xml");
+        TextLoader dl = new Semeval2007TextLoader("../data/senseval2007_task7/test/eng-coarse-all-words-t1s.xml");
         dl.loadNonInstances(false);
         dl.load();
         

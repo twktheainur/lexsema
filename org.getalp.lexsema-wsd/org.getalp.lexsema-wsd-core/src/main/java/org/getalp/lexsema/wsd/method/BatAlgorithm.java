@@ -41,6 +41,8 @@ public class BatAlgorithm implements Disambiguator
 
     private Bat bestBat;
     
+    private boolean verbose;
+    
     private class Bat
     {
         private ContinuousConfiguration position;
@@ -72,7 +74,7 @@ public class BatAlgorithm implements Disambiguator
     
     public BatAlgorithm(int iterationsNumber, int batsNumber, double minFrequency, double maxFrequency, 
                         double minLoudness, double maxLoudness, double minRate, double MaxRate, 
-                        double alpha, double gamma, ConfigurationScorer configurationScorer)
+                        double alpha, double gamma, ConfigurationScorer configurationScorer, boolean verbose)
     {
         this.iterationsNumber = iterationsNumber;
         this.batsNumber = batsNumber;
@@ -86,6 +88,7 @@ public class BatAlgorithm implements Disambiguator
         this.gamma = gamma;
         this.configurationScorer = configurationScorer;
         bats = new Bat[batsNumber];
+        this.verbose = verbose;
     }
 
     public Configuration disambiguate(Document document)
@@ -103,7 +106,7 @@ public class BatAlgorithm implements Disambiguator
         for (int currentIteration = 0 ; currentIteration < iterationsNumber ; currentIteration++)
         {
             int progress = (int)(((double) currentIteration / (double) iterationsNumber) * 10000);
-            System.out.println("Bat progress : " + (double)progress / 100.0 + "%");
+            if (verbose) System.out.println("Bat progress : " + (double)progress / 100.0 + "%");
 
             for (Bat currentBat : bats)
             {
@@ -127,7 +130,7 @@ public class BatAlgorithm implements Disambiguator
                 if (currentBat.rate < randomDoubleInRange(minRate, maxRate))
                 {
                     currentBat.position = bestBat.position.clone();
-                    currentBat.position.makeRandomChanges((int) random.nextGaussian());
+                    currentBat.position.makeRandomChanges((int) (random.nextGaussian() * getAverageLoudness()));
                 }
                 
                 if (currentBat.loudness > randomDoubleInRange(minLoudness, maxLoudness) &&
@@ -148,7 +151,7 @@ public class BatAlgorithm implements Disambiguator
                 }
             }
             
-            System.out.println("Current best : " + bestBat.score);
+            if (verbose) System.out.println("Current best : " + bestBat.score);
         }
 
         return bestBat.position;
@@ -183,4 +186,10 @@ public class BatAlgorithm implements Disambiguator
         }
     }
 
+    private double getAverageLoudness()
+    {
+        double average = 0;
+        for (Bat currentBat : bats) average += currentBat.loudness;
+        return (average / (double)bats.length);
+    }
 }
