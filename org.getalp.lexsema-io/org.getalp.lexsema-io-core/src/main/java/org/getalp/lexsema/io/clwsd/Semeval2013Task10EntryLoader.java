@@ -4,7 +4,6 @@ package org.getalp.lexsema.io.clwsd;
 import edu.stanford.nlp.util.Pair;
 import org.getalp.lexsema.io.text.EnglishDKPSentenceProcessor;
 import org.getalp.lexsema.io.text.SentenceProcessor;
-import org.getalp.lexsema.language.Language;
 import org.getalp.lexsema.similarity.Sentence;
 import org.getalp.lexsema.similarity.WordImpl;
 import org.slf4j.Logger;
@@ -98,7 +97,7 @@ public class Semeval2013Task10EntryLoader implements ContentHandler, TargetEntry
                 contextString = contextString.replaceAll("<[/]?head>", "");
                 contextString = contextString.replaceAll("/", "_");
                 try {
-                    Sentence s = sentenceProcessor.process(contextString, targetWordId + "#" + currentContextId, Language.ENGLISH.getISO2Code());
+                    Sentence s = sentenceProcessor.process(contextString, targetWordId + "#" + currentContextId);
                     entry.addContext(s, currentWordIndex);
                 } catch (RuntimeException e) {
                     logger.warn(e.getLocalizedMessage());

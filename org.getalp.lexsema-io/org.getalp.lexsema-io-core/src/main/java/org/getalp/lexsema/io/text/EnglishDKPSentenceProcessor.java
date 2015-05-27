@@ -6,10 +6,15 @@ import de.tudarmstadt.ukp.dkpro.core.stanfordnlp.StanfordPosTagger;
 import de.tudarmstadt.ukp.dkpro.core.tokit.BreakIteratorSegmenter;
 import org.apache.uima.analysis_engine.AnalysisEngineDescription;
 import org.apache.uima.resource.ResourceInitializationException;
+import org.getalp.lexsema.language.Language;
 
 import static org.apache.uima.fit.factory.AnalysisEngineFactory.createEngineDescription;
 
 public class EnglishDKPSentenceProcessor extends AbstractDKPSentenceProcessor {
+    public EnglishDKPSentenceProcessor() {
+        super(Language.ENGLISH);
+    }
+
     @Override
     protected AnalysisEngineDescription[] defineAnalysisEngine() throws ResourceInitializationException {
         AnalysisEngineDescription[] descriptors = new AnalysisEngineDescription[3];

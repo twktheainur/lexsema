@@ -1,5 +1,6 @@
 package org.getalp.lexsema.ontolex.babelnet;
 
+import org.getalp.lexsema.language.Language;
 import org.getalp.lexsema.ontolex.LexicalResourceEntity;
 
 /**
@@ -54,7 +55,7 @@ public interface Translation extends LexicalResourceEntity {
      *
      * @return The target language of the definition
      */
-    String getLanguage();
+    Language getLanguage();
 
-    void setLanguage(String language);
+    void setLanguage(Language language);
 }

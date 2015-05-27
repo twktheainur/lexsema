@@ -5,7 +5,8 @@ import cern.colt.matrix.tdouble.DoubleMatrix2D;
 import org.getalp.lexsema.ontolex.LexicalResourceEntity;
 import org.getalp.lexsema.similarity.Sense;
 import org.getalp.lexsema.similarity.measures.SimilarityMeasure;
-import org.getalp.lexsema.similarity.signatures.SemanticSignature;
+import org.getalp.lexsema.similarity.signatures.IndexedSemanticSignature;
+import org.getalp.lexsema.similarity.signatures.StringSemanticSignature;
 import org.getalp.lexsema.util.URIUtils;
 import org.getalp.ml.matrix.filters.Filter;
 import org.slf4j.Logger;
@@ -55,7 +56,7 @@ public class PairwiseCLSimilarityMatrixGeneratorSim implements PairwiseCrossLing
 
                     printSimilarityOutput(a, b, value, totalPairs, currentPairIndex);
                 } else {
-                    similarityMatrix.setQuick(indexA, indexB, computeSimilarity(a.getSemanticSignature(), b.getSemanticSignature()));
+                    similarityMatrix.setQuick(indexA, indexB, computeSimilarity((StringSemanticSignature) a.getSemanticSignature(), (StringSemanticSignature) b.getSemanticSignature()));
                 }
                 indexB++;
                 currentPairIndex++;
@@ -74,7 +75,11 @@ public class PairwiseCLSimilarityMatrixGeneratorSim implements PairwiseCrossLing
     }
 
 
-    private double computeSimilarity(SemanticSignature a, SemanticSignature b) {
+    private double computeSimilarity(IndexedSemanticSignature a, IndexedSemanticSignature b) {
+        return similarityMeasure.compute(a, b, null, null);
+    }
+
+    private double computeSimilarity(StringSemanticSignature a, StringSemanticSignature b) {
         return similarityMeasure.compute(a, b, null, null);
     }
 

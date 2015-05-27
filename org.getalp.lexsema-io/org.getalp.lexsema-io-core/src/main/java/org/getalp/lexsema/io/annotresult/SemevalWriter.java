@@ -24,7 +24,7 @@ public class SemevalWriter implements ConfigurationWriter {
     }
 
     @Override
-    public void write(Document d, int[] assignments) {
+    public void write(Document d, Integer[] assignments) {
         try (PrintStream ps = new PrintStream(path)) {
             String id = d.getId();
             int wordIndex = 0;

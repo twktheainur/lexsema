@@ -41,6 +41,7 @@ public class DBNaryLoaderImpl implements DBNaryLoader {
     private boolean shuffle;
     private boolean loadDefinitions;
     private boolean loadRelated;
+    private Language language;
 
 
     public DBNaryLoaderImpl(final String dbPath, final String ontologyPropertiesPath, final Language language)
@@ -53,8 +54,27 @@ public class DBNaryLoaderImpl implements DBNaryLoader {
         // Creating DBNary wrapper
         dbnary = (DBNary) LexicalResourceFactory.getLexicalResource(DBNary.class, model, language);
         senseCache = SenseCacheImpl.getInstance();
+        this.language = language;
     }
 
+    public DBNaryLoaderImpl(DBNary dbNary)
+            throws IOException, InvocationTargetException, NoSuchMethodException,
+            ClassNotFoundException, InstantiationException, IllegalAccessException {
+        model = dbNary.getModel();
+        // Creating DBNary wrapper
+        dbnary = dbNary;
+        senseCache = SenseCacheImpl.getInstance();
+    }
+
+    public DBNaryLoaderImpl(DBNary dbNary, Language language)
+            throws IOException, InvocationTargetException, NoSuchMethodException,
+            ClassNotFoundException, InstantiationException, IllegalAccessException {
+        model = dbNary.getModel();
+        // Creating DBNary wrapper
+        dbnary = dbNary;
+        senseCache = SenseCacheImpl.getInstance();
+        this.language = language;
+    }
 
     @SuppressWarnings("FeatureEnvy")
     @Override
@@ -66,7 +86,7 @@ public class DBNaryLoaderImpl implements DBNaryLoader {
         List<LexicalEntry> les;
         LexicalEntry returnEntry = null;
         try {
-            v = dbnary.getVocable(lemma);
+            v = dbnary.getVocable(lemma, language);
             les = dbnary.getLexicalEntries(v);
             int currentEntry = 0;
             int size = les.size();
@@ -82,7 +102,7 @@ public class DBNaryLoaderImpl implements DBNaryLoader {
                 }
             }
         } catch (NoSuchVocableException e) {
-            logger.error(e.toString());
+            logger.warn(e.toString());
         }
         return returnEntry;
     }

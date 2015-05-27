@@ -6,7 +6,6 @@ import org.getalp.lexsema.wsd.configuration.ConfidenceConfiguration;
 import org.getalp.lexsema.wsd.configuration.Configuration;
 import org.getalp.lexsema.wsd.configuration.org.getalp.lexsema.wsd.evaluation.Evaluation;
 import org.getalp.lexsema.wsd.configuration.org.getalp.lexsema.wsd.evaluation.GoldStandard;
-import org.getalp.lexsema.wsd.configuration.org.getalp.lexsema.wsd.evaluation.Semeval2007GoldStandard;
 import org.getalp.lexsema.wsd.configuration.org.getalp.lexsema.wsd.evaluation.StandardEvaluation;
 import org.getalp.lexsema.wsd.score.ConfigurationScorer;
 import org.slf4j.Logger;
@@ -68,7 +67,7 @@ public class SimulatedAnnealing implements Disambiguator {
         this.coolingRate = coolingRate;
         this.iterations = iterations;
         evaluation = new StandardEvaluation();
-        goldStandard = new Semeval2007GoldStandard();
+        //goldStandard = new Semeval2007GoldStandard();
     }
 
     public SimulatedAnnealing(double p0, double coolingRate, int convergenceThreshold, int iterations, ConfigurationScorer configurationScorer, double T0) {
@@ -79,7 +78,7 @@ public class SimulatedAnnealing implements Disambiguator {
         this.coolingRate = coolingRate;
         this.iterations = iterations;
         evaluation = new StandardEvaluation();
-        goldStandard = new Semeval2007GoldStandard();
+        //goldStandard = new Semeval2007GoldStandard();
     }
 
     /**
@@ -150,7 +149,7 @@ public class SimulatedAnnealing implements Disambiguator {
     }
 
     private void initialEvaluation(Document document) {
-        //Configuration configuration = new ConfidenceConfiguration(document, ConfidenceConfiguration.InitializationType.RANDOM);
+        Configuration configuration = new ConfidenceConfiguration(document, ConfidenceConfiguration.InitializationType.RANDOM);
         logger.info("Sampling...");
         List<Double> scores = new ArrayList<>();
         double sum;
@@ -236,7 +235,9 @@ public class SimulatedAnnealing implements Disambiguator {
 
         Configuration cp = makeRandomChange(configuration, document, 1, uniformGenerator);
         score = configurationScorer.computeScore(document, cp);
-        f1score = evaluation.evaluate(goldStandard, cp).getPrecision();
+        if (goldStandard != null) {
+            f1score = evaluation.evaluate(goldStandard, cp).getPrecision();
+        }
         //double tmp = score;
         //score = f1score;
         //f1score = tmp;
@@ -255,7 +256,7 @@ public class SimulatedAnnealing implements Disambiguator {
             }
             changedSinceLast = true;
             numberOfAcceptanceEvents++;
-        } else {
+        } else if (delta > 0) {
 
             if (delta > maxDelta) {
                 maxDelta = delta;
@@ -266,7 +267,7 @@ public class SimulatedAnnealing implements Disambiguator {
                 //logger.info(String.format("\r\t[Cycle=%f | %.2f%%][Accepted Lower Score = %.2f][Best = %.2f][P(a)=%.2f][Ld=%.2f]", currentCycle, (double) cycleNumber / iterations * 100d, score, bestScore, Math.exp(-delta / T), delta));
                 configuration = cp;
                 prevScore = score;
-                changedSinceLast = true;
+                //changedSinceLast = true;
                 numberOfAcceptanceEvents++;
             }
         }

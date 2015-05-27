@@ -14,6 +14,7 @@ import org.apache.uima.resource.ResourceSpecifier;
 import org.apache.uima.util.CasCreationUtils;
 import org.getalp.lexsema.io.uima.SentenceLevelConsumer;
 import org.getalp.lexsema.io.uima.TokenAnnotationConsumer;
+import org.getalp.lexsema.language.Language;
 import org.getalp.lexsema.similarity.Sentence;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,6 +28,11 @@ import static org.apache.uima.fit.factory.CollectionReaderFactory.createReaderDe
 public abstract class AbstractDKPSentenceProcessor implements SentenceProcessor {
 
     private Logger logger = LoggerFactory.getLogger(AbstractDKPSentenceProcessor.class);
+    private Language language;
+
+    protected AbstractDKPSentenceProcessor(Language language) {
+        this.language = language;
+    }
 
     private Sentence processSentence(final ResourceSpecifier readerDesc,
                                      AnalysisEngineDescription... engineDescriptions) throws UIMAException, IOException {
@@ -66,13 +72,13 @@ public abstract class AbstractDKPSentenceProcessor implements SentenceProcessor 
 
     @SuppressWarnings("all")
     @Override
-    public Sentence process(String sentenceText, String documentId, String language) {
+    public Sentence process(String sentenceText, String documentId) {
         try {
             CollectionReaderDescription cr = createReaderDescription(
                     StringReader.class,
                     StringReader.PARAM_DOCUMENT_ID, documentId,
                     StringReader.PARAM_DOCUMENT_TEXT, sentenceText,
-                    StringReader.PARAM_LANGUAGE, language);
+                    StringReader.PARAM_LANGUAGE, language.getISO2Code());
             return processSentence(cr, defineAnalysisEngine());
         } catch (UIMAException | IOException e) {
             logger.error(e.getLocalizedMessage());

@@ -6,7 +6,7 @@ import org.getalp.lexsema.io.document.SemCorTextLoader;
 import org.getalp.lexsema.io.document.Semeval2007TextLoader;
 import org.getalp.lexsema.io.document.TextLoader;
 import org.getalp.lexsema.io.resource.LRLoader;
-import org.getalp.lexsema.io.resource.wordnet.WordnetLoader;
+import org.getalp.lexsema.io.resource.dictionary.DictionaryLRLoader;
 import org.getalp.lexsema.similarity.Document;
 import org.getalp.lexsema.supervised.WekaDisambiguator;
 import org.getalp.lexsema.supervised.features.*;
@@ -16,6 +16,7 @@ import org.getalp.lexsema.wsd.configuration.Configuration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +27,7 @@ public class ArabicNUSPTDisambiguation {
     public static void main(String[] args) throws IOException {
         TextLoader dl = new Semeval2007TextLoader(args[0]).loadNonInstances(false);
         TextLoader semCor = new SemCorTextLoader(args[1]);
-        LRLoader lrloader = new WordnetLoader("../data/wordnet/2.1/dict").extendedSignature(true).shuffle(false);
+        LRLoader lrloader = new DictionaryLRLoader(new File(args[2]));
 
 //        LemmaFeatureExtractor lfe = new LemmaFeatureExtractor(3,1);
 //        PosFeatureExtractor pfe = new PosFeatureExtractor(1, 2);
@@ -53,16 +54,16 @@ public class ArabicNUSPTDisambiguation {
         contextWindows.add(new ContextWindow(-2, 1));
         contextWindows.add(new ContextWindow(-1, 2));
         contextWindows.add(new ContextWindow(1, 3));
-        LocalCollocationFeatureExtractor lcfe = new LocalCollocationFeatureExtractor(contextWindows);
+        LocalCollocationFeatureExtractor lcfe = new LocalCollocationFeatureExtractor(contextWindows, false);
         PosFeatureExtractor pfe = new PosFeatureExtractor(3, 3);
-        LocalTextFeatureExtractor acfe = new LemmaFeatureExtractor(3, 3);
+        LocalTextFeatureExtractor acfe = new LemmaFeatureExtractor(3, 3, false);
 
         AggregateLocalTextFeatureExtractor altfe = new AggregateLocalTextFeatureExtractor();
         altfe.addExtractor(lcfe);
         altfe.addExtractor(pfe);
         altfe.addExtractor(acfe);
 
-        TrainingDataExtractor trainingDataExtractor = new SemCorTrainingDataExtractor(altfe);
+        TrainingDataExtractor trainingDataExtractor = new SemCorTrainingDataExtractor(altfe, true);
         trainingDataExtractor.extract(semCor);
 
         //Le dernier argument est la taille de la poole de threads

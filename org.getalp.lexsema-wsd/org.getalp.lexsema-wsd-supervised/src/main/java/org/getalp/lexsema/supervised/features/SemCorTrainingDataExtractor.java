@@ -14,11 +14,16 @@ public class SemCorTrainingDataExtractor implements TrainingDataExtractor {
     private static Logger logger = LoggerFactory.getLogger(SemCorTrainingDataExtractor.class);
     private LocalTextFeatureExtractor localTextFeatureExtractor;
     private Map<String, List<List<String>>> instanceVectors;
-
+    private boolean useSurfaceForm;
 
     public SemCorTrainingDataExtractor(LocalTextFeatureExtractor localTextFeatureExtractor) {
+        this(localTextFeatureExtractor, false);
+    }
+
+    public SemCorTrainingDataExtractor(LocalTextFeatureExtractor localTextFeatureExtractor, boolean useSurfaceForm) {
         this.localTextFeatureExtractor = localTextFeatureExtractor;
         instanceVectors = new HashMap<>();
+        this.useSurfaceForm = useSurfaceForm;
     }
 
 
@@ -58,13 +63,21 @@ public class SemCorTrainingDataExtractor implements TrainingDataExtractor {
                 int wordIndex = 0;
                 for (Word w : text) {
                     String lemma = w.getLemma();
+                    String surfaceForm = w.getSurfaceForm();
                     List<String> instance = localTextFeatureExtractor.getFeatures(text, wordIndex);
                     String semanticTag = w.getSemanticTag();
                     instance.add(0, String.format("\"%s\"", semanticTag));
-                    if (!instanceVectors.containsKey(lemma)) {
-                        instanceVectors.put(lemma, new ArrayList<List<String>>());
+                    String key = "";
+                    if (useSurfaceForm) {
+                        key = surfaceForm;
+                    } else {
+                        key = lemma;
                     }
-                    instanceVectors.get(lemma).add(instance);
+
+                    if (!instanceVectors.containsKey(key)) {
+                        instanceVectors.put(key, new ArrayList<List<String>>());
+                    }
+                    instanceVectors.get(key).add(instance);
                     wordIndex++;
                 }
             }

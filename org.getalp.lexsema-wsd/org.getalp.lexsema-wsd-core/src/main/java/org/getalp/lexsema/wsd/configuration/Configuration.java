@@ -5,7 +5,7 @@ import org.getalp.lexsema.similarity.Document;
 /**
  * A WSD sense assignment configuration. Allows to assign the index of a sense to a particular word of a Document.
  */
-public interface Configuration {
+public interface Configuration extends Iterable<Integer> {
     void setSense(int wordIndex, int senseIndex);
 
     void setConfidence(int wordIndex, double confidence);
@@ -25,7 +25,7 @@ public interface Configuration {
     public int countUnassigned();
 
     @SuppressWarnings("ReturnOfCollectionOrArrayField")
-    int[] getAssignments();
+    Integer[] getAssignments();
 
     public Document getDocument();
 }

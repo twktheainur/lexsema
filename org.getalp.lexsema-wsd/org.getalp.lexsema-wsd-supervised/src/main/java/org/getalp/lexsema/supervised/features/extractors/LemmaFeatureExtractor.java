@@ -8,12 +8,18 @@ import java.util.List;
 
 public class LemmaFeatureExtractor implements LocalTextFeatureExtractor {
 
+    private final boolean useLemmas;
     private int lemmamin;
     private int lemmamax;
 
     public LemmaFeatureExtractor(int lemmamin, int lemmamax) {
+        this(lemmamin, lemmamax, true);
+    }
+
+    public LemmaFeatureExtractor(int lemmamin, int lemmamax, boolean useLemmas) {
         this.lemmamin = lemmamin;
         this.lemmamax = lemmamax;
+        this.useLemmas = useLemmas;
     }
 
     @Override
@@ -25,7 +31,10 @@ public class LemmaFeatureExtractor implements LocalTextFeatureExtractor {
                 if (j < 0 || j >= document.size()) {
                     lemmaFeature = "\"X\"";
                 } else {
-                    String lemma = document.getWord(0, j).getLemma();
+                    String lemma = null;
+                    if (useLemmas) {
+                        lemma = document.getWord(0, j).getLemma();
+                    }
                     if (lemma != null) {
                         lemma = document.getWord(0, j).getSurfaceForm();
                     }

@@ -13,9 +13,7 @@ import org.getalp.lexsema.wsd.method.Disambiguator;
 import org.getalp.lexsema.wsd.method.SimulatedAnnealing;
 import org.getalp.lexsema.wsd.score.ConfigurationScorer;
 import org.getalp.lexsema.wsd.score.MatrixTverskiConfigurationScorer;
-import org.getalp.ml.matrix.factorization.TapkeeNLMatrixFactorization;
-import org.getalp.ml.matrix.factorization.TapkeeNLMatrixFactorizationFactory;
-import org.getalp.ml.matrix.filters.MatrixFactorizationFilter;
+import org.getalp.ml.matrix.filters.NormalizationFilter;
 import org.getalp.ml.matrix.score.SumMatrixScorer;
 
 import java.io.File;
@@ -53,7 +51,7 @@ public class AdaptiveSimulatedAnnealingDisambiguation {
             threads = Runtime.getRuntime().availableProcessors();
         }
 
-        ConfigurationScorer configurationScorer = new MatrixTverskiConfigurationScorer(sim, new MatrixFactorizationFilter(new TapkeeNLMatrixFactorizationFactory(TapkeeNLMatrixFactorization.Method.T_SNE)), new SumMatrixScorer(), threads);
+        ConfigurationScorer configurationScorer = new MatrixTverskiConfigurationScorer(sim, new NormalizationFilter(NormalizationFilter.NormalizationType.UNIT_NORM), new SumMatrixScorer(), threads);
         //ConfigurationScorer configurationScorer = new TverskyConfigurationScorer(sim, threads);
         // ConfigurationScorer configurationScorer = new ACSimilarityConfigurationScorer(sim);
 

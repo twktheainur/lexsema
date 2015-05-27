@@ -2,6 +2,8 @@ package org.getalp.lexsema.wsd.configuration;
 
 import org.getalp.lexsema.similarity.Document;
 
+import java.util.Arrays;
+import java.util.Iterator;
 import java.util.Random;
 
 public class ContinuousConfiguration implements Configuration
@@ -11,22 +13,22 @@ public class ContinuousConfiguration implements Configuration
     private Document document;
 
     private int documentSize;
-    
-    private int[] assignments;
+
+    private Integer[] assignments;
     
     public ContinuousConfiguration(Document d)
     {
         document = d;
         documentSize = d.size();
-        assignments = new int[documentSize];
+        assignments = new Integer[documentSize];
         setRandomSenses();
     }
 
-    public ContinuousConfiguration(Document d, int[] senses)
+    public ContinuousConfiguration(Document d, Integer[] senses)
     {
         document = d;
         documentSize = d.size();
-        assignments = new int[documentSize];
+        assignments = new Integer[documentSize];
         setSenses(senses);
     }
 
@@ -34,11 +36,11 @@ public class ContinuousConfiguration implements Configuration
     {
         document = d;
         documentSize = d.size();
-        assignments = new int[documentSize];
+        assignments = new Integer[documentSize];
         initialize(initialization_value);
     }
 
-    public void setSenses(int[] senses)
+    public void setSenses(Integer[] senses)
     {
         if (senses.length != documentSize) return;
         for (int i = 0 ; i < documentSize ; i++)
@@ -125,9 +127,14 @@ public class ContinuousConfiguration implements Configuration
         return 0;
     }
 
-    public int[] getAssignments()
+    public Integer[] getAssignments()
     {
         return assignments;
+    }
+
+    @Override
+    public Iterator<Integer> iterator() {
+        return Arrays.asList(assignments).iterator();
     }
 
     public Document getDocument()

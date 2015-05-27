@@ -1,53 +1,76 @@
 package org.getalp.lexsema.acceptali.crosslingual.translation;
 
+import org.getalp.lexsema.io.resource.LRLoader;
+import org.getalp.lexsema.io.resource.dbnary.DBNaryLoaderImpl;
 import org.getalp.lexsema.io.text.SentenceProcessor;
 import org.getalp.lexsema.language.Language;
 import org.getalp.lexsema.ontolex.LexicalEntry;
+import org.getalp.lexsema.ontolex.LexicalResourceEntity;
+import org.getalp.lexsema.ontolex.LexicalSense;
 import org.getalp.lexsema.ontolex.dbnary.DBNary;
 import org.getalp.lexsema.ontolex.dbnary.Translation;
 import org.getalp.lexsema.ontolex.dbnary.Vocable;
 import org.getalp.lexsema.ontolex.dbnary.exceptions.NoSuchVocableException;
+import org.getalp.lexsema.similarity.Document;
 import org.getalp.lexsema.similarity.Sentence;
-import org.getalp.lexsema.similarity.Word;
-import org.getalp.lexsema.util.segmentation.Segmenter;
-import org.getalp.lexsema.util.segmentation.SpaceSegmenter;
+import org.getalp.lexsema.wsd.configuration.Configuration;
 import org.getalp.lexsema.wsd.method.Disambiguator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.tartarus.snowball.SnowballStemmer;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.util.*;
 
 public class DbNaryDisambiguatingTranslator implements Translator {
 
     private static Logger logger = LoggerFactory.getLogger(DbNaryDisambiguatingTranslator.class);
     private final Disambiguator disambiguator;
+    private final SnowballStemmer snowballStemmer;
+    private final Collection<String> stopList;
     private DBNary dbNary;
     private SentenceProcessor sentenceProcessor;
 
-    public DbNaryDisambiguatingTranslator(DBNary dbNary, SentenceProcessor sentenceProcessor, Disambiguator disambiguator) {
+    public DbNaryDisambiguatingTranslator(DBNary dbNary, SentenceProcessor sentenceProcessor, Disambiguator disambiguator, SnowballStemmer snowballStemmer, Collection<String> stopList) {
         this.dbNary = dbNary;
         this.sentenceProcessor = sentenceProcessor;
         this.disambiguator = disambiguator;
+        this.snowballStemmer = snowballStemmer;
+        this.stopList = Collections.unmodifiableCollection(stopList);
     }
 
     @Override
     public String translate(String source, Language sourceLanguage, Language targetLanguage) {
         StringBuilder outputBuilder = new StringBuilder();
-
-        if (sentenceProcessor != null) {
-            Sentence sentence = sentenceProcessor.process(source, "", sourceLanguage.getLanguageName());
-            for (Word w : sentence) {
-                outputBuilder.append(String.format("%s ", getWordTranslation(w.getLemma(), sourceLanguage, targetLanguage)));
+        LRLoader lrLoader = null;
+        try {
+            lrLoader = new DBNaryLoaderImpl(dbNary, sourceLanguage).loadDefinitions(true);
+            Sentence sentence = sentenceProcessor.process(filterInput(source), "");
+            loadSenses(lrLoader, sentence);
+            Configuration result = disambiguator.disambiguate(sentence);
+            //noinspection LawOfDemeter
+            for (int i = 0; i < result.size(); i++) {
+                outputBuilder.append(String.format("%s ", getWordTranslation(i, result, sentence, sourceLanguage, targetLanguage)));
             }
-        } else {
-            Segmenter s = new SpaceSegmenter();
-            List<String> sentence = s.segment(source.replaceAll("\\p{Punct}", " ").replaceAll("  ", " "));
-            for (String w : sentence) {
-                outputBuilder.append(String.format("%s ", getWordTranslation(w, sourceLanguage, targetLanguage)));
-            }
+        } catch (IOException e) {
+            logger.error("IO " + e.getLocalizedMessage());
+        } catch (InvocationTargetException e) {
+            logger.error("Invoke " + e.getLocalizedMessage());
+        } catch (NoSuchMethodException e) {
+            logger.error(e.getLocalizedMessage());
+        } catch (ClassNotFoundException e) {
+            logger.error("Class not found: " + e.getLocalizedMessage());
+        } catch (InstantiationException e) {
+            logger.error("Cannot instantiate" + e.getLocalizedMessage());
+        } catch (IllegalAccessException e) {
+            logger.error("Illegal access" + e.getLocalizedMessage());
         }
         return outputBuilder.toString();
+    }
+
+    private String filterInput(String input) {
+        return input.replaceAll("\\p{Punct}", "");
     }
 
     @Override
@@ -55,21 +78,48 @@ public class DbNaryDisambiguatingTranslator implements Translator {
 
     }
 
-    private String getWordTranslation(String form, Language sourceLanguage, Language targetLanguage) {
+    private void loadSenses(LRLoader lrLoader, Document document) {
+        lrLoader.loadSenses(document);
+    }
+
+    private String getWordTranslation(int index, Configuration c, Document d, Language sourceLanguage, Language targetLanguage) {
         StringBuilder outputBuilder = new StringBuilder();
-        try {
-            Vocable v = dbNary.getVocable(form, sourceLanguage);
-            List<Translation> translations = getDBNaryTranslation(v, targetLanguage);
+        int selectedSense = c.getAssignment(index);
+        List<Translation> translations = null;
+        Collection<String> uniqueTranslations = new TreeSet<>();
+        if (selectedSense >= 0) {
+            LexicalSense sense = getAssignedSense(d, index, selectedSense);
+            if (sense != null) {
+                translations = getDBNarySenseTranslation(sense, targetLanguage);
+            }
+        }
+        if (translations == null || translations.isEmpty()) {
+            try {
+                Vocable v = dbNary.getVocable(getWordLemma(d.getWord(0, index)), sourceLanguage);
+                translations = getDBNaryTranslation(v, targetLanguage);
+            } catch (NoSuchVocableException e) {
+                logger.error(e.getLocalizedMessage());
+            }
+        }
+        if (translations != null) {
             for (Translation translation : translations) {
                 if (translation.getLanguage().equals(targetLanguage)) {
-                    outputBuilder.append(String.format("%s ", translation.getWrittenForm()));
+                    uniqueTranslations.add(translation.getWrittenForm());
                 }
             }
-            return outputBuilder.toString();
-        } catch (NoSuchVocableException ignored) {
-            //logger.error(e.getLocalizedMessage());
+            for (String t : uniqueTranslations) {
+                if (!stopList.contains(t)) {
+                    //snowballStemmer.setCurrent(t);
+                    //outputBuilder.append(snowballStemmer.stem()).append(" ");
+                    outputBuilder.append(t).append(" ");
+                }
+            }
         }
-        return "";
+        return outputBuilder.toString();
+    }
+
+    private String getWordLemma(LexicalEntry w) {
+        return w.getLemma();
     }
 
     private List<Translation> getDBNaryTranslation(Vocable v, Language targetLanguage) {
@@ -79,6 +129,20 @@ public class DbNaryDisambiguatingTranslator implements Translator {
             translations.addAll(dbNary.getTranslations(lexicalEntry, targetLanguage));
         }
         return translations;
+    }
+
+    private List<Translation> getDBNarySenseTranslation(LexicalResourceEntity sense, Language targetLanguage) {
+        List<Translation> translations = new ArrayList<>();
+        translations.addAll(dbNary.getTranslations(sense, targetLanguage));
+        return translations;
+    }
+
+    private LexicalSense getAssignedSense(Document d, int index, int senseIndex) {
+        if (d.getSenses(index).size() > index) {
+            return d.getSenses(index).get(senseIndex);
+        } else {
+            return null;
+        }
     }
 
 }

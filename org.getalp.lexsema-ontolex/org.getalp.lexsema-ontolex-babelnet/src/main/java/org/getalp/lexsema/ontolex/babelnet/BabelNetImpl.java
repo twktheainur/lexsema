@@ -2,6 +2,7 @@ package org.getalp.lexsema.ontolex.babelnet;
 
 import lombok.ToString;
 import org.getalp.lexsema.language.Language;
+import org.getalp.lexsema.ontolex.LexicalEntry;
 import org.getalp.lexsema.ontolex.LexicalResourceEntity;
 import org.getalp.lexsema.ontolex.OntolexLexicalResource;
 import org.getalp.lexsema.ontolex.babelnet.queries.RelatedEntitiesForLexicalResourceEntityQueryProcessor;
@@ -84,6 +85,16 @@ public final class BabelNetImpl extends OntolexLexicalResource implements BabelN
             entities.addAll(getRelatedEntities(sourceEntity, rt));
         }
         return entities;
+    }
+
+    @Override
+    public List<LexicalEntry> getLexicalEntries(String entry, Language language) {
+        return null;
+    }
+
+    @Override
+    public List<LexicalEntry> getLexicalEntries(String entry, String pos, Language language) {
+        return null;
     }
 
     @Override

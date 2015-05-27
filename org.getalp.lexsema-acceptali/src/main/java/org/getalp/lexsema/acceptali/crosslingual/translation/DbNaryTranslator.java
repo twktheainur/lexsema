@@ -37,7 +37,7 @@ public class DbNaryTranslator implements Translator {
         StringBuilder outputBuilder = new StringBuilder();
 
         if (sentenceProcessor != null) {
-            Sentence sentence = sentenceProcessor.process(source, "", sourceLanguage.getLanguageName());
+            Sentence sentence = sentenceProcessor.process(source, "");
             for (Word w : sentence) {
                 outputBuilder.append(String.format("%s ", getWordTranslation(w.getLemma(), sourceLanguage, targetLanguage)));
             }

@@ -31,4 +31,9 @@ public class BabelNetBuilder extends OntolexLexicalResourceBuilder {
     public LexicalResource build(OntologyModel model, Language language, String uri) {
         return new BabelNetImpl(model, language, uri, getUriParserRegister(), getEntityFactory());
     }
+
+    @Override
+    public LexicalResource build(OntologyModel model, String uri, Language... languages) {
+        return null;
+    }
 }

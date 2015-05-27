@@ -2,18 +2,20 @@ package org.getalp.lexsema.wsd.configuration;
 
 import org.getalp.lexsema.similarity.Document;
 
+import java.util.Arrays;
+import java.util.Iterator;
 import java.util.Random;
 
 public class BatConfiguration implements Configuration
 {
-    int[] assignments;
+    Integer[] assignments;
     
     Document document;
 
     public BatConfiguration(Document d)
     {
         document = d;
-        assignments = new int[d.size()];
+        assignments = new Integer[d.size()];
         Random r = new Random();
         for (int i = 0; i < assignments.length; i++)
         {
@@ -88,7 +90,7 @@ public class BatConfiguration implements Configuration
         return unassignedCount;
     }
 
-    public int[] getAssignments()
+    public Integer[] getAssignments()
     {
         return assignments;
     }
@@ -106,5 +108,10 @@ public class BatConfiguration implements Configuration
     public double getConfidence(int wordIndex)
     {
         return 0;
+    }
+
+    @Override
+    public Iterator<Integer> iterator() {
+        return Arrays.asList(assignments).iterator();
     }
 }

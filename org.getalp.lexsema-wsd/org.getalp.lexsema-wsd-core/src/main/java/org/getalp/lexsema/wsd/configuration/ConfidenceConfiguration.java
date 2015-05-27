@@ -5,16 +5,18 @@ import cern.colt.matrix.tdouble.DoubleMatrix1D;
 import cern.colt.matrix.tdouble.impl.DenseDoubleMatrix1D;
 import org.getalp.lexsema.similarity.Document;
 
+import java.util.Arrays;
+import java.util.Iterator;
 import java.util.Random;
 
 public class ConfidenceConfiguration implements Configuration {
-    int[] assignments;
+    Integer[] assignments;
     DoubleMatrix1D confidence;
     Document document;
 
     public ConfidenceConfiguration(Document d) {
         int documentSize = d.size();
-        assignments = new int[documentSize];
+        assignments = new Integer[documentSize];
         noAssignmentInit(documentSize);
         confidence = new DenseDoubleMatrix1D(documentSize);
         document = d;
@@ -22,7 +24,7 @@ public class ConfidenceConfiguration implements Configuration {
 
     public ConfidenceConfiguration(Document d, InitializationType initializationType) {
         int documentSize = d.size();
-        assignments = new int[documentSize];
+        assignments = new Integer[documentSize];
         switch (initializationType) {
             case FIRST:
                 firstAssignment(documentSize);
@@ -141,13 +143,18 @@ public class ConfidenceConfiguration implements Configuration {
 
     @Override
     @SuppressWarnings("ReturnOfCollectionOrArrayField")
-    public int[] getAssignments() {
+    public Integer[] getAssignments() {
         return assignments;
     }
 
     @Override
     public Document getDocument() {
         return document;
+    }
+
+    @Override
+    public Iterator<Integer> iterator() {
+        return Arrays.asList(assignments).listIterator();
     }
 
     public enum InitializationType {

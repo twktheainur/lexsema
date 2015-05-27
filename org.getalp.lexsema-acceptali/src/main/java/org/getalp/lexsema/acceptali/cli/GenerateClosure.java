@@ -16,7 +16,10 @@ import org.getalp.lexsema.ontolex.dbnary.exceptions.NoSuchVocableException;
 import org.getalp.lexsema.ontolex.factories.resource.LexicalResourceFactory;
 import org.getalp.lexsema.ontolex.graph.OWLTBoxModel;
 import org.getalp.lexsema.ontolex.graph.OntologyModel;
-import org.getalp.lexsema.ontolex.graph.storage.*;
+import org.getalp.lexsema.ontolex.graph.storage.JenaMemoryStore;
+import org.getalp.lexsema.ontolex.graph.storage.JenaRemoteSPARQLStore;
+import org.getalp.lexsema.ontolex.graph.storage.JenaTDBStore;
+import org.getalp.lexsema.ontolex.graph.storage.StoreHandler;
 import org.getalp.lexsema.ontolex.graph.store.Store;
 
 import java.io.File;
@@ -146,12 +149,6 @@ public final class GenerateClosure {
         switch (storageType) {
             case "tdb":
                 vts = new JenaTDBStore(location);
-                break;
-            case "virtuoso":
-                String user = location.split("@")[0].split(":")[0];
-                String password = location.split("@")[0].split(":")[1];
-                String uri = location.split("@")[1];
-                vts = new VirtuosoStore(uri, user, password);
                 break;
             case "file":
                 vts = new JenaMemoryStore(location);
