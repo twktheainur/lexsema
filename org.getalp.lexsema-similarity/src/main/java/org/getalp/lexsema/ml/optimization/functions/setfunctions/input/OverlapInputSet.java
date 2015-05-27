@@ -1,4 +1,4 @@
-package org.getalp.lexsema.org.getalp.ml.optimization.functions.setfunctions.input;
+package org.getalp.lexsema.ml.optimization.functions.setfunctions.input;
 
 import cern.colt.matrix.tdouble.impl.DenseDoubleMatrix1D;
 import com.wcohen.ss.AbstractStringDistance;

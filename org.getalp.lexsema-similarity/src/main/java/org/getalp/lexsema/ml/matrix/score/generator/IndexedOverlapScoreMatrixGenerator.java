@@ -1,4 +1,4 @@
-package org.getalp.lexsema.org.getalp.ml.matrix.score.generator;
+package org.getalp.lexsema.ml.matrix.score.generator;
 
 import cern.colt.matrix.tdouble.DoubleMatrix2D;
 import cern.colt.matrix.tdouble.impl.DenseDoubleMatrix2D;

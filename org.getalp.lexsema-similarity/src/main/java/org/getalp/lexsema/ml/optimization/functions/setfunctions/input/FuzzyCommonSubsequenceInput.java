@@ -1,4 +1,4 @@
-package org.getalp.lexsema.org.getalp.ml.optimization.functions.setfunctions.input;
+package org.getalp.lexsema.ml.optimization.functions.setfunctions.input;
 
 import cern.colt.function.tdouble.DoubleFunction;
 import cern.colt.matrix.tdouble.impl.DenseDoubleMatrix1D;
