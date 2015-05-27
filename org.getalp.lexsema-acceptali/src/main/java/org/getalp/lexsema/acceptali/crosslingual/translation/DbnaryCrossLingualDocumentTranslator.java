@@ -11,6 +11,7 @@ import org.getalp.lexsema.ontolex.factories.resource.LexicalResourceFactory;
 import org.getalp.lexsema.ontolex.graph.OWLTBoxModel;
 import org.getalp.lexsema.ontolex.graph.OntologyModel;
 import org.getalp.lexsema.ontolex.graph.storage.JenaRemoteSPARQLStore;
+import org.getalp.lexsema.ontolex.graph.storage.JenaTDBStore;
 import org.getalp.lexsema.ontolex.graph.storage.StoreHandler;
 import org.getalp.lexsema.ontolex.graph.store.Store;
 import org.getalp.lexsema.similarity.measures.SimilarityMeasure;
@@ -63,10 +64,18 @@ public final class DbnaryCrossLingualDocumentTranslator implements Translator{
         String sourceDir = args[2];
         String targetDir = args[3];
 
+        DBNary dbNary;
+        if (args.length > 4) {
+            String dbPath = args[4];
+            dbNary = instantiateDBNary(dbPath);
+        } else {
+            dbNary = instantiateDBNary();
+        }
+
         Language lang1 = Language.fromCode(sourceLang);
         Language lang2 = Language.fromCode(targetLang);
 
-        DBNary dbNary = instantiateDBNary();
+
         Translator translator = new DbnaryCrossLingualDocumentTranslator(dbNary);
 
         File sourceDirectoryFile = new File(sourceDir);
@@ -99,49 +108,7 @@ public final class DbnaryCrossLingualDocumentTranslator implements Translator{
         }
     }
 
-    @Override
-    public String translate(String text, Language lang1, Language lang2){
-
-        SentenceProcessor sentenceProcessor;
-        SnowballStemmer snowballStemmer;
-        Collection<String> stopList;
-        if(languageIs(lang1, "en")){
-            sentenceProcessor = new EnglishDKPSentenceProcessor();
-            snowballStemmer = new englishStemmer();
-            stopList = loadStopList("english_stop.txt");
-        } else if (languageIs(lang1, "fr")){
-            sentenceProcessor = new FrenchDKPSentenceProcessor();
-            snowballStemmer = new frenchStemmer();
-            stopList = loadStopList("french_stop.txt");
-        } else {
-            sentenceProcessor = new RussianPythonSentenceProcessor();
-            snowballStemmer = new russianStemmer();
-            stopList = loadStopList("russian_stop.txt");
-        }
-        Translator translator = new DbNaryDisambiguatingTranslator(dbNary,sentenceProcessor,disambiguator, snowballStemmer, stopList);
-        return translator.translate(text, lang1, lang2);
-    }
-
-    @Override
-    public void close() {
-        disambiguator.release();
-    }
-
-    private Collection<String> loadStopList(String name){
-        Collection<String> result = new TreeSet<>();
-        try (BufferedReader br = new BufferedReader(new InputStreamReader(getClass().getClassLoader().getResourceAsStream(name)))) {
-            String line = "";
-            while(line!=null){
-                result.add(line);
-                line = br.readLine();
-            }
-        } catch (IOException e) {
-            logger.error(e.getLocalizedMessage());
-        }
-        return  result;
-    }
-
-    private static boolean languageIs(Language l, String target){
+    private static boolean languageIs(Language l, String target) {
         return l.getISO2Code().equals(target);
     }
 
@@ -152,6 +119,67 @@ public final class DbnaryCrossLingualDocumentTranslator implements Translator{
         OntologyModel tBox = new OWLTBoxModel(ONTOLOGY_PROPERTIES);
         // Creating DBNary wrapper
         return (DBNary) LexicalResourceFactory.getLexicalResource(DBNary.class, tBox, loadLanguages);
+    }
+
+    private static DBNary instantiateDBNary(String path) throws IOException, InvocationTargetException, NoSuchMethodException, ClassNotFoundException, InstantiationException, IllegalAccessException {
+        //Store vts = new JenaRemoteSPARQLStore("http://kaiko.getalp.org/sparql");
+        Store vts = new JenaTDBStore(path);
+        StoreHandler.registerStoreInstance(vts);
+        //StoreHandler.DEBUG_ON = true;
+        OntologyModel tBox = new OWLTBoxModel(ONTOLOGY_PROPERTIES);
+        // Creating DBNary wrapper
+        return (DBNary) LexicalResourceFactory.getLexicalResource(DBNary.class, tBox, loadLanguages);
+    }
+
+    @Override
+    public String translate(String text, Language lang1, Language lang2) {
+
+        SentenceProcessor sentenceProcessor;
+        SnowballStemmer snowballStemmer;
+        Collection<String> stopList;
+        if (languageIs(lang1, "en")) {
+            sentenceProcessor = new EnglishDKPSentenceProcessor();
+            snowballStemmer = new englishStemmer();
+            stopList = loadStopList("english_stop.txt");
+        } else if (languageIs(lang1, "fr")) {
+            sentenceProcessor = new FrenchDKPSentenceProcessor();
+            snowballStemmer = new frenchStemmer();
+            stopList = loadStopList("french_stop.txt");
+        } else {
+            sentenceProcessor = new RussianPythonSentenceProcessor();
+            snowballStemmer = new russianStemmer();
+            stopList = loadStopList("russian_stop.txt");
+        }
+        Translator translator = new DbNaryDisambiguatingTranslator(dbNary, sentenceProcessor, disambiguator, snowballStemmer, stopList);
+        return translator.translate(text, lang1, lang2);
+    }
+
+    @Override
+    public void close() {
+        disambiguator.release();
+    }
+
+    private Collection<String> loadStopList(String name) {
+        Collection<String> result = new TreeSet<>();
+        try (BufferedReader br = new BufferedReader(new InputStreamReader(getClass().getClassLoader().getResourceAsStream(name)))) {
+            String line = "";
+            while (line != null) {
+                if (line.contains("|")) {
+                    String[] fields = line.split("|");
+                    if (!fields[0].isEmpty()) {
+                        line = fields[0];
+                    }
+                }
+                line = line.trim();
+                if (!line.isEmpty()) {
+                    result.add(line);
+                }
+                line = br.readLine();
+            }
+        } catch (IOException e) {
+            logger.error(e.getLocalizedMessage());
+        }
+        return result;
     }
 
 }
