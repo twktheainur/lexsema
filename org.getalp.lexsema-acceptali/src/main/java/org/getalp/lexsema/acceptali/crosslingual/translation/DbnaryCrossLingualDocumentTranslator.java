@@ -1,7 +1,5 @@
-package org.getalp.lexsema.acceptali.experiments;
+package org.getalp.lexsema.acceptali.crosslingual.translation;
 
-import org.getalp.lexsema.acceptali.crosslingual.translation.DbNaryDisambiguatingTranslator;
-import org.getalp.lexsema.acceptali.crosslingual.translation.Translator;
 import org.getalp.lexsema.io.text.EnglishDKPSentenceProcessor;
 import org.getalp.lexsema.io.text.FrenchDKPSentenceProcessor;
 import org.getalp.lexsema.io.text.RussianPythonSentenceProcessor;
@@ -120,7 +118,7 @@ public final class DbnaryCrossLingualDocumentTranslator implements Translator{
             snowballStemmer = new russianStemmer();
             stopList = loadStopList("russian_stop.txt");
         }
-        Translator translator = new DbNaryDisambiguatingTranslator(dbNary,sentenceProcessor,disambiguator);
+        Translator translator = new DbNaryDisambiguatingTranslator(dbNary,sentenceProcessor,disambiguator, snowballStemmer, stopList);
         return translator.translate(text, lang1, lang2);
     }
 
@@ -131,7 +129,7 @@ public final class DbnaryCrossLingualDocumentTranslator implements Translator{
 
     private Collection<String> loadStopList(String name){
         Collection<String> result = new TreeSet<>();
-        try (BufferedReader br = new BufferedReader(new InputStreamReader(getClass().getClassLoader().getResourceAsStream(File.separator + name)))) {
+        try (BufferedReader br = new BufferedReader(new InputStreamReader(getClass().getClassLoader().getResourceAsStream(name)))) {
             String line = "";
             while(line!=null){
                 result.add(line);
