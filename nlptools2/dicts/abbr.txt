@@ -1,0 +1,25 @@
+б/пл	бесплатно	ADVB	Abbr
+С.С.С.Р	СССР	NOUN	neut,sing,0
+а/м	автомашина	NOUN	femn,inan
+ф.-м	физико-математический	ADJF	femn,inan,gent,plur,Abbr
+ф-м	физико-математический	ADJF	femn,inan,gent,plur,Abbr
+ф. -м	физико-математический	ADJF	femn,inan,gent,plur,Abbr
+ф.- м	физико-математический	ADJF	femn,inan,gent,plur,Abbr
+ф -м	физико-математический	ADJF	femn,inan,gent,plur,Abbr
+ф- м	физико-математический	ADJF	femn,inan,gent,plur,Abbr
+физ.-хим	физико-химический	ADJF	Abbr
+физ. -хим	физико-химический	ADJF	Abbr
+физ -хим	физико-химический	ADJF	Abbr
+физ-хим	физико-химический	ADJF	Abbr
+физ.- хим	физико-химический	ADJF	Abbr
+физ- хим	физико-химический	ADJF	Abbr
+пасс.-км	пассажиро-километр	NOUN	masc,inan
+ул.	улица	NOUN	femn,inan,sing
+пр.	проспект	NOUN	masc,inan,sing
+пер.	переулок	NOUN	masc,inan
+см	сантиметр	NOUN	masc,inan
+км	километр	NOUN	masc,inan
+сек	секундв	NOUN	femn,inan
+мин	минута	NOUN	femn,inan
+барр	баррель	NOUN	masc
+СТР	страница	NOUN	femn,inan,sing,nomn,Abbr

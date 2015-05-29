@@ -57,6 +57,7 @@ public class BatAlgorithm implements Disambiguator
         this.gamma = gamma;
         this.configurationScorer = configurationScorer;
         bats = new Bat[batsNumber];
+        this.verbose = verbose;
     }
 
     public Configuration disambiguate(Document document)
@@ -78,8 +79,8 @@ public class BatAlgorithm implements Disambiguator
 
             for (Bat currentBat : bats)
             {
-                int[] previousPosition = currentBat.position.clone();
-                int[] previousVelocity = currentBat.velocity.clone();
+                ContinuousConfiguration previousPosition = currentBat.position.clone();
+                int previousVelocity = currentBat.velocity;
                 double previousScore = currentBat.score;
 
                 currentBat.frequency = randomDoubleInRange(minFrequency, maxFrequency);
@@ -92,16 +93,14 @@ public class BatAlgorithm implements Disambiguator
 
                 if (currentBat.rate < randomDoubleInRange(minRate, maxRate))
                 {
-                    for (int i = 0 ; i < dimension ; i++)
-                    {
-                        currentBat.position[i] = bestBat.position[i] + (int) random.nextGaussian();
-                    }
+                    currentBat.position = bestBat.position.clone();
+                    currentBat.position.makeRandomChanges((int) (random.nextGaussian() * getAverageLoudness()));
                 }
 
                 currentBat.recomputeScore();
 
                 if (currentBat.loudness > randomDoubleInRange(minLoudness, maxLoudness) &&
-                    currentBat.score > previousScore)
+                    currentBat.recomputeScore() > previousScore)
                 {
                     currentBat.loudness *= alpha;
                     currentBat.rate = currentBat.initialRate * (1 - Math.exp(-gamma * currentIteration));
@@ -119,9 +118,10 @@ public class BatAlgorithm implements Disambiguator
             }
 
             System.out.println("Current best : " + bestBat.score);
+            
         }
 
-        return bestBat.configuration;
+        return bestBat.position;
     }
 
     public Configuration disambiguate(Document document, Configuration c)

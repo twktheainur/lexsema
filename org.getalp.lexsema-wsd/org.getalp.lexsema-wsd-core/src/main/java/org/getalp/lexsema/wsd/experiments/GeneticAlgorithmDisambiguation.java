@@ -8,31 +8,31 @@ import org.getalp.lexsema.io.document.TextLoader;
 import org.getalp.lexsema.io.resource.LRLoader;
 import org.getalp.lexsema.io.resource.dictionary.DictionaryLRLoader;
 import org.getalp.lexsema.similarity.Document;
+import org.getalp.lexsema.similarity.measures.ACExtendedLeskSimilarity;
 import org.getalp.lexsema.wsd.configuration.Configuration;
-import org.getalp.lexsema.wsd.experiments.cuckoo.wsd.CuckooSearchDisambiguator;
+import org.getalp.lexsema.wsd.experiments.ga.wsd.GeneticAlgorithmDisambiguator;
 import org.getalp.lexsema.wsd.method.Disambiguator;
-import org.getalp.lexsema.wsd.score.ConfigurationScorer;
-import org.getalp.lexsema.wsd.score.SemEval2007Task7PerfectConfigurationScorer;
+import org.getalp.lexsema.wsd.score.*;
 
-public class CuckooSearchDisambiguation
+public class GeneticAlgorithmDisambiguation
 {
     public static void main(String[] args)
     {
         int iterations = 1000;
-        double levyScale = 0.5;
-        int nestsNumber = 1;
-        int destroyedNests = 0;
+        int population = 20;
+        double crossoverRate = 0.7;
+        double mutationRate = 0.9;
         
         if (args.length >= 1) iterations = Integer.valueOf(args[0]);
-        if (args.length >= 2) levyScale = Double.valueOf(args[1]);
-        if (args.length >= 3) nestsNumber = Integer.valueOf(args[2]);
-        if (args.length >= 4) destroyedNests = Integer.valueOf(args[3]);
+        if (args.length >= 2) population = Integer.valueOf(args[1]);
+        if (args.length >= 3) crossoverRate = Double.valueOf(args[2]);
+        if (args.length >= 4) mutationRate = Double.valueOf(args[3]);
         
         System.out.println("Parameters value : " +
                            "<iterations = " + iterations + "> " +
-                           "<levy scale = " + levyScale + "> " +
-                           "<nests number = " + nestsNumber + "> " +
-                           "<destroyed nests = " + destroyedNests + "> ");
+                           "<population = " + population + "> " +
+                           "<crossover rate = " + crossoverRate + "> " +
+                           "<mutation rate = " + mutationRate + "> ");
         
         long startTime = System.currentTimeMillis();
 
@@ -40,14 +40,14 @@ public class CuckooSearchDisambiguation
 
         LRLoader lrloader = new DictionaryLRLoader(new File("../data/dictionnaires-lesk/dict-adapted-all-relations.xml"));
         
-        ConfigurationScorer scorer = new SemEval2007Task7PerfectConfigurationScorer();
+        //ConfigurationScorer scorer = new SemEval2007Task7PerfectConfigurationScorer();
         //ConfigurationScorer scorer = new ACSimilarityConfigurationScorer(new ACExtendedLeskSimilarity());
         //ConfigurationScorer scorer = new ACSimilarityConfigurationScorer(new IndexedOverlapSimilarity());
         //ConfigurationScorer scorer = new TverskyConfigurationScorer(new ACExtendedLeskSimilarity(), Runtime.getRuntime().availableProcessors());
-        //ConfigurationScorer scorer = new ConfigurationScorerWithCache(new ACExtendedLeskSimilarity());
+        ConfigurationScorer scorer = new ConfigurationScorerWithCache(new ACExtendedLeskSimilarity());
         //ConfigurationScorer scorer = new TestScorer(new TverskyConfigurationScorer(new IndexedOverlapSimilarity(), Runtime.getRuntime().availableProcessors()));
         
-        Disambiguator cuckooDisambiguator = new CuckooSearchDisambiguator(iterations, levyScale, nestsNumber, destroyedNests, scorer, true);
+        Disambiguator geneticDisambiguator = new GeneticAlgorithmDisambiguator(iterations, population, crossoverRate, mutationRate, scorer);
 
         System.out.println("Loading texts...");
         dl.load();
@@ -60,7 +60,7 @@ public class CuckooSearchDisambiguation
             lrloader.loadSenses(d);
 
             System.out.println("Disambiguating...");
-            Configuration c = cuckooDisambiguator.disambiguate(d);
+            Configuration c = geneticDisambiguator.disambiguate(d);
 
             System.out.println("Writing results...");
             SemevalWriter sw = new SemevalWriter(d.getId() + ".ans");
@@ -69,10 +69,10 @@ public class CuckooSearchDisambiguation
             System.out.println("Done!");
         }
         
-        cuckooDisambiguator.release();
+        geneticDisambiguator.release();
         
         long endTime = System.currentTimeMillis();
-        System.out.println("Total time elapsed in execution of Cuckoo Search Algorithm is : ");
+        System.out.println("Total time elapsed in execution of Genetic Algorithm is : ");
         System.out.println((endTime - startTime) + " ms.");
         System.out.println(((endTime - startTime) / 1000l) + " s.");
         System.out.println(((endTime - startTime) / 60000l) + " m.");
