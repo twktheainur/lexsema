@@ -28,16 +28,18 @@ public class DbNaryDisambiguatingTranslator implements Translator {
     private static Logger logger = LoggerFactory.getLogger(DbNaryDisambiguatingTranslator.class);
     private final Disambiguator disambiguator;
     private final SnowballStemmer snowballStemmer;
-    private final Collection<String> stopList;
+    private final Collection<String> sourceStopList;
+    private final Collection<String> targetStopList;
     private DBNary dbNary;
     private SentenceProcessor sentenceProcessor;
 
-    public DbNaryDisambiguatingTranslator(DBNary dbNary, SentenceProcessor sentenceProcessor, Disambiguator disambiguator, SnowballStemmer snowballStemmer, Collection<String> stopList) {
+    public DbNaryDisambiguatingTranslator(DBNary dbNary, SentenceProcessor sentenceProcessor, Disambiguator disambiguator, SnowballStemmer snowballStemmer, Collection<String> sourceStopList, Collection<String> targetStopList) {
         this.dbNary = dbNary;
         this.sentenceProcessor = sentenceProcessor;
         this.disambiguator = disambiguator;
         this.snowballStemmer = snowballStemmer;
-        this.stopList = Collections.unmodifiableCollection(stopList);
+        this.sourceStopList = Collections.unmodifiableCollection(sourceStopList);
+        this.targetStopList = targetStopList;
     }
 
     @Override
@@ -70,12 +72,11 @@ public class DbNaryDisambiguatingTranslator implements Translator {
     }
 
     private String filterInput(String input) {
-        return input.replaceAll("\\p{Punct}", "");
+        return input.replaceAll("\\p{Punct}", " ");
     }
 
     @Override
     public void close() {
-
     }
 
     private void loadSenses(LRLoader lrLoader, Document document) {
@@ -87,7 +88,8 @@ public class DbNaryDisambiguatingTranslator implements Translator {
         int selectedSense = c.getAssignment(index);
         List<Translation> translations = null;
         Collection<String> uniqueTranslations = new TreeSet<>();
-        if (selectedSense >= 0) {
+        String lemma = d.getWord(0, index).getLemma();
+        if (selectedSense >= 0 && !targetStopList.contains(lemma)) {
             LexicalSense sense = getAssignedSense(d, index, selectedSense);
             if (sense != null) {
                 translations = getDBNarySenseTranslation(sense, targetLanguage);
@@ -108,7 +110,7 @@ public class DbNaryDisambiguatingTranslator implements Translator {
                 }
             }
             for (String t : uniqueTranslations) {
-                if (!stopList.contains(t)) {
+                if (!targetStopList.contains(t)) {
                     //snowballStemmer.setCurrent(t);
                     //outputBuilder.append(snowballStemmer.stem()).append(" ");
                     outputBuilder.append(t).append(" ");

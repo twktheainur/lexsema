@@ -103,6 +103,7 @@ public final class DbnaryCrossLingualDocumentTranslator implements Translator{
                     pw.close();
                 }
             }
+            translator.close();
         } else {
             logger.error("The specified target directory does not exist and could not be created.");
         }
@@ -136,21 +137,30 @@ public final class DbnaryCrossLingualDocumentTranslator implements Translator{
 
         SentenceProcessor sentenceProcessor;
         SnowballStemmer snowballStemmer;
-        Collection<String> stopList;
+        Collection<String> sourceStopList;
+        Collection<String> targetStopList;
         if (languageIs(lang1, "en")) {
             sentenceProcessor = new EnglishDKPSentenceProcessor();
-            snowballStemmer = new englishStemmer();
-            stopList = loadStopList("english_stop.txt");
+            sourceStopList = loadStopList("english_stop.txt");
         } else if (languageIs(lang1, "fr")) {
             sentenceProcessor = new FrenchDKPSentenceProcessor();
+            sourceStopList = loadStopList("french_stop.txt");
+        } else {
+            sentenceProcessor = new RussianPythonSentenceProcessor();
+            sourceStopList = loadStopList("russian_stop.txt");
+        }
+        if (languageIs(lang2, "en")) {
+            targetStopList = loadStopList("english_stop.txt");
+            snowballStemmer = new englishStemmer();
+        } else if (languageIs(lang2, "fr")) {
+            targetStopList = loadStopList("french_stop.txt");
             snowballStemmer = new frenchStemmer();
-            stopList = loadStopList("french_stop.txt");
         } else {
             sentenceProcessor = new RussianPythonSentenceProcessor();
             snowballStemmer = new russianStemmer();
-            stopList = loadStopList("russian_stop.txt");
+            targetStopList = loadStopList("russian_stop.txt");
         }
-        Translator translator = new DbNaryDisambiguatingTranslator(dbNary, sentenceProcessor, disambiguator, snowballStemmer, stopList);
+        Translator translator = new DbNaryDisambiguatingTranslator(dbNary, sentenceProcessor, disambiguator, snowballStemmer, sourceStopList, targetStopList);
         return translator.translate(text, lang1, lang2);
     }
 
