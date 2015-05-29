@@ -1,4 +1,5 @@
-package org.getalp.lexsema.acceptali.crosslingual.translation;
+package org.getalp.lexsema.wsd.score.translation;
+
 
 import org.getalp.lexsema.io.resource.LRLoader;
 import org.getalp.lexsema.io.resource.dbnary.DBNaryLoaderImpl;
@@ -13,6 +14,7 @@ import org.getalp.lexsema.ontolex.dbnary.Vocable;
 import org.getalp.lexsema.ontolex.dbnary.exceptions.NoSuchVocableException;
 import org.getalp.lexsema.similarity.Document;
 import org.getalp.lexsema.similarity.Sentence;
+import org.getalp.lexsema.similarity.measures.xlingual.translation.Translator;
 import org.getalp.lexsema.wsd.configuration.Configuration;
 import org.getalp.lexsema.wsd.method.Disambiguator;
 import org.slf4j.Logger;

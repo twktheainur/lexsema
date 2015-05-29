@@ -1,12 +1,5 @@
 package org.getalp.lexsema.wsd.experiments.cuckoo.parameters.bat;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
-
 import org.getalp.lexsema.io.document.TextLoader;
 import org.getalp.lexsema.similarity.Document;
 import org.getalp.lexsema.wsd.configuration.Configuration;
@@ -15,6 +8,13 @@ import org.getalp.lexsema.wsd.experiments.cuckoo.generic.CuckooSolutionScorer;
 import org.getalp.lexsema.wsd.method.BatAlgorithm;
 import org.getalp.lexsema.wsd.method.Disambiguator;
 import org.getalp.lexsema.wsd.score.ConfigurationScorer;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 public class BatParametersScorer implements CuckooSolutionScorer
 {
@@ -59,18 +59,22 @@ public class BatParametersScorer implements CuckooSolutionScorer
         {
             e.printStackTrace();
         }
-        return res / ((double) iterationsOutside);
+        return res / (double) iterationsOutside;
     }
 
     public double computeScore(CuckooSolution configuration)
     {
         return computeScore((BatParameters) configuration);
     }
+
+    public void finalize() {
+        threadPool.shutdown();
+    }
     
     private class IntermediateScorer implements Callable<Double>
     {
         private BatParameters params;
-        
+
         public IntermediateScorer(BatParameters params)
         {
             this.params = params;
@@ -78,8 +82,8 @@ public class BatParametersScorer implements CuckooSolutionScorer
 
         public Double call() throws Exception
         {
-            Disambiguator batDisambiguator = new BatAlgorithm(iterationsInside, 
-                    (int) params.batsNumber.currentValue, 
+            Disambiguator batDisambiguator = new BatAlgorithm(iterationsInside,
+                    (int) params.batsNumber.currentValue,
                     params.minFrequency.currentValue,
                     params.maxFrequency.currentValue,
                     params.minLoudness.currentValue,
@@ -98,12 +102,7 @@ public class BatParametersScorer implements CuckooSolutionScorer
                 nbTexts++;
             }
             batDisambiguator.release();
-            return (tmpres / ((double) nbTexts));
+            return tmpres / (double) nbTexts;
         }
-    }
-    
-    public void finalize()
-    {
-        threadPool.shutdown();
     }
 }

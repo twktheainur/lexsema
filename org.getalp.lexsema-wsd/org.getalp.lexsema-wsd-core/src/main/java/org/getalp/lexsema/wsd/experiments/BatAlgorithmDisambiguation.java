@@ -1,7 +1,5 @@
 package org.getalp.lexsema.wsd.experiments;
 
-import java.io.File;
-
 import org.getalp.lexsema.io.annotresult.SemevalWriter;
 import org.getalp.lexsema.io.document.Semeval2007TextLoader;
 import org.getalp.lexsema.io.document.TextLoader;
@@ -13,6 +11,8 @@ import org.getalp.lexsema.wsd.method.BatAlgorithm;
 import org.getalp.lexsema.wsd.method.Disambiguator;
 import org.getalp.lexsema.wsd.score.ConfigurationScorer;
 import org.getalp.lexsema.wsd.score.SemEval2007Task7PerfectConfigurationScorer;
+
+import java.io.File;
 
 public class BatAlgorithmDisambiguation
 {
@@ -91,7 +91,7 @@ public class BatAlgorithmDisambiguation
         long endTime = System.currentTimeMillis();
         System.out.println("Total time elapsed in execution of Bat Algorithm is : ");
         System.out.println((endTime - startTime) + " ms.");
-        System.out.println(((endTime - startTime) / 1000l) + " s.");
-        System.out.println(((endTime - startTime) / 60000l) + " m.");
+        System.out.println((endTime - startTime) / 1000l + " s.");
+        System.out.println((endTime - startTime) / 60000l + " m.");
     }
 }

@@ -10,7 +10,7 @@ import java.util.Random;
 public class BatAlgorithm implements Disambiguator
 {
     private static final Random random = new Random();
-    
+
     private int iterationsNumber;
 
     private int batsNumber;
@@ -41,9 +41,11 @@ public class BatAlgorithm implements Disambiguator
 
     private Bat bestBat;
 
+    private boolean verbose;
+
     public BatAlgorithm(int iterationsNumber, int batsNumber, double minFrequency, double maxFrequency,
                         double minLoudness, double maxLoudness, double minRate, double MaxRate,
-                        double alpha, double gamma, ConfigurationScorer configurationScorer)
+                        double alpha, double gamma, ConfigurationScorer configurationScorer, boolean verbose)
     {
         this.iterationsNumber = iterationsNumber;
         this.batsNumber = batsNumber;
@@ -75,7 +77,7 @@ public class BatAlgorithm implements Disambiguator
         for (int currentIteration = 0 ; currentIteration < iterationsNumber ; currentIteration++)
         {
             int progress = (int) ((double) currentIteration / (double) iterationsNumber * 10000);
-            System.out.println("Bat progress : " + (double)progress / 100.0 + "%");
+            if (verbose) System.out.println("Bat progress : " + (double) progress / 100.0 + "%");
 
             for (Bat currentBat : bats)
             {
@@ -85,11 +87,15 @@ public class BatAlgorithm implements Disambiguator
 
                 currentBat.frequency = randomDoubleInRange(minFrequency, maxFrequency);
 
+                currentBat.velocity = 0;
                 for (int i = 0 ; i < dimension ; i++)
                 {
-                    currentBat.velocity[i] += (int) ((currentBat.position[i] - bestBat.position[i]) * currentBat.frequency);
-                    currentBat.position[i] += currentBat.velocity[i];
+                    if (currentBat.position.getAssignment(i) != bestBat.position.getAssignment(i)) {
+                        currentBat.velocity++;
+                    }
                 }
+                currentBat.velocity *= currentBat.frequency;
+                currentBat.position.makeRandomChanges(currentBat.velocity);
 
                 if (currentBat.rate < randomDoubleInRange(minRate, maxRate))
                 {
@@ -97,10 +103,8 @@ public class BatAlgorithm implements Disambiguator
                     currentBat.position.makeRandomChanges((int) (random.nextGaussian() * getAverageLoudness()));
                 }
 
-                currentBat.recomputeScore();
-
                 if (currentBat.loudness > randomDoubleInRange(minLoudness, maxLoudness) &&
-                    currentBat.recomputeScore() > previousScore)
+                        currentBat.recomputeScore() > previousScore)
                 {
                     currentBat.loudness *= alpha;
                     currentBat.rate = currentBat.initialRate * (1 - Math.exp(-gamma * currentIteration));
@@ -117,8 +121,7 @@ public class BatAlgorithm implements Disambiguator
                 }
             }
 
-            System.out.println("Current best : " + bestBat.score);
-            
+            if (verbose) System.out.println("Current best : " + bestBat.score);
         }
 
         return bestBat.position;
@@ -153,10 +156,15 @@ public class BatAlgorithm implements Disambiguator
         }
     }
 
+    private double getAverageLoudness() {
+        double average = 0;
+        for (Bat currentBat : bats) average += currentBat.loudness;
+        return average / (double) bats.length;
+    }
+
     private class Bat {
-        private ContinuousConfiguration configuration;
-        private int[] position;
-        private int[] velocity;
+        private ContinuousConfiguration position;
+        private int velocity;
         private double frequency;
         private double initialRate;
         private double rate;
@@ -164,13 +172,8 @@ public class BatAlgorithm implements Disambiguator
         private double score;
 
         public Bat() {
-            configuration = new ContinuousConfiguration(currentDocument);
-            position = new int[currentDocument.size()];
-            velocity = new int[currentDocument.size()];
-            for (int i = 0; i < currentDocument.size(); ++i) {
-                position[i] = configuration.getAssignment(i);
-                velocity[i] = 0;
-            }
+            position = new ContinuousConfiguration(currentDocument);
+            velocity = 0;
             frequency = randomDoubleInRange(minFrequency, maxFrequency);
             initialRate = randomDoubleInRange(minRate, maxRate);
             rate = initialRate;
@@ -178,11 +181,10 @@ public class BatAlgorithm implements Disambiguator
             recomputeScore();
         }
 
-        public void recomputeScore() {
-            configuration.setSenses(position);
-            score = configurationScorer.computeScore(currentDocument, configuration);
+        public double recomputeScore() {
+            score = configurationScorer.computeScore(currentDocument, position);
+            return score;
         }
 
     }
-
 }
