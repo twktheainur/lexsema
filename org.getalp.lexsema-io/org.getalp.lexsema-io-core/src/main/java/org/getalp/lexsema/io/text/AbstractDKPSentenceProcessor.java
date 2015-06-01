@@ -14,8 +14,8 @@ import org.apache.uima.resource.ResourceSpecifier;
 import org.apache.uima.util.CasCreationUtils;
 import org.getalp.lexsema.io.uima.SentenceLevelConsumer;
 import org.getalp.lexsema.io.uima.TokenAnnotationConsumer;
-import org.getalp.lexsema.language.Language;
 import org.getalp.lexsema.similarity.Sentence;
+import org.getalp.lexsema.util.Language;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

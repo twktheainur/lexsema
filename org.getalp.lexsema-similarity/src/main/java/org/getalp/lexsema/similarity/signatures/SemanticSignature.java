@@ -2,6 +2,7 @@ package org.getalp.lexsema.similarity.signatures;
 
 
 import org.getalp.lexsema.similarity.measures.SimilarityMeasure;
+import org.getalp.lexsema.util.Language;
 
 import java.util.List;
 import java.util.Map;
@@ -15,5 +16,7 @@ public interface SemanticSignature {
                                         Map<String, ? extends SemanticSignature> relatedB
     );
     public List<Double> getWeights();
+    public Language getLanguage();
+    public void setLanguage(Language language);
     public int size();
 }

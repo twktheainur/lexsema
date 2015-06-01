@@ -2,7 +2,7 @@ package org.getalp.lexsema.ontolex;
 
 
 import com.hp.hpl.jena.graph.Node;
-import org.getalp.lexsema.language.Language;
+import org.getalp.lexsema.util.Language;
 import org.getalp.lexsema.ontolex.graph.OntologyModel;
 
 /**

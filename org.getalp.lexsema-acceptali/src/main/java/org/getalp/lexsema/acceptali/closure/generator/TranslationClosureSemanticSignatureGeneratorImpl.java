@@ -3,13 +3,13 @@ package org.getalp.lexsema.acceptali.closure.generator;
 
 import org.getalp.lexsema.acceptali.closure.LexicalResourceTranslationClosure;
 import org.getalp.lexsema.acceptali.closure.LexicalResourceTranslationClosureWithSignatures;
-import org.getalp.lexsema.language.Language;
 import org.getalp.lexsema.ontolex.LexicalEntry;
 import org.getalp.lexsema.ontolex.LexicalSense;
 import org.getalp.lexsema.similarity.Sense;
 import org.getalp.lexsema.similarity.SenseImpl;
 import org.getalp.lexsema.similarity.signatures.StringSemanticSignature;
 import org.getalp.lexsema.similarity.signatures.StringSemanticSignatureImpl;
+import org.getalp.lexsema.util.Language;
 
 import java.util.Map;
 import java.util.Set;

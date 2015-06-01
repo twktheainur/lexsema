@@ -1,6 +1,6 @@
 package org.getalp.lexsema.ontolex.factories.resource;
 
-import org.getalp.lexsema.language.Language;
+import org.getalp.lexsema.util.Language;
 import org.getalp.lexsema.ontolex.LexicalResource;
 import org.getalp.lexsema.ontolex.graph.OntologyModel;
 

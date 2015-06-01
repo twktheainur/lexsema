@@ -6,10 +6,6 @@ import org.getalp.lexsema.acceptali.closure.generator.TranslationClosureGenerato
 import org.getalp.lexsema.acceptali.closure.generator.TranslationClosureGeneratorFactory;
 import org.getalp.lexsema.acceptali.closure.generator.TranslationClosureSemanticSignatureGenerator;
 import org.getalp.lexsema.acceptali.closure.generator.TranslationClosureSemanticSignatureGeneratorImpl;
-import org.getalp.lexsema.acceptali.crosslingual.translation.BingAPITranslator;
-import org.getalp.lexsema.acceptali.crosslingual.translation.CachedTranslator;
-import org.getalp.lexsema.acceptali.crosslingual.translation.Translator;
-import org.getalp.lexsema.language.Language;
 import org.getalp.lexsema.ontolex.LexicalEntry;
 import org.getalp.lexsema.ontolex.LexicalSense;
 import org.getalp.lexsema.ontolex.dbnary.DBNary;
@@ -26,6 +22,10 @@ import org.getalp.lexsema.similarity.signatures.SemanticSignature;
 import org.getalp.lexsema.similarity.signatures.StringSemanticSignature;
 import org.getalp.lexsema.similarity.signatures.StringSemanticSignatureImpl;
 import org.getalp.lexsema.similarity.signatures.StringSemanticSymbolImpl;
+import org.getalp.lexsema.translation.BingAPITranslator;
+import org.getalp.lexsema.translation.CachedTranslator;
+import org.getalp.lexsema.translation.Translator;
+import org.getalp.lexsema.util.Language;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

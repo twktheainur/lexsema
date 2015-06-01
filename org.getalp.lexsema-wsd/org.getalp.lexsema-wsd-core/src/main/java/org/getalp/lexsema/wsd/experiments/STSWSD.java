@@ -7,7 +7,7 @@ import org.getalp.lexsema.io.sentences.STS2013SentencePairLoader;
 import org.getalp.lexsema.similarity.Sentence;
 import org.getalp.lexsema.similarity.Word;
 import org.getalp.lexsema.similarity.measures.SimilarityMeasure;
-import org.getalp.lexsema.similarity.measures.TverskiIndexSimilarityMeasureBuilder;
+import org.getalp.lexsema.similarity.measures.tverski.TverskiIndexSimilarityMeasureBuilder;
 import org.getalp.lexsema.similarity.signatures.StringSemanticSignature;
 import org.getalp.lexsema.similarity.signatures.StringSemanticSignatureImpl;
 import org.getalp.lexsema.similarity.signatures.StringSemanticSymbolImpl;

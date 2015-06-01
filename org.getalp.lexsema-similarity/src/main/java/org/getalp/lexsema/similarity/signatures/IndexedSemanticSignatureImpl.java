@@ -1,6 +1,7 @@
 package org.getalp.lexsema.similarity.signatures;
 
 import org.getalp.lexsema.similarity.measures.SimilarityMeasure;
+import org.getalp.lexsema.util.Language;
 
 import java.util.*;
 
@@ -9,6 +10,18 @@ public class IndexedSemanticSignatureImpl implements IndexedSemanticSignature {
 
     public static final double DEFAULT_WEIGHT = 1d;
     private List<IndexedSemanticSymbol> symbols;
+
+    private Language language;
+
+    @Override
+    public Language getLanguage() {
+        return language;
+    }
+
+    @Override
+    public void setLanguage(Language language) {
+        this.language = language;
+    }
 
     public IndexedSemanticSignatureImpl() {
         symbols = new ArrayList<>();

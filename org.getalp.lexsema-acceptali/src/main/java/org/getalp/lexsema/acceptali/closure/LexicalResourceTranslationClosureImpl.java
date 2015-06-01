@@ -1,8 +1,8 @@
 package org.getalp.lexsema.acceptali.closure;
 
-import org.getalp.lexsema.language.Language;
 import org.getalp.lexsema.ontolex.LexicalEntry;
 import org.getalp.lexsema.ontolex.LexicalSense;
+import org.getalp.lexsema.util.Language;
 
 import java.util.*;
 

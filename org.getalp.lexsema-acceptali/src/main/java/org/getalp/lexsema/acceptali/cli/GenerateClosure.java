@@ -7,7 +7,6 @@ import org.getalp.lexsema.acceptali.closure.generator.TranslationClosureGenerato
 import org.getalp.lexsema.acceptali.closure.generator.TranslationClosureGeneratorFactory;
 import org.getalp.lexsema.acceptali.closure.writer.FileTranslationClosureWriter;
 import org.getalp.lexsema.acceptali.closure.writer.TranslationClosureWriter;
-import org.getalp.lexsema.language.Language;
 import org.getalp.lexsema.ontolex.LexicalEntry;
 import org.getalp.lexsema.ontolex.LexicalSense;
 import org.getalp.lexsema.ontolex.dbnary.DBNary;
@@ -21,6 +20,7 @@ import org.getalp.lexsema.ontolex.graph.storage.JenaRemoteSPARQLStore;
 import org.getalp.lexsema.ontolex.graph.storage.JenaTDBStore;
 import org.getalp.lexsema.ontolex.graph.storage.StoreHandler;
 import org.getalp.lexsema.ontolex.graph.store.Store;
+import org.getalp.lexsema.util.Language;
 
 import java.io.File;
 import java.io.IOException;

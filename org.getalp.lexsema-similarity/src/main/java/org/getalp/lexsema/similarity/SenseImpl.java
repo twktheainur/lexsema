@@ -1,13 +1,13 @@
 package org.getalp.lexsema.similarity;
 
 import com.hp.hpl.jena.graph.Node;
-import org.getalp.lexsema.language.Language;
 import org.getalp.lexsema.ontolex.LexicalResource;
 import org.getalp.lexsema.ontolex.LexicalResourceEntity;
 import org.getalp.lexsema.ontolex.LexicalSense;
 import org.getalp.lexsema.ontolex.graph.OntologyModel;
 import org.getalp.lexsema.similarity.measures.SimilarityMeasure;
 import org.getalp.lexsema.similarity.signatures.SemanticSignature;
+import org.getalp.lexsema.util.Language;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -133,6 +133,9 @@ public class SenseImpl implements Sense {
         if (lexicalSense != null) {
             lexicalSense.setLanguage(language);
         }
+        if(semanticSignature!=null){
+            semanticSignature.setLanguage(language);
+        }
     }
 
     @Override
@@ -143,6 +146,9 @@ public class SenseImpl implements Sense {
     @Override
     public void setSemanticSignature(SemanticSignature semanticSignature) {
         this.semanticSignature = semanticSignature;
+        if(getLanguage()!=null){
+            semanticSignature.setLanguage(getLanguage());
+        }
     }
 
     @Override

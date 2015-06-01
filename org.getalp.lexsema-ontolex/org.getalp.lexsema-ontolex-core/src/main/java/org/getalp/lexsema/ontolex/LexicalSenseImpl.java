@@ -2,7 +2,7 @@ package org.getalp.lexsema.ontolex;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import org.getalp.lexsema.language.Language;
+import org.getalp.lexsema.util.Language;
 
 /**
  * Class representing a ontolex LexicalSense entity

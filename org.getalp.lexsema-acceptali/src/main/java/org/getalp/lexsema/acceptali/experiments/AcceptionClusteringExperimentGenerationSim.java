@@ -12,18 +12,10 @@ import org.getalp.lexsema.acceptali.closure.generator.TranslationClosureGenerato
 import org.getalp.lexsema.acceptali.closure.generator.TranslationClosureGeneratorFactory;
 import org.getalp.lexsema.acceptali.closure.generator.TranslationClosureSemanticSignatureGenerator;
 import org.getalp.lexsema.acceptali.closure.generator.TranslationClosureSemanticSignatureGeneratorImpl;
-import org.getalp.lexsema.acceptali.crosslingual.CrossLingualSimilarity;
-import org.getalp.lexsema.acceptali.crosslingual.PairwiseCLSimilarityMatrixGeneratorSim;
-import org.getalp.lexsema.acceptali.crosslingual.PairwiseCrossLingualSimilarityMatrixGenerator;
-import org.getalp.lexsema.acceptali.crosslingual.TranslatorCrossLingualSimilarity;
-import org.getalp.lexsema.acceptali.crosslingual.translation.BingAPITranslator;
-import org.getalp.lexsema.acceptali.crosslingual.translation.CachedTranslator;
-import org.getalp.lexsema.acceptali.crosslingual.translation.Translator;
-import org.getalp.lexsema.acceptali.word2vec.MultilingualSerializedModelWord2VecLoader;
-import org.getalp.lexsema.acceptali.word2vec.MultilingualSignatureEnrichment;
-import org.getalp.lexsema.acceptali.word2vec.MultilingualWord2VecLoader;
-import org.getalp.lexsema.acceptali.word2vec.MultilingualWord2VecSignatureEnrichment;
-import org.getalp.lexsema.language.Language;
+import org.getalp.lexsema.acceptali.closure.similarity.PairwiseCLSimilarityMatrixGeneratorSim;
+import org.getalp.lexsema.acceptali.closure.similarity.PairwiseCrossLingualSimilarityMatrixGenerator;
+import org.getalp.lexsema.io.word2vec.MultilingualSerializedModelWord2VecLoader;
+import org.getalp.lexsema.io.word2vec.MultilingualWord2VecLoader;
 import org.getalp.lexsema.ontolex.LexicalEntry;
 import org.getalp.lexsema.ontolex.LexicalSense;
 import org.getalp.lexsema.ontolex.dbnary.DBNary;
@@ -37,7 +29,14 @@ import org.getalp.lexsema.ontolex.graph.storage.StoreHandler;
 import org.getalp.lexsema.ontolex.graph.store.Store;
 import org.getalp.lexsema.similarity.Sense;
 import org.getalp.lexsema.similarity.measures.SimilarityMeasure;
-import org.getalp.lexsema.similarity.measures.TverskiIndexSimilarityMeasureMatrixImplBuilder;
+import org.getalp.lexsema.similarity.measures.tverski.TverskiIndexSimilarityMeasureMatrixImplBuilder;
+import org.getalp.lexsema.similarity.measures.crosslingual.TranslatorCrossLingualSimilarity;
+import org.getalp.lexsema.similarity.signatures.enrichment.SignatureEnrichment;
+import org.getalp.lexsema.similarity.signatures.enrichment.Word2VecSignatureEnrichment;
+import org.getalp.lexsema.translation.BingAPITranslator;
+import org.getalp.lexsema.translation.CachedTranslator;
+import org.getalp.lexsema.translation.Translator;
+import org.getalp.lexsema.util.Language;
 import org.getalp.ml.matrix.factorization.TapkeeNLMatrixFactorization;
 import org.getalp.ml.matrix.factorization.TapkeeNLMatrixFactorizationFactory;
 import org.getalp.ml.matrix.filters.Filter;
@@ -118,16 +117,16 @@ public final class AcceptionClusteringExperimentGenerationSim {
             logger.info("Loading Word2Vec...");
             MultilingualWord2VecLoader word2VecLoader = new MultilingualSerializedModelWord2VecLoader();
             word2VecLoader.load(new File(WORD_2_VEC_MODEL));
-            MultilingualSignatureEnrichment signatureEnrichment = new MultilingualWord2VecSignatureEnrichment(null, enrichmentSize);
+            SignatureEnrichment signatureEnrichment = new Word2VecSignatureEnrichment(null, enrichmentSize);
 
-            CrossLingualSimilarity crossLingualSimilarity =
+            SimilarityMeasure crossLingualSimilarity =
                     new TranslatorCrossLingualSimilarity(similarityMeasure, translator, signatureEnrichment);
             /*CrossLingualSimilarity crossLingualSimilarity =
                     new TranslatorCrossLingualSimilarity(similarityMeasure, translator);*/
 
             logger.info("Generating matrix...");
             PairwiseCrossLingualSimilarityMatrixGenerator matrixGenerator =
-                    new PairwiseCLSimilarityMatrixGeneratorSim(crossLingualSimilarity, closureSet, similarityMeasure);
+                    new PairwiseCLSimilarityMatrixGeneratorSim(crossLingualSimilarity, closureSet);
             matrixGenerator.generateMatrix();
 
             logger.info("Clustering...");

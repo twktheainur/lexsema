@@ -1,0 +1,157 @@
+ INFO [main] (AcceptionClusteringExperimentGenerationSim.java:166) - [CONFIG] Loaded tdbPath=/Volumes/RAMDisk
+ INFO [main] (AcceptionClusteringExperimentGenerationSim.java:170) - [CONFIG] Loaded numberOfClusters=30
+ INFO [main] (AcceptionClusteringExperimentGenerationSim.java:174) - [CONFIG] Loaded similarityDimensions=20
+ INFO [main] (AcceptionClusteringExperimentGenerationSim.java:178) - [CONFIG] Loaded clDimensions=20
+ INFO [main] (AcceptionClusteringExperimentGenerationSim.java:182) - [CONFIG] Loaded enrichmentSize=20
+ INFO [main] (AcceptionClusteringExperimentGenerationSim.java:186) - [CONFIG] Loaded word2vecModel=/dev/shm/word2vec
+ INFO [main] (AcceptionClusteringExperimentGenerationSim.java:109) - Generating or Loading Closure...
+ INFO [main] (AcceptionClusteringExperimentGenerationSim.java:236) - 
+LANGUAGE:FRENCH
+	FRENCH LexicalEntry|écoulement#noun|
+		Sense|__ws_1_écoulement__nom__1|{' Action de s’écouler.'}
+		Sense|__ws_2_écoulement__nom__1|{' (Médecine) Mouvement des humeurs qui sortent d’un organe.'}
+		Sense|__ws_3_écoulement__nom__1|{' (Absolument) Hémorragie légère.'}
+		Sense|__ws_4_écoulement__nom__1|{' (Figuré) Mouvement progressif ou continu.'}
+		Sense|__ws_5_écoulement__nom__1|{' (En particulier) Exportation, vente, débit des marchandises, des produits de l’agriculture ou des fabriques.'}
+	FRENCH LexicalEntry|torrent#noun|
+		Sense|__ws_1_torrent__nom__1|{' Courant d’eau impétueux, qui s’enfle rapidement et qui est souvent à sec.'}
+		Sense|__ws_2_torrent__nom__1|{' (Figuré) Écoulement abondant, choses qui se répandent impétueusement.'}
+		Sense|__ws_3_torrent__nom__1|{' (Informatique) Fichier informatique utilisé pour échanger divers fichiers en utilisant le protocole de transfert de données Poste à poste BitTorrent.'}
+	FRENCH LexicalEntry|flux#noun|
+		Sense|__ws_1_flux__nom__1|{' Écoulement, mouvement ou déplacement, en général d’un fluide, ou de populations ; action de couler ; écoulement.'}
+		Sense|__ws_2_flux__nom__1|{' Mouvement de la marée montante.'}
+		Sense|__ws_3_flux__nom__1|{' (Physique) Transfert ou déplacement, de données ou d’énergie.'}
+		Sense|__ws_4_flux__nom__1|{' (Métallurgie) Produit qui permet de protéger de l’oxydation ou fluidifier un métal en fusion.'}
+		Sense|__ws_5_flux__nom__1|{' (Médecine) Écoulement d’un liquide organique hors de son réservoir habituel.'}
+		Sense|__ws_6_flux__nom__1|{' (Figuré) Abondance, en parlant de la vicissitude, du changement alternatif de certaines choses.'}
+	FRENCH LexicalEntry|décapant#noun|
+		Sense|__ws_1_décapant__nom__1|{' Produit dont le rôle est de décaper une surface.'}
+	FRENCH LexicalEntry|courant#noun|
+		Sense|__ws_10_courant__nom__1|{' (Figuré) Flux de personnes ou de choses.'}
+		Sense|__ws_11_courant__nom__1|{' Sous-ensemble d’une organisation, d’un parti politique.'}
+		Sense|__ws_12_courant__nom__1|{' Période actuelle.'}
+		Sense|__ws_13_courant__nom__1|{' (Figuré) L’ordinaire, ce qui est usuel.'}
+		Sense|__ws_14_courant__nom__1|{' (Figuré) Quantité d’affaires que l’on traite ou dont on est chargé.'}
+		Sense|__ws_15_courant__nom__1|{' Ensemble d’idées, d’opinions qui s’emparent du plus grand nombre des esprits et entraînent les autres.'}
+		Sense|__ws_16_courant__nom__1|{' (Finance) Terme qui court.'}
+		Sense|__ws_8_courant__nom__1|{' Déplacement ordonné d’un fluide.'}
+		Sense|__ws_8a_courant__nom__1|{' (Spécialement) Fil de l’eau.'}
+		Sense|__ws_8b_courant__nom__1|{' (En particulier) Canal ou ruisseau qui court.'}
+		Sense|__ws_8c_courant__nom__1|{' (Marine) Mouvement qui se produit en certains endroits de la mer et de l’estuaire d’un fleuve et qui est indépendant de l’action du vent.'}
+		Sense|__ws_9_courant__nom__1|{' (Électricité) (Par ellipse) Courant électrique (passage de l’électricité à travers un conducteur) voire l'intensité d'un courant électrique.'}
+	FRENCH LexicalEntry|fleuve#noun|
+		Sense|__ws_1_fleuve__nom__1|{' (Géographie) Cours d’eau qui se jette généralement dans la mer ou dans l’océan.'}
+		Sense|__ws_2_fleuve__nom__1|{' (Par analogie) Flot puissant et ininterrompu de personnes ou de choses.'}
+		Sense|__ws_3_fleuve__nom__1|{' (Mythologie) Divinité qui préside aux fleuves, et qu’on représente ordinairement sous la figure de vieillard à longue barbe couché sur des roseaux, appuyé sur une urne, la tête ceinte d’une couronne de joncs.'}
+	FRENCH LexicalEntry|rivière#noun|
+		Sense|__ws_1_rivière__nom__1|{' (Géographie) Cours d’eau naturel qui se jette dans une autre rivière, dans un fleuve, dans la mer, dans un lac, ou se perd dans les sables. Son débit est en principe moins abondant que celui d’un fleuve mais plus que celui d’un ruisseau.'}
+		Sense|__ws_2_rivière__nom__1|{' (Géographie) Se dit spécialement d’un cours d’eau qui se jette dans un autre.'}
+		Sense|__ws_3_rivière__nom__1|{' (Vieilli) Rivage dans certaines expressions consacrées.'}
+		Sense|__ws_4_rivière__nom__1|{' (Poker) Tirage de la dernière carte du tableau.'}
+		Sense|__ws_5_rivière__nom__1|{' (Bijouterie) Collier fait d'une chaîne avec un grand nombre des pierres précieuses.'}
+LANGUAGE:ENGLISH
+	ENGLISH LexicalEntry|runoff#noun|
+		Sense|__ws_1_runoff__Noun__1|{' That portion of precipitation or irrigation on an area which does not infiltrate or evaporate, but instead is discharged from the area.'}
+		Sense|__ws_2_runoff__Noun__1|{' Dissolved chemicals, etc, included in such water.'}
+		Sense|__ws_3_runoff__Noun__1|{' A second or further round of an indecisive election, after other candidates (often all but the last two) have been eliminated,'}
+	ENGLISH LexicalEntry|flow#noun|
+		Sense|__ws_1_flow__Noun__1|{' The movement of a real or figurative fluid.'}
+		Sense|__ws_2_flow__Noun__1|{' The rising movement of the tide.'}
+		Sense|__ws_3_flow__Noun__1|{' Smoothness or continuity.'}
+		Sense|__ws_4_flow__Noun__1|{' The amount of a fluid that moves or the rate of fluid movement.'}
+		Sense|__ws_5_flow__Noun__1|{' The state of being at one with.'}
+		Sense|__ws_6_flow__Noun__1|{' Menstruation fluid'}
+	ENGLISH LexicalEntry|torrent#noun|
+		Sense|__ws_1_torrent__Noun__1|{' A violent flow, as of water, lava, etc.; a stream suddenly raised and running rapidly, as down a precipice.'}
+		Sense|__ws_2_torrent__Noun__1|{' A large amount or stream of something.'}
+		Sense|__ws_4_torrent__Noun__2|{' A set of files obtainable through a peer-to-peer network, especially BitTorrent.'}
+	ENGLISH LexicalEntry|tide#noun|
+		Sense|__ws_1_tide__Noun__1|{' The periodic change of the sea level, particularly when caused by the gravitational influence of the sun and the moon.'}
+		Sense|__ws_2_tide__Noun__1|{' A stream, current or flood.'}
+		Sense|__ws_3_tide__Noun__1|{' Time, notably anniversary, period or season linked to an ecclesiastical feast.'}
+		Sense|__ws_4_tide__Noun__1|{' The period of twelve hours.'}
+		Sense|__ws_5_tide__Noun__1|{' Something which changes like the tides of the sea.'}
+		Sense|__ws_6_tide__Noun__1|{' Tendency or direction of causes, influences, or events; course; current.'}
+		Sense|__ws_7_tide__Noun__1|{' Violent confluence &mdash; Francis Bacon'}
+	ENGLISH LexicalEntry|fluency#noun|
+		Sense|__ws_1_fluency__Noun__1|{' The quality of smoothness of flow'}
+		Sense|__ws_2_fluency__Noun__1|{' The quality of being fluent in a language; A person's command of a particular language.'}
+		Sense|__ws_3_fluency__Noun__1|{' The quality of consistently applying skill correctly in the manner of one well-practiced at it, requiring little deliberate thought to perform without mistakes'}
+	ENGLISH LexicalEntry|flux#noun|
+		Sense|__ws_1_flux__Noun__1|{' The act of flowing; a continuous moving on or passing by, as of a flowing stream.'}
+		Sense|__ws_2_flux__Noun__1|{' A state of ongoing change.'}
+		Sense|__ws_3_flux__Noun__1|{' A chemical agent for cleaning metal prior to soldering or welding.'}
+		Sense|__ws_4_flux__Noun__1|{' The rate of transfer of energy (or another physical quantity) through a given surface, specifically electric flux, magnetic flux.'}
+		Sense|__ws_5_flux__Noun__1|{' A disease which causes diarrhea, especially dysentery.'}
+		Sense|__ws_6_flux__Noun__1|{' diarrhea or other fluid discharge from the body'}
+		Sense|__ws_7_flux__Noun__1|{' The state of being liquid through heat; fusion.'}
+	ENGLISH LexicalEntry|current#noun|
+		Sense|__ws_1_current__Noun__1|{' The part of a fluid that moves continuously in a certain direction.'}
+		Sense|__ws_2_current__Noun__1|{' The time rate of flow of electric charge.'}
+		Sense|__ws_3_current__Noun__1|{' A tendency or a course of events.'}
+	ENGLISH LexicalEntry|river#noun|
+		Sense|__ws_1_river__Noun__1|{' A large and often winding stream which drains a land mass, carrying water down from higher areas to a lower point, ending at an ocean or in an inland sea.'}
+		Sense|__ws_2_river__Noun__1|{' Any large flow of a liquid in a single body.'}
+		Sense|__ws_3_river__Noun__1|{' The last card dealt in a hand.'}
+		Sense|__ws_5_river__Noun__2|{' One who rives or splits.'}
+	ENGLISH LexicalEntry|stream#noun|
+		Sense|__ws_1_stream__Noun__1|{' A small river; a large creek; a body of moving water confined by banks.'}
+		Sense|__ws_2_stream__Noun__1|{' A thin connected passing of a liquid through a lighter gas (e.g. air).'}
+		Sense|__ws_3_stream__Noun__1|{' Any steady flow or succession of material, such as water, air, radio signal or words.'}
+		Sense|__ws_4_stream__Noun__1|{' An umbrella term for all moving waters.'}
+		Sense|__ws_5_stream__Noun__1|{' A source or repository of data that can be read or written only sequentially.'}
+		Sense|__ws_6_stream__Noun__1|{' A division of a school year by perceived ability.'}
+LANGUAGE:ITALIAN
+	ITALIAN LexicalEntry|fiume#noun|
+		Sense|__ws_2_fiume__sost__1|{' (geografia) corso d'acqua che scorre prevalentemente in pianura o, comunque, nel cui percorso prevalga una pendenza molto bassa in modo che lo scorrere dell'acqua sia regolare'}
+		Sense|__ws_3_fiume__sost__1|{' (per estensione) qualsiasi liquido che scorre in abbondanza, spesso in senso iperbolico'}
+		Sense|__ws_4_fiume__sost__1|{' (senso figurato) grande quantità in movimento'}
+		Sense|__ws_5_fiume__sost__1|{' (araldica) figura araldica convenzionale costituita da alcune fasce ondulate'}
+	ITALIAN LexicalEntry|colata#noun|
+		Sense|__ws_1_colata__sost__1|{' (metallurgia) tecnica di lavorazione metallurgica, ma non solo, consistente nel far colare in stampi o su un nastro trasportatore materiali fluidi'}
+		Sense|__ws_2_colata__sost__1|{' (geologia) percorso seguito dalla lava in discesa dal cratere di un vulcano'}
+	ITALIAN LexicalEntry|flusso#noun|
+		Sense|__ws_1_flusso__sost__1|{' l'avanzamento di un fluido'}
+		Sense|__ws_2_flusso__sost__1|{' (per estensione)spostamento incessante e organico di individui od oggetti'}
+	ITALIAN LexicalEntry|ruscello#noun|
+		Sense|__ws_1_ruscello__sost__1|{' (geografia) piccolo corso d'acqua'}
+	ITALIAN LexicalEntry|corrente#noun|
+		Sense|__ws_10_corrente__sost__1|{' (musica)definizione mancante; se vuoi, aggiungila tuCategoria:Pagine senza definizione - Template:Wikizionario:switch_lang'}
+		Sense|__ws_6_corrente__sost__1|{' (geografia)movimento di masse di materia aeriforme o liquida'}
+		Sense|__ws_7_corrente__sost__1|{' (fisica) moto ordinato di cariche elettriche'}
+		Sense|__ws_8_corrente__sost__1|{' moda, tendenza'}
+		Sense|__ws_9_corrente__sost__1|{' (politica) o (religione) insieme di persone aventi stessi ideali'}
+LANGUAGE:GERMAN
+	GERMAN LexicalEntry|Fluss#noun|
+		Sense|__ws_1_Fluss__Substantiv__1|{' größeres, fließendes Gewässer'}
+		Sense|__ws_2_Fluss__Substantiv__1|{' ein stetiger Ablauf; das Fließen'}
+		Sense|__ws_3_Fluss__Substantiv__1|{' Energieübertragungsrate'}
+	GERMAN LexicalEntry|Flut#noun|
+		Sense|__ws_1_Flut__Substantiv__1|{' der (in den meisten Teilen der Welt) zweimal tägliche Zeitraum des Wasserauflaufes an den Küsten der Weltmeere'}
+		Sense|__ws_2_Flut__Substantiv__1|{' Hochwasser eines Flusses, Überschwemmung'}
+		Sense|__ws_3_Flut__Substantiv__1|{' nur im Plural, Fluten: das Wasser eines Gewässers'}
+		Sense|__ws_4_Flut__Substantiv__1|{' übertragen: große Menge'}
+	GERMAN LexicalEntry|Bach#noun|
+		Sense|__ws_1_Bach__Substantiv__1|{' kleiner, natürlicher Wasserlauf'}
+		Sense|__ws_1_Bach__Substantiv__2|{' deutschsprachiger Nachname, Familienname, auch in der Form von Bach'}
+		Sense|__ws_1_Bach__Substantiv__3|{' Name mehrerer Orte in Österreich und Deutschland'}
+		Sense|__ws_2_Bach__Substantiv__1|{' Astronomie: der Asteroid mit der Nummer 1814'}
+		Sense|__ws_3_Bach__Substantiv__1|{' übertragen, Typografie: Fachausdruck für mehrere untereinander stehende Wortzwischenräume, die sich dem Auge des Betrachters zu einem „Bach“ [1] verbinden'}
+	GERMAN LexicalEntry|Strömung#noun|
+		Sense|__ws_1_Strömung__Substantiv__1|{' Physik: das Strömen; gerichtete Bewegung von Teilchen oder sich kontinuierlich bewegenden Fluiden oder Strom'}
+		Sense|__ws_2_Strömung__Substantiv__1|{' eine der verschiedenen Anschauungen innerhalb einer großen Gruppe'}
+	GERMAN LexicalEntry|Schwall#noun|
+		Sense|__ws_1_Schwall__Substantiv__1|{' Plural selten: eine große Menge, die über jemanden oder etwas hereinbricht (insbesondere Wasser oder andere Flüssigkeiten, aber auch Worte, Düfte etc.)'}
+	GERMAN LexicalEntry|Abfluss#noun|
+		Sense|__ws_1_Abfluss__Substantiv__1|{' dasjenige, was abfließt'}
+		Sense|__ws_2_Abfluss__Substantiv__1|{' Technik: Einrichtung, Vorrichtung, die eine Ableitung von Flüssigkeiten aus Behältern zulässt'}
+		Sense|__ws_3_Abfluss__Substantiv__1|{' Geografie, Hydrologie: ein Teil des Niederschlages im Wasserkreislauf, der oberirdisch und unterirdisch in Ozeane und abflusslose Becken abfließt'}
+	GERMAN LexicalEntry|Strom#noun|
+		Sense|__ws_1_Strom__Substantiv__1|{' allgemein eine Menge (Informationen, Menschen, Teilchen, Wasser), die sich sich fließend in eine bestimmte Richtung bewegt'}
+		Sense|__ws_2_Strom__Substantiv__1|{' großes, fließendes Gewässer in Form eines Flusses'}
+		Sense|__ws_3_Strom__Substantiv__1|{' kurz für: elektrischer Strom – sich in eine bestimmte Richtung bewegende Ladungsträger'}
+		Sense|__ws_4_Strom__Substantiv__1|{' kurz für: Datenstrom'}
+ INFO [main] (CachePool.java:39) - [CONFIG] Loaded lexsema.cache.provider=JEDIS
+ INFO [main] (CachePool.java:43) - [CONFIG] Loaded lexsema.cache.host=localhost
+ INFO [main] (AcceptionClusteringExperimentGenerationSim.java:118) - Loading Word2Vec...
+ INFO [main] (MultilingualSerializedModelWord2VecLoader.java:46) - 	Loading GERMAN model...
