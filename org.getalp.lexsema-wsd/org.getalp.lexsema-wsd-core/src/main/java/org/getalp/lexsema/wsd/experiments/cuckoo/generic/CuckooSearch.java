@@ -4,13 +4,15 @@ import java.util.Arrays;
 import java.util.Random;
 
 import org.apache.commons.math3.distribution.LevyDistribution;
+import org.getalp.lexsema.wsd.method.IterationStopCondition;
+import org.getalp.lexsema.wsd.method.StopCondition;
 
 public class CuckooSearch
 {
     private static final Random random = new Random();
     
-    private int iterationsNumber;
-
+    private StopCondition stopCondition;
+        
     private LevyDistribution levyDistribution;
     
     private int nestsNumber;
@@ -27,7 +29,12 @@ public class CuckooSearch
 
     public CuckooSearch(int iterations, double levyScale, int nestsNumber, int destroyedNests, CuckooSolutionScorer solutionScorer, CuckooSolutionFactory solutionFactory, boolean verbose)
     {
-        this.iterationsNumber = iterations;
+        this(new IterationStopCondition(iterations), levyScale, nestsNumber, destroyedNests, solutionScorer, solutionFactory, verbose);
+    }
+
+    public CuckooSearch(StopCondition stopCondition, double levyScale, int nestsNumber, int destroyedNests, CuckooSolutionScorer solutionScorer, CuckooSolutionFactory solutionFactory, boolean verbose)
+    {
+        this.stopCondition = stopCondition;
         this.levyDistribution = new LevyDistribution(1, levyScale);
         this.nestsNumber = nestsNumber;
         this.destroyedNestsNumber = destroyedNests;
@@ -39,14 +46,16 @@ public class CuckooSearch
 
     public CuckooSolution run()
     {
+        stopCondition.reset();
+        
         for (int i = 0 ; i < nestsNumber ; i++)
         {
             nests[i] = new CuckooNest(solutionScorer, levyDistribution, solutionFactory);
         }
         
-        for (int currentIteration = 0 ; currentIteration < iterationsNumber ; currentIteration++)
+        while (!stopCondition.stop())
         {
-            int progress = (int)(((double) currentIteration / (double) iterationsNumber) * 10000);
+            int progress = (int)(stopCondition.getRemainingPercentage() * 100);
             double progressPercent = (double)progress / 100.0;
             
             int i = random.nextInt(nests.length);
@@ -68,6 +77,7 @@ public class CuckooSearch
                                    "Current best : " + nests[nestsNumber - 1].score + 
                                    " [" + nests[nestsNumber - 1].solution + "]");
             }
+            stopCondition.increment();
         }
         sortNests();
         return nests[nestsNumber - 1].solution;

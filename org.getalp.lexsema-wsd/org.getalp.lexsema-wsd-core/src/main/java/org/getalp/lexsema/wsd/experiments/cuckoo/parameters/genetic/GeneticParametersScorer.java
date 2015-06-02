@@ -1,4 +1,4 @@
-package org.getalp.lexsema.wsd.experiments.cuckoo.parameters.bat;
+package org.getalp.lexsema.wsd.experiments.cuckoo.parameters.genetic;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,13 +12,11 @@ import org.getalp.lexsema.similarity.Document;
 import org.getalp.lexsema.wsd.configuration.Configuration;
 import org.getalp.lexsema.wsd.experiments.cuckoo.generic.CuckooSolution;
 import org.getalp.lexsema.wsd.experiments.cuckoo.generic.CuckooSolutionScorer;
-import org.getalp.lexsema.wsd.method.BatAlgorithm;
+import org.getalp.lexsema.wsd.experiments.cuckoo.wsd.CuckooSearchDisambiguator;
 import org.getalp.lexsema.wsd.method.Disambiguator;
-import org.getalp.lexsema.wsd.method.IterationStopCondition;
-import org.getalp.lexsema.wsd.method.StopCondition;
 import org.getalp.lexsema.wsd.score.ConfigurationScorer;
 
-public class BatParametersScorer implements CuckooSolutionScorer
+public class GeneticParametersScorer implements CuckooSolutionScorer
 {
     private ConfigurationScorer scorer; 
     
@@ -26,26 +24,21 @@ public class BatParametersScorer implements CuckooSolutionScorer
     
     private int iterationsOutside;
     
-    private StopCondition stopCondition;
-    
+    private int iterationsInside;
+
     private ExecutorService threadPool;
 
-    public BatParametersScorer(ConfigurationScorer scorer, TextLoader dl, int iterationsOutside, int iterationsInside)
-    {
-        this(scorer, dl, iterationsOutside, new IterationStopCondition(iterationsInside));
-    }
-    
-    public BatParametersScorer(ConfigurationScorer scorer, TextLoader dl, int iterationsOutside, StopCondition stopCondition)
+    public GeneticParametersScorer(ConfigurationScorer scorer, TextLoader dl, int iterationsOutside, int iterationsInside)
     {
         this.scorer = scorer;
         this.dl = dl;
         this.iterationsOutside = iterationsOutside;
-        this.stopCondition = stopCondition;
+        this.iterationsInside = iterationsInside;
         int nbThreads = Runtime.getRuntime().availableProcessors();
         threadPool = Executors.newFixedThreadPool(nbThreads);
     }
     
-    public double computeScore(BatParameters params)
+    public double computeScore(GeneticParameters params)
     {
         ArrayList<IntermediateScorer> scorers = new ArrayList<IntermediateScorer>();
         for (int i = 0 ; i < iterationsOutside ; i++)
@@ -71,42 +64,35 @@ public class BatParametersScorer implements CuckooSolutionScorer
 
     public double computeScore(CuckooSolution configuration)
     {
-        return computeScore((BatParameters) configuration);
+        return computeScore((GeneticParameters) configuration);
     }
-    
+
     private class IntermediateScorer implements Callable<Double>
     {
-        private BatParameters params;
+        private GeneticParameters params;
         
-        public IntermediateScorer(BatParameters params)
+        public IntermediateScorer(GeneticParameters params)
         {
             this.params = params;
         }
 
         public Double call() throws Exception
         {
-            Disambiguator batDisambiguator = new BatAlgorithm(
-                    stopCondition, 
-                    (int) params.batsNumber.currentValue, 
-                    params.minFrequency.currentValue,
-                    params.maxFrequency.currentValue,
-                    params.minLoudness.currentValue,
-                    params.maxLoudness.currentValue,
-                    params.minRate.currentValue,
-                    params.maxRate.currentValue,
-                    params.alpha.currentValue,
-                    params.gamma.currentValue,
+            Disambiguator cuckooDisambiguator = new CuckooSearchDisambiguator(iterationsInside, 
+                    params.levyScale.currentValue, 
+                    (int)params.nestsNumber.currentValue, 
+                    (int)(params.destroyedNests.currentValue * params.nestsNumber.currentValue), 
                     scorer, false);
             double tmpres = 0;
             int nbTexts = 0;
             for (Document d : dl)
             {
-                Configuration c = batDisambiguator.disambiguate(d);
+                Configuration c = cuckooDisambiguator.disambiguate(d);
                 tmpres += scorer.computeScore(d, c);
                 nbTexts++;
             }
-            batDisambiguator.release();
-            return (tmpres / ((double) nbTexts));
+            cuckooDisambiguator.release();
+            return tmpres / ((double) nbTexts);
         }
     }
     

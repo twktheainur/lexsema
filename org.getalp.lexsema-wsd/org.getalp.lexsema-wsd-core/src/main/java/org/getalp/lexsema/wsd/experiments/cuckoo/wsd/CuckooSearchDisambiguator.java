@@ -4,11 +4,13 @@ import org.getalp.lexsema.similarity.Document;
 import org.getalp.lexsema.wsd.configuration.Configuration;
 import org.getalp.lexsema.wsd.experiments.cuckoo.generic.CuckooSearch;
 import org.getalp.lexsema.wsd.method.Disambiguator;
+import org.getalp.lexsema.wsd.method.IterationStopCondition;
+import org.getalp.lexsema.wsd.method.StopCondition;
 import org.getalp.lexsema.wsd.score.ConfigurationScorer;
 
 public class CuckooSearchDisambiguator implements Disambiguator
 {
-    private int iterations;
+    private StopCondition stopCondition;
     
     private double levyScale;
 
@@ -22,7 +24,12 @@ public class CuckooSearchDisambiguator implements Disambiguator
 
     public CuckooSearchDisambiguator(int iterations, double levyScale, int nestsNumber, int destroyedNests, ConfigurationScorer configurationScorer, boolean verbose)
     {
-        this.iterations = iterations;
+        this(new IterationStopCondition(iterations), levyScale, nestsNumber, destroyedNests, configurationScorer, verbose);
+    }
+
+    public CuckooSearchDisambiguator(StopCondition stopCondition, double levyScale, int nestsNumber, int destroyedNests, ConfigurationScorer configurationScorer, boolean verbose)
+    {
+        this.stopCondition = stopCondition;
         this.levyScale = levyScale;
         this.nestsNumber = nestsNumber;
         this.destroyedNests = destroyedNests;
@@ -34,7 +41,7 @@ public class CuckooSearchDisambiguator implements Disambiguator
     {
         CuckooConfigurationScorer scorer = new CuckooConfigurationScorer(configurationScorer, document);
         CuckooConfigurationFactory configurationFactory = new CuckooConfigurationFactory(document);
-        CuckooSearch cuckoo = new CuckooSearch(iterations, levyScale, nestsNumber, destroyedNests, scorer, configurationFactory, verbose);
+        CuckooSearch cuckoo = new CuckooSearch(stopCondition, levyScale, nestsNumber, destroyedNests, scorer, configurationFactory, verbose);
         return (Configuration) cuckoo.run();
     }
 

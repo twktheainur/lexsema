@@ -80,6 +80,7 @@ public class BatParameters implements CuckooSolution
         maxRate.add(parameters[6] * distance);
         alpha.add(parameters[7] * distance);
         gamma.add(parameters[8] * distance);
+        /*
         System.out.println("Move batsNumbers : " + parameters[0] * distance * batsNumber.step);
         System.out.println("Move minFrequency : " + parameters[1] * distance * minFrequency.step);
         System.out.println("Move maxFrequency : " + parameters[2] * distance * maxFrequency.step);
@@ -89,6 +90,7 @@ public class BatParameters implements CuckooSolution
         System.out.println("Move maxRate : " + parameters[6] * distance * maxRate.step);
         System.out.println("Move alpha : " + parameters[7] * distance * alpha.step);
         System.out.println("Move gamma : " + parameters[8] * distance * gamma.step);
+        */
     }
     
     public String toString()

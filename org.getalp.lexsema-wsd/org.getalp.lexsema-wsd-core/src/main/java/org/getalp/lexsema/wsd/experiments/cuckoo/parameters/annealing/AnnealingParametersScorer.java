@@ -1,4 +1,4 @@
-package org.getalp.lexsema.wsd.experiments.cuckoo.parameters.bat;
+package org.getalp.lexsema.wsd.experiments.cuckoo.parameters.annealing;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,13 +12,12 @@ import org.getalp.lexsema.similarity.Document;
 import org.getalp.lexsema.wsd.configuration.Configuration;
 import org.getalp.lexsema.wsd.experiments.cuckoo.generic.CuckooSolution;
 import org.getalp.lexsema.wsd.experiments.cuckoo.generic.CuckooSolutionScorer;
-import org.getalp.lexsema.wsd.method.BatAlgorithm;
+import org.getalp.lexsema.wsd.experiments.cuckoo.wsd.CuckooSearchDisambiguator;
 import org.getalp.lexsema.wsd.method.Disambiguator;
-import org.getalp.lexsema.wsd.method.IterationStopCondition;
-import org.getalp.lexsema.wsd.method.StopCondition;
+import org.getalp.lexsema.wsd.method.SimulatedAnnealing2;
 import org.getalp.lexsema.wsd.score.ConfigurationScorer;
 
-public class BatParametersScorer implements CuckooSolutionScorer
+public class AnnealingParametersScorer implements CuckooSolutionScorer
 {
     private ConfigurationScorer scorer; 
     
@@ -26,26 +25,21 @@ public class BatParametersScorer implements CuckooSolutionScorer
     
     private int iterationsOutside;
     
-    private StopCondition stopCondition;
-    
+    private int iterationsInside;
+
     private ExecutorService threadPool;
 
-    public BatParametersScorer(ConfigurationScorer scorer, TextLoader dl, int iterationsOutside, int iterationsInside)
-    {
-        this(scorer, dl, iterationsOutside, new IterationStopCondition(iterationsInside));
-    }
-    
-    public BatParametersScorer(ConfigurationScorer scorer, TextLoader dl, int iterationsOutside, StopCondition stopCondition)
+    public AnnealingParametersScorer(ConfigurationScorer scorer, TextLoader dl, int iterationsOutside, int iterationsInside)
     {
         this.scorer = scorer;
         this.dl = dl;
         this.iterationsOutside = iterationsOutside;
-        this.stopCondition = stopCondition;
+        this.iterationsInside = iterationsInside;
         int nbThreads = Runtime.getRuntime().availableProcessors();
         threadPool = Executors.newFixedThreadPool(nbThreads);
     }
     
-    public double computeScore(BatParameters params)
+    public double computeScore(AnnealingParameters params)
     {
         ArrayList<IntermediateScorer> scorers = new ArrayList<IntermediateScorer>();
         for (int i = 0 ; i < iterationsOutside ; i++)
@@ -71,42 +65,35 @@ public class BatParametersScorer implements CuckooSolutionScorer
 
     public double computeScore(CuckooSolution configuration)
     {
-        return computeScore((BatParameters) configuration);
+        return computeScore((AnnealingParameters) configuration);
     }
-    
+
     private class IntermediateScorer implements Callable<Double>
     {
-        private BatParameters params;
+        private AnnealingParameters params;
         
-        public IntermediateScorer(BatParameters params)
+        public IntermediateScorer(AnnealingParameters params)
         {
             this.params = params;
         }
 
         public Double call() throws Exception
         {
-            Disambiguator batDisambiguator = new BatAlgorithm(
-                    stopCondition, 
-                    (int) params.batsNumber.currentValue, 
-                    params.minFrequency.currentValue,
-                    params.maxFrequency.currentValue,
-                    params.minLoudness.currentValue,
-                    params.maxLoudness.currentValue,
-                    params.minRate.currentValue,
-                    params.maxRate.currentValue,
-                    params.alpha.currentValue,
-                    params.gamma.currentValue,
-                    scorer, false);
+            Disambiguator annealingDisambiguator = new SimulatedAnnealing2(
+                    params.coolingRate.currentValue, 
+                    (int) params.convergenceThreshold.currentValue, 
+                    (int) params.iterationsNumber.currentValue, 
+                    scorer);
             double tmpres = 0;
             int nbTexts = 0;
             for (Document d : dl)
             {
-                Configuration c = batDisambiguator.disambiguate(d);
+                Configuration c = annealingDisambiguator.disambiguate(d);
                 tmpres += scorer.computeScore(d, c);
                 nbTexts++;
             }
-            batDisambiguator.release();
-            return (tmpres / ((double) nbTexts));
+            annealingDisambiguator.release();
+            return tmpres / ((double) nbTexts);
         }
     }
     

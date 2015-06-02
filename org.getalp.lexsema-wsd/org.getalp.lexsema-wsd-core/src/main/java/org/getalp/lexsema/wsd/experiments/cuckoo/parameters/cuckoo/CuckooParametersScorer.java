@@ -14,6 +14,8 @@ import org.getalp.lexsema.wsd.experiments.cuckoo.generic.CuckooSolution;
 import org.getalp.lexsema.wsd.experiments.cuckoo.generic.CuckooSolutionScorer;
 import org.getalp.lexsema.wsd.experiments.cuckoo.wsd.CuckooSearchDisambiguator;
 import org.getalp.lexsema.wsd.method.Disambiguator;
+import org.getalp.lexsema.wsd.method.IterationStopCondition;
+import org.getalp.lexsema.wsd.method.StopCondition;
 import org.getalp.lexsema.wsd.score.ConfigurationScorer;
 
 public class CuckooParametersScorer implements CuckooSolutionScorer
@@ -24,16 +26,21 @@ public class CuckooParametersScorer implements CuckooSolutionScorer
     
     private int iterationsOutside;
     
-    private int iterationsInside;
+    private StopCondition stopCondition;
 
     private ExecutorService threadPool;
 
     public CuckooParametersScorer(ConfigurationScorer scorer, TextLoader dl, int iterationsOutside, int iterationsInside)
     {
+        this(scorer, dl, iterationsOutside, new IterationStopCondition(iterationsInside));
+    }
+    
+    public CuckooParametersScorer(ConfigurationScorer scorer, TextLoader dl, int iterationsOutside, StopCondition stopCondition)
+    {
         this.scorer = scorer;
         this.dl = dl;
         this.iterationsOutside = iterationsOutside;
-        this.iterationsInside = iterationsInside;
+        this.stopCondition = stopCondition;
         int nbThreads = Runtime.getRuntime().availableProcessors();
         threadPool = Executors.newFixedThreadPool(nbThreads);
     }
@@ -78,7 +85,7 @@ public class CuckooParametersScorer implements CuckooSolutionScorer
 
         public Double call() throws Exception
         {
-            Disambiguator cuckooDisambiguator = new CuckooSearchDisambiguator(iterationsInside, 
+            Disambiguator cuckooDisambiguator = new CuckooSearchDisambiguator(stopCondition, 
                     params.levyScale.currentValue, 
                     (int)params.nestsNumber.currentValue, 
                     (int)(params.destroyedNests.currentValue * params.nestsNumber.currentValue), 

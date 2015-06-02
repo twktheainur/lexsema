@@ -18,21 +18,18 @@ public class SimulatedAnnealingDisambiguation2
 {
     public static void main(String[] args)
     {    
-        int iterationsNumber = 1000;
-        double acceptanceProbability = 0.8;
         double coolingRate = 0.8;
         int convergenceThreshold = 5;
+        int iterationsNumber = 2;
         
-        if (args.length >= 1) iterationsNumber = Integer.valueOf(args[0]);
-        if (args.length >= 2) acceptanceProbability = Double.valueOf(args[1]);
-        if (args.length >= 3) coolingRate = Double.valueOf(args[2]);
-        if (args.length >= 4) convergenceThreshold = Integer.valueOf(args[3]);
+        if (args.length >= 1) coolingRate = Double.valueOf(args[0]);
+        if (args.length >= 2) convergenceThreshold = Integer.valueOf(args[1]);
+        if (args.length >= 3) iterationsNumber = Integer.valueOf(args[2]);
         
         System.out.println("Parameters value : " + 
-                         "<iterations = " + iterationsNumber + "> " +
-                         "<acceptance probability = " + acceptanceProbability + "> " +
                          "<cooling rate = " + coolingRate + "> " +
-                         "<convergence threshold = " + convergenceThreshold + "> " 
+                         "<convergence threshold = " + convergenceThreshold + "> " +
+                         "<iterations = " + iterationsNumber + "> " 
                          );
         
         long startTime = System.currentTimeMillis();
@@ -44,7 +41,7 @@ public class SimulatedAnnealingDisambiguation2
 
         ConfigurationScorer scorer = new SemEval2007Task7PerfectConfigurationScorer();
 
-        Disambiguator saDisambiguator = new SimulatedAnnealing2(acceptanceProbability, coolingRate, convergenceThreshold, iterationsNumber, scorer);
+        Disambiguator saDisambiguator = new SimulatedAnnealing2(coolingRate, convergenceThreshold, iterationsNumber, scorer);
 
         System.out.println("Loading texts...");
         dl.load();

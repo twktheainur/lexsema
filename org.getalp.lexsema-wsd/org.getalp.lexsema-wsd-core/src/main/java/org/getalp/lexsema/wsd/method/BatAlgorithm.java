@@ -11,8 +11,10 @@ public class BatAlgorithm implements Disambiguator
 {
     private static final Random random = new Random();
     
-    private int iterationsNumber;
+    private StopCondition stopCondition;
 
+    private int currentIteration;
+    
     private int batsNumber;
 
     private double minFrequency;
@@ -73,17 +75,26 @@ public class BatAlgorithm implements Disambiguator
     }
     
     public BatAlgorithm(int iterationsNumber, int batsNumber, double minFrequency, double maxFrequency, 
-                        double minLoudness, double maxLoudness, double minRate, double MaxRate, 
+                        double minLoudness, double maxLoudness, double minRate, double maxRate, 
                         double alpha, double gamma, ConfigurationScorer configurationScorer, boolean verbose)
     {
-        this.iterationsNumber = iterationsNumber;
+        this(new IterationStopCondition(iterationsNumber), batsNumber, minFrequency, maxFrequency, 
+             minLoudness, maxLoudness, minRate, maxRate, 
+             alpha, gamma, configurationScorer, verbose);
+    }
+
+    public BatAlgorithm(StopCondition stopCondition, int batsNumber, double minFrequency, double maxFrequency, 
+                        double minLoudness, double maxLoudness, double minRate, double maxRate, 
+                        double alpha, double gamma, ConfigurationScorer configurationScorer, boolean verbose)
+    {
+        this.stopCondition = stopCondition;
         this.batsNumber = batsNumber;
         this.minFrequency = minFrequency;
         this.maxFrequency = maxFrequency;
         this.minLoudness = minLoudness;
         this.maxLoudness= maxLoudness;
         this.minRate = minRate;
-        this.maxRate = MaxRate;
+        this.maxRate = maxRate;
         this.alpha = alpha;
         this.gamma = gamma;
         this.configurationScorer = configurationScorer;
@@ -93,8 +104,10 @@ public class BatAlgorithm implements Disambiguator
 
     public Configuration disambiguate(Document document)
     {
+        stopCondition.reset();
         currentDocument = document;
         dimension = document.size();
+        currentIteration = 0;
         
         for (int i = 0 ; i < batsNumber ; ++i)
         {
@@ -103,10 +116,9 @@ public class BatAlgorithm implements Disambiguator
 
         updateBestBat();
 
-        for (int currentIteration = 0 ; currentIteration < iterationsNumber ; currentIteration++)
+        while (!stopCondition.stop())
         {
-            int progress = (int)(((double) currentIteration / (double) iterationsNumber) * 10000);
-            if (verbose) System.out.println("Bat progress : " + (double)progress / 100.0 + "%");
+            int progress = (int)(stopCondition.getRemainingPercentage() * 100);
 
             for (Bat currentBat : bats)
             {
@@ -115,8 +127,9 @@ public class BatAlgorithm implements Disambiguator
                 double previousScore = currentBat.score;
 
                 currentBat.frequency = randomDoubleInRange(minFrequency, maxFrequency);
-                
+
                 currentBat.velocity = 0;
+                
                 for (int i = 0 ; i < dimension ; i++)
                 {
                     if (currentBat.position.getAssignment(i) != bestBat.position.getAssignment(i))
@@ -126,7 +139,7 @@ public class BatAlgorithm implements Disambiguator
                 }
                 currentBat.velocity *= currentBat.frequency;
                 currentBat.position.makeRandomChanges(currentBat.velocity);
-                
+
                 if (currentBat.rate < randomDoubleInRange(minRate, maxRate))
                 {
                     currentBat.position = bestBat.position.clone();
@@ -151,7 +164,11 @@ public class BatAlgorithm implements Disambiguator
                 }
             }
             
-            if (verbose) System.out.println("Current best : " + bestBat.score);
+            stopCondition.increment();
+            currentIteration++;
+
+            if (verbose) System.out.println("Bat progress : " + (double)progress / 100.0 + "% - " + 
+                                            "Current best : " + bestBat.score);
         }
 
         return bestBat.position;
