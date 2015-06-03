@@ -2,7 +2,10 @@ package org.getalp.lexsema.wsd.experiments;
 
 import com.wcohen.ss.ScaledLevenstein;
 
+import org.getalp.lexsema.io.dictionary.DictionaryWriter;
+import org.getalp.lexsema.io.document.TextLoader;
 import org.getalp.lexsema.io.resource.dictionary.DictionaryLRLoader;
+import org.getalp.lexsema.io.resource.wordnet.WordnetLoader;
 import org.getalp.lexsema.similarity.Document;
 import org.getalp.lexsema.similarity.measures.SimilarityMeasure;
 import org.getalp.lexsema.similarity.measures.tverski.TverskiIndexSimilarityMeasureBuilder;
