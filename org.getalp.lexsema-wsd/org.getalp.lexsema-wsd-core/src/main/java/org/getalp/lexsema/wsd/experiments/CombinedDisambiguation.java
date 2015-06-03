@@ -25,6 +25,7 @@ public class CombinedDisambiguation {
 
     public static void main(String[] args) {
         long startTime = System.currentTimeMillis();
+        System.out.println("jambon");
         TextLoader dl = new Semeval2007TextLoader("../data/senseval2007_task7/test/eng-coarse-all-words.xml").loadNonInstances(true);
         LRLoader lrloader = new DictionaryLRLoader(new File("dictTest.xml"));
         SimilarityMeasure sim_lr_hp;
@@ -44,7 +45,7 @@ public class CombinedDisambiguation {
 				.setUsesStopWords(true)
 				.setStemming(true); */
         //Disambiguator sl = new SimplifiedLesk(100, sim_lr_hp, slp, 4);
-        System.out.println("jambon");
+        
 
         WindowedLeskParameters wlp = new WindowedLeskParameters().setFallbackFS(false).setMinimize(false);
         sim_full = new TverskiIndexSimilarityMeasureBuilder().distance(new ScaledLevenstein()).computeRatio(true).alpha(1d).beta(0.5d).gamma(0.5d).fuzzyMatching(false).quadraticWeighting(false).extendedLesk(false).randomInit(false).regularizeOverlapInput(false).optimizeOverlapInput(false).regularizeRelations(false).optimizeRelations(false).build();
