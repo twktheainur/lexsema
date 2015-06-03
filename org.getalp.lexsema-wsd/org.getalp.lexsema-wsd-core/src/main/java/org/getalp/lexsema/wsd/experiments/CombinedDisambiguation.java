@@ -44,7 +44,7 @@ public class CombinedDisambiguation {
 				.setUsesStopWords(true)
 				.setStemming(true); */
         //Disambiguator sl = new SimplifiedLesk(100, sim_lr_hp, slp, 4);
-
+        System.out.println("jambon");
 
         WindowedLeskParameters wlp = new WindowedLeskParameters().setFallbackFS(false).setMinimize(false);
         sim_full = new TverskiIndexSimilarityMeasureBuilder().distance(new ScaledLevenstein()).computeRatio(true).alpha(1d).beta(0.5d).gamma(0.5d).fuzzyMatching(false).quadraticWeighting(false).extendedLesk(false).randomInit(false).regularizeOverlapInput(false).optimizeOverlapInput(false).regularizeRelations(false).optimizeRelations(false).build();
