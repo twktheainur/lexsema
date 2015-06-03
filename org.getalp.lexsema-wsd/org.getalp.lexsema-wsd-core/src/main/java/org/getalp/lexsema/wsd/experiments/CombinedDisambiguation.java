@@ -25,7 +25,7 @@ public class CombinedDisambiguation {
 
     public static void main(String[] args) {
         long startTime = System.currentTimeMillis();
-        System.out.println("jambon2");
+        System.out.println("jambon");
         TextLoader dl = new Semeval2007TextLoader("../data/senseval2007_task7/test/eng-coarse-all-words.xml").loadNonInstances(true);
         LRLoader lrloader = new DictionaryLRLoader(new File("dictTest.xml"));
         SimilarityMeasure sim_lr_hp;
