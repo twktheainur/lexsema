@@ -122,13 +122,13 @@ public class WordnetLoader implements LRLoader {
             String token = st.nextToken().replaceAll("\"|;", "").toLowerCase();
             //Removing stop words from definitions
             if (!usesStopWords || !StopList.isStopWord(token)) {
-                if (stemming) {
-                    stemmer.setCurrent(token);
-                    stemmer.stem();
-                    signature.addSymbol(stemmer.getCurrent(), 1.0);
-                } else {
+                //if (stemming) {
+                    //stemmer.setCurrent(token);
+                    //stemmer.stem();
+                    //signature.addSymbol(stemmer.getCurrent(), 1.0);
+            	//} else {
                     signature.addSymbol(token, 1.0);
-                }
+                    //}
             }
         }
     }
