@@ -74,6 +74,11 @@
             <artifactId>org.getalp.lexsema-util</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
+                <dependency>
+            <groupId>org.getalp</groupId>
+            <artifactId>org.getalp.lexsema-io</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
         <dependency>
             <groupId>net.sourceforge.parallelcolt</groupId>
             <artifactId>parallelcolt</artifactId>

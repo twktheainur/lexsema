@@ -1,12 +1,7 @@
 package org.getalp.lexsema.wsd.experiments;
 
 import com.wcohen.ss.ScaledLevenstein;
-import org.getalp.lexsema.io.annotresult.SemevalWriter;
-import org.getalp.lexsema.io.dictionary.DictionaryWriter;
-import org.getalp.lexsema.io.dictionary.DocumentDictionaryWriter;
-import org.getalp.lexsema.io.document.Semeval2007TextLoader;
-import org.getalp.lexsema.io.document.TextLoader;
-import org.getalp.lexsema.io.resource.LRLoader;
+
 import org.getalp.lexsema.io.resource.dictionary.DictionaryLRLoader;
 import org.getalp.lexsema.similarity.Document;
 import org.getalp.lexsema.similarity.measures.SimilarityMeasure;
@@ -25,9 +20,13 @@ public class CombinedDisambiguation {
 
     public static void main(String[] args) {
         long startTime = System.currentTimeMillis();
-        System.out.println("jambon");
+        System.out.println("jambon2");
         TextLoader dl = new Semeval2007TextLoader("../data/senseval2007_task7/test/eng-coarse-all-words.xml").loadNonInstances(true);
-        LRLoader lrloader = new DictionaryLRLoader(new File("dictTest.xml"));
+        LRLoader lrloader = new WordnetLoader("../data/wordnet/2.1/dict")
+		.extendedSignature(true)
+		.setUsesStopWords(false)
+		.setStemming(true)
+		.loadDefinitions(true);
         SimilarityMeasure sim_lr_hp;
         SimilarityMeasure sim_full;
 
