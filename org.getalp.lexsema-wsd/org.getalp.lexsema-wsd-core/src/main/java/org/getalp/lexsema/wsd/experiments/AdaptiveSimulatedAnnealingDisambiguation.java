@@ -8,12 +8,15 @@ import org.getalp.lexsema.io.resource.dictionary.DictionaryLRLoader;
 import org.getalp.lexsema.io.resource.wordnet.WordnetLoader;
 import org.getalp.lexsema.similarity.Document;
 import org.getalp.lexsema.similarity.measures.SimilarityMeasure;
+import org.getalp.lexsema.similarity.measures.lesk.ACExtendedLeskSimilarity;
 import org.getalp.lexsema.similarity.measures.tverski.TverskiIndexSimilarityMeasureBuilder;
 import org.getalp.lexsema.wsd.configuration.Configuration;
 import org.getalp.lexsema.wsd.method.Disambiguator;
 import org.getalp.lexsema.wsd.method.SimulatedAnnealing;
+import org.getalp.lexsema.wsd.score.ACSimilarityConfigurationScorer;
 import org.getalp.lexsema.wsd.score.ConfigurationScorer;
 import org.getalp.lexsema.wsd.score.MatrixTverskiConfigurationScorer;
+import org.getalp.lexsema.wsd.score.TverskyConfigurationScorer;
 import org.getalp.ml.matrix.filters.NormalizationFilter;
 import org.getalp.ml.matrix.score.SumMatrixScorer;
 
@@ -39,7 +42,7 @@ public class AdaptiveSimulatedAnnealingDisambiguation {
 
         //sim = new IndexedOverlapSimilarity().normalize(false);
         //sim = new ACExtendedLeskSimilarity();
-        sim = new TverskiIndexSimilarityMeasureBuilder().alpha(1d).beta(0d).gamma(0d).fuzzyMatching(false).computeRatio(false).build();
+        sim = new ACExtendedLeskSimilarity();
 
         if (args.length < 4) {
             System.err.println("Usage: aSAD [P0] [cR] [cT] [It] (threads)");
@@ -56,9 +59,9 @@ public class AdaptiveSimulatedAnnealingDisambiguation {
             threads = Runtime.getRuntime().availableProcessors();
         }
 
-        ConfigurationScorer configurationScorer = new MatrixTverskiConfigurationScorer(sim, new NormalizationFilter(NormalizationFilter.NormalizationType.UNIT_NORM), new SumMatrixScorer(), threads);
-        //ConfigurationScorer configurationScorer = new TverskyConfigurationScorer(sim, threads);
-        // ConfigurationScorer configurationScorer = new ACSimilarityConfigurationScorer(sim);
+        //ConfigurationScorer configurationScorer = new MatrixTverskiConfigurationScorer(sim, new NormalizationFilter(NormalizationFilter.NormalizationType.UNIT_NORM), new SumMatrixScorer(), threads);
+        ConfigurationScorer configurationScorer = new TverskyConfigurationScorer(sim, threads);
+        //ConfigurationScorer configurationScorer = new ACSimilarityConfigurationScorer(sim);
 
         Disambiguator sl_full = new SimulatedAnnealing(accptProb, cR, (int) convThresh, iterations, configurationScorer, 1000);
 
