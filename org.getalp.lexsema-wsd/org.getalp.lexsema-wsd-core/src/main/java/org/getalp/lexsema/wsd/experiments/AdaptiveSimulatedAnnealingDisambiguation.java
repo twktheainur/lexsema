@@ -5,6 +5,7 @@ import org.getalp.lexsema.io.document.Semeval2007TextLoader;
 import org.getalp.lexsema.io.document.TextLoader;
 import org.getalp.lexsema.io.resource.LRLoader;
 import org.getalp.lexsema.io.resource.dictionary.DictionaryLRLoader;
+import org.getalp.lexsema.io.resource.wordnet.WordnetLoader;
 import org.getalp.lexsema.similarity.Document;
 import org.getalp.lexsema.similarity.measures.SimilarityMeasure;
 import org.getalp.lexsema.similarity.measures.tverski.TverskiIndexSimilarityMeasureBuilder;
@@ -27,7 +28,11 @@ public class AdaptiveSimulatedAnnealingDisambiguation {
         //VisualVMTools.delayUntilReturn();
         long startTime = System.currentTimeMillis();
         TextLoader dl = new Semeval2007TextLoader("../data/senseval2007_task7/test/eng-coarse-all-words-t1.xml");
-        LRLoader lrloader = new DictionaryLRLoader(new File("../data/dictionnaires-lesk/dict-adapted-all-relations.xml"), true);
+        LRLoader lrloader = new WordnetLoader("../data/wordnet/2.1/dict")
+		.extendedSignature(true)
+		.setUsesStopWords(false)
+		.setStemming(true)
+		.loadDefinitions(true);
         //LRLoader lrloader = new WordnetLoader("../data/wordnet/2.1/dict")
         //        .extendedSignature(true).loadDefinitions(true).shuffle(false);
         SimilarityMeasure sim;
