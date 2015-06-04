@@ -4,7 +4,6 @@ import edu.mit.jwi.Dictionary;
 import edu.mit.jwi.item.*;
 
 import org.getalp.lexsema.io.DSODefinitionExpender.DSODefinitionExpender;
-//import org.getalp.lexsema.io.DSODefinitionExpender.DSODefinitionExpender;
 import org.getalp.lexsema.io.SemecoreDefinitionExpender.SemecoreDefinitionExpender;
 import org.getalp.lexsema.io.resource.LRLoader;
 import org.getalp.lexsema.similarity.Document;

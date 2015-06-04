@@ -1,6 +1,8 @@
 package org.getalp.lexsema.io.resource.dbnary;
 
 
+import org.getalp.lexsema.io.DSODefinitionExpender.DSODefinitionExpender;
+import org.getalp.lexsema.io.SemecoreDefinitionExpender.SemecoreDefinitionExpender;
 import org.getalp.lexsema.io.resource.LRLoader;
 import org.getalp.lexsema.ontolex.LexicalEntry;
 import org.getalp.lexsema.ontolex.LexicalSense;
@@ -219,4 +221,12 @@ public class DBNaryLoaderImpl implements DBNaryLoader {
         // TODO Auto-generated method stub
         return null;
     }
+
+	@Override
+	public void loadSenses(Document document,
+			SemecoreDefinitionExpender definitionExpender, int profondeur,
+			DSODefinitionExpender contexteDSO) {
+		// TODO Auto-generated method stub
+		
+	}
 }
