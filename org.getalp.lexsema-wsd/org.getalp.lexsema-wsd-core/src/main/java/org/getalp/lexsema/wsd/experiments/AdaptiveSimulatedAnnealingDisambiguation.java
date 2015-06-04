@@ -1,5 +1,6 @@
 package org.getalp.lexsema.wsd.experiments;
 
+import org.getalp.lexsema.io.DSODefinitionExpender.DSODefinitionExpender;
 import org.getalp.lexsema.io.SemecoreDefinitionExpender.SemecoreDefinitionExpender;
 import org.getalp.lexsema.io.annotresult.SemevalWriter;
 import org.getalp.lexsema.io.document.SemCorTextLoader;
@@ -45,7 +46,10 @@ public class AdaptiveSimulatedAnnealingDisambiguation {
 		semCor.load();
         
         SemecoreDefinitionExpender definitionExpender=null;
-		definitionExpender=new SemecoreDefinitionExpender(semCor, 2);
+		//definitionExpender=new SemecoreDefinitionExpender(semCor, 2);
+		
+		DSODefinitionExpender contexteDSO=null;
+		//contexteDSO=new DSODefinitionExpender(10);
         
         //LRLoader lrloader = new WordnetLoader("../data/wordnet/2.1/dict")
         //        .extendedSignature(true).loadDefinitions(true).shuffle(false);
@@ -81,7 +85,7 @@ public class AdaptiveSimulatedAnnealingDisambiguation {
         for (Document d : dl) {
             System.err.println("Starting document " + d.getId());
             System.err.println("\tLoading senses...");
-            lrloader.loadSenses(d, definitionExpender, 0);
+            lrloader.loadSenses(d, definitionExpender, 0, contexteDSO);
 
             System.err.println("Disambiguating...");
             Configuration c = sl_full.disambiguate(d);

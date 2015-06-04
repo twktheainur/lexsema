@@ -3,6 +3,7 @@ package org.getalp.lexsema.io.resource.wordnet;
 import edu.mit.jwi.Dictionary;
 import edu.mit.jwi.item.*;
 
+import org.getalp.lexsema.io.DSODefinitionExpender.DSODefinitionExpender;
 //import org.getalp.lexsema.io.DSODefinitionExpender.DSODefinitionExpender;
 import org.getalp.lexsema.io.SemecoreDefinitionExpender.SemecoreDefinitionExpender;
 import org.getalp.lexsema.io.resource.LRLoader;
@@ -160,7 +161,7 @@ public class WordnetLoader implements LRLoader {
     			return senses;
     }
     
-    /*public List<Sense> getSensesEnrichisDSO(Word w, List<Sense> senses, DSODefinitionExpender contexteDSO){
+    public List<Sense> getSensesEnrichisDSO(Word w, List<Sense> senses, DSODefinitionExpender contexteDSO){
     	String defCourante;
     	if(contexteDSO.estDansDico(w.getLemma())){
 			int scoreMax, scoreCourant, sens=0, lemma=contexteDSO.getPos(w.getLemma());
@@ -168,7 +169,7 @@ public class WordnetLoader implements LRLoader {
 				scoreMax=0;
 				defCourante=senses.get(i).getSemanticSignature().toString();
 				/*System.out.println(w.getLemma()+" "+contexteDSO.getLemma(lemma));
-				System.out.println(defCourante);
+				System.out.println(defCourante);*/
 				for(int j =0; j<contexteDSO.sizeSense(lemma); j++){
 					scoreCourant=score(defCourante, contexteDSO.getDefinition(lemma, j));
 					if(scoreCourant>scoreMax){
@@ -177,12 +178,12 @@ public class WordnetLoader implements LRLoader {
 						//System.out.println("jambon");
 					}
 				}
-				System.out.println(w.getLemma());
+				/*System.out.println(w.getLemma());
 				System.out.println("");
 				StringSemanticSignature semanticTest=(StringSemanticSignature)senses.get(i).getSemanticSignature();
 				for(int k=0; k< semanticTest.getSymbols().size(); k++){
 					System.out.println(semanticTest.getSymbol(k).getSymbol());
-				}
+				}*/
 				System.out.println("");
 				if(contexteDSO.getContexte(lemma, sens)!=null){
 					//for(int k=0; k< contexteDSO.getContexte(lemma, sens).size(); k++){
@@ -192,7 +193,7 @@ public class WordnetLoader implements LRLoader {
 						//senses.get(i).getSemanticSignature().addSymbol(contexteDSO.getContexte(lemma, sens).get(k));
 					//}
 				}
-				semanticTest=(StringSemanticSignature)senses.get(i).getSemanticSignature();
+				/*semanticTest=(StringSemanticSignature)senses.get(i).getSemanticSignature();
 				for(int k=0; k< semanticTest.getSymbols().size(); k++){
 					System.out.println(semanticTest.getSymbol(k).getSymbol());
 				}
@@ -201,11 +202,11 @@ public class WordnetLoader implements LRLoader {
 				System.out.println("");
 				System.out.println(verbeDSO.getDefinition(lemma, sens));
 				System.out.println(senses.get(i).getSemanticSignature().toString());
-				System.out.println("");
+				System.out.println("");*/
 			}
 		}
     	return senses;
-    }*/
+    }
     
   //retourne le sense, parmis la liste de sens, correspondant au mot du contexte enrichissant
   	//null s'il n'est pas dans 
@@ -394,17 +395,16 @@ public class WordnetLoader implements LRLoader {
     }
 
     @Override
-    public void loadSenses(Document document, SemecoreDefinitionExpender definitionExpender, int profondeur){
-    //public void loadSenses(Document document, SemecoreDefinitionExpender definitionExpender, int profondeur, DSODefinitionExpender contexteDSO){
+    public void loadSenses(Document document, SemecoreDefinitionExpender definitionExpender, int profondeur, DSODefinitionExpender contexteDSO){
     	List<Sense> senses;
     	for (Word w : document) {
         	senses=getSenses(w);
         	if(definitionExpender!=null){
         		senses=getSensesEnrichisSemecore(w, senses, definitionExpender, profondeur);
         	}
-        	/*if(contexteDSO!=null){
+        	if(contexteDSO!=null){
         		senses=getSensesEnrichisDSO(w, senses, contexteDSO);
-        	}*/
+        	}
             document.addWordSenses(senses);
         }
     }

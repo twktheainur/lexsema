@@ -1,6 +1,7 @@
 package org.getalp.lexsema.io.resource;
 
 
+import org.getalp.lexsema.io.DSODefinitionExpender.DSODefinitionExpender;
 import org.getalp.lexsema.io.SemecoreDefinitionExpender.SemecoreDefinitionExpender;
 import org.getalp.lexsema.similarity.Document;
 import org.getalp.lexsema.similarity.Sense;
@@ -29,5 +30,6 @@ public interface LRLoader {
     public LRLoader setUsesStopWords(boolean usesStopWords);
 
 	void loadSenses(Document document,
-			SemecoreDefinitionExpender definitionExpender, int profondeur);
+			SemecoreDefinitionExpender definitionExpender, int profondeur,
+			DSODefinitionExpender contexteDSO);
 }
