@@ -20,6 +20,8 @@ import org.getalp.lexsema.wsd.score.TverskyConfigurationScorer;
 import org.getalp.ml.matrix.filters.NormalizationFilter;
 import org.getalp.ml.matrix.score.SumMatrixScorer;
 
+import com.wcohen.ss.ScaledLevenstein;
+
 import java.io.File;
 
 @SuppressWarnings("all")
@@ -41,7 +43,7 @@ public class AdaptiveSimulatedAnnealingDisambiguation {
         SimilarityMeasure sim;
 
         //sim = new IndexedOverlapSimilarity().normalize(false);
-        sim = new ACExtendedLeskSimilarity();
+        sim = new TverskiIndexSimilarityMeasureBuilder().distance(new ScaledLevenstein()).computeRatio(true).alpha(1d).beta(0.5d).gamma(0.5d).fuzzyMatching(false).quadraticWeighting(false).extendedLesk(false).randomInit(false).regularizeOverlapInput(false).optimizeOverlapInput(false).regularizeRelations(false).optimizeRelations(false).build();
 
         if (args.length < 4) {
             System.err.println("Usage: aSAD [P0] [cR] [cT] [It] (threads)");
@@ -79,6 +81,7 @@ public class AdaptiveSimulatedAnnealingDisambiguation {
             sw.write(d, c.getAssignments());
             System.err.println("done!");
         }
+        
         //sl.release();
         sl_full.release();
         long endTime = System.currentTimeMillis();
