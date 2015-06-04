@@ -2,6 +2,7 @@ package org.getalp.lexsema.io.resource.wordnet;
 
 import edu.mit.jwi.Dictionary;
 import edu.mit.jwi.item.*;
+
 import org.getalp.lexsema.io.resource.LRLoader;
 import org.getalp.lexsema.similarity.Document;
 import org.getalp.lexsema.similarity.Sense;
@@ -34,7 +35,7 @@ public class WordnetLoader implements LRLoader {
 
 
     public WordnetLoader(String path) {
-
+    	System.out.println("jambon2");
         URL url = null;
         try {
             url = new URL("file", null, path);
