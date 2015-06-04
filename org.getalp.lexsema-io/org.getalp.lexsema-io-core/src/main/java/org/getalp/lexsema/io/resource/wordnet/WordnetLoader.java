@@ -35,7 +35,7 @@ public class WordnetLoader implements LRLoader {
 
 
     public WordnetLoader(String path) {
-    	System.out.println("jambon2");
+    	System.out.println("jambon1");
         URL url = null;
         try {
             url = new URL("file", null, path);
