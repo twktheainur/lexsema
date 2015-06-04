@@ -50,13 +50,11 @@ public class CombinedDisambiguation {
 				.setMinimize(false)
 				.setUsesStopWords(true)
 				.setStemming(true); */
-        //Disambiguator sl = new SimplifiedLesk(100, sim_lr_hp, slp, 4);
-        
+        //Disambiguator sl = new SimplifiedLesk(100, sim_lr_hp, slp, 4);   
 
         WindowedLeskParameters wlp = new WindowedLeskParameters().setFallbackFS(false).setMinimize(false);
         sim_full = new TverskiIndexSimilarityMeasureBuilder().distance(new ScaledLevenstein()).computeRatio(true).alpha(1d).beta(0.5d).gamma(0.5d).fuzzyMatching(false).quadraticWeighting(false).extendedLesk(false).randomInit(false).regularizeOverlapInput(false).optimizeOverlapInput(false).regularizeRelations(false).optimizeRelations(false).build();
         Disambiguator sl_full = new WindowedLesk(2, sim_full, wlp, Runtime.getRuntime().availableProcessors());
-
 
         //Disambiguator sl = new LegacySimplifiedLesk(10,sim_lr_hp,);
         //WindowedLeskParameters wlp = new WindowedLeskParameters(false,false);

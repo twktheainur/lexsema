@@ -1,6 +1,8 @@
 package org.getalp.lexsema.wsd.experiments;
 
+import org.getalp.lexsema.io.SemecoreDefinitionExpender.SemecoreDefinitionExpender;
 import org.getalp.lexsema.io.annotresult.SemevalWriter;
+import org.getalp.lexsema.io.document.SemCorTextLoader;
 import org.getalp.lexsema.io.document.Semeval2007TextLoader;
 import org.getalp.lexsema.io.document.TextLoader;
 import org.getalp.lexsema.io.resource.LRLoader;
@@ -34,10 +36,17 @@ public class AdaptiveSimulatedAnnealingDisambiguation {
         long startTime = System.currentTimeMillis();
         TextLoader dl = new Semeval2007TextLoader("../data/senseval2007_task7/test/eng-coarse-all-words.xml").loadNonInstances(true);
         LRLoader lrloader = new WordnetLoader("../data/wordnet/2.1/dict")
-		.extendedSignature(true)
-		.setUsesStopWords(false)
-		.setStemming(true)
-		.loadDefinitions(true);
+			.extendedSignature(true)
+			.setUsesStopWords(false)
+			.setStemming(true)
+			.loadDefinitions(true);
+        
+        TextLoader semCor = new SemCorTextLoader("../data/semcor3.0/semcor_full.xml");
+		semCor.load();
+        
+        SemecoreDefinitionExpender definitionExpender=null;
+		definitionExpender=new SemecoreDefinitionExpender(semCor, 2);
+        
         //LRLoader lrloader = new WordnetLoader("../data/wordnet/2.1/dict")
         //        .extendedSignature(true).loadDefinitions(true).shuffle(false);
         SimilarityMeasure sim;
@@ -72,7 +81,7 @@ public class AdaptiveSimulatedAnnealingDisambiguation {
         for (Document d : dl) {
             System.err.println("Starting document " + d.getId());
             System.err.println("\tLoading senses...");
-            lrloader.loadSenses(d);
+            lrloader.loadSenses(d, definitionExpender, 0);
 
             System.err.println("Disambiguating...");
             Configuration c = sl_full.disambiguate(d);
