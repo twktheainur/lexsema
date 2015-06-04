@@ -27,7 +27,7 @@ public class CombinedDisambiguation {
 
     public static void main(String[] args) {
         long startTime = System.currentTimeMillis();
-        System.out.println("jambon2");
+        System.out.println("jambon1");
         TextLoader dl = new Semeval2007TextLoader("../data/senseval2007_task7/test/eng-coarse-all-words.xml").loadNonInstances(true);
         LRLoader lrloader = new WordnetLoader("../data/wordnet/2.1/dict")
 		.extendedSignature(true)
