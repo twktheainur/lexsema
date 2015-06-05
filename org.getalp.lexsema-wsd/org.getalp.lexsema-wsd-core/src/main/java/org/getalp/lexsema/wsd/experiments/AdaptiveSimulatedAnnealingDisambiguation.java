@@ -46,10 +46,10 @@ public class AdaptiveSimulatedAnnealingDisambiguation {
 		semCor.load();
         
         SemecoreDefinitionExpender definitionExpender=null;
-		definitionExpender=new SemecoreDefinitionExpender(semCor, 1);
+		//definitionExpender=new SemecoreDefinitionExpender(semCor, 1);
 		
 		DSODefinitionExpender contexteDSO=null;
-		//contexteDSO=new DSODefinitionExpender(1);
+		contexteDSO=new DSODefinitionExpender(2);
         
         //LRLoader lrloader = new WordnetLoader("../data/wordnet/2.1/dict")
         //        .extendedSignature(true).loadDefinitions(true).shuffle(false);
