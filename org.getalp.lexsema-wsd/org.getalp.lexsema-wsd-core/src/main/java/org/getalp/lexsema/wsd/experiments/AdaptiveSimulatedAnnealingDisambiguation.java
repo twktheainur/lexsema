@@ -46,7 +46,7 @@ public class AdaptiveSimulatedAnnealingDisambiguation {
 		semCor.load();
         
         SemecoreDefinitionExpender definitionExpender=null;
-		//definitionExpender=new SemecoreDefinitionExpender(semCor, 0);
+		definitionExpender=new SemecoreDefinitionExpender(semCor, 1);
 		
 		DSODefinitionExpender contexteDSO=null;
 		//contexteDSO=new DSODefinitionExpender(10);
