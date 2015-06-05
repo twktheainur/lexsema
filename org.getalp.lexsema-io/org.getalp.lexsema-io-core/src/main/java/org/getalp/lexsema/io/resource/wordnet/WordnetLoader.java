@@ -182,8 +182,8 @@ public class WordnetLoader implements LRLoader {
 				StringSemanticSignature semanticTest=(StringSemanticSignature)senses.get(i).getSemanticSignature();
 				for(int k=0; k< semanticTest.getSymbols().size(); k++){
 					System.out.println(semanticTest.getSymbol(k).getSymbol());
-				}*/
-				System.out.println("");
+				}
+				System.out.println("");*/
 				if(contexteDSO.getContexte(lemma, sens)!=null){
 					//for(int k=0; k< contexteDSO.getContexte(lemma, sens).size(); k++){
 						StringSemanticSignature semantic = (StringSemanticSignature)senses.get(i).getSemanticSignature();
