@@ -2,6 +2,7 @@ package org.getalp.lexsema.wsd.experiments;
 
 import com.wcohen.ss.ScaledLevenstein;
 
+import org.getalp.lexsema.io.DSODefinitionExpender.DSODefinitionExpender;
 import org.getalp.lexsema.io.annotresult.SemevalWriter;
 import org.getalp.lexsema.io.dictionary.DictionaryWriter;
 import org.getalp.lexsema.io.dictionary.DocumentDictionaryWriter;
@@ -27,7 +28,6 @@ public class CombinedDisambiguation {
 
     public static void main(String[] args) {
         long startTime = System.currentTimeMillis();
-        System.out.println("jambon3");
         TextLoader dl = new Semeval2007TextLoader("../data/senseval2007_task7/test/eng-coarse-all-words.xml").loadNonInstances(true);
         LRLoader lrloader = new WordnetLoader("../data/wordnet/2.1/dict")
 		.extendedSignature(true)
@@ -50,7 +50,10 @@ public class CombinedDisambiguation {
 				.setMinimize(false)
 				.setUsesStopWords(true)
 				.setStemming(true); */
-        //Disambiguator sl = new SimplifiedLesk(100, sim_lr_hp, slp, 4);   
+        //Disambiguator sl = new SimplifiedLesk(100, sim_lr_hp, slp, 4);  
+        
+        DSODefinitionExpender contexteDSO=null;
+		contexteDSO=new DSODefinitionExpender(3);
 
         WindowedLeskParameters wlp = new WindowedLeskParameters().setFallbackFS(false).setMinimize(false);
         sim_full = new TverskiIndexSimilarityMeasureBuilder().distance(new ScaledLevenstein()).computeRatio(true).alpha(1d).beta(0.5d).gamma(0.5d).fuzzyMatching(false).quadraticWeighting(false).extendedLesk(false).randomInit(false).regularizeOverlapInput(false).optimizeOverlapInput(false).regularizeRelations(false).optimizeRelations(false).build();
@@ -65,7 +68,7 @@ public class CombinedDisambiguation {
         for (Document d : dl) {
             System.err.println("Starting document " + d.getId());
             System.err.println("\tLoading senses...");
-            lrloader.loadSenses(d);
+            lrloader.loadSenses(d, null, 0, contexteDSO);
             //System.err.println("\tDisambiguating... ");
             //System.err.println("Applying low recall high precision simplified lesk...");
             //Configuration c = sl.disambiguate(d);

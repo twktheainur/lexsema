@@ -243,6 +243,9 @@ public class DSODefinitionExpender {
 										//Si le caractere courant est le numero de sense du mot contexté on le reléve
 									}else if(courant >= 48 && courant <= 57 && ID){
 										sense=10*sense+((int)courant)-48;
+										/*if(sense==5){
+											System.out.println(sense);
+										}*/
 
 										//Si on entre dans les borne du mot et de son sense : caractere courant = >
 									}else if(courant==62 && !ID){
@@ -271,7 +274,7 @@ public class DSODefinitionExpender {
 								}	
 								i++;
 							}
-							if(sense>0 && sense<dico.get(numeroMot).size() && dico.get(numeroMot).get(sense-1).getOccurence()<occurence){
+							if(sense>0 && sense<=dico.get(numeroMot).size() && dico.get(numeroMot).get(sense-1).getOccurence()<occurence){
 								boolean trouver = false;
 								int p=0;
 								while(p<numeroMot && !trouver){
@@ -301,6 +304,13 @@ public class DSODefinitionExpender {
 					System.out.println(e.toString());
 				}
 			}
+		}
+		for (int m=0; m<dico.size(); m++){
+			System.out.println(dico.get(m).get(0).getLemma());
+			for (int n=0; n<dico.get(m).size(); n++){
+				System.out.println(n+" : "+dico.get(m).get(n).getContexte().size()+" "+dico.get(m).get(n).getDefinition());
+			}
+			System.out.println("");
 		}
 	}
 
