@@ -46,7 +46,7 @@ public class AdaptiveSimulatedAnnealingDisambiguation {
 		semCor.load();
         
         SemecoreDefinitionExpender definitionExpender=null;
-		definitionExpender=new SemecoreDefinitionExpender(semCor, 2);
+		definitionExpender=new SemecoreDefinitionExpender(semCor, 1);
 		
 		DSODefinitionExpender contexteDSO=null;
 		//contexteDSO=new DSODefinitionExpender(10);
@@ -85,7 +85,7 @@ public class AdaptiveSimulatedAnnealingDisambiguation {
         for (Document d : dl) {
             System.err.println("Starting document " + d.getId());
             System.err.println("\tLoading senses...");
-            lrloader.loadSenses(d, definitionExpender, 0, contexteDSO);
+            lrloader.loadSenses(d, definitionExpender, 1, contexteDSO);
 
             System.err.println("Disambiguating...");
             Configuration c = sl_full.disambiguate(d);
