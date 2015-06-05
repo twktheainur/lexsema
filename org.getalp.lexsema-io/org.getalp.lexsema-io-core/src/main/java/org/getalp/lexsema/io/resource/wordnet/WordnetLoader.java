@@ -184,11 +184,18 @@ public class WordnetLoader implements LRLoader {
 					System.out.println(semanticTest.getSymbol(k).getSymbol());
 				}
 				System.out.println("");*/
-				if(contexteDSO.getContexte(lemma, sens)!=null){
-					//for(int k=0; k< contexteDSO.getContexte(lemma, sens).size(); k++){
+				List<String> contexte=contexteDSO.getContexte(lemma, sens);
+				if(contexte!=null){
+				/*	for(int k=0; k< contexte.size(); k++){
+						System.out.println(contexte.get(k));
+					}
+					System.out.println(senses.get(i).getSemanticSignature().toString());*/
 						StringSemanticSignature semantic = (StringSemanticSignature)senses.get(i).getSemanticSignature();
 						semantic.addSymbolString(contexteDSO.getContexte(lemma, sens));
 						senses.get(i).setSemanticSignature(semantic);
+						//for(int k=0; k< senses.get(i).getSemanticSignature().size(); k++){
+							//System.out.println(senses.get(i).getSemanticSignature().toString());
+						//}
 						//senses.get(i).getSemanticSignature().addSymbol(contexteDSO.getContexte(lemma, sens).get(k));
 					//}
 				}
@@ -398,15 +405,12 @@ public class WordnetLoader implements LRLoader {
     	List<Sense> senses;
     	for (Word w : document) {
         	senses=getSenses(w);
-        	System.out.println(senses.size());
         	if(definitionExpender!=null){
         		senses=getSensesEnrichisSemecore(w, senses, definitionExpender, profondeur);
         	}
         	if(contexteDSO!=null){
         		senses=getSensesEnrichisDSO(w, senses, contexteDSO);
         	}
-        	System.out.println(senses.size());
-        	System.out.println("");
             document.addWordSenses(senses);
         }
     }

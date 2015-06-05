@@ -305,13 +305,13 @@ public class DSODefinitionExpender {
 				}
 			}
 		}
-		for (int m=0; m<dico.size(); m++){
+		/*for (int m=0; m<dico.size(); m++){
 			System.out.println(dico.get(m).get(0).getLemma());
 			for (int n=0; n<dico.get(m).size(); n++){
 				System.out.println(n+" : "+dico.get(m).get(n).getContexte().size()+" "+dico.get(m).get(n).getDefinition());
 			}
 			System.out.println("");
-		}
+		}*/
 	}
 
 	/*public DSODefinitionExpender(char partOfSpeech, int occurence){
