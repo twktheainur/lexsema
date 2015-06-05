@@ -10,7 +10,11 @@ import java.util.Random;
 public class BatAlgorithm implements Disambiguator
 {
     private static final Random random = new Random();
-    
+
+    private static final double minRate = 0;
+
+    private static final double maxRate = 1;
+
     private StopCondition stopCondition;
 
     private int currentIteration;
@@ -24,10 +28,6 @@ public class BatAlgorithm implements Disambiguator
     private double minLoudness;
 
     private double maxLoudness;
-
-    private double minRate;
-
-    private double maxRate;
 
     private double alpha;
 
@@ -71,20 +71,19 @@ public class BatAlgorithm implements Disambiguator
             score = configurationScorer.computeScore(currentDocument, position);
             return score;
         }
-                
     }
     
     public BatAlgorithm(int iterationsNumber, int batsNumber, double minFrequency, double maxFrequency, 
-                        double minLoudness, double maxLoudness, double minRate, double maxRate, 
+                        double minLoudness, double maxLoudness, 
                         double alpha, double gamma, ConfigurationScorer configurationScorer, boolean verbose)
     {
         this(new IterationStopCondition(iterationsNumber), batsNumber, minFrequency, maxFrequency, 
-             minLoudness, maxLoudness, minRate, maxRate, 
+             minLoudness, maxLoudness, 
              alpha, gamma, configurationScorer, verbose);
     }
 
     public BatAlgorithm(StopCondition stopCondition, int batsNumber, double minFrequency, double maxFrequency, 
-                        double minLoudness, double maxLoudness, double minRate, double maxRate, 
+                        double minLoudness, double maxLoudness, 
                         double alpha, double gamma, ConfigurationScorer configurationScorer, boolean verbose)
     {
         this.stopCondition = stopCondition;
@@ -93,8 +92,6 @@ public class BatAlgorithm implements Disambiguator
         this.maxFrequency = maxFrequency;
         this.minLoudness = minLoudness;
         this.maxLoudness= maxLoudness;
-        this.minRate = minRate;
-        this.maxRate = maxRate;
         this.alpha = alpha;
         this.gamma = gamma;
         this.configurationScorer = configurationScorer;
@@ -128,8 +125,6 @@ public class BatAlgorithm implements Disambiguator
 
                 currentBat.frequency = randomDoubleInRange(minFrequency, maxFrequency);
 
-                currentBat.velocity = 0;
-                
                 for (int i = 0 ; i < dimension ; i++)
                 {
                     if (currentBat.position.getAssignment(i) != bestBat.position.getAssignment(i))
@@ -145,16 +140,13 @@ public class BatAlgorithm implements Disambiguator
                     currentBat.position = bestBat.position.clone();
                     currentBat.position.makeRandomChanges((int) (random.nextGaussian() * getAverageLoudness()));
                 }
-                
+
                 if (currentBat.loudness > randomDoubleInRange(minLoudness, maxLoudness) &&
-                    currentBat.recomputeScore() > previousScore)
+                    currentBat.recomputeScore() > bestBat.score)
                 {
                     currentBat.loudness *= alpha;
                     currentBat.rate = currentBat.initialRate * (1 - Math.exp(-gamma * currentIteration));
-                    if (currentBat.score > bestBat.score)
-                    {
-                        bestBat = currentBat;
-                    }
+                    bestBat = currentBat;
                 }
                 else
                 {

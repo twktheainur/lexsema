@@ -9,8 +9,8 @@ import org.getalp.lexsema.io.resource.LRLoader;
 import org.getalp.lexsema.io.resource.dictionary.DictionaryLRLoader;
 import org.getalp.lexsema.similarity.Document;
 import org.getalp.lexsema.wsd.configuration.Configuration;
-import org.getalp.lexsema.wsd.experiments.ga.wsd.GeneticAlgorithmDisambiguator;
 import org.getalp.lexsema.wsd.method.Disambiguator;
+import org.getalp.lexsema.wsd.method.genetic.GeneticAlgorithmDisambiguator;
 import org.getalp.lexsema.wsd.score.*;
 
 public class GeneticAlgorithmDisambiguation

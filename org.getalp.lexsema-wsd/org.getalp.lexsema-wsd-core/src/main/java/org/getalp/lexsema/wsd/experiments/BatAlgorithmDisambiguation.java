@@ -19,13 +19,11 @@ public class BatAlgorithmDisambiguation
     public static void main(String[] args)
     {    
         int iterationsNumber = 1000;
-        int batsNumber = 20;
-        double minFrequency = 0;
-        double maxFrequency = 20;
-        double minLoudness = 0;
-        double maxLoudness = 10;
-        double minRate = 0;
-        double maxRate = 1;
+        int batsNumber = 70;
+        double minFrequency = 50;
+        double maxFrequency = 100;
+        double minLoudness = 1;
+        double maxLoudness = 20;
         double alpha = 0.95;
         double gamma = 0.9;
         
@@ -35,10 +33,8 @@ public class BatAlgorithmDisambiguation
         if (args.length >= 4) maxFrequency = Double.valueOf(args[3]);
         if (args.length >= 5) minLoudness = Double.valueOf(args[4]);
         if (args.length >= 6) maxLoudness = Double.valueOf(args[5]);
-        if (args.length >= 7) minRate = Double.valueOf(args[6]);
-        if (args.length >= 8) maxRate = Double.valueOf(args[7]);
-        if (args.length >= 9) alpha = Double.valueOf(args[8]);
-        if (args.length >= 10) gamma = Double.valueOf(args[9]);
+        if (args.length >= 7) alpha = Double.valueOf(args[6]);
+        if (args.length >= 8) gamma = Double.valueOf(args[7]);
         
         System.out.println("Parameters value : " + 
                          "<iterations = " + iterationsNumber + "> " +
@@ -47,8 +43,6 @@ public class BatAlgorithmDisambiguation
                          "<max frequency = " + maxFrequency + "> " +
                          "<min loudness = " + minLoudness + "> " +
                          "<max loudness = " + maxLoudness + "> " +
-                         "<min rate = " + minRate + "> " +
-                         "<max rate = " + maxRate + "> " +
                          "<alpha = " + alpha + "> " +
                          "<gamma = " + gamma + "> "
                          );
@@ -64,7 +58,7 @@ public class BatAlgorithmDisambiguation
 
         Disambiguator batDisambiguator = new BatAlgorithm(iterationsNumber, batsNumber, minFrequency, 
                                                           maxFrequency, minLoudness, maxLoudness,
-                                                          minRate, maxRate, alpha, gamma, scorer, true);
+                                                          alpha, gamma, scorer, true);
 
         System.out.println("Loading texts...");
         dl.load();

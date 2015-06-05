@@ -9,8 +9,8 @@ import org.getalp.lexsema.io.resource.LRLoader;
 import org.getalp.lexsema.io.resource.dictionary.DictionaryLRLoader;
 import org.getalp.lexsema.similarity.Document;
 import org.getalp.lexsema.wsd.configuration.Configuration;
-import org.getalp.lexsema.wsd.experiments.cuckoo.wsd.CuckooSearchDisambiguator;
 import org.getalp.lexsema.wsd.method.Disambiguator;
+import org.getalp.lexsema.wsd.method.cuckoo.CuckooSearchDisambiguator;
 import org.getalp.lexsema.wsd.score.ConfigurationScorer;
 import org.getalp.lexsema.wsd.score.SemEval2007Task7PerfectConfigurationScorer;
 

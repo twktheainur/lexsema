@@ -8,21 +8,21 @@ import org.getalp.lexsema.io.resource.LRLoader;
 import org.getalp.lexsema.io.resource.dictionary.DictionaryLRLoader;
 import org.getalp.lexsema.similarity.Document;
 import org.getalp.lexsema.wsd.configuration.Configuration;
-import org.getalp.lexsema.wsd.experiments.cuckoo.generic.CuckooSearch;
-import org.getalp.lexsema.wsd.experiments.cuckoo.generic.CuckooSolution;
-import org.getalp.lexsema.wsd.experiments.cuckoo.parameters.bat.BatParameters;
-import org.getalp.lexsema.wsd.experiments.cuckoo.parameters.bat.BatParametersFactory;
-import org.getalp.lexsema.wsd.experiments.cuckoo.parameters.bat.BatParametersScorer;
-import org.getalp.lexsema.wsd.experiments.cuckoo.parameters.cuckoo.CuckooParameters;
-import org.getalp.lexsema.wsd.experiments.cuckoo.parameters.cuckoo.CuckooParametersFactory;
-import org.getalp.lexsema.wsd.experiments.cuckoo.parameters.cuckoo.CuckooParametersScorer;
-import org.getalp.lexsema.wsd.experiments.cuckoo.parameters.genetic.GeneticParameters;
-import org.getalp.lexsema.wsd.experiments.cuckoo.wsd.CuckooSearchDisambiguator;
-import org.getalp.lexsema.wsd.experiments.ga.wsd.GeneticAlgorithmDisambiguator;
 import org.getalp.lexsema.wsd.method.BatAlgorithm;
 import org.getalp.lexsema.wsd.method.SimulatedAnnealing2;
 import org.getalp.lexsema.wsd.method.StopCondition;
 import org.getalp.lexsema.wsd.method.TimeStopCondition;
+import org.getalp.lexsema.wsd.method.cuckoo.CuckooSearchDisambiguator;
+import org.getalp.lexsema.wsd.method.cuckoo.generic.CuckooSearch;
+import org.getalp.lexsema.wsd.method.cuckoo.generic.CuckooSolution;
+import org.getalp.lexsema.wsd.method.genetic.GeneticAlgorithmDisambiguator;
+import org.getalp.lexsema.wsd.parameters.bat.BatParameters;
+import org.getalp.lexsema.wsd.parameters.bat.BatParametersFactory;
+import org.getalp.lexsema.wsd.parameters.bat.BatParametersScorer;
+import org.getalp.lexsema.wsd.parameters.cuckoo.CuckooParameters;
+import org.getalp.lexsema.wsd.parameters.cuckoo.CuckooParametersFactory;
+import org.getalp.lexsema.wsd.parameters.cuckoo.CuckooParametersScorer;
+import org.getalp.lexsema.wsd.parameters.genetic.GeneticParameters;
 import org.getalp.lexsema.wsd.score.ConfigurationScorer;
 import org.getalp.lexsema.wsd.score.SemEval2007Task7PerfectConfigurationScorer;
 
@@ -50,7 +50,7 @@ public class AlgorithmsComparison
         CuckooSearchDisambiguator csa = new CuckooSearchDisambiguator(stopCondition, csaParams.levyScale.currentValue, (int) csaParams.nestsNumber.currentValue, (int) csaParams.destroyedNests.currentValue, configScorer, false);
         
         BatParameters baParams = getOptimalBatParameters();
-        BatAlgorithm ba = new BatAlgorithm(stopCondition, (int)baParams.batsNumber.currentValue, baParams.minFrequency.currentValue, baParams.maxFrequency.currentValue, baParams.minLoudness.currentValue, baParams.maxLoudness.currentValue, baParams.minRate.currentValue, baParams.maxRate.currentValue, baParams.alpha.currentValue, baParams.gamma.currentValue, configScorer, false);
+        BatAlgorithm ba = new BatAlgorithm(stopCondition, (int)baParams.batsNumber.currentValue, baParams.minFrequency.currentValue, baParams.maxFrequency.currentValue, baParams.minLoudness.currentValue, baParams.maxLoudness.currentValue, baParams.alpha.currentValue, baParams.gamma.currentValue, configScorer, false);
         
         //GeneticParameters gaParams;
         //AnnealingParameters saParams;
