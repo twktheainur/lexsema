@@ -49,7 +49,7 @@ public class AdaptiveSimulatedAnnealingDisambiguation {
 		//definitionExpender=new SemecoreDefinitionExpender(semCor, 1);
 		
 		DSODefinitionExpender contexteDSO=null;
-		contexteDSO=new DSODefinitionExpender(10);
+		//contexteDSO=new DSODefinitionExpender(10);
         
         //LRLoader lrloader = new WordnetLoader("../data/wordnet/2.1/dict")
         //        .extendedSignature(true).loadDefinitions(true).shuffle(false);
