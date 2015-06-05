@@ -398,15 +398,15 @@ public class WordnetLoader implements LRLoader {
     	List<Sense> senses;
     	for (Word w : document) {
         	senses=getSenses(w);
-        	//System.out.println(senses.size());
+        	System.out.println(senses.size());
         	if(definitionExpender!=null){
         		senses=getSensesEnrichisSemecore(w, senses, definitionExpender, profondeur);
         	}
         	if(contexteDSO!=null){
         		senses=getSensesEnrichisDSO(w, senses, contexteDSO);
         	}
-        	//System.out.println(senses.size());
-        	//System.out.println("");
+        	System.out.println(senses.size());
+        	System.out.println("");
             document.addWordSenses(senses);
         }
     }
