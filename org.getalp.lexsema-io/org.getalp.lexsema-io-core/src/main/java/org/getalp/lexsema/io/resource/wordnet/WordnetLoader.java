@@ -403,7 +403,7 @@ public class WordnetLoader implements LRLoader {
     @Override
     public void loadSenses(Document document, SemecoreDefinitionExpender definitionExpender, int profondeur, DSODefinitionExpender contexteDSO){
     	List<Sense> senses;
-    	System.out.println("jambon");
+    	System.out.println("jambon1");
     	for (Word w : document) {
         	senses=getSenses(w);
         	if(definitionExpender!=null){
