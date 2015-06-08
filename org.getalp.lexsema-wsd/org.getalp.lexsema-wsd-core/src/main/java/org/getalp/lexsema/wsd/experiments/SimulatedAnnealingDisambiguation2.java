@@ -8,6 +8,7 @@ import org.getalp.lexsema.io.resource.dictionary.DictionaryLRLoader;
 import org.getalp.lexsema.similarity.Document;
 import org.getalp.lexsema.wsd.configuration.Configuration;
 import org.getalp.lexsema.wsd.method.Disambiguator;
+import org.getalp.lexsema.wsd.method.IterationStopCondition;
 import org.getalp.lexsema.wsd.method.SimulatedAnnealing2;
 import org.getalp.lexsema.wsd.score.ConfigurationScorer;
 import org.getalp.lexsema.wsd.score.SemEval2007Task7PerfectConfigurationScorer;
@@ -18,30 +19,30 @@ public class SimulatedAnnealingDisambiguation2
 {
     public static void main(String[] args)
     {    
+        int cycles = 1000;
         double coolingRate = 0.8;
-        int convergenceThreshold = 5;
         int iterationsNumber = 2;
         
-        if (args.length >= 1) coolingRate = Double.valueOf(args[0]);
-        if (args.length >= 2) convergenceThreshold = Integer.valueOf(args[1]);
+        if (args.length >= 1) cycles = Integer.valueOf(args[0]);
+        if (args.length >= 2) coolingRate = Double.valueOf(args[1]);
         if (args.length >= 3) iterationsNumber = Integer.valueOf(args[2]);
         
         System.out.println("Parameters value : " + 
+                         "<cycles = " + cycles + "> " +
                          "<cooling rate = " + coolingRate + "> " +
-                         "<convergence threshold = " + convergenceThreshold + "> " +
                          "<iterations = " + iterationsNumber + "> " 
                          );
         
         long startTime = System.currentTimeMillis();
 
-        TextLoader dl = new Semeval2007TextLoader("../data/senseval2007_task7/test/eng-coarse-all-words.xml")
+        TextLoader dl = new Semeval2007TextLoader("../data/senseval2007_task7/test/eng-coarse-all-words-t1.xml")
                 .loadNonInstances(false);
 
         LRLoader lrloader = new DictionaryLRLoader(new File("../data/dictionnaires-lesk/dict-adapted-all-relations.xml"));
 
         ConfigurationScorer scorer = new SemEval2007Task7PerfectConfigurationScorer();
 
-        Disambiguator saDisambiguator = new SimulatedAnnealing2(coolingRate, convergenceThreshold, iterationsNumber, scorer);
+        Disambiguator saDisambiguator = new SimulatedAnnealing2(new IterationStopCondition(cycles), 200, coolingRate, iterationsNumber, scorer, true);
 
         System.out.println("Loading texts...");
         dl.load();

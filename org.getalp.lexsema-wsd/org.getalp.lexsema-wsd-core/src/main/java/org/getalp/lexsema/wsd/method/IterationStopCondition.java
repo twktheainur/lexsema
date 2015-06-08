@@ -31,4 +31,9 @@ public class IterationStopCondition implements StopCondition
     {
         return ((double) currentIteration) * 100.0 / ((double)(iterationsNumber));
     }
+    
+    public int getIterationsNumber()
+    {
+        return iterationsNumber;
+    }
 }

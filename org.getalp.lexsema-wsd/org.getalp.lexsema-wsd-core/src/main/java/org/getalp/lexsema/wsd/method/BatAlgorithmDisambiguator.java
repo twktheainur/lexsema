@@ -7,7 +7,7 @@ import org.getalp.lexsema.wsd.score.ConfigurationScorer;
 
 import java.util.Random;
 
-public class BatAlgorithm implements Disambiguator
+public class BatAlgorithmDisambiguator implements Disambiguator
 {
     private static final Random random = new Random();
 
@@ -73,7 +73,7 @@ public class BatAlgorithm implements Disambiguator
         }
     }
     
-    public BatAlgorithm(int iterationsNumber, int batsNumber, double minFrequency, double maxFrequency, 
+    public BatAlgorithmDisambiguator(int iterationsNumber, int batsNumber, double minFrequency, double maxFrequency, 
                         double minLoudness, double maxLoudness, 
                         double alpha, double gamma, ConfigurationScorer configurationScorer, boolean verbose)
     {
@@ -82,7 +82,7 @@ public class BatAlgorithm implements Disambiguator
              alpha, gamma, configurationScorer, verbose);
     }
 
-    public BatAlgorithm(StopCondition stopCondition, int batsNumber, double minFrequency, double maxFrequency, 
+    public BatAlgorithmDisambiguator(StopCondition stopCondition, int batsNumber, double minFrequency, double maxFrequency, 
                         double minLoudness, double maxLoudness, 
                         double alpha, double gamma, ConfigurationScorer configurationScorer, boolean verbose)
     {

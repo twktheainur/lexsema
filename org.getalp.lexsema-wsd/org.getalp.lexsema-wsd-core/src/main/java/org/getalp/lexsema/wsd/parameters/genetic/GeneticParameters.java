@@ -2,10 +2,10 @@ package org.getalp.lexsema.wsd.parameters.genetic;
 
 import java.util.Random;
 
-import org.getalp.lexsema.wsd.method.cuckoo.generic.CuckooSolution;
 import org.getalp.lexsema.wsd.parameters.ScalarParameter;
+import org.getalp.lexsema.wsd.parameters.method.Parameters;
 
-public class GeneticParameters implements CuckooSolution
+public class GeneticParameters implements Parameters
 {
     public static final Random random = new Random();
     

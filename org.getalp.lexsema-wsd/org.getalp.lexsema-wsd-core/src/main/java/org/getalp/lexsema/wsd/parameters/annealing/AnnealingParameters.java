@@ -2,23 +2,20 @@ package org.getalp.lexsema.wsd.parameters.annealing;
 
 import java.util.Random;
 
-import org.getalp.lexsema.wsd.method.cuckoo.generic.CuckooSolution;
 import org.getalp.lexsema.wsd.parameters.ScalarParameter;
+import org.getalp.lexsema.wsd.parameters.method.Parameters;
 
-public class AnnealingParameters implements CuckooSolution
+public class AnnealingParameters implements Parameters
 {
     public static final Random random = new Random();
     
     public ScalarParameter coolingRate;
-    
-    public ScalarParameter convergenceThreshold;
     
     public ScalarParameter iterationsNumber;
     
     public AnnealingParameters()
     {
         coolingRate = new ScalarParameter(0.1, 0.95);
-        convergenceThreshold = new ScalarParameter(1, 100);
         iterationsNumber = new ScalarParameter(0, 1);
     }
 
@@ -26,7 +23,6 @@ public class AnnealingParameters implements CuckooSolution
     {
         AnnealingParameters ret = new AnnealingParameters();
         ret.coolingRate.currentValue = coolingRate.currentValue;
-        ret.convergenceThreshold.currentValue =  convergenceThreshold.currentValue;
         ret.iterationsNumber.currentValue = iterationsNumber.currentValue;
         return ret;
     }
@@ -35,23 +31,18 @@ public class AnnealingParameters implements CuckooSolution
     {
         double x = random.nextGaussian();
         double y = random.nextGaussian();
-        double z = random.nextGaussian();
-        double norm = Math.sqrt(x*x + y*y + z*z);
+        double norm = Math.sqrt(x*x + y*y);
         x /= norm;
         y /= norm;
-        z /= norm;
         coolingRate.add(x * distance);
-        convergenceThreshold.add(y * distance);
-        iterationsNumber.add(z * distance);
+        iterationsNumber.add(y * distance);
         System.out.println("Move coolingRate : " + x * distance * coolingRate.step);
-        System.out.println("Move convergenceThreshold : " + y * distance * convergenceThreshold.step);
-        System.out.println("Move iterationsNumber : " + z * distance * iterationsNumber.step);
+        System.out.println("Move iterationsNumber : " + y * distance * iterationsNumber.step);
     }
     
     public String toString()
     {
         return "coolingRate = " + coolingRate.currentValue + 
-                ", convergenceThreshold = " + (int) convergenceThreshold.currentValue + 
                 ", iterationsNumber = " + (int) iterationsNumber.currentValue;
     }
 }

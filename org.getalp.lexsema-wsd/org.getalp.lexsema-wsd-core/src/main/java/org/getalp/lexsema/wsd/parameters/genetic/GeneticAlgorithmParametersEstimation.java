@@ -1,44 +1,41 @@
-package org.getalp.lexsema.wsd.parameters.bat;
+package org.getalp.lexsema.wsd.parameters.genetic;
 
 import java.io.File;
 import java.io.PrintWriter;
-
 import org.getalp.lexsema.io.document.Semeval2007TextLoader;
 import org.getalp.lexsema.io.document.TextLoader;
 import org.getalp.lexsema.io.resource.LRLoader;
 import org.getalp.lexsema.io.resource.dictionary.DictionaryLRLoader;
 import org.getalp.lexsema.similarity.Document;
-import org.getalp.lexsema.wsd.method.cuckoo.generic.CuckooSearch;
-import org.getalp.lexsema.wsd.method.cuckoo.generic.CuckooSolution;
+import org.getalp.lexsema.wsd.method.TimeStopCondition;
+import org.getalp.lexsema.wsd.parameters.method.CuckooSearchParameterEstimator;
+import org.getalp.lexsema.wsd.parameters.method.Parameters;
 import org.getalp.lexsema.wsd.score.ConfigurationScorer;
 import org.getalp.lexsema.wsd.score.SemEval2007Task7PerfectConfigurationScorer;
 
-public class BatAlgorithmParametersEstimator
+public class GeneticAlgorithmParametersEstimation
 {
     public static void main(String[] args) throws Exception
     {
         int iterations = 1000;
+        double levyLocation = 1;
         double levyScale = 0.5;
-        int nestsNumber = 10;
-        int destroyedNests = 2;
-        int insideIterations = 1000;
+        int msInside = 20;
         
         if (args.length >= 1) iterations = Integer.valueOf(args[0]);
-        if (args.length >= 2) levyScale = Double.valueOf(args[1]);
-        if (args.length >= 3) nestsNumber = Integer.valueOf(args[2]);
-        if (args.length >= 4) destroyedNests = Integer.valueOf(args[3]);
-        if (args.length >= 5) insideIterations = Integer.valueOf(args[4]);
+        if (args.length >= 2) levyLocation = Double.valueOf(args[1]);
+        if (args.length >= 3) levyScale = Double.valueOf(args[2]);
+        if (args.length >= 4) msInside = Integer.valueOf(args[3]);
         
         System.out.println("Parameters value : " +
                            "<iterations = " + iterations + "> " +
+                           "<levy location = " + levyLocation + "> " +
                            "<levy scale = " + levyScale + "> " +
-                           "<nests number = " + nestsNumber + "> " +
-                           "<destroyed nests = " + destroyedNests + "> " +
-                           "<inside iterations = " + insideIterations + "> ");
+                           "<milliseconds inside = " + msInside + "> ");
 
         long startTime = System.currentTimeMillis();
 
-        TextLoader dl = new Semeval2007TextLoader("../data/senseval2007_task7/test/eng-coarse-all-words-t1s.xml");
+        TextLoader dl = new Semeval2007TextLoader("../data/senseval2007_task7/test/eng-coarse-all-words-t1.xml");
         dl.loadNonInstances(false);
         dl.load();
         
@@ -47,16 +44,15 @@ public class BatAlgorithmParametersEstimator
         
         ConfigurationScorer configScorer = new SemEval2007Task7PerfectConfigurationScorer();
         
-        BatParametersScorer scorer = new BatParametersScorer(configScorer, dl, 5, insideIterations); 
+        GeneticParametersScorer scorer = new GeneticParametersScorer(configScorer, dl, 100, new TimeStopCondition(msInside)); 
         
-        BatParametersFactory configFactory = new BatParametersFactory();
+        GeneticParametersFactory configFactory = new GeneticParametersFactory();
         
-        CuckooSearch cuckoo = new CuckooSearch(iterations, levyScale, nestsNumber, destroyedNests, 
-                                                 scorer, configFactory, true);
+        CuckooSearchParameterEstimator cuckoo = new CuckooSearchParameterEstimator(iterations, levyLocation, levyScale, scorer, configFactory, true);
         
-        CuckooSolution params = cuckoo.run();
+        Parameters params = cuckoo.run();
         
-        PrintWriter writer = new PrintWriter("bat_parameters.txt");
+        PrintWriter writer = new PrintWriter("genetic_parameters.txt");
         writer.println(params.toString());
         writer.close();
         

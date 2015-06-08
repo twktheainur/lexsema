@@ -1,13 +1,12 @@
 package org.getalp.lexsema.wsd.parameters.genetic;
 
-import org.getalp.lexsema.wsd.method.cuckoo.generic.CuckooSolution;
-import org.getalp.lexsema.wsd.method.cuckoo.generic.CuckooSolutionFactory;
+import org.getalp.lexsema.wsd.parameters.method.Parameters;
+import org.getalp.lexsema.wsd.parameters.method.ParametersFactory;
 
-public class GeneticParametersFactory implements CuckooSolutionFactory
+public class GeneticParametersFactory implements ParametersFactory
 {
-    public CuckooSolution createRandomSolution()
+    public Parameters createRandomSolution()
     {
         return new GeneticParameters();
     }
-
 }

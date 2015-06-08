@@ -9,8 +9,8 @@ import org.getalp.lexsema.io.resource.LRLoader;
 import org.getalp.lexsema.io.resource.dictionary.DictionaryLRLoader;
 import org.getalp.lexsema.similarity.Document;
 import org.getalp.lexsema.wsd.configuration.Configuration;
+import org.getalp.lexsema.wsd.method.CuckooSearchDisambiguator;
 import org.getalp.lexsema.wsd.method.Disambiguator;
-import org.getalp.lexsema.wsd.method.cuckoo.CuckooSearchDisambiguator;
 import org.getalp.lexsema.wsd.score.ConfigurationScorer;
 import org.getalp.lexsema.wsd.score.SemEval2007Task7PerfectConfigurationScorer;
 
@@ -19,17 +19,20 @@ public class CuckooSearchDisambiguation
     public static void main(String[] args)
     {
         int iterations = 1000;
+        double levyLocation = 5;
         double levyScale = 0.5;
         int nestsNumber = 1;
         int destroyedNests = 0;
         
         if (args.length >= 1) iterations = Integer.valueOf(args[0]);
-        if (args.length >= 2) levyScale = Double.valueOf(args[1]);
-        if (args.length >= 3) nestsNumber = Integer.valueOf(args[2]);
-        if (args.length >= 4) destroyedNests = Integer.valueOf(args[3]);
+        if (args.length >= 2) levyLocation = Double.valueOf(args[1]);
+        if (args.length >= 3) levyScale = Double.valueOf(args[2]);
+        if (args.length >= 4) nestsNumber = Integer.valueOf(args[3]);
+        if (args.length >= 5) destroyedNests = Integer.valueOf(args[4]);
         
         System.out.println("Parameters value : " +
                            "<iterations = " + iterations + "> " +
+                           "<levy location = " + levyLocation + "> " +
                            "<levy scale = " + levyScale + "> " +
                            "<nests number = " + nestsNumber + "> " +
                            "<destroyed nests = " + destroyedNests + "> ");
@@ -47,7 +50,7 @@ public class CuckooSearchDisambiguation
         //ConfigurationScorer scorer = new ConfigurationScorerWithCache(new ACExtendedLeskSimilarity());
         //ConfigurationScorer scorer = new TestScorer(new TverskyConfigurationScorer(new IndexedOverlapSimilarity(), Runtime.getRuntime().availableProcessors()));
         
-        Disambiguator cuckooDisambiguator = new CuckooSearchDisambiguator(iterations, levyScale, nestsNumber, destroyedNests, scorer, true);
+        Disambiguator cuckooDisambiguator = new CuckooSearchDisambiguator(iterations, levyLocation, levyScale, nestsNumber, destroyedNests, scorer, true);
 
         System.out.println("Loading texts...");
         dl.load();

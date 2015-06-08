@@ -31,4 +31,9 @@ public class TimeStopCondition implements StopCondition
     {
         return ((double) System.currentTimeMillis()) * 100.0 / ((double)(endingTime));
     }
+    
+    public long getMilliSeconds()
+    {
+        return milliSeconds;
+    }
 }

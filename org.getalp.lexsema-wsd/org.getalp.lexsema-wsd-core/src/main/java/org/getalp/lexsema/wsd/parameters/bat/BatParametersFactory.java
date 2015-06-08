@@ -1,11 +1,11 @@
 package org.getalp.lexsema.wsd.parameters.bat;
 
-import org.getalp.lexsema.wsd.method.cuckoo.generic.CuckooSolution;
-import org.getalp.lexsema.wsd.method.cuckoo.generic.CuckooSolutionFactory;
+import org.getalp.lexsema.wsd.parameters.method.Parameters;
+import org.getalp.lexsema.wsd.parameters.method.ParametersFactory;
 
-public class BatParametersFactory implements CuckooSolutionFactory
+public class BatParametersFactory implements ParametersFactory
 {
-    public CuckooSolution createRandomSolution()
+    public Parameters createRandomSolution()
     {
         return new BatParameters();
     }

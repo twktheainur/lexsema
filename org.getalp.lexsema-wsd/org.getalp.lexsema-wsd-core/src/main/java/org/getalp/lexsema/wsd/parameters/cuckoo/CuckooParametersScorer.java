@@ -10,15 +10,14 @@ import java.util.concurrent.Future;
 import org.getalp.lexsema.io.document.TextLoader;
 import org.getalp.lexsema.similarity.Document;
 import org.getalp.lexsema.wsd.configuration.Configuration;
+import org.getalp.lexsema.wsd.method.CuckooSearchDisambiguator;
 import org.getalp.lexsema.wsd.method.Disambiguator;
-import org.getalp.lexsema.wsd.method.IterationStopCondition;
 import org.getalp.lexsema.wsd.method.StopCondition;
-import org.getalp.lexsema.wsd.method.cuckoo.CuckooSearchDisambiguator;
-import org.getalp.lexsema.wsd.method.cuckoo.generic.CuckooSolution;
-import org.getalp.lexsema.wsd.method.cuckoo.generic.CuckooSolutionScorer;
+import org.getalp.lexsema.wsd.parameters.method.Parameters;
+import org.getalp.lexsema.wsd.parameters.method.ParametersScorer;
 import org.getalp.lexsema.wsd.score.ConfigurationScorer;
 
-public class CuckooParametersScorer implements CuckooSolutionScorer
+public class CuckooParametersScorer implements ParametersScorer
 {
     private ConfigurationScorer scorer; 
     
@@ -30,11 +29,6 @@ public class CuckooParametersScorer implements CuckooSolutionScorer
 
     private ExecutorService threadPool;
 
-    public CuckooParametersScorer(ConfigurationScorer scorer, TextLoader dl, int iterationsOutside, int iterationsInside)
-    {
-        this(scorer, dl, iterationsOutside, new IterationStopCondition(iterationsInside));
-    }
-    
     public CuckooParametersScorer(ConfigurationScorer scorer, TextLoader dl, int iterationsOutside, StopCondition stopCondition)
     {
         this.scorer = scorer;
@@ -45,7 +39,7 @@ public class CuckooParametersScorer implements CuckooSolutionScorer
         threadPool = Executors.newFixedThreadPool(nbThreads);
     }
     
-    public double computeScore(CuckooParameters params)
+    public double[] computeScore(CuckooParameters params)
     {
         ArrayList<IntermediateScorer> scorers = new ArrayList<IntermediateScorer>();
         for (int i = 0 ; i < iterationsOutside ; i++)
@@ -53,23 +47,23 @@ public class CuckooParametersScorer implements CuckooSolutionScorer
             scorers.add(new IntermediateScorer(params));
         }
 
-        double res = 0;
+        ArrayList<Double> res = new ArrayList<Double>(iterationsOutside);
         try
         {
             List<Future<Double>> intermediateScores = threadPool.invokeAll(scorers);
             for (Future<Double> intermediateScore : intermediateScores)
             {
-                res += intermediateScore.get();
+                res.add(intermediateScore.get());
             }
         }
         catch (Exception e)
         {
             e.printStackTrace();
         }
-        return res / ((double) iterationsOutside);
+        return toDoubleArray(res);
     }
 
-    public double computeScore(CuckooSolution configuration)
+    public double[] computeScore(Parameters configuration)
     {
         return computeScore((CuckooParameters) configuration);
     }
@@ -85,10 +79,12 @@ public class CuckooParametersScorer implements CuckooSolutionScorer
 
         public Double call() throws Exception
         {
-            Disambiguator cuckooDisambiguator = new CuckooSearchDisambiguator(stopCondition, 
+            Disambiguator cuckooDisambiguator = new CuckooSearchDisambiguator(
+                    stopCondition, 
+                    params.levyLocation.currentValue,
                     params.levyScale.currentValue, 
                     (int)params.nestsNumber.currentValue, 
-                    (int)params.destroyedNests.currentValue, 
+                    (int)params.destroyedNests.currentValue - 1, 
                     scorer, false);
             double tmpres = 0;
             int nbTexts = 0;
@@ -106,5 +102,12 @@ public class CuckooParametersScorer implements CuckooSolutionScorer
     public void finalize()
     {
         threadPool.shutdown();
+    }
+    
+    private static double[] toDoubleArray(ArrayList<Double> list)
+    {
+        double[] ret = new double[list.size()];
+        for (int i = 0 ; i < ret.length ; i++) ret[i] = list.get(i).doubleValue();
+        return ret;
     }
 }

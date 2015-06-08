@@ -9,7 +9,7 @@ import org.getalp.lexsema.io.resource.LRLoader;
 import org.getalp.lexsema.io.resource.dictionary.DictionaryLRLoader;
 import org.getalp.lexsema.similarity.Document;
 import org.getalp.lexsema.wsd.configuration.Configuration;
-import org.getalp.lexsema.wsd.method.BatAlgorithm;
+import org.getalp.lexsema.wsd.method.BatAlgorithmDisambiguator;
 import org.getalp.lexsema.wsd.method.Disambiguator;
 import org.getalp.lexsema.wsd.score.ConfigurationScorer;
 import org.getalp.lexsema.wsd.score.SemEval2007Task7PerfectConfigurationScorer;
@@ -56,7 +56,7 @@ public class BatAlgorithmDisambiguation
 
         ConfigurationScorer scorer = new SemEval2007Task7PerfectConfigurationScorer();
 
-        Disambiguator batDisambiguator = new BatAlgorithm(iterationsNumber, batsNumber, minFrequency, 
+        Disambiguator batDisambiguator = new BatAlgorithmDisambiguator(iterationsNumber, batsNumber, minFrequency, 
                                                           maxFrequency, minLoudness, maxLoudness,
                                                           alpha, gamma, scorer, true);
 

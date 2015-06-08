@@ -16,35 +16,32 @@ public class SimulatedAnnealing2 implements Disambiguator
 
     private double coolingRate;
 
-    private int convergenceThreshold;
-    
     private double iterations;
 
     private ConfigurationScorer configurationScorer;
 
-    private boolean changedSinceLast;
-    
     private double T;
     
     private Configuration configuration;
         
-    private Configuration previousConfiguration;
-    
     private double bestScore;
     
     private double prevScore;
     
     private int currentCycle;
     
-    private int convergenceCycles;
+    private StopCondition stopCondition;
     
-    public SimulatedAnnealing2(double coolingRate, int convergenceThreshold, int iterations, ConfigurationScorer configurationScorer)
+    private boolean verbose;
+    
+    public SimulatedAnnealing2(StopCondition stopCondition, double T0, double coolingRate, int iterations, ConfigurationScorer configurationScorer, boolean verbose)
     {
-        this.T0 = 200;
+        this.stopCondition = stopCondition;
+        this.T0 = T0;
         this.coolingRate = coolingRate;
-        this.convergenceThreshold = convergenceThreshold;
         this.iterations = iterations;
         this.configurationScorer = configurationScorer;
+        this.verbose = verbose;
     }
 
     private void initialize(Document document) 
@@ -52,9 +49,7 @@ public class SimulatedAnnealing2 implements Disambiguator
         configuration = new ConfidenceConfiguration(document, ConfidenceConfiguration.InitializationType.RANDOM);
         T = T0;
         currentCycle = 0;
-        convergenceCycles = 0;
         bestScore = 0;
-        changedSinceLast = false;
     }
 
     private double calculateT(double T0, double cycle) 
@@ -67,7 +62,8 @@ public class SimulatedAnnealing2 implements Disambiguator
         return (int) ValueScale.scaleValue(randomEngine.raw(), 0d, 1d, 0, max);
     }
 
-    private Configuration makeRandomChange(Configuration source, Document document, int numberOfChanges, DoubleRandomEngine gu) {
+    private Configuration makeRandomChange(Configuration source, Document document, int numberOfChanges, DoubleRandomEngine gu) 
+    {
         Configuration newConfiguration = new ConfidenceConfiguration((ConfidenceConfiguration) source);
 
         for (int i = 0; i < numberOfChanges; i++) 
@@ -82,11 +78,14 @@ public class SimulatedAnnealing2 implements Disambiguator
 
     public Configuration disambiguate(Document document) 
     {
+        stopCondition.reset();
         initialize(document);
         while (evaluate()) 
         {
-            System.out.println("[Cycle " + currentCycle + "] [T=" + T + "] [Convergence: " + convergenceCycles + "/" + convergenceThreshold + "] [Best: " + bestScore + "]");
-            changedSinceLast = false;
+            if (verbose)
+            {
+                System.out.println("[Cycle " + currentCycle + "] [T=" + T + "] [Best: " + bestScore + "]");
+            }
             for (int j = 0; j < iterations; j++)
             {
                 anneal(document, j);
@@ -114,7 +113,6 @@ public class SimulatedAnnealing2 implements Disambiguator
             {
                 bestScore = score;
             }
-            changedSinceLast = true;
         }
         else 
         {
@@ -124,7 +122,6 @@ public class SimulatedAnnealing2 implements Disambiguator
             {
                 configuration = cp;
                 prevScore = score;
-                changedSinceLast = true;
             }
         }
     }
@@ -132,21 +129,9 @@ public class SimulatedAnnealing2 implements Disambiguator
     private boolean evaluate() 
     {
         T = calculateT(T0, currentCycle);
-        if (convergenceCycles >= convergenceThreshold && configuration.equals(previousConfiguration)) 
-        {
-            return false;
-        } 
-        else if (!changedSinceLast) 
-        {
-            convergenceCycles++;
-        } 
-        else 
-        {
-            convergenceCycles = 0;
-        }
-        previousConfiguration = configuration;
         currentCycle++;
-        return true;
+        stopCondition.increment();
+        return !stopCondition.stop();
     }
 
     public void release() 
