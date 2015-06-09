@@ -16,7 +16,7 @@ public class AnnealingParameters implements Parameters
     public AnnealingParameters()
     {
         coolingRate = new ScalarParameter(0.1, 0.95);
-        iterationsNumber = new ScalarParameter(0, 1);
+        iterationsNumber = new ScalarParameter(0, 100);
     }
 
     public AnnealingParameters clone()
@@ -31,13 +31,15 @@ public class AnnealingParameters implements Parameters
     {
         double x = random.nextGaussian();
         double y = random.nextGaussian();
-        double norm = Math.sqrt(x*x + y*y);
-        x /= norm;
-        y /= norm;
+        double max = Math.max(Math.abs(x), Math.abs(y));
+        x /= max;
+        y /= max;
         coolingRate.add(x * distance);
         iterationsNumber.add(y * distance);
+        /*
         System.out.println("Move coolingRate : " + x * distance * coolingRate.step);
         System.out.println("Move iterationsNumber : " + y * distance * iterationsNumber.step);
+        */
     }
     
     public String toString()

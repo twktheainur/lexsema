@@ -2,7 +2,6 @@ package org.getalp.lexsema.wsd.parameters.method;
 
 import org.apache.commons.math3.distribution.LevyDistribution;
 import org.apache.commons.math3.stat.inference.MannWhitneyUTest;
-import org.getalp.lexsema.wsd.method.IterationStopCondition;
 import org.getalp.lexsema.wsd.method.StopCondition;
 
 public class CuckooSearchParameterEstimator
@@ -20,6 +19,7 @@ public class CuckooSearchParameterEstimator
             this.solution = solutionFactory.createRandomSolution();
             this.scores = solutionScorer.computeScore(solution);
             this.meanScore = computeMeanScore(scores);
+            stopCondition.incrementScorerCalls();
         }
         
         public Nest(Parameters solution, double[] scores, double meanScore)
@@ -42,6 +42,7 @@ public class CuckooSearchParameterEstimator
             solution.makeRandomChanges(distance);
             scores = solutionScorer.computeScore(solution);
             meanScore = computeMeanScore(scores);
+            stopCondition.incrementScorerCalls();
         }
         
         private double computeMeanScore(double[] scores)
@@ -69,7 +70,7 @@ public class CuckooSearchParameterEstimator
 
     public CuckooSearchParameterEstimator(int iterations, double levyLocation, double levyScale, ParametersScorer solutionScorer, ParametersFactory solutionFactory, boolean verbose)
     {
-        this(new IterationStopCondition(iterations), levyLocation, levyScale, solutionScorer, solutionFactory, verbose);
+        this(new StopCondition(StopCondition.Condition.ITERATIONS, iterations), levyLocation, levyScale, solutionScorer, solutionFactory, verbose);
     }
 
     public CuckooSearchParameterEstimator(StopCondition stopCondition, double levyLocation, double levyScale, ParametersScorer solutionScorer, ParametersFactory solutionFactory, boolean verbose)
@@ -97,7 +98,7 @@ public class CuckooSearchParameterEstimator
             double progressPercent = (double)progress / 100.0;
             Nest newNest = nest.clone();
             newNest.randomFly();
-            if (newNest.meanScore > nest.meanScore && mannTest.mannWhitneyUTest(newNest.scores, nest.scores) < 0.05)
+            if (newNest.meanScore > nest.meanScore && mannTest.mannWhitneyUTest(newNest.scores, nest.scores) < 0.01)
             {
                 nest = newNest;
             }
@@ -107,7 +108,8 @@ public class CuckooSearchParameterEstimator
                                    "Current best : " + nest.meanScore + 
                                    " [" + nest.solution + "]");
             }
-            stopCondition.increment();
+            stopCondition.incrementIterations();
+            stopCondition.updateMilliseconds();
         }
         return nest.solution;
     }

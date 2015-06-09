@@ -8,7 +8,7 @@ import org.getalp.lexsema.io.document.TextLoader;
 import org.getalp.lexsema.io.resource.LRLoader;
 import org.getalp.lexsema.io.resource.dictionary.DictionaryLRLoader;
 import org.getalp.lexsema.similarity.Document;
-import org.getalp.lexsema.wsd.method.TimeStopCondition;
+import org.getalp.lexsema.wsd.method.StopCondition;
 import org.getalp.lexsema.wsd.parameters.method.CuckooSearchParameterEstimator;
 import org.getalp.lexsema.wsd.parameters.method.Parameters;
 import org.getalp.lexsema.wsd.score.ConfigurationScorer;
@@ -20,7 +20,7 @@ public class BatAlgorithmParametersEstimation
     {
         int iterations = 1000;
         double levyLocation = 1;
-        double levyScale = 0.5;
+        double levyScale = 1;
         int msInside = 20;
         
         if (args.length >= 1) iterations = Integer.valueOf(args[0]);
@@ -45,7 +45,7 @@ public class BatAlgorithmParametersEstimation
         
         ConfigurationScorer configScorer = new SemEval2007Task7PerfectConfigurationScorer();
         
-        BatParametersScorer scorer = new BatParametersScorer(configScorer, dl, 5, new TimeStopCondition(msInside)); 
+        BatParametersScorer scorer = new BatParametersScorer(configScorer, dl, 5, new StopCondition(StopCondition.Condition.MILLISECONDS, msInside)); 
         
         BatParametersFactory configFactory = new BatParametersFactory();
         

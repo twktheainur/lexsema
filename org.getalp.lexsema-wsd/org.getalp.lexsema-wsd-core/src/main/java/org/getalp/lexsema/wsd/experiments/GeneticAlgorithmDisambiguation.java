@@ -10,7 +10,7 @@ import org.getalp.lexsema.io.resource.dictionary.DictionaryLRLoader;
 import org.getalp.lexsema.similarity.Document;
 import org.getalp.lexsema.wsd.configuration.Configuration;
 import org.getalp.lexsema.wsd.method.Disambiguator;
-import org.getalp.lexsema.wsd.method.IterationStopCondition;
+import org.getalp.lexsema.wsd.method.StopCondition;
 import org.getalp.lexsema.wsd.method.genetic.GeneticAlgorithmDisambiguator;
 import org.getalp.lexsema.wsd.score.*;
 
@@ -47,7 +47,7 @@ public class GeneticAlgorithmDisambiguation
         //ConfigurationScorer scorer = new ConfigurationScorerWithCache(new ACExtendedLeskSimilarity());
         //ConfigurationScorer scorer = new TestScorer(new TverskyConfigurationScorer(new IndexedOverlapSimilarity(), Runtime.getRuntime().availableProcessors()));
         
-        Disambiguator geneticDisambiguator = new GeneticAlgorithmDisambiguator(new IterationStopCondition(iterations), population, crossoverRate, mutationRate, scorer);
+        Disambiguator geneticDisambiguator = new GeneticAlgorithmDisambiguator(new StopCondition(StopCondition.Condition.ITERATIONS, iterations), population, crossoverRate, mutationRate, scorer);
 
         System.out.println("Loading texts...");
         dl.load();

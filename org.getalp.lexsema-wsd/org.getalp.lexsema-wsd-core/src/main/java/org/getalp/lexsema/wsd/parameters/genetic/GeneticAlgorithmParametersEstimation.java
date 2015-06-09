@@ -2,12 +2,13 @@ package org.getalp.lexsema.wsd.parameters.genetic;
 
 import java.io.File;
 import java.io.PrintWriter;
+
 import org.getalp.lexsema.io.document.Semeval2007TextLoader;
 import org.getalp.lexsema.io.document.TextLoader;
 import org.getalp.lexsema.io.resource.LRLoader;
 import org.getalp.lexsema.io.resource.dictionary.DictionaryLRLoader;
 import org.getalp.lexsema.similarity.Document;
-import org.getalp.lexsema.wsd.method.TimeStopCondition;
+import org.getalp.lexsema.wsd.method.StopCondition;
 import org.getalp.lexsema.wsd.parameters.method.CuckooSearchParameterEstimator;
 import org.getalp.lexsema.wsd.parameters.method.Parameters;
 import org.getalp.lexsema.wsd.score.ConfigurationScorer;
@@ -19,7 +20,7 @@ public class GeneticAlgorithmParametersEstimation
     {
         int iterations = 1000;
         double levyLocation = 1;
-        double levyScale = 0.5;
+        double levyScale = 1;
         int msInside = 20;
         
         if (args.length >= 1) iterations = Integer.valueOf(args[0]);
@@ -44,7 +45,7 @@ public class GeneticAlgorithmParametersEstimation
         
         ConfigurationScorer configScorer = new SemEval2007Task7PerfectConfigurationScorer();
         
-        GeneticParametersScorer scorer = new GeneticParametersScorer(configScorer, dl, 100, new TimeStopCondition(msInside)); 
+        GeneticParametersScorer scorer = new GeneticParametersScorer(configScorer, dl, 100, new StopCondition(StopCondition.Condition.MILLISECONDS, msInside)); 
         
         GeneticParametersFactory configFactory = new GeneticParametersFactory();
         

@@ -52,7 +52,12 @@ public class CuckooSearchDisambiguator implements Disambiguator
         
         public double getScore()
         {
-            if (needRecomputeScore) score = configurationScorer.computeScore(currentDocument, configuration);
+            if (needRecomputeScore)
+            {
+                score = configurationScorer.computeScore(currentDocument, configuration);
+                stopCondition.incrementScorerCalls();
+                needRecomputeScore = false;
+            }
             return score;
         }
     }
@@ -77,7 +82,7 @@ public class CuckooSearchDisambiguator implements Disambiguator
 
     public CuckooSearchDisambiguator(int iterations, double levyLocation, double levyScale, int nestsNumber, int destroyedNests, ConfigurationScorer configurationScorer, boolean verbose)
     {
-        this(new IterationStopCondition(iterations), levyLocation, levyScale, nestsNumber, destroyedNests, configurationScorer, verbose);
+        this(new StopCondition(StopCondition.Condition.ITERATIONS, iterations), levyLocation, levyScale, nestsNumber, destroyedNests, configurationScorer, verbose);
     }
 
     public CuckooSearchDisambiguator(StopCondition stopCondition, double levyLocation, double levyScale, int nestsNumber, int destroyedNests, ConfigurationScorer configurationScorer, boolean verbose)
@@ -118,7 +123,8 @@ public class CuckooSearchDisambiguator implements Disambiguator
                 System.out.println("Cuckoo Progress : " + progressPercent + "% - " +
                                    "Current best : " + nests[0].getScore());
             }
-            stopCondition.increment();
+            stopCondition.incrementIterations();
+            stopCondition.updateMilliseconds();
         }
         return nests[0].configuration;
     }
@@ -158,7 +164,8 @@ public class CuckooSearchDisambiguator implements Disambiguator
                                    "Current best : " + nests[nestsNumber - 1].getScore() + 
                                    " [" + nests[nestsNumber - 1].configuration + "]");
             }
-            stopCondition.increment();
+            stopCondition.incrementIterations();
+            stopCondition.updateMilliseconds();
         }
         sortNests();
         return nests[nestsNumber - 1].configuration;

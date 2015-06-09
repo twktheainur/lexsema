@@ -103,6 +103,7 @@ public class SimulatedAnnealing2 implements Disambiguator
     {
         Configuration cp = makeRandomChange(configuration, document, 1, uniformGenerator);
         double score = configurationScorer.computeScore(document, cp);
+        stopCondition.incrementScorerCalls();
 
         double delta = prevScore - score;
         if (delta < 0)
@@ -130,7 +131,8 @@ public class SimulatedAnnealing2 implements Disambiguator
     {
         T = calculateT(T0, currentCycle);
         currentCycle++;
-        stopCondition.increment();
+        stopCondition.incrementIterations();
+        stopCondition.updateMilliseconds();
         return !stopCondition.stop();
     }
 

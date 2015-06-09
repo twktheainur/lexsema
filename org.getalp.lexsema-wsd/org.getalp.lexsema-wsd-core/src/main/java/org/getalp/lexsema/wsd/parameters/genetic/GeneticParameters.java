@@ -36,10 +36,10 @@ public class GeneticParameters implements Parameters
         double x = random.nextGaussian();
         double y = random.nextGaussian();
         double z = random.nextGaussian();
-        double norm = Math.sqrt(x*x + y*y + z*z);
-        x /= norm;
-        y /= norm;
-        z /= norm;
+        double max = Math.max(Math.max(Math.abs(x), Math.abs(y)), Math.abs(z));
+        x /= max;
+        y /= max;
+        z /= max;
         population.add(x * distance);
         crossoverRate.add(y * distance);
         mutationRate.add(z * distance);

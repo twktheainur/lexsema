@@ -21,7 +21,7 @@ public class SemEval2007Task7PerfectConfigurationScorer implements Configuration
     public double computeScore(Document document, Configuration configuration)
     {
         WSDResult result = evaluation.evaluate(goldStandard, configuration);
-        return result.getF1Score();
+        return result.getPrecision();
     }
 
     public void release()

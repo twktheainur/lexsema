@@ -8,8 +8,8 @@ import org.getalp.lexsema.io.resource.dictionary.DictionaryLRLoader;
 import org.getalp.lexsema.similarity.Document;
 import org.getalp.lexsema.wsd.configuration.Configuration;
 import org.getalp.lexsema.wsd.method.Disambiguator;
-import org.getalp.lexsema.wsd.method.IterationStopCondition;
 import org.getalp.lexsema.wsd.method.SimulatedAnnealing2;
+import org.getalp.lexsema.wsd.method.StopCondition;
 import org.getalp.lexsema.wsd.score.ConfigurationScorer;
 import org.getalp.lexsema.wsd.score.SemEval2007Task7PerfectConfigurationScorer;
 
@@ -42,7 +42,7 @@ public class SimulatedAnnealingDisambiguation2
 
         ConfigurationScorer scorer = new SemEval2007Task7PerfectConfigurationScorer();
 
-        Disambiguator saDisambiguator = new SimulatedAnnealing2(new IterationStopCondition(cycles), 200, coolingRate, iterationsNumber, scorer, true);
+        Disambiguator saDisambiguator = new SimulatedAnnealing2(new StopCondition(StopCondition.Condition.ITERATIONS, cycles), 200, coolingRate, iterationsNumber, scorer, true);
 
         System.out.println("Loading texts...");
         dl.load();

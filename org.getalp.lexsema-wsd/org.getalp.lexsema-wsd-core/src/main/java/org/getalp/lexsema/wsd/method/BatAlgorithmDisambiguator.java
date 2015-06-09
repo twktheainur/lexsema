@@ -4,7 +4,7 @@ import org.getalp.lexsema.similarity.Document;
 import org.getalp.lexsema.wsd.configuration.Configuration;
 import org.getalp.lexsema.wsd.configuration.ContinuousConfiguration;
 import org.getalp.lexsema.wsd.score.ConfigurationScorer;
-
+import org.getalp.lexsema.wsd.method.StopCondition;
 import java.util.Random;
 
 public class BatAlgorithmDisambiguator implements Disambiguator
@@ -69,6 +69,7 @@ public class BatAlgorithmDisambiguator implements Disambiguator
         public double recomputeScore()
         {
             score = configurationScorer.computeScore(currentDocument, position);
+            stopCondition.incrementScorerCalls();
             return score;
         }
     }
@@ -77,7 +78,7 @@ public class BatAlgorithmDisambiguator implements Disambiguator
                         double minLoudness, double maxLoudness, 
                         double alpha, double gamma, ConfigurationScorer configurationScorer, boolean verbose)
     {
-        this(new IterationStopCondition(iterationsNumber), batsNumber, minFrequency, maxFrequency, 
+        this(new StopCondition(StopCondition.Condition.ITERATIONS, iterationsNumber), batsNumber, minFrequency, maxFrequency, 
              minLoudness, maxLoudness, 
              alpha, gamma, configurationScorer, verbose);
     }
@@ -123,22 +124,24 @@ public class BatAlgorithmDisambiguator implements Disambiguator
                 int previousVelocity = currentBat.velocity;
                 double previousScore = currentBat.score;
 
-                currentBat.frequency = randomDoubleInRange(minFrequency, maxFrequency);
-
-                for (int i = 0 ; i < dimension ; i++)
-                {
-                    if (currentBat.position.getAssignment(i) != bestBat.position.getAssignment(i))
-                    {
-                        currentBat.velocity++;
-                    }
-                }
-                currentBat.velocity *= currentBat.frequency;
-                currentBat.position.makeRandomChanges(currentBat.velocity);
-
                 if (currentBat.rate < randomDoubleInRange(minRate, maxRate))
                 {
                     currentBat.position = bestBat.position.clone();
-                    currentBat.position.makeRandomChanges((int) (random.nextGaussian() * getAverageLoudness()));
+                    currentBat.position.makeRandomChanges((int) getAverageLoudness());
+                }
+                else
+                {
+                    currentBat.frequency = randomDoubleInRange(minFrequency, maxFrequency);
+
+                    for (int i = 0 ; i < dimension ; i++)
+                    {
+                        if (currentBat.position.getAssignment(i) != bestBat.position.getAssignment(i))
+                        {
+                            currentBat.velocity++;
+                        }
+                    }
+                    currentBat.velocity *= currentBat.frequency;
+                    currentBat.position.makeRandomChanges(currentBat.velocity);
                 }
 
                 if (currentBat.loudness > randomDoubleInRange(minLoudness, maxLoudness) &&
@@ -156,7 +159,8 @@ public class BatAlgorithmDisambiguator implements Disambiguator
                 }
             }
             
-            stopCondition.increment();
+            stopCondition.incrementIterations();
+            stopCondition.updateMilliseconds();
             currentIteration++;
 
             if (verbose) System.out.println("Bat progress : " + (double)progress / 100.0 + "% - " + 
