@@ -10,7 +10,9 @@ import java.net.URLEncoder;
 import java.util.Map;
 
 public class RestfulQuery {
-    public static String restfulQuery(String uri, Map<String, String> parameters) throws IOException {
+
+
+    public static URLConnection restfulQuery(String uri, Map<String, String> parameters) throws IOException {
 
         StringBuilder params = new StringBuilder();
         if (!parameters.isEmpty()) {
@@ -28,18 +30,12 @@ public class RestfulQuery {
         URL url = new URL(uri+params);
         //make connection
         URLConnection urlc = url.openConnection();
+        urlc.setRequestProperty("User-Agent", "Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.4; en-US; rv:1.9.2.2) Gecko/20100316 Firefox/3.6.2");
+        return urlc;
+    }
 
-        //use post mode
-        //urlc.setDoOutput(true);
-        //urlc.setAllowUserInteraction(false);
-
-        //send query
-        //PrintStream ps = new PrintStream(urlc.getOutputStream());
-        //ps.print(query);
-        //ps.close();
-
-        //get result
-        BufferedReader br = new BufferedReader(new InputStreamReader(urlc
+    public static String getRequestOutput(URLConnection urlConnection) throws IOException{
+        BufferedReader br = new BufferedReader(new InputStreamReader(urlConnection
                 .getInputStream()));
         String l = br.readLine();
         String output = "";
@@ -49,9 +45,5 @@ public class RestfulQuery {
         }
         br.close();
         return output.trim();
-    }
-
-    public enum Method {
-        POST,GET;
     }
 }

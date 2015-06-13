@@ -3,7 +3,7 @@ import org.getalp.lexsema.similarity.measures.crosslingual.TranslatorCrossLingua
 import org.getalp.lexsema.similarity.measures.tverski.TverskiIndexSimilarityMeasureBuilder;
 import org.getalp.lexsema.similarity.signatures.StringSemanticSignature;
 import org.getalp.lexsema.similarity.signatures.StringSemanticSignatureImpl;
-import org.getalp.lexsema.translation.BaiduAPITranslator;
+import org.getalp.lexsema.translation.GoogleWebTranslator;
 import org.getalp.lexsema.translation.Translator;
 import org.getalp.lexsema.util.Language;
 import org.slf4j.Logger;
@@ -30,7 +30,8 @@ public class CrossLingualTextSimilarity {
         StringSemanticSignature signature2 = new StringSemanticSignatureImpl(args[3]);
         signature2.setLanguage(target);
 
-        Translator translator = new BaiduAPITranslator(BAIDU_KEY);
+        //Translator translator = new BaiduAPITranslator(BAIDU_KEY);
+        Translator translator = new GoogleWebTranslator();
         SimilarityMeasure similarityMeasure = new TverskiIndexSimilarityMeasureBuilder()
                 .fuzzyMatching(true).alpha(1d).beta(0d).gamma(0d).normalize(true).regularizeOverlapInput(true).build();
         SimilarityMeasure crossLingualMeasure = new TranslatorCrossLingualSimilarity(similarityMeasure, translator);

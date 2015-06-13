@@ -9,6 +9,7 @@ import org.xml.sax.helpers.XMLReaderFactory;
 
 import java.io.IOException;
 import java.io.StringReader;
+import java.net.URLConnection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -29,7 +30,8 @@ public class YandexAPITranslator implements Translator {
         parameters.put("lang", String.format("%s-%s", sourceLanguage.getISO2Code(), targetLanguage.getISO2Code()));
         parameters.put("text",source);
         try {
-            String response = RestfulQuery.restfulQuery("https://translate.yandex.net/api/v1.5/tr/translate",parameters);
+            URLConnection connection = RestfulQuery.restfulQuery("https://translate.yandex.net/api/v1.5/tr/translate",parameters);
+            String response = RestfulQuery.getRequestOutput(connection);
             String output = "";
             try {
                 OutputXMLParser handler = new OutputXMLParser();

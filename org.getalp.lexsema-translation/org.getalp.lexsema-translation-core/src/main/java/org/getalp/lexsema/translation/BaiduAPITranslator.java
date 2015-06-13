@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.net.URLConnection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -28,7 +29,8 @@ public class BaiduAPITranslator implements Translator {
         parameters.put("to", targetLanguage.getISO2Code());
         parameters.put("q",source);
         try {
-            String response = RestfulQuery.restfulQuery("http://openapi.baidu.com/public/2.0/bmt/translate",parameters);
+            URLConnection urlConnection = RestfulQuery.restfulQuery("http://openapi.baidu.com/public/2.0/bmt/translate",parameters);
+            String response = RestfulQuery.getRequestOutput(urlConnection);
             JsonObject object = JSON.parse(response);
             response = object.get("trans_result").getAsArray().get(0).getAsObject().get("dst").getAsString().value();
             return response;
