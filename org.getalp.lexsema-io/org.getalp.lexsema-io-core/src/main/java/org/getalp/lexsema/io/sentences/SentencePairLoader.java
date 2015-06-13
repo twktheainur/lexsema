@@ -1,19 +1,19 @@
 package org.getalp.lexsema.io.sentences;
 
 
-import org.getalp.lexsema.similarity.Sentence;
+import org.getalp.lexsema.similarity.Text;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public abstract class SentencePairLoader {
-    List<List<Sentence>> sentences;
+    List<List<Text>> sentences;
 
     protected SentencePairLoader() {
         sentences = new ArrayList<>();
     }
 
-    public List<List<Sentence>> getSentencePairs() {
+    public List<List<Text>> getSentencePairs() {
         return sentences;
     }
 }

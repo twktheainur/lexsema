@@ -141,15 +141,15 @@ public class MatrixTverskiConfigurationScorer implements ConfigurationScorer {
 
         @Override
         public Triple<Integer, Integer, Double> call() throws Exception {
-            try {
+            //try {
                 Sense a = document.getSenses(configuration.getStart(), indexA).get(configuration.getAssignment(indexA));
                 Sense b = document.getSenses(configuration.getStart(), indexB).get(configuration.getAssignment(indexB));
                 double sim = a.computeSimilarityWith(similarityMeasure, b);
                 return new TripleImpl<>(indexA, indexB, sim);
-            } catch (RuntimeException e) {
-                logger.error(e.getLocalizedMessage());
-            }
-            return new TripleImpl<>(indexA, indexB, 0d);
+            //} catch (RuntimeException e) {
+             //   logger.error(e.getLocalizedMessage());
+           // }
+            //return new TripleImpl<>(indexA, indexB, 0d);
         }
     }
 

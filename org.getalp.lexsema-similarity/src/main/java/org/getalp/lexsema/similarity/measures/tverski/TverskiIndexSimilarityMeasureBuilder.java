@@ -20,6 +20,8 @@ public class TverskiIndexSimilarityMeasureBuilder {
     private boolean optimizeRelations = false;
     private boolean isDistance = false;
 
+    private boolean normalize = true;
+
     public TverskiIndexSimilarityMeasureBuilder distance(AbstractStringDistance distance) {
         this.distance = distance;
         return this;
@@ -90,6 +92,14 @@ public class TverskiIndexSimilarityMeasureBuilder {
         return this;
     }
 
+
+    public TverskiIndexSimilarityMeasureBuilder normalize(boolean normalize) {
+        this.normalize = normalize;
+        return this;
+    }
+
+
+
     @SuppressWarnings("FeatureEnvy")
     public TverskiIndexSimilarityMeasure build() {
         TverskiIndexSimilarityMeasureImpl st = new TverskiIndexSimilarityMeasureImpl();
@@ -107,6 +117,7 @@ public class TverskiIndexSimilarityMeasureBuilder {
         st.setExtendedLesk(extendedLesk);
         st.setIsDistance(isDistance);
         st.setDistance(distance);
+        st.setNormalize(normalize);
         return st;
     }
 }

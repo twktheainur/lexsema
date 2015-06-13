@@ -81,11 +81,7 @@ public final class AcceptionClusteringExperimentGenerationSim {
     private static String dbPath = DB_PATH;
 
 
-    /**
-     * twk.theainur@live.co.uk account
-     */
-    //public static final String BING_APP_ID = "dbnary";
-    //public static final String BING_APP_KEY = "H2pC+d3b0L0tduSZzRafqPZyV6zmmzMmj9+AEpc9b1E=";
+
     private static int numberOfTopLevelClusters = NUMBER_OF_TOP_LEVEL_CLUSTERS;
     private static int similarityDimensions = SIMILARITY_DIMENSIONS;
     private static int clDimensions = CL_DIMENSIONS;

@@ -1,4 +1,4 @@
-package org.getalp.lexsema.wsd.experiments.ga.wsd;
+package org.getalp.lexsema.wsd.method.genetic;
 
 import org.apache.commons.math3.genetics.ElitisticListPopulation;
 import org.apache.commons.math3.genetics.FixedGenerationCount;
@@ -57,6 +57,6 @@ public class GeneticAlgorithmDisambiguator implements Disambiguator
 
     public void release()
     {
-        
+        scorer.release();
     }
 }

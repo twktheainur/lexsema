@@ -66,7 +66,11 @@ public class MultilingualDBNaryImpl implements DBNary {
 
     @Override
     public List<Vocable> getVocables() {
-        return resourceMap.get(defaultLanguage).getVocables();
+        List<Vocable> vocables = new ArrayList<>();
+        for(Language language : resourceMap.keySet()) {
+            vocables.addAll(resourceMap.get(language).getVocables());
+        }
+        return vocables;
     }
 
     @Override

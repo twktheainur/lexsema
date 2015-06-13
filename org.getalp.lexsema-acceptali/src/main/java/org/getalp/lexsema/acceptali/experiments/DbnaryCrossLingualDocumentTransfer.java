@@ -1,23 +1,22 @@
 package org.getalp.lexsema.acceptali.experiments;
 
-import org.getalp.lexsema.io.text.EnglishDKPSentenceProcessor;
-import org.getalp.lexsema.io.text.FrenchDKPSentenceProcessor;
-import org.getalp.lexsema.io.text.RussianPythonSentenceProcessor;
-import org.getalp.lexsema.io.text.SentenceProcessor;
-import org.getalp.lexsema.util.Language;
+import org.getalp.lexsema.io.text.EnglishDKPTextProcessor;
+import org.getalp.lexsema.io.text.FrenchDKPTextProcessor;
+import org.getalp.lexsema.io.text.RussianPythonTextProcessor;
+import org.getalp.lexsema.io.text.TextProcessor;
 import org.getalp.lexsema.ontolex.dbnary.DBNary;
 import org.getalp.lexsema.ontolex.dbnary.exceptions.NoSuchVocableException;
 import org.getalp.lexsema.ontolex.factories.resource.LexicalResourceFactory;
 import org.getalp.lexsema.ontolex.graph.OWLTBoxModel;
 import org.getalp.lexsema.ontolex.graph.OntologyModel;
 import org.getalp.lexsema.ontolex.graph.storage.JenaRemoteSPARQLStore;
-import org.getalp.lexsema.ontolex.graph.storage.JenaTDBStore;
 import org.getalp.lexsema.ontolex.graph.storage.StoreHandler;
 import org.getalp.lexsema.ontolex.graph.store.Store;
 import org.getalp.lexsema.similarity.measures.SimilarityMeasure;
 import org.getalp.lexsema.similarity.measures.tverski.TverskiIndexSimilarityMeasureBuilder;
 import org.getalp.lexsema.translation.DbNaryDisambiguatingTranslator;
 import org.getalp.lexsema.translation.Translator;
+import org.getalp.lexsema.util.Language;
 import org.getalp.lexsema.wsd.method.Disambiguator;
 import org.getalp.lexsema.wsd.method.SimulatedAnnealing;
 import org.getalp.lexsema.wsd.score.ConfigurationScorer;
@@ -125,8 +124,8 @@ public final class DbnaryCrossLingualDocumentTransfer {
     }
 
     private static DBNary instantiateDBNary(String path) throws IOException, InvocationTargetException, NoSuchMethodException, ClassNotFoundException, InstantiationException, IllegalAccessException {
-        //Store vts = new JenaRemoteSPARQLStore("http://kaiko.getalp.org/sparql");
-        Store vts = new JenaTDBStore(path);
+        Store vts = new JenaRemoteSPARQLStore("http://kaiko.getalp.org/sparql");
+        //Store vts = new JenaTDBStore(path);
         StoreHandler.registerStoreInstance(vts);
         //StoreHandler.DEBUG_ON = true;
         OntologyModel tBox = new OWLTBoxModel(ONTOLOGY_PROPERTIES);
@@ -136,18 +135,18 @@ public final class DbnaryCrossLingualDocumentTransfer {
 
     public String translate(String text, Language lang1, Language lang2) {
 
-        SentenceProcessor sentenceProcessor;
+        TextProcessor textProcessor;
         SnowballStemmer snowballStemmer;
         Collection<String> sourceStopList;
         Collection<String> targetStopList;
         if (languageIs(lang1, "en")) {
-            sentenceProcessor = new EnglishDKPSentenceProcessor();
+            textProcessor = new EnglishDKPTextProcessor();
             sourceStopList = loadStopList("english_stop.txt");
         } else if (languageIs(lang1, "fr")) {
-            sentenceProcessor = new FrenchDKPSentenceProcessor();
+            textProcessor = new FrenchDKPTextProcessor();
             sourceStopList = loadStopList("french_stop.txt");
         } else {
-            sentenceProcessor = new RussianPythonSentenceProcessor();
+            textProcessor = new RussianPythonTextProcessor();
             sourceStopList = loadStopList("russian_stop.txt");
         }
         if (languageIs(lang2, "en")) {
@@ -157,11 +156,11 @@ public final class DbnaryCrossLingualDocumentTransfer {
             targetStopList = loadStopList("french_stop.txt");
             snowballStemmer = new frenchStemmer();
         } else {
-            sentenceProcessor = new RussianPythonSentenceProcessor();
+            textProcessor = new RussianPythonTextProcessor();
             snowballStemmer = new russianStemmer();
             targetStopList = loadStopList("russian_stop.txt");
         }
-        Translator translator = new DbNaryDisambiguatingTranslator(dbNary, sentenceProcessor, disambiguator, snowballStemmer, sourceStopList, targetStopList);
+        Translator translator = new DbNaryDisambiguatingTranslator(dbNary, textProcessor, disambiguator, snowballStemmer, sourceStopList, targetStopList);
         return translator.translate(text, lang1, lang2);
     }
 

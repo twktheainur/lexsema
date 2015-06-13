@@ -7,9 +7,6 @@ import cern.jet.math.tdouble.DoubleFunctions;
 import org.getalp.ml.optimization.functions.Function;
 import org.getalp.ml.optimization.functions.input.FunctionInput;
 
-/**
- * Created by tchechem on 10/7/14.
- */
 public class GradientOptimisation implements OptimisationMethod {
 
     private DoubleBlas bl = new SmpDoubleBlas();

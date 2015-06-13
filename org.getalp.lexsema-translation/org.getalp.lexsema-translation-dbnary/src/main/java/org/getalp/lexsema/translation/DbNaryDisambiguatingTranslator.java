@@ -3,8 +3,7 @@ package org.getalp.lexsema.translation;
 
 import org.getalp.lexsema.io.resource.LRLoader;
 import org.getalp.lexsema.io.resource.dbnary.DBNaryLoaderImpl;
-import org.getalp.lexsema.io.text.SentenceProcessor;
-import org.getalp.lexsema.util.Language;
+import org.getalp.lexsema.io.text.TextProcessor;
 import org.getalp.lexsema.ontolex.LexicalEntry;
 import org.getalp.lexsema.ontolex.LexicalResourceEntity;
 import org.getalp.lexsema.ontolex.LexicalSense;
@@ -13,7 +12,8 @@ import org.getalp.lexsema.ontolex.dbnary.Translation;
 import org.getalp.lexsema.ontolex.dbnary.Vocable;
 import org.getalp.lexsema.ontolex.dbnary.exceptions.NoSuchVocableException;
 import org.getalp.lexsema.similarity.Document;
-import org.getalp.lexsema.similarity.Sentence;
+import org.getalp.lexsema.similarity.Text;
+import org.getalp.lexsema.util.Language;
 import org.getalp.lexsema.wsd.configuration.Configuration;
 import org.getalp.lexsema.wsd.method.Disambiguator;
 import org.slf4j.Logger;
@@ -32,11 +32,11 @@ public class DbNaryDisambiguatingTranslator implements Translator {
     private final Collection<String> sourceStopList;
     private final Collection<String> targetStopList;
     private DBNary dbNary;
-    private SentenceProcessor sentenceProcessor;
+    private TextProcessor textProcessor;
 
-    public DbNaryDisambiguatingTranslator(DBNary dbNary, SentenceProcessor sentenceProcessor, Disambiguator disambiguator, SnowballStemmer snowballStemmer, Collection<String> sourceStopList, Collection<String> targetStopList) {
+    public DbNaryDisambiguatingTranslator(DBNary dbNary, TextProcessor textProcessor, Disambiguator disambiguator, SnowballStemmer snowballStemmer, Collection<String> sourceStopList, Collection<String> targetStopList) {
         this.dbNary = dbNary;
-        this.sentenceProcessor = sentenceProcessor;
+        this.textProcessor = textProcessor;
         this.disambiguator = disambiguator;
         this.snowballStemmer = snowballStemmer;
         this.sourceStopList = Collections.unmodifiableCollection(sourceStopList);
@@ -49,7 +49,7 @@ public class DbNaryDisambiguatingTranslator implements Translator {
         LRLoader lrLoader = null;
         try {
             lrLoader = new DBNaryLoaderImpl(dbNary, sourceLanguage).loadDefinitions(true);
-            Sentence sentence = sentenceProcessor.process(filterInput(source), "");
+            Text sentence = textProcessor.process(filterInput(source), "");
             loadSenses(lrLoader, sentence);
             Configuration result = disambiguator.disambiguate(sentence);
             //noinspection LawOfDemeter

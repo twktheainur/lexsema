@@ -1,7 +1,7 @@
 package org.getalp.lexsema.io.clwsd;
 
 import edu.stanford.nlp.util.Pair;
-import org.getalp.lexsema.similarity.Sentence;
+import org.getalp.lexsema.similarity.Text;
 import org.getalp.lexsema.similarity.Word;
 
 import java.util.ArrayList;
@@ -10,7 +10,7 @@ import java.util.List;
 
 
 public class TargetWordEntryImpl implements TargetWordEntry {
-    private List<Pair<Sentence, Integer>> contexts;
+    private List<Pair<Text, Integer>> contexts;
     private Word targetWord;
 
     public TargetWordEntryImpl(Word targetWord) {
@@ -19,12 +19,12 @@ public class TargetWordEntryImpl implements TargetWordEntry {
     }
 
     @Override
-    public Iterator<Pair<Sentence, Integer>> iterator() {
+    public Iterator<Pair<Text, Integer>> iterator() {
         return contexts.iterator();
     }
 
     @Override
-    public void addContext(Sentence sentence, int position) {
+    public void addContext(Text sentence, int position) {
         contexts.add(new Pair<>(sentence, position));
     }
 

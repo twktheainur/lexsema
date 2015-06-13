@@ -264,10 +264,10 @@ public class SimulatedAnnealing implements Disambiguator {
             double choice = uniformGenerator.nextDouble();
             double prob = Math.exp(-delta / T);
             if (prob > choice) {
-                //logger.info(String.format("\r\t[Cycle=%f | %.2f%%][Accepted Lower Score = %.2f][Best = %.2f][P(a)=%.2f][Ld=%.2f]", currentCycle, (double) cycleNumber / iterations * 100d, score, bestScore, Math.exp(-delta / T), delta));
+                logger.info(String.format("\r\t[Cycle=%f | %.2f%%][Accepted Lower Score = %.2f][Best = %.2f][P(a)=%.2f][Ld=%.2f]", currentCycle, (double) cycleNumber / iterations * 100d, score, bestScore, Math.exp(-delta / T), delta));
                 configuration = cp;
                 prevScore = score;
-                //changedSinceLast = true;
+                changedSinceLast = true;
                 numberOfAcceptanceEvents++;
             }
         }

@@ -163,4 +163,9 @@ public class WordImpl implements Word {
     public int compareTo(LexicalResourceEntity o) {
         return id.compareTo(o.getNode().toString());
     }
+
+    @Override
+    public String toString() {
+        return lexicalEntry.toString();
+    }
 }

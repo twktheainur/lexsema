@@ -15,6 +15,7 @@
         <module>org.getalp.lexsema-wsd</module>
         <module>org.getalp.lexsema-acceptali</module>
         <module>org.getalp.lexsema-translation</module>
+        <module>org.getalp.lexsema-examples</module>
     </modules>
 
     <name>lexsema</name>

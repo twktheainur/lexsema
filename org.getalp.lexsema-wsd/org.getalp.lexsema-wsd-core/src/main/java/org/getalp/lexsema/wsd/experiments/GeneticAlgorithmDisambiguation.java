@@ -1,27 +1,29 @@
 package org.getalp.lexsema.wsd.experiments;
 
-import java.io.File;
-
-import org.getalp.lexsema.io.annotresult.SemevalWriter;
 import org.getalp.lexsema.io.document.Semeval2007TextLoader;
 import org.getalp.lexsema.io.document.TextLoader;
 import org.getalp.lexsema.io.resource.LRLoader;
 import org.getalp.lexsema.io.resource.dictionary.DictionaryLRLoader;
 import org.getalp.lexsema.similarity.Document;
-import org.getalp.lexsema.similarity.measures.lesk.ACExtendedLeskSimilarity;
+import org.getalp.lexsema.similarity.measures.tverski.TverskiIndexSimilarityMeasureBuilder;
 import org.getalp.lexsema.wsd.configuration.Configuration;
-import org.getalp.lexsema.wsd.experiments.ga.wsd.GeneticAlgorithmDisambiguator;
+import org.getalp.lexsema.wsd.configuration.org.getalp.lexsema.wsd.evaluation.Semeval2007GoldStandard;
+import org.getalp.lexsema.wsd.configuration.org.getalp.lexsema.wsd.evaluation.StandardEvaluation;
+import org.getalp.lexsema.wsd.method.genetic.GeneticAlgorithmDisambiguator;
 import org.getalp.lexsema.wsd.method.Disambiguator;
-import org.getalp.lexsema.wsd.score.*;
+import org.getalp.lexsema.wsd.score.ConfigurationScorer;
+import org.getalp.lexsema.wsd.score.ConfigurationScorerWithCache;
+
+import java.io.File;
 
 public class GeneticAlgorithmDisambiguation
 {
     public static void main(String[] args)
     {
         int iterations = 1000;
-        int population = 20;
-        double crossoverRate = 0.7;
-        double mutationRate = 0.9;
+        int population = 100;
+        double crossoverRate = 0.6;
+        double mutationRate = 0.6;
         
         if (args.length >= 1) iterations = Integer.valueOf(args[0]);
         if (args.length >= 2) population = Integer.valueOf(args[1]);
@@ -44,9 +46,12 @@ public class GeneticAlgorithmDisambiguation
         //ConfigurationScorer scorer = new ACSimilarityConfigurationScorer(new ACExtendedLeskSimilarity());
         //ConfigurationScorer scorer = new ACSimilarityConfigurationScorer(new IndexedOverlapSimilarity());
         //ConfigurationScorer scorer = new TverskyConfigurationScorer(new ACExtendedLeskSimilarity(), Runtime.getRuntime().availableProcessors());
-        ConfigurationScorer scorer = new ConfigurationScorerWithCache(new ACExtendedLeskSimilarity());
+        ConfigurationScorer scorer = new ConfigurationScorerWithCache((new TverskiIndexSimilarityMeasureBuilder()).alpha(1).beta(0).gamma(0).fuzzyMatching(true).build());
         //ConfigurationScorer scorer = new TestScorer(new TverskyConfigurationScorer(new IndexedOverlapSimilarity(), Runtime.getRuntime().availableProcessors()));
-        
+
+        Semeval2007GoldStandard goldStandard = new Semeval2007GoldStandard();
+        StandardEvaluation evaluation = new StandardEvaluation();
+
         Disambiguator geneticDisambiguator = new GeneticAlgorithmDisambiguator(iterations, population, crossoverRate, mutationRate, scorer);
 
         System.out.println("Loading texts...");
@@ -62,9 +67,11 @@ public class GeneticAlgorithmDisambiguation
             System.out.println("Disambiguating...");
             Configuration c = geneticDisambiguator.disambiguate(d);
 
-            System.out.println("Writing results...");
-            SemevalWriter sw = new SemevalWriter(d.getId() + ".ans");
-            sw.write(d, c.getAssignments());
+            System.err.println(evaluation.evaluate(goldStandard, c));
+
+//            System.out.println("Writing results...");
+//            SemevalWriter sw = new SemevalWriter(d.getId() + ".ans");
+//            sw.write(d, c.getAssignments());
             
             System.out.println("Done!");
         }

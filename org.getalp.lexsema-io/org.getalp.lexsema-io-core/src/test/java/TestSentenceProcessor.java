@@ -1,6 +1,6 @@
-import org.getalp.lexsema.io.text.RussianPythonSentenceProcessor;
-import org.getalp.lexsema.io.text.SentenceProcessor;
-import org.getalp.lexsema.similarity.Sentence;
+import org.getalp.lexsema.io.text.RussianPythonTextProcessor;
+import org.getalp.lexsema.io.text.TextProcessor;
+import org.getalp.lexsema.similarity.Text;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,8 +12,8 @@ public class TestSentenceProcessor {
     Logger logger = LoggerFactory.getLogger(getClass());
     @Test
     public void testRussianSentenceProcessor() throws Exception {
-        SentenceProcessor sp = new RussianPythonSentenceProcessor();
-        Sentence s = sp.process("Как вам зовуть?", "");
+        TextProcessor sp = new RussianPythonTextProcessor();
+        Text s = sp.process("Как вам зовуть?", "");
         logger.info(s.toString());
     }
 }

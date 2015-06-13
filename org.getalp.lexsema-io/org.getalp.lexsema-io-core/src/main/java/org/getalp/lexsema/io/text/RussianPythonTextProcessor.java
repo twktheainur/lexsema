@@ -1,19 +1,17 @@
 package org.getalp.lexsema.io.text;
 
 
-import org.getalp.lexsema.similarity.Sentence;
-import org.getalp.lexsema.similarity.SentenceImpl;
-import org.getalp.lexsema.similarity.WordImpl;
+import org.getalp.lexsema.similarity.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.*;
 
-public class RussianPythonSentenceProcessor implements SentenceProcessor {
-    private static Logger logger = LoggerFactory.getLogger(RussianPythonSentenceProcessor.class);
+public class RussianPythonTextProcessor implements TextProcessor {
+    private static Logger logger = LoggerFactory.getLogger(RussianPythonTextProcessor.class);
     @Override
-    public Sentence process(String sentenceText, String documentId) {
-        Sentence resultSentence = new SentenceImpl("");
+    public Text process(String sentenceText, String documentId) {
+        Text resultSentence = new TextImpl();
         try {
             File tempText = File.createTempFile("lexsema_nlptools2", null);
             try (PrintWriter pw = new PrintWriter(tempText)) {

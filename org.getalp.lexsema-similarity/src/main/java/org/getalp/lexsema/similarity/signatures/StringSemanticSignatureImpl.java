@@ -26,6 +26,14 @@ public class StringSemanticSignatureImpl implements StringSemanticSignature {
         symbols = new ArrayList<>();
     }
 
+    public StringSemanticSignatureImpl(String symbolString) {
+        symbols = new ArrayList<>();
+        String[] tokens = symbolString.split("\\s");
+        for(String token: tokens){
+            addSymbol(token);
+        }
+    }
+
     private StringSemanticSignatureImpl(List<StringSemanticSymbol> symbols) {
         this.symbols = new ArrayList<>();
         Collections.copy(symbols, this.symbols);

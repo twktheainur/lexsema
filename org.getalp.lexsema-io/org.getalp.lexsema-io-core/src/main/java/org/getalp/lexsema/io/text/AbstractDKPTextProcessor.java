@@ -12,9 +12,9 @@ import org.apache.uima.resource.ResourceInitializationException;
 import org.apache.uima.resource.ResourceManager;
 import org.apache.uima.resource.ResourceSpecifier;
 import org.apache.uima.util.CasCreationUtils;
-import org.getalp.lexsema.io.uima.SentenceLevelConsumer;
+import org.getalp.lexsema.io.uima.TokenConsumer;
 import org.getalp.lexsema.io.uima.TokenAnnotationConsumer;
-import org.getalp.lexsema.similarity.Sentence;
+import org.getalp.lexsema.similarity.Text;
 import org.getalp.lexsema.util.Language;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,16 +25,16 @@ import static java.util.Arrays.asList;
 import static org.apache.uima.fit.factory.AnalysisEngineFactory.createEngineDescription;
 import static org.apache.uima.fit.factory.CollectionReaderFactory.createReaderDescription;
 
-public abstract class AbstractDKPSentenceProcessor implements SentenceProcessor {
+public abstract class AbstractDKPTextProcessor implements TextProcessor {
 
-    private Logger logger = LoggerFactory.getLogger(AbstractDKPSentenceProcessor.class);
+    private Logger logger = LoggerFactory.getLogger(AbstractDKPTextProcessor.class);
     private Language language;
 
-    protected AbstractDKPSentenceProcessor(Language language) {
+    protected AbstractDKPTextProcessor(Language language) {
         this.language = language;
     }
 
-    private Sentence processSentence(final ResourceSpecifier readerDesc,
+    private Text processSentence(final ResourceSpecifier readerDesc,
                                      AnalysisEngineDescription... engineDescriptions) throws UIMAException, IOException {
         ResourceManager resMgr = UIMAFramework.newDefaultResourceManager();
 
@@ -52,7 +52,7 @@ public abstract class AbstractDKPSentenceProcessor implements SentenceProcessor 
 
         try {
             // Process
-            SentenceLevelConsumer sac = new TokenAnnotationConsumer();
+            TokenConsumer sac = new TokenAnnotationConsumer();
             while (reader.hasNext()) {
                 reader.getNext(cas);
                 aae.process(cas);
@@ -61,7 +61,7 @@ public abstract class AbstractDKPSentenceProcessor implements SentenceProcessor 
             }
             // Signal end of processing
             aae.collectionProcessComplete();
-            return sac.getSentence();
+            return sac.getText();
         } finally {
             // Destroy
             aae.destroy();
@@ -72,7 +72,7 @@ public abstract class AbstractDKPSentenceProcessor implements SentenceProcessor 
 
     @SuppressWarnings("all")
     @Override
-    public Sentence process(String sentenceText, String documentId) {
+    public Text process(String sentenceText, String documentId) {
         try {
             CollectionReaderDescription cr = createReaderDescription(
                     StringReader.class,

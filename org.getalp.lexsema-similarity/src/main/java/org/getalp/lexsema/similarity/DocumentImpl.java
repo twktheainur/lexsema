@@ -41,6 +41,11 @@ public class DocumentImpl implements Document {
     }
 
     @Override
+    public Word getWord(int index) {
+        return getWord(0,index);
+    }
+
+    @Override
     public void addWord(Word w) {
         lexicalEntries.add(w);
     }
