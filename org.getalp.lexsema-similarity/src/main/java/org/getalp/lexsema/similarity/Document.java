@@ -1,6 +1,6 @@
 package org.getalp.lexsema.similarity;
 
-import org.getalp.lexsema.language.Language;
+import org.getalp.lexsema.util.Language;
 
 import java.util.List;
 
@@ -24,6 +24,7 @@ public interface Document extends Iterable<Word> {
 
 
     public Word getWord(int offset, int index);
+    public Word getWord(int index);
 
     public void addWord(Word w);
 

@@ -2,7 +2,6 @@ package org.getalp.lexsema.io.resource.dbnary;
 
 
 import org.getalp.lexsema.io.resource.LRLoader;
-import org.getalp.lexsema.language.Language;
 import org.getalp.lexsema.ontolex.LexicalEntry;
 import org.getalp.lexsema.ontolex.LexicalSense;
 import org.getalp.lexsema.ontolex.dbnary.DBNary;
@@ -22,6 +21,7 @@ import org.getalp.lexsema.similarity.cache.SenseCache;
 import org.getalp.lexsema.similarity.cache.SenseCacheImpl;
 import org.getalp.lexsema.similarity.signatures.StringSemanticSignature;
 import org.getalp.lexsema.similarity.signatures.StringSemanticSignatureImpl;
+import org.getalp.lexsema.util.Language;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -41,6 +41,7 @@ public class DBNaryLoaderImpl implements DBNaryLoader {
     private boolean shuffle;
     private boolean loadDefinitions;
     private boolean loadRelated;
+    private Language language;
 
 
     public DBNaryLoaderImpl(final String dbPath, final String ontologyPropertiesPath, final Language language)
@@ -53,8 +54,27 @@ public class DBNaryLoaderImpl implements DBNaryLoader {
         // Creating DBNary wrapper
         dbnary = (DBNary) LexicalResourceFactory.getLexicalResource(DBNary.class, model, language);
         senseCache = SenseCacheImpl.getInstance();
+        this.language = language;
     }
 
+    public DBNaryLoaderImpl(DBNary dbNary)
+            throws IOException, InvocationTargetException, NoSuchMethodException,
+            ClassNotFoundException, InstantiationException, IllegalAccessException {
+        model = dbNary.getModel();
+        // Creating DBNary wrapper
+        dbnary = dbNary;
+        senseCache = SenseCacheImpl.getInstance();
+    }
+
+    public DBNaryLoaderImpl(DBNary dbNary, Language language)
+            throws IOException, InvocationTargetException, NoSuchMethodException,
+            ClassNotFoundException, InstantiationException, IllegalAccessException {
+        model = dbNary.getModel();
+        // Creating DBNary wrapper
+        dbnary = dbNary;
+        senseCache = SenseCacheImpl.getInstance();
+        this.language = language;
+    }
 
     @SuppressWarnings("FeatureEnvy")
     @Override
@@ -66,7 +86,7 @@ public class DBNaryLoaderImpl implements DBNaryLoader {
         List<LexicalEntry> les;
         LexicalEntry returnEntry = null;
         try {
-            v = dbnary.getVocable(lemma);
+            v = dbnary.getVocable(lemma, language);
             les = dbnary.getLexicalEntries(v);
             int currentEntry = 0;
             int size = les.size();
@@ -82,7 +102,7 @@ public class DBNaryLoaderImpl implements DBNaryLoader {
                 }
             }
         } catch (NoSuchVocableException e) {
-            logger.error(e.toString());
+            logger.warn(e.toString());
         }
         return returnEntry;
     }

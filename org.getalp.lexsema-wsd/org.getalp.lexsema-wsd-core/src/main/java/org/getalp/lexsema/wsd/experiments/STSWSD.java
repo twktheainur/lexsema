@@ -4,10 +4,10 @@ import com.wcohen.ss.ScaledLevenstein;
 import org.getalp.lexsema.io.resource.LRLoader;
 import org.getalp.lexsema.io.resource.wordnet.WordnetLoader;
 import org.getalp.lexsema.io.sentences.STS2013SentencePairLoader;
-import org.getalp.lexsema.similarity.Sentence;
+import org.getalp.lexsema.similarity.Text;
 import org.getalp.lexsema.similarity.Word;
 import org.getalp.lexsema.similarity.measures.SimilarityMeasure;
-import org.getalp.lexsema.similarity.measures.TverskiIndexSimilarityMeasureBuilder;
+import org.getalp.lexsema.similarity.measures.tverski.TverskiIndexSimilarityMeasureBuilder;
 import org.getalp.lexsema.similarity.signatures.StringSemanticSignature;
 import org.getalp.lexsema.similarity.signatures.StringSemanticSignatureImpl;
 import org.getalp.lexsema.similarity.signatures.StringSemanticSymbolImpl;
@@ -74,9 +74,9 @@ public class STSWSD {
         spl.load();
 
 
-        for (List<Sentence> sp : spl.getSentencePairs()) {
-            Sentence sentence1 = sp.get(0);
-            Sentence sentence2 = sp.get(1);
+        for (List<Text> sp : spl.getSentencePairs()) {
+            Text sentence1 = sp.get(0);
+            Text sentence2 = sp.get(1);
             System.err.println("Processing sentence pair: ");
             System.err.println("\t" + sentence1);
             System.err.println("\t" + sentence2);

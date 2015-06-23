@@ -1,20 +1,20 @@
 package org.getalp.lexsema.wsd.experiments;
 
-import cern.colt.matrix.Norm;
 import org.getalp.lexsema.io.annotresult.SemevalWriter;
 import org.getalp.lexsema.io.document.Semeval2007TextLoader;
 import org.getalp.lexsema.io.document.TextLoader;
 import org.getalp.lexsema.io.resource.LRLoader;
 import org.getalp.lexsema.io.resource.dictionary.DictionaryLRLoader;
 import org.getalp.lexsema.similarity.Document;
-import org.getalp.lexsema.similarity.measures.IndexedOverlapSimilarity;
 import org.getalp.lexsema.similarity.measures.SimilarityMeasure;
+import org.getalp.lexsema.similarity.measures.tverski.TverskiIndexSimilarityMeasureBuilder;
 import org.getalp.lexsema.wsd.configuration.Configuration;
 import org.getalp.lexsema.wsd.method.Disambiguator;
 import org.getalp.lexsema.wsd.method.SimulatedAnnealing;
 import org.getalp.lexsema.wsd.score.ConfigurationScorer;
 import org.getalp.lexsema.wsd.score.MatrixTverskiConfigurationScorer;
-import org.getalp.ml.matrix.score.NormMatrixScorer;
+import org.getalp.ml.matrix.filters.NormalizationFilter;
+import org.getalp.ml.matrix.score.SumMatrixScorer;
 
 import java.io.File;
 
@@ -32,9 +32,9 @@ public class AdaptiveSimulatedAnnealingDisambiguation {
         //        .extendedSignature(true).loadDefinitions(true).shuffle(false);
         SimilarityMeasure sim;
 
-        sim = new IndexedOverlapSimilarity().normalize(false);
+        //sim = new IndexedOverlapSimilarity().normalize(false);
         //sim = new ACExtendedLeskSimilarity();
-        //sim = new TverskiIndexSimilarityMeasureBuilder().alpha(1d).beta(0d).gamma(0d).fuzzyMatching(false).computeRatio(false).build();
+        sim = new TverskiIndexSimilarityMeasureBuilder().alpha(1d).beta(0d).gamma(0d).fuzzyMatching(false).computeRatio(false).build();
 
         if (args.length < 4) {
             System.err.println("Usage: aSAD [P0] [cR] [cT] [It] (threads)");
@@ -51,11 +51,11 @@ public class AdaptiveSimulatedAnnealingDisambiguation {
             threads = Runtime.getRuntime().availableProcessors();
         }
 
-        ConfigurationScorer configurationScorer = new MatrixTverskiConfigurationScorer(sim, new NormMatrixScorer(Norm.Frobenius), threads);
+        ConfigurationScorer configurationScorer = new MatrixTverskiConfigurationScorer(sim, new NormalizationFilter(NormalizationFilter.NormalizationType.UNIT_NORM), new SumMatrixScorer(), threads);
         //ConfigurationScorer configurationScorer = new TverskyConfigurationScorer(sim, threads);
         // ConfigurationScorer configurationScorer = new ACSimilarityConfigurationScorer(sim);
 
-        Disambiguator sl_full = new SimulatedAnnealing(accptProb, cR, (int) convThresh, iterations, configurationScorer, 200);
+        Disambiguator sl_full = new SimulatedAnnealing(accptProb, cR, (int) convThresh, iterations, configurationScorer, 1000);
 
         System.err.println("Loading texts");
         dl.load();

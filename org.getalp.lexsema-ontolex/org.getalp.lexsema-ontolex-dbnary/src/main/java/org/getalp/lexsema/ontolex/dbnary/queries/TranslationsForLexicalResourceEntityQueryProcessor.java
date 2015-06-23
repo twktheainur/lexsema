@@ -3,7 +3,7 @@ package org.getalp.lexsema.ontolex.dbnary.queries;
 import com.hp.hpl.jena.query.QuerySolution;
 import com.hp.hpl.jena.rdf.model.RDFNode;
 import com.hp.hpl.jena.sparql.core.Var;
-import org.getalp.lexsema.language.Language;
+import org.getalp.lexsema.util.Language;
 import org.getalp.lexsema.ontolex.LexicalResourceEntity;
 import org.getalp.lexsema.ontolex.dbnary.Translation;
 import org.getalp.lexsema.ontolex.factories.entities.LexicalResourceEntityFactory;

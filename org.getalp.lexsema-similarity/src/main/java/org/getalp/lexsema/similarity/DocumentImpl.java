@@ -1,7 +1,7 @@
 package org.getalp.lexsema.similarity;
 
 
-import org.getalp.lexsema.language.Language;
+import org.getalp.lexsema.util.Language;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -38,6 +38,11 @@ public class DocumentImpl implements Document {
     @Override
     public Word getWord(int offset, int index) {
         return lexicalEntries.get(index + offset);
+    }
+
+    @Override
+    public Word getWord(int index) {
+        return getWord(0,index);
     }
 
     @Override

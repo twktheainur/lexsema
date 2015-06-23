@@ -7,7 +7,7 @@ import org.getalp.lexsema.io.resource.LRLoader;
 import org.getalp.lexsema.io.resource.wordnet.WordnetLoader;
 import org.getalp.lexsema.similarity.Document;
 import org.getalp.lexsema.similarity.measures.SimilarityMeasure;
-import org.getalp.lexsema.similarity.measures.TverskiIndexSimilarityMeasureMatrixImplBuilder;
+import org.getalp.lexsema.similarity.measures.tverski.TverskiIndexSimilarityMeasureMatrixImplBuilder;
 import org.getalp.lexsema.wsd.configuration.Configuration;
 import org.getalp.lexsema.wsd.method.Disambiguator;
 import org.getalp.lexsema.wsd.method.MatrixBatAlgorithm;

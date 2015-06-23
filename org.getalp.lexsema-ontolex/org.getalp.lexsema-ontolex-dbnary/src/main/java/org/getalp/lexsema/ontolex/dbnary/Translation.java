@@ -1,6 +1,6 @@
 package org.getalp.lexsema.ontolex.dbnary;
 
-import org.getalp.lexsema.language.Language;
+import org.getalp.lexsema.util.Language;
 import org.getalp.lexsema.ontolex.LexicalResourceEntity;
 
 /**

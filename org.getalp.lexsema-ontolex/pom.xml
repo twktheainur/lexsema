@@ -42,11 +42,11 @@
 
     </build>
 
-    <dependencies>
+    <!--dependencies>
         <dependency>
             <groupId>com.openlinksw.virtuoso</groupId>
             <artifactId>virt_jena2</artifactId>
             <version>2.10.1_B1.9</version>
         </dependency>
-    </dependencies>
+    </dependencies-->
 </project>

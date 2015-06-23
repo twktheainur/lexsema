@@ -2,8 +2,8 @@ package org.getalp.lexsema.acceptali.closure.generator;
 
 import org.getalp.lexsema.acceptali.closure.LexicalResourceTranslationClosure;
 import org.getalp.lexsema.acceptali.closure.LexicalResourceTranslationClosureImpl;
-import org.getalp.lexsema.language.Language;
 import org.getalp.lexsema.ontolex.*;
+import org.getalp.lexsema.util.Language;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -1,16 +1,16 @@
 package org.getalp.lexsema.wsd.score;
 
+import org.getalp.lexsema.similarity.Document;
+import org.getalp.lexsema.similarity.Sense;
+import org.getalp.lexsema.similarity.measures.SimilarityMeasure;
+import org.getalp.lexsema.wsd.configuration.Configuration;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
-
-import org.getalp.lexsema.similarity.Document;
-import org.getalp.lexsema.similarity.Sense;
-import org.getalp.lexsema.similarity.measures.SimilarityMeasure;
-import org.getalp.lexsema.wsd.configuration.Configuration;
 
 public class ConfigurationScorerWithCache implements ConfigurationScorer
 {
@@ -104,6 +104,7 @@ public class ConfigurationScorerWithCache implements ConfigurationScorer
                 }
                 else
                 {
+                    List<Sense> sensesA = d.getSenses(i);
                     Sense senseA = d.getSenses(i).get(k);
                     Sense senseB = d.getSenses(j).get(l);
                     double similarity = senseA.computeSimilarityWith(similarityMeasure, senseB);

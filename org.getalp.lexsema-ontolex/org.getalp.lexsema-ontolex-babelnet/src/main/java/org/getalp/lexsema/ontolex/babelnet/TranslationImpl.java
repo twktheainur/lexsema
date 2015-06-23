@@ -2,6 +2,7 @@ package org.getalp.lexsema.ontolex.babelnet;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.getalp.lexsema.language.Language;
 import org.getalp.lexsema.ontolex.AbstractLexicalResourceEntity;
 import org.getalp.lexsema.ontolex.LexicalResource;
 import org.getalp.lexsema.ontolex.LexicalResourceEntity;
@@ -13,7 +14,7 @@ public class TranslationImpl extends AbstractLexicalResourceEntity implements Tr
     private String gloss;
     private Integer translationNumber;
     private String writtenForm;
-    private String language;
+    private Language language;
 
     /**
      * Constructor for a DBNary Translation
@@ -25,11 +26,16 @@ public class TranslationImpl extends AbstractLexicalResourceEntity implements Tr
     @SuppressWarnings("ConstructorWithTooManyParameters")
     public TranslationImpl(LexicalResource r, String uri, LexicalResourceEntity parent,
                            String gloss, int translationNumber,
-                           String writtenForm, String targetLanguage) {
+                           String writtenForm, Language targetLanguage) {
         super(r, uri, parent);
         this.gloss = gloss;
         this.translationNumber = translationNumber;
         this.writtenForm = writtenForm;
         language = targetLanguage;
+    }
+
+    @Override
+    public void setLanguage(Language language) {
+        this.language = language;
     }
 }

@@ -1,9 +1,9 @@
 package org.getalp.lexsema.io.annotresult;
 
 
-import org.getalp.lexsema.language.Language;
 import org.getalp.lexsema.ontolex.dbnary.Translation;
 import org.getalp.lexsema.similarity.Word;
+import org.getalp.lexsema.util.Language;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -1,11 +1,11 @@
 package org.getalp.lexsema.ontolex.dbnary;
 
-import org.getalp.lexsema.language.Language;
 import org.getalp.lexsema.ontolex.LexicalEntry;
 import org.getalp.lexsema.ontolex.LexicalResource;
 import org.getalp.lexsema.ontolex.LexicalResourceEntity;
 import org.getalp.lexsema.ontolex.dbnary.exceptions.NoSuchVocableException;
 import org.getalp.lexsema.ontolex.dbnary.relations.DBNaryRelationType;
+import org.getalp.lexsema.util.Language;
 
 import java.util.List;
 

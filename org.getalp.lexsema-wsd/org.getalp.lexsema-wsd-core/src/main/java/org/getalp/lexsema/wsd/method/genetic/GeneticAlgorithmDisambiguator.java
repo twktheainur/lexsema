@@ -73,6 +73,6 @@ public class GeneticAlgorithmDisambiguator implements Disambiguator
 
     public void release()
     {
-        
+        scorer.release();
     }
 }

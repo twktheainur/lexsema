@@ -1,0 +1,218 @@
+<S>
+Мосгорсуд	Мосгорсуд	NOUN	masc,nomn,inan,sing
+удовлетворил	удовлетворить	VERB	tran,masc,indc,perf,past,sing
+ходатайство	ходатайство	NOUN	sing,nomn,inan,neut
+о	о	PREP
+рассмотрении	рассмотрение	NOUN	sing,loct,inan,neut
+дела	деть	VERB	tran,indc,perf,femn,past,sing
+об	о	PREP	Vpre
+убийстве	убийство	NOUN	sing,loct,inan,neut
+Анны	Анна	NOUN	sing,gent,Name,femn,anim
+Политковской	Политковская	NOUN	gent,Sgtm,femn,anim,Surn,sing
+с	с	PREP
+участием	участие	NOUN	sing,ablt,inan,neut
+присяжных	присяжный	ADJF	Qual,plur,gent
+.	.	PNCT
+</S>
+<S>
+Об	О	PREP	Vpre
+этом	это	NPRO	loct,neut,sing
+4	4	NUMB	intg
+июня	июнь	NOUN	gent,masc,inan,sing
+сообщает	сообщать	VERB	tran,indc,3per,impf,pres,sing
+РИА	РИА	NOUN	inan,Sgtm,neut,nomn,Orgn,Fixd,sing
+Новости	Новость	NOUN	sing,gent,inan,femn
+.	.	PNCT
+</S>
+<S>
+Отбор	Отбор	NOUN	masc,nomn,inan,sing
+коллегии	коллегия	NOUN	sing,gent,inan,femn
+присяжных	присяжный	ADJF	Qual,plur,gent
+состоится	состояться	VERB	indc,futr,perf,3per,intr,sing
+20	20	NUMB	intg
+июня	июнь	NOUN	gent,masc,inan,sing
+.	.	PNCT
+</S>
+<S>
+В	В	PREP
+то	то	CONJ
+же	же	PRCL
+время	время	NOUN	sing,accs,inan,neut
+суд	суд	NOUN	masc,nomn,inan,sing
+отклонил	отклонить	VERB	tran,masc,indc,perf,past,sing
+ходатайство	ходатайство	NOUN	sing,nomn,inan,neut
+защиты	защита	NOUN	sing,gent,inan,femn
+о	о	PREP
+возвращении	возвращение	NOUN	sing,loct,inan,neut
+дела	деть	VERB	tran,indc,perf,femn,past,sing
+в	в	PREP
+прокуратуру	прокуратура	NOUN	sing,accs,inan,femn
+.	.	PNCT
+</S>
+<S>
+Адвокаты	Адвокат	NOUN	masc,plur,nomn,anim
+утверждали	утверждать	VERB	plur,past,indc,intr,impf
+,	,	PNCT
+что	что	CONJ
+следователи	следователь	NOUN	masc,plur,nomn,anim
+изъяли	изъять	VERB	tran,plur,past,indc,perf
+из	из	PREP
+дела	деть	VERB	tran,indc,perf,femn,past,sing
+ряд	ряд	NOUN	masc,nomn,inan,sing
+доказательств	доказательство	NOUN	gent,plur,inan,neut
+и	и	CONJ
+в	в	PREP
+целом	целый	ADJF	loct,Qual,masc,sing
+сильно	сильно	ADVB
+изменили	изменить	VERB	tran,plur,past,indc,perf
+материалы	материал	NOUN	masc,plur,accs,inan
+по	по	PREP
+сравнению	сравнение	NOUN	sing,datv,inan,neut
+с	с	PREP
+предыдущим	предыдущий	ADJF	masc,ablt,sing
+рассмотрением	рассмотрение	NOUN	sing,ablt,inan,neut
+(	(	PNCT
+которое	который	ADJF	Anph,neut,nomn,Subx,Apro,sing
+завершилось	завершиться	VERB	indc,neut,perf,intr,past,sing
+оправдательным	оправдательный	ADJF	masc,ablt,sing
+вердиктом	вердикт	NOUN	masc,ablt,inan,sing
+,	,	PNCT
+впоследствии	впоследствии	ADVB
+отмененным	отменить	PRTF	tran,masc,ablt,perf,pssv,past,sing
+Верховным	Верховный	ADJF	Qual,plur,datv
+судом	суд	NOUN	masc,ablt,inan,sing
+РФ	РФ	NOUN	Abbr,Geox,inan,Sgtm,gent,femn,Fixd,sing
+)	)	PNCT
+.	.	PNCT
+</S>
+<S>
+На	На	PREP
+скамье	скамья	NOUN	sing,loct,inan,femn
+подсудимых	подсудимый	NOUN	masc,plur,gent,anim
+находятся	находиться	VERB	indc,plur,intr,3per,impf,pres
+бывший	бывший	ADJF	masc,nomn,sing
+милиционер	милиционер	NOUN	masc,nomn,sing,anim
+Сергей	Сергей	NOUN	masc,Name,nomn,sing,anim
+Хаджикурбанов	Хаджикурбан	NOUN	masc,plur,Name,gent,anim
+,	,	PNCT
+трое	трое	NUMR	Coll,nomn
+братьев	брат	NOUN	masc,plur,gent,anim
+Махмудовых	Махмудов	NOUN	Ms-f,gent,plur,anim,GNdr,Surn,Pltm
+и	и	CONJ
+их	они	NPRO	plur,Anph,3per,gent
+дядя	дядя	NOUN	masc,nomn,sing,anim
+Лом-Али	Лом-Али	NOUN	masc,nomn,inan,sing
+Гайтукаев	Гайтукай	NOUN	masc,plur,Name,gent,anim
+.	.	PNCT
+</S>
+<S>
+Еще	Еще	PRCL
+один	один	ADJF	masc,nomn,Apro,sing
+фигурант	фигурант	NOUN	masc,nomn,sing,anim
+дела	дело	NOUN	sing,gent,inan,neut
+,	,	PNCT
+бывший	бывший	ADJF	masc,nomn,sing
+милиционер	милиционер	NOUN	masc,nomn,sing,anim
+Дмитрий	Дмитрий	NOUN	masc,Name,nomn,sing,anim
+Павлюченков	Павлюченков	NOUN	masc,Sgtm,nomn,anim,Surn,sing
+,	,	PNCT
+ранее	ранее	ADVB
+пошел	пойти	VERB	masc,indc,perf,intr,past,sing
+на	на	PREP
+сделку	сделка	NOUN	sing,accs,inan,femn
+с	с	PREP
+со	с	PREP	Vpre
+следствием	следствие	NOUN	sing,ablt,inan,neut
+.	.	PNCT
+</S>
+<S>
+Его	Он	NPRO	masc,accs,Anph,3per,sing
+судили	судить	VERB	tran,plur,past,indc,impf
+отдельно	отдельно	ADVB
+,	,	PNCT
+он	он	NPRO	masc,Anph,nomn,3per,sing
+получил	получить	VERB	tran,masc,indc,perf,past,sing
+11	11	NUMB	intg
+лет	год	NOUN	masc,plur,inan,gent
+колонии	колония	NOUN	sing,gent,inan,femn
+.	.	PNCT
+</S>
+<S>
+Политковская	Политковская	NOUN	Sgtm,nomn,femn,anim,Surn,sing
+была	быть	VERB	indc,intr,femn,impf,past,sing
+застрелена	застрелить	PRTS	past,pssv,perf,femn,sing
+в	в	PREP
+подъезде	подъезд	NOUN	loct,masc,inan,sing
+своего	свой	ADJF	sing,gent,Anph,Apro,neut
+дома	дом	NOUN	gent,masc,inan,sing
+в	в	PREP
+октябре	октябрь	NOUN	loct,masc,inan,sing
+2006	2006	NUMB	intg
+года	год	NOUN	gent,masc,inan,sing
+.	.	PNCT
+</S>
+<S>
+По	По	PREP
+версии	версия	NOUN	sing,datv,inan,femn
+следствия	следствие	NOUN	sing,gent,inan,neut
+,	,	PNCT
+выстрел	выстрел	NOUN	masc,nomn,inan,sing
+произвел	произвести	VERB	tran,masc,indc,perf,past,sing
+Рустам	Рустам	NOUN	masc,Name,nomn,sing,anim
+Махмудов	Махмуд	NOUN	masc,plur,Name,gent,anim
+.	.	PNCT
+</S>
+<S>
+Его	Его	ADJF	Anph,gent,femn,Apro,Fixd,sing
+братья	брат	NOUN	masc,plur,nomn,anim
+Ибрагим	Ибрагим	NOUN	masc,Name,nomn,sing,anim
+и	и	CONJ
+Джабраил	Джабраил	NOUN	masc,Name,nomn,sing,anim
+оказывали	оказывать	VERB	tran,plur,past,indc,impf
+ему	он	NPRO	datv,masc,Anph,3per,sing
+различную	различный	ADJF	Qual,accs,femn,sing
+помощь	помощь	NOUN	sing,accs,inan,femn
+.	.	PNCT
+</S>
+<S>
+Гайтукаев	Гайтукай	NOUN	masc,plur,Name,gent,anim
+,	,	PNCT
+Павлюченков	Павлюченков	NOUN	masc,Sgtm,nomn,anim,Surn,sing
+и	и	CONJ
+Хаджикурбанов	Хаджикурбан	NOUN	masc,plur,Name,gent,anim
+выполняли	выполнять	VERB	tran,plur,past,indc,impf
+организаторские	организаторский	ADJF	plur,nomn
+роли	роля	NOUN	sing,gent,inan,femn
+.	.	PNCT
+</S>
+<S>
+Личности	Личность	NOUN	sing,gent,inan,femn
+заказчиков	заказчик	NOUN	masc,plur,gent,anim
+убийства	убийство	NOUN	sing,gent,inan,neut
+формально	формально	ADVB
+не	не	PRCL
+установлены	установить	PRTS	past,plur,pssv,perf
+,	,	PNCT
+хотя	хотя	CONJ
+в	в	PREP
+СМИ	СМИ	NOUN	inan,plur,nomn,GNdr,Fixd,Pltm
+появлялась	появляться	VERB	indc,intr,femn,impf,past,sing
+информация	информация	NOUN	sing,nomn,inan,femn
+о	о	PREP
+том	тот	ADJF	Anph,neut,loct,Subx,Apro,sing
+,	,	PNCT
+что	что	CONJ
+заказать	заказать	INFN	tran,perf
+преступление	преступление	NOUN	sing,accs,inan,neut
+могли	мочь	VERB	plur,past,indc,intr,impf
+представитель	представитель	NOUN	masc,nomn,sing,anim
+чеченских	чеченский	ADJF	plur,gent
+сепаратистов	сепаратист	NOUN	masc,plur,gent,anim
+Ахмед	Ахмед	NOUN	masc,Name,nomn,sing,anim
+Закаев	Закаев	NOUN	masc,Sgtm,nomn,anim,Surn,sing
+или	или	CONJ
+предприниматель	предприниматель	NOUN	masc,nomn,sing,anim
+Борис	Борис	NOUN	masc,Name,nomn,sing,anim
+Березовский	Березовский	NOUN	masc,Sgtm,nomn,anim,Surn,sing
+.	.	PNCT
+</S>

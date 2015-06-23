@@ -1,7 +1,7 @@
 package org.getalp.lexsema.ontolex.dbnary;
 
 import lombok.ToString;
-import org.getalp.lexsema.language.Language;
+import org.getalp.lexsema.util.Language;
 import org.getalp.lexsema.ontolex.LexicalEntry;
 import org.getalp.lexsema.ontolex.LexicalResourceEntity;
 import org.getalp.lexsema.ontolex.OntolexLexicalResource;
@@ -67,7 +67,7 @@ public final class DBNaryImpl extends OntolexLexicalResource implements DBNary {
     @Override
     public List<Vocable> getVocables() {
         QueryProcessor<Vocable> retrieveAllVocableQP = new RetrieveAllVocablesQueryProcessor(getGraph(),
-                getLexicalResourceEntityFactory());
+                getLexicalResourceEntityFactory(),language);
         retrieveAllVocableQP.runQuery();
         return retrieveAllVocableQP.processResults();
     }

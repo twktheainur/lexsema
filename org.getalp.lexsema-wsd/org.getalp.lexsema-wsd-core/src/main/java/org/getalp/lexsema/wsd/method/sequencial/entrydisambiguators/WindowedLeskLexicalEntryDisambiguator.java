@@ -5,8 +5,8 @@ import org.getalp.lexsema.similarity.measures.SimilarityMeasure;
 import org.getalp.lexsema.wsd.configuration.Configuration;
 import org.getalp.lexsema.wsd.configuration.SubConfiguration;
 import org.getalp.lexsema.wsd.method.sequencial.parameters.WindowedLeskParameters;
-import org.getalp.lexsema.wsd.score.ACSimilarityConfigurationScorer;
 import org.getalp.lexsema.wsd.score.ConfigurationScorer;
+import org.getalp.lexsema.wsd.score.TverskyConfigurationScorer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,7 +27,7 @@ public class WindowedLeskLexicalEntryDisambiguator extends SequentialLexicalEntr
         super(c, d, start, end, currentIndex);
         this.params = params;
         similarityMeasure = sim;
-        configurationScorer = new ACSimilarityConfigurationScorer(sim);
+        configurationScorer = new TverskyConfigurationScorer(sim, Runtime.getRuntime().availableProcessors());
     }
 
     @Override

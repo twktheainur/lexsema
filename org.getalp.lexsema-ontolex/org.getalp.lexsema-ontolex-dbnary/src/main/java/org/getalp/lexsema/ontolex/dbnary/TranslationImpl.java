@@ -2,7 +2,7 @@ package org.getalp.lexsema.ontolex.dbnary;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import org.getalp.lexsema.language.Language;
+import org.getalp.lexsema.util.Language;
 import org.getalp.lexsema.ontolex.AbstractLexicalResourceEntity;
 import org.getalp.lexsema.ontolex.LexicalResource;
 import org.getalp.lexsema.ontolex.LexicalResourceEntity;

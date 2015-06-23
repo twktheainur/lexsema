@@ -2,11 +2,11 @@ package org.getalp.lexsema.similarity;
 
 import com.hp.hpl.jena.graph.Node;
 import lombok.EqualsAndHashCode;
-import org.getalp.lexsema.language.Language;
 import org.getalp.lexsema.ontolex.LexicalEntry;
 import org.getalp.lexsema.ontolex.LexicalResource;
 import org.getalp.lexsema.ontolex.LexicalResourceEntity;
 import org.getalp.lexsema.ontolex.graph.OntologyModel;
+import org.getalp.lexsema.util.Language;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -162,5 +162,10 @@ public class WordImpl implements Word {
     @Override
     public int compareTo(LexicalResourceEntity o) {
         return id.compareTo(o.getNode().toString());
+    }
+
+    @Override
+    public String toString() {
+        return lexicalEntry.toString();
     }
 }

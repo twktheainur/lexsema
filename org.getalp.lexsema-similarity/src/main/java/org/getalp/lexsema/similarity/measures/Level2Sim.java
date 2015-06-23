@@ -34,6 +34,15 @@ public class Level2Sim implements SimilarityMeasure {
         return 0;
     }
 
+    @Override
+    public double compute(StringSemanticSignature sigA, StringSemanticSignature sigB) {
+        return compute(sigA,sigB,null,null);
+    }
+    @Override
+    public double compute(IndexedSemanticSignature sigA, IndexedSemanticSignature sigB) {
+        return compute(sigA,sigB,null, null);
+    }
+
     private double compute(Iterable<String> a, Iterable<String> b) {
         String sa = "";
         String sb = "";

@@ -1,6 +1,6 @@
 package org.getalp.lexsema.ontolex.dbnary;
 
-import org.getalp.lexsema.language.Language;
+import org.getalp.lexsema.util.Language;
 import org.getalp.lexsema.ontolex.LexicalEntry;
 import org.getalp.lexsema.ontolex.LexicalResourceEntity;
 import org.getalp.lexsema.ontolex.LexicalSense;
@@ -66,7 +66,11 @@ public class MultilingualDBNaryImpl implements DBNary {
 
     @Override
     public List<Vocable> getVocables() {
-        return resourceMap.get(defaultLanguage).getVocables();
+        List<Vocable> vocables = new ArrayList<>();
+        for(Language language : resourceMap.keySet()) {
+            vocables.addAll(resourceMap.get(language).getVocables());
+        }
+        return vocables;
     }
 
     @Override
