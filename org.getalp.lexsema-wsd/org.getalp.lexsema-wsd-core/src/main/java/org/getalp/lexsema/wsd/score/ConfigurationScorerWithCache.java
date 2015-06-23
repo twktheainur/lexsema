@@ -94,6 +94,7 @@ public class ConfigurationScorerWithCache implements ConfigurationScorer
         {
             double score = 0;
             int k = c.getAssignment(i);
+            Sense senseA = d.getSenses(i).get(k);
             for (int j = i + 1 ; j < c.size() ; j++)
             {
                 int l = c.getAssignment(j);
@@ -104,8 +105,6 @@ public class ConfigurationScorerWithCache implements ConfigurationScorer
                 }
                 else
                 {
-                    List<Sense> sensesA = d.getSenses(i);
-                    Sense senseA = d.getSenses(i).get(k);
                     Sense senseB = d.getSenses(j).get(l);
                     double similarity = senseA.computeSimilarityWith(similarityMeasure, senseB);
                     score += similarity;

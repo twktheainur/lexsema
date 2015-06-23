@@ -30,6 +30,9 @@ public class ACExtendedLeskSimilarity implements SimilarityMeasure {
 
     @Override
     public double compute(IndexedSemanticSignature sigA, IndexedSemanticSignature sigB, Map<String, IndexedSemanticSignature> relatedSignaturesA, Map<String, IndexedSemanticSignature> relatedSignaturesB) {
-        return 0;
+        Definition defA = new Definition(sigA.toString());
+        Definition defB = new Definition(sigB.toString());
+        DefinitionInput di = new DefinitionInput(defA, defB, null);
+        return new ExtendedLeskSenseSimilarity().computeSimilarity(di, false);
     }
 }
