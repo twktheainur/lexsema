@@ -1,6 +1,9 @@
 package org.getalp.lexsema.wsd.experiments;
 
 import java.io.File;
+import java.io.PrintWriter;
+import java.util.Locale;
+import java.util.Scanner;
 
 import org.getalp.lexsema.io.document.Semeval2007TextLoader;
 import org.getalp.lexsema.io.document.TextLoader;
@@ -13,33 +16,32 @@ import org.getalp.lexsema.wsd.method.CuckooSearchDisambiguator;
 import org.getalp.lexsema.wsd.method.SimulatedAnnealing2;
 import org.getalp.lexsema.wsd.method.StopCondition;
 import org.getalp.lexsema.wsd.method.genetic.GeneticAlgorithmDisambiguator;
-import org.getalp.lexsema.wsd.parameters.annealing.AnnealingParameters;
-import org.getalp.lexsema.wsd.parameters.annealing.AnnealingParametersFactory;
-import org.getalp.lexsema.wsd.parameters.annealing.AnnealingParametersScorer;
-import org.getalp.lexsema.wsd.parameters.bat.BatParameters;
-import org.getalp.lexsema.wsd.parameters.bat.BatParametersFactory;
-import org.getalp.lexsema.wsd.parameters.bat.BatParametersScorer;
-import org.getalp.lexsema.wsd.parameters.cuckoo.CuckooParameters;
-import org.getalp.lexsema.wsd.parameters.cuckoo.CuckooParametersFactory;
-import org.getalp.lexsema.wsd.parameters.cuckoo.CuckooParametersScorer;
-import org.getalp.lexsema.wsd.parameters.genetic.GeneticParameters;
-import org.getalp.lexsema.wsd.parameters.genetic.GeneticParametersFactory;
-import org.getalp.lexsema.wsd.parameters.genetic.GeneticParametersScorer;
-import org.getalp.lexsema.wsd.parameters.method.CuckooSearchParameterEstimator;
 import org.getalp.lexsema.wsd.score.ConfigurationScorer;
 import org.getalp.lexsema.wsd.score.SemEval2007Task7PerfectConfigurationScorer;
 
 public class AlgorithmsComparison
 {
+    private static StopCondition stopConditionEvaluation;
     private static LRLoader lrloader;
     private static TextLoader dlEvaluation;
-    private static TextLoader dlTraining;
     private static ConfigurationScorer configScorer;
-    private static StopCondition stopConditionEvaluation;
-    private static StopCondition stopConditionTraining;
     
-    public static void main(String[] args)
+    public static void main(String[] args) throws Exception
     {
+        String condition = "sc";
+        long value = 2000;
+        if (args.length >= 1) condition = args[0];
+        if (args.length >= 2) value = Long.valueOf(args[1]);
+        
+        System.out.println("Parameters value : " +
+                           "<condition = " + condition + " (ms/it/sc)> " +
+                           "<condition value = " + value + "> ");
+        
+        if (condition.equals("ms")) stopConditionEvaluation = new StopCondition(StopCondition.Condition.MILLISECONDS, value);
+        else if (condition.equals("it")) stopConditionEvaluation = new StopCondition(StopCondition.Condition.ITERATIONS, value);
+        else if (condition.equals("sc")) stopConditionEvaluation = new StopCondition(StopCondition.Condition.SCORERCALLS, value);
+        else stopConditionEvaluation = new StopCondition(StopCondition.Condition.MILLISECONDS, value);
+        
         lrloader = new DictionaryLRLoader(new File("../data/dictionnaires-lesk/dict-adapted-all-relations.xml"));
 
         dlEvaluation = new Semeval2007TextLoader("../data/senseval2007_task7/test/evaluation.xml");
@@ -47,78 +49,61 @@ public class AlgorithmsComparison
         dlEvaluation.load();
         for (Document d : dlEvaluation) lrloader.loadSenses(d);
 
-        dlTraining = new Semeval2007TextLoader("../data/senseval2007_task7/test/training.xml");
-        dlTraining.loadNonInstances(false);
-        dlTraining.load();
-        for (Document d : dlTraining) lrloader.loadSenses(d);
-
         configScorer = new SemEval2007Task7PerfectConfigurationScorer();
 
-        stopConditionEvaluation = new StopCondition(StopCondition.Condition.MILLISECONDS, 1000);
-
-        stopConditionTraining = new StopCondition(StopCondition.Condition.MILLISECONDS, 50);
+        Scanner reader = new Scanner(new File("../parameters.txt"));
+        reader.useLocale(Locale.ENGLISH);
         
-        CuckooParameters csaParams = getOptimalCuckooParameters();
-        CuckooSearchDisambiguator csa = new CuckooSearchDisambiguator(stopConditionEvaluation, csaParams.levyLocation.currentValue, csaParams.levyScale.currentValue, (int) csaParams.nestsNumber.currentValue, (int) csaParams.destroyedNests.currentValue - 1, configScorer, false);
+        double csaLevyLocation = reader.nextDouble();
+        double csaLevyScale = reader.nextDouble();
+        int csaNestsNumber = reader.nextInt();
+        int csaDestroyedNestsNumber = reader.nextInt();
+        CuckooSearchDisambiguator csa = new CuckooSearchDisambiguator(stopConditionEvaluation, csaLevyLocation, csaLevyScale, csaNestsNumber, csaDestroyedNestsNumber, configScorer, false);
         
-        BatParameters baParams = getOptimalBatParameters();
-        BatAlgorithmDisambiguator ba = new BatAlgorithmDisambiguator(stopConditionEvaluation, (int)baParams.batsNumber.currentValue, baParams.minFrequency.currentValue, baParams.maxFrequency.currentValue, baParams.minLoudness.currentValue, baParams.maxLoudness.currentValue, baParams.alpha.currentValue, baParams.gamma.currentValue, configScorer, false);
+        int baBatsNumber = reader.nextInt();
+        double baMinFrequency = reader.nextDouble();
+        double baMaxFrequency = reader.nextDouble();
+        double baMinLoudness = reader.nextDouble();
+        double baMaxLoudness = reader.nextDouble();
+        double baAlpha = reader.nextDouble();
+        double baGamma = reader.nextDouble();
+        BatAlgorithmDisambiguator ba = new BatAlgorithmDisambiguator(stopConditionEvaluation, baBatsNumber, baMinFrequency, baMaxFrequency, baMinLoudness, baMaxLoudness, baAlpha, baGamma, configScorer, false);
 
-        GeneticParameters gaParams = getOptimalGeneticParameters();
-        GeneticAlgorithmDisambiguator ga = new GeneticAlgorithmDisambiguator(stopConditionEvaluation, (int) gaParams.population.currentValue, gaParams.mutationRate.currentValue, gaParams.crossoverRate.currentValue, configScorer);
+        int gaPopulation = reader.nextInt();
+        double gaCrossoverRate = reader.nextDouble();
+        double gaMutationRate = reader.nextDouble();
+        GeneticAlgorithmDisambiguator ga = new GeneticAlgorithmDisambiguator(stopConditionEvaluation, gaPopulation, gaCrossoverRate, gaMutationRate, configScorer);
 
-        AnnealingParameters saParams = getOptimalAnnealingParameters();
-        SimulatedAnnealing2 sa = new SimulatedAnnealing2(stopConditionEvaluation, 200, saParams.coolingRate.currentValue, (int) saParams.iterationsNumber.currentValue, configScorer, false);
+        double saCoolingRate = reader.nextDouble();
+        int saIterations = reader.nextInt();
+        SimulatedAnnealing2 sa = new SimulatedAnnealing2(stopConditionEvaluation, 200, saCoolingRate, saIterations, configScorer, false);
         
-        System.out.println("Cuckoo Search Parameters : " + csaParams);
-        System.out.println("Bat Parameters : " + baParams);
-        System.out.println("Genetic Parameters : " + gaParams);
-        System.out.println("Annealing Parameters : " + saParams);
+        reader.close();
+        
         for (Document d : dlEvaluation)
         {
+            System.out.println();
+            
+            csa.plotWriter = open("cuckoo", d.getId());
             Configuration c = csa.disambiguate(d);
             System.out.println("Cuckoo Search Score : " + configScorer.computeScore(d, c));
-            
+
+            ba.plotWriter = open("bat", d.getId());
             c = ba.disambiguate(d);
             System.out.println("Bat Score : " + configScorer.computeScore(d, c));
-            
+
+            ga.plotWriter = open("genetic", d.getId());
             c = ga.disambiguate(d);
             System.out.println("Genetic Score : " + configScorer.computeScore(d, c));
-            
+
+            sa.plotWriter = open("annealing", d.getId());
             c = sa.disambiguate(d);
             System.out.println("Annealing Score : " + configScorer.computeScore(d, c));
         }
     }
     
-    private static CuckooParameters getOptimalCuckooParameters()
+    private static PrintWriter open(String algoName, String documentName) throws Exception
     {
-        CuckooParametersScorer csaParamsscorer = new CuckooParametersScorer(configScorer, dlTraining, 100, stopConditionTraining); 
-        CuckooParametersFactory configFactory = new CuckooParametersFactory();
-        CuckooSearchParameterEstimator cuckoo = new CuckooSearchParameterEstimator(1000, 1, 1, csaParamsscorer, configFactory, true);
-        return (CuckooParameters) cuckoo.run();
-    }
-    
-    private static BatParameters getOptimalBatParameters()
-    {
-        BatParametersScorer csaParamsscorer = new BatParametersScorer(configScorer, dlTraining, 100, stopConditionTraining); 
-        BatParametersFactory configFactory = new BatParametersFactory();
-        CuckooSearchParameterEstimator cuckoo = new CuckooSearchParameterEstimator(1000, 1, 1, csaParamsscorer, configFactory, true);
-        return (BatParameters) cuckoo.run();
-    }
-    
-    private static GeneticParameters getOptimalGeneticParameters()
-    {
-        GeneticParametersScorer csaParamsscorer = new GeneticParametersScorer(configScorer, dlTraining, 100, stopConditionTraining); 
-        GeneticParametersFactory configFactory = new GeneticParametersFactory();
-        CuckooSearchParameterEstimator cuckoo = new CuckooSearchParameterEstimator(1000, 1, 1, csaParamsscorer, configFactory, true);
-        return (GeneticParameters) cuckoo.run();
-    }
-    
-    private static AnnealingParameters getOptimalAnnealingParameters()
-    {
-        AnnealingParametersScorer csaParamsscorer = new AnnealingParametersScorer(configScorer, dlTraining, 100, stopConditionTraining); 
-        AnnealingParametersFactory configFactory = new AnnealingParametersFactory();
-        CuckooSearchParameterEstimator cuckoo = new CuckooSearchParameterEstimator(1000, 1, 1, csaParamsscorer, configFactory, true);
-        return (AnnealingParameters) cuckoo.run();
+        return new PrintWriter("../" + algoName + "_plot_" + documentName + ".dat");
     }
 }

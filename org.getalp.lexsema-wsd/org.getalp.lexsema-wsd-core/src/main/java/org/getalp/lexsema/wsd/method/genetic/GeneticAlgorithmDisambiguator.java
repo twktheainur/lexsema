@@ -1,10 +1,7 @@
 package org.getalp.lexsema.wsd.method.genetic;
 
-import java.util.concurrent.TimeUnit;
-
+import java.io.PrintWriter;
 import org.apache.commons.math3.genetics.ElitisticListPopulation;
-import org.apache.commons.math3.genetics.FixedElapsedTime;
-import org.apache.commons.math3.genetics.FixedGenerationCount;
 import org.apache.commons.math3.genetics.GeneticAlgorithm;
 import org.apache.commons.math3.genetics.Population;
 import org.apache.commons.math3.genetics.StoppingCondition;
@@ -17,6 +14,8 @@ import org.getalp.lexsema.wsd.score.ConfigurationScorer;
 
 public class GeneticAlgorithmDisambiguator implements Disambiguator
 {
+    public PrintWriter plotWriter = null;
+
     private StopCondition stopCondition;
     
     private int population;
@@ -38,12 +37,14 @@ public class GeneticAlgorithmDisambiguator implements Disambiguator
     
     public Configuration disambiguate(Document document)
     {
+        stopCondition.reset();
         StoppingCondition stoppingCondition = new StoppingCondition()
         {
             public boolean isSatisfied(Population population)
             {
                 stopCondition.incrementIterations();
                 stopCondition.updateMilliseconds();
+                if (plotWriter != null) plotWriter.println(stopCondition.getCurrent() + " " + population.getFittestChromosome().getFitness());
                 return stopCondition.stop();
             }
         };
@@ -61,7 +62,7 @@ public class GeneticAlgorithmDisambiguator implements Disambiguator
         GeneticAlgorithm ga = new GeneticAlgorithm(crossoverPolicy, crossoverRate, mutationPolicy, mutationRate, selectionPolicy);
         
         population = ga.evolve(population, stoppingCondition);
-        
+        if (plotWriter != null) plotWriter.flush();
         return ((GeneticConfigurationChromosome) population.getFittestChromosome()).configuration;
     }
 

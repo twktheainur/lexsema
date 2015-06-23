@@ -18,25 +18,34 @@ public class BatAlgorithmParametersEstimation
 {
     public static void main(String[] args) throws Exception
     {
+        String condition = "sc";
+        long value = 50;
         int iterations = 1000;
         double levyLocation = 1;
         double levyScale = 1;
-        int msInside = 20;
-        
-        if (args.length >= 1) iterations = Integer.valueOf(args[0]);
-        if (args.length >= 2) levyLocation = Double.valueOf(args[1]);
-        if (args.length >= 3) levyScale = Double.valueOf(args[2]);
-        if (args.length >= 4) msInside = Integer.valueOf(args[3]);
+
+        if (args.length >= 1) condition = args[0];
+        if (args.length >= 2) value = Long.valueOf(args[1]);
+        if (args.length >= 3) iterations = Integer.valueOf(args[2]);
+        if (args.length >= 4) levyLocation = Double.valueOf(args[3]);
+        if (args.length >= 5) levyScale = Double.valueOf(args[4]);
         
         System.out.println("Parameters value : " +
+                           "<condition = " + condition + " (ms/it/sc)> " +
+                           "<condition value = " + value + "> " +
                            "<iterations = " + iterations + "> " +
                            "<levy location = " + levyLocation + "> " +
-                           "<levy scale = " + levyScale + "> " +
-                           "<milliseconds inside = " + msInside + "> ");
+                           "<levy scale = " + levyScale + "> ");
 
+        StopCondition stopCondition;
+        if (condition.equals("ms")) stopCondition = new StopCondition(StopCondition.Condition.MILLISECONDS, value);
+        else if (condition.equals("it")) stopCondition = new StopCondition(StopCondition.Condition.ITERATIONS, value);
+        else if (condition.equals("sc")) stopCondition = new StopCondition(StopCondition.Condition.SCORERCALLS, value);
+        else stopCondition = new StopCondition(StopCondition.Condition.MILLISECONDS, value);
+        
         long startTime = System.currentTimeMillis();
 
-        TextLoader dl = new Semeval2007TextLoader("../data/senseval2007_task7/test/eng-coarse-all-words-t1.xml");
+        TextLoader dl = new Semeval2007TextLoader("../data/senseval2007_task7/test/training.xml");
         dl.loadNonInstances(false);
         dl.load();
         
@@ -45,7 +54,7 @@ public class BatAlgorithmParametersEstimation
         
         ConfigurationScorer configScorer = new SemEval2007Task7PerfectConfigurationScorer();
         
-        BatParametersScorer scorer = new BatParametersScorer(configScorer, dl, 5, new StopCondition(StopCondition.Condition.MILLISECONDS, msInside)); 
+        BatParametersScorer scorer = new BatParametersScorer(configScorer, dl, 5, stopCondition); 
         
         BatParametersFactory configFactory = new BatParametersFactory();
         
@@ -53,7 +62,7 @@ public class BatAlgorithmParametersEstimation
         
         Parameters params = cuckoo.run();
         
-        PrintWriter writer = new PrintWriter("bat_parameters.txt");
+        PrintWriter writer = new PrintWriter("../bat_parameters.txt");
         writer.println(params.toString());
         writer.close();
         

@@ -18,10 +18,18 @@ public class GeneticParameters implements Parameters
     public GeneticParameters()
     {
         population = new ScalarParameter(2, 100);
-        crossoverRate = new ScalarParameter(0, 1);
-        mutationRate = new ScalarParameter(0, 1);
+        crossoverRate = new ScalarParameter(0.01, 1);
+        mutationRate = new ScalarParameter(0.01, 1);
     }
 
+    public GeneticParameters(int population, double crossoverRate, double mutationRate)
+    {
+        this();
+        this.population.currentValue = population;
+        this.crossoverRate.currentValue = crossoverRate;
+        this.mutationRate.currentValue = mutationRate;
+    }
+    
     public GeneticParameters clone()
     {
         GeneticParameters ret = new GeneticParameters();

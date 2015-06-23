@@ -1,16 +1,21 @@
 package org.getalp.lexsema.wsd.method;
 
+import java.io.PrintWriter;
+import java.util.Random;
+
 import cern.jet.random.tdouble.engine.DoubleMersenneTwister;
 import cern.jet.random.tdouble.engine.DoubleRandomEngine;
+
 import org.getalp.lexsema.similarity.Document;
-import org.getalp.lexsema.util.ValueScale;
-import org.getalp.lexsema.wsd.configuration.ConfidenceConfiguration;
 import org.getalp.lexsema.wsd.configuration.Configuration;
+import org.getalp.lexsema.wsd.configuration.ContinuousConfiguration;
 import org.getalp.lexsema.wsd.score.ConfigurationScorer;
 
 public class SimulatedAnnealing2 implements Disambiguator
 {
-    private static DoubleRandomEngine uniformGenerator = new DoubleMersenneTwister(1);
+    public PrintWriter plotWriter = null;
+
+    private static Random uniformGenerator = new Random();
 
     private double T0;
 
@@ -22,7 +27,7 @@ public class SimulatedAnnealing2 implements Disambiguator
 
     private double T;
     
-    private Configuration configuration;
+    private ContinuousConfiguration configuration;
         
     private double bestScore;
     
@@ -46,7 +51,7 @@ public class SimulatedAnnealing2 implements Disambiguator
 
     private void initialize(Document document) 
     {
-        configuration = new ConfidenceConfiguration(document, ConfidenceConfiguration.InitializationType.RANDOM);
+        configuration = new ContinuousConfiguration(document);
         T = T0;
         currentCycle = 0;
         bestScore = 0;
@@ -55,25 +60,6 @@ public class SimulatedAnnealing2 implements Disambiguator
     private double calculateT(double T0, double cycle) 
     {
         return T0 * Math.pow(coolingRate, cycle);
-    }
-
-    private int nextRandomNatural(DoubleRandomEngine randomEngine, int max) 
-    {
-        return (int) ValueScale.scaleValue(randomEngine.raw(), 0d, 1d, 0, max);
-    }
-
-    private Configuration makeRandomChange(Configuration source, Document document, int numberOfChanges, DoubleRandomEngine gu) 
-    {
-        Configuration newConfiguration = new ConfidenceConfiguration((ConfidenceConfiguration) source);
-
-        for (int i = 0; i < numberOfChanges; i++) 
-        {
-            int changeIndex = nextRandomNatural(gu, source.size());
-            int numberOfSenses = document.getSenses(changeIndex).size();
-            int newIndex = nextRandomNatural(gu, numberOfSenses);
-            newConfiguration.setSense(changeIndex, newIndex);
-        }
-        return newConfiguration;
     }
 
     public Configuration disambiguate(Document document) 
@@ -91,6 +77,7 @@ public class SimulatedAnnealing2 implements Disambiguator
                 anneal(document, j);
             }
         }
+        if (plotWriter != null) plotWriter.flush();
         return configuration;
     }
     
@@ -101,7 +88,8 @@ public class SimulatedAnnealing2 implements Disambiguator
 
     private void anneal(Document document, int cycleNumber)
     {
-        Configuration cp = makeRandomChange(configuration, document, 1, uniformGenerator);
+        ContinuousConfiguration cp = configuration.clone();
+        cp.makeRandomChange();
         double score = configurationScorer.computeScore(document, cp);
         stopCondition.incrementScorerCalls();
 
@@ -117,7 +105,7 @@ public class SimulatedAnnealing2 implements Disambiguator
         }
         else 
         {
-            double choice = uniformGenerator.raw();
+            double choice = uniformGenerator.nextDouble();
             double prob = Math.exp(-delta / T);
             if (prob > choice) 
             {
@@ -129,6 +117,7 @@ public class SimulatedAnnealing2 implements Disambiguator
 
     private boolean evaluate() 
     {
+        if (plotWriter != null) plotWriter.println(stopCondition.getCurrent() + " " + bestScore);
         T = calculateT(T0, currentCycle);
         currentCycle++;
         stopCondition.incrementIterations();

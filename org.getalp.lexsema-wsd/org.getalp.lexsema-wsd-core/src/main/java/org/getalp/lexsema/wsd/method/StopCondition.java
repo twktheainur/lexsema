@@ -55,12 +55,17 @@ public class StopCondition
     
     public double getRemainingPercentage()
     {
-        return ((double) (current - begin)) / ((double) (end - begin));
+        return (((double) (current - begin)) / ((double) (end - begin))) * 100;
     }
     
     public Condition getCondition()
     {
         return condition;
+    }
+    
+    public long getCurrent()
+    {
+        return current - begin;
     }
     
     public long getValue()

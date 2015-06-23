@@ -16,7 +16,14 @@ public class AnnealingParameters implements Parameters
     public AnnealingParameters()
     {
         coolingRate = new ScalarParameter(0.1, 0.95);
-        iterationsNumber = new ScalarParameter(0, 100);
+        iterationsNumber = new ScalarParameter(1, 100);
+    }
+    
+    public AnnealingParameters(double coolingRate, int iterationsNumber)
+    {
+        this();
+        this.coolingRate.currentValue = coolingRate;
+        this.iterationsNumber.currentValue = iterationsNumber;
     }
 
     public AnnealingParameters clone()

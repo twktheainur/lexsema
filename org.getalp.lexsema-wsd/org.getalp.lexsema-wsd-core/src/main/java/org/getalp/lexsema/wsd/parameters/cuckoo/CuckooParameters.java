@@ -24,6 +24,15 @@ public class CuckooParameters implements Parameters
         nestsNumber = new ScalarParameter(1, 100);
         destroyedNests = new ScalarParameter(1, nestsNumber);
     }
+    
+    public CuckooParameters(double levyLocation, double levyScale, int nestsNumber, int destroyedNests)
+    {
+        this();
+        this.levyLocation.currentValue = levyLocation;
+        this.levyScale.currentValue = levyScale;
+        this.nestsNumber.currentValue = nestsNumber;
+        this.destroyedNests.currentValue = destroyedNests;
+    }
 
     public CuckooParameters clone()
     {

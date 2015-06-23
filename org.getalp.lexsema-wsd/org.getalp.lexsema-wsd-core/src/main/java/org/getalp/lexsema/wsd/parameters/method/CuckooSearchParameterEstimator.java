@@ -100,6 +100,7 @@ public class CuckooSearchParameterEstimator
             newNest.randomFly();
             if (newNest.meanScore > nest.meanScore && mannTest.mannWhitneyUTest(newNest.scores, nest.scores) < 0.01)
             {
+                //System.out.println("mannWhitneyU : " + mannTest.mannWhitneyUTest(newNest.scores, nest.scores));
                 nest = newNest;
             }
             if (verbose)

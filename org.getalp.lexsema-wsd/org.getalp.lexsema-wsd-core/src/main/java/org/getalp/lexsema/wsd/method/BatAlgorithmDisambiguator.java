@@ -5,10 +5,13 @@ import org.getalp.lexsema.wsd.configuration.Configuration;
 import org.getalp.lexsema.wsd.configuration.ContinuousConfiguration;
 import org.getalp.lexsema.wsd.score.ConfigurationScorer;
 import org.getalp.lexsema.wsd.method.StopCondition;
+import java.io.PrintWriter;
 import java.util.Random;
 
 public class BatAlgorithmDisambiguator implements Disambiguator
 {
+    public PrintWriter plotWriter = null;
+    
     private static final Random random = new Random();
 
     private static final double minRate = 0;
@@ -106,6 +109,7 @@ public class BatAlgorithmDisambiguator implements Disambiguator
         currentDocument = document;
         dimension = document.size();
         currentIteration = 0;
+        int nbBatsFinished = 0;
         
         for (int i = 0 ; i < batsNumber ; ++i)
         {
@@ -114,8 +118,9 @@ public class BatAlgorithmDisambiguator implements Disambiguator
 
         updateBestBat();
 
-        while (!stopCondition.stop())
+        while (!stopCondition.stop() && nbBatsFinished < batsNumber)
         {
+            if (plotWriter != null) plotWriter.println(stopCondition.getCurrent() + " " + bestBat.score);
             int progress = (int)(stopCondition.getRemainingPercentage() * 100);
 
             for (Bat currentBat : bats)
@@ -144,10 +149,11 @@ public class BatAlgorithmDisambiguator implements Disambiguator
                     currentBat.position.makeRandomChanges(currentBat.velocity);
                 }
 
-                if (currentBat.loudness > randomDoubleInRange(minLoudness, maxLoudness) &&
+                if (currentBat.loudness >= randomDoubleInRange(minLoudness, maxLoudness) &&
                     currentBat.recomputeScore() > bestBat.score)
                 {
                     currentBat.loudness *= alpha;
+                    if (currentBat.loudness < minLoudness) nbBatsFinished++;
                     currentBat.rate = currentBat.initialRate * (1 - Math.exp(-gamma * currentIteration));
                     bestBat = currentBat;
                 }
@@ -166,7 +172,7 @@ public class BatAlgorithmDisambiguator implements Disambiguator
             if (verbose) System.out.println("Bat progress : " + (double)progress / 100.0 + "% - " + 
                                             "Current best : " + bestBat.score);
         }
-
+        if (plotWriter != null) plotWriter.flush();
         return bestBat.position;
     }
 

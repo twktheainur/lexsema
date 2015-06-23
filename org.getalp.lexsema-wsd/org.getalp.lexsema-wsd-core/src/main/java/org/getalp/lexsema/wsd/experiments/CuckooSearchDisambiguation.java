@@ -1,6 +1,9 @@
 package org.getalp.lexsema.wsd.experiments;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 
 import org.getalp.lexsema.io.annotresult.SemevalWriter;
 import org.getalp.lexsema.io.document.Semeval2007TextLoader;
@@ -11,14 +14,15 @@ import org.getalp.lexsema.similarity.Document;
 import org.getalp.lexsema.wsd.configuration.Configuration;
 import org.getalp.lexsema.wsd.method.CuckooSearchDisambiguator;
 import org.getalp.lexsema.wsd.method.Disambiguator;
+import org.getalp.lexsema.wsd.method.StopCondition;
 import org.getalp.lexsema.wsd.score.ConfigurationScorer;
 import org.getalp.lexsema.wsd.score.SemEval2007Task7PerfectConfigurationScorer;
 
 public class CuckooSearchDisambiguation
 {
-    public static void main(String[] args)
+    public static void main(String[] args) throws FileNotFoundException, UnsupportedEncodingException
     {
-        int iterations = 1000;
+        int iterations = 2000;
         double levyLocation = 5;
         double levyScale = 0.5;
         int nestsNumber = 1;
@@ -31,7 +35,7 @@ public class CuckooSearchDisambiguation
         if (args.length >= 5) destroyedNests = Integer.valueOf(args[4]);
         
         System.out.println("Parameters value : " +
-                           "<iterations = " + iterations + "> " +
+                           "<scorer calls = " + iterations + "> " +
                            "<levy location = " + levyLocation + "> " +
                            "<levy scale = " + levyScale + "> " +
                            "<nests number = " + nestsNumber + "> " +
@@ -50,7 +54,7 @@ public class CuckooSearchDisambiguation
         //ConfigurationScorer scorer = new ConfigurationScorerWithCache(new ACExtendedLeskSimilarity());
         //ConfigurationScorer scorer = new TestScorer(new TverskyConfigurationScorer(new IndexedOverlapSimilarity(), Runtime.getRuntime().availableProcessors()));
         
-        Disambiguator cuckooDisambiguator = new CuckooSearchDisambiguator(iterations, levyLocation, levyScale, nestsNumber, destroyedNests, scorer, true);
+        CuckooSearchDisambiguator cuckooDisambiguator = new CuckooSearchDisambiguator(new StopCondition(StopCondition.Condition.SCORERCALLS, iterations), levyLocation, levyScale, nestsNumber, destroyedNests, scorer, true);
 
         System.out.println("Loading texts...");
         dl.load();
@@ -62,6 +66,7 @@ public class CuckooSearchDisambiguation
             System.out.println("Loading senses...");
             lrloader.loadSenses(d);
 
+            cuckooDisambiguator.plotWriter = new PrintWriter("../cuckoo_plot_" + d.getId() + ".dat");
             System.out.println("Disambiguating...");
             Configuration c = cuckooDisambiguator.disambiguate(d);
 

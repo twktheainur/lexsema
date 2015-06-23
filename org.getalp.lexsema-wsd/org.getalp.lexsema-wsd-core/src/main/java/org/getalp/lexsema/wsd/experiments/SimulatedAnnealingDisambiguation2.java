@@ -14,35 +14,38 @@ import org.getalp.lexsema.wsd.score.ConfigurationScorer;
 import org.getalp.lexsema.wsd.score.SemEval2007Task7PerfectConfigurationScorer;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 
 public class SimulatedAnnealingDisambiguation2
 {
-    public static void main(String[] args)
+    public static void main(String[] args) throws Exception
     {    
-        int cycles = 1000;
-        double coolingRate = 0.8;
-        int iterationsNumber = 2;
+        int cycles = 2000;
+        double coolingRate = 0.10;
+        int iterationsNumber = 4;
         
         if (args.length >= 1) cycles = Integer.valueOf(args[0]);
         if (args.length >= 2) coolingRate = Double.valueOf(args[1]);
         if (args.length >= 3) iterationsNumber = Integer.valueOf(args[2]);
         
         System.out.println("Parameters value : " + 
-                         "<cycles = " + cycles + "> " +
+                         "<scorer calls = " + cycles + "> " +
                          "<cooling rate = " + coolingRate + "> " +
                          "<iterations = " + iterationsNumber + "> " 
                          );
         
         long startTime = System.currentTimeMillis();
 
-        TextLoader dl = new Semeval2007TextLoader("../data/senseval2007_task7/test/eng-coarse-all-words-t1.xml")
+        TextLoader dl = new Semeval2007TextLoader("../data/senseval2007_task7/test/eng-coarse-all-words.xml")
                 .loadNonInstances(false);
 
         LRLoader lrloader = new DictionaryLRLoader(new File("../data/dictionnaires-lesk/dict-adapted-all-relations.xml"));
 
         ConfigurationScorer scorer = new SemEval2007Task7PerfectConfigurationScorer();
 
-        Disambiguator saDisambiguator = new SimulatedAnnealing2(new StopCondition(StopCondition.Condition.ITERATIONS, cycles), 200, coolingRate, iterationsNumber, scorer, true);
+        SimulatedAnnealing2 saDisambiguator = new SimulatedAnnealing2(new StopCondition(StopCondition.Condition.SCORERCALLS, cycles), 200, coolingRate, iterationsNumber, scorer, true);
 
         System.out.println("Loading texts...");
         dl.load();
@@ -54,6 +57,7 @@ public class SimulatedAnnealingDisambiguation2
             System.out.println("Loading senses...");
             lrloader.loadSenses(d);
 
+            saDisambiguator.plotWriter = new PrintWriter("../annealing_plot_" + d.getId() + ".dat");
             System.out.println("Disambiguating...");
             Configuration c = saDisambiguator.disambiguate(d);
             

@@ -32,10 +32,22 @@ public class BatParameters implements Parameters
         minLoudness = new ScalarParameter(0, 100);
         maxLoudness = new ScalarParameter(minLoudness, 100);
         minLoudness.setMaxValueAsScalarParameter(maxLoudness);
-        alpha = new ScalarParameter(0.75, 1);
-        gamma = new ScalarParameter(0.75, 1);
+        alpha = new ScalarParameter(0.1, 0.95);
+        gamma = new ScalarParameter(0.1, 0.95);
     }
-
+    
+    public BatParameters(int batsNumber, double minFrequency, double maxFrequency, double minLoudness, double maxLoudness, double alpha, double gamma)
+    {
+        this();
+        this.batsNumber.currentValue = batsNumber;
+        this.minFrequency.currentValue = minFrequency;
+        this.maxFrequency.currentValue = maxFrequency;
+        this.minLoudness.currentValue = minLoudness;
+        this.maxLoudness.currentValue = maxLoudness;
+        this.alpha.currentValue = alpha;
+        this.gamma.currentValue = gamma;
+    }
+    
     public BatParameters clone()
     {
         BatParameters ret = new BatParameters();
@@ -88,7 +100,7 @@ public class BatParameters implements Parameters
                 ", min frequency = " + (int) minFrequency.currentValue + 
                 ", max frequency = " + (int) maxFrequency.currentValue +
                 ", min loudness = " + (int) minLoudness.currentValue + 
-                ", max loudness = " + (int) maxLoudness.currentValue +
+                ", max loudness = " + (int) (maxLoudness.currentValue + 1) +
                 ", alpha = " + alpha.currentValue +
                 ", gamma = " + gamma.currentValue;
     }

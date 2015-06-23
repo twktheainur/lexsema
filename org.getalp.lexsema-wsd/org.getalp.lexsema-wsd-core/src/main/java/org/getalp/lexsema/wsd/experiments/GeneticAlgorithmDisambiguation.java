@@ -1,6 +1,9 @@
 package org.getalp.lexsema.wsd.experiments;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 
 import org.getalp.lexsema.io.annotresult.SemevalWriter;
 import org.getalp.lexsema.io.document.Semeval2007TextLoader;
@@ -16,9 +19,9 @@ import org.getalp.lexsema.wsd.score.*;
 
 public class GeneticAlgorithmDisambiguation
 {
-    public static void main(String[] args)
+    public static void main(String[] args) throws FileNotFoundException, UnsupportedEncodingException
     {
-        int iterations = 1000;
+        int iterations = 2000;
         int population = 20;
         double crossoverRate = 0.7;
         double mutationRate = 0.9;
@@ -29,7 +32,7 @@ public class GeneticAlgorithmDisambiguation
         if (args.length >= 4) mutationRate = Double.valueOf(args[3]);
         
         System.out.println("Parameters value : " +
-                           "<iterations = " + iterations + "> " +
+                           "<scorer calls = " + iterations + "> " +
                            "<population = " + population + "> " +
                            "<crossover rate = " + crossoverRate + "> " +
                            "<mutation rate = " + mutationRate + "> ");
@@ -47,7 +50,7 @@ public class GeneticAlgorithmDisambiguation
         //ConfigurationScorer scorer = new ConfigurationScorerWithCache(new ACExtendedLeskSimilarity());
         //ConfigurationScorer scorer = new TestScorer(new TverskyConfigurationScorer(new IndexedOverlapSimilarity(), Runtime.getRuntime().availableProcessors()));
         
-        Disambiguator geneticDisambiguator = new GeneticAlgorithmDisambiguator(new StopCondition(StopCondition.Condition.ITERATIONS, iterations), population, crossoverRate, mutationRate, scorer);
+        GeneticAlgorithmDisambiguator geneticDisambiguator = new GeneticAlgorithmDisambiguator(new StopCondition(StopCondition.Condition.SCORERCALLS, iterations), population, crossoverRate, mutationRate, scorer);
 
         System.out.println("Loading texts...");
         dl.load();
@@ -59,6 +62,7 @@ public class GeneticAlgorithmDisambiguation
             System.out.println("Loading senses...");
             lrloader.loadSenses(d);
 
+            geneticDisambiguator.plotWriter = new PrintWriter("../genetic_plot_" + d.getId() + ".dat");
             System.out.println("Disambiguating...");
             Configuration c = geneticDisambiguator.disambiguate(d);
 

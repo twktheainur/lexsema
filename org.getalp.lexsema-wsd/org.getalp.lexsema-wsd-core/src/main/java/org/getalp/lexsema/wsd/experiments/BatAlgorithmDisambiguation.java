@@ -1,6 +1,9 @@
 package org.getalp.lexsema.wsd.experiments;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 
 import org.getalp.lexsema.io.annotresult.SemevalWriter;
 import org.getalp.lexsema.io.document.Semeval2007TextLoader;
@@ -11,14 +14,15 @@ import org.getalp.lexsema.similarity.Document;
 import org.getalp.lexsema.wsd.configuration.Configuration;
 import org.getalp.lexsema.wsd.method.BatAlgorithmDisambiguator;
 import org.getalp.lexsema.wsd.method.Disambiguator;
+import org.getalp.lexsema.wsd.method.StopCondition;
 import org.getalp.lexsema.wsd.score.ConfigurationScorer;
 import org.getalp.lexsema.wsd.score.SemEval2007Task7PerfectConfigurationScorer;
 
 public class BatAlgorithmDisambiguation
 {
-    public static void main(String[] args)
+    public static void main(String[] args) throws FileNotFoundException, UnsupportedEncodingException
     {    
-        int iterationsNumber = 1000;
+        int iterationsNumber = 2000;
         int batsNumber = 70;
         double minFrequency = 50;
         double maxFrequency = 100;
@@ -37,7 +41,7 @@ public class BatAlgorithmDisambiguation
         if (args.length >= 8) gamma = Double.valueOf(args[7]);
         
         System.out.println("Parameters value : " + 
-                         "<iterations = " + iterationsNumber + "> " +
+                         "<scorer calls = " + iterationsNumber + "> " +
                          "<bats number = " + batsNumber + "> " +
                          "<min frequency = " + minFrequency + "> " +
                          "<max frequency = " + maxFrequency + "> " +
@@ -56,7 +60,7 @@ public class BatAlgorithmDisambiguation
 
         ConfigurationScorer scorer = new SemEval2007Task7PerfectConfigurationScorer();
 
-        Disambiguator batDisambiguator = new BatAlgorithmDisambiguator(iterationsNumber, batsNumber, minFrequency, 
+        BatAlgorithmDisambiguator batDisambiguator = new BatAlgorithmDisambiguator(new StopCondition(StopCondition.Condition.SCORERCALLS, iterationsNumber), batsNumber, minFrequency, 
                                                           maxFrequency, minLoudness, maxLoudness,
                                                           alpha, gamma, scorer, true);
 
@@ -70,6 +74,7 @@ public class BatAlgorithmDisambiguation
             System.out.println("Loading senses...");
             lrloader.loadSenses(d);
 
+            batDisambiguator.plotWriter = new PrintWriter("../bat_plot_" + d.getId() + ".dat");
             System.out.println("Disambiguating...");
             Configuration c = batDisambiguator.disambiguate(d);
             

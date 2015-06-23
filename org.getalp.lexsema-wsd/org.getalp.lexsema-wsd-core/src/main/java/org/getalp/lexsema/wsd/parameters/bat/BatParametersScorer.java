@@ -85,7 +85,7 @@ public class BatParametersScorer implements ParametersScorer
                     params.minFrequency.currentValue,
                     params.maxFrequency.currentValue,
                     params.minLoudness.currentValue,
-                    params.maxLoudness.currentValue,
+                    params.maxLoudness.currentValue + 1,
                     params.alpha.currentValue,
                     params.gamma.currentValue,
                     scorer, false);

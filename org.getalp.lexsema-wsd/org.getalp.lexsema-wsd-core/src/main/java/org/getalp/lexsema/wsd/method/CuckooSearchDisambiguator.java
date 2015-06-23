@@ -1,5 +1,6 @@
 package org.getalp.lexsema.wsd.method;
 
+import java.io.PrintWriter;
 import java.util.Arrays;
 import java.util.Random;
 
@@ -11,6 +12,8 @@ import org.getalp.lexsema.wsd.score.ConfigurationScorer;
 
 public class CuckooSearchDisambiguator implements Disambiguator
 {
+    public PrintWriter plotWriter = null;
+    
     private class Nest implements Comparable<Nest>
     {
         public ContinuousConfiguration configuration;
@@ -99,8 +102,11 @@ public class CuckooSearchDisambiguator implements Disambiguator
     public Configuration disambiguate(Document document)
     {
         this.currentDocument = document;
-        if (nestsNumber == 1) return runWithSingleNest(document);
-        else return runWithManyNests(document);
+        Configuration ret = null;
+        if (nestsNumber == 1) ret = runWithSingleNest(document);
+        else ret = runWithManyNests(document);
+        if (plotWriter != null) plotWriter.flush();
+        return ret;
     }
     
     private Configuration runWithSingleNest(Document document)
@@ -125,6 +131,7 @@ public class CuckooSearchDisambiguator implements Disambiguator
             }
             stopCondition.incrementIterations();
             stopCondition.updateMilliseconds();
+            if (plotWriter != null) plotWriter.println(stopCondition.getCurrent() + " " + nests[0].getScore());
         }
         return nests[0].configuration;
     }
@@ -166,6 +173,7 @@ public class CuckooSearchDisambiguator implements Disambiguator
             }
             stopCondition.incrementIterations();
             stopCondition.updateMilliseconds();
+            if (plotWriter != null) plotWriter.println(stopCondition.getCurrent() + " " + nests[nestsNumber - 1].getScore());
         }
         sortNests();
         return nests[nestsNumber - 1].configuration;
