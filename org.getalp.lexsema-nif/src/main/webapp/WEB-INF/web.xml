@@ -3,5 +3,15 @@
  "http://java.sun.com/dtd/web-app_2_3.dtd" >
 
 <web-app>
-  <display-name>Archetype Created Web Application</display-name>
+  <display-name>NIF Servlet</display-name>
+
+	<servlet>
+		<servlet-name>Niflet</servlet-name>
+		<servlet-class>org.getalp.lexsema.nif.Niflet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>Niflet</servlet-name>
+		<url-pattern>/niflet</url-pattern>
+	</servlet-mapping>
 </web-app>
