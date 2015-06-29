@@ -94,12 +94,12 @@ public class ConfigurationScorerWithCache implements ConfigurationScorer
         {
             double score = 0;
             int k = c.getAssignment(i);
-            if (k < 0) return 0.0;
+            if (k < 0 || d.getSenses(i).isEmpty()) return 0.0;
             Sense senseA = d.getSenses(i).get(k);
             for (int j = i + 1 ; j < c.size() ; j++)
             {
                 int l = c.getAssignment(j);
-                if (l < 0) return 0.0;
+                if (l < 0 || d.getSenses(j).isEmpty()) continue;
                 double cacheCell = cache[i][j][k][l];
                 if (cacheCell != -1)
                 {

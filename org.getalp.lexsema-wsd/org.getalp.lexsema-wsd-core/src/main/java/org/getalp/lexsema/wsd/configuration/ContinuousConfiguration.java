@@ -51,9 +51,7 @@ public class ContinuousConfiguration implements Configuration
     {
         for (int i = 0 ; i < documentSize ; i++)
         {
-            if(!document.getSenses(i).isEmpty()) {
-                setSense(i, random.nextInt(document.getSenses(i).size()));
-            }
+            setSenseRandom(i);
         }
     }
     
@@ -69,26 +67,33 @@ public class ContinuousConfiguration implements Configuration
     public void makeRandomChange()
     {
         int randomIndex = random.nextInt(documentSize);
-        int numberOfSenses= getNumberOfSenses(randomIndex);
-        if(numberOfSenses>0) {
-            setSense(randomIndex, random.nextInt());
+        setSenseRandom(randomIndex);
+    }
+    
+    public void setSenseRandom(int wordIndex)
+    {
+        if (document.getSenses(wordIndex).isEmpty())
+        {
+        	assignments[wordIndex] = -1;
+        }
+        else
+        {
+        	assignments[wordIndex] = random.nextInt(document.getSenses(wordIndex).size());
         }
     }
     
-    public int getNumberOfSenses(int wordIndex)
-    {
-        return document.getSenses(wordIndex).size();
-    }
-
     public void setSense(int wordIndex, int senseIndex)
     {
-        int sensesNumber = document.getSenses(wordIndex).size();
-        while (senseIndex < 0) senseIndex += sensesNumber;
-        if(sensesNumber!=0) {
-            assignments[wordIndex] = senseIndex % sensesNumber;
-        } else {
-            assignments[wordIndex] = -1;
-        }
+    	if (document.getSenses(wordIndex).isEmpty())
+    	{
+    		assignments[wordIndex] = -1;
+    	}
+    	else
+    	{
+	        int sensesNumber = document.getSenses(wordIndex).size();
+	        while (senseIndex < 0) senseIndex += sensesNumber;
+	        assignments[wordIndex] = senseIndex % sensesNumber;
+    	}
     }
 
     public int getAssignment(int wordIndex)
