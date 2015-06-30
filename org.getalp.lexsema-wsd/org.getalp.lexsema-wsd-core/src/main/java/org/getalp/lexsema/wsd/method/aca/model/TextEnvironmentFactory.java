@@ -18,7 +18,9 @@ public class TextEnvironmentFactory implements EnvironmentFactory{
     @Override
     public Environment build() {
         Configuration configuration = new ConfidenceConfiguration(text);
-        INDArray data = Nd4j.create(10, 10, 10);
+        INDArray data = Nd4j.create(10, 10, 3);
+
+
         Environment environment = new EnvironmentImpl(text, configuration,data);
         return null;
     }

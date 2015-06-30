@@ -6,7 +6,7 @@ import org.getalp.lexsema.similarity.Sense;
 import java.util.Iterator;
 
 /**
- * Created by tchechem on 05/03/15.
+* Interface for a Sense CLuster that groups several sense together in one set.
  */
 public interface SenseCluster extends Iterable<Sense> {
     void addMember(Sense member, DoubleMatrix1D location, double weight);

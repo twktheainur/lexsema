@@ -13,7 +13,7 @@ import org.getalp.lexsema.wsd.method.Disambiguator;
 import org.getalp.lexsema.wsd.method.SimulatedAnnealing;
 import org.getalp.lexsema.wsd.score.ConfigurationScorer;
 import org.getalp.lexsema.wsd.score.MatrixTverskiConfigurationScorer;
-import org.getalp.ml.matrix.filters.NormalizationFilter;
+import org.getalp.ml.matrix.filters.normalization.NormalizationFilter;
 import org.getalp.ml.matrix.score.SumMatrixScorer;
 
 import java.io.File;

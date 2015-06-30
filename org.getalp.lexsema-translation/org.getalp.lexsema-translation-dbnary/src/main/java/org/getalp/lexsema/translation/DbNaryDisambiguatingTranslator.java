@@ -76,7 +76,7 @@ public class DbNaryDisambiguatingTranslator implements Translator {
         return input.replaceAll("\\p{Punct}", " ");
     }
     private String filterOutput(String output){
-        return output.replaceAll("[\\[\\]]+","");
+        return output.replaceAll("[\\[\\]]+","").replaceAll("\\p{Punct}", " ").replaceAll("''comp.","");
     }
 
     @Override

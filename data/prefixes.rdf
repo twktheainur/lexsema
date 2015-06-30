@@ -13,7 +13,7 @@
         <!ENTITY lexinfo "http://lexinfo.net/ontology/2.0/lexinfo.owl#" >
         <!ENTITY skos "http://www.w3.org/2004/02/skos/core#" >
         <!ENTITY dc "http://purl.org/dc/elements/1.1/" >
-
+        <!ENTITY gvp "http://vocab.getty.edu/ontology#">
         ]>
 
 
@@ -29,6 +29,6 @@
          xmlns:lexinfo="http://www.lexinfo.net/ontology/2.0/lexinfo#"
          xmlns:semio="http://www.ontologydesignpatterns.org/cp/owl/semiotics.owl#"
          xmlns:skos="http://www.w3.org/2004/02/skos/core#"
-
+         xmlns:gvp="http://vocab.getty.edu/ontology#"
          xmlns:dc="http://purl.org/dc/elements/1.1/"
         />

@@ -66,7 +66,11 @@ public class ConfigurationEntryPairwiseScoreInput extends AbstractSetFunctionInp
                         if (currentWordSelectedSense != null && otherWordSense != null) {
                             value = currentWordSelectedSense.computeSimilarityWith(sim, otherWordSense);
                             //System.err.println(value);
-                            getValues().setQuick(pairIndex, value);
+                            if(!Double.isNaN(value)) {
+                                getValues().setQuick(pairIndex, value);
+                            } else {
+                                getValues().setQuick(pairIndex, 0);
+                            }
                         }
                     }
                     pairIndex++;

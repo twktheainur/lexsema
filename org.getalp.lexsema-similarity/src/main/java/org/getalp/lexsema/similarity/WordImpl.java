@@ -166,6 +166,10 @@ public class WordImpl implements Word {
 
     @Override
     public String toString() {
-        return lexicalEntry.toString();
+        if(lexicalEntry!=null) {
+            return lexicalEntry.toString();
+        } else {
+            return String.format("Word|%s#%s|",lemma,textPos);
+        }
     }
 }

@@ -5,6 +5,8 @@ import cern.colt.matrix.tdouble.DoubleMatrix2D;
 import org.getalp.lexsema.similarity.Sense;
 import org.getalp.lexsema.similarity.measures.SimilarityMeasure;
 import org.getalp.lexsema.util.URIUtils;
+import org.getalp.lexsema.util.caching.Cache;
+import org.getalp.lexsema.util.caching.CachePool;
 import org.getalp.ml.matrix.filters.Filter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,22 +15,30 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Set;
 
-public class PairwiseCLSimilarityMatrixGeneratorSim implements PairwiseCrossLingualSimilarityMatrixGenerator {
+public class PairwiseSimilarityMatrixGeneratorSim implements PairwiseSimilarityMatrixGenerator {
 
     private static final double PERCENT_MAX = 100d;
 
-    private static Logger logger = LoggerFactory.getLogger(PairwiseCrossLingualSimilarityMatrixGenerator.class);
+    private static Logger logger = LoggerFactory.getLogger(PairwiseSimilarityMatrixGenerator.class);
 
     private DoubleMatrix2D similarityMatrix;
 
     private Collection<Sense> closureSet;
     private SimilarityMeasure crossLingualSimilarity;
 
-    public PairwiseCLSimilarityMatrixGeneratorSim(SimilarityMeasure crossLingualSimilarity, Set<Sense> closureSet) {
+    private Cache cache = CachePool.getResource();
+
+    String prefix;
+
+    public PairwiseSimilarityMatrixGeneratorSim(SimilarityMeasure crossLingualSimilarity, Set<Sense> closureSet, String prefix) {
         this.crossLingualSimilarity = crossLingualSimilarity;
         this.closureSet = Collections.unmodifiableSet(closureSet);
         similarityMatrix = DoubleFactory2D.dense.make(closureSet.size(), closureSet.size(), -1d);
+        this.prefix = prefix;
+    }
 
+    public PairwiseSimilarityMatrixGeneratorSim(SimilarityMeasure crossLingualSimilarity, Set<Sense> closureSet) {
+        this(crossLingualSimilarity,closureSet,"");
     }
 
     private static double percentage(int current, int total) {
@@ -44,9 +54,15 @@ public class PairwiseCLSimilarityMatrixGeneratorSim implements PairwiseCrossLing
         int currentPairIndex = 0;
         for (Sense a : closureSet) {
             for (Sense b : closureSet) {
-                double value = a.computeSimilarityWith(crossLingualSimilarity, b);
+                String key = generateKey(a,b);
+                double value;
+                //if(cache.exists(key)){
+                //    value = Double.valueOf(cache.get(key));
+                //} else {
+                    value = a.computeSimilarityWith(crossLingualSimilarity, b);
+                  //  cache.set(key,String.format("%f",value));
+                //}
                 similarityMatrix.setQuick(indexA, indexB, value);
-
                 printSimilarityOutput(a, b, value, totalPairs, currentPairIndex);
                 indexB++;
                 currentPairIndex++;
@@ -55,6 +71,10 @@ public class PairwiseCLSimilarityMatrixGeneratorSim implements PairwiseCrossLing
             indexB = 0;
         }
 
+    }
+
+    private String generateKey(Sense s1, Sense s2){
+        return String.format("%s%s|%s",prefix ,s1.getId(), s2.getId());
     }
 
     private void printSimilarityOutput(Sense a, Sense b, double value, int totalPairs, int currentPairIndex) {

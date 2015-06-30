@@ -1,15 +1,13 @@
 package org.getalp.lexsema.acceptali.experiments;
 
-import org.getalp.lexsema.io.text.EnglishDKPTextProcessor;
-import org.getalp.lexsema.io.text.FrenchDKPTextProcessor;
-import org.getalp.lexsema.io.text.RussianPythonTextProcessor;
-import org.getalp.lexsema.io.text.TextProcessor;
+import org.getalp.lexsema.io.text.*;
 import org.getalp.lexsema.ontolex.dbnary.DBNary;
 import org.getalp.lexsema.ontolex.dbnary.exceptions.NoSuchVocableException;
 import org.getalp.lexsema.ontolex.factories.resource.LexicalResourceFactory;
 import org.getalp.lexsema.ontolex.graph.OWLTBoxModel;
 import org.getalp.lexsema.ontolex.graph.OntologyModel;
 import org.getalp.lexsema.ontolex.graph.storage.JenaRemoteSPARQLStore;
+import org.getalp.lexsema.ontolex.graph.storage.JenaTDBStore;
 import org.getalp.lexsema.ontolex.graph.storage.StoreHandler;
 import org.getalp.lexsema.ontolex.graph.store.Store;
 import org.getalp.lexsema.similarity.measures.SimilarityMeasure;
@@ -26,6 +24,7 @@ import org.slf4j.LoggerFactory;
 import org.tartarus.snowball.SnowballStemmer;
 import org.tartarus.snowball.ext.englishStemmer;
 import org.tartarus.snowball.ext.frenchStemmer;
+import org.tartarus.snowball.ext.germanStemmer;
 import org.tartarus.snowball.ext.russianStemmer;
 
 import java.io.*;
@@ -124,8 +123,8 @@ public final class DbnaryCrossLingualDocumentTransfer {
     }
 
     private static DBNary instantiateDBNary(String path) throws IOException, InvocationTargetException, NoSuchMethodException, ClassNotFoundException, InstantiationException, IllegalAccessException {
-        Store vts = new JenaRemoteSPARQLStore("http://kaiko.getalp.org/sparql");
-        //Store vts = new JenaTDBStore(path);
+        //Store vts = new JenaRemoteSPARQLStore("http://kaiko.getalp.org/sparql");
+        Store vts = new JenaTDBStore(path);
         StoreHandler.registerStoreInstance(vts);
         //StoreHandler.DEBUG_ON = true;
         OntologyModel tBox = new OWLTBoxModel(ONTOLOGY_PROPERTIES);
@@ -145,6 +144,9 @@ public final class DbnaryCrossLingualDocumentTransfer {
         } else if (languageIs(lang1, "fr")) {
             textProcessor = new FrenchDKPTextProcessor();
             sourceStopList = loadStopList("french_stop.txt");
+        } else if (languageIs(lang1, "de")){
+            textProcessor = new GermanDKPTextProcessor();
+            sourceStopList = loadStopList("german_stop.txt");
         } else {
             textProcessor = new RussianPythonTextProcessor();
             sourceStopList = loadStopList("russian_stop.txt");
@@ -155,8 +157,10 @@ public final class DbnaryCrossLingualDocumentTransfer {
         } else if (languageIs(lang2, "fr")) {
             targetStopList = loadStopList("french_stop.txt");
             snowballStemmer = new frenchStemmer();
+        } else if (languageIs(lang2, "de")) {
+            targetStopList = loadStopList("german_stop.txt");
+            snowballStemmer = new germanStemmer();
         } else {
-            textProcessor = new RussianPythonTextProcessor();
             snowballStemmer = new russianStemmer();
             targetStopList = loadStopList("russian_stop.txt");
         }

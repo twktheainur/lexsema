@@ -2,18 +2,18 @@ package org.getalp.lexsema.acceptali.experiments;
 
 import cern.colt.matrix.tdouble.DoubleMatrix2D;
 import com.trickl.cluster.KMeans;
-import com.wcohen.ss.ScaledLevenstein;
+import org.deeplearning4j.models.word2vec.Word2Vec;
 import org.getalp.lexsema.acceptali.cli.org.getalp.lexsema.acceptali.acceptions.SenseCluster;
 import org.getalp.lexsema.acceptali.cli.org.getalp.lexsema.acceptali.acceptions.SenseClusterer;
-import org.getalp.lexsema.acceptali.cli.org.getalp.lexsema.acceptali.acceptions.SenseClustererImpl;
+import org.getalp.lexsema.acceptali.cli.org.getalp.lexsema.acceptali.acceptions.TricklSenseClusterer;
 import org.getalp.lexsema.acceptali.closure.LexicalResourceTranslationClosure;
 import org.getalp.lexsema.acceptali.closure.LexicalResourceTranslationClosureImpl;
 import org.getalp.lexsema.acceptali.closure.generator.TranslationClosureGenerator;
 import org.getalp.lexsema.acceptali.closure.generator.TranslationClosureGeneratorFactory;
 import org.getalp.lexsema.acceptali.closure.generator.TranslationClosureSemanticSignatureGenerator;
 import org.getalp.lexsema.acceptali.closure.generator.TranslationClosureSemanticSignatureGeneratorImpl;
-import org.getalp.lexsema.acceptali.closure.similarity.PairwiseCLSimilarityMatrixGeneratorSim;
-import org.getalp.lexsema.acceptali.closure.similarity.PairwiseCrossLingualSimilarityMatrixGenerator;
+import org.getalp.lexsema.acceptali.closure.similarity.PairwiseSimilarityMatrixGenerator;
+import org.getalp.lexsema.acceptali.closure.similarity.PairwiseSimilarityMatrixGeneratorSim;
 import org.getalp.lexsema.io.word2vec.MultilingualSerializedModelWord2VecLoader;
 import org.getalp.lexsema.io.word2vec.MultilingualWord2VecLoader;
 import org.getalp.lexsema.ontolex.LexicalEntry;
@@ -29,19 +29,16 @@ import org.getalp.lexsema.ontolex.graph.storage.StoreHandler;
 import org.getalp.lexsema.ontolex.graph.store.Store;
 import org.getalp.lexsema.similarity.Sense;
 import org.getalp.lexsema.similarity.measures.SimilarityMeasure;
-import org.getalp.lexsema.similarity.measures.tverski.TverskiIndexSimilarityMeasureMatrixImplBuilder;
 import org.getalp.lexsema.similarity.measures.crosslingual.TranslatorCrossLingualSimilarity;
-import org.getalp.lexsema.similarity.signatures.enrichment.SignatureEnrichment;
-import org.getalp.lexsema.similarity.signatures.enrichment.Word2VecSignatureEnrichment;
-import org.getalp.lexsema.translation.BingAPITranslator;
+import org.getalp.lexsema.similarity.measures.word2vec.Word2VecGlossSimilarity;
 import org.getalp.lexsema.translation.CachedTranslator;
+import org.getalp.lexsema.translation.GoogleWebTranslator;
 import org.getalp.lexsema.translation.Translator;
 import org.getalp.lexsema.util.Language;
 import org.getalp.ml.matrix.factorization.TapkeeNLMatrixFactorization;
 import org.getalp.ml.matrix.factorization.TapkeeNLMatrixFactorizationFactory;
 import org.getalp.ml.matrix.filters.Filter;
 import org.getalp.ml.matrix.filters.MatrixFactorizationFilter;
-import org.getalp.ml.matrix.score.SumMatrixScorer;
 import org.getalp.ml.optimization.org.getalp.util.Matrices;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -104,29 +101,33 @@ public final class AcceptionClusteringExperimentGenerationSim {
             logger.info("Generating or Loading Closure...");
             Set<Sense> closureSet =  generateTranslationClosureWithSignatures(instantiateDBNary());
 
-            long matrix_time = System.currentTimeMillis();
-
-            SimilarityMeasure similarityMeasure = createSimilarityMeasure();
-
-            Translator translator = new CachedTranslator("Bing", new BingAPITranslator(BING_APP_ID, BING_APP_KEY));
-
             logger.info("Loading Word2Vec...");
             MultilingualWord2VecLoader word2VecLoader = new MultilingualSerializedModelWord2VecLoader();
-            word2VecLoader.load(new File(WORD_2_VEC_MODEL));
-            SignatureEnrichment signatureEnrichment = new Word2VecSignatureEnrichment(null, enrichmentSize);
+            word2VecLoader.loadGoogle(new File(WORD_2_VEC_MODEL),true);
+
+            long matrix_time = System.currentTimeMillis();
+
+            SimilarityMeasure similarityMeasure = createSimilarityMeasure(word2VecLoader.getWord2Vec(Language.ENGLISH));
+
+            Translator translator = new GoogleWebTranslator();
+
+
+            //SignatureEnrichment signatureEnrichment = new Word2VecSignatureEnrichment(null, enrichmentSize);
 
             SimilarityMeasure crossLingualSimilarity =
-                    new TranslatorCrossLingualSimilarity(similarityMeasure, translator, signatureEnrichment);
+                    new TranslatorCrossLingualSimilarity(similarityMeasure, translator, null);
+            /*SimilarityMeasure crossLingualSimilarity =
+                    new TranslatorCrossLingualSimilarity(similarityMeasure, translator, signatureEnrichment);*/
             /*CrossLingualSimilarity crossLingualSimilarity =
                     new TranslatorCrossLingualSimilarity(similarityMeasure, translator);*/
 
             logger.info("Generating matrix...");
-            PairwiseCrossLingualSimilarityMatrixGenerator matrixGenerator =
-                    new PairwiseCLSimilarityMatrixGeneratorSim(crossLingualSimilarity, closureSet);
+            PairwiseSimilarityMatrixGenerator matrixGenerator =
+                    new PairwiseSimilarityMatrixGeneratorSim(crossLingualSimilarity, closureSet,"newcross2");
             matrixGenerator.generateMatrix();
 
             logger.info("Clustering...");
-            SenseClusterer clusterer = new SenseClustererImpl(new KMeans());
+            SenseClusterer clusterer = new TricklSenseClusterer(new KMeans());
             DoubleMatrix2D inputData = matrixGenerator.getScoreMatrix();
             inputData.normalize();
 
@@ -193,8 +194,8 @@ public final class AcceptionClusteringExperimentGenerationSim {
     }
 
     @SuppressWarnings({"LawOfDemeter", "MagicNumber", "FeatureEnvy"})
-    private static SimilarityMeasure createSimilarityMeasure() {
-        return new TverskiIndexSimilarityMeasureMatrixImplBuilder()
+    private static SimilarityMeasure createSimilarityMeasure(Word2Vec word2Vec) {
+        /*return new TverskiIndexSimilarityMeasureMatrixImplBuilder()
                 .computeRatio(true)
                 .alpha(1d)
                 .beta(0.5d)
@@ -205,7 +206,8 @@ public final class AcceptionClusteringExperimentGenerationSim {
                 .setDistance(new ScaledLevenstein())
                         //.filter(new NormalizationFilter())
                         //.filter(new MatrixFactorizationFilter(new TapkeeNLMatrixFactorizationFactory(Method.HLLE)))
-                .build();
+                .build();*/
+        return  new Word2VecGlossSimilarity(word2Vec);
 
     }
 

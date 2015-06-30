@@ -28,19 +28,24 @@ public class ACSimilarityConfigurationScorer implements ConfigurationScorer {
     }
 
     private double computeSimilarity(int wordIndex, Configuration configuration, Document document) {
-        Sense senseA = document.getSenses(configuration.getStart(), wordIndex)
-                .get(configuration.getAssignment(wordIndex));
-        Sense senseB;
-        int index = 0;
         double totalScore = 0.0D;
-
-        for (int i = wordIndex; i < configuration.size(); ++i) {
-            if (wordIndex != i) {
-                senseB = document.getSenses(configuration.getStart(), i)
-                        .get(configuration.getAssignment(i));
-                double score = senseA.computeSimilarityWith(similarityMeasure, senseB);
-                //System.err.println(String.format("\tScore(%d,%d)=%f",wordIndex,i,score));
-                totalScore += score;
+        if(!document.getSenses(configuration.getStart(),wordIndex).isEmpty()) {
+            Sense senseA = document.getSenses(configuration.getStart(), wordIndex)
+                    .get(configuration.getAssignment(wordIndex));
+            Sense senseB;
+            int index = 0;
+            for (int i = wordIndex; i < configuration.size(); ++i) {
+                if (wordIndex != i) {
+                    if(!document.getSenses(configuration.getStart(), i).isEmpty()) {
+                        senseB = document.getSenses(configuration.getStart(), i)
+                                .get(configuration.getAssignment(i));
+                        double score = senseA.computeSimilarityWith(similarityMeasure, senseB);
+                        //System.err.println(String.format("\tScore(%d,%d)=%f",wordIndex,i,score));
+                        if(!Double.isNaN(score)) {
+                            totalScore += score;
+                        }
+                    }
+                }
             }
         }
         return totalScore;
