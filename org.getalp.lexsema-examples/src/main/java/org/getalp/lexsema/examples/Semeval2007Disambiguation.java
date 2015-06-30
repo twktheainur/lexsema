@@ -1,7 +1,7 @@
 package org.getalp.lexsema.examples;
 
-import com.wcohen.ss.ScaledLevenstein;
 import org.getalp.lexsema.io.document.RawTextLoader;
+import org.getalp.lexsema.io.document.Semeval2007TextLoader;
 import org.getalp.lexsema.io.document.TextLoader;
 import org.getalp.lexsema.io.resource.LRLoader;
 import org.getalp.lexsema.io.resource.dbnary.DBNaryLoaderImpl;
@@ -19,7 +19,6 @@ import org.getalp.lexsema.ontolex.graph.store.Store;
 import org.getalp.lexsema.similarity.Document;
 import org.getalp.lexsema.similarity.Word;
 import org.getalp.lexsema.similarity.measures.SimilarityMeasure;
-import org.getalp.lexsema.similarity.measures.tverski.TverskiIndexSimilarityMeasureBuilder;
 import org.getalp.lexsema.similarity.measures.word2vec.Word2VecGlossSimilarity;
 import org.getalp.lexsema.util.Language;
 import org.getalp.lexsema.wsd.configuration.Configuration;
@@ -36,25 +35,20 @@ import java.io.StringReader;
 import java.lang.reflect.InvocationTargetException;
 
 
-
-public class TextDisambiguation {
-    public static final String ONTOLOGY_PROPERTIES = "data" + File.separator + "ontology.properties";
+public class Semeval2007Disambiguation {
     private static Logger logger = LoggerFactory.getLogger(TextSimilarity.class);
 
     public static void main(String[] args) throws InvocationTargetException, NoSuchMethodException, ClassNotFoundException, InstantiationException, IllegalAccessException, IOException {
         if(args.length<1){
             usage();
         }
-        TextLoader textLoader = new RawTextLoader(new StringReader(args[0]), new EnglishDKPTextProcessor());
-        Store store = new JenaRemoteSPARQLStore("http://kaiko.getalp.org/sparql");
-        StoreHandler.registerStoreInstance(store);
-        OntologyModel model = new OWLTBoxModel(ONTOLOGY_PROPERTIES);
-        DBNary dbnary = (DBNary) LexicalResourceFactory.getLexicalResource(DBNary.class, model, new Language[] {Language.ENGLISH});
-        LRLoader lrloader = new DBNaryLoaderImpl(dbnary, Language.ENGLISH).loadDefinitions(true);
-        /*LRLoader lrloader = new WordnetLoader("../data/wordnet/2.1/dict")
-                .extendedSignature(true).loadDefinitions(true);*/
+
+        TextLoader textLoader = new Semeval2007TextLoader("../data/senseval2007_task7/test/eng-coarse-all-words-t1.xml");
+
+        LRLoader lrloader = new WordnetLoader("../data/wordnet/2.1/dict")
+                .extendedSignature(true).loadDefinitions(true);
         MultilingualWord2VecLoader word2VecLoader = new MultilingualSerializedModelWord2VecLoader();
-        word2VecLoader.loadGoogle(new File(args[1]),true);
+        word2VecLoader.loadGoogle(new File(args[0]),true);
 
         SimilarityMeasure similarityMeasure = new Word2VecGlossSimilarity(word2VecLoader.getWord2Vec(Language.ENGLISH));
 

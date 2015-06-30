@@ -8,6 +8,7 @@ import org.getalp.lexsema.wsd.configuration.ConfidenceConfiguration;
 import org.getalp.lexsema.wsd.configuration.Configuration;
 import org.getalp.lexsema.wsd.configuration.org.getalp.lexsema.wsd.evaluation.Evaluation;
 import org.getalp.lexsema.wsd.configuration.org.getalp.lexsema.wsd.evaluation.GoldStandard;
+import org.getalp.lexsema.wsd.configuration.org.getalp.lexsema.wsd.evaluation.Semeval2007GoldStandard;
 import org.getalp.lexsema.wsd.configuration.org.getalp.lexsema.wsd.evaluation.StandardEvaluation;
 import org.getalp.lexsema.wsd.score.ConfigurationScorer;
 import org.slf4j.Logger;
@@ -69,7 +70,7 @@ public class SimulatedAnnealing implements Disambiguator {
         this.coolingRate = coolingRate;
         this.iterations = iterations;
         evaluation = new StandardEvaluation();
-        //goldStandard = new Semeval2007GoldStandard();
+        goldStandard = new Semeval2007GoldStandard();
     }
 
     public SimulatedAnnealing(double p0, double coolingRate, int convergenceThreshold, int iterations, ConfigurationScorer configurationScorer, double T0) {
@@ -158,7 +159,7 @@ public class SimulatedAnnealing implements Disambiguator {
         sum = 0;
 
         //Execution of the algorithm nbEvaluation times
-        for (int i = 0; i < iterations; i++) {
+        for (int i = 0; i < iterations*10; i++) {
             //First set of scores for the initial execution is also the set of best scores
             double score =
                     configurationScorer.computeScore(document, makeRandomChange(configuration, document, NUMBER_OF_CHANGES, uniformGenerator));
@@ -310,6 +311,10 @@ public class SimulatedAnnealing implements Disambiguator {
         previousConfiguration = configuration;
         currentCycle++;
         return true;
+    }
+
+    public void setGoldStandard(GoldStandard goldStandard) {
+        this.goldStandard = goldStandard;
     }
 
     @Override
