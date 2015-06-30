@@ -1,9 +1,10 @@
 package org.getalp.lexsema.ontolex.babelnet;
 
-import org.getalp.lexsema.language.Language;
+
 import org.getalp.lexsema.ontolex.LexicalResource;
 import org.getalp.lexsema.ontolex.LexicalResourceEntity;
 import org.getalp.lexsema.ontolex.babelnet.relations.LexinfoRelationType;
+import org.getalp.lexsema.util.Language;
 
 import java.util.List;
 

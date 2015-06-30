@@ -2,10 +2,10 @@ package org.getalp.lexsema.ontolex.babelnet;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import org.getalp.lexsema.language.Language;
 import org.getalp.lexsema.ontolex.AbstractLexicalResourceEntity;
 import org.getalp.lexsema.ontolex.LexicalResource;
 import org.getalp.lexsema.ontolex.LexicalResourceEntity;
+import org.getalp.lexsema.util.Language;
 
 @EqualsAndHashCode(callSuper = false)
 @Data

@@ -10,13 +10,13 @@ import org.getalp.lexsema.io.document.Semeval2013Task13TextLoader;
 import org.getalp.lexsema.io.document.TextLoader;
 import org.getalp.lexsema.io.resource.LRLoader;
 import org.getalp.lexsema.io.resource.babelnet.BabelNetAPILoader;
-import org.getalp.lexsema.language.Language;
 import org.getalp.lexsema.similarity.Document;
 import org.getalp.lexsema.supervised.features.ContextWindow;
 import org.getalp.lexsema.supervised.features.extractors.AggregateLocalTextFeatureExtractor;
 import org.getalp.lexsema.supervised.features.extractors.LemmaFeatureExtractor;
 import org.getalp.lexsema.supervised.features.extractors.LocalCollocationFeatureExtractor;
 import org.getalp.lexsema.supervised.features.extractors.PosFeatureExtractor;
+import org.getalp.lexsema.util.Language;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
