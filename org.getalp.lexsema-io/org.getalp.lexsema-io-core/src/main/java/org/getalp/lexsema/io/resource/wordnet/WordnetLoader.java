@@ -414,7 +414,11 @@ public class WordnetLoader implements LRLoader {
 
     @Override
     public void loadSenses(Document document, SemecoreDefinitionExpender definitionExpender, int profondeur, DSODefinitionExpender contexteDSO){
-    	List<Sense> senses;
+        for (Word w : document) {
+            document.addWordSenses(getSenses(w));
+        }
+        /*
+        List<Sense> senses;
     	System.out.println("jambon 1.2");
     	for (Word w : document) {
         	senses=getSenses(w);
@@ -426,6 +430,7 @@ public class WordnetLoader implements LRLoader {
         	}
             document.addWordSenses(senses);
         }
+        */
     }
 
     @SuppressWarnings("BooleanParameter")
@@ -461,7 +466,8 @@ public class WordnetLoader implements LRLoader {
 
 	@Override
 	public void loadSenses(Document document) {
-		// TODO Auto-generated method stub
-		
+        for (Word w : document) {
+            document.addWordSenses(getSenses(w));
+        }
 	}
 }
