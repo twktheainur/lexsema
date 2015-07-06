@@ -3,10 +3,10 @@ package org.getalp.lexsema.supervised.features;
 import it.uniroma1.lcl.babelnet.BabelNet;
 import it.uniroma1.lcl.babelnet.BabelSense;
 import it.uniroma1.lcl.babelnet.BabelSynset;
-import org.getalp.lexsema.language.Language;
 import org.getalp.lexsema.similarity.Text;
 import org.getalp.lexsema.similarity.Word;
 import org.getalp.lexsema.supervised.features.extractors.LocalTextFeatureExtractor;
+import org.getalp.lexsema.util.Language;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -1,7 +1,8 @@
 package org.getalp.lexsema.ontolex.babelnet;
 
-import org.getalp.lexsema.language.Language;
+
 import org.getalp.lexsema.ontolex.LexicalResourceEntity;
+import org.getalp.lexsema.util.Language;
 
 /**
  * An interface for a DBNary translation instance

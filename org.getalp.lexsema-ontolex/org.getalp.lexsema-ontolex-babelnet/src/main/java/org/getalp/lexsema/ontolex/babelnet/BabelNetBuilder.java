@@ -1,11 +1,12 @@
 package org.getalp.lexsema.ontolex.babelnet;
 
-import org.getalp.lexsema.language.Language;
+
 import org.getalp.lexsema.ontolex.LexicalResource;
 import org.getalp.lexsema.ontolex.LexicalSense;
 import org.getalp.lexsema.ontolex.OntolexLexicalResourceBuilder;
 import org.getalp.lexsema.ontolex.babelnet.factories.entities.BabelNetLexicalSenseBuilder;
 import org.getalp.lexsema.ontolex.graph.OntologyModel;
+import org.getalp.lexsema.util.Language;
 
 @SuppressWarnings("unused")
 public class BabelNetBuilder extends OntolexLexicalResourceBuilder {

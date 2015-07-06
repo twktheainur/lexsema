@@ -1,3 +1,5 @@
+package org.getalp.lexsema.examples;
+
 import org.getalp.lexsema.similarity.measures.SimilarityMeasure;
 import org.getalp.lexsema.similarity.measures.tverski.TverskiIndexSimilarityMeasureBuilder;
 import org.getalp.lexsema.similarity.signatures.StringSemanticSignature;
@@ -24,7 +26,7 @@ public final class TextSimilarity {
     }
 
     private static void usage() {
-        logger.error("Usage -- TextSimilarity \"String1\" \"String2\"");
+        logger.error("Usage -- org.getalp.lexsema.examples.TextSimilarity \"String1\" \"String2\"");
         System.exit(1);
     }
 }

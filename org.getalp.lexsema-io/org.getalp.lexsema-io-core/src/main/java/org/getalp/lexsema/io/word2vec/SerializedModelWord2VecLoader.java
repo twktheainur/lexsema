@@ -6,6 +6,7 @@ import org.deeplearning4j.models.word2vec.wordstore.VocabCache;
 import org.deeplearning4j.util.SerializationUtils;
 
 import java.io.File;
+import java.io.IOException;
 
 public class SerializedModelWord2VecLoader implements Word2VecLoader {
 
@@ -29,5 +30,11 @@ public class SerializedModelWord2VecLoader implements Word2VecLoader {
         word2Vec = SerializationUtils.readObject(vecPath);
         vocabCache = SerializationUtils.readObject(cachePath);
         word2Vec.setVocab(vocabCache);
+    }
+
+    @Override
+    public void loadGoogle(File directory, boolean binary) throws IOException {
+        word2Vec = WordVectorSerializer.loadGoogleModel(new File(directory, "model.bin"),binary);
+        vocabCache = word2Vec.vocab();
     }
 }

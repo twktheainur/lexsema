@@ -2,6 +2,8 @@ package org.getalp.lexsema.io.text;
 
 
 import de.tudarmstadt.ukp.dkpro.core.matetools.MateLemmatizer;
+import de.tudarmstadt.ukp.dkpro.core.matetools.MatePosTagger;
+import de.tudarmstadt.ukp.dkpro.core.opennlp.OpenNlpSegmenter;
 import de.tudarmstadt.ukp.dkpro.core.stanfordnlp.StanfordPosTagger;
 import de.tudarmstadt.ukp.dkpro.core.tokit.BreakIteratorSegmenter;
 import org.apache.uima.analysis_engine.AnalysisEngineDescription;
@@ -19,8 +21,8 @@ public class FrenchDKPTextProcessor extends AbstractDKPTextProcessor {
     @Override
     protected AnalysisEngineDescription[] defineAnalysisEngine() throws ResourceInitializationException {
         AnalysisEngineDescription[] descriptors = new AnalysisEngineDescription[3];
-        descriptors[0] = createEngineDescription(BreakIteratorSegmenter.class);
-        descriptors[1] = createEngineDescription(StanfordPosTagger.class);
+        descriptors[0] = createEngineDescription(OpenNlpSegmenter.class);
+        descriptors[1] = createEngineDescription(MatePosTagger.class);
         descriptors[2] = createEngineDescription(MateLemmatizer.class);
         return descriptors;
     }

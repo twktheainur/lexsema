@@ -36,7 +36,10 @@ class JedisCache implements Cache {
 
     @Override
     public String set(String key, String value) {
-        return cache.set(key, value);
+        if(key!=null && value!=null) {
+            return cache.set(key, value);
+        }
+        return "";
     }
 
     @Override

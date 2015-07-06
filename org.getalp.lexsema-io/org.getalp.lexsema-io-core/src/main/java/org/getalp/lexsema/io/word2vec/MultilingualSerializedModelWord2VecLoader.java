@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -51,6 +52,23 @@ public class MultilingualSerializedModelWord2VecLoader implements MultilingualWo
                 Word2VecLoader word2VecLoader = new SerializedModelWord2VecLoader();
                 logger.info(String.format("\tLoading %s model...", language.toString()));
                 word2VecLoader.load(file);
+                word2VecMap.put(language, word2VecLoader.getWord2Vec());
+                vocabCacheMap.put(language, word2VecLoader.getCache());
+            }
+        }
+    }
+
+    @Override
+    public void loadGoogle(File directory, boolean binary) throws IOException {
+        if (directory != null) {
+            //noinspection ConstantConditions
+            for (File file : directory.listFiles()) {
+
+                String langCode = file.getName();
+                Language language = Language.fromCode(langCode);
+                Word2VecLoader word2VecLoader = new SerializedModelWord2VecLoader();
+                logger.info(String.format("\tLoading %s model...", language.toString()));
+                word2VecLoader.loadGoogle(file, binary);
                 word2VecMap.put(language, word2VecLoader.getWord2Vec());
                 vocabCacheMap.put(language, word2VecLoader.getCache());
             }

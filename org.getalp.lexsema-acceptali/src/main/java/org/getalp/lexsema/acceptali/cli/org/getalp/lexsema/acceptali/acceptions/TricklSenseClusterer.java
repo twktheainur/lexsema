@@ -9,17 +9,17 @@ import org.getalp.ml.matrix.filters.Filter;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SenseClustererImpl implements SenseClusterer {
+public class TricklSenseClusterer implements SenseClusterer {
     private ClusterAlgorithm clusterAlgorithm;
     private Filter kernelFilter;
     private double threshold;
 
-    public SenseClustererImpl(ClusterAlgorithm clusterAlgorithm) {
+    public TricklSenseClusterer(ClusterAlgorithm clusterAlgorithm) {
         this(clusterAlgorithm, 0);
 
     }
 
-    public SenseClustererImpl(ClusterAlgorithm clusterAlgorithm, double threshold) {
+    public TricklSenseClusterer(ClusterAlgorithm clusterAlgorithm, double threshold) {
         this.clusterAlgorithm = clusterAlgorithm;
         this.threshold = threshold;
     }

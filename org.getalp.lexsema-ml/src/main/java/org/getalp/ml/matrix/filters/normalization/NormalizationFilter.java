@@ -1,7 +1,7 @@
 /**
  *
  */
-package org.getalp.ml.matrix.filters;
+package org.getalp.ml.matrix.filters.normalization;
 
 import cern.colt.matrix.tdouble.DoubleMatrix1D;
 import cern.colt.matrix.tdouble.DoubleMatrix2D;
@@ -9,6 +9,7 @@ import cern.colt.matrix.tdouble.algo.DoubleStatistic;
 import cern.colt.matrix.tdouble.impl.DenseDoubleMatrix1D;
 import cern.jet.math.tdouble.DoubleFunctions;
 import cern.jet.stat.tdouble.DoubleDescriptive;
+import org.getalp.ml.matrix.filters.Filter;
 
 /**
  * @author tchechem

@@ -8,8 +8,6 @@ import it.uniroma1.lcl.babelnet.BabelNet;
 import it.uniroma1.lcl.babelnet.BabelSense;
 import it.uniroma1.lcl.babelnet.BabelSynset;
 import org.getalp.lexsema.io.resource.LRLoader;
-import org.getalp.lexsema.util.Language;
-import org.getalp.lexsema.util.language.Language;
 import org.getalp.lexsema.similarity.Document;
 import org.getalp.lexsema.similarity.Sense;
 import org.getalp.lexsema.similarity.SenseImpl;
@@ -18,6 +16,7 @@ import org.getalp.lexsema.similarity.cache.SenseCache;
 import org.getalp.lexsema.similarity.cache.SenseCacheImpl;
 import org.getalp.lexsema.similarity.signatures.StringSemanticSignature;
 import org.getalp.lexsema.similarity.signatures.StringSemanticSignatureImpl;
+import org.getalp.lexsema.util.Language;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -151,8 +151,8 @@ public class DBNaryLoaderImpl implements DBNaryLoader {
 
     private String posToLexvo(final String pos) {
         String convertedPos = "";
-        if (pos.toLowerCase().startsWith("n")
-                || pos.toLowerCase().contains("noun")) {
+        if ((pos.toLowerCase().startsWith("n")
+                || pos.toLowerCase().contains("noun")) && language.equals(Language.ENGLISH)) {
             convertedPos = "lexinfo:noun";
         } else if (pos.toLowerCase().startsWith("v")
                 || pos.toLowerCase().contains("verb")) {
@@ -167,6 +167,13 @@ public class DBNaryLoaderImpl implements DBNaryLoader {
                 pos.toLowerCase().contains("adv") ||
                 pos.toLowerCase().contains("adverb")) {
             convertedPos = "lexinfo:adverb";
+        } else if(pos.toLowerCase().contains("adjf")){
+            convertedPos = "прил";
+        } else if ((pos.toLowerCase().startsWith("n")
+                || pos.toLowerCase().contains("noun")) && language.equals(Language.RUSSIAN)){
+            convertedPos = "сущ";
+        } else if(pos.toLowerCase().startsWith("pr") && language.equals(Language.RUSSIAN)){
+            convertedPos = "гл";
         }
         return model.getNode(convertedPos).toString();
     }
