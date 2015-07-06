@@ -3,11 +3,9 @@ package org.getalp.lexsema.util;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.HashSet;
+import java.util.Scanner;
 import java.util.Set;
 
 /**
@@ -29,23 +27,22 @@ public final class StopList {
      * @return Success or not of loading the stop words from the stop list file
      */
     private static boolean loadStopWords() {
-        String currentLine;
-        try (BufferedReader br = new BufferedReader(new FileReader(stopListFile))) {
-            if (stopWords == null) {
-                stopWords = new HashSet<String>();
-            } else {
-                stopWords.clear();
+        stopWords = new HashSet<String>();
+        try
+        {
+            Scanner sc = new Scanner(new File(stopListFile));
+            while (sc.hasNext())
+            {
+                stopWords.add(sc.next());
             }
-
-            do {
-                currentLine = br.readLine();
-                stopWords.add(currentLine.toLowerCase().trim());
-            } while (currentLine != null);
-
-        } catch (IOException e) {
-            logger.error(e.getLocalizedMessage());
+            sc.close();
+            return !stopWords.isEmpty();
         }
-        return stopWords != null ^ !stopWords.isEmpty();
+        catch (Exception e)
+        {
+            logger.error(e.getLocalizedMessage());
+            return false;
+        }
     }
 
     /**
@@ -53,17 +50,18 @@ public final class StopList {
      * @return <code>true</code> if the token is first stop word, <code>false</code> otherwise
      */
     public static boolean isStopWord(String token) {
+        /*
         char[] chars = token.toCharArray();
         for (char c : chars) {
             if (!Character.isLetter(c) && c != '-' && c != ' ') {
                 return false;
             }
         }
-
+        */
         if (stopWords == null) {
             loadStopWords();
         }
-        return stopWords.contains(token.toLowerCase());
+        return stopWords.contains(token.toLowerCase().trim());
     }
 
     /**

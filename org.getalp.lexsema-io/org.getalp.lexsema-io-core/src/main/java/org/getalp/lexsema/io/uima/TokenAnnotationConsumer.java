@@ -34,7 +34,9 @@ public class TokenAnnotationConsumer extends CasConsumer_ImplBase implements Tok
             String lemma = token.getLemma().getValue();
             String pos = token.getPos().getPosValue();
             String sform = token.getCoveredText();
-            Word lexEnt = new WordImpl("", lemma, sform, pos);
+            int begin = token.getBegin();
+            int end = token.getEnd();
+            Word lexEnt = new WordImpl("", lemma, sform, pos, begin, end);
             text.addWord(lexEnt);
         }
     }

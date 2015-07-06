@@ -9,6 +9,8 @@ import org.getalp.lexsema.similarity.signatures.StringSemanticSignature;
 
 public class AnotherLeskSimilarity implements SimilarityMeasure
 {
+    public boolean normalize = false;
+    
     public double compute(StringSemanticSignature sigA, StringSemanticSignature sigB)
     {
         List<String> la = sigA.getSymbols();
@@ -26,7 +28,8 @@ public class AnotherLeskSimilarity implements SimilarityMeasure
         		}
         	}
         }
-        return count;
+        if (normalize) return (((double) count) / ((double) aSize * bSize));
+        else return count;
     }
 
     public double compute(IndexedSemanticSignature sigA, IndexedSemanticSignature sigB)
@@ -46,6 +49,7 @@ public class AnotherLeskSimilarity implements SimilarityMeasure
         		}
         	}
         }
+        if (normalize) return (((double) count) / ((double) aSize * bSize));
         return count;
     }
 

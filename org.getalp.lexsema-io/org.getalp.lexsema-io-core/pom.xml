@@ -11,6 +11,15 @@
 
     <artifactId>org.getalp.lexsema-io-core</artifactId>
 
+    <dependencies>
+		<dependency>
+		    <groupId>org.apache.lucene</groupId>
+		    <artifactId>lucene-snowball</artifactId>
+		    <version>3.0.3</version>
+		</dependency>
+
+	</dependencies>
+
     <build>
         <plugins>
             <plugin>

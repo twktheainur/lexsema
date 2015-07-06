@@ -51,11 +51,31 @@
 		      <artifactId>jena</artifactId>
 		      <version>2.0.1-SNAPSHOT</version>
 		</dependency>
+		<!-- 
         <dependency>
               <groupId>org.nlp2rdf.software</groupId>
               <artifactId>stanfordcorenlp</artifactId>
               <version>2.0.1-SNAPSHOT</version>
         </dependency>
-    </dependencies>    
-
+         -->
+         <dependency>
+		    <groupId>com.google.guava</groupId>
+		    <artifactId>guava</artifactId>
+		    <version>18.0</version>
+		</dependency>
+         
+    </dependencies>  
+    
+    <repositories>
+		<repository>
+		    <id>maven.aksw.internal</id>
+		    <name>University Leipzig, AKSW Maven2 Repository</name>
+		    <url>http://maven.aksw.org/repository/internal</url>
+		</repository>
+		<repository>
+		    <id>maven.aksw.snapshots</id>
+		    <name>University Leipzig, AKSW Maven2 Repository</name>
+		    <url>http://maven.aksw.org/repository/snapshots</url>
+		</repository>
+	</repositories>  
 </project>

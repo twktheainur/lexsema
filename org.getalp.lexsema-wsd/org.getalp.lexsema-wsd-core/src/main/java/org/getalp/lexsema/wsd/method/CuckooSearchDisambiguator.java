@@ -12,7 +12,11 @@ import org.getalp.lexsema.wsd.score.ConfigurationScorer;
 
 public class CuckooSearchDisambiguator implements Disambiguator
 {
-    public PrintWriter plotWriter = null;
+    public PrintWriter scorePlotWriter = null;
+
+    public PrintWriter perfectScorePlotWriter = null;
+    
+    public ConfigurationScorer perfectScorer = null;
     
     private class Nest implements Comparable<Nest>
     {
@@ -46,11 +50,12 @@ public class CuckooSearchDisambiguator implements Disambiguator
             return new Nest(configuration.clone(), getScore());
         }
         
-        public void randomFly()
+        public double randomFly()
         {
             double distance = levyDistribution.sample();
             configuration.makeRandomChanges((int) distance);
             needRecomputeScore = true;
+            return distance;
         }
         
         public double getScore()
@@ -105,7 +110,8 @@ public class CuckooSearchDisambiguator implements Disambiguator
         Configuration ret = null;
         if (nestsNumber == 1) ret = runWithSingleNest(document);
         else ret = runWithManyNests(document);
-        if (plotWriter != null) plotWriter.flush();
+        if (scorePlotWriter != null) scorePlotWriter.flush();
+        if (perfectScorePlotWriter != null) perfectScorePlotWriter.flush();
         return ret;
     }
     
@@ -119,7 +125,7 @@ public class CuckooSearchDisambiguator implements Disambiguator
             int progress = (int)(stopCondition.getRemainingPercentage() * 100);
             double progressPercent = (double)progress / 100.0;
             Nest newNest = nests[0].clone();
-            newNest.randomFly();
+            double distance = newNest.randomFly();
             if (newNest.getScore() > nests[0].getScore())
             {
                 nests[0] = newNest;
@@ -127,11 +133,13 @@ public class CuckooSearchDisambiguator implements Disambiguator
             if (verbose)
             {
                 System.out.println("Cuckoo Progress : " + progressPercent + "% - " +
-                                   "Current best : " + nests[0].getScore());
+                                   "Current best : " + nests[0].getScore() + " - " + 
+                		           "Distance flight : " + distance);
             }
             stopCondition.incrementIterations();
             stopCondition.updateMilliseconds();
-            if (plotWriter != null) plotWriter.println(stopCondition.getCurrent() + " " + nests[0].getScore());
+            if (scorePlotWriter != null)  scorePlotWriter.println(stopCondition.getCurrent() + " " + nests[0].getScore());
+            if (perfectScorePlotWriter != null && perfectScorer != null) perfectScorePlotWriter.println(stopCondition.getCurrent() + " " + perfectScorer.computeScore(document, nests[0].configuration));
         }
         return nests[0].configuration;
     }
@@ -173,7 +181,8 @@ public class CuckooSearchDisambiguator implements Disambiguator
             }
             stopCondition.incrementIterations();
             stopCondition.updateMilliseconds();
-            if (plotWriter != null) plotWriter.println(stopCondition.getCurrent() + " " + nests[nestsNumber - 1].getScore());
+            if (scorePlotWriter != null)  scorePlotWriter.println(stopCondition.getCurrent() + " " + nests[nestsNumber - 1].getScore());
+            if (perfectScorePlotWriter != null && perfectScorer != null) perfectScorePlotWriter.println(stopCondition.getCurrent() + " " + perfectScorer.computeScore(document, nests[nestsNumber - 1].configuration));
         }
         sortNests();
         return nests[nestsNumber - 1].configuration;

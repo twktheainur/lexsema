@@ -84,7 +84,7 @@ public class AlgorithmsComparison
         {
             System.out.println();
             
-            csa.plotWriter = open("cuckoo", d.getId());
+            csa.scorePlotWriter = open("cuckoo", d.getId());
             Configuration c = csa.disambiguate(d);
             System.out.println("Cuckoo Search Score : " + configScorer.computeScore(d, c));
 
