@@ -10,9 +10,9 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 
-public class PairwiseCLSimilarityMatrixGeneratorFile implements PairwiseCrossLingualSimilarityMatrixGenerator {
+public class PairwiseCLSimilarityMatrixGeneratorFile implements PairwiseSimilarityMatrixGenerator {
 
-    private static Logger logger = LoggerFactory.getLogger(PairwiseCrossLingualSimilarityMatrixGenerator.class);
+    private static Logger logger = LoggerFactory.getLogger(PairwiseSimilarityMatrixGenerator.class);
 
     private DoubleMatrix2D similarityMatrix = null;
     private String filename;

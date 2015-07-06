@@ -22,6 +22,8 @@ public class WordImpl implements Word {
     private String semanticTag;
     private Sentence enclosingSentence = null;
     private List<Word> precedingNonInstances;
+    private int begin = 0;
+    private int end = 0;
 
     public WordImpl(String id, String lemma, String surfaceForm, String pos) {
         this.id = id;
@@ -29,6 +31,16 @@ public class WordImpl implements Word {
         this.surfaceForm = surfaceForm;
         textPos = pos;
         precedingNonInstances = new ArrayList<>();
+    }
+
+    public WordImpl(String id, String lemma, String surfaceForm, String pos, int begin, int end) {
+        this.id = id;
+        this.lemma = lemma;
+        this.surfaceForm = surfaceForm;
+        textPos = pos;
+        precedingNonInstances = new ArrayList<>();
+        this.begin = begin;
+        this.end = end;
     }
 
 
@@ -162,5 +174,24 @@ public class WordImpl implements Word {
     @Override
     public int compareTo(LexicalResourceEntity o) {
         return id.compareTo(o.getNode().toString());
+    }
+
+    @Override
+    public String toString() {
+        if(lexicalEntry!=null) {
+            return lexicalEntry.toString();
+        } else {
+            return String.format("Word|%s#%s|",lemma,textPos);
+        }
+    }
+    
+    @Override
+    public int getBegin() {
+    	return begin;
+    }
+    
+    @Override
+    public int getEnd() {
+    	return end;
     }
 }

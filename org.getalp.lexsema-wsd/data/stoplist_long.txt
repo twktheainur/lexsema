@@ -1,5 +1,4 @@
-﻿first
-﻿able
+a
 able
 about
 above
@@ -852,4 +851,3 @@ yourselves
 you've
 z
 zero
-zero﻿I

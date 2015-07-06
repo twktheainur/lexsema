@@ -18,8 +18,7 @@ import org.getalp.lexsema.similarity.signatures.StringSemanticSignatureImpl;
 import org.getalp.lexsema.util.StopList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.tartarus.snowball.SnowballStemmer;
-import org.tartarus.snowball.ext.englishStemmer;
+import org.tartarus.snowball.ext.EnglishStemmer;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -74,9 +73,22 @@ public class WordnetLoader implements LRLoader {
                 Sense s = new SenseImpl(word.getSenseKey().toString());
 
                 if (loadRelated) {
-                    Map<IPointer, List<IWordID>> rm = word.getRelatedMap();
+                    
+                    Map<IPointer, List<ISynsetID>> rm = word.getSynset().getRelatedMap();
                     for (IPointer p : rm.keySet()) {
-                        for (IWordID iwd : rm.get(p)) {
+                        for (ISynsetID iwd : rm.get(p)) {
+                            StringSemanticSignature localSignature = new StringSemanticSignatureImpl();
+                            addToSignature(localSignature, dictionary.getSynset(iwd).getGloss());
+                            if (hasExtendedSignature) {
+                                signature.appendSignature(localSignature);
+                            }
+                            s.addRelatedSignature(p.getSymbol(), localSignature);
+                        }
+                    }
+                    
+                    Map<IPointer, List<IWordID>> rm2 = word.getRelatedMap();
+                    for (IPointer p : rm2.keySet()) {
+                        for (IWordID iwd : rm2.get(p)) {
                             StringSemanticSignature localSignature = new StringSemanticSignatureImpl();
                             addToSignature(localSignature, dictionary.getWord(iwd).getSynset().getGloss());
                             if (hasExtendedSignature) {
@@ -86,6 +98,7 @@ public class WordnetLoader implements LRLoader {
                         }
                     }
                 }
+                
                 //if (hasExtendedSignature) {
                 s.setSemanticSignature(signature);
                 //}
@@ -330,8 +343,7 @@ public class WordnetLoader implements LRLoader {
 
     private void addToSignature(StringSemanticSignature signature, String def) {
         StringTokenizer st = new StringTokenizer(def, " ", false);
-        SnowballStemmer stemmer = new englishStemmer();
-        int ww = 0;
+        EnglishStemmer stemmer = new EnglishStemmer();
         while (st.hasMoreTokens()) {
             String token = st.nextToken().replaceAll("\"|;", "").toLowerCase();
             //Removing stop words from definitions

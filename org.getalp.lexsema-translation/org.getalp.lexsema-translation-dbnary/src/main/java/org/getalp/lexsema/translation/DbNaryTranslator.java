@@ -1,12 +1,12 @@
 package org.getalp.lexsema.translation;
 
-import org.getalp.lexsema.io.text.SentenceProcessor;
+import org.getalp.lexsema.io.text.TextProcessor;
 import org.getalp.lexsema.ontolex.LexicalEntry;
 import org.getalp.lexsema.ontolex.dbnary.DBNary;
 import org.getalp.lexsema.ontolex.dbnary.Translation;
 import org.getalp.lexsema.ontolex.dbnary.Vocable;
 import org.getalp.lexsema.ontolex.dbnary.exceptions.NoSuchVocableException;
-import org.getalp.lexsema.similarity.Sentence;
+import org.getalp.lexsema.similarity.Text;
 import org.getalp.lexsema.similarity.Word;
 import org.getalp.lexsema.util.Language;
 import org.getalp.lexsema.util.segmentation.Segmenter;
@@ -21,11 +21,11 @@ public class DbNaryTranslator implements Translator {
 
     private static Logger logger = LoggerFactory.getLogger(DbNaryTranslator.class);
     private DBNary dbNary;
-    private SentenceProcessor sentenceProcessor;
+    private TextProcessor textProcessor;
 
-    public DbNaryTranslator(DBNary dbNary, SentenceProcessor sentenceProcessor) {
+    public DbNaryTranslator(DBNary dbNary, TextProcessor textProcessor) {
         this.dbNary = dbNary;
-        this.sentenceProcessor = sentenceProcessor;
+        this.textProcessor = textProcessor;
     }
 
     public DbNaryTranslator(DBNary dbNary) {
@@ -36,8 +36,8 @@ public class DbNaryTranslator implements Translator {
     public String translate(String source, Language sourceLanguage, Language targetLanguage) {
         StringBuilder outputBuilder = new StringBuilder();
 
-        if (sentenceProcessor != null) {
-            Sentence sentence = sentenceProcessor.process(source, "");
+        if (textProcessor != null) {
+            Text sentence = textProcessor.process(source, "");
             for (Word w : sentence) {
                 outputBuilder.append(String.format("%s ", getWordTranslation(w.getLemma(), sourceLanguage, targetLanguage)));
             }

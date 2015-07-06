@@ -4,7 +4,7 @@ import cern.colt.matrix.tdouble.DoubleMatrix2D;
 import com.trickl.cluster.FuzzyCMeans;
 import org.getalp.lexsema.acceptali.cli.org.getalp.lexsema.acceptali.acceptions.SenseCluster;
 import org.getalp.lexsema.acceptali.cli.org.getalp.lexsema.acceptali.acceptions.SenseClusterer;
-import org.getalp.lexsema.acceptali.cli.org.getalp.lexsema.acceptali.acceptions.SenseClustererImpl;
+import org.getalp.lexsema.acceptali.cli.org.getalp.lexsema.acceptali.acceptions.TricklSenseClusterer;
 import org.getalp.lexsema.acceptali.closure.LexicalResourceTranslationClosure;
 import org.getalp.lexsema.acceptali.closure.generator.TranslationClosureGenerator;
 import org.getalp.lexsema.acceptali.closure.generator.TranslationClosureGeneratorFactory;
@@ -21,7 +21,7 @@ import org.getalp.lexsema.ontolex.graph.storage.StoreHandler;
 import org.getalp.lexsema.ontolex.graph.store.Store;
 import org.getalp.lexsema.similarity.Sense;
 import org.getalp.lexsema.acceptali.closure.similarity.PairwiseCLSimilarityMatrixGeneratorFile;
-import org.getalp.lexsema.acceptali.closure.similarity.PairwiseCrossLingualSimilarityMatrixGenerator;
+import org.getalp.lexsema.acceptali.closure.similarity.PairwiseSimilarityMatrixGenerator;
 import org.getalp.lexsema.util.Language;
 import org.getalp.ml.matrix.filters.NeuralICAMatrixFactorizationFilter;
 import org.slf4j.Logger;
@@ -64,10 +64,10 @@ public final class AcceptionClusteringExperimentFromFile {
 
         try {
             Set<Sense> closureSet = generateTranslationClosureWithSignatures(instantiateDBNary());
-            PairwiseCrossLingualSimilarityMatrixGenerator matrixGenerator =
+            PairwiseSimilarityMatrixGenerator matrixGenerator =
                     new PairwiseCLSimilarityMatrixGeneratorFile(SIM_MATRIX_PATH);
             matrixGenerator.generateMatrix();
-            SenseClusterer clusterer = new SenseClustererImpl(new FuzzyCMeans(), .5);
+            SenseClusterer clusterer = new TricklSenseClusterer(new FuzzyCMeans(), .5);
             clusterer.setKernelFilter(new NeuralICAMatrixFactorizationFilter(5));
             DoubleMatrix2D inputData = matrixGenerator.getScoreMatrix();
             //inputData.normalize();

@@ -51,7 +51,7 @@ public class ContinuousConfiguration implements Configuration
     {
         for (int i = 0 ; i < documentSize ; i++)
         {
-            setSense(i, random.nextInt(document.getSenses(i).size()));
+            setSenseRandom(i);
         }
     }
     
@@ -67,19 +67,33 @@ public class ContinuousConfiguration implements Configuration
     public void makeRandomChange()
     {
         int randomIndex = random.nextInt(documentSize);
-        setSense(randomIndex, random.nextInt(getNumberOfSenses(randomIndex)));
+        setSenseRandom(randomIndex);
     }
     
-    public int getNumberOfSenses(int wordIndex)
+    public void setSenseRandom(int wordIndex)
     {
-        return document.getSenses(wordIndex).size();
+        if (document.getSenses(wordIndex).isEmpty())
+        {
+        	assignments[wordIndex] = -1;
+        }
+        else
+        {
+        	assignments[wordIndex] = random.nextInt(document.getSenses(wordIndex).size());
+        }
     }
-
+    
     public void setSense(int wordIndex, int senseIndex)
     {
-        int sensesNumber = document.getSenses(wordIndex).size();
-        while (senseIndex < 0) senseIndex += sensesNumber;
-        assignments[wordIndex] = senseIndex % sensesNumber;
+    	if (document.getSenses(wordIndex).isEmpty())
+    	{
+    		assignments[wordIndex] = -1;
+    	}
+    	else
+    	{
+	        int sensesNumber = document.getSenses(wordIndex).size();
+	        while (senseIndex < 0) senseIndex += sensesNumber;
+	        assignments[wordIndex] = senseIndex % sensesNumber;
+    	}
     }
 
     public int getAssignment(int wordIndex)

@@ -1,10 +1,6 @@
 package org.getalp.lexsema.acceptali.experiments;
 
-import org.getalp.lexsema.io.text.EnglishDKPSentenceProcessor;
-import org.getalp.lexsema.io.text.FrenchDKPSentenceProcessor;
-import org.getalp.lexsema.io.text.RussianPythonSentenceProcessor;
-import org.getalp.lexsema.io.text.SentenceProcessor;
-import org.getalp.lexsema.util.Language;
+import org.getalp.lexsema.io.text.*;
 import org.getalp.lexsema.ontolex.dbnary.DBNary;
 import org.getalp.lexsema.ontolex.dbnary.exceptions.NoSuchVocableException;
 import org.getalp.lexsema.ontolex.factories.resource.LexicalResourceFactory;
@@ -18,6 +14,7 @@ import org.getalp.lexsema.similarity.measures.SimilarityMeasure;
 import org.getalp.lexsema.similarity.measures.tverski.TverskiIndexSimilarityMeasureBuilder;
 import org.getalp.lexsema.translation.DbNaryDisambiguatingTranslator;
 import org.getalp.lexsema.translation.Translator;
+import org.getalp.lexsema.util.Language;
 import org.getalp.lexsema.wsd.method.Disambiguator;
 import org.getalp.lexsema.wsd.method.SimulatedAnnealing;
 import org.getalp.lexsema.wsd.score.ConfigurationScorer;
@@ -27,6 +24,7 @@ import org.slf4j.LoggerFactory;
 import org.tartarus.snowball.SnowballStemmer;
 import org.tartarus.snowball.ext.englishStemmer;
 import org.tartarus.snowball.ext.frenchStemmer;
+import org.tartarus.snowball.ext.germanStemmer;
 import org.tartarus.snowball.ext.russianStemmer;
 
 import java.io.*;
@@ -136,18 +134,21 @@ public final class DbnaryCrossLingualDocumentTransfer {
 
     public String translate(String text, Language lang1, Language lang2) {
 
-        SentenceProcessor sentenceProcessor;
+        TextProcessor textProcessor;
         SnowballStemmer snowballStemmer;
         Collection<String> sourceStopList;
         Collection<String> targetStopList;
         if (languageIs(lang1, "en")) {
-            sentenceProcessor = new EnglishDKPSentenceProcessor();
+            textProcessor = new EnglishDKPTextProcessor();
             sourceStopList = loadStopList("english_stop.txt");
         } else if (languageIs(lang1, "fr")) {
-            sentenceProcessor = new FrenchDKPSentenceProcessor();
+            textProcessor = new FrenchDKPTextProcessor();
             sourceStopList = loadStopList("french_stop.txt");
+        } else if (languageIs(lang1, "de")){
+            textProcessor = new GermanDKPTextProcessor();
+            sourceStopList = loadStopList("german_stop.txt");
         } else {
-            sentenceProcessor = new RussianPythonSentenceProcessor();
+            textProcessor = new RussianPythonTextProcessor();
             sourceStopList = loadStopList("russian_stop.txt");
         }
         if (languageIs(lang2, "en")) {
@@ -156,12 +157,14 @@ public final class DbnaryCrossLingualDocumentTransfer {
         } else if (languageIs(lang2, "fr")) {
             targetStopList = loadStopList("french_stop.txt");
             snowballStemmer = new frenchStemmer();
+        } else if (languageIs(lang2, "de")) {
+            targetStopList = loadStopList("german_stop.txt");
+            snowballStemmer = new germanStemmer();
         } else {
-            sentenceProcessor = new RussianPythonSentenceProcessor();
             snowballStemmer = new russianStemmer();
             targetStopList = loadStopList("russian_stop.txt");
         }
-        Translator translator = new DbNaryDisambiguatingTranslator(dbNary, sentenceProcessor, disambiguator, snowballStemmer, sourceStopList, targetStopList);
+        Translator translator = new DbNaryDisambiguatingTranslator(dbNary, textProcessor, disambiguator, snowballStemmer, sourceStopList, targetStopList);
         return translator.translate(text, lang1, lang2);
     }
 

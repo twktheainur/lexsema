@@ -6,33 +6,36 @@ import org.getalp.lexsema.io.document.TextLoader;
 import org.getalp.lexsema.io.resource.LRLoader;
 import org.getalp.lexsema.io.resource.dictionary.DictionaryLRLoader;
 import org.getalp.lexsema.similarity.Document;
+import org.getalp.lexsema.similarity.measures.lesk.ACExtendedLeskSimilarity;
 import org.getalp.lexsema.wsd.configuration.Configuration;
 import org.getalp.lexsema.wsd.method.Disambiguator;
 import org.getalp.lexsema.wsd.method.SimulatedAnnealing2;
+import org.getalp.lexsema.wsd.method.StopCondition;
 import org.getalp.lexsema.wsd.score.ConfigurationScorer;
+import org.getalp.lexsema.wsd.score.ConfigurationScorerWithCache;
 import org.getalp.lexsema.wsd.score.SemEval2007Task7PerfectConfigurationScorer;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 
 public class SimulatedAnnealingDisambiguation2
 {
-    public static void main(String[] args)
+    public static void main(String[] args) throws Exception
     {    
-        int iterationsNumber = 1000;
-        double acceptanceProbability = 0.8;
-        double coolingRate = 0.8;
-        int convergenceThreshold = 5;
+        int cycles = 2000;
+        double coolingRate = 0.10;
+        int iterationsNumber = 4;
         
-        if (args.length >= 1) iterationsNumber = Integer.valueOf(args[0]);
-        if (args.length >= 2) acceptanceProbability = Double.valueOf(args[1]);
-        if (args.length >= 3) coolingRate = Double.valueOf(args[2]);
-        if (args.length >= 4) convergenceThreshold = Integer.valueOf(args[3]);
+        if (args.length >= 1) cycles = Integer.valueOf(args[0]);
+        if (args.length >= 2) coolingRate = Double.valueOf(args[1]);
+        if (args.length >= 3) iterationsNumber = Integer.valueOf(args[2]);
         
         System.out.println("Parameters value : " + 
-                         "<iterations = " + iterationsNumber + "> " +
-                         "<acceptance probability = " + acceptanceProbability + "> " +
+                         "<scorer calls = " + cycles + "> " +
                          "<cooling rate = " + coolingRate + "> " +
-                         "<convergence threshold = " + convergenceThreshold + "> " 
+                         "<iterations = " + iterationsNumber + "> " 
                          );
         
         long startTime = System.currentTimeMillis();
@@ -42,9 +45,10 @@ public class SimulatedAnnealingDisambiguation2
 
         LRLoader lrloader = new DictionaryLRLoader(new File("../data/dictionnaires-lesk/dict-adapted-all-relations.xml"));
 
-        ConfigurationScorer scorer = new SemEval2007Task7PerfectConfigurationScorer();
+        //ConfigurationScorer scorer = new SemEval2007Task7PerfectConfigurationScorer();
+        ConfigurationScorer scorer = new ConfigurationScorerWithCache(new ACExtendedLeskSimilarity());
 
-        Disambiguator saDisambiguator = new SimulatedAnnealing2(acceptanceProbability, coolingRate, convergenceThreshold, iterationsNumber, scorer);
+        SimulatedAnnealing2 saDisambiguator = new SimulatedAnnealing2(new StopCondition(StopCondition.Condition.SCORERCALLS, cycles), 200, coolingRate, iterationsNumber, scorer, true);
 
         System.out.println("Loading texts...");
         dl.load();
@@ -56,6 +60,7 @@ public class SimulatedAnnealingDisambiguation2
             System.out.println("Loading senses...");
             lrloader.loadSenses(d);
 
+            saDisambiguator.plotWriter = new PrintWriter("../annealing_plot_" + d.getId() + ".dat");
             System.out.println("Disambiguating...");
             Configuration c = saDisambiguator.disambiguate(d);
             

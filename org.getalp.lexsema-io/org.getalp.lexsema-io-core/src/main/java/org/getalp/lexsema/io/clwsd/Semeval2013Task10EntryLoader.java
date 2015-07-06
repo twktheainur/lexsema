@@ -2,9 +2,9 @@ package org.getalp.lexsema.io.clwsd;
 
 
 import edu.stanford.nlp.util.Pair;
-import org.getalp.lexsema.io.text.EnglishDKPSentenceProcessor;
-import org.getalp.lexsema.io.text.SentenceProcessor;
-import org.getalp.lexsema.similarity.Sentence;
+import org.getalp.lexsema.io.text.EnglishDKPTextProcessor;
+import org.getalp.lexsema.io.text.TextProcessor;
+import org.getalp.lexsema.similarity.Text;
 import org.getalp.lexsema.similarity.WordImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,7 +20,7 @@ public class Semeval2013Task10EntryLoader implements ContentHandler, TargetEntry
     private Logger logger = LoggerFactory.getLogger(Semeval2013Task10EntryLoader.class);
 
     private String path;
-    private SentenceProcessor sentenceProcessor;
+    private TextProcessor textProcessor;
 
     private boolean inContext = false;
     private int numberOfSpacesInContext;
@@ -35,7 +35,7 @@ public class Semeval2013Task10EntryLoader implements ContentHandler, TargetEntry
 
     public Semeval2013Task10EntryLoader(String path) {
         this.path = path;
-        sentenceProcessor = new EnglishDKPSentenceProcessor();
+        textProcessor = new EnglishDKPTextProcessor();
     }
 
     @Override
@@ -97,7 +97,7 @@ public class Semeval2013Task10EntryLoader implements ContentHandler, TargetEntry
                 contextString = contextString.replaceAll("<[/]?head>", "");
                 contextString = contextString.replaceAll("/", "_");
                 try {
-                    Sentence s = sentenceProcessor.process(contextString, targetWordId + "#" + currentContextId);
+                    Text s = textProcessor.process(contextString, targetWordId + "#" + currentContextId);
                     entry.addContext(s, currentWordIndex);
                 } catch (RuntimeException e) {
                     logger.warn(e.getLocalizedMessage());
@@ -155,7 +155,7 @@ public class Semeval2013Task10EntryLoader implements ContentHandler, TargetEntry
     }
 
     @Override
-    public Iterator<Pair<Sentence, Integer>> iterator() {
+    public Iterator<Pair<Text, Integer>> iterator() {
         return entry.iterator();
     }
 

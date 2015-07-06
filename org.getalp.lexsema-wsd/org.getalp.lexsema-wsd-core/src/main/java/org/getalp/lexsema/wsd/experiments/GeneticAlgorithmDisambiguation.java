@@ -1,6 +1,9 @@
 package org.getalp.lexsema.wsd.experiments;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 
 import org.getalp.lexsema.io.annotresult.SemevalWriter;
 import org.getalp.lexsema.io.document.Semeval2007TextLoader;
@@ -8,17 +11,17 @@ import org.getalp.lexsema.io.document.TextLoader;
 import org.getalp.lexsema.io.resource.LRLoader;
 import org.getalp.lexsema.io.resource.dictionary.DictionaryLRLoader;
 import org.getalp.lexsema.similarity.Document;
-import org.getalp.lexsema.similarity.measures.lesk.ACExtendedLeskSimilarity;
 import org.getalp.lexsema.wsd.configuration.Configuration;
-import org.getalp.lexsema.wsd.experiments.ga.wsd.GeneticAlgorithmDisambiguator;
 import org.getalp.lexsema.wsd.method.Disambiguator;
+import org.getalp.lexsema.wsd.method.StopCondition;
+import org.getalp.lexsema.wsd.method.genetic.GeneticAlgorithmDisambiguator;
 import org.getalp.lexsema.wsd.score.*;
 
 public class GeneticAlgorithmDisambiguation
 {
-    public static void main(String[] args)
+    public static void main(String[] args) throws FileNotFoundException, UnsupportedEncodingException
     {
-        int iterations = 1000;
+        int iterations = 2000;
         int population = 20;
         double crossoverRate = 0.7;
         double mutationRate = 0.9;
@@ -29,7 +32,7 @@ public class GeneticAlgorithmDisambiguation
         if (args.length >= 4) mutationRate = Double.valueOf(args[3]);
         
         System.out.println("Parameters value : " +
-                           "<iterations = " + iterations + "> " +
+                           "<scorer calls = " + iterations + "> " +
                            "<population = " + population + "> " +
                            "<crossover rate = " + crossoverRate + "> " +
                            "<mutation rate = " + mutationRate + "> ");
@@ -40,14 +43,14 @@ public class GeneticAlgorithmDisambiguation
 
         LRLoader lrloader = new DictionaryLRLoader(new File("../data/dictionnaires-lesk/dict-adapted-all-relations.xml"));
         
-        //ConfigurationScorer scorer = new SemEval2007Task7PerfectConfigurationScorer();
+        ConfigurationScorer scorer = new SemEval2007Task7PerfectConfigurationScorer();
         //ConfigurationScorer scorer = new ACSimilarityConfigurationScorer(new ACExtendedLeskSimilarity());
         //ConfigurationScorer scorer = new ACSimilarityConfigurationScorer(new IndexedOverlapSimilarity());
         //ConfigurationScorer scorer = new TverskyConfigurationScorer(new ACExtendedLeskSimilarity(), Runtime.getRuntime().availableProcessors());
-        ConfigurationScorer scorer = new ConfigurationScorerWithCache(new ACExtendedLeskSimilarity());
+        //ConfigurationScorer scorer = new ConfigurationScorerWithCache(new ACExtendedLeskSimilarity());
         //ConfigurationScorer scorer = new TestScorer(new TverskyConfigurationScorer(new IndexedOverlapSimilarity(), Runtime.getRuntime().availableProcessors()));
         
-        Disambiguator geneticDisambiguator = new GeneticAlgorithmDisambiguator(iterations, population, crossoverRate, mutationRate, scorer);
+        GeneticAlgorithmDisambiguator geneticDisambiguator = new GeneticAlgorithmDisambiguator(new StopCondition(StopCondition.Condition.SCORERCALLS, iterations), population, crossoverRate, mutationRate, scorer);
 
         System.out.println("Loading texts...");
         dl.load();
@@ -59,6 +62,7 @@ public class GeneticAlgorithmDisambiguation
             System.out.println("Loading senses...");
             lrloader.loadSenses(d);
 
+            geneticDisambiguator.plotWriter = new PrintWriter("../genetic_plot_" + d.getId() + ".dat");
             System.out.println("Disambiguating...");
             Configuration c = geneticDisambiguator.disambiguate(d);
 

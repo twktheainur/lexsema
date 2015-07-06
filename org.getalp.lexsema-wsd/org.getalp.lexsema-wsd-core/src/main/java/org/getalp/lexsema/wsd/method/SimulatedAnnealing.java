@@ -1,11 +1,14 @@
 package org.getalp.lexsema.wsd.method;
 
+import cern.jet.random.tdouble.engine.DoubleMersenneTwister;
+import cern.jet.random.tdouble.engine.DoubleRandomEngine;
 import org.getalp.lexsema.similarity.Document;
 import org.getalp.lexsema.util.ValueScale;
 import org.getalp.lexsema.wsd.configuration.ConfidenceConfiguration;
 import org.getalp.lexsema.wsd.configuration.Configuration;
 import org.getalp.lexsema.wsd.configuration.org.getalp.lexsema.wsd.evaluation.Evaluation;
 import org.getalp.lexsema.wsd.configuration.org.getalp.lexsema.wsd.evaluation.GoldStandard;
+import org.getalp.lexsema.wsd.configuration.org.getalp.lexsema.wsd.evaluation.Semeval2007GoldStandard;
 import org.getalp.lexsema.wsd.configuration.org.getalp.lexsema.wsd.evaluation.StandardEvaluation;
 import org.getalp.lexsema.wsd.score.ConfigurationScorer;
 import org.slf4j.Logger;
@@ -25,8 +28,8 @@ public class SimulatedAnnealing implements Disambiguator {
     private static Logger logger = LoggerFactory.getLogger(SimulatedAnnealing.class);
     public double iterations = 1000;
     boolean changedSinceLast = false;
-    //private DoubleRandomEngine uniformGenerator = new DoubleMersenneTwister(1);
-    private Random uniformGenerator = new Random();
+    private DoubleRandomEngine uniformGenerator = new DoubleMersenneTwister(1);
+    //private Random uniformGenerator = new Random();
     /**
      * Estimated parameters
      */
@@ -67,7 +70,7 @@ public class SimulatedAnnealing implements Disambiguator {
         this.coolingRate = coolingRate;
         this.iterations = iterations;
         evaluation = new StandardEvaluation();
-        //goldStandard = new Semeval2007GoldStandard();
+        goldStandard = new Semeval2007GoldStandard();
     }
 
     public SimulatedAnnealing(double p0, double coolingRate, int convergenceThreshold, int iterations, ConfigurationScorer configurationScorer, double T0) {
@@ -156,7 +159,7 @@ public class SimulatedAnnealing implements Disambiguator {
         sum = 0;
 
         //Execution of the algorithm nbEvaluation times
-        for (int i = 0; i < iterations; i++) {
+        for (int i = 0; i < iterations*10; i++) {
             //First set of scores for the initial execution is also the set of best scores
             double score =
                     configurationScorer.computeScore(document, makeRandomChange(configuration, document, NUMBER_OF_CHANGES, uniformGenerator));
@@ -186,8 +189,24 @@ public class SimulatedAnnealing implements Disambiguator {
         return (int) ValueScale.scaleValue(randomEngine.nextDouble(), 0d, 1d, 0, max);
     }
 
+    private int nextRandomNatural(DoubleRandomEngine randomEngine, int max) {
+        return (int) ValueScale.scaleValue(randomEngine.raw(), 0d, 1d, 0, max);
+    }
+
     //TODO: Factor in new configuration subtype;
     private Configuration makeRandomChange(Configuration source, Document document, int numberOfChanges, Random gu) {
+        Configuration newConfiguration = new ConfidenceConfiguration((ConfidenceConfiguration) source);
+
+        for (int i = 0; i < numberOfChanges; i++) {
+            int changeIndex = nextRandomNatural(gu, source.size());
+            int numberOfSenses = document.getSenses(changeIndex).size();
+            int newIndex = nextRandomNatural(gu, numberOfSenses);
+            newConfiguration.setSense(changeIndex, newIndex);
+        }
+        return newConfiguration;
+    }
+
+    private Configuration makeRandomChange(Configuration source, Document document, int numberOfChanges, DoubleRandomEngine gu) {
         Configuration newConfiguration = new ConfidenceConfiguration((ConfidenceConfiguration) source);
 
         for (int i = 0; i < numberOfChanges; i++) {
@@ -264,10 +283,10 @@ public class SimulatedAnnealing implements Disambiguator {
             double choice = uniformGenerator.nextDouble();
             double prob = Math.exp(-delta / T);
             if (prob > choice) {
-                //logger.info(String.format("\r\t[Cycle=%f | %.2f%%][Accepted Lower Score = %.2f][Best = %.2f][P(a)=%.2f][Ld=%.2f]", currentCycle, (double) cycleNumber / iterations * 100d, score, bestScore, Math.exp(-delta / T), delta));
+                logger.info(String.format("\r\t[Cycle=%f | %.2f%%][Accepted Lower Score = %.2f][Best = %.2f][P(a)=%.2f][Ld=%.2f]", currentCycle, (double) cycleNumber / iterations * 100d, score, bestScore, Math.exp(-delta / T), delta));
                 configuration = cp;
                 prevScore = score;
-                //changedSinceLast = true;
+                changedSinceLast = true;
                 numberOfAcceptanceEvents++;
             }
         }
@@ -292,6 +311,10 @@ public class SimulatedAnnealing implements Disambiguator {
         previousConfiguration = configuration;
         currentCycle++;
         return true;
+    }
+
+    public void setGoldStandard(GoldStandard goldStandard) {
+        this.goldStandard = goldStandard;
     }
 
     @Override

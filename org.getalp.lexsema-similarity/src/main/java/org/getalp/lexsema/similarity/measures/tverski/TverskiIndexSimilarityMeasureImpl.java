@@ -37,6 +37,8 @@ public class TverskiIndexSimilarityMeasureImpl implements TverskiIndexSimilarity
     private boolean extendedLesk = true;
     private boolean isDistance;
 
+    private  boolean normalize = true;
+
     private boolean randomInit = false;
 
 
@@ -203,6 +205,7 @@ public class TverskiIndexSimilarityMeasureImpl implements TverskiIndexSimilarity
         double returnVal;
         Sum s = new Sum(1);
         if (regularizeOverlapInput) {
+            input.setInterval(0,Math.max(la.size(),lb.size()));
             Extension l = new LovaszExtension();
             s.setExtension(l);
             if (optimizeOverlapInput) {
@@ -212,6 +215,10 @@ public class TverskiIndexSimilarityMeasureImpl implements TverskiIndexSimilarity
             returnVal = l.compute(input);
         } else {
             returnVal = s.F(input);
+        }
+
+        if(normalize){
+            returnVal /= Math.max(la.size(),lb.size());
         }
         //returnVal *= (double)Math.min(lb.size(),la.size())/(double)Math.max(lb.size(),la.size());
         //returnVal /= input.getValues().size();
@@ -286,5 +293,9 @@ public class TverskiIndexSimilarityMeasureImpl implements TverskiIndexSimilarity
     @Override
     public void setIsDistance(boolean isDistance) {
         this.isDistance = isDistance;
+    }
+
+    public void setNormalize(boolean normalize) {
+        this.normalize = normalize;
     }
 }

@@ -20,12 +20,9 @@ import org.getalp.lexsema.wsd.score.ACSimilarityConfigurationScorer;
 import org.getalp.lexsema.wsd.score.ConfigurationScorer;
 import org.getalp.lexsema.wsd.score.MatrixTverskiConfigurationScorer;
 import org.getalp.lexsema.wsd.score.TverskyConfigurationScorer;
-import org.getalp.ml.matrix.filters.NormalizationFilter;
-import org.getalp.ml.matrix.score.SumMatrixScorer;
 
 import com.wcohen.ss.ScaledLevenstein;
 
-import java.io.File;
 
 @SuppressWarnings("all")
 public class AdaptiveSimulatedAnnealingDisambiguation {

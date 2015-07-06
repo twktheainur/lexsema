@@ -98,9 +98,25 @@ public final class DbnaryLexicalEntryPropertiesQueryProcessor extends AbstractQu
         return lexicalResource.getResourceGraphURI();
     }
 
-    @Data
+
     public class LexicalEntryProperties {
         String lemma = "";
         String pos = "";
+
+        public String getLemma() {
+            return lemma;
+        }
+
+        public void setLemma(String lemma) {
+            this.lemma = lemma;
+        }
+
+        public String getPos() {
+            return pos;
+        }
+
+        public void setPos(String pos) {
+            this.pos = pos;
+        }
     }
 }

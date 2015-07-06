@@ -7,17 +7,14 @@ import org.apache.uima.cas.Type;
 import org.apache.uima.cas.text.AnnotationFS;
 import org.apache.uima.fit.component.CasConsumer_ImplBase;
 import org.apache.uima.fit.util.CasUtil;
-import org.getalp.lexsema.similarity.Sentence;
-import org.getalp.lexsema.similarity.SentenceImpl;
-import org.getalp.lexsema.similarity.Word;
-import org.getalp.lexsema.similarity.WordImpl;
+import org.getalp.lexsema.similarity.*;
 
 import java.util.Collection;
 
 
-public class TokenAnnotationConsumer extends CasConsumer_ImplBase implements SentenceLevelConsumer {
+public class TokenAnnotationConsumer extends CasConsumer_ImplBase implements TokenConsumer {
 
-    private Sentence sentence;
+    private Text text;
 
 
     public TokenAnnotationConsumer() {
@@ -31,21 +28,23 @@ public class TokenAnnotationConsumer extends CasConsumer_ImplBase implements Sen
         Type TOKEN_ANNOTATION = cas.getTypeSystem().getType("de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Token");
         Collection<AnnotationFS> tokens = CasUtil.select(cas, TOKEN_ANNOTATION);
 
-        sentence = new SentenceImpl("");
+        text = new TextImpl();
         for (AnnotationFS tokenAnnot : tokens) {
             Token token = (Token) tokenAnnot;
             String lemma = token.getLemma().getValue();
             String pos = token.getPos().getPosValue();
             String sform = token.getCoveredText();
-            Word lexEnt = new WordImpl("", lemma, sform, pos);
-            sentence.addWord(lexEnt);
+            int begin = token.getBegin();
+            int end = token.getEnd();
+            Word lexEnt = new WordImpl("", lemma, sform, pos, begin, end);
+            text.addWord(lexEnt);
         }
     }
 
 
     @Override
-    public Sentence getSentence() {
-        return sentence;
+    public Text getText() {
+        return text;
     }
 
 }

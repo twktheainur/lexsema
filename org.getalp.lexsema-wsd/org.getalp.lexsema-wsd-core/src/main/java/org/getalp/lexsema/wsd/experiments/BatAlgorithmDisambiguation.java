@@ -1,5 +1,10 @@
 package org.getalp.lexsema.wsd.experiments;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
+
 import org.getalp.lexsema.io.annotresult.SemevalWriter;
 import org.getalp.lexsema.io.document.Semeval2007TextLoader;
 import org.getalp.lexsema.io.document.TextLoader;
@@ -7,25 +12,22 @@ import org.getalp.lexsema.io.resource.LRLoader;
 import org.getalp.lexsema.io.resource.dictionary.DictionaryLRLoader;
 import org.getalp.lexsema.similarity.Document;
 import org.getalp.lexsema.wsd.configuration.Configuration;
-import org.getalp.lexsema.wsd.method.BatAlgorithm;
+import org.getalp.lexsema.wsd.method.BatAlgorithmDisambiguator;
 import org.getalp.lexsema.wsd.method.Disambiguator;
+import org.getalp.lexsema.wsd.method.StopCondition;
 import org.getalp.lexsema.wsd.score.ConfigurationScorer;
 import org.getalp.lexsema.wsd.score.SemEval2007Task7PerfectConfigurationScorer;
 
-import java.io.File;
-
 public class BatAlgorithmDisambiguation
 {
-    public static void main(String[] args)
+    public static void main(String[] args) throws FileNotFoundException, UnsupportedEncodingException
     {    
-        int iterationsNumber = 1000;
-        int batsNumber = 20;
-        double minFrequency = 0;
-        double maxFrequency = 20;
-        double minLoudness = 0;
-        double maxLoudness = 10;
-        double minRate = 0;
-        double maxRate = 1;
+        int iterationsNumber = 2000;
+        int batsNumber = 70;
+        double minFrequency = 50;
+        double maxFrequency = 100;
+        double minLoudness = 1;
+        double maxLoudness = 20;
         double alpha = 0.95;
         double gamma = 0.9;
         
@@ -35,20 +37,16 @@ public class BatAlgorithmDisambiguation
         if (args.length >= 4) maxFrequency = Double.valueOf(args[3]);
         if (args.length >= 5) minLoudness = Double.valueOf(args[4]);
         if (args.length >= 6) maxLoudness = Double.valueOf(args[5]);
-        if (args.length >= 7) minRate = Double.valueOf(args[6]);
-        if (args.length >= 8) maxRate = Double.valueOf(args[7]);
-        if (args.length >= 9) alpha = Double.valueOf(args[8]);
-        if (args.length >= 10) gamma = Double.valueOf(args[9]);
+        if (args.length >= 7) alpha = Double.valueOf(args[6]);
+        if (args.length >= 8) gamma = Double.valueOf(args[7]);
         
         System.out.println("Parameters value : " + 
-                         "<iterations = " + iterationsNumber + "> " +
+                         "<scorer calls = " + iterationsNumber + "> " +
                          "<bats number = " + batsNumber + "> " +
                          "<min frequency = " + minFrequency + "> " +
                          "<max frequency = " + maxFrequency + "> " +
                          "<min loudness = " + minLoudness + "> " +
                          "<max loudness = " + maxLoudness + "> " +
-                         "<min rate = " + minRate + "> " +
-                         "<max rate = " + maxRate + "> " +
                          "<alpha = " + alpha + "> " +
                          "<gamma = " + gamma + "> "
                          );
@@ -62,9 +60,9 @@ public class BatAlgorithmDisambiguation
 
         ConfigurationScorer scorer = new SemEval2007Task7PerfectConfigurationScorer();
 
-        Disambiguator batDisambiguator = new BatAlgorithm(iterationsNumber, batsNumber, minFrequency, 
+        BatAlgorithmDisambiguator batDisambiguator = new BatAlgorithmDisambiguator(new StopCondition(StopCondition.Condition.SCORERCALLS, iterationsNumber), batsNumber, minFrequency, 
                                                           maxFrequency, minLoudness, maxLoudness,
-                                                          minRate, maxRate, alpha, gamma, scorer, true);
+                                                          alpha, gamma, scorer, true);
 
         System.out.println("Loading texts...");
         dl.load();
@@ -76,6 +74,7 @@ public class BatAlgorithmDisambiguation
             System.out.println("Loading senses...");
             lrloader.loadSenses(d);
 
+            batDisambiguator.plotWriter = new PrintWriter("../bat_plot_" + d.getId() + ".dat");
             System.out.println("Disambiguating...");
             Configuration c = batDisambiguator.disambiguate(d);
             
@@ -91,7 +90,7 @@ public class BatAlgorithmDisambiguation
         long endTime = System.currentTimeMillis();
         System.out.println("Total time elapsed in execution of Bat Algorithm is : ");
         System.out.println((endTime - startTime) + " ms.");
-        System.out.println((endTime - startTime) / 1000l + " s.");
-        System.out.println((endTime - startTime) / 60000l + " m.");
+        System.out.println(((endTime - startTime) / 1000l) + " s.");
+        System.out.println(((endTime - startTime) / 60000l) + " m.");
     }
 }

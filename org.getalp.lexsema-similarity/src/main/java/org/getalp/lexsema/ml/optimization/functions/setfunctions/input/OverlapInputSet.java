@@ -51,7 +51,9 @@ public class OverlapInputSet extends AbstractSetFunctionInput {
                 if (invert) {
                     value = 1 - value;
                 }
-                getValues().setQuick(i * lb.size() + j, value);
+                if(value>.5) {
+                    getValues().setQuick(i * lb.size() + j, value);
+                }
             }
         }
         setInterval(new Interval(0, (int) getInput().size()));

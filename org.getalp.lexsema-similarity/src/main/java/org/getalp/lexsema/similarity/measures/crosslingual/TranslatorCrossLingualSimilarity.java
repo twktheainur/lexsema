@@ -52,7 +52,7 @@ public class TranslatorCrossLingualSimilarity implements SimilarityMeasure {
                 enrichedTranslated = enrichment.enrichSemanticSignature(translatedSignature, sigA.getLanguage());
             }
 
-            logger.info(String.format("%s || %s", sigA.toString(), translatedDefinitionB));
+            //logger.info(String.format("%s || %s", sigA.toString(), translatedDefinitionB));
             return similarityMeasure.compute(enrichedA, enrichedTranslated, null, null);
         } else {
             return similarityMeasure.compute(sigA,sigB, null, null);

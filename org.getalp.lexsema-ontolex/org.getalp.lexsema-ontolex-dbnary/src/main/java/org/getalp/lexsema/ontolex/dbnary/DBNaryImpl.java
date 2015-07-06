@@ -67,7 +67,7 @@ public final class DBNaryImpl extends OntolexLexicalResource implements DBNary {
     @Override
     public List<Vocable> getVocables() {
         QueryProcessor<Vocable> retrieveAllVocableQP = new RetrieveAllVocablesQueryProcessor(getGraph(),
-                getLexicalResourceEntityFactory());
+                getLexicalResourceEntityFactory(),language);
         retrieveAllVocableQP.runQuery();
         return retrieveAllVocableQP.processResults();
     }

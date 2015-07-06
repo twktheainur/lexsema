@@ -1,16 +1,16 @@
 package org.getalp.lexsema.wsd.score;
 
+import org.getalp.lexsema.similarity.Document;
+import org.getalp.lexsema.similarity.Sense;
+import org.getalp.lexsema.similarity.measures.SimilarityMeasure;
+import org.getalp.lexsema.wsd.configuration.Configuration;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
-
-import org.getalp.lexsema.similarity.Document;
-import org.getalp.lexsema.similarity.Sense;
-import org.getalp.lexsema.similarity.measures.SimilarityMeasure;
-import org.getalp.lexsema.wsd.configuration.Configuration;
 
 public class ConfigurationScorerWithCache implements ConfigurationScorer
 {
@@ -94,9 +94,12 @@ public class ConfigurationScorerWithCache implements ConfigurationScorer
         {
             double score = 0;
             int k = c.getAssignment(i);
+            if (k < 0 || d.getSenses(i).isEmpty()) return 0.0;
+            Sense senseA = d.getSenses(i).get(k);
             for (int j = i + 1 ; j < c.size() ; j++)
             {
                 int l = c.getAssignment(j);
+                if (l < 0 || d.getSenses(j).isEmpty()) continue;
                 double cacheCell = cache[i][j][k][l];
                 if (cacheCell != -1)
                 {
@@ -104,7 +107,6 @@ public class ConfigurationScorerWithCache implements ConfigurationScorer
                 }
                 else
                 {
-                    Sense senseA = d.getSenses(i).get(k);
                     Sense senseB = d.getSenses(j).get(l);
                     double similarity = senseA.computeSimilarityWith(similarityMeasure, senseB);
                     score += similarity;

@@ -24,6 +24,7 @@ public interface Document extends Iterable<Word> {
 
 
     public Word getWord(int offset, int index);
+    public Word getWord(int index);
 
     public void addWord(Word w);
 

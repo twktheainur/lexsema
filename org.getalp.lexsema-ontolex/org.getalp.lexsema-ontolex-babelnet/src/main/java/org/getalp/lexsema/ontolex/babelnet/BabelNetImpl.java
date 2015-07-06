@@ -1,7 +1,6 @@
 package org.getalp.lexsema.ontolex.babelnet;
 
 import lombok.ToString;
-import org.getalp.lexsema.language.Language;
 import org.getalp.lexsema.ontolex.LexicalEntry;
 import org.getalp.lexsema.ontolex.LexicalResourceEntity;
 import org.getalp.lexsema.ontolex.OntolexLexicalResource;
@@ -12,6 +11,7 @@ import org.getalp.lexsema.ontolex.factories.entities.LexicalResourceEntityFactor
 import org.getalp.lexsema.ontolex.graph.OntologyModel;
 import org.getalp.lexsema.ontolex.queries.QueryProcessor;
 import org.getalp.lexsema.ontolex.uri.URIParserRegister;
+import org.getalp.lexsema.util.Language;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

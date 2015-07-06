@@ -9,6 +9,8 @@ import org.getalp.lexsema.ontolex.queries.ARQSelectQuery;
 import org.getalp.lexsema.ontolex.queries.ARQSelectQueryImpl;
 import org.getalp.lexsema.ontolex.queries.AbstractQueryProcessor;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,9 +41,14 @@ public final class VocableExistsQueryProcessor extends AbstractQueryProcessor<Vo
         ARQSelectQuery q = new ARQSelectQueryImpl();
         q.setDistinct(true);
         setQuery(q);
+
+            /*addTriple(getNode(URLEncoder.encode(lexicalResource.getResourceGraphURI() + vocable, "UTF-8")),
+                    getNode("rdf:type"),
+                    Var.alloc(VOCABLE_TYPE));*/
         addTriple(getNode(lexicalResource.getResourceGraphURI() + vocable),
                 getNode("rdf:type"),
                 Var.alloc(VOCABLE_TYPE));
+
         addResultVar(VOCABLE_TYPE);
     }
 

@@ -17,10 +17,7 @@ import org.getalp.lexsema.ontolex.graph.OntologyModel;
 import org.getalp.lexsema.ontolex.graph.storage.JenaRemoteSPARQLStore;
 import org.getalp.lexsema.ontolex.graph.storage.StoreHandler;
 import org.getalp.lexsema.ontolex.graph.store.Store;
-import org.getalp.lexsema.similarity.Document;
-import org.getalp.lexsema.similarity.Sense;
-import org.getalp.lexsema.similarity.Sentence;
-import org.getalp.lexsema.similarity.Word;
+import org.getalp.lexsema.similarity.*;
 import org.getalp.lexsema.similarity.measures.SimilarityMeasure;
 import org.getalp.lexsema.similarity.measures.tverski.TverskiIndexSimilarityMeasureBuilder;
 import org.getalp.lexsema.util.Language;
@@ -141,8 +138,8 @@ public final class CLDisambiguator {
             lrLoader.retrieveLexicalEntryForWord(targetWord);
             int contextIndex = 1;
             loggerInfoTargetWordProgress(targetWord);
-            for (Pair<Sentence, Integer> context : entry) {
-                Sentence s = context.first();
+            for (Pair<Text, Integer> context : entry) {
+                Text s = context.first();
                 //Integer index = findTargetIndex(s, targetWord);
                 Integer index = context.second();
                 if (index != -1) {

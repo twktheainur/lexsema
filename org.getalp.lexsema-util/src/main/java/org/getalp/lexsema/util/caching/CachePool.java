@@ -15,10 +15,11 @@ import static java.io.File.separator;
 public final class CachePool {
 
     public static final CacheProvider DEFAULT_CACHE_PROVIDER = CacheProvider.DUMMY;
+    private static CacheProvider provider = DEFAULT_CACHE_PROVIDER;
+    private static Logger logger = LoggerFactory.getLogger(CachePool.class);
     public final static String DEFAULT_HOST = "localhost";
     private final static CachePooledResourceProvider CACHE_POOLED_RESOURCE_PROVIDER = buildProvider();
-    private static Logger logger = LoggerFactory.getLogger(CachePool.class);
-    private static CacheProvider provider = DEFAULT_CACHE_PROVIDER;
+
 
     private static String host = DEFAULT_HOST;
     private static Integer port;

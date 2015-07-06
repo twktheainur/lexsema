@@ -17,9 +17,9 @@ import org.apache.uima.resource.ResourceManager;
 import org.apache.uima.resource.ResourceSpecifier;
 import org.apache.uima.util.CasCreationUtils;
 import org.getalp.lexsema.io.resource.LRLoader;
-import org.getalp.lexsema.io.uima.SentenceLevelConsumer;
 import org.getalp.lexsema.io.uima.TokenAnnotationConsumer;
-import org.getalp.lexsema.similarity.Sentence;
+import org.getalp.lexsema.io.uima.TokenConsumer;
+import org.getalp.lexsema.similarity.Text;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -48,7 +48,7 @@ public class STS2013SentencePairLoader extends SentencePairLoader {
         senseLoader = loader;
     }
 
-    private Sentence processSentence(final ResourceSpecifier readerDesc,
+    private Text processSentence(final ResourceSpecifier readerDesc,
                                      AnalysisEngineDescription... engineDescriptions) throws UIMAException, IOException {
         ResourceManager resMgr = UIMAFramework.newDefaultResourceManager();
 
@@ -66,7 +66,7 @@ public class STS2013SentencePairLoader extends SentencePairLoader {
 
         try {
             // Process
-            SentenceLevelConsumer sac = new TokenAnnotationConsumer();
+            TokenConsumer sac = new TokenAnnotationConsumer();
             while (reader.hasNext()) {
                 reader.getNext(cas);
                 aae.process(cas);
@@ -75,7 +75,7 @@ public class STS2013SentencePairLoader extends SentencePairLoader {
             }
             // Signal end of processing
             aae.collectionProcessComplete();
-            return sac.getSentence();
+            return sac.getText();
         } finally {
             // Destroy
             aae.destroy();
@@ -83,7 +83,7 @@ public class STS2013SentencePairLoader extends SentencePairLoader {
 
     }
 
-    private Sentence extractAndAnnotate(String sentenceString, int pairId, int sentenceId) {
+    private Text extractAndAnnotate(String sentenceString, int pairId, int sentenceId) {
         try {
             CollectionReaderDescription cr = createReaderDescription(
                     StringReader.class,
@@ -113,12 +113,12 @@ public class STS2013SentencePairLoader extends SentencePairLoader {
             int sentenceId = 1;
             line = br.readLine();
             while (line != null && !line.isEmpty()) {
-                List<Sentence> sentencePair = new ArrayList<>();
+                List<Text> sentencePair = new ArrayList<>();
                 String[] sentences = line.replace("-", "_").split("\t");
 
 
-                Sentence sentence1 = extractAndAnnotate(sentences[0], sentenceId, 1);
-                Sentence sentence2 = extractAndAnnotate(sentences[1], sentenceId, 2);
+                Text sentence1 = extractAndAnnotate(sentences[0], sentenceId, 1);
+                Text sentence2 = extractAndAnnotate(sentences[1], sentenceId, 2);
 
                 senseLoader.loadSenses(sentence1);
                 senseLoader.loadSenses(sentence2);
