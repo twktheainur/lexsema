@@ -11,6 +11,7 @@ import org.getalp.lexsema.similarity.Sense;
 import org.getalp.lexsema.similarity.SenseImpl;
 import org.getalp.lexsema.similarity.Word;
 import org.getalp.lexsema.similarity.cache.SenseCacheImpl;
+import org.getalp.lexsema.similarity.signatures.IndexedSemanticSignature;
 import org.getalp.lexsema.similarity.signatures.IndexedSemanticSignatureImpl;
 import org.getalp.lexsema.similarity.signatures.SemanticSignature;
 import org.getalp.lexsema.similarity.signatures.StringSemanticSignature;
@@ -19,6 +20,9 @@ import org.getalp.lexsema.util.StopList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.tartarus.snowball.ext.EnglishStemmer;
+
+import com.google.common.collect.BiMap;
+import com.google.common.collect.HashBiMap;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -35,7 +39,10 @@ public class WordnetLoader implements LRLoader {
 
     private boolean loadDefinitions;
     private boolean loadRelated;
-
+    
+    private boolean usesIndex;
+    private BiMap<String, Integer> indexMap;
+    private int currentIndex;
 
     public WordnetLoader(String path) {
 
@@ -55,53 +62,89 @@ public class WordnetLoader implements LRLoader {
         } else {
             dictionary = null;
         }
+        indexMap = HashBiMap.create();
+        currentIndex = 0;
     }
 
-    private List<Sense> getSenses(String lemma, String pos) {
+    private List<Sense> getSenses(String lemma, String pos)
+    {
         List<Sense> senses = new ArrayList<>();
         IIndexWord iw = getWord(lemma + "%" + pos);
         if (iw != null) {
-            for (int j = 0; j < iw.getWordIDs().size(); j++) {
-
-                StringSemanticSignature signature = new StringSemanticSignatureImpl();
+            for (int j = 0; j < iw.getWordIDs().size(); j++)
+            {
+                SemanticSignature signature;
+                if (usesIndex) signature = new IndexedSemanticSignatureImpl();
+                else signature = new StringSemanticSignatureImpl();
                 IWord word = dictionary.getWord(iw.getWordIDs().get(j));
-                if (loadDefinitions) {
+                if (loadDefinitions)
+                {
                     String def = word.getSynset().getGloss();
                     addToSignature(signature, def);
                 }
 
                 Sense s = new SenseImpl(word.getSenseKey().toString());
 
-                if (loadRelated) {
-                    
+                if (loadRelated)
+                {
                     Map<IPointer, List<ISynsetID>> rm = word.getSynset().getRelatedMap();
-                    for (IPointer p : rm.keySet()) {
-                        for (ISynsetID iwd : rm.get(p)) {
-                            StringSemanticSignature localSignature = new StringSemanticSignatureImpl();
-                            addToSignature(localSignature, dictionary.getSynset(iwd).getGloss());
-                            if (hasExtendedSignature) {
-                                signature.appendSignature(localSignature);
+                    for (IPointer p : rm.keySet())
+                    {
+                        for (ISynsetID iwd : rm.get(p))
+                        {
+                            if (usesIndex)
+                            {
+                                IndexedSemanticSignature localSignature = new IndexedSemanticSignatureImpl();
+                                addToSignature(localSignature, dictionary.getSynset(iwd).getGloss());
+                                if (hasExtendedSignature)
+                                {
+                                    ((IndexedSemanticSignatureImpl) signature).appendSignature(localSignature);
+                                }
+                                s.addRelatedSignature(p.getSymbol(), localSignature);
                             }
-                            s.addRelatedSignature(p.getSymbol(), localSignature);
+                            else
+                            {
+                                StringSemanticSignature localSignature = new StringSemanticSignatureImpl();
+                                addToSignature(localSignature, dictionary.getSynset(iwd).getGloss());
+                                if (hasExtendedSignature)
+                                {
+                                    ((StringSemanticSignature) signature).appendSignature(localSignature);
+                                }
+                                s.addRelatedSignature(p.getSymbol(), localSignature);
+                            }
                         }
                     }
                     
                     Map<IPointer, List<IWordID>> rm2 = word.getRelatedMap();
-                    for (IPointer p : rm2.keySet()) {
-                        for (IWordID iwd : rm2.get(p)) {
-                            StringSemanticSignature localSignature = new StringSemanticSignatureImpl();
-                            addToSignature(localSignature, dictionary.getWord(iwd).getSynset().getGloss());
-                            if (hasExtendedSignature) {
-                                signature.appendSignature(localSignature);
+                    for (IPointer p : rm2.keySet())
+                    {
+                        for (IWordID iwd : rm2.get(p))
+                        {
+                            if (usesIndex)
+                            {
+                                IndexedSemanticSignature localSignature = new IndexedSemanticSignatureImpl();
+                                addToSignature(localSignature, dictionary.getWord(iwd).getSynset().getGloss());
+                                if (hasExtendedSignature)
+                                {
+                                    ((IndexedSemanticSignatureImpl) signature).appendSignature(localSignature);
+                                }
+                                s.addRelatedSignature(p.getSymbol(), localSignature);
                             }
-                            s.addRelatedSignature(p.getSymbol(), localSignature);
+                            else
+                            {
+                                StringSemanticSignature localSignature = new StringSemanticSignatureImpl();
+                                addToSignature(localSignature, dictionary.getWord(iwd).getSynset().getGloss());
+                                if (hasExtendedSignature)
+                                {
+                                    ((StringSemanticSignature) signature).appendSignature(localSignature);
+                                }
+                                s.addRelatedSignature(p.getSymbol(), localSignature);
+                            }
                         }
                     }
                 }
                 
-                //if (hasExtendedSignature) {
                 s.setSemanticSignature(signature);
-                //}
                 senses.add(s);
             }
         }
@@ -341,20 +384,31 @@ public class WordnetLoader implements LRLoader {
 		return score;
 	}
 
-    private void addToSignature(StringSemanticSignature signature, String def) {
-        StringTokenizer st = new StringTokenizer(def, " ", false);
+    private void addToSignature(SemanticSignature signature, String def) {
+        String[] words = def.replaceAll("[^a-zA-Z ]", "").toLowerCase().split("\\s+");
         EnglishStemmer stemmer = new EnglishStemmer();
-        while (st.hasMoreTokens()) {
-            String token = st.nextToken().replaceAll("\"|;", "").toLowerCase();
-            //Removing stop words from definitions
-            if (!usesStopWords || !StopList.isStopWord(token)) {
-                if (stemming) {
-                    stemmer.setCurrent(token);
-                    //stemmer.stem();
-                    signature.addSymbol(stemmer.getCurrent(), 1.0);
-                } else {
-                    signature.addSymbol(token, 1.0);
+        for (String token : words) {
+            
+            if (usesStopWords && StopList.isStopWord(token)) {
+                continue;
+            }
+
+            if (stemming) {
+                stemmer.setCurrent(token);
+                stemmer.stem();
+                token = stemmer.getCurrent();
+            }
+
+            if (usesIndex) {
+                IndexedSemanticSignature indexedSignature = (IndexedSemanticSignature) signature;
+                if (!indexMap.containsKey(token)) {
+                    indexMap.put(token, currentIndex++);
                 }
+                indexedSignature.addSymbol(indexMap.get(token));
+            }
+            else {
+                StringSemanticSignature normalSignature = (StringSemanticSignature) signature;
+                normalSignature.addSymbol(token);
             }
         }
     }
@@ -433,7 +487,6 @@ public class WordnetLoader implements LRLoader {
         */
     }
 
-    @SuppressWarnings("BooleanParameter")
     @Override
     public LRLoader shuffle(boolean shuffle) {
         this.shuffle = shuffle;
@@ -461,6 +514,11 @@ public class WordnetLoader implements LRLoader {
     @Override
     public WordnetLoader setUsesStopWords(boolean usesStopWords) {
         this.usesStopWords = usesStopWords;
+        return this;
+    }
+    
+    public WordnetLoader setUsesIndex(boolean usesIndex) {
+        this.usesIndex = usesIndex;
         return this;
     }
 

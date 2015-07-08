@@ -59,10 +59,10 @@ public class CuckooSearchDisambiguation
         TextLoader dl = new Semeval2007TextLoader("../data/senseval2007_task7/test/eng-coarse-all-words-t1.xml");
 
         //LRLoader lrloader = new DictionaryLRLoader(new File("../data/dictionnaires-lesk/dict-adapted-all-relations.xml"));
-        //LRLoader lrloader = new DictionaryLRLoader(new File("../data/dict_semeval2007task7"), false);
-        //LRLoader lrloader = new DictionaryLRLoader(new File("../data/dict_semeval2007task7_stopwords"), false);
-        //LRLoader lrloader = new DictionaryLRLoader(new File("../data/dict_semeval2007task7_stemming"), false);
-        LRLoader lrloader = new DictionaryLRLoader(new File("../data/dict_semeval2007task7_stopwords_and_stemming"), false);
+        //LRLoader lrloader = new DictionaryLRLoader(new File("../data/dict_semeval2007task7"), true);
+        //LRLoader lrloader = new DictionaryLRLoader(new File("../data/dict_semeval2007task7_stopwords"), true);
+        //LRLoader lrloader = new DictionaryLRLoader(new File("../data/dict_semeval2007task7_stemming"), true);
+        LRLoader lrloader = new DictionaryLRLoader(new File("../data/dict_semeval2007task7_stopwords_and_stemming"), true);
         
         //ConfigurationScorer scorer = new SemEval2007Task7PerfectConfigurationScorer();
         //ConfigurationScorer scorer = new ACSimilarityConfigurationScorer(new ACExtendedLeskSimilarity());
