@@ -60,4 +60,6 @@ public interface IndexedSemanticSignature extends SemanticSignature, Iterable<In
     List<Integer> getSymbols();
 
     public IndexedSemanticSymbol getSymbol(int index);
+    
+    public void sort();
 }

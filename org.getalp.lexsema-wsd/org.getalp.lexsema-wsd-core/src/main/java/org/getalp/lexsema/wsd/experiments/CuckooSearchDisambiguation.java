@@ -35,7 +35,7 @@ public class CuckooSearchDisambiguation
 {
     public static void main(String[] args) throws FileNotFoundException, UnsupportedEncodingException
     {
-        int iterations = 5000;
+        int iterations = 10000;
         double levyLocation = 2;
         double levyScale = 0.7;
         int nestsNumber = 1;
@@ -56,13 +56,19 @@ public class CuckooSearchDisambiguation
         
         long startTime = System.currentTimeMillis();
 
-        TextLoader dl = new Semeval2007TextLoader("../data/senseval2007_task7/test/eng-coarse-all-words-t1.xml");
+        TextLoader dl = new Semeval2007TextLoader("../data/senseval2007_task7/test/eng-coarse-all-words.xml");
 
-        //LRLoader lrloader = new DictionaryLRLoader(new File("../data/dictionnaires-lesk/dict-adapted-all-relations.xml"));
-        //LRLoader lrloader = new DictionaryLRLoader(new File("../data/dict_semeval2007task7"), true);
-        //LRLoader lrloader = new DictionaryLRLoader(new File("../data/dict_semeval2007task7_stopwords"), true);
-        //LRLoader lrloader = new DictionaryLRLoader(new File("../data/dict_semeval2007task7_stemming"), true);
-        LRLoader lrloader = new DictionaryLRLoader(new File("../data/dict_semeval2007task7_stopwords_and_stemming"), true);
+        //LRLoader lrloader = new DictionaryLRLoader(new File("../data/lesk_dict/dict-adapted-all-relations.xml"));
+        
+        //LRLoader lrloader = new DictionaryLRLoader(new File("../data/lesk_dict/dict_semeval2007task7"), true);
+        //LRLoader lrloader = new DictionaryLRLoader(new File("../data/lesk_dict/dict_semeval2007task7_stopwords"), true);
+        //LRLoader lrloader = new DictionaryLRLoader(new File("../data/lesk_dict/dict_semeval2007task7_stemming"), true);
+        //LRLoader lrloader = new DictionaryLRLoader(new File("../data/lesk_dict/dict_semeval2007task7_stopwords_stemming"), true);
+        
+        //LRLoader lrloader = new DictionaryLRLoader(new File("../data/lesk_dict/dict_semeval2007task7_semcor"), true);
+        //LRLoader lrloader = new DictionaryLRLoader(new File("../data/lesk_dict/dict_semeval2007task7_stopwords_semcor"), true);
+        //LRLoader lrloader = new DictionaryLRLoader(new File("../data/lesk_dict/dict_semeval2007task7_stemming_semcor"), true);
+        LRLoader lrloader = new DictionaryLRLoader(new File("../data/lesk_dict/all/dict_semeval2007task7_stopwords_stemming_semcor"), true);
         
         //ConfigurationScorer scorer = new SemEval2007Task7PerfectConfigurationScorer();
         //ConfigurationScorer scorer = new ACSimilarityConfigurationScorer(new ACExtendedLeskSimilarity());
@@ -91,7 +97,7 @@ public class CuckooSearchDisambiguation
             Configuration c = cuckooDisambiguator.disambiguate(d);
 
             System.out.println("Writing results...");
-            SemevalWriter sw = new SemevalWriter(d.getId() + ".ans");
+            SemevalWriter sw = new SemevalWriter("../" + d.getId() + ".ans");
             sw.write(d, c.getAssignments());
             
             System.out.println("Done!");

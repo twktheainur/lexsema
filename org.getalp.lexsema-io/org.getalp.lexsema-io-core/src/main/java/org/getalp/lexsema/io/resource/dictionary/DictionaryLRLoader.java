@@ -1,7 +1,7 @@
 package org.getalp.lexsema.io.resource.dictionary;
 
 import org.getalp.lexsema.io.DSODefinitionExpender.DSODefinitionExpender;
-import org.getalp.lexsema.io.SemecoreDefinitionExpender.SemecoreDefinitionExpender;
+import org.getalp.lexsema.io.definitionenricher.TextDefinitionEnricher;
 import org.getalp.lexsema.io.resource.LRLoader;
 import org.getalp.lexsema.similarity.Document;
 import org.getalp.lexsema.similarity.Sense;
@@ -109,7 +109,7 @@ public class DictionaryLRLoader implements LRLoader {
 
 	@Override
 	public void loadSenses(Document document,
-			SemecoreDefinitionExpender definitionExpender, int profondeur,
+			TextDefinitionEnricher definitionExpender, int profondeur,
 			DSODefinitionExpender contexteDSO) {
 		// TODO Auto-generated method stub
 		

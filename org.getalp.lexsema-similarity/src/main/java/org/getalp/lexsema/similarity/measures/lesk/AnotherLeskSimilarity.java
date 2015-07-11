@@ -31,25 +31,35 @@ public class AnotherLeskSimilarity implements SimilarityMeasure
         if (normalize) return (((double) count) / ((double) aSize * bSize));
         else return count;
     }
-
+    
     public double compute(IndexedSemanticSignature sigA, IndexedSemanticSignature sigB)
     {
         List<Integer> la = sigA.getSymbols();
-        List<Integer> lb = sigB.getSymbols();
+        List<Integer> lb = sigB.getSymbols(); 
         int aSize = la.size();
         int bSize = lb.size();
         int count = 0;
-        for (int i = 0 ; i < aSize ; i++)
+        int i = 0;
+        int j = 0;
+        while (i < aSize && j < bSize)
         {
-        	for (int j = 0 ; j < bSize ; j++)
-        	{
-        		if (la.get(i).equals(lb.get(j)))
-        		{
-        			count++;
-        		}
-        	}
+            int cmp = la.get(i).compareTo(lb.get(j));
+            if (cmp == 0)
+            {
+                count++;
+                i++;
+                j++;
+            }
+            else if (cmp < 0) 
+            {
+                i++;
+            } 
+            else 
+            {
+                j++;
+            }
         }
-        if (normalize) return (((double) count) / ((double) aSize * bSize));
+        if (normalize) return (((double) count) / ((double) (aSize * bSize)));
         return count;
     }
 

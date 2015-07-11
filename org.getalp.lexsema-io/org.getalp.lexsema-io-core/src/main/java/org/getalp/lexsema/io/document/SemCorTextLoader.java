@@ -133,8 +133,7 @@ public class SemCorTextLoader extends TextLoaderImpl implements ContentHandler {
     public void load() {
         try {
             XMLReader saxReader = XMLReaderFactory.createXMLReader();
-            saxReader
-                    .setContentHandler(this);
+            saxReader.setContentHandler(this);
             saxReader.parse(path);
         } catch (IOException | SAXException t) {
             t.printStackTrace();

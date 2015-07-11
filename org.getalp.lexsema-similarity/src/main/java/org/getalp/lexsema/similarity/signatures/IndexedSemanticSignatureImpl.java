@@ -142,4 +142,8 @@ public class IndexedSemanticSignatureImpl implements IndexedSemanticSignature {
     public int size() {
         return symbols.size();
     }
+    
+    public void sort() {
+        Collections.sort(symbols);
+    }
 }

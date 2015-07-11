@@ -18,8 +18,8 @@ public class CuckooSearchParametersEstimation
 {
     public static void main(String[] args) throws Exception
     {
-        String condition = "ms";
-        long value = 50;
+        String condition = "sc";
+        long value = 4000;
         int iterations = 1000;
         double levyLocation = 1;
         double levyScale = 1;

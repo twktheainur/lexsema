@@ -1,8 +1,8 @@
 package org.getalp.lexsema.wsd.experiments;
 
 import org.getalp.lexsema.io.DSODefinitionExpender.DSODefinitionExpender;
-import org.getalp.lexsema.io.SemecoreDefinitionExpender.SemecoreDefinitionExpender;
 import org.getalp.lexsema.io.annotresult.SemevalWriter;
+import org.getalp.lexsema.io.definitionenricher.TextDefinitionEnricher;
 import org.getalp.lexsema.io.document.SemCorTextLoader;
 import org.getalp.lexsema.io.document.Semeval2007TextLoader;
 import org.getalp.lexsema.io.document.TextLoader;
@@ -26,6 +26,7 @@ import com.wcohen.ss.ScaledLevenstein;
 
 @SuppressWarnings("all")
 public class AdaptiveSimulatedAnnealingDisambiguation {
+    /*
     public AdaptiveSimulatedAnnealingDisambiguation() {
     }
 
@@ -42,8 +43,8 @@ public class AdaptiveSimulatedAnnealingDisambiguation {
         TextLoader semCor = new SemCorTextLoader("../data/semcor3.0/semcor_full.xml");
 		semCor.load();
         
-        SemecoreDefinitionExpender definitionExpender=null;
-		definitionExpender=new SemecoreDefinitionExpender(semCor, 2);
+        SemCorDefinitionExpender definitionExpender=null;
+		definitionExpender=new SemCorDefinitionExpender(semCor, 2);
 		
 		DSODefinitionExpender contexteDSO=null;
 		//contexteDSO=new DSODefinitionExpender(10);
@@ -98,4 +99,5 @@ public class AdaptiveSimulatedAnnealingDisambiguation {
         System.out.println("Total time elapsed in execution of Adapted Simulated Annealing is : " + (endTime - startTime) + " ms.");
 
     }
+*/
 }

@@ -2,7 +2,6 @@ package org.getalp.lexsema.nif;
 
 import java.util.*;
 
-import org.getalp.lexsema.io.resource.LRLoader;
 import org.getalp.lexsema.io.resource.wordnet.WordnetLoader;
 import org.getalp.lexsema.io.text.EnglishDKPTextProcessor;
 import org.getalp.lexsema.io.text.TextProcessor;
@@ -47,11 +46,6 @@ public class Niflet extends NIFServlet
     public OntModel execute(NIFParameters nifParameters) throws Exception 
     {
         Data data = new Data(nifParameters);
-        if (data.model.getNsPrefixURI("p") != null &&
-            !data.model.getNsPrefixURI("p").equals(nifParameters.getPrefix()))
-        {
-            return data.model;
-        }
         tokenize(data);
         annotate(data);
         disambiguate(data);
@@ -133,7 +127,7 @@ public class Niflet extends NIFServlet
                                                   data.model.createProperty(data.model.getNsPrefixURI("rdf") + "type"),
                                                   data.model.createResource(data.model.getNsPrefixURI("owl") + "DatatypeProperty")));
         
-        LRLoader lrloader = new WordnetLoader("/home/coyl/data/wordnet/3.0/dict");
+        WordnetLoader lrloader = new WordnetLoader("/home/coyl/data/wordnet/3.0/dict");
         lrloader.loadDefinitions(true);
         lrloader.loadSenses(data.text);
         ConfigurationScorer scorer = new ConfigurationScorerWithCache(new AnotherLeskSimilarity());
@@ -146,7 +140,6 @@ public class Niflet extends NIFServlet
             Resource wordNode = data.words.get(word);
             wordNode.addProperty(data.model.createProperty(data.nifParameters.getPrefix() + "sense"), "" + c.getAssignment(j));
         }
-        
     }
     
     private List<Resource> getWordNodes(OntModel model)

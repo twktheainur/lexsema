@@ -14,19 +14,18 @@ import java.util.Set;
  * @author Amine Aït-Mouloud
  * @since 2014-12-16
  */
-public final class StopList {
+public final class StopList 
+{
     private static String stopListFile = ".." + File.separator + "data" + File.separator + "stoplist_long.txt";
     private static Set<String> stopWords = null;
 
     private static Logger logger = LoggerFactory.getLogger(StopList.class);
 
-    private StopList() {
-    }
-
     /**
      * @return Success or not of loading the stop words from the stop list file
      */
-    private static boolean loadStopWords() {
+    private static boolean loadStopWords() 
+    {
         stopWords = new HashSet<String>();
         try
         {
@@ -47,17 +46,10 @@ public final class StopList {
 
     /**
      * @param token the string to tested
-     * @return <code>true</code> if the token is first stop word, <code>false</code> otherwise
+     * @return <code>true</code> if the token is a stop word, <code>false</code> otherwise
      */
-    public static boolean isStopWord(String token) {
-        /*
-        char[] chars = token.toCharArray();
-        for (char c : chars) {
-            if (!Character.isLetter(c) && c != '-' && c != ' ') {
-                return false;
-            }
-        }
-        */
+    public static boolean isStopWord(String token) 
+    {
         if (stopWords == null) {
             loadStopWords();
         }
@@ -68,7 +60,8 @@ public final class StopList {
      * @param path path to the stop list file
      * @return Success of the operation (true) or not (false)
      */
-    public static boolean setStopListFile(String path) {
+    public static boolean setStopListFile(String path) 
+    {
         if (!path.equals(stopListFile)) {
             stopListFile = path;
             return loadStopWords();
