@@ -1,81 +1,95 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xmlns="http://maven.apache.org/POM/4.0.0"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <parent>
-        <artifactId>lexsema</artifactId>
-        <groupId>org.getalp</groupId>
-        <version>1.0-SNAPSHOT</version>
-    </parent>
-    <modelVersion>4.0.0</modelVersion>
+	xmlns="http://maven.apache.org/POM/4.0.0"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<parent>
+		<artifactId>lexsema</artifactId>
+		<groupId>org.getalp</groupId>
+		<version>1.0-SNAPSHOT</version>
+	</parent>
+	<modelVersion>4.0.0</modelVersion>
 
-    <artifactId>org.getalp.lexsema-nif</artifactId>
-    <version>1.0-SNAPSHOT</version>
-    <packaging>war</packaging>
+	<artifactId>org.getalp.lexsema-nif</artifactId>
+	<version>1.0-SNAPSHOT</version>
+	<packaging>war</packaging>
 
-    <dependencies>
-        <dependency>
-            <groupId>org.getalp</groupId>
-            <artifactId>org.getalp.lexsema-util</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>org.getalp</groupId>
-            <artifactId>org.getalp.lexsema-wsd-core</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>org.getalp</groupId>
-            <artifactId>org.getalp.lexsema-io-core</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>org.getalp</groupId>
-            <artifactId>org.getalp.lexsema-similarity</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-	        <groupId>org.apache.jena</groupId>
-	        <artifactId>apache-jena-libs</artifactId>
-	        <type>pom</type>
-	        <version>2.13.0</version>
-        </dependency>
-        <dependency>
-	        <groupId>org.apache.jena</groupId>
-	        <artifactId>jena-core</artifactId>
-	        <type>pom</type>
-	        <version>2.13.0</version>
-        </dependency>
-		<dependency>
-		      <groupId>org.nlp2rdf.software</groupId>
-		      <artifactId>jena</artifactId>
-		      <version>2.0.1-SNAPSHOT</version>
-		</dependency>
-		<!-- 
-        <dependency>
-              <groupId>org.nlp2rdf.software</groupId>
-              <artifactId>stanfordcorenlp</artifactId>
-              <version>2.0.1-SNAPSHOT</version>
-        </dependency>
-         -->
-         <dependency>
-		    <groupId>com.google.guava</groupId>
-		    <artifactId>guava</artifactId>
-		    <version>18.0</version>
-		</dependency>
-         
-    </dependencies>  
+    <build>
+        <pluginManagement>
+            <plugins>
+              <plugin>
+                <groupId>org.apache.tomcat.maven</groupId>
+                <artifactId>tomcat7-maven-plugin</artifactId>
+                <version>2.2</version>
+                <configuration>
+                  <port>9090</port>
+                  <path>/</path>
+                </configuration>
+               </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
     
-    <repositories>
+	<dependencies>
+		<dependency>
+			<groupId>org.getalp</groupId>
+			<artifactId>org.getalp.lexsema-util</artifactId>
+			<version>1.0-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>org.getalp</groupId>
+			<artifactId>org.getalp.lexsema-wsd-core</artifactId>
+			<version>1.0-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>org.getalp</groupId>
+			<artifactId>org.getalp.lexsema-io-core</artifactId>
+			<version>1.0-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>org.getalp</groupId>
+			<artifactId>org.getalp.lexsema-similarity</artifactId>
+			<version>1.0-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.jena</groupId>
+			<artifactId>apache-jena-libs</artifactId>
+			<type>pom</type>
+			<version>2.13.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.jena</groupId>
+			<artifactId>jena-core</artifactId>
+			<type>pom</type>
+			<version>2.13.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.nlp2rdf.software</groupId>
+			<artifactId>jena</artifactId>
+			<version>2.0.1-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>org.aksw.rdfunit</groupId>
+			<artifactId>rdfunit-core</artifactId>
+			<version>0.7.3</version>
+		</dependency>
+		<dependency>
+			<groupId>com.google.guava</groupId>
+			<artifactId>guava</artifactId>
+			<version>18.0</version>
+		</dependency>
+
+	</dependencies>
+
+	<repositories>
 		<repository>
-		    <id>maven.aksw.internal</id>
-		    <name>University Leipzig, AKSW Maven2 Repository</name>
-		    <url>http://maven.aksw.org/repository/internal</url>
+			<id>maven.aksw.internal</id>
+			<name>University Leipzig, AKSW Maven2 Repository</name>
+			<url>http://maven.aksw.org/repository/internal</url>
 		</repository>
 		<repository>
-		    <id>maven.aksw.snapshots</id>
-		    <name>University Leipzig, AKSW Maven2 Repository</name>
-		    <url>http://maven.aksw.org/repository/snapshots</url>
+			<id>maven.aksw.snapshots</id>
+			<name>University Leipzig, AKSW Maven2 Repository</name>
+			<url>http://maven.aksw.org/repository/snapshots</url>
 		</repository>
-	</repositories>  
+	</repositories>
 </project>

@@ -1,7 +1,17 @@
 package org.getalp.lexsema.nif;
 
+import java.io.OutputStream;
+import java.security.InvalidParameterException;
 import java.util.*;
 
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.aksw.rdfunit.enums.TestCaseExecutionType;
+import org.aksw.rdfunit.io.writer.RDFStreamWriter;
+import org.aksw.rdfunit.io.writer.RDFWriter;
+import org.aksw.rdfunit.io.writer.RDFWriterFactory;
 import org.getalp.lexsema.io.resource.wordnet.WordnetLoader;
 import org.getalp.lexsema.io.text.EnglishDKPTextProcessor;
 import org.getalp.lexsema.io.text.TextProcessor;
@@ -18,7 +28,7 @@ import org.nlp2rdf.core.Span;
 import org.nlp2rdf.core.Text2RDF;
 import org.nlp2rdf.core.vocab.NIFDatatypeProperties;
 import org.nlp2rdf.core.vocab.NIFOntClasses;
-import org.nlp2rdf.webservice.NIFServlet;
+import org.nlp2rdf.webservice.NIFParameterWebserviceFactory;
 
 import com.google.common.collect.HashBiMap;
 import com.hp.hpl.jena.ontology.Individual;
@@ -30,10 +40,49 @@ import com.hp.hpl.jena.rdf.model.Statement;
 import com.hp.hpl.jena.rdf.model.StmtIterator;
 import com.hp.hpl.jena.util.iterator.ExtendedIterator;
 
-public class Niflet extends NIFServlet
+public class Niflet extends HttpServlet
 {
     private static final long serialVersionUID = 1L;
-    
+
+    protected void doOptions(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse)
+    {
+        httpServletResponse.setHeader("Access-Control-Allow-Origin", "*");
+        httpServletResponse.setHeader("Access-Control-Allow-Methods", "GET, PUT, POST, OPTIONS, DELETE");
+        httpServletResponse.setHeader("Access-Control-Max-Age", "*");
+        httpServletResponse.setHeader("Access-Control-Allow-Headers", "*");
+    }
+
+    protected void doGet(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse)
+    {
+        handle(httpServletRequest, httpServletResponse);
+    }
+
+    protected void doPost(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse)
+    {
+        handle(httpServletRequest, httpServletResponse);
+    }
+
+    private void handle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse)
+    {
+        try
+        {
+            doOptions(httpServletRequest, httpServletResponse);
+            String defaultPrefix = httpServletRequest.getRequestURL().toString() + "#";
+            NIFParameters nifParameters = NIFParameterWebserviceFactory.getInstance(httpServletRequest, defaultPrefix);
+            Data data = new Data(nifParameters);
+            tokenize(data);
+            annotate(data);
+            disambiguate(data);
+            OntModel out = data.model;
+            out.setNsPrefix("p", defaultPrefix);
+            write(httpServletResponse, out, nifParameters.getOutputFormat());
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+    }
+
     private static class Data
     {
         public Data(NIFParameters np) { nifParameters = np; model = np.getInputModel(); }
@@ -43,15 +92,6 @@ public class Niflet extends NIFServlet
         public HashBiMap<Word, Resource> words;
     }
 
-    public OntModel execute(NIFParameters nifParameters) throws Exception 
-    {
-        Data data = new Data(nifParameters);
-        tokenize(data);
-        annotate(data);
-        disambiguate(data);
-        return data.model;
-    }
-    
     private void tokenize(Data data)
     {
         TextProcessor txtProcessor = new EnglishDKPTextProcessor();
@@ -78,7 +118,7 @@ public class Niflet extends NIFServlet
         }
         populateBiMap(data);
     }
-    
+
     private void populateBiMap(Data data)
     {
         data.words = HashBiMap.create();
@@ -88,21 +128,21 @@ public class Niflet extends NIFServlet
             data.words.inverse().put(wordNode, getCorrespondingWord(wordNode, data.text, data.model));
         }
     }
-    
+
     private Word getCorrespondingWord(Resource wordNode, Text txt, OntModel model)
     {
         for (Word word : txt)
         {
             if (wordNode.getProperty(model.createProperty(model.getNsPrefixURI("nif") + "anchorOf")).getObject().toString().equals("" + word.getSurfaceForm()) &&
-                wordNode.getProperty(model.createProperty(model.getNsPrefixURI("nif") + "beginIndex")).getObject().toString().equals("" + word.getBegin()) && 
-                wordNode.getProperty(model.createProperty(model.getNsPrefixURI("nif") + "endIndex")).getObject().toString().equals("" + word.getEnd()))
+                    wordNode.getProperty(model.createProperty(model.getNsPrefixURI("nif") + "beginIndex")).getObject().toString().equals("" + word.getBegin()) && 
+                    wordNode.getProperty(model.createProperty(model.getNsPrefixURI("nif") + "endIndex")).getObject().toString().equals("" + word.getEnd()))
             {
                 return word;
             }
         }
         return null;
     }
-    
+
     private void annotate(Data data)
     {
         Property lemmaProperty = data.model.createProperty(data.model.getNsPrefixURI("nif") + "lemma");
@@ -120,14 +160,14 @@ public class Niflet extends NIFServlet
             }
         }
     }
-    
+
     private void disambiguate(Data data)
     {
         data.model.add(data.model.createStatement(data.model.createResource(data.nifParameters.getPrefix() + "sense"),
-                                                  data.model.createProperty(data.model.getNsPrefixURI("rdf") + "type"),
-                                                  data.model.createResource(data.model.getNsPrefixURI("owl") + "DatatypeProperty")));
-        
-        WordnetLoader lrloader = new WordnetLoader("/home/coyl/data/wordnet/3.0/dict");
+                data.model.createProperty(data.model.getNsPrefixURI("rdf") + "type"),
+                data.model.createResource(data.model.getNsPrefixURI("owl") + "DatatypeProperty")));
+
+        WordnetLoader lrloader = new WordnetLoader("/home/coyl/lig/data/wordnet/3.0/dict");
         lrloader.loadDefinitions(true);
         lrloader.loadSenses(data.text);
         ConfigurationScorer scorer = new ConfigurationScorerWithCache(new AnotherLeskSimilarity());
@@ -141,7 +181,7 @@ public class Niflet extends NIFServlet
             wordNode.addProperty(data.model.createProperty(data.nifParameters.getPrefix() + "sense"), "" + c.getAssignment(j));
         }
     }
-    
+
     private List<Resource> getWordNodes(OntModel model)
     {
         List<Resource> words = new ArrayList<Resource>();
@@ -154,12 +194,66 @@ public class Niflet extends NIFServlet
             {
                 Statement stm = stmIterator.next();
                 if (stm.getPredicate().toString().equals(model.getNsPrefixURI("rdf") + "type") &&
-                    stm.getObject().toString().equals(model.getNsPrefixURI("nif") + "Word"))
+                        stm.getObject().toString().equals(model.getNsPrefixURI("nif") + "Word"))
                 {
                     words.add(node);
                 }
             }
         }
         return words;
+    }
+
+    private void write(HttpServletResponse httpServletResponse, OntModel out, String format) throws Exception 
+    {
+        OutputStream outputStream = httpServletResponse.getOutputStream();
+
+        RDFWriter outputWriter = null;
+        String contentType = "";
+
+        switch (format.toLowerCase())
+        {
+            case "turtle":
+                outputWriter = new RDFStreamWriter(outputStream, "TURTLE");
+                contentType = "text/turtle";
+                break;
+            case "rdfxml":
+                outputWriter = new RDFStreamWriter(outputStream, "RDF/XML");
+                contentType = "application/rdf+xml";
+                break;
+            case "n3":
+                outputWriter = new RDFStreamWriter(outputStream, "N3");
+                contentType = "text/rdf+n3";
+            case "ntriples":
+                outputWriter = new RDFStreamWriter(outputStream, "NTRIPLES");
+                contentType = "text/rdf+n3";
+                break;
+            case "html": {
+                outputWriter = RDFWriterFactory.createHTMLWriter(TestCaseExecutionType.rlogTestCaseResult, outputStream);
+                contentType = "text/html";
+                break;
+            }
+            case "text": {
+                contentType = "text";
+                break;
+            }
+            default: {
+                outputStream.close();
+                throw new InvalidParameterException("There is no " + format + " output implemented at the moment. Sorry!");
+            }
+        }
+
+        httpServletResponse.setContentType(contentType);
+        httpServletResponse.setCharacterEncoding("UTF-8");
+
+        if (outputWriter != null)
+        {
+            outputWriter.write(out);
+        }
+        else  // "text"
+        {
+            outputStream.write(outputStream.toString().getBytes());
+        }
+
+        outputStream.close();
     }
 }
