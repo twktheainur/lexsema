@@ -10,8 +10,18 @@
 		<servlet-class>org.getalp.lexsema.nif.Niflet</servlet-class>
 	</servlet>
 
+    <servlet>
+        <servlet-name>HTMLTextAnnotator</servlet-name>
+        <servlet-class>org.getalp.lexsema.nif.HTMLTextAnnotator</servlet-class>
+    </servlet>
+
 	<servlet-mapping>
 		<servlet-name>Niflet</servlet-name>
 		<url-pattern>/niflet</url-pattern>
 	</servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>HTMLTextAnnotator</servlet-name>
+        <url-pattern>/htmltextannotator</url-pattern>
+    </servlet-mapping>
 </web-app>

@@ -32,23 +32,28 @@ public class DictionaryEnrichment
         //writeDictionary(false, false, true, "../data/dict_semeval2007task7_semcor");
         //writeDictionary(true, false, true, "../data/dict_semeval2007task7_stopwords_semcor");
         //writeDictionary(false, true, true, "../data/dict_semeval2007task7_stemming_semcor");
-        writeDictionary(true, true, true, "../data/dict_semeval2007task7_stopwords_stemming_semcor");
+        //writeDictionary(true, true, true, "../data/dict_semeval2007task7_stopwords_stemming_semcor");
+        
+        for (int i = 100 ; i <= 100 ; i += 5)
+        {
+            writeDictionary(true, true, true, true, true, i, "../data/dict_semeval2007task7_stopwords_stemming_semcor" + i);
+        }
     }
     
-    private static void writeDictionary(boolean stopWords, boolean stemming, boolean semCorrify, String newDictPath)
+    private static void writeDictionary(boolean definitions, boolean extendedDefinitions, boolean stopWords, boolean stemming, boolean semCorrify, int nbSemCorWords, String newDictPath)
     {
         System.out.println("Building dictionary " + newDictPath + "...");
         WordnetLoader lrloader = new WordnetLoader(dictPath);
-        lrloader.loadDefinitions(true);
-        lrloader.extendedSignature(true);
-        lrloader.setLoadRelated(true);
+        lrloader.loadDefinitions(definitions);
+        lrloader.extendedSignature(extendedDefinitions);
+        lrloader.setLoadRelated(extendedDefinitions);
         lrloader.setUsesIndex(true);
         lrloader.shuffle(true);
         lrloader.setUsesStopWords(stopWords);
         lrloader.setStemming(stemming);
         lrloader.setUsesSemCor(semCorrify);
         lrloader.setSemCorDefinitionExpender(semCorExpender);
-        lrloader.setSemCorNumberOfWordsToTake(20);
+        lrloader.setSemCorNumberOfWordsToTake(nbSemCorWords);
         TextLoader dl = new Semeval2007TextLoader(docPath);
         dl.load();
         for (Text txt : dl)

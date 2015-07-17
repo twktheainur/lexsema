@@ -3,7 +3,6 @@ package org.getalp.lexsema.io.resource.wordnet;
 import edu.mit.jwi.Dictionary;
 import edu.mit.jwi.item.*;
 
-import org.getalp.lexsema.io.DSODefinitionExpender.DSODefinitionExpender;
 import org.getalp.lexsema.io.definitionenricher.TextDefinitionEnricher;
 import org.getalp.lexsema.io.resource.LRLoader;
 import org.getalp.lexsema.similarity.Document;
@@ -24,50 +23,74 @@ import org.tartarus.snowball.ext.EnglishStemmer;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 
+import java.io.File;
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.*;
 
-public class WordnetLoader implements LRLoader {
+public class WordnetLoader implements LRLoader
+{
     private static Logger logger = LoggerFactory.getLogger(WordnetLoader.class);
-    private final Dictionary dictionary;
-    private boolean hasExtendedSignature;
-    private boolean shuffle;
-    private boolean usesStopWords;
-    private boolean stemming;
+    
+    private Dictionary dictionary;
 
     private boolean loadDefinitions;
+    
     private boolean loadRelated;
     
+    private boolean hasExtendedSignature;
+
+    private boolean usesStopWords;
+    
+    private boolean usesStemming;
+
     private boolean usesIndex;
+
+    private boolean usesSemCor;
+
+    private boolean shuffle;
+    
     private BiMap<String, Integer> indexMap;
+    
     private int currentIndex;
     
-    private boolean usesSemCor;
     private TextDefinitionEnricher semCorExpender;
+    
     private int semCorNumberOfWords = 10;
 
-    public WordnetLoader(String path) {
+    /**
+     * Creates a WordnetLoader given the path of a Wordnet dictionary.
+     */
+    public WordnetLoader(String path)
+    {
+        this(new Dictionary(new File(path)));
+    }
 
-        URL url = null;
-        try {
-            url = new URL("file", null, path);
-        } catch (MalformedURLException e) {
-            logger.info(e.getLocalizedMessage());
-        }
-        if (url != null) {
-            dictionary = new Dictionary(url);
-            try {
-                dictionary.open();
-            } catch (IOException e) {
-                logger.info(e.getLocalizedMessage());
-            }
-        } else {
-            dictionary = null;
-        }
+    /**
+     * Creates a WordnetLoader with an already created Wordnet Dictionary object.
+     * The dictionary may or may not be open prior to this constructor call.
+     * In every cases, it is opened during the call.
+     */
+    public WordnetLoader(Dictionary dictionary)
+    {
+        this.dictionary = dictionary;
+        openDictionary();
         indexMap = HashBiMap.create();
         currentIndex = 0;
+    }
+
+    private void openDictionary()
+    {
+        if (dictionary != null && !dictionary.isOpen())
+        {
+            try
+            {
+                this.dictionary.open();
+            }
+            catch (IOException e)
+            {
+                logger.info(e.getLocalizedMessage());
+            }
+        }
     }
 
     private List<Sense> getSenses(String lemma, String pos)
@@ -93,6 +116,7 @@ public class WordnetLoader implements LRLoader {
 
                 if (loadRelated)
                 {
+                    // Semantic relations
                     Map<IPointer, List<ISynsetID>> rm = word.getSynset().getRelatedMap();
                     for (IPointer p : rm.keySet())
                     {
@@ -121,6 +145,7 @@ public class WordnetLoader implements LRLoader {
                         }
                     }
                     
+                    // Lexical relations
                     Map<IPointer, List<IWordID>> rm2 = word.getRelatedMap();
                     for (IPointer p : rm2.keySet())
                     {
@@ -160,7 +185,6 @@ public class WordnetLoader implements LRLoader {
                     }
                 }
                 
-
                 if (usesIndex)
                 {
                     ((IndexedSemanticSignatureImpl) signature).sort();
@@ -206,7 +230,7 @@ public class WordnetLoader implements LRLoader {
                 continue;
             }
 
-            if (stemming) {
+            if (usesStemming) {
                 stemmer.setCurrent(token);
                 stemmer.stem();
                 token = stemmer.getCurrent();
@@ -280,13 +304,6 @@ public class WordnetLoader implements LRLoader {
     }
 
     @Override
-    public void loadSenses(Document document, TextDefinitionEnricher definitionExpender, int profondeur, DSODefinitionExpender contexteDSO){
-        for (Word w : document) {
-            document.addWordSenses(getSenses(w));
-        }
-    }
-
-    @Override
     public LRLoader shuffle(boolean shuffle) {
         this.shuffle = shuffle;
         return this;
@@ -306,7 +323,7 @@ public class WordnetLoader implements LRLoader {
 
     @Override
     public WordnetLoader setStemming(boolean stemming) {
-        this.stemming = stemming;
+        this.usesStemming = stemming;
         return this;
     }
 

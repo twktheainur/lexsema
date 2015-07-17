@@ -25,10 +25,10 @@ public class CuckooSearchDisambiguation
 {
     public static void main(String[] args) throws Exception
     {
-        int iterations = 50000;
+        int iterations = 10000;
         double levyLocation = 2;
         double levyScale = 0.7;
-        int nestsNumber = 2;
+        int nestsNumber = 1;
         int destroyedNests = 0;
          
         if (args.length >= 1) iterations = Integer.valueOf(args[0]);
@@ -46,7 +46,7 @@ public class CuckooSearchDisambiguation
         
         long startTime = System.currentTimeMillis();
 
-        TextLoader dl = new Semeval2007TextLoader("../data/senseval2007_task7/test/eng-coarse-all-words-t1.xml");
+        TextLoader dl = new Semeval2007TextLoader("../data/senseval2007_task7/test/eng-coarse-all-words.xml");
 
         //LRLoader lrloader = new DictionaryLRLoader(new File("../data/lesk_dict/dict-adapted-all-relations.xml"));
         
@@ -70,7 +70,7 @@ public class CuckooSearchDisambiguation
         //ConfigurationScorer scorer = new TverskyConfigurationScorer(new TverskiIndexSimilarityMeasureBuilder().distance(new ScaledLevenstein()).alpha(1d).beta(0.0d).gamma(0.0d).fuzzyMatching(true).build(), Runtime.getRuntime().availableProcessors());
         
         //CuckooSearchDisambiguator cuckooDisambiguator = new CuckooSearchDisambiguator(new StopCondition(StopCondition.Condition.SCORERCALLS, iterations), levyLocation, levyScale, nestsNumber, destroyedNests, scorer, true);
-        MultiThreadCuckooSearch cuckooDisambiguator = new MultiThreadCuckooSearch(new StopCondition(StopCondition.Condition.SCORERCALLS, iterations), 1, 20, 1, 5, nestsNumber, scorer, true);
+        MultiThreadCuckooSearch cuckooDisambiguator = new MultiThreadCuckooSearch(iterations, levyLocation, levyScale, scorer, true);
         
         System.out.println("Loading texts...");
         dl.load();

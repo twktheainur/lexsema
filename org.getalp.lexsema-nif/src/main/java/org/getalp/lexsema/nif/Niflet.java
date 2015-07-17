@@ -69,6 +69,7 @@ public class Niflet extends HttpServlet
             doOptions(httpServletRequest, httpServletResponse);
             String defaultPrefix = httpServletRequest.getRequestURL().toString() + "#";
             NIFParameters nifParameters = NIFParameterWebserviceFactory.getInstance(httpServletRequest, defaultPrefix);
+            System.out.println(nifParameters);
             Data data = new Data(nifParameters);
             tokenize(data);
             annotate(data);

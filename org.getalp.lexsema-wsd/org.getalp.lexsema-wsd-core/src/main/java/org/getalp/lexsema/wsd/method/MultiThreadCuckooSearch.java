@@ -42,7 +42,10 @@ public class MultiThreadCuckooSearch
                 double newScore = getScore(newConfig);
                 if (newScore > score)
                 {
-                    configuration = newConfig;
+                    synchronized (configuration)
+                    {
+                        configuration = newConfig;
+                    }
                     score = newScore;
                 }
             }
@@ -73,6 +76,16 @@ public class MultiThreadCuckooSearch
     
     private Document currentDocument;
 
+    public MultiThreadCuckooSearch(int iterations, double levyLocation, double levyScale, ConfigurationScorer configurationScorer, boolean verbose)
+    {
+        this(new StopCondition(StopCondition.Condition.ITERATIONS, iterations), levyLocation, levyLocation, levyScale, levyScale, Runtime.getRuntime().availableProcessors(), configurationScorer, verbose);
+    }
+
+    public MultiThreadCuckooSearch(int iterations, ConfigurationScorer configurationScorer, boolean verbose)
+    {
+        this(new StopCondition(StopCondition.Condition.ITERATIONS, iterations), 1, 10, 1, 10, Runtime.getRuntime().availableProcessors(), configurationScorer, verbose);
+    }
+
     public MultiThreadCuckooSearch(int iterations, double minLevyLocation, double maxLevyLocation, double minLevyScale, double maxLevyScale, int numberThreads, ConfigurationScorer configurationScorer, boolean verbose)
     {
         this(new StopCondition(StopCondition.Condition.ITERATIONS, iterations), minLevyLocation, maxLevyLocation, minLevyScale, maxLevyScale, numberThreads, configurationScorer, verbose);
@@ -81,6 +94,10 @@ public class MultiThreadCuckooSearch
     public MultiThreadCuckooSearch(StopCondition stopCondition, double minLevyLocation, double maxLevyLocation, double minLevyScale, double maxLevyScale, int numberThreads, ConfigurationScorer configurationScorer, boolean verbose)
     {
         this.stopCondition = stopCondition;
+        this.minLevyLocation = minLevyLocation;
+        this.maxLevyLocation = maxLevyLocation;
+        this.minLevyScale = minLevyScale;
+        this.maxLevyScale = maxLevyScale;
         this.configurationScorer = configurationScorer;
         this.cuckoos = new Cuckoo[numberThreads];
         this.verbose = verbose;
