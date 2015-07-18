@@ -2,13 +2,16 @@ package org.getalp.lexsema.wsd.experiments;
 
 import java.io.File;
 
-import org.getalp.lexsema.io.definitionenricher.TextDefinitionEnricher;
+import edu.mit.jwi.Dictionary;
 import org.getalp.lexsema.io.dictionary.DocumentDictionaryWriter;
 import org.getalp.lexsema.io.document.SemCorTextLoader;
 import org.getalp.lexsema.io.document.Semeval2007TextLoader;
 import org.getalp.lexsema.io.document.TextLoader;
+import org.getalp.lexsema.io.resource.LRLoader;
 import org.getalp.lexsema.io.resource.wordnet.WordnetLoader;
+import org.getalp.lexsema.io.thesaurus.AnnotatedTextThesaurus;
 import org.getalp.lexsema.similarity.Text;
+import org.getalp.lexsema.io.thesaurus.AnnotatedTextThesaurusImpl;
 
 public class DictionaryEnrichment
 {
@@ -20,7 +23,7 @@ public class DictionaryEnrichment
     
     public static TextLoader semCor = new SemCorTextLoader(semCorPath);
     
-    public static TextDefinitionEnricher semCorExpender =  new TextDefinitionEnricher(semCor);
+    public static AnnotatedTextThesaurus semCorExpender =  new AnnotatedTextThesaurusImpl(semCor,10);
     
     public static void main(String[] args)
     {
@@ -43,17 +46,14 @@ public class DictionaryEnrichment
     private static void writeDictionary(boolean definitions, boolean extendedDefinitions, boolean stopWords, boolean stemming, boolean semCorrify, int nbSemCorWords, String newDictPath)
     {
         System.out.println("Building dictionary " + newDictPath + "...");
-        WordnetLoader lrloader = new WordnetLoader(dictPath);
-        lrloader.loadDefinitions(definitions);
-        lrloader.extendedSignature(extendedDefinitions);
-        lrloader.setLoadRelated(extendedDefinitions);
-        lrloader.setUsesIndex(true);
-        lrloader.shuffle(true);
-        lrloader.setUsesStopWords(stopWords);
-        lrloader.setStemming(stemming);
-        lrloader.setUsesSemCor(semCorrify);
-        lrloader.setSemCorDefinitionExpender(semCorExpender);
-        lrloader.setSemCorNumberOfWordsToTake(nbSemCorWords);
+        LRLoader lrloader = new WordnetLoader(new Dictionary(new File("../data/wordnet/2.1/dict")),semCorExpender)
+        .loadDefinitions(definitions)
+        .extendedSignature(extendedDefinitions)
+        .loadRelated(extendedDefinitions)
+        .index(true)
+        .shuffle(true)
+        .filterStopWords(stopWords)
+        .stemming(stemming);
         TextLoader dl = new Semeval2007TextLoader(docPath);
         dl.load();
         for (Text txt : dl)

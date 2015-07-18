@@ -7,20 +7,22 @@ import java.util.List;
 
 public interface LRLoader
 {
-    public List<Sense> getSenses(Word w);
+    List<Sense> getSenses(Word w);
 
-    public void loadSenses(Document document);
+    void loadSenses(Document document);
 
-    public LRLoader shuffle(boolean shuffle);
+    LRLoader shuffle(boolean shuffle);
 
-    public LRLoader extendedSignature(boolean hasExtendedSignature);
+    LRLoader extendedSignature(boolean hasExtendedSignature);
 
-    public LRLoader loadDefinitions(boolean loadDefinitions);
+    LRLoader loadDefinitions(boolean loadDefinitions);
 
-    public LRLoader setLoadRelated(boolean loadRelated);
+    LRLoader loadRelated(boolean loadRelated);
 
-    public LRLoader setStemming(boolean stemming);
+    LRLoader stemming(boolean stemming);
 
-    public LRLoader setUsesStopWords(boolean usesStopWords);
+    LRLoader filterStopWords(boolean usesStopWords);
+
+    LRLoader index(boolean useIndex);
 
 }

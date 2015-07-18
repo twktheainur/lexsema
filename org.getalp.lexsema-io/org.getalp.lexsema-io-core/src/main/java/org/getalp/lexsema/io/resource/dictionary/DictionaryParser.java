@@ -20,107 +20,61 @@ import java.util.StringTokenizer;
 public class DictionaryParser implements ContentHandler {
 
     Map<String, List<Sense>> dico;
-    String word;
+    String word = null;
 
-    List<Sense> mws;
-    Sense mw;
+    List<Sense> mws = null;
+    Sense mw = null;
     boolean emptyDef;
     boolean ids, def;
     boolean indexed;
     @SuppressWarnings("unused")
     private Locator locator;
     private String currentSemanticSignature = "";
+    private final SymbolIndex symbolIndex = new SymbolIndexImpl();
 
-    /**
-     * Constructeur par defaut.
-     *
-     * @throws FileNotFoundException
-     */
-    public DictionaryParser(Map<String, List<Sense>> c, boolean indexed) throws FileNotFoundException {
+
+    public DictionaryParser(Map<String, List<Sense>> senseMap, boolean indexed) throws FileNotFoundException {
         super();
         //noinspection AssignmentToCollectionOrArrayFieldFromParameter
-        dico = c;
+        dico = senseMap;
         ids = false;
         def = false;
-        // On definit le locator par defaut.
         locator = new LocatorImpl();
         emptyDef = false;
         this.indexed = indexed;
     }
 
-    /**
-     * Definition du locator qui permet a tout moment pendant l'analyse, de localiser
-     * le traitement dans le flux. Le locator par defaut indique, par exemple, le numero
-     * de ligne et le numero de caractere sur la ligne.
-     *
-     * @param value le locator a utiliser.
-     * @see org.xml.sax.ContentHandler#setDocumentLocator(org.xml.sax.Locator)
-     */
+
     @Override
-    public void setDocumentLocator(Locator value) {
-        locator = value;
+    public void setDocumentLocator(Locator locator) {
+        this.locator = locator;
     }
 
-    /**
-     * Evenement envoye au demarrage du parse du flux xml.
-     *
-     * @throws SAXException en cas de probleme quelquonque ne permettant pas de
-     *                      se lancer dans l'analyse du document.
-     * @see org.xml.sax.ContentHandler#startDocument()
-     */
+
     @Override
     public void startDocument() throws SAXException {
     }
 
-    /**
-     * Evenement envoye a la fin de l'analyse du flux xml.
-     *
-     * @throws SAXException en cas de probleme quelquonque ne permettant pas de
-     *                      considerer l'analyse du document comme etant complete.
-     * @see org.xml.sax.ContentHandler#endDocument()
-     */
     @Override
     public void endDocument() throws SAXException {
     }
 
-    /**
-     * Debut de traitement dans un espace de nommage.
-     *
-     * @param prefix utilise pour cet espace de nommage dans cette partie de l'arborescence.
-     * @param URI    de l'espace de nommage.
-     * @see org.xml.sax.ContentHandler#startPrefixMapping(java.lang.String, java.lang.String)
-     */
+
     @Override
-    public void startPrefixMapping(String prefix, String URI) throws SAXException {
+    public void startPrefixMapping(String prefix, String uri) throws SAXException {
 
     }
 
-    /**
-     * Fin de traitement de l'espace de nommage.
-     *
-     * @param prefix le prefixe choisi a l'ouverture du traitement de l'espace nommage.
-     * @see org.xml.sax.ContentHandler#endPrefixMapping(java.lang.String)
-     */
     @Override
     public void endPrefixMapping(String prefix) throws SAXException {
 
     }
 
-    /**
-     * Evenement recu a chaque fois que l'analyseur rencontre une balise xml ouvrante.
-     *
-     * @param nameSpaceURI l'url de l'espace de nommage.
-     * @param localName    le nom local de la balise.
-     * @param rawName      nom de la balise en version 1.0 <code>nameSpaceURI + ":" + localName</code>
-     * @throws SAXException si la balise ne correspond pas a ce qui est attendu,
-     *                      comme par exemple non respect d'une dtd.
-     * @see org.xml.sax.ContentHandler#startElement(java.lang.String, java.lang.String, java.lang.String, org.xml.sax.Attributes)
-     */
     @Override
-    public void startElement(String nameSpaceURI, String localName, String rawName, Attributes attributes) throws SAXException {
+    public void startElement(String uri, String localName, String qName, Attributes atts) throws SAXException {
         switch (localName) {
             case "word":
-                word = attributes.getValue("tag");
+                word = atts.getValue("tag");
                 mws = new ArrayList<>();
                 break;
             case "ids":
@@ -133,19 +87,13 @@ public class DictionaryParser implements ContentHandler {
         }
     }
 
-    /**
-     * Evenement recu a chaque fermeture de balise.
-     *
-     * @see org.xml.sax.ContentHandler#endElement(java.lang.String, java.lang.String, java.lang.String)
-     */
     @Override
-    public void endElement(String nameSpaceURI, String localName, String rawName) throws SAXException {
+    public void endElement(String uri, String localName, String qName) throws SAXException {
         switch (localName) {
             case "word":
                 dico.put(word, mws);
                 break;
             case "sense":
-                //System.out.println("Def " + mw.getDef());
                 if (mw.getSemanticSignature() != null && !isSignatureEmpty(mw.getSemanticSignature())) {
                     mws.add(mw);
                 }
@@ -156,14 +104,14 @@ public class DictionaryParser implements ContentHandler {
             case "def":
                 def = false;
                 if (indexed) {
-                    IndexedSemanticSignature semanticSignature = new IndexedSemanticSignatureImpl();
+                    IndexedSemanticSignature semanticSignature = new IndexedSemanticSignatureImpl(symbolIndex);
                     StringTokenizer st = new StringTokenizer(currentSemanticSignature);
                     while (st.hasMoreTokens()) {
-                        semanticSignature.addSymbol(Integer.valueOf(st.nextToken()));
+                        semanticSignature.addIndexedSymbol(Integer.valueOf(st.nextToken()));
                     }
                     mw.setSemanticSignature(semanticSignature);
                 } else {
-                    StringSemanticSignature semanticSignature = new StringSemanticSignatureImpl();
+                    SemanticSignature semanticSignature = new SemanticSignatureImpl();
                     StringTokenizer st = new StringTokenizer(currentSemanticSignature);
                     while (st.hasMoreTokens()) {
                         semanticSignature.addSymbol(st.nextToken());
@@ -179,71 +127,30 @@ public class DictionaryParser implements ContentHandler {
         return semanticSignature.size() == 0;
     }
 
-    /**
-     * Evenement recu a chaque fois que l'analyseur rencontre des caracteres (entre
-     * deux balises).
-     *
-     * @param ch    les caracteres proprement dits.
-     * @param start le rang du premier caractere a traiter effectivement.
-     * @param end   le rang du dernier caractere a traiter effectivement
-     * @see org.xml.sax.ContentHandler#characters(char[], int, int)
-     */
     @Override
-    public void characters(char[] ch, int start, int end) throws SAXException {
+    public void characters(char[] ch, int start, int length) throws SAXException {
         if (ids) {
-            StringTokenizer st = new StringTokenizer(new String(ch, start, end));
+            StringTokenizer st = new StringTokenizer(new String(ch, start, length));
             if (st.hasMoreElements()) {
                 mw = new SenseImpl(st.nextToken());
             } else {
-                mw = new SenseImpl(new String(ch, start, end).trim());
+                mw = new SenseImpl(new String(ch, start, length).trim());
             }
         } else if (def) {
-            String defs = new String(ch, start, end);
+            String defs = new String(ch, start, length);
             currentSemanticSignature += defs;
         }
     }
 
-    /**
-     * Recu chaque fois que des caracteres d'espacement peuvent etre ignores au sens de
-     * XML. C'est a dire que cet evenement est envoye pour plusieurs espaces se succedant,
-     * les tabulations, et les retours chariot se succedants ainsi que toute combinaison de ces
-     * trois types d'occurrence.
-     *
-     * @param ch    les caracteres proprement dits.
-     * @param start le rang du premier caractere a traiter effectivement.
-     * @param end   le rang du dernier caractere a traiter effectivement
-     * @see org.xml.sax.ContentHandler#ignorableWhitespace(char[], int, int)
-     */
     @Override
-    public void ignorableWhitespace(char[] ch, int start, int end) throws SAXException {
-        //System.out.println("espaces inutiles rencontres : ..." + new String(ch, start, end) +  "...");
+    public void ignorableWhitespace(char[] ch, int start, int length) throws SAXException {
     }
 
-    /**
-     * Rencontre une instruction de fonctionnement.
-     *
-     * @param target la cible de l'instruction de fonctionnement.
-     * @param data   les valeurs associees a cette cible. En general, elle se presente sous la forme
-     *               d'une serie de paires nom/valeur.
-     * @see org.xml.sax.ContentHandler#processingInstruction(java.lang.String, java.lang.String)
-     */
     @Override
     public void processingInstruction(String target, String data) throws SAXException {
-        //System.out.println("Instruction de fonctionnement : " + target);
-        //System.out.println("  dont les arguments sont : " + data);
     }
 
-    /**
-     * Recu a chaque fois qu'une balise est evitee dans le traitement a cause d'un
-     * probleme non bloque par le parser. Pour ma part je ne pense pas que vous
-     * en ayez besoin dans vos traitements.
-     *
-     * @see org.xml.sax.ContentHandler#skippedEntity(java.lang.String)
-     */
     @Override
-    public void skippedEntity(String arg0) throws SAXException {
-        // Je ne fais rien, ce qui se passe n'est pas franchement normal.
-        // Pour eviter cet evenement, le mieux est quand meme de specifier une dtd pour vos
-        // documents xml et de les faire valider par votre parser.
+    public void skippedEntity(String name) throws SAXException {
     }
 }

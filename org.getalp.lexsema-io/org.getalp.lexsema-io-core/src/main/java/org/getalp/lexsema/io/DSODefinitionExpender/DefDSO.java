@@ -28,7 +28,7 @@ public class DefDSO {
 		while(i<contexte.length()){
 			if(contexte.charAt(i)>=97 && contexte.charAt(i)<=122){
 				k=i+1;
-				while((k)<contexte.length() && contexte.charAt(k)>=97 && contexte.charAt(k)<=122){
+				while(k <contexte.length() && contexte.charAt(k)>=97 && contexte.charAt(k)<=122){
 					k++;
 				}
 				this.contexte.add(contexte.substring(i, k));

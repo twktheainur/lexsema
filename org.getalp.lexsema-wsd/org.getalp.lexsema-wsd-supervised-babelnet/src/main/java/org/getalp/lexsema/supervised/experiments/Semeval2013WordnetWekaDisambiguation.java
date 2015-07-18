@@ -1,6 +1,7 @@
 package org.getalp.lexsema.supervised.experiments;
 
 
+import edu.mit.jwi.Dictionary;
 import org.getalp.lexsema.io.annotresult.ConfigurationWriter;
 import org.getalp.lexsema.io.annotresult.SemevalWriter;
 import org.getalp.lexsema.io.document.SemCorTextLoader;
@@ -21,6 +22,7 @@ import org.getalp.lexsema.wsd.method.Disambiguator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -32,8 +34,8 @@ public class Semeval2013WordnetWekaDisambiguation {
         TextLoader dl = new Semeval2013Task13TextLoader("../data/semeval-2013-task12-test-data/data/multilingual-all-words.en.xml")
                 .loadNonInstances(false);
         TextLoader semCor = new SemCorTextLoader("../data/semcor3.0/semcor_full.xml");
-        //LRLoader lrloader = new BabelNetAPILoader(Language.ENGLISH).extendedSignature(false).shuffle(false).loadDefinitions(false).setLoadRelated(false);
-        LRLoader lrloader = new WordnetLoader("../data/wordnet/3.0/dict")
+        //LRLoader lrloader = new BabelNetAPILoader(Language.ENGLISH).extendedSignature(false).shuffle(false).loadDefinitions(false).loadRelated(false);
+        LRLoader lrloader = new WordnetLoader(new Dictionary(new File("../data/wordnet/3.0/dict")))
                 .extendedSignature(true).shuffle(true);
         semCor.load();
         WindowLoader wloader = new DocumentCollectionWindowLoader(semCor);

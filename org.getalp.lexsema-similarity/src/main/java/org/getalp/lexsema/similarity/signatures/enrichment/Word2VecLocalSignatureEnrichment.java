@@ -1,22 +1,25 @@
 package org.getalp.lexsema.similarity.signatures.enrichment;
 
 import org.deeplearning4j.models.word2vec.Word2Vec;
-import org.getalp.lexsema.similarity.signatures.StringSemanticSignature;
-import org.getalp.lexsema.similarity.signatures.StringSemanticSignatureImpl;
-import org.getalp.lexsema.similarity.signatures.StringSemanticSymbol;
-import org.getalp.lexsema.similarity.signatures.StringSemanticSymbolImpl;
+import org.getalp.lexsema.similarity.signatures.SemanticSignature;
+import org.getalp.lexsema.similarity.signatures.SemanticSignatureImpl;
+import org.getalp.lexsema.similarity.signatures.SemanticSymbol;
+import org.getalp.lexsema.similarity.signatures.SemanticSymbolImpl;
 import org.getalp.lexsema.util.Language;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Word2VecLocalSignatureEnrichment implements SignatureEnrichment {
 
     public static final int DEFAULT_TOP_N = 10;
+    private static final Pattern PUNCTUATION_PATTERN = Pattern.compile("\\p{Punct}");
 
-    private Word2Vec word2Vec;
-    private int topN;
+    private final Word2Vec word2Vec;
+    private final int topN;
 
 
     public Word2VecLocalSignatureEnrichment(Word2Vec word2Vec) {
@@ -28,28 +31,28 @@ public class Word2VecLocalSignatureEnrichment implements SignatureEnrichment {
         this.topN = topN;
     }
 
-    private List<StringSemanticSymbol> enrichSemanticSymbol(StringSemanticSymbol semanticSymbol) {
+    private List<SemanticSymbol> enrichSemanticSymbol(SemanticSymbol semanticSymbol) {
         String word = semanticSymbol.getSymbol();
-        word = word.replaceAll("\\p{Punct}", "");
-        Collection<String> related = word2Vec.wordsNearest(word, topN);
-        List<StringSemanticSymbol> symbols = new ArrayList<>();
+        final Matcher matcher = PUNCTUATION_PATTERN.matcher(word);
+        Collection<String> related = word2Vec.wordsNearest(matcher.replaceAll(""), topN);
+        List<SemanticSymbol> symbols = new ArrayList<>();
         for (String sword : related) {
-            symbols.add(new StringSemanticSymbolImpl(sword, 1.0));
+            symbols.add(new SemanticSymbolImpl(sword, 1.0));
         }
         return symbols;
     }
 
     @Override
-    public StringSemanticSignature enrichSemanticSignature(StringSemanticSignature semanticSignature) {
-        StringSemanticSignature newSignature = new StringSemanticSignatureImpl();
-        for (StringSemanticSymbol semanticSymbol : semanticSignature) {
+    public SemanticSignature enrichSemanticSignature(SemanticSignature semanticSignature) {
+        SemanticSignature newSignature = new SemanticSignatureImpl();
+        for (SemanticSymbol semanticSymbol : semanticSignature) {
             newSignature.addSymbols(enrichSemanticSymbol(semanticSymbol));
         }
         return newSignature;
     }
 
     @Override
-    public StringSemanticSignature enrichSemanticSignature(StringSemanticSignature semanticSignature, Language language) {
+    public SemanticSignature enrichSemanticSignature(SemanticSignature semanticSignature, Language language) {
         return null;
     }
 

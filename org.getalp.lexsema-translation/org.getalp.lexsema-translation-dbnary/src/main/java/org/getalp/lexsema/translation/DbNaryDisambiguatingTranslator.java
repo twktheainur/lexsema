@@ -1,6 +1,7 @@
 package org.getalp.lexsema.translation;
 
 
+import org.cleartk.snowball.SnowballStemmer;
 import org.getalp.lexsema.io.resource.LRLoader;
 import org.getalp.lexsema.io.resource.dbnary.DBNaryLoaderImpl;
 import org.getalp.lexsema.io.text.TextProcessor;
@@ -18,7 +19,7 @@ import org.getalp.lexsema.wsd.configuration.Configuration;
 import org.getalp.lexsema.wsd.method.Disambiguator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.tartarus.snowball.SnowballStemmer;
+
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;

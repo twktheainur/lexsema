@@ -13,20 +13,21 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.io.IOException;
 
-public final class Word2VecTextSimilarity {
-    private static Logger logger = LoggerFactory.getLogger(Word2VecTextSimilarity.class);
+public final class TextSimilarityEmbeddings {
+    private static Logger logger = LoggerFactory.getLogger(TextSimilarityEmbeddings.class);
 
     public static void main(String[] args) throws IOException {
 
         if (args.length <2) {
             usage();
         }
-        SemanticSignature signature1 = new SemanticSignatureImpl(args[0].replaceAll("\\p{Punct}","").toLowerCase().trim());
-        SemanticSignature signature2 = new SemanticSignatureImpl(args[1].replaceAll("\\p{Punct}","").toLowerCase().trim());
+        SemanticSignature signature1 = new SemanticSignatureImpl(args[0]);
+        SemanticSignature signature2 = new SemanticSignatureImpl(args[1]);
 
         MultilingualWord2VecLoader word2VecLoader = new MultilingualSerializedModelWord2VecLoader();
         word2VecLoader.loadGoogle(new File(args[2]),true);
 
+        //SimilarityMeasure similarityMeasure = new Word2VecGlossDistanceSimilarity(word2VecLoader.getWord2Vec(Language.ENGLISH),new MahalanobisDistance(),null);
         SimilarityMeasure similarityMeasure = new Word2VecGlossCosineSimilarity(word2VecLoader.getWord2Vec(Language.ENGLISH),true);
         double sim = similarityMeasure.compute(signature1, signature2);
         String output = String.format("The similarity between \"%s\" and \"%s\" is %s", signature1.toString(), signature2.toString(), sim);

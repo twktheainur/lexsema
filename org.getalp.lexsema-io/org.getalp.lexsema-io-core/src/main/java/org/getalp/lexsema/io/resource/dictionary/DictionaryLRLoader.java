@@ -1,7 +1,5 @@
 package org.getalp.lexsema.io.resource.dictionary;
 
-import org.getalp.lexsema.io.DSODefinitionExpender.DSODefinitionExpender;
-import org.getalp.lexsema.io.definitionenricher.TextDefinitionEnricher;
 import org.getalp.lexsema.io.resource.LRLoader;
 import org.getalp.lexsema.similarity.Document;
 import org.getalp.lexsema.similarity.Sense;
@@ -17,6 +15,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -25,7 +24,7 @@ import java.util.Map;
 @SuppressWarnings("BooleanParameter")
 public class DictionaryLRLoader implements LRLoader {
 
-    private static Logger logger = LoggerFactory.getLogger(DictionaryLRLoader.class);
+    private static final Logger logger = LoggerFactory.getLogger(DictionaryLRLoader.class);
 
     Map<String, List<Sense>> wordSenses;
     boolean indexed = false;
@@ -42,19 +41,21 @@ public class DictionaryLRLoader implements LRLoader {
             saxReader.setContentHandler(new DictionaryParser(wordSenses, indexed));
             saxReader.parse(new InputSource(new FileReader(dictionaryFile)));
         } catch (SAXException e) {
-            logger.error("Parser error :" + e.getLocalizedMessage());
+            logger.error(MessageFormat.format("Parser error :{0}", e.getLocalizedMessage()));
         } catch (FileNotFoundException e) {
-            logger.error("File not found :" + e.getLocalizedMessage());
+            logger.error(MessageFormat.format("File not found :{0}", e.getLocalizedMessage()));
         } catch (IOException e) {
-            logger.error("Read|Write error :" + e.getLocalizedMessage());
+            logger.error(MessageFormat.format("Read|Write error :{0}", e.getLocalizedMessage()));
         }
     }
 
     @Override
     public List<Sense> getSenses(Word w) {
-        String tag = w.getLemma() + "%" + w.getPartOfSpeech();
+        String lemma = w.getLemma();
+        String partOfSpeech = w.getPartOfSpeech();
+        String tag = MessageFormat.format("{0}%{1}", lemma, partOfSpeech);
         if (wordSenses.get(tag) == null) {
-            tag = w.getLemma().toLowerCase() + "%" + w.getPartOfSpeech();
+            tag = MessageFormat.format("{0}%{1}", lemma.toLowerCase(), partOfSpeech);
         }
         return wordSenses.get(tag);
     }
@@ -91,27 +92,25 @@ public class DictionaryLRLoader implements LRLoader {
 
     @SuppressWarnings("BooleanParameter")
     @Override
-    public LRLoader setLoadRelated(boolean loadRelated) {
+    public LRLoader loadRelated(boolean loadRelated) {
         return this;
     }
 
     @SuppressWarnings("BooleanParameter")
     @Override
-    public LRLoader setStemming(boolean stemming) {
+    public LRLoader stemming(boolean stemming) {
         return this;
     }
 
     @SuppressWarnings("BooleanParameter")
     @Override
-    public LRLoader setUsesStopWords(boolean usesStopWords) {
+    public LRLoader filterStopWords(boolean usesStopWords) {
         return this;
     }
 
-	@Override
-	public void loadSenses(Document document,
-			TextDefinitionEnricher definitionExpender, int profondeur,
-			DSODefinitionExpender contexteDSO) {
-		// TODO Auto-generated method stub
-		
-	}
+    @Override
+    public LRLoader index(boolean useIndex) {
+        return this;
+    }
+
 }

@@ -2,8 +2,8 @@ package org.getalp.lexsema.similarity.measures.crosslingual;
 
 import org.getalp.lexsema.similarity.measures.SimilarityMeasure;
 import org.getalp.lexsema.similarity.signatures.IndexedSemanticSignature;
-import org.getalp.lexsema.similarity.signatures.StringSemanticSignature;
-import org.getalp.lexsema.similarity.signatures.StringSemanticSignatureImpl;
+import org.getalp.lexsema.similarity.signatures.SemanticSignature;
+import org.getalp.lexsema.similarity.signatures.SemanticSignatureImpl;
 import org.getalp.lexsema.similarity.signatures.enrichment.SignatureEnrichment;
 import org.getalp.lexsema.translation.Translator;
 import org.slf4j.Logger;
@@ -36,16 +36,16 @@ public class TranslatorCrossLingualSimilarity implements SimilarityMeasure {
     }
 
     @Override
-    public double compute(StringSemanticSignature sigA, StringSemanticSignature sigB, Map<String, StringSemanticSignature> relatedSignaturesA, Map<String, StringSemanticSignature> relatedSignaturesB) {
+    public double compute(SemanticSignature sigA, SemanticSignature sigB, Map<String, SemanticSignature> relatedSignaturesA, Map<String, SemanticSignature> relatedSignaturesB) {
         if(!sigA.getLanguage().equals(sigB.getLanguage())) {
             String definitionB = sigB.toString();
             String translatedDefinitionB = translator.translate(definitionB, sigB.getLanguage(), sigA.getLanguage());
 
-            StringSemanticSignature translatedSignature = new StringSemanticSignatureImpl();
+            SemanticSignature translatedSignature = new SemanticSignatureImpl();
             translatedSignature.addSymbolString(Arrays.asList(translatedDefinitionB.split(" ")));
 
-            StringSemanticSignature enrichedA = sigA;
-            StringSemanticSignature enrichedTranslated = translatedSignature;
+            SemanticSignature enrichedA = sigA;
+            SemanticSignature enrichedTranslated = translatedSignature;
 
             if (enrichment != null) {
                 enrichedA = enrichment.enrichSemanticSignature(sigA, sigA.getLanguage());
@@ -59,17 +59,10 @@ public class TranslatorCrossLingualSimilarity implements SimilarityMeasure {
         }
     }
 
-    @Override
-    public double compute(IndexedSemanticSignature sigA, IndexedSemanticSignature sigB, Map<String, IndexedSemanticSignature> relatedSignaturesA, Map<String, IndexedSemanticSignature> relatedSignaturesB) {
-        return 0;
-    }
 
     @Override
-    public double compute(StringSemanticSignature sigA, StringSemanticSignature sigB) {
+    public double compute(SemanticSignature sigA, SemanticSignature sigB) {
         return compute(sigA,sigB,null,null);
     }
-    @Override
-    public double compute(IndexedSemanticSignature sigA, IndexedSemanticSignature sigB) {
-        return compute(sigA,sigB,null, null);
-    }
+
 }

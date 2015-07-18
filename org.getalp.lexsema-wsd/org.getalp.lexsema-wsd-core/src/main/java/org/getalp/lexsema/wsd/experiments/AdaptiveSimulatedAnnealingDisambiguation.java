@@ -1,28 +1,5 @@
 package org.getalp.lexsema.wsd.experiments;
 
-import org.getalp.lexsema.io.DSODefinitionExpender.DSODefinitionExpender;
-import org.getalp.lexsema.io.annotresult.SemevalWriter;
-import org.getalp.lexsema.io.definitionenricher.TextDefinitionEnricher;
-import org.getalp.lexsema.io.document.SemCorTextLoader;
-import org.getalp.lexsema.io.document.Semeval2007TextLoader;
-import org.getalp.lexsema.io.document.TextLoader;
-import org.getalp.lexsema.io.resource.LRLoader;
-import org.getalp.lexsema.io.resource.dictionary.DictionaryLRLoader;
-import org.getalp.lexsema.io.resource.wordnet.WordnetLoader;
-import org.getalp.lexsema.similarity.Document;
-import org.getalp.lexsema.similarity.measures.SimilarityMeasure;
-import org.getalp.lexsema.similarity.measures.lesk.ACExtendedLeskSimilarity;
-import org.getalp.lexsema.similarity.measures.tverski.TverskiIndexSimilarityMeasureBuilder;
-import org.getalp.lexsema.wsd.configuration.Configuration;
-import org.getalp.lexsema.wsd.method.Disambiguator;
-import org.getalp.lexsema.wsd.method.SimulatedAnnealing;
-import org.getalp.lexsema.wsd.score.ACSimilarityConfigurationScorer;
-import org.getalp.lexsema.wsd.score.ConfigurationScorer;
-import org.getalp.lexsema.wsd.score.MatrixTverskiConfigurationScorer;
-import org.getalp.lexsema.wsd.score.TverskyConfigurationScorer;
-
-import com.wcohen.ss.ScaledLevenstein;
-
 
 @SuppressWarnings("all")
 public class AdaptiveSimulatedAnnealingDisambiguation {
@@ -34,10 +11,10 @@ public class AdaptiveSimulatedAnnealingDisambiguation {
         //VisualVMTools.delayUntilReturn();
         long startTime = System.currentTimeMillis();
         TextLoader dl = new Semeval2007TextLoader("../data/senseval2007_task7/test/eng-coarse-all-words.xml").loadNonInstances(true);
-        LRLoader lrloader = new WordnetLoader("../data/wordnet/2.1/dict")
+        LRLoader lrloader = new WordnetLoader2("../data/wordnet/2.1/dict")
 			.extendedSignature(true)
-			.setUsesStopWords(false)
-			.setStemming(true)
+			.filterStopWords(false)
+			.stemming(true)
 			.loadDefinitions(true);
         
         TextLoader semCor = new SemCorTextLoader("../data/semcor3.0/semcor_full.xml");
@@ -49,7 +26,7 @@ public class AdaptiveSimulatedAnnealingDisambiguation {
 		DSODefinitionExpender contexteDSO=null;
 		//contexteDSO=new DSODefinitionExpender(10);
         
-        //LRLoader lrloader = new WordnetLoader("../data/wordnet/2.1/dict")
+        //LRLoader lrloader = new WordnetLoader2("../data/wordnet/2.1/dict")
         //        .extendedSignature(true).loadDefinitions(true).shuffle(false);
         SimilarityMeasure sim;
 

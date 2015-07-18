@@ -14,8 +14,8 @@ import org.getalp.lexsema.similarity.SenseImpl;
 import org.getalp.lexsema.similarity.Word;
 import org.getalp.lexsema.similarity.cache.SenseCache;
 import org.getalp.lexsema.similarity.cache.SenseCacheImpl;
-import org.getalp.lexsema.similarity.signatures.StringSemanticSignature;
-import org.getalp.lexsema.similarity.signatures.StringSemanticSignatureImpl;
+import org.getalp.lexsema.similarity.signatures.SemanticSignature;
+import org.getalp.lexsema.similarity.signatures.SemanticSignatureImpl;
 import org.getalp.lexsema.util.Language;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -53,7 +53,7 @@ public class BabelNetAPILoader implements LRLoader {
 
 
             for (BabelSense bs : babelSenses) {
-                StringSemanticSignature signature = new StringSemanticSignatureImpl();
+                SemanticSignature signature = new SemanticSignatureImpl();
                 if (loadDefinitions) {
                     String def = "";
                     List<BabelGloss> glosses = bs.getSynset().getGlosses(toBabelNetLanguage(language));
@@ -74,7 +74,7 @@ public class BabelNetAPILoader implements LRLoader {
                             for (BabelGloss rbg : relatedGlosses) {
                                 localDef += rbg.getGloss();
                             }
-                            StringSemanticSignature localSignature = new StringSemanticSignatureImpl();
+                            SemanticSignature localSignature = new SemanticSignatureImpl();
                             addToSignature(localSignature, localDef);
                             if (hasExtendedSignature) {
                                 signature.appendSignature(localSignature);
@@ -109,7 +109,7 @@ public class BabelNetAPILoader implements LRLoader {
         return senses;
     }
 
-    private void addToSignature(StringSemanticSignature signature, String def) {
+    private void addToSignature(SemanticSignature signature, String def) {
         StringTokenizer st = new StringTokenizer(def, " ", false);
         while (st.hasMoreTokens()) {
             String token = st.nextToken();
@@ -161,18 +161,23 @@ public class BabelNetAPILoader implements LRLoader {
         return this;
     }
 
-    public LRLoader setLoadRelated(boolean loadRelated) {
+    public LRLoader loadRelated(boolean loadRelated) {
         this.loadRelated = loadRelated;
         return this;
     }
 
     @Override
-    public LRLoader setStemming(boolean stemming) {
-        return null;
+    public LRLoader stemming(boolean stemming) {
+        return this;
     }
 
     @Override
-    public LRLoader setUsesStopWords(boolean usesStopWords) {
-        return null;
+    public LRLoader filterStopWords(boolean usesStopWords) {
+        return this;
+    }
+
+    @Override
+    public LRLoader index(boolean useIndex) {
+        return this;
     }
 }

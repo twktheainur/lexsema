@@ -1,6 +1,6 @@
 package org.getalp.lexsema.similarity.signatures.enrichment;
-import org.getalp.lexsema.similarity.signatures.StringSemanticSignature;
-import org.getalp.lexsema.similarity.signatures.StringSemanticSignatureImpl;
+import org.getalp.lexsema.similarity.signatures.SemanticSignature;
+import org.getalp.lexsema.similarity.signatures.SemanticSignatureImpl;
 import org.getalp.lexsema.util.Language;
 import org.getalp.lexsema.util.caching.Cache;
 import org.getalp.lexsema.util.caching.CachePool;
@@ -13,11 +13,11 @@ import java.util.Arrays;
 
 public class JedisCachedSignatureEnrichment implements SignatureEnrichment {
 
-    private Logger logger = LoggerFactory.getLogger(JedisCachedSignatureEnrichment.class);
+    private final Logger logger = LoggerFactory.getLogger(JedisCachedSignatureEnrichment.class);
 
-    private SignatureEnrichment signatureEnrichmentEngine;
-    private String prefix;
-    private Cache cache = CachePool.getResource();
+    private final SignatureEnrichment signatureEnrichmentEngine;
+    private final String prefix;
+    private final Cache cache = CachePool.getResource();
 
     public JedisCachedSignatureEnrichment(String prefix, SignatureEnrichment signatureEnrichmentEngine) {
         this.prefix = prefix;
@@ -30,16 +30,13 @@ public class JedisCachedSignatureEnrichment implements SignatureEnrichment {
 
     }
 
-    public JedisCachedSignatureEnrichment(SignatureEnrichment signatureEnrichmentEngine) {
-        this("", signatureEnrichmentEngine);
-    }
-
     private String produceKey(String key) {
-        return String.format("%s____%s____%s", prefix, getClass().getCanonicalName(), key);
+        final Class<? extends JedisCachedSignatureEnrichment> aClass = getClass();
+        return String.format("%s____%s____%s", prefix, aClass.getCanonicalName(), key);
     }
 
-    private StringSemanticSignature signatureFromCachedString(String cachedString) {
-        StringSemanticSignature semanticSignature = new StringSemanticSignatureImpl();
+    private SemanticSignature signatureFromCachedString(String cachedString) {
+        SemanticSignature semanticSignature = new SemanticSignatureImpl();
 
         semanticSignature.addSymbolString(new ArrayList<>(Arrays.asList(cachedString.split(" "))));
         return semanticSignature;
@@ -52,25 +49,25 @@ public class JedisCachedSignatureEnrichment implements SignatureEnrichment {
 
     @SuppressWarnings("FeatureEnvy")
     @Override
-    public StringSemanticSignature enrichSemanticSignature(StringSemanticSignature semanticSignature) {
+    public SemanticSignature enrichSemanticSignature(SemanticSignature semanticSignature) {
         String key = produceKey(semanticSignature.toString());
-        StringSemanticSignature signature;
-        if (!cache.exists(key)) {
+        SemanticSignature signature;
+        if (cache.exists(key)) {
+            signature = signatureFromCachedString(cache.get(key));
+        } else {
             if (signatureEnrichmentEngine != null) {
                 signatureEnrichmentEngine.enrichSemanticSignature(semanticSignature);
                 cache.set(key, semanticSignature.toString());
             }
             signature = semanticSignature;
 
-        } else {
-            signature = signatureFromCachedString(cache.get(key));
         }
         logger.info(semanticSignature.toString());
         return signature;
     }
 
     @Override
-    public StringSemanticSignature enrichSemanticSignature(StringSemanticSignature semanticSignature, Language language) {
+    public SemanticSignature enrichSemanticSignature(SemanticSignature semanticSignature, Language language) {
         return enrichSemanticSignature(semanticSignature);
     }
 }

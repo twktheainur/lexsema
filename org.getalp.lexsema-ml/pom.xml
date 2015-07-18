@@ -44,6 +44,21 @@
             <artifactId>cluster</artifactId>
             <version>0.1-SNAPSHOT</version>
         </dependency>
+        <dependency>
+            <groupId>org.nd4j</groupId>
+            <artifactId>nd4j-api</artifactId>
+            <version>0.0.3.5.5.5</version>
+        </dependency>
+        <dependency>
+            <groupId>org.nd4j</groupId>
+            <artifactId>nd4j-jblas</artifactId>
+            <version>0.0.3.5.5.5</version>
+        </dependency>
+        <dependency>
+            <groupId>org.nd4j</groupId>
+            <artifactId>canova-api</artifactId>
+            <version>0.0.0.4</version>
+        </dependency>
     </dependencies>
 
 </project>

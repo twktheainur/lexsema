@@ -5,7 +5,9 @@ import cern.colt.matrix.tdouble.DoubleMatrix1D;
 import cern.colt.matrix.tdouble.DoubleMatrix2D;
 import cern.jet.math.tdouble.DoubleFunctions;
 import cern.jet.stat.tdouble.DoubleDescriptive;
+import org.getalp.ml.matrix.MatrixUtils;
 import org.getalp.ml.matrix.filters.Filter;
+import org.nd4j.linalg.api.ndarray.INDArray;
 
 
 public class ZSignificanceNormalizationFilter implements Filter {
@@ -27,6 +29,11 @@ public class ZSignificanceNormalizationFilter implements Filter {
         }
         return null;
     }
+    @Override
+    public INDArray apply(INDArray signal) {
+        return MatrixUtils.toINDArray(apply(MatrixUtils.toColtMatrix(signal)));
+    }
+
 
     private void subtractMean(DoubleMatrix1D input, double mean){
         input.assign(DoubleFunctions.minus(mean));

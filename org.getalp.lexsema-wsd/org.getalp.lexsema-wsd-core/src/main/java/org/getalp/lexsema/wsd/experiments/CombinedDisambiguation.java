@@ -2,24 +2,21 @@ package org.getalp.lexsema.wsd.experiments;
 
 import com.wcohen.ss.ScaledLevenstein;
 
+import edu.mit.jwi.Dictionary;
 import org.getalp.lexsema.io.DSODefinitionExpender.DSODefinitionExpender;
-import org.getalp.lexsema.io.annotresult.SemevalWriter;
 import org.getalp.lexsema.io.dictionary.DictionaryWriter;
 import org.getalp.lexsema.io.dictionary.DocumentDictionaryWriter;
 import org.getalp.lexsema.io.document.Semeval2007TextLoader;
 import org.getalp.lexsema.io.document.TextLoader;
 import org.getalp.lexsema.io.resource.LRLoader;
-import org.getalp.lexsema.io.resource.dictionary.DictionaryLRLoader;
 import org.getalp.lexsema.io.resource.wordnet.WordnetLoader;
 import org.getalp.lexsema.similarity.Document;
 import org.getalp.lexsema.similarity.measures.SimilarityMeasure;
-import org.getalp.lexsema.similarity.measures.lesk.ACExtendedLeskSimilarity;
 import org.getalp.lexsema.similarity.measures.tverski.TverskiIndexSimilarityMeasureBuilder;
 import org.getalp.lexsema.wsd.configuration.Configuration;
 import org.getalp.lexsema.wsd.configuration.org.getalp.lexsema.wsd.evaluation.Semeval2007GoldStandard;
 import org.getalp.lexsema.wsd.configuration.org.getalp.lexsema.wsd.evaluation.StandardEvaluation;
 import org.getalp.lexsema.wsd.method.Disambiguator;
-import org.getalp.lexsema.wsd.method.sequencial.SimplifiedLesk;
 import org.getalp.lexsema.wsd.method.sequencial.WindowedLesk;
 import org.getalp.lexsema.wsd.method.sequencial.parameters.SimplifiedLeskParameters;
 import org.getalp.lexsema.wsd.method.sequencial.parameters.WindowedLeskParameters;
@@ -34,10 +31,10 @@ public class CombinedDisambiguation {
     public static void main(String[] args) {
         long startTime = System.currentTimeMillis();
         TextLoader dl = new Semeval2007TextLoader("../data/senseval2007_task7/test/eng-coarse-all-words.xml").loadNonInstances(true);
-        LRLoader lrloader = new WordnetLoader("../data/wordnet/2.1/dict")
+        LRLoader lrloader = new WordnetLoader(new Dictionary(new File("../data/wordnet/2.1/dict")))
 		.extendedSignature(true)
-		.setUsesStopWords(false)
-		.setStemming(true)
+		.filterStopWords(false)
+		.stemming(true)
 		.loadDefinitions(true);
         SimilarityMeasure sim_lr_hp;
         SimilarityMeasure sim_full;
@@ -52,8 +49,8 @@ public class CombinedDisambiguation {
 				.setOnlyUniqueWords(false)
 				.setFallbackFS(false)
 				.setMinimize(false);
-				//.setUsesStopWords(true)
-				//.setStemming(true); 
+				//.filterStopWords(true)
+				//.stemming(true);
         //Disambiguator sl = new SimplifiedLesk(100, sim_lr_hp, slp, 4);  
         
         DSODefinitionExpender contexteDSO=null;
@@ -75,7 +72,8 @@ public class CombinedDisambiguation {
         for (Document d : dl) {
             System.err.println("Starting document " + d.getId());
             System.err.println("\tLoading senses...");
-            lrloader.loadSenses(d, null, 0, contexteDSO);
+            //lrloader.loadSenses(d, null, 0, contexteDSO);
+            lrloader.loadSenses(d);
             //System.err.println("\tDisambiguating... ");
             //System.err.println("Applying low recall high precision simplified lesk...");
             //Configuration c = sl.disambiguate(d);

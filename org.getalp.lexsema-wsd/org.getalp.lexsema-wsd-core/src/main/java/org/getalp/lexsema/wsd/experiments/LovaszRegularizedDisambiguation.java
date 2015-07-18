@@ -1,6 +1,7 @@
 package org.getalp.lexsema.wsd.experiments;
 
 import com.wcohen.ss.ScaledLevenstein;
+import edu.mit.jwi.Dictionary;
 import org.getalp.lexsema.io.annotresult.SemevalWriter;
 import org.getalp.lexsema.io.document.Semeval2007TextLoader;
 import org.getalp.lexsema.io.document.TextLoader;
@@ -15,6 +16,8 @@ import org.getalp.lexsema.wsd.method.Disambiguator;
 import org.getalp.lexsema.wsd.method.sequencial.SimplifiedLesk;
 import org.getalp.lexsema.wsd.method.sequencial.parameters.SimplifiedLeskParameters;
 
+import java.io.File;
+
 @SuppressWarnings("all")
 public class LovaszRegularizedDisambiguation {
     public LovaszRegularizedDisambiguation() {
@@ -26,7 +29,7 @@ public class LovaszRegularizedDisambiguation {
 
         TextLoader dl = new Semeval2007TextLoader("../data/senseval2007_task7/test/eng-coarse-all-words.xml")
                 .loadNonInstances(false);
-        LRLoader lrloader = new WordnetLoader("../data/wordnet/2.1/dict")
+        LRLoader lrloader = new WordnetLoader(new Dictionary(new File("../data/wordnet/2.1/dict")))
                 .extendedSignature(true).shuffle(true);
         SimilarityMeasure similarityMeasure;
 

@@ -1,5 +1,6 @@
 package org.getalp.lexsema.nif;
 
+import java.io.File;
 import java.io.OutputStream;
 import java.security.InvalidParameterException;
 import java.util.*;
@@ -8,6 +9,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import edu.mit.jwi.*;
+import edu.mit.jwi.Dictionary;
 import org.aksw.rdfunit.enums.TestCaseExecutionType;
 import org.aksw.rdfunit.io.writer.RDFStreamWriter;
 import org.aksw.rdfunit.io.writer.RDFWriter;
@@ -168,7 +171,7 @@ public class Niflet extends HttpServlet
                 data.model.createProperty(data.model.getNsPrefixURI("rdf") + "type"),
                 data.model.createResource(data.model.getNsPrefixURI("owl") + "DatatypeProperty")));
 
-        WordnetLoader lrloader = new WordnetLoader("/home/coyl/lig/data/wordnet/3.0/dict");
+        WordnetLoader lrloader = new WordnetLoader(new Dictionary(new File("/home/coyl/lig/data/wordnet/3.0/dict")));
         lrloader.loadDefinitions(true);
         lrloader.loadSenses(data.text);
         ConfigurationScorer scorer = new ConfigurationScorerWithCache(new AnotherLeskSimilarity());

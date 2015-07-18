@@ -4,15 +4,15 @@ import org.getalp.lexsema.similarity.measures.SimilarityMeasure;
 import org.getalp.lexsema.util.Language;
 
 import java.util.*;
+import java.util.regex.Pattern;
 
 
-public class IndexedSemanticSignatureImpl implements IndexedSemanticSignature {
+public class SemanticSignatureImpl implements SemanticSignature {
 
     public static final double DEFAULT_WEIGHT = 1d;
-    private final List<IndexedSemanticSymbol> symbols;
-
-    private Language language = null;
-    private final SymbolIndex symbolIndex;
+    private static final Pattern WHITESPACE = Pattern.compile("\\s");
+    private final List<SemanticSymbol> symbols;
+    private Language language = Language.UNSUPPORTED;
 
     @Override
     public Language getLanguage() {
@@ -24,26 +24,21 @@ public class IndexedSemanticSignatureImpl implements IndexedSemanticSignature {
         this.language = language;
     }
 
-    public IndexedSemanticSignatureImpl(SymbolIndex symbolIndex) {
-
+    public SemanticSignatureImpl() {
         symbols = new ArrayList<>();
-        this.symbolIndex = symbolIndex;
     }
 
-    private IndexedSemanticSignatureImpl(List<IndexedSemanticSymbol> symbols, SymbolIndex symbolIndex) {
+    public SemanticSignatureImpl(CharSequence symbolString) {
+        symbols = new ArrayList<>();
+        String[] tokens = WHITESPACE.split(symbolString);
+        for(String token: tokens){
+            addSymbol(token);
+        }
+    }
+
+    private SemanticSignatureImpl(List<SemanticSymbol> symbols) {
         this.symbols = new ArrayList<>();
         Collections.copy(symbols, this.symbols);
-        this.symbolIndex = symbolIndex;
-    }
-
-
-    @Override
-    public List<Integer> getIndexedSymbols() {
-        List<Integer> intetegerSymbols = new ArrayList<>();
-        for (IndexedSemanticSymbol ss : symbols) {
-            intetegerSymbols.add(ss.getIndexedSymbol());
-        }
-        return intetegerSymbols;
     }
 
     @Override
@@ -52,44 +47,18 @@ public class IndexedSemanticSignatureImpl implements IndexedSemanticSignature {
                                         Map<String, SemanticSignature> relatedB) {
         if (other != null) {
             return measure.compute(this, other,
-                     relatedA,
-                     relatedB);
+                    relatedA,
+                    relatedB);
         } else {
             return 0;
         }
     }
 
     @Override
-    public IndexedSemanticSymbol getIndexedSymbol(int index) {
-        return symbols.get(index);
-    }
-
-
-
-    @Override
-    public IndexedSemanticSignature copy() {
-        return new IndexedSemanticSignatureImpl(symbols,symbolIndex);
-    }
-
-    @Override
-    public int size() {
-        return symbols.size();
-    }
-    
-    @Override
-    public void sort() {
-        Collections.sort(symbols);
-    }
-
-    @Override
     public void addSymbol(String symbol, double weight) {
-        symbols.add(new IndexedSemanticSymbolImpl(symbolIndex.getSymbolIndex(symbol), weight));
+        symbols.add(new SemanticSymbolImpl(symbol, weight));
     }
 
-    @Override
-    public void addIndexedSymbol(Integer symbol) {
-        symbols.add(new IndexedSemanticSymbolImpl(symbol,0));
-    }
 
     @Override
     public void addSymbol(String symbol) {
@@ -129,20 +98,16 @@ public class IndexedSemanticSignatureImpl implements IndexedSemanticSignature {
 
     @Override
     public List<String> getSymbols() {
-        List<String> stringSymbols = new ArrayList<>();
+        List<String> srtingSymbols = new ArrayList<>();
         for (SemanticSymbol ss : this) {
-            stringSymbols.add(ss.getSymbol());
+            srtingSymbols.add(ss.getSymbol());
         }
-        return stringSymbols;
+        return srtingSymbols;
     }
 
     @Override
     public Iterator<SemanticSymbol> iterator() {
-        final Collection<SemanticSymbol> stringSymbols = new ArrayList<>();
-        for(IndexedSemanticSymbol semanticSymbol: symbols){
-            stringSymbols.add(new SemanticSymbolImpl(semanticSymbol.getSymbol(),semanticSymbol.getWeight()));
-        }
-        return stringSymbols.iterator();
+        return symbols.iterator();
     }
 
     @Override
@@ -164,7 +129,7 @@ public class IndexedSemanticSignatureImpl implements IndexedSemanticSignature {
 
     @Override
     public SemanticSignature mergeSignatures(SemanticSignature other) {
-        final SemanticSignature semanticSymbols = new IndexedSemanticSignatureImpl(symbols, symbolIndex);
+        final SemanticSignature semanticSymbols = new SemanticSignatureImpl(symbols);
         return semanticSymbols.appendSignature(other);
     }
 
@@ -175,12 +140,16 @@ public class IndexedSemanticSignatureImpl implements IndexedSemanticSignature {
 
     @Override
     public void addSymbol(SemanticSymbol symbol) {
-        if(symbol instanceof IndexedSemanticSymbol){
-            symbols.add((IndexedSemanticSymbol) symbol);
-        } else {
-            symbols.add(new IndexedSemanticSymbolImpl(symbolIndex.getSymbolIndex(symbol.getSymbol()),symbol.getWeight()));
-        }
+        symbols.add(symbol);
     }
 
+    @Override
+    public SemanticSignature copy() {
+        return new SemanticSignatureImpl(symbols);
+    }
 
+    @Override
+    public int size() {
+        return symbols.size();
+    }
 }

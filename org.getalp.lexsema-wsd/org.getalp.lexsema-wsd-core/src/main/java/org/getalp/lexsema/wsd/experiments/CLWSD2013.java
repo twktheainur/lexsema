@@ -1,6 +1,7 @@
 package org.getalp.lexsema.wsd.experiments;
 
 import com.wcohen.ss.ScaledLevenstein;
+import edu.mit.jwi.Dictionary;
 import org.getalp.lexsema.io.resource.LRLoader;
 import org.getalp.lexsema.io.resource.wordnet.WordnetLoader;
 import org.getalp.lexsema.io.sentences.STS2013SentencePairLoader;
@@ -8,9 +9,9 @@ import org.getalp.lexsema.similarity.Text;
 import org.getalp.lexsema.similarity.Word;
 import org.getalp.lexsema.similarity.measures.SimilarityMeasure;
 import org.getalp.lexsema.similarity.measures.tverski.TverskiIndexSimilarityMeasureBuilder;
-import org.getalp.lexsema.similarity.signatures.StringSemanticSignature;
-import org.getalp.lexsema.similarity.signatures.StringSemanticSignatureImpl;
-import org.getalp.lexsema.similarity.signatures.StringSemanticSymbolImpl;
+import org.getalp.lexsema.similarity.signatures.SemanticSignature;
+import org.getalp.lexsema.similarity.signatures.SemanticSignatureImpl;
+import org.getalp.lexsema.similarity.signatures.SemanticSymbolImpl;
 import org.getalp.lexsema.util.ValueScale;
 import org.getalp.lexsema.wsd.configuration.Configuration;
 import org.getalp.lexsema.wsd.method.Disambiguator;
@@ -20,6 +21,7 @@ import org.getalp.lexsema.wsd.score.ConfigurationPairScoreInput;
 import org.getalp.ml.optimization.functions.Function;
 import org.getalp.ml.optimization.functions.setfunctions.submodular.Sum;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.util.List;
@@ -33,7 +35,7 @@ public class CLWSD2013 {
 
         //VisualVMTools.delayUntilReturn();
 
-        LRLoader lrloader = new WordnetLoader("../data/wordnet/2.1/dict")
+        LRLoader lrloader = new WordnetLoader(new Dictionary(new File("../data/wordnet/2.1/dict")))
                 .extendedSignature(true).shuffle(true);
         STS2013SentencePairLoader spl = new STS2013SentencePairLoader("STS.input.headlines.txt", lrloader);
         PrintWriter outputFile = new PrintWriter("STS.headlines.output.txt");
@@ -95,13 +97,13 @@ public class CLWSD2013 {
             double wsdScore = f.F(pairScore);
             wsdScore /= Math.max(sentence1.size(), sentence2.size());
 
-            StringSemanticSignature semanticSignature1 = new StringSemanticSignatureImpl();
-            StringSemanticSignature semanticSignature2 = new StringSemanticSignatureImpl();
+            SemanticSignature semanticSignature1 = new SemanticSignatureImpl();
+            SemanticSignature semanticSignature2 = new SemanticSignatureImpl();
             for (Word w : sentence1) {
-                semanticSignature1.addSymbol(new StringSemanticSymbolImpl(w.getSurfaceForm(), 1.0));
+                semanticSignature1.addSymbol(new SemanticSymbolImpl(w.getSurfaceForm(), 1.0));
             }
             for (Word w : sentence2) {
-                semanticSignature2.addSymbol(new StringSemanticSymbolImpl(w.getSurfaceForm(), 1.0));
+                semanticSignature2.addSymbol(new SemanticSymbolImpl(w.getSurfaceForm(), 1.0));
             }
 
             double stringScore = similarityMeasure.compute(semanticSignature1,

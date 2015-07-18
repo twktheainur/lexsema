@@ -6,7 +6,7 @@ import com.wcohen.ss.ScaledLevenstein;
 import org.getalp.lexsema.ml.matrix.score.generator.IndexedOverlapScoreMatrixGenerator;
 import org.getalp.lexsema.ml.matrix.score.generator.OverlapScoreMatrixGenerator;
 import org.getalp.lexsema.similarity.signatures.IndexedSemanticSignature;
-import org.getalp.lexsema.similarity.signatures.StringSemanticSignature;
+import org.getalp.lexsema.similarity.signatures.SemanticSignature;
 import org.getalp.ml.matrix.filters.Filter;
 import org.getalp.ml.matrix.score.MatrixScorer;
 import org.getalp.ml.matrix.score.generator.DenseScoreMatrixGenerator;
@@ -36,18 +36,15 @@ public class TverskiIndexSimilarityMeasureMatrixImpl implements TverskiIndexSimi
     }
 
     @Override
-    public double compute(StringSemanticSignature sigA, StringSemanticSignature sigB) {
+    public double compute(SemanticSignature sigA, SemanticSignature sigB) {
         return compute(sigA,sigB,null,null);
     }
-    @Override
-    public double compute(IndexedSemanticSignature sigA, IndexedSemanticSignature sigB) {
-        return compute(sigA,sigB,null, null);
-    }
+
 
     @Override
-    public double compute(StringSemanticSignature sigA, StringSemanticSignature sigB,
-                          Map<String, StringSemanticSignature> relatedSignaturesA,
-                          Map<String, StringSemanticSignature> relatedSignaturesB) {
+    public double compute(SemanticSignature sigA, SemanticSignature sigB,
+                          Map<String, SemanticSignature> relatedSignaturesA,
+                          Map<String, SemanticSignature> relatedSignaturesB) {
 
 
         List<String> a = sigA.getSymbols();
@@ -55,18 +52,6 @@ public class TverskiIndexSimilarityMeasureMatrixImpl implements TverskiIndexSimi
 
         /*Computing overlap between the semantic signatures*/
         double overlap = computeOverlap(a, b);
-        return computeTverski(overlap, a.size(), b.size());
-    }
-
-    @Override
-    public double compute(IndexedSemanticSignature sigA, IndexedSemanticSignature sigB,
-                          Map<String, IndexedSemanticSignature> relatedSignaturesA,
-                          Map<String, IndexedSemanticSignature> relatedSignaturesB) {
-        List<Integer> a = sigA.getSymbols();
-        List<Integer> b = sigB.getSymbols();
-
-        /*Computing overlap between the semantic signatures*/
-        double overlap = computeIndexedOverlap(a, b);
         return computeTverski(overlap, a.size(), b.size());
     }
 

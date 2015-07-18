@@ -7,7 +7,7 @@ import org.getalp.lexsema.ontolex.LexicalSense;
 import org.getalp.lexsema.ontolex.graph.OntologyModel;
 import org.getalp.lexsema.similarity.measures.SimilarityMeasure;
 import org.getalp.lexsema.similarity.signatures.SemanticSignature;
-import org.getalp.lexsema.similarity.signatures.StringSemanticSignatureImpl;
+import org.getalp.lexsema.similarity.signatures.SemanticSignatureImpl;
 import org.getalp.lexsema.util.Language;
 
 import java.util.Collections;
@@ -32,7 +32,7 @@ public class SenseImpl implements Sense {
         }
         lexicalSense = sense;
         relatedSignatures = new HashMap<>();
-        semanticSignature = new StringSemanticSignatureImpl(lexicalSense.getDefinition());
+        semanticSignature = new SemanticSignatureImpl(lexicalSense.getDefinition());
         setLanguage(lexicalSense.getLanguage());
     }
 

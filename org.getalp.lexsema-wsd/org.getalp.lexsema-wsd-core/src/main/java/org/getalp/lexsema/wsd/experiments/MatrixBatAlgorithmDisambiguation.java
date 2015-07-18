@@ -1,5 +1,6 @@
 package org.getalp.lexsema.wsd.experiments;
 
+import edu.mit.jwi.Dictionary;
 import org.getalp.lexsema.io.annotresult.SemevalWriter;
 import org.getalp.lexsema.io.document.Semeval2007TextLoader;
 import org.getalp.lexsema.io.document.TextLoader;
@@ -15,6 +16,8 @@ import org.getalp.lexsema.wsd.score.ConfigurationScorer;
 import org.getalp.lexsema.wsd.score.MatrixTverskiConfigurationScorer;
 import org.getalp.ml.matrix.score.SumMatrixScorer;
 
+import java.io.File;
+
 public class MatrixBatAlgorithmDisambiguation {
 
 	public static void main(String[] args) {
@@ -23,12 +26,12 @@ public class MatrixBatAlgorithmDisambiguation {
         
         TextLoader dl = new Semeval2007TextLoader("../data/senseval2007_task7/test/eng-coarse-all-words.xml")
         		.loadNonInstances(true);
-        
-        LRLoader lrloader = new WordnetLoader("../data/wordnet/2.1/dict")
+
+        LRLoader lrloader = new WordnetLoader(new Dictionary(new File("../data/wordnet/2.1/dict")))
                 .extendedSignature(true)
                 .shuffle(false)
-                .setUsesStopWords(false)
-                .setStemming(false)
+                .filterStopWords(false)
+                .stemming(false)
                 .loadDefinitions(true);
 
         SimilarityMeasure sim = new TverskiIndexSimilarityMeasureMatrixImplBuilder()

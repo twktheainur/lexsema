@@ -1,8 +1,7 @@
 package org.getalp.lexsema.io.resource.dbnary;
 
 
-import org.getalp.lexsema.io.DSODefinitionExpender.DSODefinitionExpender;
-import org.getalp.lexsema.io.definitionenricher.TextDefinitionEnricher;
+import com.hp.hpl.jena.graph.Node;
 import org.getalp.lexsema.io.resource.LRLoader;
 import org.getalp.lexsema.ontolex.LexicalEntry;
 import org.getalp.lexsema.ontolex.LexicalSense;
@@ -21,8 +20,8 @@ import org.getalp.lexsema.similarity.SenseImpl;
 import org.getalp.lexsema.similarity.Word;
 import org.getalp.lexsema.similarity.cache.SenseCache;
 import org.getalp.lexsema.similarity.cache.SenseCacheImpl;
-import org.getalp.lexsema.similarity.signatures.StringSemanticSignature;
-import org.getalp.lexsema.similarity.signatures.StringSemanticSignatureImpl;
+import org.getalp.lexsema.similarity.signatures.SemanticSignature;
+import org.getalp.lexsema.similarity.signatures.SemanticSignatureImpl;
 import org.getalp.lexsema.util.Language;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,14 +35,13 @@ import java.util.StringTokenizer;
 
 @SuppressWarnings("OverlyCoupledClass")
 public class DBNaryLoaderImpl implements DBNaryLoader {
-    private static Logger logger = LoggerFactory.getLogger(DBNaryLoaderImpl.class);
+    private static final Logger logger = LoggerFactory.getLogger(DBNaryLoaderImpl.class);
     private final DBNary dbnary;
     private final OntologyModel model;
     SenseCache senseCache;
     private boolean shuffle;
-    private boolean loadDefinitions;
-    private boolean loadRelated;
-    private Language language;
+    private boolean loadDefinitions = true;
+    private final Language language;
 
 
     public DBNaryLoaderImpl(final String dbPath, final String ontologyPropertiesPath, final Language language)
@@ -57,6 +55,7 @@ public class DBNaryLoaderImpl implements DBNaryLoader {
         dbnary = (DBNary) LexicalResourceFactory.getLexicalResource(DBNary.class, model, language);
         senseCache = SenseCacheImpl.getInstance();
         this.language = language;
+        shuffle = false;
     }
 
     public DBNaryLoaderImpl(DBNary dbNary)
@@ -66,6 +65,8 @@ public class DBNaryLoaderImpl implements DBNaryLoader {
         // Creating DBNary wrapper
         dbnary = dbNary;
         senseCache = SenseCacheImpl.getInstance();
+        shuffle = false;
+        language = dbNary.getLanguage();
     }
 
     public DBNaryLoaderImpl(DBNary dbNary, Language language)
@@ -76,6 +77,7 @@ public class DBNaryLoaderImpl implements DBNaryLoader {
         dbnary = dbNary;
         senseCache = SenseCacheImpl.getInstance();
         this.language = language;
+        shuffle = false;
     }
 
     @SuppressWarnings("FeatureEnvy")
@@ -100,6 +102,7 @@ public class DBNaryLoaderImpl implements DBNaryLoader {
                 } else {
                     returnEntry = le;
                     targetWord.setLexicalEntry(le);
+                    //noinspection BreakStatement
                     break;
                 }
             }
@@ -114,14 +117,14 @@ public class DBNaryLoaderImpl implements DBNaryLoader {
         LexicalEntry le = retrieveLexicalEntryForWord(w);
         if (le != null) {
             for (LexicalSense ls : dbnary.getLexicalSenses(le)) {
-                Sense s = new SenseImpl(ls);
-                StringSemanticSignature signature = new StringSemanticSignatureImpl();
+                Sense sense = new SenseImpl(ls);
+                SemanticSignature signature = new SemanticSignatureImpl();
                 if (loadDefinitions) {
                     String def = ls.getDefinition();
                     addToSignature(signature, def);
                 }
-                s.setSemanticSignature(signature);
-                senses.add(s);
+                sense.setSemanticSignature(signature);
+                senses.add(sense);
             }
         }
         return senses;
@@ -143,7 +146,7 @@ public class DBNaryLoaderImpl implements DBNaryLoader {
         return senses;
     }
 
-    private void addToSignature(StringSemanticSignature signature, String def) {
+    private void addToSignature(SemanticSignature signature, String def) {
         StringTokenizer st = new StringTokenizer(def, " ", false);
         while (st.hasMoreTokens()) {
             String token = st.nextToken();
@@ -151,33 +154,37 @@ public class DBNaryLoaderImpl implements DBNaryLoader {
         }
     }
 
+    @SuppressWarnings("OverlyComplexMethod")
     private String posToLexvo(final String pos) {
         String convertedPos = "";
-        if ((pos.toLowerCase().startsWith("n")
-                || pos.toLowerCase().contains("noun")) && language.equals(Language.ENGLISH)) {
+        String lpos = pos.toLowerCase();
+        //noinspection IfStatementWithTooManyBranches
+        if ((lpos.startsWith("n")
+                || lpos.contains("noun")) && language == Language.ENGLISH) {
             convertedPos = "lexinfo:noun";
-        } else if (pos.toLowerCase().startsWith("v")
-                || pos.toLowerCase().contains("verb")) {
+        } else if (lpos.startsWith("v")
+                || lpos.contains("verb")) {
             convertedPos = "lexinfo:verb";
         } else if (pos.toLowerCase().startsWith("j") ||
-                pos.toLowerCase().contains("adj") ||
-                pos.toLowerCase().contains("adjective") ||
-                pos.toLowerCase().contains("s") ||
-                pos.toLowerCase().contains("a")) {
+                lpos.contains("adj") ||
+                lpos.contains("adjective") ||
+                lpos.contains("s") ||
+                lpos.contains("a")) {
             convertedPos = "lexinfo:adjective";
         } else if (pos.toLowerCase().startsWith("r") ||
-                pos.toLowerCase().contains("adv") ||
-                pos.toLowerCase().contains("adverb")) {
+                lpos.contains("adv") ||
+                lpos.contains("adverb")) {
             convertedPos = "lexinfo:adverb";
-        } else if(pos.toLowerCase().contains("adjf")){
+        } else if(lpos.contains("adjf")){
             convertedPos = "прил";
-        } else if ((pos.toLowerCase().startsWith("n")
-                || pos.toLowerCase().contains("noun")) && language.equals(Language.RUSSIAN)){
+        } else if ((lpos.startsWith("n")
+                || lpos.contains("noun")) && language == Language.RUSSIAN){
             convertedPos = "сущ";
-        } else if(pos.toLowerCase().startsWith("pr") && language.equals(Language.RUSSIAN)){
+        } else if(lpos.startsWith("pr") && language == Language.RUSSIAN){
             convertedPos = "гл";
         }
-        return model.getNode(convertedPos).toString();
+        Node node = model.getNode(convertedPos);
+        return node.toString();
     }
 
     @Override
@@ -210,30 +217,27 @@ public class DBNaryLoaderImpl implements DBNaryLoader {
 
     @SuppressWarnings("BooleanParameter")
     @Override
-    public LRLoader setLoadRelated(boolean loadRelated) {
-        this.loadRelated = loadRelated;
+    public LRLoader loadRelated(boolean loadRelated) {
         return this;
     }
 
     @SuppressWarnings("BooleanParameter")
     @Override
-    public LRLoader setStemming(boolean stemming) {
+    public LRLoader stemming(boolean stemming) {
         // TODO Auto-generated method stub
         return null;
     }
 
     @SuppressWarnings("BooleanParameter")
     @Override
-    public LRLoader setUsesStopWords(boolean usesStopWords) {
+    public LRLoader filterStopWords(boolean usesStopWords) {
         // TODO Auto-generated method stub
         return null;
     }
 
-	@Override
-	public void loadSenses(Document document,
-			TextDefinitionEnricher definitionExpender, int profondeur,
-			DSODefinitionExpender contexteDSO) {
-		// TODO Auto-generated method stub
-		
-	}
+    @Override
+    public LRLoader index(boolean useIndex) {
+        return this;
+    }
+
 }

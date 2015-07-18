@@ -1,74 +1,49 @@
 package org.getalp.lexsema.similarity.measures.lesk;
 
+import org.getalp.lexsema.similarity.measures.SimilarityMeasure;
+import org.getalp.lexsema.similarity.signatures.SemanticSignature;
+
 import java.util.List;
 import java.util.Map;
 
-import org.getalp.lexsema.similarity.measures.SimilarityMeasure;
-import org.getalp.lexsema.similarity.signatures.IndexedSemanticSignature;
-import org.getalp.lexsema.similarity.signatures.StringSemanticSignature;
-
 public class AnotherLeskSimilarity implements SimilarityMeasure
 {
-    public boolean normalize = false;
-    
-    public double compute(StringSemanticSignature sigA, StringSemanticSignature sigB)
+    public boolean normalize;
+
+    public AnotherLeskSimilarity() {
+        normalize=false;
+    }
+
+    public AnotherLeskSimilarity(boolean normalize) {
+        this.normalize = normalize;
+    }
+
+    @Override
+    public double compute(SemanticSignature sigA, SemanticSignature sigB)
     {
         List<String> la = sigA.getSymbols();
         List<String> lb = sigB.getSymbols();
         int aSize = la.size();
         int bSize = lb.size();
         int count = 0;
-        for (int i = 0 ; i < aSize ; i++)
-        {
-        	for (int j = 0 ; j < bSize ; j++)
-        	{
-        		if (la.get(i).equals(lb.get(j)))
-        		{
-        			count++;
-        		}
-        	}
+        for (String aLa : la) {
+            for (String aLb : lb) {
+                if (aLa.equals(aLb)) {
+                    count++;
+                }
+            }
         }
-        if (normalize) return (((double) count) / ((double) aSize * bSize));
-        else return count;
+        if (normalize) {
+            return count / ((double) aSize * bSize);
+        } else {
+            return count;
+        }
     }
     
-    public double compute(IndexedSemanticSignature sigA, IndexedSemanticSignature sigB)
-    {
-        List<Integer> la = sigA.getSymbols();
-        List<Integer> lb = sigB.getSymbols(); 
-        int aSize = la.size();
-        int bSize = lb.size();
-        int count = 0;
-        int i = 0;
-        int j = 0;
-        while (i < aSize && j < bSize)
-        {
-            int cmp = la.get(i).compareTo(lb.get(j));
-            if (cmp == 0)
-            {
-                count++;
-                i++;
-                j++;
-            }
-            else if (cmp < 0) 
-            {
-                i++;
-            } 
-            else 
-            {
-                j++;
-            }
-        }
-        if (normalize) return (((double) count) / ((double) (aSize * bSize)));
-        return count;
-    }
 
-    public double compute(StringSemanticSignature sigA, StringSemanticSignature sigB, Map<String, StringSemanticSignature> relatedSignaturesA, Map<String, StringSemanticSignature> relatedSignaturesB)
-    {
-    	return compute(sigA, sigB);
-    }
 
-    public double compute(IndexedSemanticSignature sigA, IndexedSemanticSignature sigB, Map<String, IndexedSemanticSignature> relatedSignaturesA, Map<String, IndexedSemanticSignature> relatedSignaturesB)
+    @Override
+    public double compute(SemanticSignature sigA, SemanticSignature sigB, Map<String, SemanticSignature> relatedSignaturesA, Map<String, SemanticSignature> relatedSignaturesB)
     {
     	return compute(sigA, sigB);
     }

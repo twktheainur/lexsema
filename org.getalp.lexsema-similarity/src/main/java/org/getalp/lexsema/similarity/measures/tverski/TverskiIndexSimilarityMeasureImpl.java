@@ -6,7 +6,7 @@ import com.wcohen.ss.ScaledLevenstein;
 import org.getalp.lexsema.ml.optimization.functions.setfunctions.input.FuzzyCommonSubsequenceInput;
 import org.getalp.lexsema.ml.optimization.functions.setfunctions.input.OverlapInputSet;
 import org.getalp.lexsema.similarity.signatures.IndexedSemanticSignature;
-import org.getalp.lexsema.similarity.signatures.StringSemanticSignature;
+import org.getalp.lexsema.similarity.signatures.SemanticSignature;
 import org.getalp.ml.optimization.functions.input.FunctionInput;
 import org.getalp.ml.optimization.functions.setfunctions.extentions.Extension;
 import org.getalp.ml.optimization.functions.setfunctions.extentions.LovaszExtension;
@@ -48,18 +48,14 @@ public class TverskiIndexSimilarityMeasureImpl implements TverskiIndexSimilarity
 
 
     @Override
-    public double compute(StringSemanticSignature sigA, StringSemanticSignature sigB) {
+    public double compute(SemanticSignature sigA, SemanticSignature sigB) {
         return compute(sigA,sigB,null,null);
-    }
-    @Override
-    public double compute(IndexedSemanticSignature sigA, IndexedSemanticSignature sigB) {
-        return compute(sigA,sigB,null, null);
     }
 
     @Override
-    public double compute(StringSemanticSignature sigA, StringSemanticSignature sigB,
-                          Map<String, StringSemanticSignature> relatedSignaturesA,
-                          Map<String, StringSemanticSignature> relatedSignaturesB) {
+    public double compute(SemanticSignature sigA, SemanticSignature sigB,
+                          Map<String, SemanticSignature> relatedSignaturesA,
+                          Map<String, SemanticSignature> relatedSignaturesB) {
 
         List<String> a = sigA.getSymbols();
         List<String> b = sigB.getSymbols();
@@ -76,21 +72,10 @@ public class TverskiIndexSimilarityMeasureImpl implements TverskiIndexSimilarity
         return computeTverski(overlap, a.size(), b.size());
     }
 
-    @Override
-    public double compute(IndexedSemanticSignature sigA, IndexedSemanticSignature sigB, Map<String, IndexedSemanticSignature> relatedSignaturesA, Map<String, IndexedSemanticSignature> relatedSignaturesB) {
-        List<Integer> a = sigA.getSymbols();
-        List<Integer> b = sigA.getSymbols();
-
-        double overlap = computeIntegerOverlap(a, b);
-                /*If extendedLesk is enabled, creating the similarity values for relation pairs*/
-
-        return computeTverski(overlap, a.size(), b.size());
-    }
-
     @SuppressWarnings("FeatureEnvy")
     private double computeExtension(List<String> a, List<String> b,
-                                    Map<String, StringSemanticSignature> relatedSignaturesA,
-                                    Map<String, StringSemanticSignature> relatedSignaturesB) {
+                                    Map<String, SemanticSignature> relatedSignaturesA,
+                                    Map<String, SemanticSignature> relatedSignaturesB) {
         List<Double> values = new ArrayList<>();
             /*This case is for a similarity between two senses that have related senses*/
         if (relatedSignaturesA != null && relatedSignaturesB != null) {
@@ -102,7 +87,7 @@ public class TverskiIndexSimilarityMeasureImpl implements TverskiIndexSimilarity
             /*This case corresponds to the overlap between a sense' related synsets' glosses
              *and an arbitrary string of text */
         } else if (relatedSignaturesA == null ^ relatedSignaturesB == null) {
-            Map<String, StringSemanticSignature> nonNullRelated;
+            Map<String, SemanticSignature> nonNullRelated;
             List<String> other;
             if (relatedSignaturesA == null) {
                 nonNullRelated = relatedSignaturesB;

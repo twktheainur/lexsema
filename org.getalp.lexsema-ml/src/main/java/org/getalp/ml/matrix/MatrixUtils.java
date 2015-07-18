@@ -14,9 +14,14 @@ package org.getalp.ml.matrix;
 import cern.colt.function.tdouble.DoubleFunction;
 import cern.colt.function.tdouble.IntIntDoubleFunction;
 import cern.colt.matrix.tdouble.DoubleMatrix2D;
+import cern.colt.matrix.tdouble.impl.DenseDoubleMatrix2D;
 import cern.jet.math.tdouble.DoubleFunctions;
 import com.carrotsearch.hppc.sorting.IndirectComparator;
 import com.carrotsearch.hppc.sorting.IndirectSort;
+import org.jblas.DoubleMatrix;
+import org.jblas.Solve;
+import org.nd4j.linalg.api.ndarray.INDArray;
+import org.nd4j.linalg.factory.Nd4j;
 
 import java.util.Arrays;
 
@@ -390,4 +395,114 @@ public class MatrixUtils {
             }
         }
     }
+
+
+    public static INDArray getRowWiseMeanVector(INDArray m) {
+        INDArray mean = Nd4j.create(m.rows());
+        for (int i = 0; i < m.rows(); i++) {
+            mean.putScalar(i, vectorSum(m.getRow(i)) / m.columns());
+        }
+        return mean;
+    }
+
+    public static double vectorSum(INDArray vector){
+        double sum = 0d;
+        for(int i=0;i<vector.columns();i++){
+            sum+=vector.getDouble(i);
+        }
+        return sum;
+    }
+
+    public static INDArray subtractMeanFromRows(INDArray signalMatrix){
+        INDArray means = getRowWiseMeanVector(signalMatrix);
+        INDArray newSignal = Nd4j.create(signalMatrix.rows(),signalMatrix.columns());
+        for(int i=0;i<newSignal.rows();i++){
+            for(int j=0;j<newSignal.columns();j++){
+                newSignal.putScalar(new int[]{i, j}, signalMatrix.getDouble(i, j) - means.getDouble(i));
+            }
+        }
+        return newSignal;
+    }
+
+    public static INDArray subtractMeanFromRowsi(INDArray newSignal){
+        INDArray means = getRowWiseMeanVector(newSignal);
+        for(int i=0;i<newSignal.rows();i++){
+            for(int j=0;j<newSignal.columns();j++){
+                newSignal.putScalar(new int[]{i, j}, newSignal.getDouble(i, j) - means.getDouble(i));
+            }
+        }
+        return newSignal;
+    }
+
+    public static INDArray covarianceMatrix(INDArray signalMatrix){
+        INDArray spd = subtractMeanFromRows(signalMatrix);
+        spd = spd.transpose().mmul(spd);
+        spd.muli(1d/signalMatrix.columns());
+        return spd;
+    }
+
+    public static DoubleMatrix toJBlasMatrix(INDArray matrix){
+        DoubleMatrix doubleMatrix = new DoubleMatrix(matrix.rows(),matrix.columns());
+        for(int i=0;i<matrix.rows();i++){
+            for(int j=0;j<matrix.columns();j++){
+                doubleMatrix.put(new int[]{i, j}, matrix.getDouble(i, j));
+            }
+        }
+        return  doubleMatrix;
+    }
+
+    public static INDArray toINDArray(DoubleMatrix doubleMatrix){
+        INDArray matrix = Nd4j.create(doubleMatrix.rows, doubleMatrix.columns);
+        for(int i=0;i<matrix.rows();i++){
+            for(int j=0;j<matrix.columns();j++){
+                matrix.putScalar(new int[]{i, j}, doubleMatrix.get(i, j));
+            }
+        }
+        return matrix;
+    }
+
+    public static INDArray inverse(INDArray matrix){
+        return toINDArray(Solve.pinv(toJBlasMatrix(matrix)));
+    }
+    
+    public static DoubleMatrix2D toColtMatrix(INDArray matrix){
+        DoubleMatrix2D doubleMatrix = new DenseDoubleMatrix2D(matrix.rows(),matrix.columns());
+        for(int i=0;i<matrix.rows();i++){
+            for(int j=0;j<matrix.columns();j++){
+                doubleMatrix.setQuick(i, j, matrix.getDouble(i, j));
+            }
+        }
+        return  doubleMatrix;
+    }
+
+    public static INDArray getColumnWiseMeanVector(INDArray array){
+        INDArray mean = Nd4j.create(array.columns());
+        for (int i = 0; i < array.columns(); i++) {
+            mean.putScalar(i, vectorSum(array.getColumn(i)) / array.rows());
+        }
+        return mean;
+    }
+
+    public static INDArray getColumnWiseSumVector(INDArray array){
+        INDArray mean = Nd4j.create(array.columns());
+        for (int i = 0; i < array.columns(); i++) {
+            mean.putScalar(i, vectorSum(array.getColumn(i)));
+        }
+        return mean;
+    }
+
+
+
+
+
+    public static INDArray toINDArray(DoubleMatrix2D doubleMatrix){
+        INDArray matrix = Nd4j.create(doubleMatrix.rows(),doubleMatrix.columns());
+        for(int i=0;i<matrix.rows();i++){
+            for(int j=0;j<matrix.columns();j++){
+                matrix.putScalar(new int[]{i, j}, doubleMatrix.getQuick(i, j));
+            }
+        }
+        return matrix;
+    }
+
 }

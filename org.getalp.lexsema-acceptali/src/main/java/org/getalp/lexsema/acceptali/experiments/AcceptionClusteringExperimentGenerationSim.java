@@ -30,8 +30,7 @@ import org.getalp.lexsema.ontolex.graph.store.Store;
 import org.getalp.lexsema.similarity.Sense;
 import org.getalp.lexsema.similarity.measures.SimilarityMeasure;
 import org.getalp.lexsema.similarity.measures.crosslingual.TranslatorCrossLingualSimilarity;
-import org.getalp.lexsema.similarity.measures.word2vec.Word2VecGlossSimilarity;
-import org.getalp.lexsema.translation.CachedTranslator;
+import org.getalp.lexsema.similarity.measures.word2vec.Word2VecGlossCosineSimilarity;
 import org.getalp.lexsema.translation.GoogleWebTranslator;
 import org.getalp.lexsema.translation.Translator;
 import org.getalp.lexsema.util.Language;
@@ -207,7 +206,7 @@ public final class AcceptionClusteringExperimentGenerationSim {
                         //.filter(new NormalizationFilter())
                         //.filter(new MatrixFactorizationFilter(new TapkeeNLMatrixFactorizationFactory(Method.HLLE)))
                 .build();*/
-        return  new Word2VecGlossSimilarity(word2Vec);
+        return  new Word2VecGlossCosineSimilarity(word2Vec,true);
 
     }
 

@@ -7,8 +7,8 @@ import org.getalp.lexsema.ontolex.LexicalEntry;
 import org.getalp.lexsema.ontolex.LexicalSense;
 import org.getalp.lexsema.similarity.Sense;
 import org.getalp.lexsema.similarity.SenseImpl;
-import org.getalp.lexsema.similarity.signatures.StringSemanticSignature;
-import org.getalp.lexsema.similarity.signatures.StringSemanticSignatureImpl;
+import org.getalp.lexsema.similarity.signatures.SemanticSignature;
+import org.getalp.lexsema.similarity.signatures.SemanticSignatureImpl;
 import org.getalp.lexsema.util.Language;
 
 import java.util.Map;
@@ -32,14 +32,14 @@ public class TranslationClosureSemanticSignatureGeneratorImpl implements Transla
 
     private Sense buildSense(LexicalSense lexicalSense) {
         Sense sense = new SenseImpl(lexicalSense);
-        StringSemanticSignature semanticSignature = new StringSemanticSignatureImpl();
+        SemanticSignature semanticSignature = new SemanticSignatureImpl();
         String definition = lexicalSense.getDefinition();
         addToSignature(semanticSignature, definition);
         sense.setSemanticSignature(semanticSignature);
         return sense;
     }
 
-    private void addToSignature(StringSemanticSignature signature, String def) {
+    private void addToSignature(SemanticSignature signature, String def) {
         StringTokenizer st = new StringTokenizer(def, " ", false);
         while (st.hasMoreTokens()) {
             String token = st.nextToken();

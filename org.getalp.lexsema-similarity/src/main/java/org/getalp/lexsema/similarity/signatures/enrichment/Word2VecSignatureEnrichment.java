@@ -3,8 +3,8 @@ package org.getalp.lexsema.similarity.signatures.enrichment;
 
 import org.deeplearning4j.models.word2vec.Word2Vec;
 import org.getalp.lexsema.util.Language;
-import org.getalp.lexsema.similarity.signatures.StringSemanticSignature;
-import org.getalp.lexsema.similarity.signatures.StringSemanticSignatureImpl;
+import org.getalp.lexsema.similarity.signatures.SemanticSignature;
+import org.getalp.lexsema.similarity.signatures.SemanticSignatureImpl;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -27,8 +27,8 @@ public class Word2VecSignatureEnrichment implements SignatureEnrichment {
     }
 
     @Override
-    public StringSemanticSignature enrichSemanticSignature(StringSemanticSignature semanticSignature) {
-        StringSemanticSignature finalSig = new StringSemanticSignatureImpl();
+    public SemanticSignature enrichSemanticSignature(SemanticSignature semanticSignature) {
+        SemanticSignature finalSig = new SemanticSignatureImpl();
         for (Language language : processors.keySet()) {
             finalSig.appendSignature(processors.get(language).enrichSemanticSignature(semanticSignature));
         }
@@ -45,7 +45,7 @@ public class Word2VecSignatureEnrichment implements SignatureEnrichment {
     }
 
     @Override
-    public StringSemanticSignature enrichSemanticSignature(StringSemanticSignature semanticSignature, Language language) {
+    public SemanticSignature enrichSemanticSignature(SemanticSignature semanticSignature, Language language) {
         SignatureEnrichment processor;
         if (processors.containsKey(language)) {
             processor = processors.get(language);

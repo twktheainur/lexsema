@@ -35,8 +35,8 @@ public class Semeval2013BabelNetWekaDisambiguationFrench {
         TextLoader dl = new Semeval2013Task13TextLoader("../data/semeval-2013-task12-test-data/data/multilingual-all-words.fr.xml")
                 .loadNonInstances(false);
         TextLoader semCor = new SemCorTextLoader("../data/semcor3.0/semcor_full.xml");
-        LRLoader lrloader = new BabelNetAPILoader(Language.FRENCH).extendedSignature(false).shuffle(false).loadDefinitions(false).setLoadRelated(false);
-        /*LRLoader lrloader = new WordnetLoader("../data/wordnet/3.0/dict")
+        LRLoader lrloader = new BabelNetAPILoader(Language.FRENCH).extendedSignature(false).shuffle(false).loadDefinitions(false).loadRelated(false);
+        /*LRLoader lrloader = new WordnetLoader2("../data/wordnet/3.0/dict")
                 .extendedSignature(true).shuffle(true);*/
         semCor.load();
         WindowLoader wloader = new DocumentCollectionWindowLoader(semCor);

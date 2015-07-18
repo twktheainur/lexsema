@@ -9,7 +9,9 @@ import cern.colt.matrix.tdouble.algo.DoubleStatistic;
 import cern.colt.matrix.tdouble.impl.DenseDoubleMatrix1D;
 import cern.jet.math.tdouble.DoubleFunctions;
 import cern.jet.stat.tdouble.DoubleDescriptive;
+import org.getalp.ml.matrix.MatrixUtils;
 import org.getalp.ml.matrix.filters.Filter;
+import org.nd4j.linalg.api.ndarray.INDArray;
 
 /**
  * @author tchechem
@@ -82,6 +84,11 @@ public class NormalizationFilter implements Filter {
 
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
+    }
+
+    @Override
+    public INDArray apply(INDArray signal) {
+        return MatrixUtils.toINDArray(apply(MatrixUtils.toColtMatrix(signal)));
     }
 
 

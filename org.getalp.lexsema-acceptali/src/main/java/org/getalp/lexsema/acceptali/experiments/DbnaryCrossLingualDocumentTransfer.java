@@ -164,7 +164,7 @@ public final class DbnaryCrossLingualDocumentTransfer {
             snowballStemmer = new russianStemmer();
             targetStopList = loadStopList("russian_stop.txt");
         }
-        Translator translator = new DbNaryDisambiguatingTranslator(dbNary, textProcessor, disambiguator, snowballStemmer, sourceStopList, targetStopList);
+        Translator translator = new DbNaryDisambiguatingTranslator(dbNary, textProcessor, disambiguator, null, sourceStopList, targetStopList);
         return translator.translate(text, lang1, lang2);
     }
 

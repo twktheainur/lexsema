@@ -28,13 +28,15 @@
 package org.getalp.ml.matrix.filters;
 
 import cern.colt.matrix.tdouble.DoubleMatrix2D;
+import org.getalp.ml.matrix.MatrixUtils;
 import org.getalp.ml.matrix.factorization.MatrixFactorization;
 import org.getalp.ml.matrix.factorization.MatrixFactorizationFactory;
+import org.nd4j.linalg.api.ndarray.INDArray;
 
 
 public class MatrixFactorizationFilter implements Filter {
 
-    private MatrixFactorizationFactory factorizationFactory;
+    private final MatrixFactorizationFactory factorizationFactory;
     private int numberOfComponents = -1;
     private boolean enabled = true;
 
@@ -60,6 +62,11 @@ public class MatrixFactorizationFilter implements Filter {
             return result;
         }
         return signal;
+    }
+
+    @Override
+    public INDArray apply(INDArray signal) {
+        return MatrixUtils.toINDArray(apply(MatrixUtils.toColtMatrix(signal)));
     }
 
     private DoubleMatrix2D projectedMatrix(MatrixFactorization matrixFactorization){

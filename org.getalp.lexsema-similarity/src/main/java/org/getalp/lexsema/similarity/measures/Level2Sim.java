@@ -2,7 +2,7 @@ package org.getalp.lexsema.similarity.measures;
 
 import com.wcohen.ss.AbstractTokenizedStringDistance;
 import org.getalp.lexsema.similarity.signatures.IndexedSemanticSignature;
-import org.getalp.lexsema.similarity.signatures.StringSemanticSignature;
+import org.getalp.lexsema.similarity.signatures.SemanticSignature;
 
 import java.util.Map;
 
@@ -21,27 +21,18 @@ public class Level2Sim implements SimilarityMeasure {
     }
 
     @Override
-    public double compute(StringSemanticSignature sigA, StringSemanticSignature sigB,
-                          Map<String, StringSemanticSignature> relatedSignaturesA,
-                          Map<String, StringSemanticSignature> relatedSignaturesB) {
+    public double compute(SemanticSignature sigA, SemanticSignature sigB,
+                          Map<String, SemanticSignature> relatedSignaturesA,
+                          Map<String, SemanticSignature> relatedSignaturesB) {
         return compute(sigA.getSymbols(), sigB.getSymbols());
     }
 
-    @Override
-    public double compute(IndexedSemanticSignature sigA, IndexedSemanticSignature sigB,
-                          Map<String, IndexedSemanticSignature> relatedSignaturesA,
-                          Map<String, IndexedSemanticSignature> relatedSignaturesB) {
-        return 0;
-    }
 
     @Override
-    public double compute(StringSemanticSignature sigA, StringSemanticSignature sigB) {
+    public double compute(SemanticSignature sigA, SemanticSignature sigB) {
         return compute(sigA,sigB,null,null);
     }
-    @Override
-    public double compute(IndexedSemanticSignature sigA, IndexedSemanticSignature sigB) {
-        return compute(sigA,sigB,null, null);
-    }
+
 
     private double compute(Iterable<String> a, Iterable<String> b) {
         String sa = "";

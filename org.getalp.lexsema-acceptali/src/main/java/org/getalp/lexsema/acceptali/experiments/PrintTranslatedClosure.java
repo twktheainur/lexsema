@@ -19,9 +19,8 @@ import org.getalp.lexsema.ontolex.graph.storage.StoreHandler;
 import org.getalp.lexsema.ontolex.graph.store.Store;
 import org.getalp.lexsema.similarity.Sense;
 import org.getalp.lexsema.similarity.signatures.SemanticSignature;
-import org.getalp.lexsema.similarity.signatures.StringSemanticSignature;
-import org.getalp.lexsema.similarity.signatures.StringSemanticSignatureImpl;
-import org.getalp.lexsema.similarity.signatures.StringSemanticSymbolImpl;
+import org.getalp.lexsema.similarity.signatures.SemanticSignatureImpl;
+import org.getalp.lexsema.similarity.signatures.SemanticSymbolImpl;
 import org.getalp.lexsema.translation.BingAPITranslator;
 import org.getalp.lexsema.translation.CachedTranslator;
 import org.getalp.lexsema.translation.Translator;
@@ -131,10 +130,10 @@ public final class PrintTranslatedClosure {
             SemanticSignature originalSignature = sense.getSemanticSignature();
             String definition = sense.getDefinition();
             String translatedDefinition = translator.translate(definition, sense.getLanguage(), targetLanguage);
-            StringSemanticSignature translatedSignature = new StringSemanticSignatureImpl();
+            SemanticSignature translatedSignature = new SemanticSignatureImpl();
             StringTokenizer tokenizer = new StringTokenizer(translatedDefinition);
             while (tokenizer.hasMoreTokens()) {
-                translatedSignature.addSymbol(new StringSemanticSymbolImpl(tokenizer.nextToken(), 1d));
+                translatedSignature.addSymbol(new SemanticSymbolImpl(tokenizer.nextToken(), 1d));
             }
             sense.setSemanticSignature(translatedSignature);
             logger.info(sense.toString());

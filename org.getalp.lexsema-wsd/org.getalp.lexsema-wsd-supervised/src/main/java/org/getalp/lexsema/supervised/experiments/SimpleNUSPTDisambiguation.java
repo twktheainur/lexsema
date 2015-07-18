@@ -1,6 +1,7 @@
 package org.getalp.lexsema.supervised.experiments;
 
 
+import edu.mit.jwi.Dictionary;
 import org.getalp.lexsema.io.annotresult.SemevalWriter;
 import org.getalp.lexsema.io.document.SemCorTextLoader;
 import org.getalp.lexsema.io.document.Semeval2007TextLoader;
@@ -16,6 +17,7 @@ import org.getalp.lexsema.wsd.configuration.Configuration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +28,7 @@ public class SimpleNUSPTDisambiguation {
     public static void main(String[] args) throws IOException {
         TextLoader dl = new Semeval2007TextLoader(args[0]).loadNonInstances(false);
         TextLoader semCor = new SemCorTextLoader(args[1]);
-        LRLoader lrloader = new WordnetLoader("../data/wordnet/2.1/dict").extendedSignature(true).shuffle(false);
+        LRLoader lrloader = new WordnetLoader(new Dictionary(new File("../data/wordnet/2.1/dict"))).extendedSignature(true).shuffle(false);
 
 //        LemmaFeatureExtractor lfe = new LemmaFeatureExtractor(3,1);
 //        PosFeatureExtractor pfe = new PosFeatureExtractor(1, 2);

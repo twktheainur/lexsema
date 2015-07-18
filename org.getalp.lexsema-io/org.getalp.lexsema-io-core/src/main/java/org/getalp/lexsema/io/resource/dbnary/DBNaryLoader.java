@@ -8,17 +8,8 @@ import org.getalp.lexsema.similarity.Word;
 
 import java.util.List;
 
-/**
- * Created by tchechem on 07/02/15.
- */
 public interface DBNaryLoader extends LRLoader {
     LexicalEntry retrieveLexicalEntryForWord(Word targetWord);
-
-    @Override
-    List<Sense> getSenses(Word w);
-
-    @Override
-    void loadSenses(Document document);
 
     @SuppressWarnings("BooleanParameter")
     @Override
@@ -34,13 +25,13 @@ public interface DBNaryLoader extends LRLoader {
 
     @SuppressWarnings("BooleanParameter")
     @Override
-    LRLoader setLoadRelated(boolean loadRelated);
+    LRLoader loadRelated(boolean loadRelated);
 
     @SuppressWarnings("BooleanParameter")
     @Override
-    LRLoader setStemming(boolean stemming);
+    LRLoader stemming(boolean stemming);
 
     @SuppressWarnings("BooleanParameter")
     @Override
-    LRLoader setUsesStopWords(boolean usesStopWords);
+    LRLoader filterStopWords(boolean usesStopWords);
 }
