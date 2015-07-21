@@ -25,13 +25,16 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class WordnetLoader implements LRLoader {
+    
     private static final Logger logger = LoggerFactory.getLogger(WordnetLoader.class);
+    
     private static final Pattern WHITESPACE = Pattern.compile("\\s+");
-    private static final Pattern NON_LETTERS = Pattern.compile("[^(\\p{L}|\\p{N}) ]");
+    
+    private static final Pattern NON_LETTERS = Pattern.compile("[^a-zA-Z ]");
 
     private final Dictionary dictionary;
 
-    private boolean loadDefinitions = true;
+    private boolean loadDefinitions;
 
     private boolean loadRelated;
 
@@ -47,13 +50,10 @@ public class WordnetLoader implements LRLoader {
 
     private final SymbolIndex symbolIndex;
 
-    private AnnotatedTextThesaurus semCorExpander;
-
-
-
+    private AnnotatedTextThesaurus thesaurus;
 
     /**
-     * Creates a WordnetLoader2 with an existing Wordnet Dictionary object.
+     * Creates a WordnetLoader with an existing Wordnet Dictionary object.
      * The dictionary may or may not be open prior to this constructor call.
      * In every cases, it is opened during the call.
      */
@@ -61,20 +61,20 @@ public class WordnetLoader implements LRLoader {
         this.dictionary = dictionary;
         openDictionary();
         symbolIndex = new SymbolIndexImpl();
-
+        loadDefinitions = true;
         loadRelated = false;
         hasExtendedSignature = false;
         usesStopWords = false;
         usesStemming = false;
         shuffle = false;
         //noinspection all
-        semCorExpander = null;
+        thesaurus = null;
         useIndex = false;
     }
 
-    public WordnetLoader(Dictionary dictionary, AnnotatedTextThesaurus annotatedTextThesaurus) {
+    public WordnetLoader(Dictionary dictionary, AnnotatedTextThesaurus thesaurus) {
         this(dictionary);
-        semCorExpander = annotatedTextThesaurus;
+        this.thesaurus = thesaurus;
     }
 
     private void openDictionary() {
@@ -121,9 +121,9 @@ public class WordnetLoader implements LRLoader {
                     loadSemanticRelations(sense, signature, wordSynset);
                 }
 
-                if (semCorExpander != null) {
+                if (thesaurus != null) {
                     String senseKeyString = senseKey.toString();
-                    List<String> relatedWords = semCorExpander.getRelatedWords(senseKeyString);
+                    List<String> relatedWords = thesaurus.getRelatedWords(senseKeyString);
                     for (String relatedWord : relatedWords) {
                         addToSignature(signature, relatedWord);
                     }
