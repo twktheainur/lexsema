@@ -2,6 +2,7 @@ package org.getalp.lexsema.io.thesaurus;
 
 import java.text.MessageFormat;
 import java.util.*;
+import java.util.regex.Pattern;
 
 import org.getalp.lexsema.similarity.Sentence;
 import org.getalp.lexsema.similarity.Text;
@@ -15,12 +16,15 @@ import org.getalp.lexsema.util.StopList;
  */
 @SuppressWarnings("ClassWithoutLogger")
 public class AnnotatedTextThesaurusImpl implements AnnotatedTextThesaurus {
+
+    private static final Pattern NON_LETTERS = Pattern.compile("[^a-zA-Z ]");
+
     private final Map<String, Map<String, Integer>> map;
+    
     private final int n;
 
-
     /**
-     * Creates a TextDefinitionEnrichment which will use the text
+     * Creates a AnnotatedTextThesaurusImpl which will use the text
      * given in parameter.
      */
     public AnnotatedTextThesaurusImpl(Iterable<Text> texts, int n) {
@@ -78,7 +82,8 @@ public class AnnotatedTextThesaurusImpl implements AnnotatedTextThesaurus {
         Map<String, Integer> wordMap = map.get(wordStr);
         for (Word w2 : stc) {
             String word2Str = w2.getSurfaceForm();
-            if (w != w2 && !StopList.isStopWord(word2Str)) {
+            word2Str = word2Str.replaceAll(NON_LETTERS.pattern(), "").toLowerCase().trim();
+            if (w != w2 && !word2Str.isEmpty() && !StopList.isStopWord(word2Str)) {
                 if (!wordMap.containsKey(word2Str)) {
                     wordMap.put(word2Str, 0);
                 }
