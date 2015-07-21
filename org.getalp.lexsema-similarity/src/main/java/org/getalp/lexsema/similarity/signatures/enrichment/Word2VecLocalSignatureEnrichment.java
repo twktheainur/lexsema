@@ -3,8 +3,8 @@ package org.getalp.lexsema.similarity.signatures.enrichment;
 import org.deeplearning4j.models.word2vec.Word2Vec;
 import org.getalp.lexsema.similarity.signatures.SemanticSignature;
 import org.getalp.lexsema.similarity.signatures.SemanticSignatureImpl;
-import org.getalp.lexsema.similarity.signatures.SemanticSymbol;
-import org.getalp.lexsema.similarity.signatures.SemanticSymbolImpl;
+import org.getalp.lexsema.similarity.signatures.symbols.SemanticSymbol;
+import org.getalp.lexsema.similarity.signatures.symbols.SemanticSymbolImpl;
 import org.getalp.lexsema.util.Language;
 
 import java.util.ArrayList;

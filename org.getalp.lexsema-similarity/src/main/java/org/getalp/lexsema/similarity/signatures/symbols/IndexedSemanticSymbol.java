@@ -1,4 +1,4 @@
-package org.getalp.lexsema.similarity.signatures;
+package org.getalp.lexsema.similarity.signatures.symbols;
 
 
 public interface IndexedSemanticSymbol extends SemanticSymbol {

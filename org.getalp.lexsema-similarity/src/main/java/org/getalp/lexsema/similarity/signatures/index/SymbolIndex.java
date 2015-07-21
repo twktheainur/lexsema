@@ -1,4 +1,4 @@
-package org.getalp.lexsema.similarity.signatures;
+package org.getalp.lexsema.similarity.signatures.index;
 
 /**
  * The index holds a map of unique (Index, Symbol) pairs, that associate a unique index to each unique symbol

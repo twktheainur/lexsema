@@ -14,11 +14,11 @@ import java.util.Map;
 
 public class TranslatorCrossLingualSimilarity implements SimilarityMeasure {
 
-    private static Logger logger = LoggerFactory.getLogger(TranslatorCrossLingualSimilarity.class);
+    private static final Logger logger = LoggerFactory.getLogger(TranslatorCrossLingualSimilarity.class);
 
     private final SimilarityMeasure similarityMeasure;
-    private Translator translator;
-    private SignatureEnrichment enrichment;
+    private final Translator translator;
+    private final SignatureEnrichment enrichment;
 
     public TranslatorCrossLingualSimilarity(final SimilarityMeasure similarityMeasure, final Translator translator, final SignatureEnrichment enrichment) {
         this.similarityMeasure = similarityMeasure;
@@ -37,7 +37,9 @@ public class TranslatorCrossLingualSimilarity implements SimilarityMeasure {
 
     @Override
     public double compute(SemanticSignature sigA, SemanticSignature sigB, Map<String, SemanticSignature> relatedSignaturesA, Map<String, SemanticSignature> relatedSignaturesB) {
-        if(!sigA.getLanguage().equals(sigB.getLanguage())) {
+        if (sigA.getLanguage() == sigB.getLanguage()) {
+            return similarityMeasure.compute(sigA, sigB, null, null);
+        } else {
             String definitionB = sigB.toString();
             String translatedDefinitionB = translator.translate(definitionB, sigB.getLanguage(), sigA.getLanguage());
 
@@ -54,8 +56,6 @@ public class TranslatorCrossLingualSimilarity implements SimilarityMeasure {
 
             //logger.info(String.format("%s || %s", sigA.toString(), translatedDefinitionB));
             return similarityMeasure.compute(enrichedA, enrichedTranslated, null, null);
-        } else {
-            return similarityMeasure.compute(sigA,sigB, null, null);
         }
     }
 

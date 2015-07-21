@@ -3,9 +3,8 @@ package org.getalp.lexsema.similarity.measures.word2vec;
 
 import org.deeplearning4j.models.word2vec.Word2Vec;
 import org.getalp.lexsema.similarity.measures.SimilarityMeasure;
-import org.getalp.lexsema.similarity.signatures.IndexedSemanticSignature;
 import org.getalp.lexsema.similarity.signatures.SemanticSignature;
-import org.getalp.lexsema.similarity.signatures.SemanticSymbol;
+import org.getalp.lexsema.similarity.signatures.symbols.SemanticSymbol;
 import org.getalp.ml.matrix.MatrixUtils;
 import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.factory.Nd4j;

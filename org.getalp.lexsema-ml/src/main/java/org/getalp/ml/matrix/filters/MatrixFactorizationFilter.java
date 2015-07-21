@@ -52,13 +52,14 @@ public class MatrixFactorizationFilter implements Filter {
     @Override
     public DoubleMatrix2D apply(DoubleMatrix2D signal) {
         if (enabled) {
+            factorizationFactory.setK(numberOfComponents);
             MatrixFactorization factorization = factorizationFactory.factorize(signal);
             DoubleMatrix2D result = projectedMatrix(factorization);
-            if (numberOfComponents > 0) {
-                if (numberOfComponents <= result.columns()) {
-                    result = result.viewPart(0, 0, result.rows(), numberOfComponents);
-                }
-            }
+            //if (numberOfComponents > 0) {
+              //  if (numberOfComponents <= result.columns()) {
+                  //  result = result.viewPart(0, 0, result.rows(), numberOfComponents);
+                //}
+            //}
             return result;
         }
         return signal;
@@ -77,4 +78,6 @@ public class MatrixFactorizationFilter implements Filter {
     public void setEnabled(boolean enabled) {
         this.enabled = true;
     }
+
+
 }

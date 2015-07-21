@@ -48,7 +48,7 @@ public class AdaptiveSimulatedAnnealingDisambiguation {
             threads = Runtime.getRuntime().availableProcessors();
         }
 
-        //ConfigurationScorer configurationScorer = new MatrixTverskiConfigurationScorer(sim, new NormalizationFilter(NormalizationFilter.NormalizationType.UNIT_NORM), new SumMatrixScorer(), threads);
+        //ConfigurationScorer configurationScorer = new MatrixConfigurationScorer(sim, new NormalizationFilter(NormalizationFilter.NormalizationType.UNIT_NORM), new SumMatrixScorer(), threads);
         ConfigurationScorer configurationScorer = new TverskyConfigurationScorer(sim, threads);
         //ConfigurationScorer configurationScorer = new ACSimilarityConfigurationScorer(sim);
 

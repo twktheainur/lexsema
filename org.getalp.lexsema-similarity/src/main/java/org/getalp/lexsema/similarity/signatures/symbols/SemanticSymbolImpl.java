@@ -1,4 +1,4 @@
-package org.getalp.lexsema.similarity.signatures;
+package org.getalp.lexsema.similarity.signatures.symbols;
 
 import lombok.Data;
 
@@ -18,8 +18,8 @@ public class SemanticSymbolImpl implements SemanticSymbol {
     }
 
     @Override
-    public Double getWeight() {
-        return null;
+    public double getWeight() {
+        return weight;
     }
 
     @SuppressWarnings("NullableProblems")

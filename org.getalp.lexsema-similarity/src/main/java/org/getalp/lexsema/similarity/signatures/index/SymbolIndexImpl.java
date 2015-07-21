@@ -1,4 +1,4 @@
-package org.getalp.lexsema.similarity.signatures;
+package org.getalp.lexsema.similarity.signatures.index;
 
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;

@@ -36,7 +36,7 @@ import java.util.Random;
 public class FastICAMatrixFactorization extends MatrixFactorizationBase {
 
 
-    private final static DenseDoubleAlgebra algebra = DenseDoubleAlgebra.DEFAULT;
+    private static final DenseDoubleAlgebra algebra = DenseDoubleAlgebra.DEFAULT;
     /**
      * number of rows (instances) in X
      */
@@ -61,7 +61,7 @@ public class FastICAMatrixFactorization extends MatrixFactorizationBase {
     // The mean value of each column of the input matrix
     private DoubleMatrix1D X_means;
     // Reference to non-linear neg-entropy estimator function
-    private NegativeEntropyEstimator G;
+    private final NegativeEntropyEstimator G;
     // Number of components to output
     private int num_components;
 
@@ -117,9 +117,16 @@ public class FastICAMatrixFactorization extends MatrixFactorizationBase {
         for (int i = 0; i < len; i++) {
             d = eigenValues.getQuick(i);
             d = (d + Math.abs(d)) / 2;  // improve numerical stability by eliminating small negatives near singular matrix zeros
-            QL.viewRow(i).assign(Q.viewRow(i).copy().assign(DoubleFunctions.div(Math.sqrt(d))));
+            DoubleMatrix1D QROW = Q.viewRow(i).copy();
+            DoubleMatrix1D QROWSQRT = QROW;
+            if(d>0) {
+                QROWSQRT = QROW.assign(DoubleFunctions.div(Math.sqrt(d)));
+            }
+            QL.viewRow(i).assign(QROWSQRT);
         }
-        return x.zMult(QL.zMult(algebra.transpose(Q), null), null);
+        DoubleMatrix2D QT = algebra.transpose(Q);
+        DoubleMatrix2D QLMQT = QL.zMult(QT, null);
+        return x.zMult(QLMQT, null);
     }
 
     /*
@@ -238,7 +245,9 @@ public class FastICAMatrixFactorization extends MatrixFactorizationBase {
 
     private DoubleMatrix2D updateW(DoubleMatrix1D oldRow, DoubleMatrix1D newRow) {
         DoubleMatrix2D W_next;
-        W_next = algebra.transpose(A).zMult(G.getGx(), null).assign(DoubleFunctions.mult(1d / n));
+        final DoubleMatrix2D transpose = algebra.transpose(A);
+        final DoubleMatrix2D doubleMatrix2D = transpose.zMult(G.getGx(), null);
+        W_next = doubleMatrix2D.assign(DoubleFunctions.mult(1d / n));
         for (int i = 0; i < num_components; i++) {
             newRow.assign(W_next.viewRow(i));
             oldRow.assign(W.viewRow(i));
@@ -265,7 +274,12 @@ public class FastICAMatrixFactorization extends MatrixFactorizationBase {
 
         // K should only keep `num_components` columns if performing
         // dimensionality reduction
-        K = svd.getV().zMult(algebra.inverse(svd.getS()), K).viewPart(0, x.columns(), 0, num_components);
+        final DoubleMatrix2D v = svd.getV();
+        final DoubleMatrix2D doubleMatrix2D = v
+                .zMult(algebra
+                        .inverse(svd.getS()), K);
+        K = doubleMatrix2D
+                .viewPart(0, 0, doubleMatrix2D.rows(), num_components);
 //		K = K.scale(-1);  // sklearn returns this version for K; doesn't affect results
 
 //		return x.mult(K).scale(Math.sqrt(m));  // sklearn scales the input
@@ -300,8 +314,10 @@ public class FastICAMatrixFactorization extends MatrixFactorizationBase {
         try {
             fit();
         } catch (Exception e) {
+            e.printStackTrace();
             logger.error(e.getLocalizedMessage());
         }
+        V = transform(A);
     }
 
     public String toString() {

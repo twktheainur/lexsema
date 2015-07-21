@@ -20,51 +20,62 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.*;
 
-public class MatrixTverskiConfigurationScorer implements ConfigurationScorer {
+public class MatrixConfigurationScorer implements ConfigurationScorer {
 
-    private static Logger logger = LoggerFactory.getLogger(MatrixTverskiConfigurationScorer.class);
-    private SimilarityMeasure similarityMeasure;
-    private ExecutorService threadPool;
+    private static final Logger logger = LoggerFactory.getLogger(MatrixConfigurationScorer.class);
+    private final SimilarityMeasure similarityMeasure;
+    private final ExecutorService threadPool;
     private List<Future<Triple<Integer, Integer, Double>>> completeTasks;
-    private List<EntryScoreCallable> tasks;
-    private Filter filter;
-    private MatrixScorer matrixScorer;
-    private Cache cache;
+    private final List<EntryScoreCallable> tasks;
+    private final Filter filter;
+    private final MatrixScorer matrixScorer;
+    private double[][][][] cache;
+    private Document currentDocument;
 
-    public MatrixTverskiConfigurationScorer(SimilarityMeasure similarityMeasure, MatrixScorer matrixScorer, int numberThreads) {
+    public MatrixConfigurationScorer(SimilarityMeasure similarityMeasure, MatrixScorer matrixScorer, int numberThreads) {
         this(similarityMeasure, null, matrixScorer, numberThreads);
     }
 
-    public MatrixTverskiConfigurationScorer(SimilarityMeasure similarityMeasure, Filter filter, MatrixScorer matrixScorer, int numberThreads) {
+    public MatrixConfigurationScorer(SimilarityMeasure similarityMeasure, Filter filter, MatrixScorer matrixScorer, int numberThreads) {
         this.similarityMeasure = similarityMeasure;
         tasks = new ArrayList<>();
         threadPool = Executors.newFixedThreadPool(numberThreads);
         this.filter = filter;
         this.matrixScorer = matrixScorer;
-        cache = CachePool.getResource();
     }
 
     private String generateKey(int index1, int index2) {
         return String.format("sim____%s____%d____%d", similarityMeasure.toString(), index1, index2);
     }
 
+    private void initCache(Document d) {
+        if (currentDocument != d) {
+            cache = new double[d.size()][d.size()][][];
+            for (int i = 0; i < d.size(); i++) {
+                for (int j = i + 1; j < d.size(); j++) {
+                    cache[i][j] = new double[d.getSenses(i).size()][d.getSenses(j).size()];
+                    for (int k = 0; k < d.getSenses(i).size(); k++) {
+                        for (int l = 0; l < d.getSenses(j).size(); l++) {
+                            cache[i][j][k][l] = -1;
+                        }
+                    }
+                }
+            }
+            currentDocument = d;
+        }
+    }
+
     @Override
     public double computeScore(Document d, Configuration c) {
         DoubleMatrix2D scoreMatrix = new DenseDoubleMatrix2D(c.size(), c.size());
         scoreMatrix.assign(0);
+        initCache(d);
         for (int i = 0; i < c.size(); i++) {
             for (int j = i; j < c.size(); j++) {
-                String key_ij = generateKey(i, j);
-                String value_ij = cache.get(key_ij);
-                if (value_ij != null) {
-                    double score = Double.valueOf(value_ij);
-                    scoreMatrix.setQuick(i, j, score);
-                } else {
-                    try {
-                        tasks.add(new EntryScoreCallable(i, j, d, c));
-                    } catch (RejectedExecutionException e) {
-                        logger.debug("Thread pool rejected task " + i);
-                    }
+                try {
+                    tasks.add(new EntryScoreCallable(i, j, d, c));
+                } catch (RejectedExecutionException e) {
+                    logger.debug("Thread pool rejected task {} -- {}", i,e.getLocalizedMessage());
                 }
             }
         }
@@ -86,12 +97,11 @@ public class MatrixTverskiConfigurationScorer implements ConfigurationScorer {
                         int indexA = pair.first();
                         int indexB = pair.second();
                         double value = pair.third();
-                        cache.set(generateKey(indexA, indexB), String.valueOf(value));
                         scoreMatrix.setQuick(indexA, indexB, value);
                     } catch (InterruptedException e) {
-                        logger.debug("Interrupted in configuration score entry calculation" + e.getLocalizedMessage());
+                        logger.debug("Interrupted in configuration score entry calculation {}", e.getLocalizedMessage());
                     } catch (ExecutionException e) {
-                        logger.debug("ExecutionException in configuration score entry calculation " + e.getLocalizedMessage());
+                        logger.debug("ExecutionException in configuration score entry calculation {}", e.getLocalizedMessage());
                     }
                     completeTasks.remove(i);
                 } else {
@@ -125,14 +135,14 @@ public class MatrixTverskiConfigurationScorer implements ConfigurationScorer {
     }
 
 
-    private class EntryScoreCallable implements Callable<Triple<Integer, Integer, Double>> {
+    private final class EntryScoreCallable implements Callable<Triple<Integer, Integer, Double>> {
 
-        private int indexA;
-        private int indexB;
-        private Document document;
-        private Configuration configuration;
+        private final int indexA;
+        private final int indexB;
+        private final Document document;
+        private final Configuration configuration;
 
-        public EntryScoreCallable(int indexA, int indexB, Document document, Configuration configuration) {
+        private EntryScoreCallable(int indexA, int indexB, Document document, Configuration configuration) {
             this.document = document;
             this.configuration = configuration;
             this.indexA = indexA;
@@ -142,13 +152,20 @@ public class MatrixTverskiConfigurationScorer implements ConfigurationScorer {
         @Override
         public Triple<Integer, Integer, Double> call() throws Exception {
             //try {
-                Sense a = document.getSenses(configuration.getStart(), indexA).get(configuration.getAssignment(indexA));
-                Sense b = document.getSenses(configuration.getStart(), indexB).get(configuration.getAssignment(indexB));
-                double sim = a.computeSimilarityWith(similarityMeasure, b);
-                return new TripleImpl<>(indexA, indexB, sim);
+
+            int senseA = configuration.getAssignment(indexA);
+            int senseB = configuration.getAssignment(indexB);
+            int start = configuration.getStart();
+            double value = cache[indexA][indexB][senseA][senseB];
+            if(value<0){
+                Sense a = document.getSenses(start, indexA).get(senseA);
+                Sense b = document.getSenses(start, indexB).get(senseB);
+                value = a.computeSimilarityWith(similarityMeasure, b);
+            }
+            return new TripleImpl<>(indexA, indexB, value);
             //} catch (RuntimeException e) {
-             //   logger.error(e.getLocalizedMessage());
-           // }
+            //   logger.error(e.getLocalizedMessage());
+            // }
             //return new TripleImpl<>(indexA, indexB, 0d);
         }
     }

@@ -4,6 +4,8 @@ package org.getalp.lexsema.io.resource.dictionary;
 import org.getalp.lexsema.similarity.Sense;
 import org.getalp.lexsema.similarity.SenseImpl;
 import org.getalp.lexsema.similarity.signatures.*;
+import org.getalp.lexsema.similarity.signatures.index.SymbolIndex;
+import org.getalp.lexsema.similarity.signatures.index.SymbolIndexImpl;
 import org.xml.sax.Attributes;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.Locator;

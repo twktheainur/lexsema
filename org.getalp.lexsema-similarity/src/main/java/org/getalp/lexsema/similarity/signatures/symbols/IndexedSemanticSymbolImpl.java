@@ -1,9 +1,9 @@
-package org.getalp.lexsema.similarity.signatures;
+package org.getalp.lexsema.similarity.signatures.symbols;
 
 
 public class IndexedSemanticSymbolImpl implements IndexedSemanticSymbol {
     private final Integer symbol;
-    private final Double weight;
+    private final double weight;
 
     public IndexedSemanticSymbolImpl(Integer symbol, double weight) {
         this.weight = weight;
@@ -15,7 +15,7 @@ public class IndexedSemanticSymbolImpl implements IndexedSemanticSymbol {
         final String stringSymbol = getSymbol();
         int symbolCmp = stringSymbol.compareTo(o.getSymbol());
         if (symbolCmp == 0) {
-            symbolCmp = weight.compareTo(o.getWeight());
+            symbolCmp = Double.valueOf(weight).compareTo(o.getWeight());
         }
         return symbolCmp;
     }
@@ -31,7 +31,7 @@ public class IndexedSemanticSymbolImpl implements IndexedSemanticSymbol {
     }
 
     @Override
-    public Double getWeight() {
+    public double getWeight() {
         return weight;
     }
 }

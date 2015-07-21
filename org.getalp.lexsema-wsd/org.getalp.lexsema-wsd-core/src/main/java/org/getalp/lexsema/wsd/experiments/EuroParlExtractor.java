@@ -22,7 +22,7 @@ import org.getalp.lexsema.wsd.configuration.Configuration;
 import org.getalp.lexsema.wsd.method.Disambiguator;
 import org.getalp.lexsema.wsd.method.SimulatedAnnealing;
 import org.getalp.lexsema.wsd.score.ConfigurationScorer;
-import org.getalp.lexsema.wsd.score.MatrixTverskiConfigurationScorer;
+import org.getalp.lexsema.wsd.score.MatrixConfigurationScorer;
 import org.getalp.ml.matrix.score.SumMatrixScorer;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -197,7 +197,7 @@ public class EuroParlExtractor {
 		similarityMeasure = new TverskiIndexSimilarityMeasureBuilder()
 		.distance(new ScaledLevenstein()).computeRatio(true).alpha(1d)
 		.beta(0.5d).gamma(0.5d).fuzzyMatching(true).build();
-		ConfigurationScorer scorer = new MatrixTverskiConfigurationScorer(similarityMeasure,new SumMatrixScorer(),Runtime.getRuntime().availableProcessors());
+		ConfigurationScorer scorer = new MatrixConfigurationScorer(similarityMeasure,new SumMatrixScorer(),Runtime.getRuntime().availableProcessors());
 		//ConfigurationScorer scorer = new ConfigurationScorerWithCache(similarityMeasure);
 		Disambiguator disambiguator = new SimulatedAnnealing(0.8,0.8,5,100,scorer);
 

@@ -20,7 +20,7 @@ import org.getalp.lexsema.ontolex.graph.store.Store;
 import org.getalp.lexsema.similarity.Sense;
 import org.getalp.lexsema.similarity.signatures.SemanticSignature;
 import org.getalp.lexsema.similarity.signatures.SemanticSignatureImpl;
-import org.getalp.lexsema.similarity.signatures.SemanticSymbolImpl;
+import org.getalp.lexsema.similarity.signatures.symbols.SemanticSymbolImpl;
 import org.getalp.lexsema.translation.BingAPITranslator;
 import org.getalp.lexsema.translation.CachedTranslator;
 import org.getalp.lexsema.translation.Translator;

@@ -1,6 +1,11 @@
 package org.getalp.lexsema.similarity.signatures;
 
 import org.getalp.lexsema.similarity.measures.SimilarityMeasure;
+import org.getalp.lexsema.similarity.signatures.index.SymbolIndex;
+import org.getalp.lexsema.similarity.signatures.symbols.IndexedSemanticSymbol;
+import org.getalp.lexsema.similarity.signatures.symbols.IndexedSemanticSymbolImpl;
+import org.getalp.lexsema.similarity.signatures.symbols.SemanticSymbol;
+import org.getalp.lexsema.similarity.signatures.symbols.SemanticSymbolImpl;
 import org.getalp.lexsema.util.Language;
 
 import java.util.*;
@@ -178,7 +183,9 @@ public class IndexedSemanticSignatureImpl implements IndexedSemanticSignature {
         if(symbol instanceof IndexedSemanticSymbol){
             symbols.add((IndexedSemanticSymbol) symbol);
         } else {
-            symbols.add(new IndexedSemanticSymbolImpl(symbolIndex.getSymbolIndex(symbol.getSymbol()),symbol.getWeight()));
+            Integer iSymbol = symbolIndex.getSymbolIndex(symbol.getSymbol());
+            IndexedSemanticSymbol indexedSemanticSymbol = new IndexedSemanticSymbolImpl(iSymbol,symbol.getWeight());
+            symbols.add(indexedSemanticSymbol);
         }
     }
 

@@ -15,6 +15,7 @@ import org.aksw.rdfunit.enums.TestCaseExecutionType;
 import org.aksw.rdfunit.io.writer.RDFStreamWriter;
 import org.aksw.rdfunit.io.writer.RDFWriter;
 import org.aksw.rdfunit.io.writer.RDFWriterFactory;
+import org.getalp.lexsema.io.resource.LRLoader;
 import org.getalp.lexsema.io.resource.wordnet.WordnetLoader;
 import org.getalp.lexsema.io.text.EnglishDKPTextProcessor;
 import org.getalp.lexsema.io.text.TextProcessor;
@@ -23,6 +24,7 @@ import org.getalp.lexsema.similarity.Word;
 import org.getalp.lexsema.similarity.measures.lesk.AnotherLeskSimilarity;
 import org.getalp.lexsema.wsd.configuration.Configuration;
 import org.getalp.lexsema.wsd.method.CuckooSearchDisambiguator;
+import org.getalp.lexsema.wsd.method.Disambiguator;
 import org.getalp.lexsema.wsd.method.StopCondition;
 import org.getalp.lexsema.wsd.score.ConfigurationScorer;
 import org.getalp.lexsema.wsd.score.ConfigurationScorerWithCache;
@@ -171,11 +173,11 @@ public class Niflet extends HttpServlet
                 data.model.createProperty(data.model.getNsPrefixURI("rdf") + "type"),
                 data.model.createResource(data.model.getNsPrefixURI("owl") + "DatatypeProperty")));
 
-        WordnetLoader lrloader = new WordnetLoader(new Dictionary(new File("/home/coyl/lig/data/wordnet/3.0/dict")));
+        LRLoader lrloader = new WordnetLoader(new Dictionary(new File("/home/coyl/lig/data/wordnet/3.0/dict")));
         lrloader.loadDefinitions(true);
         lrloader.loadSenses(data.text);
         ConfigurationScorer scorer = new ConfigurationScorerWithCache(new AnotherLeskSimilarity());
-        CuckooSearchDisambiguator cuckooDisambiguator = new CuckooSearchDisambiguator(new StopCondition(StopCondition.Condition.SCORERCALLS, 100), 5, 0.5, 1, 0, scorer, true);
+        Disambiguator cuckooDisambiguator = new CuckooSearchDisambiguator(new StopCondition(StopCondition.Condition.SCORERCALLS, 100), 5, 0.5, 1, 0, scorer, true);
         Configuration c = cuckooDisambiguator.disambiguate(data.text);
 
         for (int j = 0 ; j < c.size() ; j++)

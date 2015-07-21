@@ -4,6 +4,7 @@ import cern.colt.matrix.tdouble.DoubleMatrix2D;
 
 public class TapkeeNLMatrixFactorizationFactory implements MatrixFactorizationFactory {
     TapkeeNLMatrixFactorization.Method method;
+    int k = -1;
 
     public TapkeeNLMatrixFactorizationFactory(TapkeeNLMatrixFactorization.Method method) {
         this.method = method;
@@ -11,8 +12,19 @@ public class TapkeeNLMatrixFactorizationFactory implements MatrixFactorizationFa
 
     @Override
     public MatrixFactorization factorize(DoubleMatrix2D A) {
-        MatrixFactorization fac = new TapkeeNLMatrixFactorization(A, method);
+
+        MatrixFactorization fac;
+        if(k>0){
+            fac = new TapkeeNLMatrixFactorization(A, method,k);
+        } else {
+            fac = new TapkeeNLMatrixFactorization(A, method);
+        }
         fac.compute();
         return fac;
+    }
+
+    @Override
+    public void setK(int k) {
+        this.k = k;
     }
 }

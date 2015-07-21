@@ -11,6 +11,8 @@ import org.getalp.lexsema.similarity.Word;
 import org.getalp.lexsema.similarity.cache.SenseCache;
 import org.getalp.lexsema.similarity.cache.SenseCacheImpl;
 import org.getalp.lexsema.similarity.signatures.*;
+import org.getalp.lexsema.similarity.signatures.index.SymbolIndex;
+import org.getalp.lexsema.similarity.signatures.index.SymbolIndexImpl;
 import org.getalp.lexsema.util.StopList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -256,9 +258,8 @@ public class WordnetLoader implements LRLoader {
             pos = "n";
         } else {
             lemme = st[0].toLowerCase();
-            pos = st[1];
+            pos = st[1].toLowerCase();
         }
-        pos = pos.toLowerCase();
         IIndexWord w = null;
         if (!lemme.isEmpty()) {
             POS posJWI = POS.getPartOfSpeech(pos.charAt(0));

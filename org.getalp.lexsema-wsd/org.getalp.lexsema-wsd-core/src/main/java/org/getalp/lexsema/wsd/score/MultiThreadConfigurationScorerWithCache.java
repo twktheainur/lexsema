@@ -14,13 +14,13 @@ import java.util.concurrent.Future;
 
 public class MultiThreadConfigurationScorerWithCache implements ConfigurationScorer
 {
-    private SimilarityMeasure similarityMeasure;
+    private final SimilarityMeasure similarityMeasure;
     
     private double[][][][] cache;
     
     private Document currentDocument;
     
-    private ExecutorService threadPool;
+    private final ExecutorService threadPool;
 
     public MultiThreadConfigurationScorerWithCache(SimilarityMeasure similarityMeasure)
     {
@@ -77,11 +77,11 @@ public class MultiThreadConfigurationScorerWithCache implements ConfigurationSco
     
     private class IntermediateScorer implements Callable<Double>
     {
-        private int i;
+        private final int i;
         
-        private Document d;
+        private final Document d;
         
-        private Configuration c;
+        private final Configuration c;
         
         public IntermediateScorer(int i, Document d, Configuration c)
         {
@@ -101,7 +101,7 @@ public class MultiThreadConfigurationScorerWithCache implements ConfigurationSco
                 int l = c.getAssignment(j);
                 if (l < 0 || d.getSenses(j).isEmpty()) continue;
                 double cacheCell = cache[i][j][k][l];
-                if (cacheCell != -1)
+                if (cacheCell > -1)
                 {
                     score += cacheCell;
                 }

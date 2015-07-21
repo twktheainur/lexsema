@@ -1,5 +1,7 @@
 package org.getalp.lexsema.similarity.signatures;
 
+import org.getalp.lexsema.similarity.signatures.symbols.IndexedSemanticSymbol;
+
 import java.util.List;
 
 

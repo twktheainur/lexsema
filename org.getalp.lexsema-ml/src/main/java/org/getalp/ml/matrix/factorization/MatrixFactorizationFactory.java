@@ -25,4 +25,6 @@ public interface MatrixFactorizationFactory {
      * @param A matrix to be factorized.
      */
     public MatrixFactorization factorize(DoubleMatrix2D A);
+
+    public void setK(int k);
 }

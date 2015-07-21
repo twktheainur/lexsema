@@ -2,10 +2,9 @@ package org.getalp.lexsema.similarity.measures.lesk;
 
 import org.getalp.lexsema.similarity.measures.SimilarityMeasure;
 import org.getalp.lexsema.similarity.signatures.IndexedSemanticSignature;
-import org.getalp.lexsema.similarity.signatures.SemanticSymbol;
+import org.getalp.lexsema.similarity.signatures.symbols.SemanticSymbol;
 import org.getalp.lexsema.similarity.signatures.SemanticSignature;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -27,25 +26,25 @@ public class IndexedOverlapSimilarity implements SimilarityMeasure {
     @Override
     public double compute(SemanticSignature sigA, SemanticSignature sigB, Map<String, SemanticSignature> relatedSignaturesA, Map<String, SemanticSignature> relatedSignaturesB) {
 
-        List<Integer> la;
-        List<Integer> lb;
+        List<String> la = sigA.getSymbols();
+        List<String> lb = sigB.getSymbols();
 
-        if(sigA instanceof IndexedSemanticSignature && sigB instanceof  IndexedSemanticSignature){
-            la = ((IndexedSemanticSignature) sigA).getIndexedSymbols();
-            lb = ((IndexedSemanticSignature) sigA).getIndexedSymbols();
-        } else {
-            la = new ArrayList<>();
-            lb = new ArrayList<>();
-            try{
-                for(String symbolA: sigA.getSymbols()){
-                    la.add(Integer.valueOf(symbolA));
-                }
-                for(String symbolB: sigB.getSymbols()){
-                    la.add(Integer.valueOf(symbolB));
-                }
-            } catch (NumberFormatException ignored){
-            }
-        }
+//        if(sigA instanceof IndexedSemanticSignature && sigB instanceof  IndexedSemanticSignature){
+//            la = ((IndexedSemanticSignature) sigA).getIndexedSymbols();
+//            lb = ((IndexedSemanticSignature) sigA).getIndexedSymbols();
+//        } else {
+//            la = new ArrayList<>();
+//            lb = new ArrayList<>();
+//            try{
+//                for(String symbolA: sigA.getSymbols()){
+//                    la.add(Integer.valueOf(symbolA));
+//                }
+//                for(String symbolB: sigB.getSymbols()){
+//                    la.add(Integer.valueOf(symbolB));
+//                }
+//            } catch (NumberFormatException ignored){
+//            }
+//        }
 
         int aSize = la.size();
         int bSize = lb.size();

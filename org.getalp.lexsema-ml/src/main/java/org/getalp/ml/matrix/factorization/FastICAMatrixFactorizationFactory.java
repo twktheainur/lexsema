@@ -38,7 +38,10 @@ public class FastICAMatrixFactorizationFactory implements
 
     public MatrixFactorization factorize(DoubleMatrix2D A) {
         FastICAMatrixFactorization fastICAMatrixFactorization = new FastICAMatrixFactorization(
-                A).setNum_components(k);
+                A);
+        if(k>DEFAULT_K){
+            fastICAMatrixFactorization.setNum_components(k);
+        }
         fastICAMatrixFactorization.compute();
         return fastICAMatrixFactorization;
     }
