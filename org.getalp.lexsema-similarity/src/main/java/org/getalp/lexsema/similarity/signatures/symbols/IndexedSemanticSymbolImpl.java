@@ -12,10 +12,14 @@ public class IndexedSemanticSymbolImpl implements IndexedSemanticSymbol {
 
     @Override
     public int compareTo(SemanticSymbol o) {
-        final String stringSymbol = getSymbol();
-        int symbolCmp = stringSymbol.compareTo(o.getSymbol());
+        int symbolCmp = 0;
+        if (o instanceof IndexedSemanticSymbol) {
+            symbolCmp = symbol.compareTo(((IndexedSemanticSymbol) o).getIndexedSymbol());
+        } else {
+            symbolCmp = getSymbol().compareTo(o.getSymbol());
+        }
         if (symbolCmp == 0) {
-            symbolCmp = Double.valueOf(weight).compareTo(o.getWeight());
+            return Double.valueOf(weight).compareTo(o.getWeight());
         }
         return symbolCmp;
     }
