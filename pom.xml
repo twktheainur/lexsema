@@ -13,7 +13,7 @@
         <module>org.getalp.lexsema-similarity</module>
         <module>org.getalp.lexsema-io</module>
         <module>org.getalp.lexsema-wsd</module>
-        <module>org.getalp.lexsema-nif</module>
+        <module>org.getalp.lexsema-ws</module>
         <module>org.getalp.lexsema-acceptali</module>
         <module>org.getalp.lexsema-translation</module>
         <module>org.getalp.lexsema-examples</module>

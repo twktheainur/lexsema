@@ -51,6 +51,7 @@ public class DSOTextLoader extends TextLoaderImpl
             {
                 processWordInList(line, pos);
             }
+            br.close();
         }
         catch (Exception e)
         {
@@ -69,6 +70,7 @@ public class DSOTextLoader extends TextLoaderImpl
                 if (line.isEmpty()) continue;
                 processSentenceInWord(line, word, pos);
             }
+            br.close();
         }
         catch (Exception e)
         {
@@ -131,7 +133,7 @@ public class DSOTextLoader extends TextLoaderImpl
         text = new TextImpl();
         text.setId("");
         processList("vlist.txt", "v");
-        //processList("nlist.txt", "n");
+        processList("nlist.txt", "n");
         addText(text);
     }
 
