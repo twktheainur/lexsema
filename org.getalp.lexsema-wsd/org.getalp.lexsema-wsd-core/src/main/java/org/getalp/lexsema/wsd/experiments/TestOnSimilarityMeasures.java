@@ -1,7 +1,6 @@
 package org.getalp.lexsema.wsd.experiments;
 
 import java.io.File;
-import java.util.HashMap;
 
 import org.apache.commons.math3.stat.inference.MannWhitneyUTest;
 import org.getalp.lexsema.io.document.Semeval2007TextLoader;
@@ -11,13 +10,8 @@ import org.getalp.lexsema.io.resource.dictionary.DictionaryLRLoader;
 import org.getalp.lexsema.similarity.Document;
 import org.getalp.lexsema.similarity.measures.lesk.AnotherLeskSimilarity;
 import org.getalp.lexsema.wsd.configuration.Configuration;
-import org.getalp.lexsema.wsd.method.CuckooSearchDisambiguator;
-import org.getalp.lexsema.wsd.method.MultiThreadCuckooSearch;
-import org.getalp.lexsema.wsd.method.StopCondition;
-import org.getalp.lexsema.wsd.score.ConfigurationScorer;
-import org.getalp.lexsema.wsd.score.ConfigurationScorerWithCache;
-import org.getalp.lexsema.wsd.score.MultiThreadConfigurationScorerWithCache;
-import org.getalp.lexsema.wsd.score.SemEval2007Task7PerfectConfigurationScorer;
+import org.getalp.lexsema.wsd.method.*;
+import org.getalp.lexsema.wsd.score.*;
 
 import com.google.common.math.DoubleMath;
 
@@ -38,29 +32,29 @@ public class TestOnSimilarityMeasures
         public long meanTime;
     }
     
+    private static MannWhitneyUTest mannTest = new MannWhitneyUTest();
+    
     public static void main(String[] args) throws Exception
     {
-        HashMap<Integer, Result> results = new HashMap<Integer, Result>();
-        for (int i = 10 ; i <= 100 ; i += 5)
-        {
-            results.put(i, getScores("../data/lesk_dict/all/dict_semeval2007task7_stopwords_stemming_semcor" + i));
-        }
+        //Result res1 = getScores("../data/lesk_dict/dict_semeval2007task7_stopwords_stemming_semcor");
+        //Result res2 = getScores("../data/lesk_dict/dict_semeval2007task7_stopwords_stemming_dso");
+        Result res4 = getScores("../data/lesk_dict/dict_semeval2007task7_stopwords_stemming_semcor_dso_wordnetglosstag");
+        Result res3 = getScores("../data/lesk_dict/dict_semeval2007task7_stopwords_stemming_semcor_dso");
 
-        for (int i = 10 ; i <= 100 ; i += 5)
-        {
-            System.out.println("Mean Time for \"../data/lesk_dict/all/dict_semeval2007task7_stopwords_stemming_semcor " + i + "\" : " + results.get(i).meanTime + " ms (" + (results.get(i).meanTime / 1000l) + " s)");
-            System.out.println("Mean Score for \"../data/lesk_dict/all/dict_semeval2007task7_stopwords_stemming_semcor " + i + "\" : " + results.get(i).meanScore);
-        }
+        //System.out.println("Mean Scores Semcor : " + res1.meanScore);
+        //System.out.println("Mean Scores DSO : " + res2.meanScore);
+        System.out.println("Mean Scores Semcor + DSO : " + res3.meanScore);
+        System.out.println("Mean Scores Semcor + DSO + WordnetGlossTag : " + res4.meanScore);
 
-        MannWhitneyUTest mannTest = new MannWhitneyUTest();
-        for (int i = 10 ; i <= 100 ; i += 5)
-        {
-            for (int j = 10 ; j <= 100 ; j += 5)
-            {
-                System.out.println("MWUTest between \"../data/lesk_dict/all/dict_semeval2007task7_stopwords_stemming_semcor " + i + "\" And \"../data/lesk_dict/all/dict_semeval2007task7_stopwords_stemming_semcor " + j + "\" : " + mannTest.mannWhitneyUTest(results.get(i).scores, results.get(j).scores));
-            }
-        }
-
+        //System.out.println("Mean Times Semcor : " + res1.meanTime);
+        //System.out.println("Mean Times DSO : " + res2.meanTime);
+        System.out.println("Mean Times Semcor + DSO : " + res3.meanTime);
+        System.out.println("Mean Times Semcor + DSO + WordnetGlossTag : " + res4.meanTime);
+        
+        //System.out.println("MWUTest Semcor / DSO : " + mannTest.mannWhitneyUTest(res1.scores, res2.scores));
+        //System.out.println("MWUTest Semcor / Semcor + DSO : " + mannTest.mannWhitneyUTest(res1.scores, res3.scores));
+        //System.out.println("MWUTest DSO / Semcor + DSO : " + mannTest.mannWhitneyUTest(res2.scores, res3.scores));
+        System.out.println("MWUTest Semcor + DSO / Semcor + DSO + WordnetGlosstag : " + mannTest.mannWhitneyUTest(res3.scores, res4.scores));
         
         //double[] scores = getScores("../data/lesk_dict/dict_semeval2007task7");
         //double[] scoresStopWords = getScores("../data/lesk_dict/dict_semeval2007task7_stopwords");
@@ -113,19 +107,19 @@ public class TestOnSimilarityMeasures
         dl.load();
         for (Document d : dl) lrloader.loadSenses(d);
 
-        //ConfigurationScorer scorer = new ConfigurationScorerWithCache(new AnotherLeskSimilarity());
-        ConfigurationScorer scorer = new MultiThreadConfigurationScorerWithCache(new AnotherLeskSimilarity());
+        ConfigurationScorer scorer = new ConfigurationScorerWithCache(new AnotherLeskSimilarity());
+        //ConfigurationScorer scorer = new MultiThreadConfigurationScorerWithCache(new AnotherLeskSimilarity());
 
         SemEval2007Task7PerfectConfigurationScorer perfectScorer = new SemEval2007Task7PerfectConfigurationScorer();
         
-        int iterations = 10000;
-        double levyLocation = 2;
-        double levyScale = 0.7;
-        int nestsNumber = 1;
-        int destroyedNests = 0;
+        int iterations = 100000;
+        double minLevyLocation = 1;
+        double maxLevyLocation = 5;
+        double minLevyScale = 0.5;
+        double maxLevyScale = 1.5;
         
-        CuckooSearchDisambiguator cuckooDisambiguator = new CuckooSearchDisambiguator(new StopCondition(StopCondition.Condition.SCORERCALLS, iterations), levyLocation, levyScale, nestsNumber, destroyedNests, scorer, false);
-        //MultiThreadCuckooSearch cuckooDisambiguator = new MultiThreadCuckooSearch(new StopCondition(StopCondition.Condition.SCORERCALLS, iterations), levyLocation, levyLocation, levyScale, levyScale, Runtime.getRuntime().availableProcessors(), scorer, false);
+        //CuckooSearchDisambiguator cuckooDisambiguator = new CuckooSearchDisambiguator(new StopCondition(StopCondition.Condition.SCORERCALLS, iterations), levyLocation, levyScale, nestsNumber, destroyedNests, scorer, false);
+        MultiThreadCuckooSearch cuckooDisambiguator = new MultiThreadCuckooSearch(iterations, minLevyLocation, maxLevyLocation, minLevyScale, maxLevyScale, scorer, false);
 
         for (int i = 0 ; i < n ; i++)
         {
@@ -142,10 +136,10 @@ public class TestOnSimilarityMeasures
                 scores[i] += perfectScorer.computeScore(d, c);
                 j++;
             }
-            System.out.println();
             long endTime = System.currentTimeMillis();
             times[i] = (endTime - startTime);
             scores[i] /= ((double) j);
+            System.out.println("score : " + scores[i] + " ; time : " + times[i]);
         }
         System.out.println();
         cuckooDisambiguator.release();

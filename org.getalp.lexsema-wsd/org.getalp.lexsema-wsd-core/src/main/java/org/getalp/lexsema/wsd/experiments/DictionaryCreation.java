@@ -9,13 +9,12 @@ import org.getalp.lexsema.io.document.DSOTextLoader;
 import org.getalp.lexsema.io.document.SemCorTextLoader;
 import org.getalp.lexsema.io.document.Semeval2007TextLoader;
 import org.getalp.lexsema.io.document.TextLoader;
-import org.getalp.lexsema.io.resource.LRLoader;
+import org.getalp.lexsema.io.document.WordnetGlossTagTextLoader;
 import org.getalp.lexsema.io.resource.wordnet.WordnetLoader;
-import org.getalp.lexsema.io.thesaurus.AnnotatedTextThesaurus;
 import org.getalp.lexsema.similarity.Text;
 import org.getalp.lexsema.io.thesaurus.AnnotatedTextThesaurusImpl;
 
-public class DictionaryEnrichment
+public class DictionaryCreation
 {
     public static String wordnetPath = "../data/wordnet/2.1/dict/";
     
@@ -25,17 +24,18 @@ public class DictionaryEnrichment
     
     public static String docPath = "../data/senseval2007_task7/test/eng-coarse-all-words.xml";
 
+    public static String wordnetGlossTagPath = "../data/wordnet/3.0/glosstag/";
+    
     public static Dictionary wordnet = new Dictionary(new File(wordnetPath));
     
     public static TextLoader semCor = new SemCorTextLoader(semCorPath);
 
     public static TextLoader dso = new DSOTextLoader(dsoPath, wordnetPath);
+
+    public static TextLoader wordnetGlossTag = new WordnetGlossTagTextLoader(wordnetGlossTagPath);
     
     public static void main(String[] args)
     {
-        //semCor.load();
-        dso.load();
-        AnnotatedTextThesaurus dsoThesaurus =  new AnnotatedTextThesaurusImpl(dso, 10);
         //writeDictionary(false, false, false, "../data/dict_semeval2007task7");
         //writeDictionary(true, false, false, "../data/dict_semeval2007task7_stopwords");
         //writeDictionary(false, true, false, "../data/dict_semeval2007task7_stemming");
@@ -45,30 +45,46 @@ public class DictionaryEnrichment
         //writeDictionary(true, false, true, "../data/dict_semeval2007task7_stopwords_semcor");
         //writeDictionary(false, true, true, "../data/dict_semeval2007task7_stemming_semcor");
         //writeDictionary(true, true, true, "../data/dict_semeval2007task7_stopwords_stemming_semcor");
-        /*
-        for (int i = 100 ; i <= 100 ; i += 5)
-        {
-            writeDictionary(true, true, true, true, true, i, "../data/dict_semeval2007task7_stopwords_stemming_semcor" + i);
-        }
-        */
-        writeDictionary(false, false, true, true, false, true, dsoThesaurus, 20, "../data/test");
+
+        //writeDictionary(true, true, true, true, true, true, true, false, "../data/lesk_dict/dict_semeval2007task7_stopwords_stemming_semcor");
+        //writeDictionary(true, true, true, true, true, true, false, true, "../data/lesk_dict/dict_semeval2007task7_stopwords_stemming_dso");
+        //writeDictionary(true, true, true, true, true, true, true, true, "../data/lesk_dict/dict_semeval2007task7_stopwords_stemming_semcor_dso");
+    
+        writeDictionary(true, true, true, true, true, true, true, true, true, "../data/lesk_dict/dict_semeval2007task7_stopwords_stemming_semcor_dso_wordnetglosstag");
     }
     
     private static void writeDictionary(boolean definitions, boolean extendedDefinitions, 
                                         boolean stopWords, boolean stemming, 
                                         boolean index, boolean shuffle, 
-                                        AnnotatedTextThesaurus thesaurus, int nbThesaurusWords, 
+                                        boolean useSemCorThesaurus, 
+                                        boolean useDSOThesaurus, 
+                                        boolean useWordnetGlossTag,
                                         String newDictPath)
     {
         System.out.println("Building dictionary " + newDictPath + "...");
-        LRLoader lrloader = new WordnetLoader(wordnet, thesaurus)
-        .loadDefinitions(definitions)
-        .extendedSignature(extendedDefinitions)
-        .loadRelated(extendedDefinitions)
-        .index(index)
-        .shuffle(shuffle)
-        .filterStopWords(stopWords)
-        .stemming(stemming);
+        WordnetLoader lrloader = new WordnetLoader(wordnet);
+        lrloader.loadDefinitions(definitions);
+        lrloader.extendedSignature(extendedDefinitions);
+        lrloader.loadRelated(extendedDefinitions);
+        lrloader.index(index);
+        lrloader.shuffle(shuffle);
+        lrloader.filterStopWords(stopWords);
+        lrloader.stemming(stemming);
+        if (useSemCorThesaurus)
+        {
+            semCor.load();
+            lrloader.addThesaurus(new AnnotatedTextThesaurusImpl(semCor, 100));
+        }
+        if (useDSOThesaurus)
+        {
+            dso.load();
+            lrloader.addThesaurus(new AnnotatedTextThesaurusImpl(dso, 100));
+        }
+        if (useWordnetGlossTag)
+        {
+            wordnetGlossTag.load();
+            lrloader.addThesaurus(new AnnotatedTextThesaurusImpl(wordnetGlossTag, 100));
+        }
         TextLoader dl = new Semeval2007TextLoader(docPath);
         dl.load();
         for (Text txt : dl)
