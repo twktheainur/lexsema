@@ -33,7 +33,7 @@ public class ACADisambiguator
     {
         int iterations = 100;
         double initialEnergy = 20;
-        int initialPheromone = 0;
+        int initialPheromone = 10   ;
         int vectorSize = 100;
         double pheromoneEvaporation = 0.7;
         double maximumEnergy = 30;
