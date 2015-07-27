@@ -86,6 +86,11 @@ public class MultiThreadCuckooSearch
         this(new StopCondition(StopCondition.Condition.ITERATIONS, iterations), 1, 10, 1, 10, Runtime.getRuntime().availableProcessors(), configurationScorer, verbose);
     }
 
+    public MultiThreadCuckooSearch(int iterations, double minLevyLocation, double maxLevyLocation, double minLevyScale, double maxLevyScale, ConfigurationScorer configurationScorer, boolean verbose)
+    {
+        this(new StopCondition(StopCondition.Condition.ITERATIONS, iterations), minLevyLocation, maxLevyLocation, minLevyScale, maxLevyScale, Runtime.getRuntime().availableProcessors(), configurationScorer, verbose);
+    }
+
     public MultiThreadCuckooSearch(int iterations, double minLevyLocation, double maxLevyLocation, double minLevyScale, double maxLevyScale, int numberThreads, ConfigurationScorer configurationScorer, boolean verbose)
     {
         this(new StopCondition(StopCondition.Condition.ITERATIONS, iterations), minLevyLocation, maxLevyLocation, minLevyScale, maxLevyScale, numberThreads, configurationScorer, verbose);
@@ -116,10 +121,11 @@ public class MultiThreadCuckooSearch
         }
         while (!stopCondition.stop())
         {
-            int progress = (int)(stopCondition.getRemainingPercentage() * 100);
-            double progressPercent = (double)progress / 100.0;
+            Thread.sleep(1000);
             if (verbose)
             {
+                int progress = (int)(stopCondition.getRemainingPercentage() * 100);
+                double progressPercent = (double)progress / 100.0;
                 System.out.println("Cuckoo Progress : " + progressPercent + "% - " +
                                    "Current best : " + score);
             }
