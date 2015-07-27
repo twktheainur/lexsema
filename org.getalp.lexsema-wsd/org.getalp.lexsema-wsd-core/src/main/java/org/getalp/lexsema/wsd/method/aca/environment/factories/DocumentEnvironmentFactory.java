@@ -38,7 +38,7 @@ public class DocumentEnvironmentFactory implements EnvironmentFactory {
         INDArray adjacency = Nd4j.create(nodes.size(), nodes.size());
         populateAdjacency(adjacency);
 
-        return new EnvironmentImpl(nodes, nestIndex, adjacency);
+        return new EnvironmentImpl(nodes, nestIndex, adjacency,initialPheromone);
     }
 
     /**
