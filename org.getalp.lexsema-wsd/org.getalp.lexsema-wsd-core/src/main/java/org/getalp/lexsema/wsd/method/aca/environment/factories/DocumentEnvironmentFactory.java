@@ -45,7 +45,7 @@ public class DocumentEnvironmentFactory implements EnvironmentFactory {
      * Creating nodes
      *
      * @param nodes     The list that will contain the nodes
-     * @param nestIndex The list that will contain the nests
+     * @param nestIndex A map between nest positions and nest node instances
      */
     private void createNodes(Collection<Node> nodes, Map<Integer, Node> nestIndex) {
         int currentPosition = 0;

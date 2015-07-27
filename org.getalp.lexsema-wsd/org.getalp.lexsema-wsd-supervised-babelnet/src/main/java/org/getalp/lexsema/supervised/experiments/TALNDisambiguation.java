@@ -5,9 +5,9 @@ import org.getalp.lexsema.io.annotresult.ConfigurationWriter;
 import org.getalp.lexsema.io.annotresult.SemevalWriter;
 import org.getalp.lexsema.io.dictionary.DictionaryWriter;
 import org.getalp.lexsema.io.dictionary.DocumentDictionaryWriter;
-import org.getalp.lexsema.io.document.SemCorTextLoader;
-import org.getalp.lexsema.io.document.Semeval2013Task13TextLoader;
-import org.getalp.lexsema.io.document.TextLoader;
+import org.getalp.lexsema.io.document.loader.SemCorCorpusLoader;
+import org.getalp.lexsema.io.document.loader.Semeval2013Task13CorpusLoader;
+import org.getalp.lexsema.io.document.loader.CorpusLoader;
 import org.getalp.lexsema.io.resource.LRLoader;
 import org.getalp.lexsema.io.resource.dictionary.DictionaryLRLoader;
 import org.getalp.lexsema.similarity.Document;
@@ -32,9 +32,9 @@ public class TALNDisambiguation {
     private static Logger logger = LoggerFactory.getLogger(TALNDisambiguation.class);
 
     public static void main(String[] args) throws IOException {
-        TextLoader dl = new Semeval2013Task13TextLoader(args[0])
+        CorpusLoader dl = new Semeval2013Task13CorpusLoader(args[0])
                 .loadNonInstances(false);
-        TextLoader semCor = new SemCorTextLoader(args[1]);
+        CorpusLoader semCor = new SemCorCorpusLoader(args[1]);
         LRLoader lrloader = new DictionaryLRLoader(new File(args[2]));
         semCor.load();
         WindowLoader wloader = new DocumentCollectionWindowLoader(semCor);

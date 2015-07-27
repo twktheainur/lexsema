@@ -1,25 +1,24 @@
 package org.getalp.lexsema.wsd.experiments;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.PrintWriter;
-import java.io.UnsupportedEncodingException;
 
+import edu.mit.jwi.Dictionary;
 import org.getalp.lexsema.io.annotresult.SemevalWriter;
-import org.getalp.lexsema.io.document.Semeval2007TextLoader;
-import org.getalp.lexsema.io.document.TextLoader;
+import org.getalp.lexsema.io.document.loader.CorpusLoader;
+import org.getalp.lexsema.io.document.loader.Semeval2007CorpusLoader;
 import org.getalp.lexsema.io.resource.LRLoader;
-import org.getalp.lexsema.io.resource.dictionary.DictionaryLRLoader;
+import org.getalp.lexsema.io.resource.wordnet.WordnetLoader;
 import org.getalp.lexsema.similarity.Document;
 import org.getalp.lexsema.similarity.measures.lesk.*;
 import org.getalp.lexsema.wsd.configuration.Configuration;
-import org.getalp.lexsema.wsd.method.CuckooSearchDisambiguator;
+import org.getalp.lexsema.wsd.configuration.org.getalp.lexsema.wsd.evaluation.Evaluation;
+import org.getalp.lexsema.wsd.configuration.org.getalp.lexsema.wsd.evaluation.GoldStandard;
+import org.getalp.lexsema.wsd.configuration.org.getalp.lexsema.wsd.evaluation.Semeval2007GoldStandard;
+import org.getalp.lexsema.wsd.configuration.org.getalp.lexsema.wsd.evaluation.StandardEvaluation;
 import org.getalp.lexsema.wsd.method.MultiThreadCuckooSearch;
-import org.getalp.lexsema.wsd.method.StopCondition;
-import org.getalp.lexsema.wsd.score.ConfigurationScorer;
-import org.getalp.lexsema.wsd.score.ConfigurationScorerWithCache;
-import org.getalp.lexsema.wsd.score.MultiThreadConfigurationScorerWithCache;
-import org.getalp.lexsema.wsd.score.SemEval2007Task7PerfectConfigurationScorer;
+import org.getalp.lexsema.wsd.score.*;
+import org.getalp.ml.matrix.score.SumMatrixScorer;
 
 public class CuckooSearchDisambiguation
 {
@@ -46,9 +45,16 @@ public class CuckooSearchDisambiguation
         
         long startTime = System.currentTimeMillis();
 
-        TextLoader dl = new Semeval2007TextLoader("../data/senseval2007_task7/test/eng-coarse-all-words.xml");
+        CorpusLoader dl = new Semeval2007CorpusLoader("../data/senseval2007_task7/test/eng-coarse-all-words.xml");
 
-        //LRLoader lrloader = new DictionaryLRLoader(new File("../data/lesk_dict/dict-adapted-all-relations.xml"));
+        //LRLoader lrloader = new DictionaryLRLoader(new File("../data/dictionnaires-lesk/dict-adapted-all-relations-apriori.xml"));
+
+        LRLoader lrloader = new WordnetLoader(new Dictionary(new File("../data/wordnet/2.1/dict")))
+                .extendedSignature(true)
+                .shuffle(true)
+                .filterStopWords(false)
+                .stemming(false)
+                .loadDefinitions(true);
         
         //LRLoader lrloader = new DictionaryLRLoader(new File("../data/lesk_dict/dict_semeval2007task7"), true);
         //LRLoader lrloader = new DictionaryLRLoader(new File("../data/lesk_dict/dict_semeval2007task7_stopwords"), true);
@@ -58,19 +64,26 @@ public class CuckooSearchDisambiguation
         //LRLoader lrloader = new DictionaryLRLoader(new File("../data/lesk_dict/dict_semeval2007task7_semcor"), true);
         //LRLoader lrloader = new DictionaryLRLoader(new File("../data/lesk_dict/dict_semeval2007task7_stopwords_semcor"), true);
         //LRLoader lrloader = new DictionaryLRLoader(new File("../data/lesk_dict/dict_semeval2007task7_stemming_semcor"), true);
-        LRLoader lrloader = new DictionaryLRLoader(new File("../data/lesk_dict/all/dict_semeval2007task7_stopwords_stemming_semcor"), true);
+        //LRLoader lrloader = new DictionaryLRLoader(new File("../data/lesk_dict/all/dict_semeval2007task7_stopwords_stemming_semcor"), true);
         
         //ConfigurationScorer scorer = new SemEval2007Task7PerfectConfigurationScorer();
         //ConfigurationScorer scorer = new ACSimilarityConfigurationScorer(new ACExtendedLeskSimilarity());
-        //ConfigurationScorer scorer = new ACSimilarityConfigurationScorer(new IndexedOverlapSimilarity());
-        //ConfigurationScorer scorer = new TverskyConfigurationScorer(new ACExtendedLeskSimilarity(), Runtime.getRuntime().availableProcessors());
-        ConfigurationScorer scorer = new ConfigurationScorerWithCache(new AnotherLeskSimilarity());
+        //ConfigurationScorer scorer = new ACSimilarityConfigurationScorer(new AnotherLeskSimilarity());
+        //ConfigurationScorer scorer = new MultiThreadConfigurationScorerWithCache(new IndexedOverlapSimilarity());
+        //ConfigurationScorer scorer = new MultiThreadConfigurationScorerWithCache(new ACExtendedLeskSimilarity());
+        //ConfigurationScorer scorer = new ConfigurationScorerWithCache(new AnotherLeskSimilarity());
         //ConfigurationScorer scorer = new MultiThreadConfigurationScorerWithCache(new AnotherLeskSimilarity());
+        ConfigurationScorer scorer = new MatrixConfigurationScorer(new AnotherLeskSimilarity(), new SumMatrixScorer(),Runtime.getRuntime().availableProcessors());
+        //ConfigurationScorer scorer = new MultiThreadConfigurationScorerWithCache(new TverskiIndexSimilarityMeasureMatrixImplBuilder().alpha(1d).beta(0.5).gamma(0.5d).fuzzyMatching(false).computeRatio(true).matrixScorer(new SumMatrixScorer()).build());
         //ConfigurationScorer scorer = new TestScorer(new TverskyConfigurationScorer(new IndexedOverlapSimilarity(), Runtime.getRuntime().availableProcessors()));
-        //ConfigurationScorer scorer = new TverskyConfigurationScorer(new TverskiIndexSimilarityMeasureBuilder().distance(new ScaledLevenstein()).alpha(1d).beta(0.0d).gamma(0.0d).fuzzyMatching(true).build(), Runtime.getRuntime().availableProcessors());
+        //ConfigurationScorer scorer = new MultiThreadConfigurationScorerWithCache(new TverskiIndexSimilarityMeasureBuilder().distance(new ScaledLevenstein()).alpha(1d).beta(0.0d).gamma(0.0d).fuzzyMatching(false).build());
+        //ConfigurationScorer scorer = new MultiThreadConfigurationScorerWithCache(new TverskiIndexSimilarityMeasureBuilder().distance(new ScaledLevenstein()).alpha(1d).beta(0.0d).gamma(0.0d).fuzzyMatching(false).build());
         
         //CuckooSearchDisambiguator cuckooDisambiguator = new CuckooSearchDisambiguator(new StopCondition(StopCondition.Condition.SCORERCALLS, iterations), levyLocation, levyScale, nestsNumber, destroyedNests, scorer, true);
         MultiThreadCuckooSearch cuckooDisambiguator = new MultiThreadCuckooSearch(iterations, levyLocation, levyScale, scorer, true);
+
+        GoldStandard goldStandard = new Semeval2007GoldStandard();
+        Evaluation evaluation = new StandardEvaluation();
         
         System.out.println("Loading texts...");
         dl.load();
@@ -87,7 +100,7 @@ public class CuckooSearchDisambiguation
             cuckooDisambiguator.perfectScorer = new SemEval2007Task7PerfectConfigurationScorer();
             System.out.println("Disambiguating...");
             Configuration c = cuckooDisambiguator.disambiguate(d);
-
+            System.err.println(evaluation.evaluate(goldStandard,c));
             System.out.println("Writing results...");
             SemevalWriter sw = new SemevalWriter("../" + d.getId() + ".ans");
             sw.write(d, c.getAssignments());

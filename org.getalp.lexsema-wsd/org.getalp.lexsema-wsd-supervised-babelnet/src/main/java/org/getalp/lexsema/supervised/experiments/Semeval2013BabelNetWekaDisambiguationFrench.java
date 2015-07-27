@@ -3,9 +3,9 @@ package org.getalp.lexsema.supervised.experiments;
 
 import org.getalp.lexsema.io.annotresult.ConfigurationWriter;
 import org.getalp.lexsema.io.annotresult.SemevalWriter;
-import org.getalp.lexsema.io.document.SemCorTextLoader;
-import org.getalp.lexsema.io.document.Semeval2013Task13TextLoader;
-import org.getalp.lexsema.io.document.TextLoader;
+import org.getalp.lexsema.io.document.loader.SemCorCorpusLoader;
+import org.getalp.lexsema.io.document.loader.Semeval2013Task13CorpusLoader;
+import org.getalp.lexsema.io.document.loader.CorpusLoader;
 import org.getalp.lexsema.io.resource.LRLoader;
 import org.getalp.lexsema.io.resource.babelnet.BabelNetAPILoader;
 import org.getalp.lexsema.similarity.Document;
@@ -32,9 +32,9 @@ public class Semeval2013BabelNetWekaDisambiguationFrench {
     private static Logger logger = LoggerFactory.getLogger(Semeval2013BabelNetWekaDisambiguationFrench.class);
 
     public static void main(String[] args) throws IOException {
-        TextLoader dl = new Semeval2013Task13TextLoader("../data/semeval-2013-task12-test-data/data/multilingual-all-words.fr.xml")
+        CorpusLoader dl = new Semeval2013Task13CorpusLoader("../data/semeval-2013-task12-test-data/data/multilingual-all-words.fr.xml")
                 .loadNonInstances(false);
-        TextLoader semCor = new SemCorTextLoader("../data/semcor3.0/semcor_full.xml");
+        CorpusLoader semCor = new SemCorCorpusLoader("../data/semcor3.0/semcor_full.xml");
         LRLoader lrloader = new BabelNetAPILoader(Language.FRENCH).extendedSignature(false).shuffle(false).loadDefinitions(false).loadRelated(false);
         /*LRLoader lrloader = new WordnetLoader2("../data/wordnet/3.0/dict")
                 .extendedSignature(true).shuffle(true);*/

@@ -3,8 +3,8 @@ package org.getalp.lexsema.wsd.experiments;
 import java.io.File;
 import java.io.PrintWriter;
 
-import org.getalp.lexsema.io.document.Semeval2007TextLoader;
-import org.getalp.lexsema.io.document.TextLoader;
+import org.getalp.lexsema.io.document.loader.Semeval2007CorpusLoader;
+import org.getalp.lexsema.io.document.loader.CorpusLoader;
 import org.getalp.lexsema.io.resource.LRLoader;
 import org.getalp.lexsema.io.resource.dictionary.DictionaryLRLoader;
 import org.getalp.lexsema.similarity.Document;
@@ -29,7 +29,7 @@ public class AlgorithmsParametersEstimation
 {
     private static StopCondition stopConditionTraining;
     private static LRLoader lrloader;
-    private static TextLoader dlTraining;
+    private static CorpusLoader dlTraining;
     private static ConfigurationScorer configScorer;
     private static int n = 100;
     private static int cuckooIterations = 1000;
@@ -54,7 +54,7 @@ public class AlgorithmsParametersEstimation
         
         lrloader = new DictionaryLRLoader(new File("../data/dictionnaires-lesk/dict-adapted-all-relations.xml"));
 
-        dlTraining = new Semeval2007TextLoader("../data/senseval2007_task7/test/eng-coarse-all-words-t1.xml");
+        dlTraining = new Semeval2007CorpusLoader("../data/senseval2007_task7/test/eng-coarse-all-words-t1.xml");
         dlTraining.loadNonInstances(false);
         dlTraining.load();
         for (Document d : dlTraining) lrloader.loadSenses(d);

@@ -1,9 +1,10 @@
 package org.getalp.lexsema.wsd.method.aca.environment.graph;
 
+
 public abstract class AbstractNode implements Node {
     private final int position;
     private final String id;
-    private final double energy;
+    private double energy;
 
     protected AbstractNode(int position, String id, double energy) {
         this.position = position;
@@ -26,4 +27,8 @@ public abstract class AbstractNode implements Node {
         return energy;
     }
 
+    @Override
+    public void setEnergy(double amount){
+        energy = amount;
+    }
 }

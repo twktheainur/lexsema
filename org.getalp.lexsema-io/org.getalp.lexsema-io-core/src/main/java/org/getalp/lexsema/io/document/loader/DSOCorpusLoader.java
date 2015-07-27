@@ -1,38 +1,42 @@
 package org.getalp.lexsema.io.document.loader;
 
+import edu.mit.jwi.Dictionary;
+import edu.mit.jwi.data.IHasLifecycle;
+import edu.mit.jwi.item.IIndexWord;
+import edu.mit.jwi.item.IWord;
+import edu.mit.jwi.item.IWordID;
+import edu.mit.jwi.item.POS;
+import org.getalp.lexsema.io.text.EnglishDKPTextProcessor;
+import org.getalp.lexsema.io.text.TextProcessor;
+import org.getalp.lexsema.similarity.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.text.MessageFormat;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import edu.mit.jwi.data.IHasLifecycle;
-import org.getalp.lexsema.io.text.EnglishDKPTextProcessor;
-import org.getalp.lexsema.io.text.TextProcessor;
-import org.getalp.lexsema.similarity.*;
-
-import edu.mit.jwi.Dictionary;
-import edu.mit.jwi.item.*;
-import org.getalp.lexsema.similarity.Word;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.util.Objects;
 
 public class DSOCorpusLoader extends CorpusLoaderImpl {
     private static final Logger logger = LoggerFactory.getLogger(DSOCorpusLoader.class);
     private final String pathToDSO;
 
-    private static final Pattern SENSE_NUMBER_PATTERN = Pattern.compile(">>\\s(.*)\\s([0-9])+\\s<<");
-
     private final Dictionary wordnet;
 
     private final TextProcessor textProcessor = new EnglishDKPTextProcessor();
+    private final Text text;
+
 
     public DSOCorpusLoader(String pathToDSO, String pathToWordnet) {
         this.pathToDSO = pathToDSO;
         wordnet = new Dictionary(new File(pathToWordnet));
+        text = new TextImpl();
+        text.setId("");
     }
 
     private static void open(IHasLifecycle wordnet) {
@@ -46,10 +50,12 @@ public class DSOCorpusLoader extends CorpusLoaderImpl {
     private void processWordFiles(String listFileName, String pos) {
         logger.info(MessageFormat.format("[DSO] Processing file {0}...", listFileName));
         File listFile = new File(pathToDSO + File.separator + listFileName);
+        Collection<String> lines = new ArrayList<>();
         try (BufferedReader br = new BufferedReader(new FileReader(listFile))) {
             for (String line = br.readLine(); line != null; line = br.readLine()) {
-                processWordInList(line, pos);
+                lines.add(line);
             }
+            lines.parallelStream().forEach(line -> processWordInList(line, pos));
         } catch (IOException e) {
             logger.error(MessageFormat.format("Error while processing DSO list file:{0}", e.getLocalizedMessage()));
         }
@@ -61,7 +67,7 @@ public class DSOCorpusLoader extends CorpusLoaderImpl {
         try (BufferedReader br = new BufferedReader(new FileReader(wordFile))) {
             for (String line = br.readLine(); line != null; line = br.readLine()) {
                 if (!line.isEmpty()) {
-                    processSentenceInWord(line, word, pos);
+                    processSentenceInWord(getSentence(textProcessor.process(line, "")));
                 }
             }
         } catch (IOException e) {
@@ -70,12 +76,28 @@ public class DSOCorpusLoader extends CorpusLoaderImpl {
     }
 
     @SuppressWarnings("FeatureEnvy")
-    private void processSentenceInWord(String sentence, String wordLemma, String wordPOS) {
-        Matcher mather = SENSE_NUMBER_PATTERN.matcher(sentence);
-        String senseNumber = mather.group(1);
-        int wordIndex = findWordIndex(sentence);
-        Sentence txtSentence = getSentence(textProcessor.process(sentence, ""));
-        setWordInfo(wordIndex, txtSentence, senseNumber, wordLemma, wordPOS);
+    private void processSentenceInWord(Document sentence) {
+        int currentWord = 3;
+        Sentence cleanSentence = new SentenceImpl(sentence.getId());
+        while(currentWord<sentence.size()){
+            Word word = sentence.getWord(currentWord);
+            @SuppressWarnings("LawOfDemeter") String lemma = word.getLemma();
+            @SuppressWarnings("LawOfDemeter") String pos = word.getPartOfSpeech();
+            if(lemma.equals(">")){
+                currentWord+=2;
+                Word targetWord = sentence.getWord(currentWord);
+                Word tag = sentence.getWord(currentWord + 1);
+                processTargetWord(targetWord,tag);
+                cleanSentence.addWord(targetWord);
+                currentWord+=3;
+            } else if(!Objects.equals(lemma, pos)){
+                cleanSentence.addWord(word);
+            }
+            currentWord++;
+        }
+        synchronized (text) {
+            text.addSentence(cleanSentence);
+        }
     }
 
     Sentence getSentence(Text text){
@@ -86,56 +108,44 @@ public class DSOCorpusLoader extends CorpusLoaderImpl {
         return txtSentence;
     }
 
-    private int findWordIndex(String sentence) {
-        String[] sentenceTokens = sentence.split(" ");
-        int wordIndex = 0;
-        while (wordIndex < sentenceTokens.length && sentenceTokens[wordIndex].equals(">>")) {
-            wordIndex++;
+
+    private void processTargetWord(Word targetWord, Word tag){
+        int senseNumber = -1;
+        try {
+            senseNumber = Integer.valueOf(tag.getSurfaceForm());
+        } catch (NumberFormatException ignored){
+
         }
-        return wordIndex;
+        String tagString = getSemanticTag(targetWord.getLemma(),targetWord.getPartOfSpeech(),senseNumber);
+        targetWord.setSemanticTag(tagString);
     }
-
-    private void setWordInfo(int wordIndex, Sentence sentence, String tag, String lemma, String pos) {
-        Word word = sentence.getWord(wordIndex);
-       setEnclosingSentenceAndTag(word,sentence,tag, lemma, pos);
-    }
-
-    private void setEnclosingSentenceAndTag(Word word, Sentence sentence, String tag, String lemma, String pos){
-        word.setLemma(lemma);
-        word.setPartOfSpeech(pos);
-        word.setEnclosingSentence(sentence);
-        word.setSemanticTag(getSemanticTag(lemma,pos,Integer.valueOf(tag)));
-    }
-
     private String getSemanticTag(String lemma, String pos, int senseNumber) {
         String tag = "";
-        IIndexWord iw = wordnet.getIndexWord(lemma, getWordnetPOS(pos));
-        final List<IWordID> wordIDs = iw.getWordIDs();
-        if (senseNumber > 0 && wordIDs.size() > senseNumber - 1) {
-            IWordID wordID = wordIDs.get(senseNumber - 1);
-            IWord word = wordnet.getWord(wordID);
-            String senseKey = word.getSenseKey().toString();
-            tag = senseKey.substring(senseKey.indexOf("%") + 1);
+        POS wnPos = getWordnetPOS(pos);
+        if(wnPos!=null) {
+            IIndexWord iw = wordnet.getIndexWord(lemma, wnPos);
+            if(iw!=null) {
+                final List<IWordID> wordIDs = iw.getWordIDs();
+                if (senseNumber > 0 && wordIDs.size() > senseNumber - 1) {
+                    IWordID wordID = wordIDs.get(senseNumber - 1);
+                    IWord word = wordnet.getWord(wordID);
+                    String senseKey = word.getSenseKey().toString();
+                    tag = senseKey.substring(senseKey.indexOf("%") + 1);
+                }
+            }
         }
         return tag;
     }
 
     private POS getWordnetPOS(String pos) {
-        POS foundPOS = null;
-        if (pos.equals("v")) {
-            foundPOS = POS.VERB;
-        }
-        if (pos.equals("n")) {
-            foundPOS = POS.NOUN;
-        }
-        return foundPOS;
+        final String s = pos.toLowerCase();
+        char lPos = s.charAt(0);
+        return POS.getPartOfSpeech(lPos);
     }
 
     @Override
     public void load() {
         open(wordnet);
-        Text text = new TextImpl();
-        text.setId("");
         processWordFiles("vlist.txt", "v");
         //processWordFiles("nlist.txt", "n");
         addText(text);

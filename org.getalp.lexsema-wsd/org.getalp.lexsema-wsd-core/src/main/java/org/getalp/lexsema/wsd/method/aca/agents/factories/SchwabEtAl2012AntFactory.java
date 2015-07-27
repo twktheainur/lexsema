@@ -9,6 +9,6 @@ import org.getalp.lexsema.wsd.method.aca.agents.updates.ShwabEtAlAntVisitor;
 public class SchwabEtAl2012AntFactory implements AntFactory{
     @Override
     public Ant buildAnt(double life, double maximumEnergy, double energyCarried, int position, SemanticSignature signature) {
-        return new AntImpl(life,maximumEnergy,energyCarried,position,signature,new ShwabEtAlAntVisitor());
+        return new AntImpl(life,maximumEnergy,energyCarried,position,signature);
     }
 }

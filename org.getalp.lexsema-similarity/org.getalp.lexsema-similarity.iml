@@ -35,6 +35,21 @@
     <orderEntry type="library" name="Maven: com.googlecode.json-simple:json-simple:1.1" level="project" />
     <orderEntry type="module" module-name="org.getalp.lexsema-util" />
     <orderEntry type="module" module-name="org.getalp.lexsema-ontolex-api" />
+    <orderEntry type="module" module-name="org.getalp.lexsema-ontolex-core" />
+    <orderEntry type="library" name="Maven: org.getalp:dbnary:1.2" level="project" />
+    <orderEntry type="library" name="Maven: org.codehaus.woodstox:woodstox-core-lgpl:4.0.8" level="project" />
+    <orderEntry type="library" name="Maven: javax.xml.stream:stax-api:1.0-2" level="project" />
+    <orderEntry type="library" name="Maven: org.codehaus.woodstox:stax2-api:3.0.2" level="project" />
+    <orderEntry type="library" name="Maven: org.getalp.blexisma:blexisma-api:1.1-SNAPSHOT" level="project" />
+    <orderEntry type="library" name="Maven: org.jdom:jdom:1.1" level="project" />
+    <orderEntry type="library" name="Maven: commons-cli:commons-cli:1.2" level="project" />
+    <orderEntry type="library" name="Maven: commons-net:commons-net:3.1" level="project" />
+    <orderEntry type="library" name="Maven: info.bliki.wiki:bliki-core:3.0.20-SNAPSHOT" level="project" />
+    <orderEntry type="library" name="Maven: commons-httpclient:commons-httpclient:3.1" level="project" />
+    <orderEntry type="library" name="Maven: org.codehaus.jackson:jackson-core-lgpl:1.9.12" level="project" />
+    <orderEntry type="library" name="Maven: org.codehaus.jackson:jackson-mapper-lgpl:1.9.12" level="project" />
+    <orderEntry type="library" name="Maven: org.getalp.dbnary:ontology:1.2-SNAPSHOT" level="project" />
+    <orderEntry type="library" name="Maven: net.sf.ehcache:ehcache:2.8.4" level="project" />
     <orderEntry type="library" name="Maven: ac.similarity:similarity:0.0.2-SNAPSHOT" level="project" />
     <orderEntry type="library" name="Maven: edu.sussex.nlp:jws:0.12.00" level="project" />
     <orderEntry type="library" name="Maven: edu.mit:jwi:2.2.3" level="project" />

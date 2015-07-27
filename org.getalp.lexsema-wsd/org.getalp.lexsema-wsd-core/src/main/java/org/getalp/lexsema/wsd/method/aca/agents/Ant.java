@@ -1,41 +1,33 @@
 package org.getalp.lexsema.wsd.method.aca.agents;
 
-
 import org.getalp.lexsema.similarity.signatures.SemanticSignature;
+import org.getalp.lexsema.wsd.method.aca.agents.updates.AntVisitor;
+import org.getalp.lexsema.wsd.method.aca.environment.graph.Node;
 
 import java.lang.ref.WeakReference;
 
-public class Ant {
-    private int life;
-    private int maximumEnergy;
-    private int energyTaken;
-    private int position;
-    private WeakReference<SemanticSignature> semanticSignature;
 
-    public Ant(int life, int maximumEnergy, int energyTaken, int position) {
-        this.life = life;
-        this.maximumEnergy = maximumEnergy;
-        this.energyTaken = energyTaken;
-        this.position = position;
-    }
+public interface Ant extends Comparable<Double>{
+    double getLife();
 
-    public int getLife() {
-        return life;
-    }
+    double getMaximumEnergy();
 
-    public int getMaximumEnergy() {
-        return maximumEnergy;
-    }
+    double getEnergyCarried();
 
-    public int getEnergyTaken() {
-        return energyTaken;
-    }
+    int getPosition();
 
-    public int getPosition() {
-        return position;
-    }
+    int getHome();
 
-    public WeakReference<SemanticSignature> getSemanticSignature() {
-        return semanticSignature;
-    }
+    SemanticSignature getSemanticSignature();
+
+    void moveTo(int position);
+
+    double takeEnergy(double amountTaken, double amountAvailable);
+
+    void decrementLives();
+
+    boolean isReturning();
+
+    void initiateReturn();
+
 }

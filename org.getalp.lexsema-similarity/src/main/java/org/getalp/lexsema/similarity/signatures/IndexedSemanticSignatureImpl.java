@@ -9,6 +9,7 @@ import org.getalp.lexsema.similarity.signatures.symbols.SemanticSymbolImpl;
 import org.getalp.lexsema.util.Language;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 
 public class IndexedSemanticSignatureImpl implements IndexedSemanticSignature {
@@ -93,7 +94,7 @@ public class IndexedSemanticSignatureImpl implements IndexedSemanticSignature {
 
     @Override
     public void addIndexedSymbol(Integer symbol) {
-        symbols.add(new IndexedSemanticSymbolImpl(symbol,0));
+        symbols.add(new IndexedSemanticSymbolImpl(symbol, 0));
     }
 
     @Override
@@ -133,7 +134,7 @@ public class IndexedSemanticSignatureImpl implements IndexedSemanticSignature {
     }
 
     @Override
-    public List<String> getSymbols() {
+    public List<String> getStringSymbols() {
         List<String> stringSymbols = new ArrayList<>();
         for (SemanticSymbol ss : this) {
             stringSymbols.add(ss.getSymbol());
@@ -142,10 +143,15 @@ public class IndexedSemanticSignatureImpl implements IndexedSemanticSignature {
     }
 
     @Override
+    public List<SemanticSymbol> getSymbols() {
+        return symbols.stream().map((IndexedSemanticSymbol symbol) -> (SemanticSymbol)symbol).collect(Collectors.toList());
+    }
+
+    @Override
     public Iterator<SemanticSymbol> iterator() {
         final Collection<SemanticSymbol> stringSymbols = new ArrayList<>();
         for(IndexedSemanticSymbol semanticSymbol: symbols){
-            stringSymbols.add(new SemanticSymbolImpl(semanticSymbol.getSymbol(),semanticSymbol.getWeight()));
+            stringSymbols.add(new SemanticSymbolImpl(semanticSymbol.getSymbol(), semanticSymbol.getWeight()));
         }
         return stringSymbols.iterator();
     }
@@ -176,6 +182,11 @@ public class IndexedSemanticSignatureImpl implements IndexedSemanticSignature {
     @Override
     public SemanticSymbol getSymbol(int index) {
         return symbols.get(index);
+    }
+
+    @Override
+    public boolean isNull() {
+        return false;
     }
 
     @Override

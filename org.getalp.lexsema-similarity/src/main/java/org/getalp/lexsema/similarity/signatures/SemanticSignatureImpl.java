@@ -69,9 +69,7 @@ public class SemanticSignatureImpl implements SemanticSignature {
 
     @Override
     public void addSymbols(List<SemanticSymbol> symbols) {
-        for (SemanticSymbol ss : symbols) {
-            addSymbol(ss);
-        }
+        symbols.forEach(this::addSymbol);
     }
 
 
@@ -99,12 +97,17 @@ public class SemanticSignatureImpl implements SemanticSignature {
     }
 
     @Override
-    public List<String> getSymbols() {
-        List<String> srtingSymbols = new ArrayList<>();
+    public List<String> getStringSymbols() {
+        List<String> stringSymbols = new ArrayList<>();
         for (SemanticSymbol ss : this) {
-            srtingSymbols.add(ss.getSymbol());
+            stringSymbols.add(ss.getSymbol());
         }
-        return srtingSymbols;
+        return stringSymbols;
+    }
+
+    @Override
+    public List<SemanticSymbol> getSymbols() {
+        return Collections.unmodifiableList(symbols);
     }
 
     @Override
@@ -138,6 +141,11 @@ public class SemanticSignatureImpl implements SemanticSignature {
     @Override
     public SemanticSymbol getSymbol(int index) {
         return symbols.get(index);
+    }
+
+    @Override
+    public boolean isNull() {
+        return false;
     }
 
     @Override

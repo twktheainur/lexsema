@@ -6,6 +6,6 @@ public interface TextProcessor {
     /**
      * Reads raw text and applies a processing pipeline to it.
      */
-    public Text process(String sentenceText, String documentId);
+    Text process(String sentenceText, String documentId);
 
 }

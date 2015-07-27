@@ -27,15 +27,15 @@ import static org.apache.uima.fit.factory.CollectionReaderFactory.createReaderDe
 
 public abstract class AbstractDKPTextProcessor implements TextProcessor {
 
-    private Logger logger = LoggerFactory.getLogger(AbstractDKPTextProcessor.class);
-    private Language language;
+    private final Logger logger = LoggerFactory.getLogger(AbstractDKPTextProcessor.class);
+    private final Language language;
 
     protected AbstractDKPTextProcessor(Language language) {
         this.language = language;
     }
 
     private Text processSentence(final ResourceSpecifier readerDesc,
-                                     AnalysisEngineDescription... engineDescriptions) throws UIMAException, IOException {
+                                     AnalysisEngineDescription... engineDescriptions) throws IOException, org.apache.uima.analysis_engine.AnalysisEngineProcessException, org.apache.uima.collection.CollectionException, ResourceInitializationException {
         ResourceManager resMgr = UIMAFramework.newDefaultResourceManager();
 
         // Create the components

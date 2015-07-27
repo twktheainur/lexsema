@@ -8,7 +8,7 @@ import java.util.Collections;
 
 public class TextImpl extends DocumentImpl implements Text {
 
-    private Collection<Sentence> sentences;
+    private final Collection<Sentence> sentences;
 
     public TextImpl() {
         sentences = new ArrayList<>();

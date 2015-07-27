@@ -58,7 +58,7 @@ public class BabelNetSemCorTrainingDataExtractor implements TrainingDataExtracto
             for (Word w : text) {
                 String lemma = w.getLemma();
                 List<String> instance = localTextFeatureExtractor.getFeatures(text, wordIndex);
-                String semanticTag = w.getSemanticTag();
+                String semanticTag = w.getSenseAnnotation();
                 if (semanticTag != null && senseTagMap != null) {
                     String semanticTagkey = String.format("%s%%%s", lemma, semanticTag);
                     if (senseTagMap.containsKey(semanticTagkey)) {

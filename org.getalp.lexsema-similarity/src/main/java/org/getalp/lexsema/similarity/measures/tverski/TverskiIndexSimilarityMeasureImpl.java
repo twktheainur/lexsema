@@ -5,7 +5,6 @@ import com.wcohen.ss.AbstractStringDistance;
 import com.wcohen.ss.ScaledLevenstein;
 import org.getalp.lexsema.ml.optimization.functions.setfunctions.input.FuzzyCommonSubsequenceInput;
 import org.getalp.lexsema.ml.optimization.functions.setfunctions.input.OverlapInputSet;
-import org.getalp.lexsema.similarity.signatures.IndexedSemanticSignature;
 import org.getalp.lexsema.similarity.signatures.SemanticSignature;
 import org.getalp.ml.optimization.functions.input.FunctionInput;
 import org.getalp.ml.optimization.functions.setfunctions.extentions.Extension;
@@ -57,8 +56,8 @@ public class TverskiIndexSimilarityMeasureImpl implements TverskiIndexSimilarity
                           Map<String, SemanticSignature> relatedSignaturesA,
                           Map<String, SemanticSignature> relatedSignaturesB) {
 
-        List<String> a = sigA.getSymbols();
-        List<String> b = sigB.getSymbols();
+        List<String> a = sigA.getStringSymbols();
+        List<String> b = sigB.getStringSymbols();
 
  /*Computing overlap between the semantic signatures*/
         double overlap = computeOverlap(a, b);
@@ -81,7 +80,7 @@ public class TverskiIndexSimilarityMeasureImpl implements TverskiIndexSimilarity
         if (relatedSignaturesA != null && relatedSignaturesB != null) {
             for (String rA : relatedSignaturesB.keySet()) {
                 for (String rB : relatedSignaturesB.keySet()) {
-                    values.add(computeOverlap(relatedSignaturesA.get(rA).getSymbols(), relatedSignaturesB.get(rB).getSymbols()));
+                    values.add(computeOverlap(relatedSignaturesA.get(rA).getStringSymbols(), relatedSignaturesB.get(rB).getStringSymbols()));
                 }
             }
             /*This case corresponds to the overlap between a sense' related synsets' glosses
@@ -97,7 +96,7 @@ public class TverskiIndexSimilarityMeasureImpl implements TverskiIndexSimilarity
                 other = b;
             }
             for (String r : nonNullRelated.keySet()) {
-                values.add(computeOverlap(nonNullRelated.get(r).getSymbols(), other));
+                values.add(computeOverlap(nonNullRelated.get(r).getStringSymbols(), other));
             }
         }
 

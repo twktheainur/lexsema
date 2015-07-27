@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module org.jetbrains.idea.maven.project.MavenProjectsManager.isMavenModule="true" type="JAVA_MODULE" version="4">
-  <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_1_7" inherit-compiler-output="false">
+  <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_1_8" inherit-compiler-output="false">
     <output url="file://$MODULE_DIR$/target/classes" />
     <output-test url="file://$MODULE_DIR$/target/test-classes" />
     <content url="file://$MODULE_DIR$">
@@ -11,6 +11,7 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+<<<<<<< Updated upstream
     <orderEntry type="library" name="Maven: eu.monnetproject:lemon.api:1.13.3" level="project" />
     <orderEntry type="library" name="Maven: org.deeplearning4j:deeplearning4j-core:0.0.3.3.3.alpha1-SNAPSHOT" level="project" />
     <orderEntry type="library" name="Maven: org.apache.commons:commons-compress:1.8" level="project" />
@@ -78,6 +79,8 @@
     <orderEntry type="library" name="Maven: com.github.spullara.mustache.java:compiler:0.8.14" level="project" />
     <orderEntry type="library" name="Maven: io.dropwizard:dropwizard-views-freemarker:0.7.0" level="project" />
     <orderEntry type="library" name="Maven: org.freemarker:freemarker:2.3.20" level="project" />
+=======
+>>>>>>> Stashed changes
     <orderEntry type="module" module-name="org.getalp.lexsema-wsd-core" />
     <orderEntry type="module" module-name="org.getalp.lexsema-ml" />
     <orderEntry type="library" name="Maven: colt:colt:1.2.0" level="project" />
@@ -86,6 +89,24 @@
     <orderEntry type="library" name="Maven: com.carrotsearch:hppc:0.6.1" level="project" />
     <orderEntry type="library" name="Maven: com.trickl:cluster:0.1-SNAPSHOT" level="project" />
     <orderEntry type="module" module-name="org.getalp.lexsema-similarity" />
+<<<<<<< Updated upstream
+=======
+    <orderEntry type="module" module-name="org.getalp.lexsema-ontolex-core" />
+    <orderEntry type="library" name="Maven: org.getalp:dbnary:1.2" level="project" />
+    <orderEntry type="library" name="Maven: org.codehaus.woodstox:woodstox-core-lgpl:4.0.8" level="project" />
+    <orderEntry type="library" name="Maven: javax.xml.stream:stax-api:1.0-2" level="project" />
+    <orderEntry type="library" name="Maven: org.codehaus.woodstox:stax2-api:3.0.2" level="project" />
+    <orderEntry type="library" name="Maven: org.getalp.blexisma:blexisma-api:1.1-SNAPSHOT" level="project" />
+    <orderEntry type="library" name="Maven: org.jdom:jdom:1.1" level="project" />
+    <orderEntry type="library" name="Maven: commons-cli:commons-cli:1.2" level="project" />
+    <orderEntry type="library" name="Maven: commons-net:commons-net:3.1" level="project" />
+    <orderEntry type="library" name="Maven: info.bliki.wiki:bliki-core:3.0.20-SNAPSHOT" level="project" />
+    <orderEntry type="library" name="Maven: commons-httpclient:commons-httpclient:3.1" level="project" />
+    <orderEntry type="library" name="Maven: org.codehaus.jackson:jackson-core-lgpl:1.9.12" level="project" />
+    <orderEntry type="library" name="Maven: org.codehaus.jackson:jackson-mapper-lgpl:1.9.12" level="project" />
+    <orderEntry type="library" name="Maven: org.getalp.dbnary:ontology:1.2-SNAPSHOT" level="project" />
+    <orderEntry type="library" name="Maven: net.sf.ehcache:ehcache:2.8.4" level="project" />
+>>>>>>> Stashed changes
     <orderEntry type="library" name="Maven: ac.similarity:similarity:0.0.2-SNAPSHOT" level="project" />
     <orderEntry type="library" name="Maven: edu.sussex.nlp:jws:0.12.00" level="project" />
     <orderEntry type="library" name="Maven: redis.clients:jedis:2.6.2" level="project" />
@@ -324,6 +345,7 @@
     <orderEntry type="library" name="Maven: de.tudarmstadt.ukp.dkpro.core:de.tudarmstadt.ukp.dkpro.core.api.semantics-asl:1.6.2" level="project" />
     <orderEntry type="module" module-name="org.getalp.lexsema-ontolex-api" />
     <orderEntry type="module" module-name="org.getalp.lexsema-ontolex-dbnary" />
+<<<<<<< Updated upstream
     <orderEntry type="module" module-name="org.getalp.lexsema-ontolex-core" />
     <orderEntry type="library" name="Maven: org.getalp:dbnary:1.2" level="project" />
     <orderEntry type="library" name="Maven: org.codehaus.woodstox:woodstox-core-lgpl:4.0.8" level="project" />
@@ -339,6 +361,8 @@
     <orderEntry type="library" name="Maven: org.codehaus.jackson:jackson-mapper-lgpl:1.9.12" level="project" />
     <orderEntry type="library" name="Maven: org.getalp.dbnary:ontology:1.2-SNAPSHOT" level="project" />
     <orderEntry type="library" name="Maven: net.sf.ehcache:ehcache:2.8.4" level="project" />
+=======
+>>>>>>> Stashed changes
     <orderEntry type="module" module-name="org.getalp.lexsema-translation-core" />
     <orderEntry type="library" name="Maven: com.memetix:microsoft-translator-java-api:0.6.2" level="project" />
     <orderEntry type="library" name="Maven: com.googlecode.json-simple:json-simple:1.1" level="project" />

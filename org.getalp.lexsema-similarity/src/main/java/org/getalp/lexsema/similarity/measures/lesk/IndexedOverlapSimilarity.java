@@ -26,8 +26,8 @@ public class IndexedOverlapSimilarity implements SimilarityMeasure {
     @Override
     public double compute(SemanticSignature sigA, SemanticSignature sigB, Map<String, SemanticSignature> relatedSignaturesA, Map<String, SemanticSignature> relatedSignaturesB) {
 
-        List<String> la = sigA.getSymbols();
-        List<String> lb = sigB.getSymbols();
+        List<String> la = sigA.getStringSymbols();
+        List<String> lb = sigB.getStringSymbols();
 
 //        if(sigA instanceof IndexedSemanticSignature && sigB instanceof  IndexedSemanticSignature){
 //            la = ((IndexedSemanticSignature) sigA).getIndexedSymbols();
@@ -36,10 +36,10 @@ public class IndexedOverlapSimilarity implements SimilarityMeasure {
 //            la = new ArrayList<>();
 //            lb = new ArrayList<>();
 //            try{
-//                for(String symbolA: sigA.getSymbols()){
+//                for(String symbolA: sigA.getStringSymbols()){
 //                    la.add(Integer.valueOf(symbolA));
 //                }
-//                for(String symbolB: sigB.getSymbols()){
+//                for(String symbolB: sigB.getStringSymbols()){
 //                    la.add(Integer.valueOf(symbolB));
 //                }
 //            } catch (NumberFormatException ignored){

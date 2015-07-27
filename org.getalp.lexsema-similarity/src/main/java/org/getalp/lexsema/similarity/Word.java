@@ -4,25 +4,31 @@ package org.getalp.lexsema.similarity;
 import org.getalp.lexsema.ontolex.LexicalEntry;
 
 
-public interface Word extends LexicalEntry, Iterable<Word> {
-    public void addPrecedingInstance(Word precedingNonInstance);
+public interface Word extends LexicalEntry, Iterable<Sense> {
+    void addPrecedingInstance(Word precedingNonInstance);
 
-    public Sentence getEnclosingSentence();
+    Sentence getEnclosingSentence();
 
-    public void setEnclosingSentence(Sentence enclosingSentence);
+    void setEnclosingSentence(Sentence enclosingSentence);
 
-    public void setLexicalEntry(LexicalEntry le);
+    void setLexicalEntry(LexicalEntry le);
 
-    public String getId();
+    String getId();
 
-    public String getSurfaceForm();
+    String getSurfaceForm();
 
-    public String getSemanticTag();
+    String getSenseAnnotation();
 
-    public void setSemanticTag(String semanticTag);
+    void setSemanticTag(String semanticTag);
     
-    public int getBegin();
+    int getBegin();
     
-    public int getEnd();
+    int getEnd();
+
+    Iterable<Word> precedingNonInstances();
+
+    void loadSenses(Iterable<Sense> senses);
+
+    boolean isNull();
 }
 

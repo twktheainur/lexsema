@@ -6,6 +6,7 @@ import org.getalp.lexsema.ontolex.LexicalResourceEntity;
 import org.getalp.lexsema.ontolex.LexicalSense;
 import org.getalp.lexsema.ontolex.graph.OntologyModel;
 import org.getalp.lexsema.similarity.measures.SimilarityMeasure;
+import org.getalp.lexsema.similarity.signatures.NullSemanticSignature;
 import org.getalp.lexsema.similarity.signatures.SemanticSignature;
 import org.getalp.lexsema.util.Language;
 
@@ -35,7 +36,7 @@ public final class NullSense implements Sense {
 
     @Override
     public SemanticSignature getSemanticSignature() {
-        return null;
+        return NullSemanticSignature.getInstance();
     }
 
     @Override

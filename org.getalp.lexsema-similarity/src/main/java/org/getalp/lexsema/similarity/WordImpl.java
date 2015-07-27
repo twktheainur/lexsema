@@ -9,6 +9,7 @@ import org.getalp.lexsema.ontolex.graph.OntologyModel;
 import org.getalp.lexsema.util.Language;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -17,20 +18,22 @@ public class WordImpl implements Word {
     private final String id;
     private final String surfaceForm;
     private final String textPos;
-    LexicalEntry lexicalEntry;
+    private LexicalEntry lexicalEntry;
+    private String semanticTag = "";
+    private Sentence enclosingSentence = NullSentence.getInstance();
+    private final List<Word> precedingNonInstances = Collections.emptyList();
     private String lemma;
-    private String semanticTag;
-    private Sentence enclosingSentence = null;
-    private List<Word> precedingNonInstances;
-    private int begin = 0;
-    private int end = 0;
+    private final int begin;
+    private final int end;
+    private final List<Sense> senses = Collections.emptyList();
 
     public WordImpl(String id, String lemma, String surfaceForm, String pos) {
         this.id = id;
         this.lemma = lemma;
         this.surfaceForm = surfaceForm;
         textPos = pos;
-        precedingNonInstances = new ArrayList<>();
+        begin=0;
+        end=lemma.length();
     }
 
     public WordImpl(String id, String lemma, String surfaceForm, String pos, int begin, int end) {
@@ -38,7 +41,6 @@ public class WordImpl implements Word {
         this.lemma = lemma;
         this.surfaceForm = surfaceForm;
         textPos = pos;
-        precedingNonInstances = new ArrayList<>();
         this.begin = begin;
         this.end = end;
     }
@@ -127,7 +129,6 @@ public class WordImpl implements Word {
             return lexicalEntry.getParent();
         }
         return null;
-
     }
 
     @Override
@@ -157,12 +158,12 @@ public class WordImpl implements Word {
     }
 
     @Override
-    public Iterator<Word> iterator() {
-        return precedingNonInstances.iterator();
+    public Iterator<Sense> iterator() {
+        return senses.iterator();
     }
 
     @Override
-    public String getSemanticTag() {
+    public String getSenseAnnotation() {
         return semanticTag;
     }
 
@@ -173,7 +174,8 @@ public class WordImpl implements Word {
 
     @Override
     public int compareTo(LexicalResourceEntity o) {
-        return id.compareTo(o.getNode().toString());
+        final Node node = o.getNode();
+        return id.compareTo(node.toString());
     }
 
     @Override
@@ -193,5 +195,20 @@ public class WordImpl implements Word {
     @Override
     public int getEnd() {
     	return end;
+    }
+
+    @Override
+    public Iterable<Word> precedingNonInstances() {
+        return Collections.unmodifiableList(precedingNonInstances);
+    }
+
+    @Override
+    public void loadSenses(Iterable<Sense> senses) {
+        senses.forEach(this.senses::add);
+    }
+
+    @Override
+    public boolean isNull() {
+        return false;
     }
 }

@@ -65,7 +65,7 @@ public class SemCorTrainingDataExtractor implements TrainingDataExtractor {
                     String lemma = w.getLemma();
                     String surfaceForm = w.getSurfaceForm();
                     List<String> instance = localTextFeatureExtractor.getFeatures(text, wordIndex);
-                    String semanticTag = w.getSemanticTag();
+                    String semanticTag = w.getSenseAnnotation();
                     instance.add(0, String.format("\"%s\"", semanticTag));
                     String key = "";
                     if (useSurfaceForm) {

@@ -5,7 +5,6 @@ import com.wcohen.ss.AbstractStringDistance;
 import com.wcohen.ss.ScaledLevenstein;
 import org.getalp.lexsema.ml.matrix.score.generator.IndexedOverlapScoreMatrixGenerator;
 import org.getalp.lexsema.ml.matrix.score.generator.OverlapScoreMatrixGenerator;
-import org.getalp.lexsema.similarity.signatures.IndexedSemanticSignature;
 import org.getalp.lexsema.similarity.signatures.SemanticSignature;
 import org.getalp.ml.matrix.filters.Filter;
 import org.getalp.ml.matrix.score.MatrixScorer;
@@ -47,8 +46,8 @@ public class TverskiIndexSimilarityMeasureMatrixImpl implements TverskiIndexSimi
                           Map<String, SemanticSignature> relatedSignaturesB) {
 
 
-        List<String> a = sigA.getSymbols();
-        List<String> b = sigB.getSymbols();
+        List<String> a = sigA.getStringSymbols();
+        List<String> b = sigB.getStringSymbols();
 
         /*Computing overlap between the semantic signatures*/
         double overlap = computeOverlap(a, b);

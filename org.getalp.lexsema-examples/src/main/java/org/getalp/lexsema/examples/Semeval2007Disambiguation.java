@@ -1,8 +1,8 @@
 package org.getalp.lexsema.examples;
 
 import edu.mit.jwi.Dictionary;
-import org.getalp.lexsema.io.document.Semeval2007TextLoader;
-import org.getalp.lexsema.io.document.TextLoader;
+import org.getalp.lexsema.io.document.loader.Semeval2007CorpusLoader;
+import org.getalp.lexsema.io.document.loader.CorpusLoader;
 import org.getalp.lexsema.io.resource.LRLoader;
 import org.getalp.lexsema.io.resource.wordnet.WordnetLoader;
 import org.getalp.lexsema.io.word2vec.MultilingualSerializedModelWord2VecLoader;
@@ -38,7 +38,7 @@ public class Semeval2007Disambiguation {
             usage();
         }
 
-        TextLoader textLoader = new Semeval2007TextLoader("../data/senseval2007_task7/test/eng-coarse-all-words-t1.xml");
+        CorpusLoader corpusLoader = new Semeval2007CorpusLoader("../data/senseval2007_task7/test/eng-coarse-all-words-t1.xml");
 
         LRLoader lrloader = new WordnetLoader(new Dictionary(new File("../data/wordnet/2.1/dict")))
                 .extendedSignature(true).loadDefinitions(true);
@@ -64,8 +64,8 @@ public class Semeval2007Disambiguation {
         SimplifiedLeskParameters simplifiedLeskParameters = new SimplifiedLeskParameters().setFallbackFS(false);
         Disambiguator disambiguator = new SimplifiedLesk(10 ,similarityMeasure,simplifiedLeskParameters,1);
         System.err.println("Loading texts");
-        textLoader.load();
-        for (Document document : textLoader) {
+        corpusLoader.load();
+        for (Document document : corpusLoader) {
             System.err.println("\tLoading senses...");
             lrloader.loadSenses(document);
             System.err.println("\tDisambiguating... ");

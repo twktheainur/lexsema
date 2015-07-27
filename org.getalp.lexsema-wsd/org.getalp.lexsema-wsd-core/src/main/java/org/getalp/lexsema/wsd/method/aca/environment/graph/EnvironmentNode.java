@@ -4,10 +4,11 @@ package org.getalp.lexsema.wsd.method.aca.environment.graph;
 import org.getalp.lexsema.similarity.signatures.SemanticSignature;
 import org.getalp.lexsema.similarity.signatures.SemanticSignatureImpl;
 import org.getalp.lexsema.similarity.signatures.symbols.SemanticSymbol;
-import org.getalp.lexsema.wsd.method.aca.agents.updates.AntVisitor;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class EnvironmentNode extends AbstractNode {
 
@@ -24,12 +25,24 @@ public class EnvironmentNode extends AbstractNode {
     @Override
     public SemanticSignature getSemanticSignature(){
         SemanticSignature semanticSignature = new SemanticSignatureImpl();
-        semanticSignature.addSymbols(signatureVector);
+        semanticSignature.addSymbols(signatureVector.stream().filter(symbol -> symbol!=null).collect(Collectors.toList()));
         return semanticSignature;
     }
 
     @Override
-    public void visit(AntVisitor visitor) {
-        visitor.visit(this);
+    public void depositSignature(List<SemanticSymbol> semanticSymbols) {
+        int length = signatureVector.size();
+        Collections.shuffle(semanticSymbols);
+        for(int i=0;i<length;i++){
+            signatureVector.set(i,semanticSymbols.get(i));
+        }
     }
+
+    @Override
+    public boolean isNest() {
+        return false;
+    }
+
+
+
 }

@@ -33,17 +33,20 @@ public class SchwabEtAl2012EnvironmentUpdater implements EnvironmentUpdater {
         this.antUpdater = antUpdater;
     }
 
+    @SuppressWarnings("FeatureEnvy")
     private void nodeUpdate(Node node, Environment environment) {
         int position = node.getPosition();
-        if (node.isNest()) {
+        double energy = node.getEnergy();
+        if (node.isNest() && energy >0) {
             randomlyCreateAnt(environment, node, ANT_CREATION_PROBABILITY);
+            node.setEnergy(energy-1);
         }
         List<Integer> outgoingPaths = environment.getOutgoingNodes(position);
-        outgoingPaths.parallelStream().forEach(target-> pathUpdate(position,target));
+        outgoingPaths.parallelStream().forEach(target-> pathUpdate(environment, position,target));
     }
 
-    private void pathUpdate(int start, int end){
-
+    private void pathUpdate(Environment environment, int start, int end){
+        //if(environment.isPath())
     }
 
     private void randomlyCreateAnt(Environment environment, Node node, NodeScoreFunction scoreFunction) {

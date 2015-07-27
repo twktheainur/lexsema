@@ -64,8 +64,8 @@ public class AnnotatedTextThesaurusImpl implements AnnotatedTextThesaurus {
         for (Text txt : texts) {
             for (Sentence stc : txt.sentences()) {
                 for (Word w : stc) {
-                    if (w.getLemma() != null && w.getSemanticTag() != null) {
-                        String wordStr = MessageFormat.format("{0}%{1}", w.getLemma(), w.getSemanticTag());
+                    if (w.getLemma() != null && w.getSenseAnnotation() != null) {
+                        String wordStr = MessageFormat.format("{0}%{1}", w.getLemma(), w.getSenseAnnotation());
                         processWord(wordStr,stc,w,map);
                     }
                 }

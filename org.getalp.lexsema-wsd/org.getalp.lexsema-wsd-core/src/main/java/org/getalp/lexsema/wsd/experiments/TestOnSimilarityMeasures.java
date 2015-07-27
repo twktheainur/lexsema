@@ -4,18 +4,16 @@ import java.io.File;
 import java.util.HashMap;
 
 import org.apache.commons.math3.stat.inference.MannWhitneyUTest;
-import org.getalp.lexsema.io.document.Semeval2007TextLoader;
-import org.getalp.lexsema.io.document.TextLoader;
+import org.getalp.lexsema.io.document.loader.Semeval2007CorpusLoader;
+import org.getalp.lexsema.io.document.loader.CorpusLoader;
 import org.getalp.lexsema.io.resource.LRLoader;
 import org.getalp.lexsema.io.resource.dictionary.DictionaryLRLoader;
 import org.getalp.lexsema.similarity.Document;
 import org.getalp.lexsema.similarity.measures.lesk.AnotherLeskSimilarity;
 import org.getalp.lexsema.wsd.configuration.Configuration;
 import org.getalp.lexsema.wsd.method.CuckooSearchDisambiguator;
-import org.getalp.lexsema.wsd.method.MultiThreadCuckooSearch;
 import org.getalp.lexsema.wsd.method.StopCondition;
 import org.getalp.lexsema.wsd.score.ConfigurationScorer;
-import org.getalp.lexsema.wsd.score.ConfigurationScorerWithCache;
 import org.getalp.lexsema.wsd.score.MultiThreadConfigurationScorerWithCache;
 import org.getalp.lexsema.wsd.score.SemEval2007Task7PerfectConfigurationScorer;
 
@@ -109,7 +107,7 @@ public class TestOnSimilarityMeasures
         long[] times = new long[n];
         LRLoader lrloader = new DictionaryLRLoader(new File(dict), true);
 
-        TextLoader dl = new Semeval2007TextLoader("../data/senseval2007_task7/test/eng-coarse-all-words.xml");
+        CorpusLoader dl = new Semeval2007CorpusLoader("../data/senseval2007_task7/test/eng-coarse-all-words.xml");
         dl.load();
         for (Document d : dl) lrloader.loadSenses(d);
 
