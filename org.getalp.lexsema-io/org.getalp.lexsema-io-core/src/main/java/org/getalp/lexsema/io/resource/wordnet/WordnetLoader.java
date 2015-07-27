@@ -260,9 +260,10 @@ public class WordnetLoader implements LRLoader {
             lemme = st[0].toLowerCase();
             pos = st[1].toLowerCase();
         }
+        POS posJWI = POS.getPartOfSpeech(pos.charAt(0));
         IIndexWord w = null;
         if (!lemme.isEmpty()) {
-            POS posJWI = POS.getPartOfSpeech(pos.charAt(0));
+
             if(posJWI!=null){
                 w = dictionary.getIndexWord(lemme, posJWI);
             }

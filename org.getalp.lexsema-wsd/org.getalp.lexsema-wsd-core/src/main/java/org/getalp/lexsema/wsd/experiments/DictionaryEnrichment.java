@@ -5,10 +5,10 @@ import java.io.File;
 import edu.mit.jwi.Dictionary;
 
 import org.getalp.lexsema.io.dictionary.DocumentDictionaryWriter;
-import org.getalp.lexsema.io.document.DSOTextLoader;
-import org.getalp.lexsema.io.document.SemCorTextLoader;
-import org.getalp.lexsema.io.document.Semeval2007TextLoader;
-import org.getalp.lexsema.io.document.TextLoader;
+import org.getalp.lexsema.io.document.loader.DSOCorpusLoader;
+import org.getalp.lexsema.io.document.loader.CorpusLoader;
+import org.getalp.lexsema.io.document.loader.SemCorCorpusLoader;
+import org.getalp.lexsema.io.document.loader.Semeval2007CorpusLoader;
 import org.getalp.lexsema.io.resource.LRLoader;
 import org.getalp.lexsema.io.resource.wordnet.WordnetLoader;
 import org.getalp.lexsema.io.thesaurus.AnnotatedTextThesaurus;
@@ -27,9 +27,9 @@ public class DictionaryEnrichment
 
     public static Dictionary wordnet = new Dictionary(new File(wordnetPath));
     
-    public static TextLoader semCor = new SemCorTextLoader(semCorPath);
+    public static CorpusLoader semCor = new SemCorCorpusLoader(semCorPath);
 
-    public static TextLoader dso = new DSOTextLoader(dsoPath, wordnetPath);
+    public static CorpusLoader dso = new DSOCorpusLoader(dsoPath, wordnetPath);
     
     public static void main(String[] args)
     {
@@ -69,7 +69,7 @@ public class DictionaryEnrichment
         .shuffle(shuffle)
         .filterStopWords(stopWords)
         .stemming(stemming);
-        TextLoader dl = new Semeval2007TextLoader(docPath);
+        CorpusLoader dl = new Semeval2007CorpusLoader(docPath);
         dl.load();
         for (Text txt : dl)
         {

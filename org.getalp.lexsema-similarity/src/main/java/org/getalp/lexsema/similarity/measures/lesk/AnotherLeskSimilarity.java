@@ -21,8 +21,8 @@ public class AnotherLeskSimilarity implements SimilarityMeasure
     @Override
     public double compute(SemanticSignature sigA, SemanticSignature sigB)
     {
-        List<String> la = sigA.getSymbols();
-        List<String> lb = sigB.getSymbols();
+        List<String> la = sigA.getStringSymbols();
+        List<String> lb = sigB.getStringSymbols();
         int aSize = la.size();
         int bSize = lb.size();
         int count = 0;
