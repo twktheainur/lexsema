@@ -3,7 +3,6 @@ package org.getalp.lexsema.wsd.method.aca.agents.factories;
 import org.getalp.lexsema.similarity.signatures.SemanticSignature;
 import org.getalp.lexsema.wsd.method.aca.agents.Ant;
 import org.getalp.lexsema.wsd.method.aca.agents.AntImpl;
-import org.getalp.lexsema.wsd.method.aca.agents.updates.ShwabEtAlAntVisitor;
 
 
 public class SchwabEtAl2012AntFactory implements AntFactory{

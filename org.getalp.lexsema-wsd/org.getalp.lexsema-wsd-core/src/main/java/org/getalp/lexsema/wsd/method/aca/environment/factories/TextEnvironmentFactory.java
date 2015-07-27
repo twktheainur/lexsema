@@ -18,11 +18,11 @@ import java.util.*;
 public class TextEnvironmentFactory implements EnvironmentFactory{
 
     private final Text text;
-    private final int initialEnergy;
+    private final double initialEnergy;
     private final int vectorLength;
-    private final int initialPheromone;
+    private final double initialPheromone;
 
-    public TextEnvironmentFactory(Text text, int initialEnergy,int initialPheromone, int vectorLength) {
+    public TextEnvironmentFactory(Text text, double initialEnergy,double initialPheromone, int vectorLength) {
         this.text = text;
         this.initialEnergy = initialEnergy;
         this.vectorLength = vectorLength;
@@ -41,7 +41,7 @@ public class TextEnvironmentFactory implements EnvironmentFactory{
         INDArray adjacency = Nd4j.create(nodes.size(),nodes.size());
         populateAdjacency(adjacency);
 
-        return new EnvironmentImpl(nodes,nests,adjacency);
+        return new EnvironmentImpl(nodes,nests,adjacency,initialPheromone);
     }
 
     /**

@@ -15,7 +15,7 @@ import org.getalp.lexsema.io.thesaurus.AnnotatedTextThesaurus;
 import org.getalp.lexsema.similarity.Text;
 import org.getalp.lexsema.io.thesaurus.AnnotatedTextThesaurusImpl;
 
-public class DictionaryEnrichment
+public class DictionaryCreation
 {
     public static String wordnetPath = "../data/wordnet/2.1/dict/";
     
@@ -61,7 +61,7 @@ public class DictionaryEnrichment
                                         String newDictPath)
     {
         System.out.println("Building dictionary " + newDictPath + "...");
-        LRLoader lrloader = new WordnetLoader(wordnet, thesaurus)
+        LRLoader lrloader = new WordnetLoader(wordnet)
         .loadDefinitions(definitions)
         .extendedSignature(extendedDefinitions)
         .loadRelated(extendedDefinitions)
@@ -69,6 +69,7 @@ public class DictionaryEnrichment
         .shuffle(shuffle)
         .filterStopWords(stopWords)
         .stemming(stemming);
+        lrloader.addThesaurus(thesaurus);
         CorpusLoader dl = new Semeval2007CorpusLoader(docPath);
         dl.load();
         for (Text txt : dl)

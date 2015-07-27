@@ -43,4 +43,10 @@ public interface Environment {
     void removeDeadAnts();
 
     void depositSignature(List<SemanticSymbol> semanticSymbols, int position);
+
+    void createBridge(int start, int end);
+
+    void cleanupBridges();
+
+    boolean isBridge(int start, int end);
 }

@@ -12,6 +12,7 @@ import java.util.List;
 public class SchwabEtAl2012EnvironmentUpdater implements EnvironmentUpdater {
 
     private static final double CENTERING_CONSTANT = .5d;
+    private static final double ZERO_EPSILON = 0.000000001d;
     private final MersenneTwister mersenneTwister;
     private final AntFactory antFactory;
     private final AntUpdater antUpdater;
@@ -19,18 +20,20 @@ public class SchwabEtAl2012EnvironmentUpdater implements EnvironmentUpdater {
     private final double initialAntLife;
     private final double maximumEnergy;
     private final double initialEnergy;
+    private final double pheromoneEvaporationRate;
 
     private static final NodeScoreFunction ANT_CREATION_PROBABILITY =
             node -> Math.atan(node.getEnergy()) / Math.PI + CENTERING_CONSTANT;
 
 
-    public SchwabEtAl2012EnvironmentUpdater(double initialEnergy, double maximumEnergy, double initialAntLife, AntFactory antFactory, AntUpdater antUpdater, MersenneTwister mersenneTwister) {
+    public SchwabEtAl2012EnvironmentUpdater(double initialEnergy, double maximumEnergy, double initialAntLife, double pheromoneEvaporationRate, AntFactory antFactory, AntUpdater antUpdater, MersenneTwister mersenneTwister) {
         this.initialEnergy = initialEnergy;
         this.maximumEnergy = maximumEnergy;
         this.initialAntLife = initialAntLife;
         this.antFactory = antFactory;
         this.mersenneTwister = mersenneTwister;
         this.antUpdater = antUpdater;
+        this.pheromoneEvaporationRate = pheromoneEvaporationRate;
     }
 
     @SuppressWarnings("FeatureEnvy")
@@ -45,8 +48,17 @@ public class SchwabEtAl2012EnvironmentUpdater implements EnvironmentUpdater {
         outgoingPaths.parallelStream().forEach(target-> pathUpdate(environment, position,target));
     }
 
+    @SuppressWarnings("FeatureEnvy")
     private void pathUpdate(Environment environment, int start, int end){
-        //if(environment.isPath())
+        double pheromone = environment.getPheromone(start,end);
+        pheromone *= pheromone*(1-pheromoneEvaporationRate);
+        if(Math.abs(0-pheromone)< ZERO_EPSILON){
+            pheromone = 0;
+            if(environment.isBridge(start,end)){
+                pheromone=-1;
+            }
+        }
+        environment.setPheromone(start,end,pheromone);
     }
 
     private void randomlyCreateAnt(Environment environment, Node node, NodeScoreFunction scoreFunction) {
@@ -61,10 +73,13 @@ public class SchwabEtAl2012EnvironmentUpdater implements EnvironmentUpdater {
         }
     }
 
+    @SuppressWarnings("FeatureEnvy")
     @Override
     public void update(Environment environment) {
         environment.ants().parallelStream().forEach(ant -> antUpdater.update(ant,environment));
         environment.nodes().parallelStream().forEach(node -> nodeUpdate(node, environment));
+        environment.removeDeadAnts();
+        environment.cleanupBridges();
     }
 
 }

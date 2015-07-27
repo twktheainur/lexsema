@@ -301,7 +301,8 @@ public class WordnetLoader implements LRLoader {
         this.usesStopWords = usesStopWords;
         return this;
     }
-    
+
+    @Override
     public LRLoader addThesaurus(AnnotatedTextThesaurus thesaurus) {
         this.thesauri.add(thesaurus);
         return this;
