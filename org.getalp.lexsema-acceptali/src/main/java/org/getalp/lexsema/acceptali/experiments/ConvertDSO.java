@@ -1,4 +1,4 @@
-package org.getalp.lexsema.wsd.experiments;
+package org.getalp.lexsema.acceptali.experiments;
 
 import org.getalp.lexsema.io.document.loader.CorpusLoader;
 import org.getalp.lexsema.io.document.loader.DSOCorpusLoader;
