@@ -35,7 +35,7 @@ public class ACADisambiguator
         double initialEnergy = 20;
         int initialPheromone = 10   ;
         int vectorSize = 100;
-        double pheromoneEvaporation = 0.7;
+        double pheromoneEvaporation = 0.5;
         double maximumEnergy = 30;
         double antLife = 10;
         double depositPheromone = 1;

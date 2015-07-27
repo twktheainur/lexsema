@@ -36,11 +36,10 @@ public class SchwabEtAl2012AntUpdater implements AntUpdater {
         int position = ant.getPosition();
 
         int selectedTarget;
-        if(environment.isNest(position)){
-            selectedTarget = ant.getHome();
-            createBridge(ant,selectedTarget,environment);
+        if(environment.isNest(position) && position!=ant.getHome()){
+                selectedTarget = ant.getHome();
+                createBridge(ant, selectedTarget, environment);
         } else {
-            depositSignatureComponents(ant.getSemanticSignature(),environment,position);
             List<Integer> neighbours = environment.getOutgoingNodes(position);
             int neighbourhoodSize = neighbours.size();
 
@@ -81,6 +80,10 @@ public class SchwabEtAl2012AntUpdater implements AntUpdater {
         moveAnt(ant, selectedTarget);
         depositPheromone(environment, position,selectedTarget);
         takeEnergy(ant, environment, selectedTarget);
+
+        if(!environment.isNest(selectedTarget)) {
+            depositSignatureComponents(ant.getSemanticSignature(), environment, selectedTarget);
+        }
         ant.decrementLives();
     }
     private boolean isThereANestInTheNeighborhood(Iterable<Integer> neighbours, Environment environment, Ant ant){

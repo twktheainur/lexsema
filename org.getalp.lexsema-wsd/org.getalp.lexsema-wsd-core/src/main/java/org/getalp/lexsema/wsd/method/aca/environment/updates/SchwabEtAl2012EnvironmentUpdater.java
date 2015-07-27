@@ -51,7 +51,7 @@ public class SchwabEtAl2012EnvironmentUpdater implements EnvironmentUpdater {
     @SuppressWarnings("FeatureEnvy")
     private void pathUpdate(Environment environment, int start, int end){
         double pheromone = environment.getPheromone(start,end);
-        pheromone *= pheromone*(1-pheromoneEvaporationRate);
+        pheromone = pheromone*(1-pheromoneEvaporationRate);
         if(Math.abs(0-pheromone)< ZERO_EPSILON){
             pheromone = 0;
             if(environment.isBridge(start,end)){
