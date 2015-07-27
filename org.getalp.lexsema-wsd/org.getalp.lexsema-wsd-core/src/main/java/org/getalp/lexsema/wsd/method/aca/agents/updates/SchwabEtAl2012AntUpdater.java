@@ -97,7 +97,7 @@ public class SchwabEtAl2012AntUpdater implements AntUpdater {
 
     @SuppressWarnings("all")
     private void createBridge(Ant ant, int position, Environment environment) {
-        environment.createBridge(position,ant.getHome());
+        environment.createBridge(position, ant.getHome());
     }
 
     private void depositSignatureComponents(SemanticSignature semanticSignature, Environment environment, int target){
@@ -128,13 +128,13 @@ public class SchwabEtAl2012AntUpdater implements AntUpdater {
     }
 
     private void depositPheromone(Environment environment, int position, int target){
-        double currentPheromone = environment.getPheromone(position,target);
-        environment.setPheromone(position,target,currentPheromone+depositPheromone);
+        double currentPheromone = environment.getPheromone(position, target);
+        environment.setPheromone(position, target, currentPheromone + depositPheromone);
     }
 
     private void takeEnergy(Ant ant, Environment environment, int targetPosition){
         double targetEnergy = environment.getEnergy(targetPosition);
-        double energyTaken = ant.takeEnergy(takeEnergy,targetEnergy);
+        double energyTaken = ant.takeEnergy(takeEnergy, targetEnergy);
         environment.setEnergy(targetPosition,targetEnergy - energyTaken);
     }
 
@@ -145,11 +145,11 @@ public class SchwabEtAl2012AntUpdater implements AntUpdater {
                 .sorted()
                 .map(p -> p > rand)
                 .collect(Collectors.toList());
-        boolean currentDecision = false;
         int i = 0;
+        boolean currentDecision = currentDecision = decision.get(i);
         while (!currentDecision) {
-            currentDecision = decision.get(i);
             i++;
+            currentDecision = decision.get(i);
         }
         return i;
     }

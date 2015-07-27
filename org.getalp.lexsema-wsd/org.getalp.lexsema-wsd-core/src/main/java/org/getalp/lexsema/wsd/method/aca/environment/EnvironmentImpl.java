@@ -95,9 +95,9 @@ public class EnvironmentImpl implements Environment {
     }
 
     @Override
-    public synchronized void setEnergy(int position, double amountTaken) {
+    public synchronized void setEnergy(int position, double energy) {
         final Node node = nodes.get(position);
-        node.setEnergy(node.getEnergy() - amountTaken);
+        node.setEnergy(energy);
     }
 
     @Override

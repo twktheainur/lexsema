@@ -54,10 +54,10 @@ public class TextEnvironmentFactory implements EnvironmentFactory{
         int currentWordIndex = 0;
 
 
-        ++currentPosition;
         //Creating text root node
         //The text id is used as the node identifier
         nodes.add(new EnvironmentNode(currentPosition,text.getId(),initialEnergy,vectorLength));
+        ++currentPosition;
 
         //Creating sentence nodes
         for(Sentence sentence: text.sentences()){
@@ -88,6 +88,7 @@ public class TextEnvironmentFactory implements EnvironmentFactory{
         int currentWordIndex = 0;
 
         //Text node
+        int textPosition = currentPosition;
         ++currentPosition;
 
         //Sentence nodes
@@ -97,20 +98,20 @@ public class TextEnvironmentFactory implements EnvironmentFactory{
             adjacency.put(currentPosition,currentPosition-1,initialPheromone);
             //Text to sentence links
             adjacency.put(currentPosition-1,currentPosition,initialPheromone);
-
+            int sentencePosition = currentPosition;
             currentPosition++;
             for(Word w: sentence){
                 //Word to sentence links
-                adjacency.put(currentPosition,currentPosition-1,initialPheromone);
+                adjacency.put(currentPosition,sentencePosition,initialPheromone);
                 //Sentence to words links
-                adjacency.put(currentPosition-1,currentPosition,initialPheromone);
-
+                adjacency.put(sentencePosition,currentPosition,initialPheromone);
+                int wordPosition = currentPosition;
                 currentPosition++;
                 for(Sense sense: text.getSenses(currentWordIndex)){
                     //Sense to word links
-                    adjacency.put(currentPosition,currentPosition-1,initialPheromone);
+                    adjacency.put(currentPosition,wordPosition,initialPheromone);
                     //Word to sense links
-                    adjacency.put(currentPosition-1,currentPosition,initialPheromone);
+                    adjacency.put(wordPosition,currentPosition,initialPheromone);
                     currentPosition++;
                 }
                 currentWordIndex++;

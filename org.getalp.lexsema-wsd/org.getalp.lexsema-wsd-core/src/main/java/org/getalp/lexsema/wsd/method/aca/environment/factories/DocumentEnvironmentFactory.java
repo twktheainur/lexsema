@@ -52,11 +52,11 @@ public class DocumentEnvironmentFactory implements EnvironmentFactory {
         int currentWordIndex = 0;
 
 
-        ++currentPosition;
+
         //Creating text root node
         //The text id is used as the node identifier
         nodes.add(new EnvironmentNode(currentPosition, text.getId(), initialEnergy, vectorLength));
-
+        ++currentPosition;
         for (Word w : text) {
             nodes.add(new EnvironmentNode(currentPosition, w.getId(), initialEnergy, vectorLength));
             currentPosition++;
@@ -82,20 +82,21 @@ public class DocumentEnvironmentFactory implements EnvironmentFactory {
         int currentWordIndex = 0;
 
         //Text node
+        int textPosition = currentPosition;
         ++currentPosition;
-
         for (Word w : text) {
             //Word to sentence links
-            adjacency.put(currentPosition, currentPosition - 1, initialPheromone);
+            adjacency.put(currentPosition, textPosition, initialPheromone);
             //Sentence to words links
-            adjacency.put(currentPosition - 1, currentPosition, initialPheromone);
+            adjacency.put(textPosition, currentPosition, initialPheromone);
 
+            int wordPosition = currentPosition;
             currentPosition++;
             for (Sense sense : text.getSenses(currentWordIndex)) {
                 //Sense to word links
-                adjacency.put(currentPosition, currentPosition - 1, initialPheromone);
+                adjacency.put(currentPosition, wordPosition, initialPheromone);
                 //Word to sense links
-                adjacency.put(currentPosition - 1, currentPosition, initialPheromone);
+                adjacency.put(wordPosition, currentPosition, initialPheromone);
                 currentPosition++;
             }
             currentWordIndex++;
