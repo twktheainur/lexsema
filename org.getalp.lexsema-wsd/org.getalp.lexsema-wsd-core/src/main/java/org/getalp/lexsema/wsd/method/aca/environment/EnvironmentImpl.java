@@ -1,6 +1,7 @@
 package org.getalp.lexsema.wsd.method.aca.environment;
 
 
+import cern.jet.random.engine.MersenneTwister;
 import org.getalp.lexsema.similarity.signatures.SemanticSignature;
 import org.getalp.lexsema.similarity.signatures.symbols.SemanticSymbol;
 import org.getalp.lexsema.util.dataitems.Pair;
@@ -127,9 +128,9 @@ public class EnvironmentImpl implements Environment {
     }
 
     @Override
-    public void depositSignature(List<SemanticSymbol> semanticSymbols, int position) {
+    public void depositSignature(List<SemanticSymbol> semanticSymbols, int position, MersenneTwister mersenneTwister) {
         final Node node = nodes.get(position);
-        node.depositSignature(semanticSymbols);
+        node.depositSignature(semanticSymbols, mersenneTwister);
     }
 
     @Override

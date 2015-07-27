@@ -109,16 +109,16 @@ public class SchwabEtAl2012AntUpdater implements AntUpdater {
             int draw = drawNext(selectedComponents,signatureSymbols.size());
             symbols.add(signatureSymbols.get(draw));
         }
-        environment.depositSignature(symbols,target);
+        environment.depositSignature(symbols,target,mersenneTwister);
     }
 
     private int drawNext(Collection<Integer> selectedComponents, int signatureSize){
-        int draw = -1;
+        int draw;
         do {
+            draw = Math.abs(mersenneTwister.nextInt()) %signatureSize;
             if(draw>0){
                 selectedComponents.add(draw);
             }
-            draw = mersenneTwister.nextInt()%signatureSize;
         } while(selectedComponents.contains(draw));
         return draw;
     }
