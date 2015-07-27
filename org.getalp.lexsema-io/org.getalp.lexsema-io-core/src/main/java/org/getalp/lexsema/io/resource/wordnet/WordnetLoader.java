@@ -52,7 +52,7 @@ public class WordnetLoader implements LRLoader {
 
     private final SymbolIndex symbolIndex;
 
-    private AnnotatedTextThesaurus thesaurus;
+    private List<AnnotatedTextThesaurus> thesauri;
 
     /**
      * Creates a WordnetLoader with an existing Wordnet Dictionary object.
@@ -70,13 +70,8 @@ public class WordnetLoader implements LRLoader {
         usesStemming = false;
         shuffle = false;
         //noinspection all
-        thesaurus = null;
+        thesauri = new ArrayList<AnnotatedTextThesaurus>();
         useIndex = false;
-    }
-
-    public WordnetLoader(Dictionary dictionary, AnnotatedTextThesaurus thesaurus) {
-        this(dictionary);
-        this.thesaurus = thesaurus;
     }
 
     private void openDictionary() {
@@ -123,7 +118,7 @@ public class WordnetLoader implements LRLoader {
                     loadSemanticRelations(sense, signature, wordSynset);
                 }
 
-                if (thesaurus != null) {
+                for (AnnotatedTextThesaurus thesaurus : thesauri) {
                     String senseKeyString = senseKey.toString();
                     List<String> relatedWords = thesaurus.getRelatedWords(senseKeyString);
                     for (String relatedWord : relatedWords) {
@@ -304,6 +299,11 @@ public class WordnetLoader implements LRLoader {
     @Override
     public LRLoader filterStopWords(boolean usesStopWords) {
         this.usesStopWords = usesStopWords;
+        return this;
+    }
+    
+    public LRLoader addThesaurus(AnnotatedTextThesaurus thesaurus) {
+        this.thesauri.add(thesaurus);
         return this;
     }
 
