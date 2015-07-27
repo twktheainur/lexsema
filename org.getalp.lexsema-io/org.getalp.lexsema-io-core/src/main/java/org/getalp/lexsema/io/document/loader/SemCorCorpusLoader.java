@@ -1,4 +1,4 @@
-package org.getalp.lexsema.io.document;
+package org.getalp.lexsema.io.document.loader;
 
 
 import org.getalp.lexsema.similarity.*;
@@ -10,17 +10,16 @@ import org.xml.sax.helpers.XMLReaderFactory;
 import java.io.IOException;
 
 @SuppressWarnings({"BooleanParameter", "ClassWithTooManyFields"})
-public class Semeval2007TextLoader extends TextLoaderImpl implements ContentHandler {
+public class SemCorCorpusLoader extends CorpusLoaderImpl implements ContentHandler {
 
-    private Logger logger = LoggerFactory.getLogger(Semeval2007TextLoader.class);
+    private Logger logger = LoggerFactory.getLogger(SemCorCorpusLoader.class);
 
     private boolean inWord;
-    private boolean loadExtra;
     private String currentSurfaceForm;
     private String currentPos;
     private String currentLemma;
     private String currentId;
-    private String extraWords;
+    private String currentSemanticTag;
 
     private String path;
 
@@ -28,14 +27,13 @@ public class Semeval2007TextLoader extends TextLoaderImpl implements ContentHand
     private Sentence currentSentence;
     private Text currentDocument;
 
-    public Semeval2007TextLoader(String path) {
+    public SemCorCorpusLoader(String path) {
         inWord = false;
         this.path = path;
         currentId = "";
         currentLemma = "";
         currentPos = "";
         currentSurfaceForm = "";
-        extraWords = "";
     }
 
     @Override
@@ -66,18 +64,19 @@ public class Semeval2007TextLoader extends TextLoaderImpl implements ContentHand
     @Override
     public void startElement(String uri, String localName, String qName, Attributes atts) throws SAXException {
         switch (localName) {
-            case "text":
+            case "context":
                 currentDocument = new TextImpl();
-                currentDocument.setId(atts.getValue("id"));
+                currentDocument.setId(atts.getValue("filename"));
                 break;
-            case "sentence":
-                currentSentence = new SentenceImpl(atts.getValue("id"));
+            case "s":
+                currentSentence = new SentenceImpl(atts.getValue("snum"));
                 break;
-            case "instance":
+            case "wf":
                 inWord = true;
                 currentPos = atts.getValue("pos");
                 currentLemma = atts.getValue("lemma");
-                currentId = atts.getValue("id");
+                currentId = "";
+                currentSemanticTag = atts.getValue("lexsn");
                 break;
         }
     }
@@ -85,31 +84,22 @@ public class Semeval2007TextLoader extends TextLoaderImpl implements ContentHand
     @Override
     public void endElement(String uri, String localName, String qName) throws SAXException {
         switch (localName) {
-            case "text":
+            case "context":
                 addText(currentDocument);
                 break;
-            case "sentence":
+            case "s":
                 currentDocument.addSentence(currentSentence);
                 break;
-            case "instance":
+            case "wf":
                 inWord = false;
                 Word w = new WordImpl(currentId, currentLemma, currentSurfaceForm, currentPos);
-
-                if (loadExtra) {
-                    for (String e : extraWords.trim().split(System.getProperty("line.separator"))) {
-                        if (!e.isEmpty()) {
-                            w.addPrecedingInstance(new WordImpl("non-target", "", e, ""));
-                        }
-                    }
-                }
-
+                w.setSemanticTag(currentSemanticTag);
                 w.setEnclosingSentence(currentSentence);
                 currentSentence.addWord(w);
                 currentId = "";
                 currentLemma = "";
                 currentPos = "";
                 currentSurfaceForm = "";
-                extraWords = "";
                 break;
         }
 
@@ -120,10 +110,6 @@ public class Semeval2007TextLoader extends TextLoaderImpl implements ContentHand
         if (inWord) {
             for (int i = start; i < start + length; i++) {
                 currentSurfaceForm += ch[i];
-            }
-        } else {
-            for (int i = start; i < start + length; i++) {
-                extraWords += ch[i];
             }
         }
     }
@@ -147,20 +133,17 @@ public class Semeval2007TextLoader extends TextLoaderImpl implements ContentHand
     public void load() {
         try {
             XMLReader saxReader = XMLReaderFactory.createXMLReader();
-            saxReader
-                    .setContentHandler(this);
+            saxReader.setContentHandler(this);
             saxReader.parse(path);
         } catch (IOException | SAXException t) {
+            t.printStackTrace();
             logger.error(t.getLocalizedMessage());
         }
     }
 
-
     @Override
-    public TextLoader loadNonInstances(boolean loadExtra) {
-        this.loadExtra = loadExtra;
+    public CorpusLoader loadNonInstances(boolean loadExtra) {
         return this;
     }
-
 
 }

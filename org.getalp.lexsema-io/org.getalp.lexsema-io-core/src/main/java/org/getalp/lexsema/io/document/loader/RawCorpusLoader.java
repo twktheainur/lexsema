@@ -1,16 +1,16 @@
-package org.getalp.lexsema.io.document;
+package org.getalp.lexsema.io.document.loader;
 
 
 import org.getalp.lexsema.io.text.TextProcessor;
 
 import java.io.*;
 
-public class RawTextLoader extends TextLoaderImpl {
+public class RawCorpusLoader extends CorpusLoaderImpl {
 
     Reader reader;
     TextProcessor processor;
 
-    public RawTextLoader(Reader reader, TextProcessor processor) {
+    public RawCorpusLoader(Reader reader, TextProcessor processor) {
         this.reader = reader;
         this.processor = processor;
     }
@@ -34,7 +34,7 @@ public class RawTextLoader extends TextLoaderImpl {
     }
 
     @Override
-    public TextLoader loadNonInstances(boolean loadExtra) {
+    public CorpusLoader loadNonInstances(boolean loadExtra) {
         return this;
     }
 }

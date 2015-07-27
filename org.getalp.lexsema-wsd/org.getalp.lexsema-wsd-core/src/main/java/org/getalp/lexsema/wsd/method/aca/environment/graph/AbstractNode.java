@@ -1,25 +1,29 @@
-package org.getalp.lexsema.wsd.method.aca.model.graph;
+package org.getalp.lexsema.wsd.method.aca.environment.graph;
 
-public abstract class AbstractNode {
+public abstract class AbstractNode implements Node {
     private final int position;
     private final String id;
     private final double energy;
 
-    public AbstractNode(int position, String id, double energy) {
+    protected AbstractNode(int position, String id, double energy) {
         this.position = position;
         this.id = id;
         this.energy = energy;
     }
 
+    @Override
     public int getPosition() {
         return position;
     }
 
+    @Override
     public String getId() {
         return id;
     }
 
+    @Override
     public double getEnergy() {
         return energy;
     }
+
 }

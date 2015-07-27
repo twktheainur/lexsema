@@ -1,4 +1,4 @@
-package org.getalp.lexsema.io.document;
+package org.getalp.lexsema.io.document.loader;
 
 
 import org.getalp.lexsema.similarity.*;
@@ -13,9 +13,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 @SuppressWarnings({"BooleanParameter", "ClassWithTooManyFields"})
-public class Semeval2013Task13TextLoader extends TextLoaderImpl implements ContentHandler {
+public class Semeval2013Task13CorpusLoader extends CorpusLoaderImpl implements ContentHandler {
 
-    private Logger logger = LoggerFactory.getLogger(Semeval2013Task13TextLoader.class);
+    private Logger logger = LoggerFactory.getLogger(Semeval2013Task13CorpusLoader.class);
 
     private boolean inWord;
     private String currentSurfaceForm;
@@ -31,7 +31,7 @@ public class Semeval2013Task13TextLoader extends TextLoaderImpl implements Conte
     private Sentence currentSentence;
     private Text currentDocument;
 
-    public Semeval2013Task13TextLoader(String path) {
+    public Semeval2013Task13CorpusLoader(String path) {
         inWord = false;
         this.path = path;
         currentId = "";
@@ -168,7 +168,7 @@ public class Semeval2013Task13TextLoader extends TextLoaderImpl implements Conte
     }
 
     @Override
-    public TextLoader loadNonInstances(boolean loadExtra) {
+    public CorpusLoader loadNonInstances(boolean loadExtra) {
         return this;
     }
 

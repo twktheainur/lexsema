@@ -1,4 +1,4 @@
-package org.getalp.lexsema.io.document;
+package org.getalp.lexsema.io.document.loader;
 
 
 import org.getalp.lexsema.similarity.Text;
@@ -7,10 +7,10 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-public abstract class TextLoaderImpl implements TextLoader {
+public abstract class CorpusLoaderImpl implements CorpusLoader {
     List<Text> documents;
 
-    protected TextLoaderImpl() {
+    protected CorpusLoaderImpl() {
         documents = new ArrayList<>();
     }
 
@@ -27,5 +27,5 @@ public abstract class TextLoaderImpl implements TextLoader {
         documents.add(text);
     }
 
-    public abstract TextLoader loadNonInstances(boolean loadExtra);
+    public abstract CorpusLoader loadNonInstances(boolean loadExtra);
 }

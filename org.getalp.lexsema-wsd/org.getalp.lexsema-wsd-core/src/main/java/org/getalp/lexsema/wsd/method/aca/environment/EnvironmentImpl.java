@@ -1,4 +1,4 @@
-package org.getalp.lexsema.wsd.method.aca.model;
+package org.getalp.lexsema.wsd.method.aca.environment;
 
 
 import org.getalp.lexsema.similarity.Document;
