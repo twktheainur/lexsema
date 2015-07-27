@@ -101,7 +101,7 @@ public class DSOCorpusLoader extends CorpusLoaderImpl {
     }
 
     Sentence getSentence(Text text){
-        Sentence txtSentence = NullSentence
+        Sentence txtSentence = NullSentence.getInstance();
         for(Sentence snt: text.sentences()){
             txtSentence = snt;
         }
