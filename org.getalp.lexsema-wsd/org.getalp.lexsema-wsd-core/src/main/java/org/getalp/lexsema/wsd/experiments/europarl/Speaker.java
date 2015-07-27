@@ -1,4 +1,4 @@
-package org.getalp.lexsema.wsd.experiments;
+package org.getalp.lexsema.wsd.experiments.europarl;
 
 import java.util.List;
 

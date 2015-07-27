@@ -1,4 +1,4 @@
-package org.getalp.lexsema.wsd.experiments;
+package org.getalp.lexsema.wsd.experiments.europarl;
 
 import com.wcohen.ss.ScaledLevenstein;
 import org.getalp.lexsema.io.resource.LRLoader;
