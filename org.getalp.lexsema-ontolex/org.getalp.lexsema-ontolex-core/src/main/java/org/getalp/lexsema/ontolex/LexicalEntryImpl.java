@@ -1,31 +1,15 @@
 package org.getalp.lexsema.ontolex;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
 import org.getalp.lexsema.util.Language;
 
 /**
  * A Lemon LexicalEntry Java Wrapper Class
  */
-@EqualsAndHashCode(callSuper = false)
-@Data
 public class LexicalEntryImpl extends AbstractLexicalResourceEntity implements LexicalEntry {
-    /**
-     * --GETTER
-     *
-     * @return Returns the lemma of the <code>LexicalEntry</code>
-     * --SETTER
-     * @param lemma Sets the lemma of the <code>LexicalEntry</code>
-     */
+
     private String lemma;
-    /**
-     * --GETTER
-     *
-     * @return Returns the part of speech tag of the <code>LexicalEntry</code>
-     * --SETTER
-     */
     private String partOfSpeech;
-    private int number;
+    private int number = 0;
 
     private Language language;
 
@@ -46,5 +30,50 @@ public class LexicalEntryImpl extends AbstractLexicalResourceEntity implements L
     public String toString() {
         String localPOS = partOfSpeech.split("#")[1];
         return String.format("%s LexicalEntry|%s#%s|", language, lemma, localPOS);
+    }
+
+    @Override
+    public String getLemma() {
+        return lemma;
+    }
+
+    @Override
+    public void setLemma(String lemma) {
+        this.lemma = lemma;
+    }
+
+    @Override
+    public String getPartOfSpeech() {
+        return partOfSpeech;
+    }
+
+    @Override
+    public void setPartOfSpeech(String partOfSpeech) {
+        this.partOfSpeech = partOfSpeech;
+    }
+
+    @Override
+    public int getNumber() {
+        return number;
+    }
+
+    @Override
+    public void setNumber(int number) {
+        this.number = number;
+    }
+
+    @Override
+    public boolean isNull() {
+        return false;
+    }
+
+    @Override
+    public Language getLanguage() {
+        return language;
+    }
+
+    @Override
+    public void setLanguage(Language language) {
+        this.language = language;
     }
 }

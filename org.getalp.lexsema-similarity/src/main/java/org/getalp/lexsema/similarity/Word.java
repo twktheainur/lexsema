@@ -3,6 +3,8 @@ package org.getalp.lexsema.similarity;
 
 import org.getalp.lexsema.ontolex.LexicalEntry;
 
+import java.util.Collection;
+
 
 public interface Word extends LexicalEntry, Iterable<Sense> {
     void addPrecedingInstance(Word precedingNonInstance);
@@ -27,7 +29,7 @@ public interface Word extends LexicalEntry, Iterable<Sense> {
 
     Iterable<Word> precedingNonInstances();
 
-    void loadSenses(Iterable<Sense> senses);
+    void loadSenses(Collection<Sense> senses);
 
     boolean isNull();
 }

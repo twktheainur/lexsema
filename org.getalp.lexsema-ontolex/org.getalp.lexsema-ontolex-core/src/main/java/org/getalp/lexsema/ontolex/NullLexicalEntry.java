@@ -46,6 +46,11 @@ public final class NullLexicalEntry implements LexicalEntry{
     }
 
     @Override
+    public boolean isNull() {
+        return true;
+    }
+
+    @Override
     public LexicalResource getLexicalResource() {
         return null;
     }

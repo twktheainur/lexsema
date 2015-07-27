@@ -8,6 +8,7 @@ import org.getalp.lexsema.ontolex.LexicalResourceEntity;
 import org.getalp.lexsema.ontolex.graph.OntologyModel;
 import org.getalp.lexsema.util.Language;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
@@ -77,7 +78,7 @@ public class NullWord implements Word{
     }
 
     @Override
-    public void loadSenses(Iterable<Sense> senses) {
+    public void loadSenses(Collection<Sense> senses) {
 
     }
 
