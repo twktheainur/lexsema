@@ -41,7 +41,7 @@ public final class NUSPT2007Disambiguation {
             semCor = new SemCorCorpusLoader("../data/semcor3.0/semcor_full.xml");
 
         if (useDso)
-            dso = new DSOCorpusLoader("../data/DSO","../data/wordnet/2.1/dict");
+            dso = new DSOCorpusLoader("../data/dso","../data/wordnet/2.1/dict");
 
         if (useSemCor)
             semCor.load();

@@ -92,6 +92,9 @@ public class SemCorCorpusLoader extends CorpusLoaderImpl implements ContentHandl
                 break;
             case "wf":
                 inWord = false;
+                if(currentLemma==null){
+                    currentLemma = "";
+                }
                 Word w = new WordImpl(currentId, currentLemma, currentSurfaceForm, currentPos);
                 w.setSemanticTag(currentSemanticTag);
                 w.setEnclosingSentence(currentSentence);

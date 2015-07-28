@@ -7,6 +7,7 @@ import edu.mit.jwi.item.IWord;
 import edu.mit.jwi.item.IWordID;
 import edu.mit.jwi.item.POS;
 import org.getalp.lexsema.io.text.EnglishDKPTextProcessor;
+import org.getalp.lexsema.io.text.SpaceSegmentingTextProcessor;
 import org.getalp.lexsema.io.text.TextProcessor;
 import org.getalp.lexsema.similarity.*;
 import org.slf4j.Logger;
@@ -28,15 +29,24 @@ public class DSOCorpusLoader extends CorpusLoaderImpl {
 
     private final Dictionary wordnet;
 
-    private final TextProcessor textProcessor = new EnglishDKPTextProcessor();
+    private final TextProcessor textProcessor;
     private final Text text;
 
 
     public DSOCorpusLoader(String pathToDSO, String pathToWordnet) {
+        this(pathToDSO,pathToWordnet,false);
+    }
+
+    public DSOCorpusLoader(String pathToDSO, String pathToWordnet, boolean lemmatizeAndPosTag) {
         this.pathToDSO = pathToDSO;
         wordnet = new Dictionary(new File(pathToWordnet));
         text = new TextImpl();
         text.setId("");
+        if(lemmatizeAndPosTag){
+            textProcessor = new SpaceSegmentingTextProcessor();
+        } else {
+            textProcessor = new EnglishDKPTextProcessor();
+        }
     }
 
     private static void open(IHasLifecycle wordnet) {
