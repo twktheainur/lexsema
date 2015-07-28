@@ -27,4 +27,6 @@ public interface Ant extends Comparable<Double>{
 
     void initiateReturn();
 
+    boolean isNewborn();
+
 }

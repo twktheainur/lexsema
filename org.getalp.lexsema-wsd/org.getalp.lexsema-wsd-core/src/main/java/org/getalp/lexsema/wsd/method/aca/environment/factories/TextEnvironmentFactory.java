@@ -33,31 +33,34 @@ public class TextEnvironmentFactory implements EnvironmentFactory{
     public Environment build() {
         List<Node> nodes = new ArrayList<>();
         Map<Integer,Node> nests = new HashMap<>();
+        List<Node> words = new ArrayList<>();
+        Map<Integer,List<Node>> wordSenseIndex = new HashMap<>();
 
         //Creating nodes
-        createNodes(nodes,nests);
+        createNodes(nodes,nests,words,wordSenseIndex);
 
         //Creating adjacency matrix
         INDArray adjacency = Nd4j.create(nodes.size(),nodes.size());
+        adjacency.assign(-1);
         populateAdjacency(adjacency);
-
-        return new EnvironmentImpl(nodes,nests,adjacency,initialPheromone);
+        return new EnvironmentImpl(nodes,nests,words,wordSenseIndex,adjacency,initialPheromone);
     }
 
     /**
      * Creating nodes
      * @param nodes The list that will contain the nodes
      * @param nestIndex The list that will contain the nests
+     * @param wordSenseIndex A mapping between wordNodes and their corresponding sense nodes
      */
-    private void createNodes(Collection<Node> nodes, Map<Integer,Node> nestIndex){
+    private void createNodes(Collection<Node> nodes, Map<Integer, Node> nestIndex, Collection<Node> wordIndex, Map<Integer, List<Node>> wordSenseIndex){
         int currentPosition = 0;
         int currentWordIndex = 0;
 
 
-        ++currentPosition;
         //Creating text root node
         //The text id is used as the node identifier
         nodes.add(new EnvironmentNode(currentPosition,text.getId(),initialEnergy,vectorLength));
+        ++currentPosition;
 
         //Creating sentence nodes
         for(Sentence sentence: text.sentences()){
@@ -65,13 +68,17 @@ public class TextEnvironmentFactory implements EnvironmentFactory{
             currentPosition++;
 
             for(Word w: sentence){
-                nodes.add(new EnvironmentNode(currentPosition,w.getId(),initialEnergy,vectorLength));
+                Node wordNode = new EnvironmentNode(currentPosition,w.getId(),initialEnergy,vectorLength);
+                nodes.add(wordNode);
+                wordIndex.add(wordNode);
+                List<Node> senses = new ArrayList<>();
+                wordSenseIndex.put(currentPosition,senses);
                 currentPosition++;
-
                 for(Sense sense: text.getSenses(currentWordIndex)){
                     Node nestNode = new NestNode(currentPosition, sense.getId(), initialEnergy, sense.getSemanticSignature());
                     nodes.add(nestNode);
                     nestIndex.put(currentPosition, nestNode);
+                    senses.add(nestNode);
                     currentPosition++;
                 }
                 currentWordIndex++;
@@ -88,6 +95,7 @@ public class TextEnvironmentFactory implements EnvironmentFactory{
         int currentWordIndex = 0;
 
         //Text node
+        int textPosition = currentPosition;
         ++currentPosition;
 
         //Sentence nodes
@@ -97,20 +105,20 @@ public class TextEnvironmentFactory implements EnvironmentFactory{
             adjacency.put(currentPosition,currentPosition-1,initialPheromone);
             //Text to sentence links
             adjacency.put(currentPosition-1,currentPosition,initialPheromone);
-
+            int sentencePosition = currentPosition;
             currentPosition++;
             for(Word w: sentence){
                 //Word to sentence links
-                adjacency.put(currentPosition,currentPosition-1,initialPheromone);
+                adjacency.put(currentPosition,sentencePosition,initialPheromone);
                 //Sentence to words links
-                adjacency.put(currentPosition-1,currentPosition,initialPheromone);
-
+                adjacency.put(sentencePosition,currentPosition,initialPheromone);
+                int wordPosition = currentPosition;
                 currentPosition++;
                 for(Sense sense: text.getSenses(currentWordIndex)){
                     //Sense to word links
-                    adjacency.put(currentPosition,currentPosition-1,initialPheromone);
+                    adjacency.put(currentPosition,wordPosition,initialPheromone);
                     //Word to sense links
-                    adjacency.put(currentPosition-1,currentPosition,initialPheromone);
+                    adjacency.put(wordPosition,currentPosition,initialPheromone);
                     currentPosition++;
                 }
                 currentWordIndex++;

@@ -107,6 +107,12 @@
             <groupId>org.nd4j</groupId>
             <artifactId>canova-nd4j-nlp</artifactId>
             <version>0.0.0.4</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.cleartk</groupId>
+                    <artifactId>cleartk-snowball</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.deeplearning4j</groupId>
@@ -151,6 +157,10 @@
                 <exclusion>
                     <groupId>ch.qos.logback</groupId>
                     <artifactId>logback-core</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.cleartk</groupId>
+                    <artifactId>cleartk-snowball</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>
