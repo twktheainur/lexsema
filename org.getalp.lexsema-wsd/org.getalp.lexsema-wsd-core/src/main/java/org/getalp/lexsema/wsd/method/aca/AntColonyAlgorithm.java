@@ -19,10 +19,14 @@ import org.getalp.lexsema.wsd.method.aca.environment.factories.DocumentEnvironme
 import org.getalp.lexsema.wsd.method.aca.environment.Environment;
 import org.getalp.lexsema.wsd.method.aca.environment.factories.EnvironmentFactory;
 import org.getalp.lexsema.wsd.method.aca.environment.factories.TextEnvironmentFactory;
+import org.getalp.lexsema.wsd.method.aca.environment.solution.EnergyPathsSolutionGenerator;
 import org.getalp.lexsema.wsd.method.aca.environment.solution.EnergySolutionGenerator;
+import org.getalp.lexsema.wsd.method.aca.environment.solution.MaxNumberOfPathsSolutionGenerator;
 import org.getalp.lexsema.wsd.method.aca.environment.solution.SolutionGenerator;
 import org.getalp.lexsema.wsd.method.aca.environment.updates.EnvironmentUpdater;
 import org.getalp.lexsema.wsd.method.aca.environment.updates.SchwabEtAl2012EnvironmentUpdater;
+import org.getalp.lexsema.wsd.score.ConfigurationScorer;
+import org.getalp.lexsema.wsd.score.MultiThreadConfigurationScorerWithCache;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -45,6 +49,8 @@ public class AntColonyAlgorithm implements Disambiguator {
     private final GoldStandard goldStandard = new Semeval2007GoldStandard();
     private final Evaluation evaluation = new StandardEvaluation();
 
+    ConfigurationScorer configurationScorer;
+
 
     public AntColonyAlgorithm(SimilarityMeasure similarityMeasure, int maxIterations, double initialEnergy, double initialPheromone, int vectorSize, double pheromoneEvaporation, double maximumEnergy, double antLife, double depositPheromone, double takeEnergy, double componentsDeposited) {
         this.maxIterations = maxIterations;
@@ -55,7 +61,8 @@ public class AntColonyAlgorithm implements Disambiguator {
         AntUpdater antUpdater = new SchwabEtAl2012AntUpdater(mersenneTwister, similarityMeasure, depositPheromone, takeEnergy, componentsDeposited);
         AntFactory antFactory = new SchwabEtAl2012AntFactory();
         environmentUpdater = new SchwabEtAl2012EnvironmentUpdater(maximumEnergy,antLife, pheromoneEvaporation, antFactory, antUpdater, mersenneTwister);
-        solutionGenerator = new EnergySolutionGenerator();
+        solutionGenerator = new EnergyPathsSolutionGenerator();
+        configurationScorer = new MultiThreadConfigurationScorerWithCache(similarityMeasure);
     }
 
     @Override
@@ -81,7 +88,9 @@ public class AntColonyAlgorithm implements Disambiguator {
             environmentUpdater.update(environment);
             Configuration configuration = solutionGenerator.generateSolution(environment,document);
             double p = evaluation.evaluate(goldStandard, configuration).getPrecision();
-            logger.info(MessageFormat.format("ACA Progress [{0}% | i={1} | bridges = {2} | P={3}]", getPercentage(iteration, maxIterations),iteration,environment.numberOfBridges(),p));
+            //double leskScore = configurationScorer.computeScore(document,configuration);
+            double leskScore = 0;
+            logger.info(MessageFormat.format("ACA Progress [{0}% | i={1} | bridges = {2} | P={3} | L={4}]", getPercentage(iteration, maxIterations),iteration,environment.numberOfBridges(),p,leskScore));
             iteration++;
         }
     }

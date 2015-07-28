@@ -32,16 +32,16 @@ public class ACADisambiguator
 {
     public static void main(String[] args) throws Exception
     {
-        int iterations = 100;
-        double initialEnergy = 30;
-        int initialPheromone = 1   ;
-        int vectorSize = 1000;
-        double pheromoneEvaporation = 0.9;
-        double maximumEnergy = 36;
-        double antLife = 25;
+        int iterations = 200;
+        double initialEnergy = 10;
+        int initialPheromone = 10 ;
+        int vectorSize = 300;
+        double pheromoneEvaporation = 0.6;
+        double maximumEnergy = 30;
+        double antLife = 10;
         double depositPheromone = 1;
-        double takeEnergy = 16;
-        double componentsDeposited = 0.3;
+        double takeEnergy = 1;
+        double componentsDeposited = 1;
 
 //        if (args.length >= 1) iterations = Integer.valueOf(args[0]);
 //        if (args.length >= 2) levyLocation = Double.valueOf(args[1]);

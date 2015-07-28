@@ -8,6 +8,7 @@ import it.uniroma1.lcl.babelnet.BabelNet;
 import it.uniroma1.lcl.babelnet.BabelSense;
 import it.uniroma1.lcl.babelnet.BabelSynset;
 import org.getalp.lexsema.io.resource.LRLoader;
+import org.getalp.lexsema.io.thesaurus.AnnotatedTextThesaurus;
 import org.getalp.lexsema.similarity.Document;
 import org.getalp.lexsema.similarity.Sense;
 import org.getalp.lexsema.similarity.SenseImpl;
@@ -25,14 +26,14 @@ import java.util.*;
 
 @SuppressWarnings("OverlyCoupledClass")
 public class BabelNetAPILoader implements LRLoader {
-    private static Logger logger = LoggerFactory.getLogger(BabelNetAPILoader.class);
-    private SenseCache senseCache;
-    private BabelNet babelNet;
-    private Language language;
-    private boolean shuffle;
-    private boolean hasExtendedSignature;
-    private boolean loadDefinitions;
-    private boolean loadRelated;
+    private static final Logger logger = LoggerFactory.getLogger(BabelNetAPILoader.class);
+    private final SenseCache senseCache;
+    private final BabelNet babelNet;
+    private final Language language;
+    private boolean shuffle = false;
+    private boolean hasExtendedSignature = true;
+    private boolean loadDefinitions = true;
+    private boolean loadRelated = false;
 
     public BabelNetAPILoader(final Language language) {
 
@@ -173,6 +174,11 @@ public class BabelNetAPILoader implements LRLoader {
 
     @Override
     public LRLoader filterStopWords(boolean usesStopWords) {
+        return this;
+    }
+
+    @Override
+    public LRLoader addThesaurus(AnnotatedTextThesaurus thesaurus) {
         return this;
     }
 

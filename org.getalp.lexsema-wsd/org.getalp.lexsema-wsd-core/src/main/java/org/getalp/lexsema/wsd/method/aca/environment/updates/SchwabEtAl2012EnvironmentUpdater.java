@@ -48,16 +48,18 @@ public class SchwabEtAl2012EnvironmentUpdater implements EnvironmentUpdater {
         }
         List<Integer> outgoingPaths = environment.getOutgoingNodes(position);
         outgoingPaths.parallelStream().forEach(target -> pathUpdate(environment, position, target));
-        outgoingPaths.parallelStream().forEach(target -> pathUpdate(environment, target, position));
+        //outgoingPaths.parallelStream().forEach(target -> pathUpdate(environment, target, position));
+//        outgoingPaths.stream().forEach(target -> pathUpdate(environment, position, target));
+        //outgoingPaths.stream().forEach(target -> pathUpdate(environment, target, position));
     }
 
     @SuppressWarnings("FeatureEnvy")
     private void pathUpdate(Environment environment, int start, int end){
         double pheromone = environment.getPheromone(start,end);
         pheromone = pheromone*(1-pheromoneEvaporationRate);
-        if(environment.isBridge(start,end)){
-            logger.info("Evaporated a bridge's pheromone!");
-        }
+//        if(environment.isBridge(start,end)){
+//            logger.info("Evaporated a bridge's pheromone!");
+//        }
         if(Math.abs(0-pheromone)< ZERO_EPSILON){
             pheromone = 0;
             if(environment.isBridge(start,end)){
