@@ -86,6 +86,7 @@ public class EnvironmentImpl implements Environment {
     @Override
     public synchronized void setPheromone(int startPosition, int targetPosition, double pheromone) {
         adjacency.put(startPosition, targetPosition, pheromone);
+        adjacency.put(targetPosition, startPosition, pheromone);
     }
 
     @Override

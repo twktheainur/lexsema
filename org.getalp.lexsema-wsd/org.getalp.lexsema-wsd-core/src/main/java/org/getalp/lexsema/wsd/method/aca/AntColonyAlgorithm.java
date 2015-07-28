@@ -54,7 +54,7 @@ public class AntColonyAlgorithm implements Disambiguator {
         MersenneTwister mersenneTwister = new MersenneTwister();
         AntUpdater antUpdater = new SchwabEtAl2012AntUpdater(mersenneTwister, similarityMeasure, depositPheromone, takeEnergy, componentsDeposited);
         AntFactory antFactory = new SchwabEtAl2012AntFactory();
-        environmentUpdater = new SchwabEtAl2012EnvironmentUpdater(initialEnergy,maximumEnergy,antLife, pheromoneEvaporation, antFactory, antUpdater, mersenneTwister);
+        environmentUpdater = new SchwabEtAl2012EnvironmentUpdater(maximumEnergy,antLife, pheromoneEvaporation, antFactory, antUpdater, mersenneTwister);
         solutionGenerator = new EnergySolutionGenerator();
     }
 

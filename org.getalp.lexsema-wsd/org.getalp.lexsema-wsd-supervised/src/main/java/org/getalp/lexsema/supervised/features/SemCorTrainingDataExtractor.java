@@ -11,10 +11,10 @@ import java.util.*;
 
 public class SemCorTrainingDataExtractor implements TrainingDataExtractor {
 
-    private static Logger logger = LoggerFactory.getLogger(SemCorTrainingDataExtractor.class);
-    private LocalTextFeatureExtractor localTextFeatureExtractor;
+    private static final Logger logger = LoggerFactory.getLogger(SemCorTrainingDataExtractor.class);
+    private final LocalTextFeatureExtractor localTextFeatureExtractor;
     private Map<String, List<List<String>>> instanceVectors;
-    private boolean useSurfaceForm;
+    private final boolean useSurfaceForm;
 
     public SemCorTrainingDataExtractor(LocalTextFeatureExtractor localTextFeatureExtractor) {
         this(localTextFeatureExtractor, false);
