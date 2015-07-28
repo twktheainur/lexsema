@@ -148,9 +148,13 @@ public class DSOCorpusLoader extends CorpusLoaderImpl {
     }
 
     private POS getWordnetPOS(String pos) {
-        final String s = pos.toLowerCase();
-        char lPos = s.charAt(0);
-        return POS.getPartOfSpeech(lPos);
+        if (!pos.isEmpty()) {
+            final String s = pos.toLowerCase();
+            char lPos = s.charAt(0);
+            return POS.getPartOfSpeech(lPos);
+        }
+        return  null;
+
     }
 
     @Override
