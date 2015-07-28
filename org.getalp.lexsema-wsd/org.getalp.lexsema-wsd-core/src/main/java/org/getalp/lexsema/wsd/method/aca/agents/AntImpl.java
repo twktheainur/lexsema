@@ -13,6 +13,7 @@ public class AntImpl implements Ant {
     private final int home;
     private double life;
     private boolean returning;
+    private boolean newBorn = true;
 
     private final WeakReference<SemanticSignature> semanticSignature;
 
@@ -53,6 +54,7 @@ public class AntImpl implements Ant {
     @Override
     public void moveTo(int position) {
         this.position = position;
+        newBorn = false;
     }
 
     @Override
@@ -90,6 +92,11 @@ public class AntImpl implements Ant {
     @Override
     public void initiateReturn(){
         returning =true;
+    }
+
+    @Override
+    public boolean isNewborn() {
+        return newBorn;
     }
 
     @Override

@@ -33,23 +33,26 @@ public class TextEnvironmentFactory implements EnvironmentFactory{
     public Environment build() {
         List<Node> nodes = new ArrayList<>();
         Map<Integer,Node> nests = new HashMap<>();
+        List<Node> words = new ArrayList<>();
+        Map<Integer,List<Node>> wordSenseIndex = new HashMap<>();
 
         //Creating nodes
-        createNodes(nodes,nests);
+        createNodes(nodes,nests,words,wordSenseIndex);
 
         //Creating adjacency matrix
         INDArray adjacency = Nd4j.create(nodes.size(),nodes.size());
+        adjacency.assign(-1);
         populateAdjacency(adjacency);
-
-        return new EnvironmentImpl(nodes,nests,adjacency,initialPheromone);
+        return new EnvironmentImpl(nodes,nests,words,wordSenseIndex,adjacency,initialPheromone);
     }
 
     /**
      * Creating nodes
      * @param nodes The list that will contain the nodes
      * @param nestIndex The list that will contain the nests
+     * @param wordSenseIndex A mapping between wordNodes and their corresponding sense nodes
      */
-    private void createNodes(Collection<Node> nodes, Map<Integer,Node> nestIndex){
+    private void createNodes(Collection<Node> nodes, Map<Integer, Node> nestIndex, Collection<Node> wordIndex, Map<Integer, List<Node>> wordSenseIndex){
         int currentPosition = 0;
         int currentWordIndex = 0;
 
@@ -65,13 +68,17 @@ public class TextEnvironmentFactory implements EnvironmentFactory{
             currentPosition++;
 
             for(Word w: sentence){
-                nodes.add(new EnvironmentNode(currentPosition,w.getId(),initialEnergy,vectorLength));
+                Node wordNode = new EnvironmentNode(currentPosition,w.getId(),initialEnergy,vectorLength);
+                nodes.add(wordNode);
+                wordIndex.add(wordNode);
+                List<Node> senses = new ArrayList<>();
+                wordSenseIndex.put(currentPosition,senses);
                 currentPosition++;
-
                 for(Sense sense: text.getSenses(currentWordIndex)){
                     Node nestNode = new NestNode(currentPosition, sense.getId(), initialEnergy, sense.getSemanticSignature());
                     nodes.add(nestNode);
                     nestIndex.put(currentPosition, nestNode);
+                    senses.add(nestNode);
                     currentPosition++;
                 }
                 currentWordIndex++;

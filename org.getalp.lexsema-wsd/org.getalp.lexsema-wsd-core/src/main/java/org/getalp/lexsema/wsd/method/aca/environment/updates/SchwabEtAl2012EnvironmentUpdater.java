@@ -12,7 +12,7 @@ import java.util.List;
 public class SchwabEtAl2012EnvironmentUpdater implements EnvironmentUpdater {
 
     private static final double CENTERING_CONSTANT = .5d;
-    private static final double ZERO_EPSILON = 0.000000001d;
+    private static final double ZERO_EPSILON = 0.000001d;
     private final MersenneTwister mersenneTwister;
     private final AntFactory antFactory;
     private final AntUpdater antUpdater;
@@ -67,7 +67,7 @@ public class SchwabEtAl2012EnvironmentUpdater implements EnvironmentUpdater {
          */
         double rand = mersenneTwister.raw();
         if (rand > scoreFunction.score(node)) {
-            Ant ant = antFactory.buildAnt(initialAntLife, maximumEnergy, initialEnergy,
+            Ant ant = antFactory.buildAnt(initialAntLife, maximumEnergy, 1,
                     node.getPosition(), node.getSemanticSignature());
             environment.addAnt(ant);
         }

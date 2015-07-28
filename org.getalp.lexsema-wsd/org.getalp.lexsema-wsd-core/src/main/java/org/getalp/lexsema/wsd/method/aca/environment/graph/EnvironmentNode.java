@@ -8,7 +8,6 @@ import org.getalp.lexsema.similarity.signatures.symbols.SemanticSymbol;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -45,8 +44,10 @@ public class EnvironmentNode extends AbstractNode {
         int draw;
         do {
             draw = Math.abs(mersenneTwister.nextInt()) %signatureSize;
-            if(draw>0){
+            if(!selectedComponents.contains(draw) && draw>0){
                 selectedComponents.add(draw);
+                //noinspection BreakStatement
+                break;
             }
         } while(selectedComponents.contains(draw));
         return draw;

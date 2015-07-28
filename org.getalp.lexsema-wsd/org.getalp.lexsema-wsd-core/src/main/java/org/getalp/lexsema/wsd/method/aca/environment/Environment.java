@@ -22,19 +22,19 @@ public interface Environment {
 
     boolean isFriendNest(int position, int antHome);
 
-    boolean isPath(int start, int end);
-
     double getPheromone(int startPosition, int targetPosition);
 
     void setPheromone(int startPosition, int targetPosition, double pheromone);
 
     double getEnergy(int position);
 
-    void setEnergy(int position, double amountTaken);
+    void setEnergy(int position, double energy);
 
-    Collection<Node> nodes();
+    List<Node> nodes();
 
     Collection<Ant> ants();
+
+    List<Node> words();
 
     void addAnt(Ant ant);
 
@@ -49,4 +49,10 @@ public interface Environment {
     void cleanupBridges();
 
     boolean isBridge(int start, int end);
+
+    Node getNode(int position);
+
+    List<Node> getNestsForNode(int position);
+
+    int numberOfBridges();
 }

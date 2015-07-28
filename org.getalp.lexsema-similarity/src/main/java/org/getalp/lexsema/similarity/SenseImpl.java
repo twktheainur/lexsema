@@ -42,7 +42,7 @@ public class SenseImpl implements Sense {
 
     @Override
     public String getId() {
-        if (lexicalSense.isNull()) {
+        if (!lexicalSense.isNull()) {
             return lexicalSense.toString();
         }
         return id;

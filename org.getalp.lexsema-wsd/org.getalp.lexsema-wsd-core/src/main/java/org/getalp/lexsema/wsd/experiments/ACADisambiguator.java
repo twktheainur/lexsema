@@ -5,11 +5,15 @@ import org.getalp.lexsema.io.annotresult.SemevalWriter;
 import org.getalp.lexsema.io.document.loader.CorpusLoader;
 import org.getalp.lexsema.io.document.loader.Semeval2007CorpusLoader;
 import org.getalp.lexsema.io.resource.LRLoader;
+import org.getalp.lexsema.io.resource.dictionary.DictionaryLRLoader;
 import org.getalp.lexsema.io.resource.wordnet.WordnetLoader;
 import org.getalp.lexsema.similarity.Document;
 import org.getalp.lexsema.similarity.measures.SimilarityMeasure;
+import org.getalp.lexsema.similarity.measures.lesk.ACExtendedLeskSimilarity;
 import org.getalp.lexsema.similarity.measures.lesk.AnotherLeskSimilarity;
 import org.getalp.lexsema.similarity.measures.lesk.IndexedOverlapSimilarity;
+import org.getalp.lexsema.similarity.measures.tverski.TverskiIndexSimilarityMeasure;
+import org.getalp.lexsema.similarity.measures.tverski.TverskiIndexSimilarityMeasureBuilder;
 import org.getalp.lexsema.wsd.configuration.Configuration;
 import org.getalp.lexsema.wsd.configuration.org.getalp.lexsema.wsd.evaluation.Evaluation;
 import org.getalp.lexsema.wsd.configuration.org.getalp.lexsema.wsd.evaluation.GoldStandard;
@@ -18,10 +22,7 @@ import org.getalp.lexsema.wsd.configuration.org.getalp.lexsema.wsd.evaluation.St
 import org.getalp.lexsema.wsd.method.Disambiguator;
 import org.getalp.lexsema.wsd.method.MultiThreadCuckooSearch;
 import org.getalp.lexsema.wsd.method.aca.AntColonyAlgorithm;
-import org.getalp.lexsema.wsd.score.ConfigurationScorer;
-import org.getalp.lexsema.wsd.score.MatrixConfigurationScorer;
-import org.getalp.lexsema.wsd.score.MultiThreadConfigurationScorerWithCache;
-import org.getalp.lexsema.wsd.score.SemEval2007Task7PerfectConfigurationScorer;
+import org.getalp.lexsema.wsd.score.*;
 import org.getalp.ml.matrix.score.SumMatrixScorer;
 
 import java.io.File;
@@ -32,15 +33,15 @@ public class ACADisambiguator
     public static void main(String[] args) throws Exception
     {
         int iterations = 100;
-        double initialEnergy = 20;
-        int initialPheromone = 10   ;
-        int vectorSize = 100;
-        double pheromoneEvaporation = 0.5;
-        double maximumEnergy = 30;
-        double antLife = 10;
+        double initialEnergy = 30;
+        int initialPheromone = 1   ;
+        int vectorSize = 1000;
+        double pheromoneEvaporation = 0.9;
+        double maximumEnergy = 36;
+        double antLife = 25;
         double depositPheromone = 1;
-        double takeEnergy = 1;
-        double componentsDeposited = 0.5;
+        double takeEnergy = 16;
+        double componentsDeposited = 0.3;
 
 //        if (args.length >= 1) iterations = Integer.valueOf(args[0]);
 //        if (args.length >= 2) levyLocation = Double.valueOf(args[1]);
@@ -57,16 +58,16 @@ public class ACADisambiguator
 
         long startTime = System.currentTimeMillis();
 
-        CorpusLoader dl = new Semeval2007CorpusLoader("../data/senseval2007_task7/test/eng-coarse-all-words-t1s1.xml");
+        CorpusLoader dl = new Semeval2007CorpusLoader("../data/senseval2007_task7/test/eng-coarse-all-words-t1.xml");
 
-        //LRLoader lrloader = new DictionaryLRLoader(new File("../data/dictionnaires-lesk/dict-adapted-all-relations-apriori.xml"));
+        LRLoader lrloader = new DictionaryLRLoader(new File("../data/dictionnaires-lesk/dict-adapted-all-relations.xml"));
 
-        LRLoader lrloader = new WordnetLoader(new Dictionary(new File("../data/wordnet/2.1/dict")))
+        /*LRLoader lrloader = new WordnetLoader(new Dictionary(new File("../data/wordnet/2.1/dict")))
                 .extendedSignature(true)
                 .shuffle(true)
                 .filterStopWords(false)
                 .stemming(false)
-                .loadDefinitions(true);
+                .loadDefinitions(true);*/
 
         //LRLoader lrloader = new DictionaryLRLoader(new File("../data/lesk_dict/dict_semeval2007task7"), true);
         //LRLoader lrloader = new DictionaryLRLoader(new File("../data/lesk_dict/dict_semeval2007task7_stopwords"), true);
