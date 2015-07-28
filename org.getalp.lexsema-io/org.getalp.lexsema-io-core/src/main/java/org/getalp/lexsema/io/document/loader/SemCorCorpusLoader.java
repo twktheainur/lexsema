@@ -132,9 +132,11 @@ public class SemCorCorpusLoader extends CorpusLoaderImpl implements ContentHandl
     @Override
     public void load() {
         try {
+            System.out.println("SemCor parsing");
             XMLReader saxReader = XMLReaderFactory.createXMLReader();
             saxReader.setContentHandler(this);
             saxReader.parse(path);
+            System.out.println("End of SemCor parsing");
         } catch (IOException | SAXException t) {
             t.printStackTrace();
             logger.error(t.getLocalizedMessage());

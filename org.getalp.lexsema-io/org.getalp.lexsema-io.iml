@@ -252,11 +252,10 @@
     <orderEntry type="library" name="Maven: com.martiansoftware:jsap:2.1" level="project" />
     <orderEntry type="library" name="Maven: commons-configuration:commons-configuration:1.8" level="project" />
     <orderEntry type="library" name="Maven: commons-collections:commons-collections:20040616" level="project" />
-    <orderEntry type="library" name="Maven: org.cleartk:cleartk-snowball:2.0.0" level="project" />
-    <orderEntry type="library" name="Maven: org.cleartk:cleartk-util:2.0.0" level="project" />
-    <orderEntry type="library" name="Maven: org.cleartk:cleartk-type-system:2.0.0" level="project" />
     <orderEntry type="library" name="Maven: org.cleartk:cleartk-opennlp-tools:2.0.0" level="project" />
     <orderEntry type="library" name="Maven: org.apache.opennlp:opennlp-uima:1.5.3" level="project" />
+    <orderEntry type="library" name="Maven: org.cleartk:cleartk-util:2.0.0" level="project" />
+    <orderEntry type="library" name="Maven: org.cleartk:cleartk-type-system:2.0.0" level="project" />
     <orderEntry type="library" name="Maven: io.dropwizard:dropwizard-assets:0.8.0" level="project" />
     <orderEntry type="library" name="Maven: io.dropwizard:dropwizard-servlets:0.8.0" level="project" />
     <orderEntry type="library" name="Maven: io.dropwizard.metrics:metrics-annotation:3.1.0" level="project" />

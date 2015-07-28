@@ -32,8 +32,8 @@ public abstract class SupervisedSequentialLexicalEntryDisambiguator extends Sequ
                 List<String> features = featureExtractor.getFeatures(getDocument(), getCurrentIndex());
                 List<ClassificationOutput> results = runClassifier(targetLemma, features);
                 if (results.isEmpty()) {
-                    //getConfiguration().setSense(getCurrentIndex(), 0);
-                    getConfiguration().setSense(getCurrentIndex(), -1);
+                    getConfiguration().setSense(getCurrentIndex(), 0);
+             //   getConfiguration().setSense(getCurrentIndex(), -1);
                 } else {
                     getConfiguration().setSense(getCurrentIndex(), -1);
                     int s = -1;

@@ -31,6 +31,7 @@ public class LocalCollocationFeatureExtractor implements LocalTextFeatureExtract
                         colFeature = "\"∅\"";
                     } else {
                         String lemma = null;
+
                         if (useLemmas) {
                             lemma = document.getWord(0, j).getLemma();
                         }

@@ -3,16 +3,18 @@ package org.getalp.lexsema.supervised.experiments;
 
 import edu.mit.jwi.Dictionary;
 import org.getalp.lexsema.io.annotresult.SemevalWriter;
+import org.getalp.lexsema.io.document.loader.CorpusLoader;
+import org.getalp.lexsema.io.document.loader.DSOCorpusLoader;
 import org.getalp.lexsema.io.document.loader.SemCorCorpusLoader;
 import org.getalp.lexsema.io.document.loader.Semeval2007CorpusLoader;
-import org.getalp.lexsema.io.document.loader.CorpusLoader;
 import org.getalp.lexsema.io.resource.LRLoader;
 import org.getalp.lexsema.io.resource.wordnet.WordnetLoader;
 import org.getalp.lexsema.similarity.Document;
+import org.getalp.lexsema.similarity.Text;
 import org.getalp.lexsema.supervised.WekaDisambiguator;
 import org.getalp.lexsema.supervised.features.*;
 import org.getalp.lexsema.supervised.features.extractors.*;
-import org.getalp.lexsema.supervised.weka.NaiveBayesSetUp;
+import org.getalp.lexsema.supervised.weka.RandomForestSetUp;
 import org.getalp.lexsema.wsd.configuration.Configuration;
 import org.getalp.lexsema.wsd.method.Disambiguator;
 
@@ -26,15 +28,41 @@ public final class NUSPT2007Disambiguation {
     public static void main(String[] args) throws IOException {
         CorpusLoader dl = new Semeval2007CorpusLoader("../data/senseval2007_task7/test/eng-coarse-all-words.xml")
                 .loadNonInstances(false);
-        LRLoader lrloader = new WordnetLoader(new Dictionary(new File("../data/wordnet/2.1/dict")))
-                .shuffle(false).extendedSignature(true);
-        //CorpusLoader semCor = new SemCorCorpusLoader("../data/semcor3.0/semcor_full.xml");
-        CorpusLoader dso = new SemCorCorpusLoader("dsoCorpus.xml");
+        LRLoader lrloader = new WordnetLoader(new Dictionary(new File("../data/wordnet/2.1/dict")));
+              //  .shuffle(false).extendedSignature(true);
 
-        dso.load();
-        WindowLoader wloader = new DocumentCollectionWindowLoader(dso);
+        boolean useSemCor = true;
+        boolean useDso = true;
+
+        CorpusLoader dso = null;
+        CorpusLoader semCor = null;
+
+        if (useSemCor)
+            semCor = new SemCorCorpusLoader("../data/semcor3.0/semcor_full.xml");
+
+        if (useDso)
+            dso = new DSOCorpusLoader("../data/DSO","../data/wordnet/2.1/dict");
+
+        if (useSemCor)
+            semCor.load();
+
+        if (useDso)
+            dso.load();
+
+        List<Text> taggedCorpora = new ArrayList<>();
+
+        if (useSemCor)
+            for(Text t: semCor) {
+                taggedCorpora.add(t);
+            }
+
+        if(useDso)
+            for(Text t: dso) {
+                taggedCorpora.add(t);
+            }
+
+        WindowLoader wloader = new DocumentCollectionWindowLoader(taggedCorpora);
         wloader.load();
-
 
         List<ContextWindow> contextWindows = new ArrayList<>();
         contextWindows.add(new ContextWindow(-1, -1));
@@ -55,7 +83,7 @@ public final class NUSPT2007Disambiguation {
         contextWindows.add(new ContextWindow(-2, 2));
         contextWindows.add(new ContextWindow(-1, 1));
         */
-        LocalCollocationFeatureExtractor lcfe = new LocalCollocationFeatureExtractor(contextWindows);
+        LocalCollocationFeatureExtractor lcfe = new LocalCollocationFeatureExtractor(contextWindows,false);
         PosFeatureExtractor pfe = new PosFeatureExtractor(3, 3);
         LocalTextFeatureExtractor acfe = new LemmaFeatureExtractor(3, 3);
 
@@ -65,14 +93,14 @@ public final class NUSPT2007Disambiguation {
         altfe.addExtractor(acfe);
 
         TrainingDataExtractor trainingDataExtractor = new SemCorTrainingDataExtractor(altfe);
-        trainingDataExtractor.extract(dso);
+        trainingDataExtractor.extract(taggedCorpora);
 
-        //Disambiguator disambiguator = new WekaDisambiguator("../data/supervised", new SVMSetUp(), altfe, 16);
+        //Disambiguator disambiguator = new WekaDisambiguator("../data/supervised", new SVMSetUp(), altfe, 4, trainingDataExtractor);
         //Disambiguator disambiguator = new WekaDisambiguator("../data/supervised", new BFTreeSetUp(), altfe, 16);
         //Disambiguator disambiguator = new WekaDisambiguator("../data/supervised", new BayesianLogisticRegressionSetUp(), altfe, 16);
         //Disambiguator disambiguator = new WekaDisambiguator("../data/supervised", new RBFNetworkSetUp(), altfe, 16);
-        //Disambiguator disambiguator = new WekaDisambiguator("../data/supervised", new RandomForestSetUp(Integer.parseInt(args[0]), Integer.parseInt(args[1]), Integer.parseInt(args[2]),Integer.parseInt(args[3])), altfe, Integer.parseInt(args[4]));
-        Disambiguator disambiguator = new WekaDisambiguator("../data/supervised", new NaiveBayesSetUp(Boolean.parseBoolean(args[0]), Boolean.parseBoolean(args[1])), altfe, Integer.parseInt(args[2]), trainingDataExtractor);
+        Disambiguator disambiguator = new WekaDisambiguator("../data/supervised", new RandomForestSetUp(Integer.parseInt(args[0]), Integer.parseInt(args[1]), Integer.parseInt(args[2]),Integer.parseInt(args[3])), altfe, Integer.parseInt(args[4]), trainingDataExtractor);
+        //Disambiguator disambiguator = new WekaDisambiguator("../data/supervised", new NaiveBayesSetUp(Boolean.parseBoolean(args[0]), Boolean.parseBoolean(args[1])), altfe, Integer.parseInt(args[2]), trainingDataExtractor);
 
         System.err.println("Loading texts");
         dl.load();

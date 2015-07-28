@@ -1,6 +1,7 @@
 package org.getalp.lexsema.supervised.features.extractors;
 
 import org.getalp.lexsema.similarity.Document;
+import org.getalp.lexsema.similarity.Word;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,7 +28,9 @@ public class PosFeatureExtractor implements LocalTextFeatureExtractor {
                 if (j < 0 || j >= document.size()) {
                     posFeature = "\"ε\"";
                 } else {
-                    posFeature = "\"" + convertPos(document.getWord(0, j).getPartOfSpeech()) + "\"";
+                    Word word = document.getWord(0, j);
+                    String pos =
+                    posFeature = "\"" + convertPos(word.getPartOfSpeech()) + "\"";
                 }
                 features.add(posFeature);
             }
@@ -37,7 +40,7 @@ public class PosFeatureExtractor implements LocalTextFeatureExtractor {
 
     public String convertPos(String pos) {
         String converted = "";
-        if (pos != null) {
+        if (pos != null && !pos.isEmpty()) {
             if (pos.equals("n")) {
                 converted = "NN";
             } else if (pos.equals("v")) {

@@ -11,6 +11,15 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="Maven: redis.clients:jedis:2.6.2" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.commons:commons-pool2:2.0" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.jena:jena-arq:2.13.0" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.jena:jena-core:2.13.0" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.jena:jena-iri:1.1.2" level="project" />
+    <orderEntry type="library" name="Maven: com.github.jsonld-java:jsonld-java:0.5.1" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.thrift:libthrift:0.9.2" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.commons:commons-lang3:3.3.2" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.jena:jena-tdb:1.1.2" level="project" />
     <orderEntry type="module" module-name="org.getalp.lexsema-ontolex-core" />
     <orderEntry type="library" name="Maven: org.getalp:dbnary:1.2" level="project" />
     <orderEntry type="library" name="Maven: org.codehaus.woodstox:woodstox-core-lgpl:4.0.8" level="project" />

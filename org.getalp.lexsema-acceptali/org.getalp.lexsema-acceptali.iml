@@ -27,6 +27,22 @@
     <orderEntry type="library" name="Maven: org.nd4j:canova-api:0.0.0.1" level="project" />
     <orderEntry type="library" name="Maven: org.nd4j:canova-nd4j-nlp:0.0.0.1" level="project" />
     <orderEntry type="library" name="Maven: org.nd4j:canova-data-nlp:0.0.0.1" level="project" />
+    <orderEntry type="library" name="Maven: eu.monnetproject:lemon.api:1.13.3" level="project" />
+    <orderEntry type="library" name="Maven: org.deeplearning4j:deeplearning4j-core:0.0.3.3.3.alpha1" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.commons:commons-compress:1.8" level="project" />
+    <orderEntry type="library" name="Maven: org.tukaani:xz:1.5" level="project" />
+    <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-core:2.5.1" level="project" />
+    <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-annotations:2.5.0" level="project" />
+    <orderEntry type="library" name="Maven: org.deeplearning4j:deeplearning4j-nlp:0.0.3.3.3.alpha1" level="project" />
+    <orderEntry type="library" name="Maven: org.deeplearning4j:deeplearning4j-scaleout-akka:0.0.3.3.3.alpha1" level="project" />
+    <orderEntry type="library" name="Maven: org.deeplearning4j:deeplearning4j-scaleout-zookeeper:0.0.3.3.3.alpha1" level="project" />
+    <orderEntry type="library" name="Maven: org.deeplearning4j:deeplearning4j-scaleout-api:0.0.3.3.3.alpha1" level="project" />
+    <orderEntry type="library" name="Maven: org.nd4j:nd4j-api:0.0.3.5.5.2" level="project" />
+    <orderEntry type="library" name="Maven: org.nd4j:nd4j-jblas:0.0.3.5.5.2" level="project" />
+    <orderEntry type="library" name="Maven: org.jblas:jblas:1.2.3" level="project" />
+    <orderEntry type="library" name="Maven: org.nd4j:canova-api:0.0.0.1" level="project" />
+    <orderEntry type="library" name="Maven: org.nd4j:canova-nd4j-nlp:0.0.0.1" level="project" />
+    <orderEntry type="library" name="Maven: org.nd4j:canova-data-nlp:0.0.0.1" level="project" />
     <orderEntry type="library" name="Maven: org.apache.uima:uimafit-maven-plugin:2.0.0" level="project" />
     <orderEntry type="library" name="Maven: commons-io:commons-io:2.2" level="project" />
     <orderEntry type="library" name="Maven: commons-lang:commons-lang:2.6" level="project" />
@@ -213,11 +229,10 @@
     <orderEntry type="library" name="Maven: com.martiansoftware:jsap:2.1" level="project" />
     <orderEntry type="library" name="Maven: commons-configuration:commons-configuration:1.8" level="project" />
     <orderEntry type="library" name="Maven: commons-collections:commons-collections:20040616" level="project" />
-    <orderEntry type="library" name="Maven: org.cleartk:cleartk-snowball:2.0.0" level="project" />
-    <orderEntry type="library" name="Maven: org.cleartk:cleartk-util:2.0.0" level="project" />
-    <orderEntry type="library" name="Maven: org.cleartk:cleartk-type-system:2.0.0" level="project" />
     <orderEntry type="library" name="Maven: org.cleartk:cleartk-opennlp-tools:2.0.0" level="project" />
     <orderEntry type="library" name="Maven: org.apache.opennlp:opennlp-uima:1.5.3" level="project" />
+    <orderEntry type="library" name="Maven: org.cleartk:cleartk-util:2.0.0" level="project" />
+    <orderEntry type="library" name="Maven: org.cleartk:cleartk-type-system:2.0.0" level="project" />
     <orderEntry type="library" name="Maven: io.dropwizard:dropwizard-assets:0.8.0" level="project" />
     <orderEntry type="library" name="Maven: io.dropwizard:dropwizard-servlets:0.8.0" level="project" />
     <orderEntry type="library" name="Maven: io.dropwizard.metrics:metrics-annotation:3.1.0" level="project" />
@@ -250,8 +265,8 @@
     <orderEntry type="library" name="Maven: com.trickl:cluster:0.1-SNAPSHOT" level="project" />
     <orderEntry type="library" name="Maven: commons-cli:commons-cli:1.2" level="project" />
     <orderEntry type="library" name="Maven: com.h2database:h2:1.4.185" level="project" />
-    <orderEntry type="library" name="Maven: org.apache.uima:uimaj-core:2.6.0" level="project" />
-    <orderEntry type="library" name="Maven: org.apache.uima:uimafit-core:2.1.0" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.uima:uimaj-core:2.5.0" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.uima:uimafit-core:2.0.0" level="project" />
     <orderEntry type="library" name="Maven: commons-logging:commons-logging-api:1.1" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-core:3.1.2.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-asm:3.1.2.RELEASE" level="project" />
