@@ -5,8 +5,8 @@ import java.io.PrintWriter;
 import java.util.Locale;
 import java.util.Scanner;
 
-import org.getalp.lexsema.io.document.Semeval2007TextLoader;
-import org.getalp.lexsema.io.document.TextLoader;
+import org.getalp.lexsema.io.document.loader.CorpusLoader;
+import org.getalp.lexsema.io.document.loader.Semeval2007CorpusLoader;
 import org.getalp.lexsema.io.resource.LRLoader;
 import org.getalp.lexsema.io.resource.dictionary.DictionaryLRLoader;
 import org.getalp.lexsema.similarity.Document;
@@ -23,7 +23,7 @@ public class AlgorithmsComparison
 {
     private static StopCondition stopConditionEvaluation;
     private static LRLoader lrloader;
-    private static TextLoader dlEvaluation;
+    private static CorpusLoader dlEvaluation;
     private static ConfigurationScorer configScorer;
     
     public static void main(String[] args) throws Exception
@@ -44,7 +44,7 @@ public class AlgorithmsComparison
         
         lrloader = new DictionaryLRLoader(new File("../data/dictionnaires-lesk/dict-adapted-all-relations.xml"));
 
-        dlEvaluation = new Semeval2007TextLoader("../data/senseval2007_task7/test/evaluation.xml");
+        dlEvaluation = new Semeval2007CorpusLoader("../data/senseval2007_task7/test/evaluation.xml");
         dlEvaluation.loadNonInstances(false);
         dlEvaluation.load();
         for (Document d : dlEvaluation) lrloader.loadSenses(d);

@@ -1,5 +1,6 @@
 package org.getalp.lexsema.io.resource;
 
+import org.getalp.lexsema.io.thesaurus.AnnotatedTextThesaurus;
 import org.getalp.lexsema.similarity.Document;
 import org.getalp.lexsema.similarity.Sense;
 import org.getalp.lexsema.similarity.Word;
@@ -22,6 +23,8 @@ public interface LRLoader
     LRLoader stemming(boolean stemming);
 
     LRLoader filterStopWords(boolean usesStopWords);
+
+    LRLoader addThesaurus(AnnotatedTextThesaurus thesaurus);
 
     LRLoader index(boolean useIndex);
 

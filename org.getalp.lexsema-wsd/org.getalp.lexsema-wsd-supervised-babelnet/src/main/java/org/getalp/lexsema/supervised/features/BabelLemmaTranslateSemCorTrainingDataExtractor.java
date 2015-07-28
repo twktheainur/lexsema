@@ -64,7 +64,7 @@ public class BabelLemmaTranslateSemCorTrainingDataExtractor implements TrainingD
             for (Word w : text) {
                 String lemma = w.getLemma();
                 List<String> instance = localTextFeatureExtractor.getFeatures(text, wordIndex);
-                String semanticTag = w.getSemanticTag();
+                String semanticTag = w.getSenseAnnotation();
                 if (semanticTag != null) {
                     String semanticTagkey = String.format("%s%%%s", lemma, semanticTag);
                     if (senseTagMap.containsKey(semanticTagkey)) {

@@ -5,11 +5,11 @@ import java.io.File;
 import edu.mit.jwi.Dictionary;
 
 import org.getalp.lexsema.io.dictionary.DocumentDictionaryWriter;
-import org.getalp.lexsema.io.document.DSOTextLoader;
-import org.getalp.lexsema.io.document.SemCorTextLoader;
-import org.getalp.lexsema.io.document.Semeval2007TextLoader;
-import org.getalp.lexsema.io.document.TextLoader;
 import org.getalp.lexsema.io.document.WordnetGlossTagTextLoader;
+import org.getalp.lexsema.io.document.loader.DSOCorpusLoader;
+import org.getalp.lexsema.io.document.loader.CorpusLoader;
+import org.getalp.lexsema.io.document.loader.SemCorCorpusLoader;
+import org.getalp.lexsema.io.document.loader.Semeval2007CorpusLoader;
 import org.getalp.lexsema.io.resource.wordnet.WordnetLoader;
 import org.getalp.lexsema.similarity.Text;
 import org.getalp.lexsema.io.thesaurus.AnnotatedTextThesaurusImpl;
@@ -28,12 +28,18 @@ public class DictionaryCreation
     
     public static Dictionary wordnet = new Dictionary(new File(wordnetPath));
     
-    public static TextLoader semCor = new SemCorTextLoader(semCorPath);
-
-    public static TextLoader dso = new DSOTextLoader(dsoPath, wordnetPath);
-
-    public static TextLoader wordnetGlossTag = new WordnetGlossTagTextLoader(wordnetGlossTagPath);
+    public static CorpusLoader semCor = new SemCorCorpusLoader(semCorPath);
     
+    public static boolean semCorIsLoaded = false;
+
+    public static CorpusLoader dso = new DSOCorpusLoader(dsoPath, wordnetPath);
+
+    public static boolean dsoIsLoaded = false;
+
+    public static CorpusLoader wordnetGlossTag = new WordnetGlossTagTextLoader(wordnetGlossTagPath);
+
+    public static boolean wordnetGlossTagIsLoaded = false;
+
     public static void main(String[] args)
     {
         //writeDictionary(false, false, false, "../data/dict_semeval2007task7");
@@ -72,20 +78,29 @@ public class DictionaryCreation
         lrloader.stemming(stemming);
         if (useSemCorThesaurus)
         {
-            semCor.load();
+            if (!semCorIsLoaded) {
+                semCor.load();
+                semCorIsLoaded = true;
+            }
             lrloader.addThesaurus(new AnnotatedTextThesaurusImpl(semCor, 100));
         }
         if (useDSOThesaurus)
         {
-            dso.load();
+            if (!dsoIsLoaded) {
+                dso.load();
+                dsoIsLoaded = true;
+            }
             lrloader.addThesaurus(new AnnotatedTextThesaurusImpl(dso, 100));
         }
         if (useWordnetGlossTag)
         {
-            wordnetGlossTag.load();
+            if (!wordnetGlossTagIsLoaded) {
+                wordnetGlossTag.load();
+                wordnetGlossTagIsLoaded = true;
+            }
             lrloader.addThesaurus(new AnnotatedTextThesaurusImpl(wordnetGlossTag, 100));
         }
-        TextLoader dl = new Semeval2007TextLoader(docPath);
+        CorpusLoader dl = new Semeval2007CorpusLoader(docPath);
         dl.load();
         for (Text txt : dl)
         {

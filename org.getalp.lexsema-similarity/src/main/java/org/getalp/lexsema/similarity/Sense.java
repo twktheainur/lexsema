@@ -1,9 +1,6 @@
 package org.getalp.lexsema.similarity;
 
-import com.hp.hpl.jena.graph.Node;
-import org.getalp.lexsema.ontolex.LexicalResource;
 import org.getalp.lexsema.ontolex.LexicalSense;
-import org.getalp.lexsema.ontolex.graph.OntologyModel;
 import org.getalp.lexsema.similarity.measures.SimilarityMeasure;
 import org.getalp.lexsema.similarity.signatures.SemanticSignature;
 
@@ -17,34 +14,15 @@ public interface Sense extends LexicalSense {
 
     Map<String, SemanticSignature> getRelatedSignatures();
 
-    @Override
-    String getDefinition();
+    SemanticSignature getSemanticSignature();
 
-    @Override
-    void setDefinition(String definition);
+    void setSemanticSignature(SemanticSignature semanticSignature);
 
-    @Override
-    String getSenseNumber();
+    void setLexicalSense(LexicalSense lexicalSense);
 
-    @Override
-    void setSenseNumber(String i);
+    void addRelatedSignature(String key, SemanticSignature semanticSignature);
 
-    @Override
-    LexicalResource getLexicalResource();
+    double computeSimilarityWith(SimilarityMeasure measure, Sense other);
 
-    @Override
-    OntologyModel getOntologyModel();
-
-    @Override
-    Node getNode();
-
-    public SemanticSignature getSemanticSignature();
-
-    public void setSemanticSignature(SemanticSignature semanticSignature);
-
-    public void setLexicalSense(LexicalSense lexicalSense);
-
-    public void addRelatedSignature(String key, SemanticSignature semanticSignature);
-
-    public double computeSimilarityWith(SimilarityMeasure measure, Sense other);
+    boolean isNull();
 }

@@ -1,8 +1,8 @@
 package org.getalp.lexsema.wsd.experiments;
 
 import com.wcohen.ss.ScaledLevenstein;
-import org.getalp.lexsema.io.document.RawTextLoader;
-import org.getalp.lexsema.io.document.TextLoader;
+import org.getalp.lexsema.io.document.loader.CorpusLoader;
+import org.getalp.lexsema.io.document.loader.RawCorpusLoader;
 import org.getalp.lexsema.io.resource.LRLoader;
 import org.getalp.lexsema.io.resource.dbnary.DBNaryLoaderImpl;
 import org.getalp.lexsema.io.text.EnglishDKPTextProcessor;
@@ -35,7 +35,7 @@ public class DbnaryDisambiguationExample {
 
     public static void main(String[] args) throws NoSuchMethodException, IOException, InstantiationException, IllegalAccessException, InvocationTargetException, ClassNotFoundException {
 
-        TextLoader dl = new RawTextLoader(new FileReader("../data/text.txt"), new EnglishDKPTextProcessor());
+        CorpusLoader dl = new RawCorpusLoader(new FileReader("../data/text.txt"), new EnglishDKPTextProcessor());
 
         Store store = new JenaRemoteSPARQLStore("http://kaiko.getalp.org/sparql");
         StoreHandler.registerStoreInstance(store);

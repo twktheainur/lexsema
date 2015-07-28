@@ -14,21 +14,16 @@ import java.util.Collection;
 
 public class TokenAnnotationConsumer extends CasConsumer_ImplBase implements TokenConsumer {
 
-    private Text text;
-
-
-    public TokenAnnotationConsumer() {
-
-    }
-
+    private Text text = NullText.getInstance();
 
     @Override
-    public void process(CAS cas) throws AnalysisEngineProcessException {
+    public void process(CAS aCAS) throws AnalysisEngineProcessException {
 
-        Type TOKEN_ANNOTATION = cas.getTypeSystem().getType("de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Token");
-        Collection<AnnotationFS> tokens = CasUtil.select(cas, TOKEN_ANNOTATION);
+        Type TOKEN_ANNOTATION = aCAS.getTypeSystem().getType("de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Token");
+        Collection<AnnotationFS> tokens = CasUtil.select(aCAS, TOKEN_ANNOTATION);
 
         text = new TextImpl();
+        Sentence sentence = new SentenceImpl("");
         for (AnnotationFS tokenAnnot : tokens) {
             Token token = (Token) tokenAnnot;
             String lemma = token.getLemma().getValue();
@@ -38,7 +33,10 @@ public class TokenAnnotationConsumer extends CasConsumer_ImplBase implements Tok
             int end = token.getEnd();
             Word lexEnt = new WordImpl("", lemma, sform, pos, begin, end);
             text.addWord(lexEnt);
+            sentence.addWord(lexEnt);
+            lexEnt.setEnclosingSentence(sentence);
         }
+        text.addSentence(sentence);
     }
 
 

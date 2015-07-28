@@ -1,6 +1,7 @@
 package org.getalp.lexsema.io.resource.dictionary;
 
 import org.getalp.lexsema.io.resource.LRLoader;
+import org.getalp.lexsema.io.thesaurus.AnnotatedTextThesaurus;
 import org.getalp.lexsema.similarity.Document;
 import org.getalp.lexsema.similarity.Sense;
 import org.getalp.lexsema.similarity.Word;
@@ -105,6 +106,11 @@ public class DictionaryLRLoader implements LRLoader {
     @SuppressWarnings("BooleanParameter")
     @Override
     public LRLoader filterStopWords(boolean usesStopWords) {
+        return this;
+    }
+
+    @Override
+    public LRLoader addThesaurus(AnnotatedTextThesaurus thesaurus) {
         return this;
     }
 

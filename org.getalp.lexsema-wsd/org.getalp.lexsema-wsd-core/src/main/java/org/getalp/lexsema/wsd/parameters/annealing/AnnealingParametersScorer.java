@@ -7,7 +7,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
-import org.getalp.lexsema.io.document.TextLoader;
+import org.getalp.lexsema.io.document.loader.CorpusLoader;
 import org.getalp.lexsema.similarity.Document;
 import org.getalp.lexsema.wsd.configuration.Configuration;
 import org.getalp.lexsema.wsd.method.Disambiguator;
@@ -21,7 +21,7 @@ public class AnnealingParametersScorer implements ParametersScorer
 {
     private ConfigurationScorer scorer; 
     
-    private TextLoader dl;
+    private CorpusLoader dl;
     
     private int iterationsOutside;
     
@@ -29,7 +29,7 @@ public class AnnealingParametersScorer implements ParametersScorer
 
     private ExecutorService threadPool;
 
-    public AnnealingParametersScorer(ConfigurationScorer scorer, TextLoader dl, int iterationsOutside, StopCondition stopCondition)
+    public AnnealingParametersScorer(ConfigurationScorer scorer, CorpusLoader dl, int iterationsOutside, StopCondition stopCondition)
     {
         this.scorer = scorer;
         this.dl = dl;

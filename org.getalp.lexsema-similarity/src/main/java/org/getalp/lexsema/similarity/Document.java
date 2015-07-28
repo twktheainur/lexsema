@@ -23,26 +23,26 @@ public interface Document extends Iterable<Word> {
     void setId(String id);
 
 
-    public Word getWord(int offset, int index);
-    public Word getWord(int index);
+    Word getWord(int offset, int index);
+    Word getWord(int index);
 
-    public void addWord(Word w);
+    void addWord(Word word);
 
-    public void addWordSenses(Iterable<Sense> s);
+    void addWordSenses(Iterable<Sense> senses);
 
-    public void addWords(Iterable<Word> w);
+    void addWords(Iterable<Word> words);
 
-    public void addWordsSenses(Iterable<Iterable<Sense>> s);
+    void addWordsSenses(Iterable<Iterable<Sense>> senses);
 
     List<Sense> getSenses(int offset, int index);
 
     List<Sense> getSenses(int index);
 
-    public int size();
+    int size();
 
-    public int indexOfWord(Word w);
+    int indexOfWord(Word word);
 
-    public Language getLanguage();
+    Language getLanguage();
 
-    public void setLanguage(Language language);
+    void setLanguage(Language language);
 }

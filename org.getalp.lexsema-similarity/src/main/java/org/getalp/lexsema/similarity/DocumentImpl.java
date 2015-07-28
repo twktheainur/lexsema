@@ -8,10 +8,10 @@ import java.util.Iterator;
 import java.util.List;
 
 public class DocumentImpl implements Document {
-    private String id;
-    private List<Word> lexicalEntries;
-    private List<List<Sense>> senses;
-    private Language language;
+    private String id = "";
+    private final List<Word> lexicalEntries;
+    private final List<List<Sense>> senses;
+    private Language language = Language.UNSUPPORTED;
 
 
     public DocumentImpl() {
@@ -46,17 +46,19 @@ public class DocumentImpl implements Document {
     }
 
     @Override
-    public void addWord(Word w) {
-        lexicalEntries.add(w);
+    public void addWord(Word word) {
+        lexicalEntries.add(word);
     }
 
     @Override
-    public void addWordSenses(Iterable<Sense> s) {
+    public void addWordSenses(Iterable<Sense> senses) {
         List<Sense> currentWordSenses = new ArrayList<>();
-        for (Sense sense : s) {
+        for (Sense sense : senses) {
             currentWordSenses.add(sense);
         }
-        senses.add(currentWordSenses);
+        final Word target = lexicalEntries.get(this.senses.size());
+        target.loadSenses(currentWordSenses);
+        this.senses.add(currentWordSenses);
     }
 
     @Override
@@ -67,8 +69,8 @@ public class DocumentImpl implements Document {
     }
 
     @Override
-    public void addWordsSenses(Iterable<Iterable<Sense>> s) {
-        for (Iterable<Sense> cws : s) {
+    public void addWordsSenses(Iterable<Iterable<Sense>> senses) {
+        for (Iterable<Sense> cws : senses) {
             addWordSenses(cws);
         }
     }
@@ -89,8 +91,8 @@ public class DocumentImpl implements Document {
     }
 
     @Override
-    public int indexOfWord(Word w) {
-        return lexicalEntries.indexOf(w);
+    public int indexOfWord(Word word) {
+        return lexicalEntries.indexOf(word);
     }
 
 
@@ -99,10 +101,12 @@ public class DocumentImpl implements Document {
         return lexicalEntries.iterator();
     }
 
+    @Override
     public Language getLanguage() {
         return language;
     }
 
+    @Override
     public void setLanguage(Language language) {
         this.language = language;
     }

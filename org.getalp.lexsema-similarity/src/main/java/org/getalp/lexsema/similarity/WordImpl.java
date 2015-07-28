@@ -5,32 +5,33 @@ import lombok.EqualsAndHashCode;
 import org.getalp.lexsema.ontolex.LexicalEntry;
 import org.getalp.lexsema.ontolex.LexicalResource;
 import org.getalp.lexsema.ontolex.LexicalResourceEntity;
+import org.getalp.lexsema.ontolex.NullLexicalEntry;
 import org.getalp.lexsema.ontolex.graph.OntologyModel;
 import org.getalp.lexsema.util.Language;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 @EqualsAndHashCode
 public class WordImpl implements Word {
     private final String id;
     private final String surfaceForm;
     private final String textPos;
-    LexicalEntry lexicalEntry;
+    private LexicalEntry lexicalEntry = NullLexicalEntry.getInstance();
+    private String semanticTag = "";
+    private Sentence enclosingSentence = NullSentence.getInstance();
+    private final List<Word> precedingNonInstances = new ArrayList<>();
     private String lemma;
-    private String semanticTag;
-    private Sentence enclosingSentence = null;
-    private List<Word> precedingNonInstances;
-    private int begin = 0;
-    private int end = 0;
+    private final int begin;
+    private final int end;
+    private final List<Sense> senses = new ArrayList<>();
 
     public WordImpl(String id, String lemma, String surfaceForm, String pos) {
         this.id = id;
         this.lemma = lemma;
         this.surfaceForm = surfaceForm;
         textPos = pos;
-        precedingNonInstances = new ArrayList<>();
+        begin = 0;
+        end = lemma.length();
     }
 
     public WordImpl(String id, String lemma, String surfaceForm, String pos, int begin, int end) {
@@ -38,7 +39,6 @@ public class WordImpl implements Word {
         this.lemma = lemma;
         this.surfaceForm = surfaceForm;
         textPos = pos;
-        precedingNonInstances = new ArrayList<>();
         this.begin = begin;
         this.end = end;
     }
@@ -66,7 +66,7 @@ public class WordImpl implements Word {
 
     @Override
     public String getLemma() {
-        if (lexicalEntry == null) {
+        if (lexicalEntry.isNull()) {
             return lemma;
         } else {
             return lexicalEntry.getLemma();
@@ -75,7 +75,7 @@ public class WordImpl implements Word {
 
     @Override
     public void setLemma(String lemma) {
-        if (lexicalEntry != null) {
+        if (lexicalEntry.isNull()) {
             lexicalEntry.setLemma(lemma);
         } else {
             this.lemma = lemma;
@@ -84,7 +84,7 @@ public class WordImpl implements Word {
 
     @Override
     public String getPartOfSpeech() {
-        if (lexicalEntry == null) {
+        if (lexicalEntry.isNull()) {
             return textPos;
         } else {
             return lexicalEntry.getPartOfSpeech();
@@ -123,27 +123,19 @@ public class WordImpl implements Word {
 
     @Override
     public LexicalResourceEntity getParent() {
-        if (lexicalEntry != null) {
-            return lexicalEntry.getParent();
-        }
-        return null;
+        return lexicalEntry.getParent();
 
     }
 
     @Override
     public Language getLanguage() {
-        if (lexicalEntry == null) {
-            return Language.UNSUPPORTED;
-        } else {
-            return lexicalEntry.getLanguage();
-        }
+        return lexicalEntry.getLanguage();
     }
 
     @Override
     public void setLanguage(Language language) {
-        if (lexicalEntry != null) {
+
             lexicalEntry.setLanguage(language);
-        }
     }
 
     @Override
@@ -157,12 +149,12 @@ public class WordImpl implements Word {
     }
 
     @Override
-    public Iterator<Word> iterator() {
-        return precedingNonInstances.iterator();
+    public Iterator<Sense> iterator() {
+        return senses.iterator();
     }
 
     @Override
-    public String getSemanticTag() {
+    public String getSenseAnnotation() {
         return semanticTag;
     }
 
@@ -173,25 +165,41 @@ public class WordImpl implements Word {
 
     @Override
     public int compareTo(LexicalResourceEntity o) {
-        return id.compareTo(o.getNode().toString());
+        final Node node = o.getNode();
+        return id.compareTo(node.toString());
     }
 
     @Override
     public String toString() {
-        if(lexicalEntry!=null) {
+        if (lexicalEntry.isNull()) {
             return lexicalEntry.toString();
         } else {
-            return String.format("Word|%s#%s|",lemma,textPos);
+            return String.format("Word|%s#%s|", lemma, textPos);
         }
     }
-    
+
     @Override
     public int getBegin() {
-    	return begin;
+        return begin;
     }
-    
+
     @Override
     public int getEnd() {
-    	return end;
+        return end;
+    }
+
+    @Override
+    public Iterable<Word> precedingNonInstances() {
+        return Collections.unmodifiableList(precedingNonInstances);
+    }
+
+    @Override
+    public void loadSenses(Collection<Sense> senses) {
+        senses.stream().forEachOrdered(this.senses::add);
+    }
+
+    @Override
+    public boolean isNull() {
+        return false;
     }
 }

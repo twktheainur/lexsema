@@ -2,9 +2,9 @@ package org.getalp.lexsema.supervised.experiments;
 
 
 import org.getalp.lexsema.io.annotresult.SemevalWriter;
-import org.getalp.lexsema.io.document.SemCorTextLoader;
-import org.getalp.lexsema.io.document.Semeval2007TextLoader;
-import org.getalp.lexsema.io.document.TextLoader;
+import org.getalp.lexsema.io.document.loader.CorpusLoader;
+import org.getalp.lexsema.io.document.loader.SemCorCorpusLoader;
+import org.getalp.lexsema.io.document.loader.Semeval2007CorpusLoader;
 import org.getalp.lexsema.io.resource.LRLoader;
 import org.getalp.lexsema.io.resource.dictionary.DictionaryLRLoader;
 import org.getalp.lexsema.similarity.Document;
@@ -25,8 +25,8 @@ public class ArabicNUSPTDisambiguation {
     private static Logger logger = LoggerFactory.getLogger(ArabicNUSPTDisambiguation.class);
 
     public static void main(String[] args) throws IOException {
-        TextLoader dl = new Semeval2007TextLoader(args[0]).loadNonInstances(false);
-        TextLoader semCor = new SemCorTextLoader(args[1]);
+        CorpusLoader dl = new Semeval2007CorpusLoader(args[0]).loadNonInstances(false);
+        CorpusLoader semCor = new SemCorCorpusLoader(args[1]);
         LRLoader lrloader = new DictionaryLRLoader(new File(args[2]));
 
 //        LemmaFeatureExtractor lfe = new LemmaFeatureExtractor(3,1);

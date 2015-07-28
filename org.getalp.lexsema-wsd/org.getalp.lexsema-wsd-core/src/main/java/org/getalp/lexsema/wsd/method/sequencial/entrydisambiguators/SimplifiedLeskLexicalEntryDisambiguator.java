@@ -42,7 +42,7 @@ public class SimplifiedLeskLexicalEntryDisambiguator extends SequentialLexicalEn
             for (int j = getStart(); j < getEnd(); j++) {
                 if (params.isIncludeTarget() || !params.isIncludeTarget() && j != getCurrentIndex()) {
                     Word cw = getDocument().getWord(0, j);
-                        for (Word prevWord : cw) {
+                        for (Word prevWord : cw.precedingNonInstances()) {
                             String lemma = prevWord.getLemma();
                             if (lemma != null && !lemma.isEmpty()) {
                                 context.add(lemma);

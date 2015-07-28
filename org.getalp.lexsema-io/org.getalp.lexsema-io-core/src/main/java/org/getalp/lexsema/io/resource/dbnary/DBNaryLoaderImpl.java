@@ -3,6 +3,7 @@ package org.getalp.lexsema.io.resource.dbnary;
 
 import com.hp.hpl.jena.graph.Node;
 import org.getalp.lexsema.io.resource.LRLoader;
+import org.getalp.lexsema.io.thesaurus.AnnotatedTextThesaurus;
 import org.getalp.lexsema.ontolex.LexicalEntry;
 import org.getalp.lexsema.ontolex.LexicalSense;
 import org.getalp.lexsema.ontolex.dbnary.DBNary;
@@ -233,6 +234,11 @@ public class DBNaryLoaderImpl implements DBNaryLoader {
     public LRLoader filterStopWords(boolean usesStopWords) {
         // TODO Auto-generated method stub
         return null;
+    }
+
+    @Override
+    public LRLoader addThesaurus(AnnotatedTextThesaurus thesaurus) {
+        return this;
     }
 
     @Override

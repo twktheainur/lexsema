@@ -13,4 +13,6 @@ public interface LexicalEntry extends LexicalResourceEntity {
     int getNumber();
 
     void setNumber(int number);
+
+    boolean isNull();
 }

@@ -67,9 +67,9 @@ public class AnnotatedTextThesaurusImpl implements AnnotatedTextThesaurus {
             {
                 for (Word w : stc)
                 {
-                    if (w.getLemma() != null && w.getSemanticTag() != null)
+                    if (w.getLemma() != null && w.getSenseAnnotation() != null)
                     {
-                        String wordStr = w.getLemma() + "%" + w.getSemanticTag();
+                        String wordStr = w.getLemma() + "%" + w.getSenseAnnotation();
                         if (!map.containsKey(wordStr))
                         {
                             map.put(wordStr, new HashMap<String, Integer>());
@@ -77,7 +77,7 @@ public class AnnotatedTextThesaurusImpl implements AnnotatedTextThesaurus {
                         Map<String, Integer> wordMap = map.get(wordStr);
                         for (Word w2 : stc)
                         {
-                            String word2Str = w2.getSurfaceForm();
+                            String word2Str = w2.getSurfaceForm().replaceAll(NON_LETTERS.pattern(), "");
                             if (w != w2 && !StopList.isStopWord(word2Str))
                             {
                                 if (!wordMap.containsKey(word2Str))

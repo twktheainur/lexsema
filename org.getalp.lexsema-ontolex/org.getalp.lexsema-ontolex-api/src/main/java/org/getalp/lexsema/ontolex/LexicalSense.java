@@ -1,7 +1,7 @@
 package org.getalp.lexsema.ontolex;
 
 /**
- * An interface for <code>LexicalSense</code> instances
+ * An interface for {@code LexicalSense} instances
  */
 public interface LexicalSense extends LexicalResourceEntity {
     String getDefinition();
@@ -11,4 +11,6 @@ public interface LexicalSense extends LexicalResourceEntity {
     String getSenseNumber();
 
     void setSenseNumber(String senseNumber);
+
+    boolean isNull();
 }

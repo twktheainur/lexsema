@@ -50,13 +50,19 @@ public interface SemanticSignature extends Iterable<SemanticSymbol> {
      */
     void addSymbolString(List<String> string, List<Double> weights);
 
+    /**
+     * Add a string of symbols
+     *
+     * @param string  The symbol string
+     */
     void addSymbolString(List<String> string);
+
 
     SemanticSignature appendSignature(SemanticSignature other);
 
     /**
-     * Merge the present semantic signature with <code>other</code> and returns a copy of the
-     * annotresult
+     * Merge the present semantic signature with {@code other} and returns a copy of the
+     * annotation result
      *
      * @param other The other semantic signature to merge with the current one
      * @return The copy of the merged signature
@@ -64,7 +70,7 @@ public interface SemanticSignature extends Iterable<SemanticSymbol> {
     SemanticSignature mergeSignatures(SemanticSignature other);
 
     /**
-     * Add a semantic symbol represented by <code>symbol</code>
+     * Add a semantic symbol represented by {@code symbol}
      *
      * @param symbol the semantic symbol
      */
@@ -72,7 +78,8 @@ public interface SemanticSignature extends Iterable<SemanticSymbol> {
 
     SemanticSignature copy();
 
-    List<String> getSymbols();
-
-    public SemanticSymbol getSymbol(int index);
+    List<String> getStringSymbols();
+    List<SemanticSymbol> getSymbols();
+    SemanticSymbol getSymbol(int index);
+    boolean isNull();
 }

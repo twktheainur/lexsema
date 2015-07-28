@@ -9,10 +9,19 @@ public class SentenceImpl extends DocumentImpl implements Sentence {
 
     @Override
     public String toString() {
-        String output = "";
+        StringBuilder output = new StringBuilder();
         for (Word le : this) {
-            output += le.getLemma().trim() + " ";
+            final String lemma = le.getLemma();
+            output.append(lemma.trim());
+            output.append(" ");
         }
-        return output.trim();
+        final String s = output.toString();
+        return s.trim();
     }
+
+    @Override
+    public boolean isNull() {
+        return false;
+    }
+
 }

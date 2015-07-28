@@ -10,14 +10,14 @@ public class AdaptiveSimulatedAnnealingDisambiguation {
     public static void main(String[] args) {
         //VisualVMTools.delayUntilReturn();
         long startTime = System.currentTimeMillis();
-        TextLoader dl = new Semeval2007TextLoader("../data/senseval2007_task7/test/eng-coarse-all-words.xml").loadNonInstances(true);
+        CorpusLoader dl = new Semeval2007CorpusLoader("../data/senseval2007_task7/test/eng-coarse-all-words.xml").loadNonInstances(true);
         LRLoader lrloader = new WordnetLoader2("../data/wordnet/2.1/dict")
 			.extendedSignature(true)
 			.filterStopWords(false)
 			.stemming(true)
 			.loadDefinitions(true);
         
-        TextLoader semCor = new SemCorTextLoader("../data/semcor3.0/semcor_full.xml");
+        CorpusLoader semCor = new SemCorCorpusLoader("../data/semcor3.0/semcor_full.xml");
 		semCor.load();
         
         SemCorDefinitionExpender definitionExpender=null;

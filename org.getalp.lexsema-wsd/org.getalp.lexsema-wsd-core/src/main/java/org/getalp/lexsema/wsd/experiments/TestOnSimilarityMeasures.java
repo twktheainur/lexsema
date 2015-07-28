@@ -3,8 +3,8 @@ package org.getalp.lexsema.wsd.experiments;
 import java.io.File;
 
 import org.apache.commons.math3.stat.inference.MannWhitneyUTest;
-import org.getalp.lexsema.io.document.Semeval2007TextLoader;
-import org.getalp.lexsema.io.document.TextLoader;
+import org.getalp.lexsema.io.document.loader.Semeval2007CorpusLoader;
+import org.getalp.lexsema.io.document.loader.CorpusLoader;
 import org.getalp.lexsema.io.resource.LRLoader;
 import org.getalp.lexsema.io.resource.dictionary.DictionaryLRLoader;
 import org.getalp.lexsema.similarity.Document;
@@ -103,7 +103,7 @@ public class TestOnSimilarityMeasures
         long[] times = new long[n];
         LRLoader lrloader = new DictionaryLRLoader(new File(dict), true);
 
-        TextLoader dl = new Semeval2007TextLoader("../data/senseval2007_task7/test/eng-coarse-all-words.xml");
+        CorpusLoader dl = new Semeval2007CorpusLoader("../data/senseval2007_task7/test/eng-coarse-all-words.xml");
         dl.load();
         for (Document d : dl) lrloader.loadSenses(d);
 

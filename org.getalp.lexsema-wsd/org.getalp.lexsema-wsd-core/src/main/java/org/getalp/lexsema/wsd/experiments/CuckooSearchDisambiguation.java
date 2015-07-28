@@ -4,8 +4,8 @@ import java.io.File;
 import java.io.PrintWriter;
 
 import org.getalp.lexsema.io.annotresult.SemevalWriter;
-import org.getalp.lexsema.io.document.Semeval2007TextLoader;
-import org.getalp.lexsema.io.document.TextLoader;
+import org.getalp.lexsema.io.document.loader.CorpusLoader;
+import org.getalp.lexsema.io.document.loader.Semeval2007CorpusLoader;
 import org.getalp.lexsema.io.resource.LRLoader;
 import org.getalp.lexsema.io.resource.dictionary.DictionaryLRLoader;
 import org.getalp.lexsema.similarity.Document;
@@ -41,31 +41,14 @@ public class CuckooSearchDisambiguation
         */
         long startTime = System.currentTimeMillis();
 
-        TextLoader dl = new Semeval2007TextLoader("../data/senseval2007_task7/test/eng-coarse-all-words.xml");
-
-        //LRLoader lrloader = new DictionaryLRLoader(new File("../data/lesk_dict/dict-adapted-all-relations.xml"));
-        
-        //LRLoader lrloader = new DictionaryLRLoader(new File("../data/lesk_dict/dict_semeval2007task7"), true);
-        //LRLoader lrloader = new DictionaryLRLoader(new File("../data/lesk_dict/dict_semeval2007task7_stopwords"), true);
-        //LRLoader lrloader = new DictionaryLRLoader(new File("../data/lesk_dict/dict_semeval2007task7_stemming"), true);
-        //LRLoader lrloader = new DictionaryLRLoader(new File("../data/lesk_dict/dict_semeval2007task7_stopwords_stemming"), true);
-        
-        //LRLoader lrloader = new DictionaryLRLoader(new File("../data/lesk_dict/dict_semeval2007task7_semcor"), true);
-        //LRLoader lrloader = new DictionaryLRLoader(new File("../data/lesk_dict/dict_semeval2007task7_stopwords_semcor"), true);
-        //LRLoader lrloader = new DictionaryLRLoader(new File("../data/lesk_dict/dict_semeval2007task7_stemming_semcor"), true);
-        //LRLoader lrloader = new DictionaryLRLoader(new File("../data/lesk_dict/all/dict_semeval2007task7_stopwords_stemming_semcor"), true);
+        CorpusLoader dl = new Semeval2007CorpusLoader("../data/senseval2007_task7/test/eng-coarse-all-words.xml");
         
         LRLoader lrloader = new DictionaryLRLoader(new File("../data/lesk_dict/dict_semeval2007task7_stopwords_stemming_semcor_dso_wordnetglosstag"), true);
 
         //ConfigurationScorer scorer = new SemEval2007Task7PerfectConfigurationScorer();
-        //ConfigurationScorer scorer = new ACSimilarityConfigurationScorer(new ACExtendedLeskSimilarity());
-        //ConfigurationScorer scorer = new ACSimilarityConfigurationScorer(new IndexedOverlapSimilarity());
-        //ConfigurationScorer scorer = new TverskyConfigurationScorer(new ACExtendedLeskSimilarity(), Runtime.getRuntime().availableProcessors());
         ConfigurationScorer scorer = new ConfigurationScorerWithCache(new AnotherLeskSimilarity());
         //ConfigurationScorer scorer = new MultiThreadConfigurationScorerWithCache(new AnotherLeskSimilarity());
-        //ConfigurationScorer scorer = new TestScorer(new TverskyConfigurationScorer(new IndexedOverlapSimilarity(), Runtime.getRuntime().availableProcessors()));
-        //ConfigurationScorer scorer = new TverskyConfigurationScorer(new TverskiIndexSimilarityMeasureBuilder().distance(new ScaledLevenstein()).alpha(1d).beta(0.0d).gamma(0.0d).fuzzyMatching(true).build(), Runtime.getRuntime().availableProcessors());
-        
+        //ConfigurationScorer scorer = new MatrixConfigurationScorer(new AnotherLeskSimilarity(), new SumMatrixScorer(),Runtime.getRuntime().availableProcessors());
         //CuckooSearchDisambiguator cuckooDisambiguator = new CuckooSearchDisambiguator(new StopCondition(StopCondition.Condition.SCORERCALLS, iterations), levyLocation, levyScale, nestsNumber, destroyedNests, scorer, true);
         MultiThreadCuckooSearch cuckooDisambiguator = new MultiThreadCuckooSearch(iterations, minLevyLocation, maxLevyLocation, minLevyScale, maxLevyScale, scorer, true);
         
@@ -84,7 +67,6 @@ public class CuckooSearchDisambiguation
             cuckooDisambiguator.perfectScorer = new SemEval2007Task7PerfectConfigurationScorer();
             System.out.println("Disambiguating...");
             Configuration c = cuckooDisambiguator.disambiguate(d);
-
             System.out.println("Writing results...");
             SemevalWriter sw = new SemevalWriter("../" + d.getId() + ".ans");
             sw.write(d, c.getAssignments());

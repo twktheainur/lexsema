@@ -1,6 +1,6 @@
 package org.getalp.lexsema.supervised.features;
 
-import org.getalp.lexsema.io.document.TextLoader;
+import org.getalp.lexsema.io.document.loader.CorpusLoader;
 import org.getalp.lexsema.similarity.Sentence;
 import org.getalp.lexsema.similarity.Text;
 import org.getalp.lexsema.similarity.Word;
@@ -12,9 +12,9 @@ public class DocumentCollectionWindowLoader implements WindowLoader {
 
     Map<String, WordWindow> wordWindows;
     Set<String> words;
-    private TextLoader corpus;
+    private CorpusLoader corpus;
 
-    public DocumentCollectionWindowLoader(TextLoader corpus) {
+    public DocumentCollectionWindowLoader(CorpusLoader corpus) {
         this.corpus = corpus;
         wordWindows = new HashMap<>();
         words = new TreeSet<>();

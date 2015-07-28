@@ -6,7 +6,6 @@ import com.wcohen.ss.api.StringDistance;
 import org.deeplearning4j.models.embeddings.WeightLookupTable;
 import org.deeplearning4j.models.word2vec.Word2Vec;
 import org.getalp.lexsema.similarity.measures.SimilarityMeasure;
-import org.getalp.lexsema.similarity.signatures.IndexedSemanticSignature;
 import org.getalp.lexsema.similarity.signatures.SemanticSignature;
 import org.getalp.lexsema.util.dataitems.Pair;
 import org.getalp.lexsema.util.dataitems.PairImpl;
@@ -112,7 +111,7 @@ public class Word2VecGlossDistanceSimilarity implements SimilarityMeasure {
     }
 
     private List<String> sortedSignature(SemanticSignature semanticSignature) {
-        List<String> symbols = semanticSignature.getSymbols();
+        List<String> symbols = semanticSignature.getStringSymbols();
         Collections.sort(symbols);
         return Collections.unmodifiableList(symbols);
     }

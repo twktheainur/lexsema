@@ -1,7 +1,8 @@
 package org.getalp.lexsema.io.document;
 
+import org.getalp.lexsema.io.document.loader.CorpusLoader;
+import org.getalp.lexsema.io.document.loader.CorpusLoaderImpl;
 import org.getalp.lexsema.similarity.*;
-import org.getalp.lexsema.similarity.Text;
 import org.xml.sax.Attributes;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.Locator;
@@ -9,7 +10,7 @@ import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLReaderFactory;
 
-public class WordnetGlossTagTextLoader extends TextLoaderImpl implements ContentHandler {
+public class WordnetGlossTagTextLoader extends CorpusLoaderImpl implements ContentHandler {
     
     private String path;
 
@@ -46,7 +47,7 @@ public class WordnetGlossTagTextLoader extends TextLoaderImpl implements Content
         processFile(path + "/merged/adv.xml");
     }
 
-    public TextLoader loadNonInstances(boolean loadExtra) {
+    public CorpusLoader loadNonInstances(boolean loadExtra) {
         return this;
     }
 
