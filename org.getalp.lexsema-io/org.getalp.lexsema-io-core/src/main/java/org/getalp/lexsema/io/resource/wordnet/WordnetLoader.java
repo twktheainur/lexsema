@@ -52,7 +52,7 @@ public class WordnetLoader implements LRLoader {
 
     private final SymbolIndex symbolIndex;
 
-    private List<AnnotatedTextThesaurus> thesauri;
+    private final List<AnnotatedTextThesaurus> thesauri;
 
     /**
      * Creates a WordnetLoader with an existing Wordnet Dictionary object.
@@ -92,9 +92,20 @@ public class WordnetLoader implements LRLoader {
         }
     }
 
+    private String processPOS(String pos){
+        char newPos = 'n';
+        if(pos.startsWith("N")||pos.startsWith("V")|| pos.startsWith("R")) {
+            final String s = pos.toLowerCase();
+            newPos = s.charAt(0);
+        } else if(pos.startsWith("J")){
+            newPos = 'a';
+        }
+        return String.valueOf(newPos);
+    }
+
     private List<Sense> getSenses(String lemma, String pos) {
         List<Sense> senses = new ArrayList<>();
-        IIndexWord iw = getWord(MessageFormat.format("{0}%{1}", lemma, pos));
+        IIndexWord iw = getWord(MessageFormat.format("{0}%{1}", lemma, processPOS(pos)));
         if (iw != null) {
             final List<IWordID> wordIDs = iw.getWordIDs();
             for (IWordID wordID : wordIDs) {
@@ -304,7 +315,7 @@ public class WordnetLoader implements LRLoader {
 
     @Override
     public LRLoader addThesaurus(AnnotatedTextThesaurus thesaurus) {
-        this.thesauri.add(thesaurus);
+        thesauri.add(thesaurus);
         return this;
     }
 

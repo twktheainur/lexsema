@@ -28,10 +28,11 @@ public final class NUSPT2007Disambiguation {
                 .loadNonInstances(false);
         LRLoader lrloader = new WordnetLoader(new Dictionary(new File("../data/wordnet/2.1/dict")))
                 .shuffle(false).extendedSignature(true);
-        CorpusLoader semCor = new SemCorCorpusLoader("../data/semcor3.0/semcor_full.xml");
+        //CorpusLoader semCor = new SemCorCorpusLoader("../data/semcor3.0/semcor_full.xml");
+        CorpusLoader dso = new SemCorCorpusLoader("dsoCorpus.xml");
 
-        semCor.load();
-        WindowLoader wloader = new DocumentCollectionWindowLoader(semCor);
+        dso.load();
+        WindowLoader wloader = new DocumentCollectionWindowLoader(dso);
         wloader.load();
 
 
@@ -64,7 +65,7 @@ public final class NUSPT2007Disambiguation {
         altfe.addExtractor(acfe);
 
         TrainingDataExtractor trainingDataExtractor = new SemCorTrainingDataExtractor(altfe);
-        trainingDataExtractor.extract(semCor);
+        trainingDataExtractor.extract(dso);
 
         //Disambiguator disambiguator = new WekaDisambiguator("../data/supervised", new SVMSetUp(), altfe, 16);
         //Disambiguator disambiguator = new WekaDisambiguator("../data/supervised", new BFTreeSetUp(), altfe, 16);
