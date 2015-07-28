@@ -3,6 +3,7 @@ package org.getalp.lexsema.supervised.experiments;
 
 import edu.mit.jwi.Dictionary;
 import org.getalp.lexsema.io.annotresult.SemevalWriter;
+import org.getalp.lexsema.io.document.WordnetGlossTagTextLoader;
 import org.getalp.lexsema.io.document.loader.CorpusLoader;
 import org.getalp.lexsema.io.document.loader.DSOCorpusLoader;
 import org.getalp.lexsema.io.document.loader.SemCorCorpusLoader;
@@ -17,6 +18,7 @@ import org.getalp.lexsema.supervised.features.extractors.*;
 import org.getalp.lexsema.supervised.weka.RandomForestSetUp;
 import org.getalp.lexsema.wsd.configuration.Configuration;
 import org.getalp.lexsema.wsd.method.Disambiguator;
+import org.getalp.lexsema.wsd.method.FirstSenseDisambiguator;
 
 import java.io.File;
 import java.io.IOException;
@@ -31,11 +33,14 @@ public final class NUSPT2007Disambiguation {
         LRLoader lrloader = new WordnetLoader(new Dictionary(new File("../data/wordnet/2.1/dict")));
               //  .shuffle(false).extendedSignature(true);
 
-        boolean useSemCor = true;
-        boolean useDso = true;
+        boolean useSemCor = false;
+        boolean useDso = false;
+        boolean useWNG = false;
 
         CorpusLoader dso = null;
         CorpusLoader semCor = null;
+        CorpusLoader wng = null;
+
 
         if (useSemCor)
             semCor = new SemCorCorpusLoader("../data/semcor3.0/semcor_full.xml");
@@ -43,11 +48,17 @@ public final class NUSPT2007Disambiguation {
         if (useDso)
             dso = new DSOCorpusLoader("../data/dso","../data/wordnet/2.1/dict");
 
+        if (useWNG)
+            wng = new WordnetGlossTagTextLoader("../data/glosstag");
+
         if (useSemCor)
             semCor.load();
 
         if (useDso)
             dso.load();
+
+        if(useWNG)
+            wng.load();
 
         List<Text> taggedCorpora = new ArrayList<>();
 
@@ -58,6 +69,11 @@ public final class NUSPT2007Disambiguation {
 
         if(useDso)
             for(Text t: dso) {
+                taggedCorpora.add(t);
+            }
+
+        if(useWNG)
+            for(Text t: wng) {
                 taggedCorpora.add(t);
             }
 
@@ -99,8 +115,10 @@ public final class NUSPT2007Disambiguation {
         //Disambiguator disambiguator = new WekaDisambiguator("../data/supervised", new BFTreeSetUp(), altfe, 16);
         //Disambiguator disambiguator = new WekaDisambiguator("../data/supervised", new BayesianLogisticRegressionSetUp(), altfe, 16);
         //Disambiguator disambiguator = new WekaDisambiguator("../data/supervised", new RBFNetworkSetUp(), altfe, 16);
-        Disambiguator disambiguator = new WekaDisambiguator("../data/supervised", new RandomForestSetUp(Integer.parseInt(args[0]), Integer.parseInt(args[1]), Integer.parseInt(args[2]),Integer.parseInt(args[3])), altfe, Integer.parseInt(args[4]), trainingDataExtractor);
+        //Disambiguator disambiguator = new WekaDisambiguator("../data/supervised", new RandomForestSetUp(Integer.parseInt(args[0]), Integer.parseInt(args[1]), Integer.parseInt(args[2]),Integer.parseInt(args[3])), altfe, Integer.parseInt(args[4]), trainingDataExtractor);
         //Disambiguator disambiguator = new WekaDisambiguator("../data/supervised", new NaiveBayesSetUp(Boolean.parseBoolean(args[0]), Boolean.parseBoolean(args[1])), altfe, Integer.parseInt(args[2]), trainingDataExtractor);
+
+        Disambiguator firstSenseDisambiguator = new FirstSenseDisambiguator();
 
         System.err.println("Loading texts");
         dl.load();
@@ -113,12 +131,15 @@ public final class NUSPT2007Disambiguation {
             System.err.println("\tLoading senses...");
             lrloader.loadSenses(d);
 
-            Configuration c = disambiguator.disambiguate(d);
+            //Configuration c = disambiguator.disambiguate(d);
+            Configuration c = firstSenseDisambiguator.disambiguate(d);
+
             SemevalWriter sw = new SemevalWriter(d.getId() + ".ans");
             System.err.println("\n\tWriting results...");
             sw.write(d, c.getAssignments());
             System.err.println("done!");
         }
-        disambiguator.release();
+        //disambiguator.release();
+        firstSenseDisambiguator.release();
     }
 }

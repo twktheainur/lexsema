@@ -29,18 +29,24 @@ public class WordImpl implements Word {
         this.id = id;
         this.lemma = lemma;
         this.surfaceForm = surfaceForm;
-        textPos = pos;
-        begin = 0;
-        end = lemma.length();
+        this.textPos = pos;
+        this.begin = 0;
+        if (lemma != null)
+            this.end = lemma.length();
+        else
+            this.end = 0;
     }
 
     public WordImpl(String id, String lemma, String surfaceForm, String pos, int begin, int end) {
         this.id = id;
         this.lemma = lemma;
         this.surfaceForm = surfaceForm;
-        textPos = pos;
+        this.textPos = pos;
         this.begin = begin;
-        this.end = end;
+        if (lemma != null)
+            this.end = lemma.length();
+        else
+            this.end = 0;
     }
 
 
