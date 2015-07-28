@@ -42,7 +42,7 @@ public class DSOCorpusLoader extends CorpusLoaderImpl {
         wordnet = new Dictionary(new File(pathToWordnet));
         text = new TextImpl();
         text.setId("");
-        if(lemmatizeAndPosTag){
+        if(!lemmatizeAndPosTag){
             textProcessor = new SpaceSegmentingTextProcessor();
         } else {
             textProcessor = new EnglishDKPTextProcessor();
