@@ -10,6 +10,7 @@ import org.getalp.lexsema.io.text.EnglishDKPTextProcessor;
 import org.getalp.lexsema.io.text.TextProcessor;
 import org.getalp.lexsema.similarity.Sense;
 import org.getalp.lexsema.similarity.Text;
+import org.getalp.lexsema.similarity.TextImpl;
 import org.getalp.lexsema.similarity.Word;
 import org.getalp.lexsema.similarity.measures.lesk.AnotherLeskSimilarity;
 import org.getalp.lexsema.wsd.configuration.Configuration;
@@ -17,7 +18,6 @@ import org.getalp.lexsema.wsd.method.CuckooSearchDisambiguator;
 import org.getalp.lexsema.wsd.method.StopCondition;
 import org.getalp.lexsema.wsd.score.ConfigurationScorer;
 import org.getalp.lexsema.wsd.score.MultiThreadConfigurationScorerWithCache;
-
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 
@@ -27,7 +27,7 @@ public class HTMLTextAnnotator extends WebServiceServlet
 {
     private static final long serialVersionUID = 1L;
     
-    private static final String wordnetPath = "/home/coyl/lig/data/wordnet/3.0/dict";
+    private static final String wordnetPath = "/home/viall/current/data/wordnet/3.0/dict";
     
     private static final Dictionary wordnet = loadWordnet(wordnetPath);
 
@@ -41,17 +41,30 @@ public class HTMLTextAnnotator extends WebServiceServlet
         
         String originalText = request.getParameter("i");
         String strippedText = stripHTMLTags(originalText);
+        System.out.println("=== Original Text ===");
+        System.out.println(originalText);
+        System.out.println("=== Stripped Text ===");
         System.out.println(strippedText);
-        
-        Text txt = txtProcessor.process(strippedText, "");
-        wordnetloader.loadSenses(txt);
+
+        int offsetAnnotation = Integer.valueOf(request.getParameter("m"));
+
+        Text txt = new TextImpl();
+        synchronized(txtProcessor) {
+            txt = txtProcessor.process(strippedText, "");
+        }
+        synchronized(wordnetloader) {
+            wordnetloader.loadSenses(txt);
+        }
         
         Configuration c = disambiguate(txt);
-        Pair<String, Integer> ret = annotate(originalText, c);
+        Pair<String, Integer> ret = annotate(originalText, c, offsetAnnotation);
         String annotatedText = ret.getLeft();
         int indexWordAnnotated = ret.getRight();
 
         String xmlText = constructXMLResponse(annotatedText, indexWordAnnotated);
+
+        System.out.println("=== Returned Text ===");
+        System.out.println(annotatedText);
         
         response.getOutputStream().write(xmlText.getBytes("UTF-8")); 
     }
@@ -78,7 +91,7 @@ public class HTMLTextAnnotator extends WebServiceServlet
         return c;
     }
     
-    private Pair<String, Integer> annotate(String str, Configuration c)
+    private Pair<String, Integer> annotate(String str, Configuration c, int offsetAnnotation)
     {
         String ret = str;
         int offset = 0;
@@ -92,20 +105,60 @@ public class HTMLTextAnnotator extends WebServiceServlet
                 String definition = word.getLemma() + " : ";
                 definition += sense.getSemanticSignature().toString();
                 int beginOfWord = ret.indexOf(word.getSurfaceForm(), offset);
+                if (beginOfWord == -1) continue;
                 int endOfWord = beginOfWord + word.getSurfaceForm().length();
+                offset = endOfWord;
+                if (isInsideHTMLTag(ret, beginOfWord)) continue;
+                if (isInsideLink(ret, beginOfWord)) continue;
                 ret = ret.substring(0, beginOfWord) + 
-                      "<span id=\"wsdword" + indexWordAnnotated + "\">" + 
+                      "<span id=\"wsdword" + (indexWordAnnotated + offsetAnnotation) + "\">" + 
                       word.getSurfaceForm() + 
                       "</span>" + 
-                      "<div id=\"wsdsense" + indexWordAnnotated + "\">" +
+                      "<span id=\"wsdsense" + (indexWordAnnotated + offsetAnnotation) + "\">" +
                       definition + 
-                      "</div>" + 
+                      "</span>" + 
                       ret.substring(endOfWord);
-                offset = endOfWord;
                 indexWordAnnotated++;
             }
         } 
         return new ImmutablePair<String, Integer>(ret, indexWordAnnotated);
+    }
+    
+    private boolean isInsideLink(String str, int index)
+    {
+        boolean insideLink = false;
+        for (int i = 0 ; i < index ; i++)
+        {
+            if (str.charAt(i) == '<' && str.charAt(i+1) == 'a')
+            {
+                insideLink = true;
+            }
+            else if (str.charAt(i) == '<' && 
+                     str.charAt(i+1) == '/' && 
+                     str.charAt(i+2) == 'a'&& 
+                     str.charAt(i+3) == '>')
+            {
+                insideLink = false;
+            }
+        }
+        return insideLink;
+    }
+    
+    private boolean isInsideHTMLTag(String str, int index)
+    {
+        boolean insideHTMLTag = false;
+        for (int i = 0 ; i < index ; i++)
+        {
+            if (str.charAt(i) == '<')
+            {
+                insideHTMLTag = true;
+            }
+            else if (str.charAt(i) == '>')
+            {
+                insideHTMLTag = false;
+            }
+        }
+        return insideHTMLTag;
     }
 
     private String constructXMLResponse(String annotatedText, int indexWordAnnotated)
