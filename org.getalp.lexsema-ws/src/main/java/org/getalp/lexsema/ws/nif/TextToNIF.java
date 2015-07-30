@@ -1,4 +1,4 @@
-package org.getalp.lexsema.ws;
+package org.getalp.lexsema.ws.nif;
 
 import java.io.File;
 import java.util.ArrayList;

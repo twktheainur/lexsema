@@ -1,4 +1,4 @@
-package org.getalp.lexsema.ws;
+package org.getalp.lexsema.ws.nif;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.jena.riot.Lang;
 import org.apache.jena.riot.RDFDataMgr;
+import org.getalp.lexsema.ws.core.WebServiceServlet;
 
 import com.google.common.base.Charsets;
 import com.google.common.io.Resources;

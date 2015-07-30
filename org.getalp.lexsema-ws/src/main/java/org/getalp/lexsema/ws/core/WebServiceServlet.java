@@ -1,4 +1,4 @@
-package org.getalp.lexsema.ws;
+package org.getalp.lexsema.ws.core;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;

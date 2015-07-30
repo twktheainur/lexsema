@@ -1,4 +1,4 @@
-package org.getalp.lexsema.ws;
+package org.getalp.lexsema.ws.html;
 
 import java.net.URL;
 
@@ -12,6 +12,7 @@ import org.getalp.lexsema.similarity.Sense;
 import org.getalp.lexsema.similarity.Text;
 import org.getalp.lexsema.similarity.Word;
 import org.getalp.lexsema.similarity.measures.lesk.AnotherLeskSimilarity;
+import org.getalp.lexsema.ws.core.WebServiceServlet;
 import org.getalp.lexsema.wsd.configuration.Configuration;
 import org.getalp.lexsema.wsd.method.CuckooSearchDisambiguator;
 import org.getalp.lexsema.wsd.method.StopCondition;
@@ -22,7 +23,7 @@ import org.apache.commons.lang3.tuple.ImmutablePair;
 
 import edu.mit.jwi.Dictionary;
 
-public class HTMLTextAnnotator extends WebServiceServlet
+public class HTMLAnnotator extends WebServiceServlet
 {
     private static final long serialVersionUID = 1L;
     
@@ -43,7 +44,8 @@ public class HTMLTextAnnotator extends WebServiceServlet
         System.out.println("=== Stripped Text ===");
         System.out.println(strippedText);
 
-        int offsetAnnotation = Integer.valueOf(request.getParameter("m"));
+        String m = request.getParameter("m");
+        int offsetAnnotation = m == null ? 0 : Integer.valueOf(m);
 
         Text txt = txtProcessor.process(strippedText, "");
         wordnetloader.loadSenses(txt);
