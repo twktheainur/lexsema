@@ -61,7 +61,7 @@ public class AntColonyAlgorithm implements Disambiguator {
         AntUpdater antUpdater = new SchwabEtAl2012AntUpdater(mersenneTwister, similarityMeasure, depositPheromone, takeEnergy, componentsDeposited);
         AntFactory antFactory = new SchwabEtAl2012AntFactory();
         environmentUpdater = new SchwabEtAl2012EnvironmentUpdater(maximumEnergy,antLife, pheromoneEvaporation, antFactory, antUpdater, mersenneTwister);
-        solutionGenerator = new EnergyPathsSolutionGenerator();
+        solutionGenerator = new MaxNumberOfPathsSolutionGenerator() ;
         configurationScorer = new MultiThreadConfigurationScorerWithCache(similarityMeasure);
     }
 
@@ -86,11 +86,11 @@ public class AntColonyAlgorithm implements Disambiguator {
         int iteration = 0;
         while (iteration < maxIterations) {
             environmentUpdater.update(environment);
-            Configuration configuration = solutionGenerator.generateSolution(environment,document);
+            Configuration configuration = solutionGenerator.generateSolution(environment, document);
             double p = evaluation.evaluate(goldStandard, configuration).getPrecision();
             //double leskScore = configurationScorer.computeScore(document,configuration);
             double leskScore = 0;
-            logger.info(MessageFormat.format("ACA Progress [{0}% | i={1} | bridges = {2} | P={3} | L={4}]", getPercentage(iteration, maxIterations),iteration,environment.numberOfBridges(),p,leskScore));
+            logger.info(MessageFormat.format("ACA Progress [{0}% | i={1} | bridges = {2} | ants = {3}| P={4} | L={5}]", getPercentage(iteration, maxIterations),iteration,environment.numberOfBridges(),environment.ants().size(),p,leskScore));
             iteration++;
         }
     }

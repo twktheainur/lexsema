@@ -33,21 +33,33 @@ public class EnvironmentNode extends AbstractNode {
     @Override
     public synchronized void depositSignature(List<SemanticSymbol> semanticSymbols, MersenneTwister mersenneTwister) {
         int length = signatureVector.size();
-        Collection<Integer> selectedIndexes = new ArrayList<>();
-        for (SemanticSymbol semanticSymbol : semanticSymbols) {
-            int draw = drawNext(selectedIndexes, length, mersenneTwister);
-            signatureVector.set(draw, semanticSymbol);
+        if(length>0) {
+            Collection<Integer> selectedIndexes = new ArrayList<>();
+            for (SemanticSymbol semanticSymbol : semanticSymbols) {
+                int draw = drawNext(selectedIndexes, length, mersenneTwister);
+                if(draw>=0) {
+                    signatureVector.set(draw, semanticSymbol);
+                }
+            }
         }
     }
 
     private int drawNext(Collection<Integer> selectedComponents, int signatureSize, MersenneTwister mersenneTwister){
         int draw;
         do {
-            draw = Math.abs(mersenneTwister.nextInt()) %signatureSize;
-            if(!selectedComponents.contains(draw) && draw>0){
-                selectedComponents.add(draw);
-                //noinspection BreakStatement
-                break;
+            if(signatureSize>0) {
+                try {
+                    draw = Math.abs(mersenneTwister.nextInt()) % signatureSize;
+                    if (!selectedComponents.contains(draw) && draw > 0) {
+                        selectedComponents.add(draw);
+                        //noinspection BreakStatement
+                        break;
+                    }
+                } catch (ArrayIndexOutOfBoundsException ignored){
+                }
+                draw =0;
+            } else {
+                draw = 0;
             }
         } while(selectedComponents.contains(draw));
         return draw;

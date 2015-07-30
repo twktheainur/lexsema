@@ -94,10 +94,10 @@ public class WordnetLoader implements LRLoader {
 
     private String processPOS(String pos){
         char newPos = 'n';
-        if(pos.startsWith("N")||pos.startsWith("V")|| pos.startsWith("R")) {
-            final String s = pos.toLowerCase();
-            newPos = s.charAt(0);
-        } else if(pos.startsWith("J")){
+        String lpos = pos.toLowerCase();
+        if(lpos.startsWith("n")||lpos.startsWith("v")|| lpos.startsWith("r")) {
+            newPos = lpos.charAt(0);
+        } else if(pos.startsWith("j")|| pos.startsWith("a")){
             newPos = 'a';
         }
         return String.valueOf(newPos);
