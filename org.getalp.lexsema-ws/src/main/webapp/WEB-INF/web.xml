@@ -3,17 +3,17 @@
  "http://java.sun.com/dtd/web-app_2_3.dtd" >
 
 <web-app>
-  <display-name>Lexsema</display-name>
+	<display-name>Lexsema</display-name>
 
 	<servlet>
 		<servlet-name>NIFWebService</servlet-name>
-		<servlet-class>org.getalp.lexsema.ws.NIFWebService</servlet-class>
+		<servlet-class>org.getalp.lexsema.ws.nif.NIFWebService</servlet-class>
 	</servlet>
 
 	<servlet>
-        	<servlet-name>HTMLTextAnnotator</servlet-name>
-        	<servlet-class>org.getalp.lexsema.ws.HTMLTextAnnotator</servlet-class>
-    	</servlet>
+		<servlet-name>HTMLAnnotator</servlet-name>
+		<servlet-class>org.getalp.lexsema.ws.html.HTMLAnnotator</servlet-class>
+	</servlet>
 
 	<servlet-mapping>
 		<servlet-name>NIFWebService</servlet-name>
@@ -21,7 +21,12 @@
 	</servlet-mapping>
 
     <servlet-mapping>
-        <servlet-name>HTMLTextAnnotator</servlet-name>
-        <url-pattern>/htmltextannotator</url-pattern>
+        <servlet-name>HTMLAnnotator</servlet-name>
+        <url-pattern>/htmlannotator</url-pattern>
     </servlet-mapping>
+
+	<servlet-mapping> <!-- DEPRECATED -->
+		<servlet-name>HTMLAnnotator</servlet-name>
+		<url-pattern>/htmltextannotator</url-pattern>
+	</servlet-mapping> <!-- DEPRECATED -->
 </web-app>

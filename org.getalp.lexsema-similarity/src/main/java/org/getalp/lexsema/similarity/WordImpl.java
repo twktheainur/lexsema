@@ -31,8 +31,8 @@ public class WordImpl implements Word {
         this.surfaceForm = surfaceForm;
         this.textPos = pos;
         this.begin = 0;
-        if (lemma != null)
-            this.end = lemma.length();
+        if (surfaceForm != null) 
+            this.end = surfaceForm.length();
         else
             this.end = 0;
     }
@@ -43,10 +43,7 @@ public class WordImpl implements Word {
         this.surfaceForm = surfaceForm;
         this.textPos = pos;
         this.begin = begin;
-        if (lemma != null)
-            this.end = lemma.length();
-        else
-            this.end = 0;
+        this.end = end;
     }
 
 
