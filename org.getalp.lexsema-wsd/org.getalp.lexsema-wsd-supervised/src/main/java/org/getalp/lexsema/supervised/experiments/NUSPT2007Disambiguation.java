@@ -2,12 +2,13 @@ package org.getalp.lexsema.supervised.experiments;
 
 
 import edu.mit.jwi.Dictionary;
+
 import org.getalp.lexsema.io.annotresult.SemevalWriter;
-import org.getalp.lexsema.io.document.WordnetGlossTagTextLoader;
 import org.getalp.lexsema.io.document.loader.CorpusLoader;
 import org.getalp.lexsema.io.document.loader.DSOCorpusLoader;
 import org.getalp.lexsema.io.document.loader.SemCorCorpusLoader;
 import org.getalp.lexsema.io.document.loader.Semeval2007CorpusLoader;
+import org.getalp.lexsema.io.document.loader.WordnetGlossTagCorpusLoader;
 import org.getalp.lexsema.io.resource.LRLoader;
 import org.getalp.lexsema.io.resource.wordnet.WordnetLoader;
 import org.getalp.lexsema.similarity.Document;
@@ -49,7 +50,7 @@ public final class NUSPT2007Disambiguation {
             dso = new DSOCorpusLoader("../data/dso","../data/wordnet/2.1/dict");
 
         if (useWNG)
-            wng = new WordnetGlossTagTextLoader("../data/glosstag");
+            wng = new WordnetGlossTagCorpusLoader("../data/glosstag");
 
         if (useSemCor)
             semCor.load();

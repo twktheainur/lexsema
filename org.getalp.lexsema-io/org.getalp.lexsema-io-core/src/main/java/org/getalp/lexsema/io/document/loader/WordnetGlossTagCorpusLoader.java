@@ -1,7 +1,5 @@
-package org.getalp.lexsema.io.document;
+package org.getalp.lexsema.io.document.loader;
 
-import org.getalp.lexsema.io.document.loader.CorpusLoader;
-import org.getalp.lexsema.io.document.loader.CorpusLoaderImpl;
 import org.getalp.lexsema.similarity.*;
 import org.xml.sax.Attributes;
 import org.xml.sax.ContentHandler;
@@ -10,7 +8,7 @@ import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLReaderFactory;
 
-public class WordnetGlossTagTextLoader extends CorpusLoaderImpl implements ContentHandler {
+public class WordnetGlossTagCorpusLoader extends CorpusLoaderImpl implements ContentHandler {
     
     private String path;
 
@@ -30,7 +28,7 @@ public class WordnetGlossTagTextLoader extends CorpusLoaderImpl implements Conte
     
     private String currentSemanticTag;
     
-    public WordnetGlossTagTextLoader(String path) {
+    public WordnetGlossTagCorpusLoader(String path) {
         this.path = path;
         try {
             saxReader = XMLReaderFactory.createXMLReader();

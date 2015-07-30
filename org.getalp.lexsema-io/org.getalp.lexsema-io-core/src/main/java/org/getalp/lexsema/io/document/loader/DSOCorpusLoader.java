@@ -161,7 +161,7 @@ public class DSOCorpusLoader extends CorpusLoaderImpl {
     public void load() {
         open(wordnet);
         processWordFiles("vlist.txt", "v");
-        //processWordFiles("nlist.txt", "n");
+        processWordFiles("nlist.txt", "n");
         addText(text);
     }
 

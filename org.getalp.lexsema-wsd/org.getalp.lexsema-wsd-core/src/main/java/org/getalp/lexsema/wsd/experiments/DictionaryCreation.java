@@ -5,11 +5,11 @@ import java.io.File;
 import edu.mit.jwi.Dictionary;
 
 import org.getalp.lexsema.io.dictionary.DocumentDictionaryWriter;
-import org.getalp.lexsema.io.document.WordnetGlossTagTextLoader;
 import org.getalp.lexsema.io.document.loader.DSOCorpusLoader;
 import org.getalp.lexsema.io.document.loader.CorpusLoader;
 import org.getalp.lexsema.io.document.loader.SemCorCorpusLoader;
 import org.getalp.lexsema.io.document.loader.Semeval2007CorpusLoader;
+import org.getalp.lexsema.io.document.loader.WordnetGlossTagCorpusLoader;
 import org.getalp.lexsema.io.resource.wordnet.WordnetLoader;
 import org.getalp.lexsema.similarity.Text;
 import org.getalp.lexsema.io.thesaurus.AnnotatedTextThesaurusImpl;
@@ -36,7 +36,7 @@ public class DictionaryCreation
 
     public static boolean dsoIsLoaded = false;
 
-    public static CorpusLoader wordnetGlossTag = new WordnetGlossTagTextLoader(wordnetGlossTagPath);
+    public static CorpusLoader wordnetGlossTag = new WordnetGlossTagCorpusLoader(wordnetGlossTagPath);
 
     public static boolean wordnetGlossTagIsLoaded = false;
 
