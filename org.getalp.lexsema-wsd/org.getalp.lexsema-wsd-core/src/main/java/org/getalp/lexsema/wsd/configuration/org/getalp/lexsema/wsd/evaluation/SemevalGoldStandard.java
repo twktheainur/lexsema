@@ -59,7 +59,8 @@ public class SemevalGoldStandard implements GoldStandard {
         for (int i = 0; i < c.size(); i++) {
             int assignment = c.getAssignment(i);
             if (assignment >= 0) {
-                assignments.add(getSenseId(document.getSenses(0, i).get(assignment)));
+                assignments.add(getSenseId(document.getSenses(0, i)
+                        .get(assignment)));
             } else {
                 assignments.add("");
             }

@@ -17,6 +17,10 @@ import org.getalp.lexsema.supervised.features.*;
 import org.getalp.lexsema.supervised.features.extractors.*;
 import org.getalp.lexsema.supervised.weka.RandomForestSetUp;
 import org.getalp.lexsema.wsd.configuration.Configuration;
+import org.getalp.lexsema.wsd.configuration.org.getalp.lexsema.wsd.evaluation.Evaluation;
+import org.getalp.lexsema.wsd.configuration.org.getalp.lexsema.wsd.evaluation.GoldStandard;
+import org.getalp.lexsema.wsd.configuration.org.getalp.lexsema.wsd.evaluation.Semeval2007GoldStandard;
+import org.getalp.lexsema.wsd.configuration.org.getalp.lexsema.wsd.evaluation.StandardEvaluation;
 import org.getalp.lexsema.wsd.method.Disambiguator;
 import org.getalp.lexsema.wsd.method.FirstSenseDisambiguator;
 
@@ -30,8 +34,7 @@ public final class NUSPT2007Disambiguation {
     public static void main(String[] args) throws IOException {
         CorpusLoader dl = new Semeval2007CorpusLoader("../data/senseval2007_task7/test/eng-coarse-all-words.xml")
                 .loadNonInstances(false);
-        LRLoader lrloader = new WordnetLoader(new Dictionary(new File("../data/wordnet/2.1/dict")));
-              //  .shuffle(false).extendedSignature(true);
+        LRLoader lrloader = new WordnetLoader(new Dictionary(new File("../data/wordnet/2.1/dict"))).shuffle(true).extendedSignature(true);
 
         boolean useSemCor = false;
         boolean useDso = false;
@@ -119,6 +122,8 @@ public final class NUSPT2007Disambiguation {
         //Disambiguator disambiguator = new WekaDisambiguator("../data/supervised", new NaiveBayesSetUp(Boolean.parseBoolean(args[0]), Boolean.parseBoolean(args[1])), altfe, Integer.parseInt(args[2]), trainingDataExtractor);
 
         Disambiguator firstSenseDisambiguator = new FirstSenseDisambiguator();
+        GoldStandard goldStandard = new Semeval2007GoldStandard();
+        Evaluation standardEvaluation = new StandardEvaluation();
 
         System.err.println("Loading texts");
         dl.load();
@@ -133,6 +138,7 @@ public final class NUSPT2007Disambiguation {
 
             //Configuration c = disambiguator.disambiguate(d);
             Configuration c = firstSenseDisambiguator.disambiguate(d);
+            System.err.println(standardEvaluation.evaluate(goldStandard,c));
 
             SemevalWriter sw = new SemevalWriter(d.getId() + ".ans");
             System.err.println("\n\tWriting results...");

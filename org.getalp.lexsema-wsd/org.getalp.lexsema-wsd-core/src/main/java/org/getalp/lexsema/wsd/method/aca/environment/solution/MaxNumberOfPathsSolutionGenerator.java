@@ -21,8 +21,8 @@ public class MaxNumberOfPathsSolutionGenerator implements SolutionGenerator{
             Node wordNode = words.get(i);
             List<Node> senses = environment.getNestsForNode(wordNode.getPosition());
             int max = findMaximumNumberOfPaths(senses,environment);
-//            configuration.setSense(i,max);
-            configuration.setSense(i,random.nextInt(senses.size()));
+            configuration.setSense(i,max);
+//            configuration.setSense(i,random.nextInt(senses.size()));
         }
         return configuration;
     }

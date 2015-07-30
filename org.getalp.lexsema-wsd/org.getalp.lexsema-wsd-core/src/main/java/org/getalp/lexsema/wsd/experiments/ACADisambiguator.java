@@ -1,5 +1,6 @@
 package org.getalp.lexsema.wsd.experiments;
 
+import cern.colt.matrix.Norm;
 import edu.mit.jwi.Dictionary;
 import org.getalp.lexsema.io.annotresult.SemevalWriter;
 import org.getalp.lexsema.io.document.loader.CorpusLoader;
@@ -14,6 +15,7 @@ import org.getalp.lexsema.similarity.measures.lesk.AnotherLeskSimilarity;
 import org.getalp.lexsema.similarity.measures.lesk.IndexedOverlapSimilarity;
 import org.getalp.lexsema.similarity.measures.tverski.TverskiIndexSimilarityMeasure;
 import org.getalp.lexsema.similarity.measures.tverski.TverskiIndexSimilarityMeasureBuilder;
+import org.getalp.lexsema.similarity.measures.tverski.TverskiIndexSimilarityMeasureMatrixImplBuilder;
 import org.getalp.lexsema.wsd.configuration.Configuration;
 import org.getalp.lexsema.wsd.configuration.org.getalp.lexsema.wsd.evaluation.Evaluation;
 import org.getalp.lexsema.wsd.configuration.org.getalp.lexsema.wsd.evaluation.GoldStandard;
@@ -23,6 +25,7 @@ import org.getalp.lexsema.wsd.method.Disambiguator;
 import org.getalp.lexsema.wsd.method.MultiThreadCuckooSearch;
 import org.getalp.lexsema.wsd.method.aca.AntColonyAlgorithm;
 import org.getalp.lexsema.wsd.score.*;
+import org.getalp.ml.matrix.score.NormMatrixScorer;
 import org.getalp.ml.matrix.score.SumMatrixScorer;
 
 import java.io.File;
@@ -32,16 +35,16 @@ public class ACADisambiguator
 {
     public static void main(String[] args) throws Exception
     {
-        int iterations = 200;
+        int iterations =100;
         double initialEnergy = 10;
-        int initialPheromone = 10 ;
-        int vectorSize = 300;
-        double pheromoneEvaporation = 0.6;
-        double maximumEnergy = 30;
-        double antLife = 10;
+        int initialPheromone = 0 ;
+        int vectorSize = 1000;
+        double pheromoneEvaporation = 0.9;
+        double maximumEnergy = 10;
+        double antLife = 20;
         double depositPheromone = 1;
         double takeEnergy = 1;
-        double componentsDeposited = 1;
+        double componentsDeposited = 0.9;
 
 //        if (args.length >= 1) iterations = Integer.valueOf(args[0]);
 //        if (args.length >= 2) levyLocation = Double.valueOf(args[1]);
@@ -58,16 +61,16 @@ public class ACADisambiguator
 
         long startTime = System.currentTimeMillis();
 
-        CorpusLoader dl = new Semeval2007CorpusLoader("../data/senseval2007_task7/test/eng-coarse-all-words-t1.xml");
+        CorpusLoader dl = new Semeval2007CorpusLoader("../data/senseval2007_task7/test/eng-coarse-all-words.xml");
 
-        LRLoader lrloader = new DictionaryLRLoader(new File("../data/dictionnaires-lesk/dict-adapted-all-relations.xml"));
+        //LRLoader lrloader = new DictionaryLRLoader(new File("../data/dictionnaires-lesk/dict-adapted-all-relations.xml"));
 
-        /*LRLoader lrloader = new WordnetLoader(new Dictionary(new File("../data/wordnet/2.1/dict")))
+        LRLoader lrloader = new WordnetLoader(new Dictionary(new File("../data/wordnet/2.1/dict")))
                 .extendedSignature(true)
                 .shuffle(true)
                 .filterStopWords(false)
                 .stemming(false)
-                .loadDefinitions(true);*/
+                .loadDefinitions(true);
 
         //LRLoader lrloader = new DictionaryLRLoader(new File("../data/lesk_dict/dict_semeval2007task7"), true);
         //LRLoader lrloader = new DictionaryLRLoader(new File("../data/lesk_dict/dict_semeval2007task7_stopwords"), true);
@@ -82,6 +85,7 @@ public class ACADisambiguator
         //ConfigurationScorer scorer = new SemEval2007Task7PerfectConfigurationScorer();
         //ConfigurationScorer scorer = new ACSimilarityConfigurationScorer(new ACExtendedLeskSimilarity());
         SimilarityMeasure similarityMeasure = new AnotherLeskSimilarity();
+        //SimilarityMeasure similarityMeasure = new TverskiIndexSimilarityMeasureMatrixImplBuilder().alpha(1d).beta(0.5).gamma(0.5d).fuzzyMatching(true).computeRatio(true).matrixScorer(new NormMatrixScorer(Norm.Frobenius)).build();
         //ConfigurationScorer scorer = new Conf(new IndexedOverlapSimilarity());
         //ConfigurationScorer scorer = new MultiThreadConfigurationScorerWithCache(new ACExtendedLeskSimilarity());
         //ConfigurationScorer scorer = new ConfigurationScorerWithCache(new AnotherLeskSimilarity());

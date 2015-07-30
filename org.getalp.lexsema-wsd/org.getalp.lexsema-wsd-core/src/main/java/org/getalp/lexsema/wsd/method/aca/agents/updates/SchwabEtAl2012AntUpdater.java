@@ -114,7 +114,9 @@ public class SchwabEtAl2012AntUpdater implements AntUpdater {
         List<SemanticSymbol> signatureSymbols = semanticSignature.getSymbols();
         for (int i = 0; i < max; i++) {
             int draw = drawNext(selectedComponents, signatureSymbols.size());
-            symbols.add(signatureSymbols.get(draw));
+            if(draw>0) {
+                symbols.add(signatureSymbols.get(draw));
+            }
         }
         environment.depositSignature(symbols, target, mersenneTwister);
     }
@@ -122,12 +124,16 @@ public class SchwabEtAl2012AntUpdater implements AntUpdater {
     private int drawNext(Collection<Integer> selectedComponents, int signatureSize) {
         int draw;
         do {
-            draw = Math.abs(mersenneTwister.nextInt()) % signatureSize;
-            if (!selectedComponents.contains(draw) && draw > 0) {
-                selectedComponents.add(draw);
-                //noinspection BreakStatement
-                break;
+            try {
+                draw = Math.abs(mersenneTwister.nextInt()) % signatureSize - 1;
+                if (!selectedComponents.contains(draw) && draw > 0) {
+                    selectedComponents.add(draw);
+                    //noinspection BreakStatement
+                    break;
+                }
+            } catch (ArrayIndexOutOfBoundsException ignored){
             }
+            draw = 0;
         } while (selectedComponents.contains(draw));
         return draw;
     }
