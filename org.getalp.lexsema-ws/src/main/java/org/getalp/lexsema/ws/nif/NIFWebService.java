@@ -2,18 +2,20 @@ package org.getalp.lexsema.ws.nif;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+
 import java.net.URL;
-import java.util.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.jena.riot.Lang;
 import org.apache.jena.riot.RDFDataMgr;
+
 import org.getalp.lexsema.ws.core.WebServiceServlet;
 
 import com.google.common.base.Charsets;
 import com.google.common.io.Resources;
+
 import com.hp.hpl.jena.ontology.OntModel;
 import com.hp.hpl.jena.ontology.OntModelSpec;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
@@ -22,48 +24,12 @@ public class NIFWebService extends WebServiceServlet
 {
     private static final long serialVersionUID = 1L;
     
-    private static final TextToNIF textToNif = new TextToNIF();
-
     public void handle(HttpServletRequest request, HttpServletResponse response) throws Exception
     {
-        setHeaders(request, response);
-        
-        String prefix = request.getRequestURL().toString() + "#";
-        String inputFormat = getInputFormat(request);
-        String inputType = getInputType(request);
-        String outputFormat = getOutputFormat(request);
-        String input = getInput(request);
-        
-        textToNif.tokenize(true);
-        textToNif.disambiguate(true);
-        textToNif.setPrefix(prefix);
-        
-        if (inputFormat.equals("turtle") && inputType.equals("url"))
-        {
-            OntModel model = ModelFactory.createOntologyModel(OntModelSpec.OWL_DL_MEM, ModelFactory.createDefaultModel());
-            model.read(input, Lang.TURTLE.toString());
-            model = textToNif.loadFromNIF(model);
-            write(response, model, outputFormat);
-        }
-        else if (inputFormat.equals("text") && inputType.equals("url"))
-        {
-            String realInput = Resources.toString(new URL(input), Charsets.UTF_8);
-            OntModel model = textToNif.loadFromString(realInput);
-            write(response, model, outputFormat);
-        }
-        else if (inputFormat.equals("text") && inputType.equals("direct"))
-        {
-            OntModel model = textToNif.loadFromString(input);
-            write(response, model, outputFormat);
-        }
-        else if (inputFormat.equals("turtle") && inputType.equals("direct"))
-        {
-            InputStream inputStream = new ByteArrayInputStream(input.getBytes(Charsets.UTF_8));
-            OntModel model = ModelFactory.createOntologyModel(OntModelSpec.OWL_DL_MEM, ModelFactory.createDefaultModel());
-            model.read(inputStream, prefix, Lang.TURTLE.toString());
-            model = textToNif.loadFromNIF(model);
-            write(response, model, outputFormat);
-        }
+        setHeaders(request, response);   
+        Parameter parameter = new Parameter(request);
+        OntModel model = readAndProcess(parameter);
+        write(response, model, parameter.outputFormat);
     }
 
     private void setHeaders(HttpServletRequest request, HttpServletResponse response)
@@ -73,63 +39,57 @@ public class NIFWebService extends WebServiceServlet
         response.setHeader("Access-Control-Max-Age", "*");
         response.setHeader("Access-Control-Allow-Headers", "*");
     }
+    
+    private OntModel readAndProcess(Parameter parameter) throws Exception
+    {
+        TextToNIF textToNif = new TextToNIF();
+        textToNif.tokenize(true);
+        textToNif.disambiguate(true);
+        textToNif.setPrefix(parameter.prefix);
 
-    private String getInput(HttpServletRequest request) throws Exception
-    {
-        if (request.getParameter("input") != null) return request.getParameter("input");
-        if (request.getParameter("i") != null) return request.getParameter("i");
-        else throw new Exception("You must give an input !");
-    }
-    
-    private String getInputFormat(HttpServletRequest request)
-    {
-        return getParameter(request.getParameter("f"), 
-                            request.getParameter("informat"), 
-                            new String[]{"turtle", "text"}, 
-                            "turtle");
-    }
-    
-    private String getInputType(HttpServletRequest request)
-    {
-        return getParameter(request.getParameter("t"), 
-                            request.getParameter("intype"), 
-                            new String[]{"direct", "url"}, 
-                            "direct");
-    }
-    
-    private String getOutputFormat(HttpServletRequest request)
-    {
-        return getParameter(request.getParameter("o"), 
-                            request.getParameter("outformat"), 
-                            new String[]{"turtle", "json-ld", "rdfxml", "ntriples"}, 
-                            "turtle");
-    }
-    
-    private String getParameter(String shortFormRequest, String longFormRequest, String[] possibleValues, String defaultValue)
-    {
-        if (Arrays.asList(possibleValues).contains(longFormRequest)) return longFormRequest;
-        if (Arrays.asList(possibleValues).contains(shortFormRequest)) return shortFormRequest;
-        return defaultValue;
+        if (parameter.inputFormat == Parameter.InputFormat.TURTLE && parameter.inputType == Parameter.InputType.URL)
+        {
+            OntModel model = ModelFactory.createOntologyModel(OntModelSpec.OWL_DL_MEM, ModelFactory.createDefaultModel());
+            model.read(parameter.input, "Turtle");
+            return textToNif.loadFromNIF(model);
+        }
+        else if (parameter.inputFormat == Parameter.InputFormat.TEXT && parameter.inputType == Parameter.InputType.URL)
+        {
+            String realInput = Resources.toString(new URL(parameter.input), Charsets.UTF_8);
+            return textToNif.loadFromString(realInput);
+        }
+        else if (parameter.inputFormat == Parameter.InputFormat.TEXT && parameter.inputType == Parameter.InputType.DIRECT)
+        {
+            return textToNif.loadFromString(parameter.input);
+        }
+        else if (parameter.inputFormat == Parameter.InputFormat.TURTLE && parameter.inputType == Parameter.InputType.DIRECT)
+        {
+            InputStream inputStream = new ByteArrayInputStream(parameter.input.getBytes(Charsets.UTF_8));
+            OntModel model = ModelFactory.createOntologyModel(OntModelSpec.OWL_DL_MEM, ModelFactory.createDefaultModel());
+            model.read(inputStream, parameter.prefix, "Turtle");
+            return textToNif.loadFromNIF(model);
+        }
+        throw new Exception("Unexpected error. Sorry.");
     }
 
-    private void write(HttpServletResponse response, OntModel model, String outputFormat) throws Exception 
+    private void write(HttpServletResponse response, OntModel model, Parameter.OutputFormat outputFormat) throws Exception 
     {
-        if (outputFormat.equals("turtle"))
+        if (outputFormat == Parameter.OutputFormat.TURTLE)
         {
             response.setContentType("text/turtle");
             RDFDataMgr.write(response.getOutputStream(), model, Lang.TURTLE);
         }
-        else if (outputFormat.equals("json-ld"))
+        else if (outputFormat == Parameter.OutputFormat.JSONLD)
         {
             response.setContentType("application/ld+json");
             RDFDataMgr.write(response.getOutputStream(), model, Lang.JSONLD);
         }
-        else if (outputFormat.equals("rdfxml"))
+        else if (outputFormat == Parameter.OutputFormat.RDFXML)
         {
             response.setContentType("application/rdf+xml");
             RDFDataMgr.write(response.getOutputStream(), model, Lang.RDFXML);
         }
-        else if (outputFormat.equals("ntriples"))
+        else if (outputFormat == Parameter.OutputFormat.NTRIPLES)
         {
             response.setContentType("application/n-triples");
             RDFDataMgr.write(response.getOutputStream(), model, Lang.NTRIPLES);
