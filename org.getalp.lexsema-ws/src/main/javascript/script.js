@@ -61,7 +61,7 @@ function getSections()
     for (i = 0 ; i < parent.childElementCount ; i++)
     {
        var child = parent.children.item(i);
-       if (child.tagName == "P")
+       if (child.tagName == "P" || child.tagName == "UL" || child.tagName == "OL")
        {
            currentSection.push(child);
        }

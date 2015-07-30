@@ -10,7 +10,6 @@ import org.getalp.lexsema.io.text.EnglishDKPTextProcessor;
 import org.getalp.lexsema.io.text.TextProcessor;
 import org.getalp.lexsema.similarity.Sense;
 import org.getalp.lexsema.similarity.Text;
-import org.getalp.lexsema.similarity.TextImpl;
 import org.getalp.lexsema.similarity.Word;
 import org.getalp.lexsema.similarity.measures.lesk.AnotherLeskSimilarity;
 import org.getalp.lexsema.wsd.configuration.Configuration;
@@ -28,16 +27,14 @@ public class HTMLTextAnnotator extends WebServiceServlet
     private static final long serialVersionUID = 1L;
     
     private static final String wordnetPath = "/home/viall/current/data/wordnet/3.0/dict";
-    
-    private static final Dictionary wordnet = loadWordnet(wordnetPath);
-
-    private static final WordnetLoader wordnetloader = loadWordnetLoader(wordnet);
-    
-    private static final TextProcessor txtProcessor = new EnglishDKPTextProcessor();
-
+        
     public void handle(HttpServletRequest request, HttpServletResponse response) throws Exception
     {
         setHeaders(request, response);
+        
+        Dictionary wordnet = loadWordnet(wordnetPath);
+        WordnetLoader wordnetloader = loadWordnetLoader(wordnet);
+        TextProcessor txtProcessor = new EnglishDKPTextProcessor();
         
         String originalText = request.getParameter("i");
         String strippedText = stripHTMLTags(originalText);
@@ -48,16 +45,11 @@ public class HTMLTextAnnotator extends WebServiceServlet
 
         int offsetAnnotation = Integer.valueOf(request.getParameter("m"));
 
-        Text txt = new TextImpl();
-        synchronized(txtProcessor) {
-            txt = txtProcessor.process(strippedText, "");
-        }
-        synchronized(wordnetloader) {
-            wordnetloader.loadSenses(txt);
-        }
+        Text txt = txtProcessor.process(strippedText, "");
+        wordnetloader.loadSenses(txt);
         
         Configuration c = disambiguate(txt);
-        Pair<String, Integer> ret = annotate(originalText, c, offsetAnnotation);
+        Pair<String, Integer> ret = annotate(originalText, c, offsetAnnotation, wordnetloader);
         String annotatedText = ret.getLeft();
         int indexWordAnnotated = ret.getRight();
 
@@ -91,7 +83,7 @@ public class HTMLTextAnnotator extends WebServiceServlet
         return c;
     }
     
-    private Pair<String, Integer> annotate(String str, Configuration c, int offsetAnnotation)
+    private Pair<String, Integer> annotate(String str, Configuration c, int offsetAnnotation, WordnetLoader wordnetloader)
     {
         String ret = str;
         int offset = 0;
