@@ -1,24 +1,28 @@
 package org.getalp.lexsema.ws.nif;
 
 import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.io.InputStream;
-
 import java.net.URL;
 
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.jena.riot.Lang;
 import org.apache.jena.riot.RDFDataMgr;
-
+import org.getalp.lexsema.io.resource.wordnet.WordnetLoader;
+import org.getalp.lexsema.io.text.EnglishDKPTextProcessor;
+import org.getalp.lexsema.io.text.TextProcessor;
 import org.getalp.lexsema.ws.core.WebServiceServlet;
 
 import com.google.common.base.Charsets;
 import com.google.common.io.Resources;
-
 import com.hp.hpl.jena.ontology.OntModel;
 import com.hp.hpl.jena.ontology.OntModelSpec;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
+
+import edu.mit.jwi.Dictionary;
 
 public class NIFWebService extends WebServiceServlet
 {
@@ -28,7 +32,7 @@ public class NIFWebService extends WebServiceServlet
     {
         setHeaders(request, response);   
         Parameter parameter = new Parameter(request);
-        OntModel model = readAndProcess(parameter);
+        OntModel model = readAndProcess(parameter, request);
         write(response, model, parameter.outputFormat);
     }
 
@@ -40,9 +44,13 @@ public class NIFWebService extends WebServiceServlet
         response.setHeader("Access-Control-Allow-Headers", "*");
     }
     
-    private OntModel readAndProcess(Parameter parameter) throws Exception
+    private OntModel readAndProcess(Parameter parameter, HttpServletRequest request) throws Exception
     {
-        TextToNIF textToNif = new TextToNIF();
+        TextProcessor txtProcessor = new EnglishDKPTextProcessor();
+        ServletContext context = request.getServletContext();
+        WordnetLoader wnLoader = getWordnetLoader(context.getRealPath("/wordnet/3.0/dict/"));
+        
+        TextToNIF textToNif = new TextToNIF(txtProcessor, wnLoader);
         textToNif.tokenize(true);
         textToNif.disambiguate(true);
         textToNif.setPrefix(parameter.prefix);
@@ -94,5 +102,12 @@ public class NIFWebService extends WebServiceServlet
             response.setContentType("application/n-triples");
             RDFDataMgr.write(response.getOutputStream(), model, Lang.NTRIPLES);
         }
+    }
+    
+    private static WordnetLoader getWordnetLoader(String pathToWordnet)
+    {
+        WordnetLoader wnLoader = new WordnetLoader(new Dictionary(new File(pathToWordnet)));
+        wnLoader.loadDefinitions(true);
+        return wnLoader;
     }
 }

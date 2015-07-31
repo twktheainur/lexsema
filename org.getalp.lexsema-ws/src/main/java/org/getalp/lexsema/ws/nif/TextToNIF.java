@@ -1,12 +1,10 @@
 package org.getalp.lexsema.ws.nif;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.getalp.lexsema.io.nif.NIFURI;
 import org.getalp.lexsema.io.resource.wordnet.WordnetLoader;
-import org.getalp.lexsema.io.text.EnglishDKPTextProcessor;
 import org.getalp.lexsema.io.text.TextProcessor;
 import org.getalp.lexsema.similarity.Sense;
 import org.getalp.lexsema.similarity.Text;
@@ -25,15 +23,13 @@ import com.hp.hpl.jena.ontology.OntModelSpec;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.util.iterator.ExtendedIterator;
 
-import edu.mit.jwi.Dictionary;
-
 public class TextToNIF
 {
     private static OntModelSpec ontModelSpec = OntModelSpec.OWL_DL_MEM;
     
-    private static TextProcessor txtProcessor = new EnglishDKPTextProcessor();
+    private TextProcessor txtProcessor;
     
-    private static WordnetLoader wnLoader = getWordnetLoader();
+    private WordnetLoader wnLoader;
         
     private String prefix;
     
@@ -41,8 +37,10 @@ public class TextToNIF
     
     private boolean doDisambiguation;
     
-    public TextToNIF()
+    public TextToNIF(TextProcessor txtProcessor, WordnetLoader wnLoader)
     {
+        this.txtProcessor = txtProcessor;
+        this.wnLoader = wnLoader;
         this.prefix = "";
         doTokenization = false;
         doDisambiguation = false;
@@ -160,7 +158,7 @@ public class TextToNIF
         }
     }
     
-    private static void addWordsToContext(Individual context, List<Individual> words, OntModel model)
+    private void addWordsToContext(Individual context, List<Individual> words, OntModel model)
     {
         context.addProperty(model.createObjectProperty(NIFURI.firstWord), words.get(0));
         context.addProperty(model.createObjectProperty(NIFURI.lastWord), words.get(words.size() - 1));
@@ -170,7 +168,7 @@ public class TextToNIF
         }
     }
     
-    private static Configuration disambiguate(Text text, String prefix, OntModel model)
+    private Configuration disambiguate(Text text, String prefix, OntModel model)
     {
         model.createDatatypeProperty(prefix + "sense");
         wnLoader.loadSenses(text);
@@ -179,12 +177,5 @@ public class TextToNIF
         Configuration c = cuckooDisambiguator.disambiguate(text);
         cuckooDisambiguator.release();
         return c;
-    }
-    
-    private static WordnetLoader getWordnetLoader()
-    {
-        WordnetLoader wnLoader = new WordnetLoader(new Dictionary(new File("/home/coyl/lig/data/wordnet/3.0/dict")));
-        wnLoader.loadDefinitions(true);
-        return wnLoader;
     }
 }
