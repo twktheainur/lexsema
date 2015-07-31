@@ -2,6 +2,7 @@ package org.getalp.lexsema.ws.html;
 
 import java.net.URL;
 
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -27,13 +28,15 @@ public class HTMLAnnotator extends WebServiceServlet
 {
     private static final long serialVersionUID = 1L;
     
-    private static final String wordnetPath = "/home/viall/current/data/wordnet/3.0/dict";
+    private static final String wordnetPath = "/wordnet/3.0/dict/";
         
     public void handle(HttpServletRequest request, HttpServletResponse response) throws Exception
     {
         setHeaders(request, response);
         
-        Dictionary wordnet = loadWordnet(wordnetPath);
+        ServletContext context = request.getServletContext();
+        String wordnetRealPath = context.getRealPath(wordnetPath);
+        Dictionary wordnet = loadWordnet(wordnetRealPath);
         WordnetLoader wordnetloader = loadWordnetLoader(wordnet);
         TextProcessor txtProcessor = new EnglishDKPTextProcessor();
         
