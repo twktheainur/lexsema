@@ -1,4 +1,4 @@
-package org.getalp.lexsema.wsd.configuration.org.getalp.lexsema.wsd.evaluation;
+package org.getalp.lexsema.wsd.evaluation;
 
 import org.getalp.lexsema.similarity.Document;
 

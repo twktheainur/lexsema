@@ -11,7 +11,7 @@ import org.getalp.lexsema.similarity.Document;
 import org.getalp.lexsema.similarity.measures.SimilarityMeasure;
 import org.getalp.lexsema.similarity.measures.tverski.TverskiIndexSimilarityMeasureImpl;
 import org.getalp.lexsema.wsd.configuration.Configuration;
-import org.getalp.lexsema.wsd.configuration.org.getalp.lexsema.wsd.evaluation.*;
+import org.getalp.lexsema.wsd.evaluation.*;
 import org.getalp.lexsema.wsd.method.Disambiguator;
 import org.getalp.lexsema.wsd.method.FirstSenseDisambiguator;
 import org.getalp.lexsema.wsd.method.sequencial.SimplifiedLesk;

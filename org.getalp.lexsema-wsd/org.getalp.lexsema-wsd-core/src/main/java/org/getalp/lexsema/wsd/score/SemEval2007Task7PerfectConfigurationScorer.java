@@ -2,9 +2,9 @@ package org.getalp.lexsema.wsd.score;
 
 import org.getalp.lexsema.similarity.Document;
 import org.getalp.lexsema.wsd.configuration.Configuration;
-import org.getalp.lexsema.wsd.configuration.org.getalp.lexsema.wsd.evaluation.Semeval2007GoldStandard;
-import org.getalp.lexsema.wsd.configuration.org.getalp.lexsema.wsd.evaluation.StandardEvaluation;
-import org.getalp.lexsema.wsd.configuration.org.getalp.lexsema.wsd.evaluation.WSDResult;
+import org.getalp.lexsema.wsd.evaluation.Semeval2007GoldStandard;
+import org.getalp.lexsema.wsd.evaluation.StandardEvaluation;
+import org.getalp.lexsema.wsd.evaluation.WSDResult;
 
 public class SemEval2007Task7PerfectConfigurationScorer implements ConfigurationScorer
 {
