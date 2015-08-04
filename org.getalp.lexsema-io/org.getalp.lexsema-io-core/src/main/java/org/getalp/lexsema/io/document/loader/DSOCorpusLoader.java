@@ -9,6 +9,7 @@ import edu.mit.jwi.item.POS;
 import org.getalp.lexsema.io.text.EnglishDKPTextProcessor;
 import org.getalp.lexsema.io.text.SpaceSegmentingTextProcessor;
 import org.getalp.lexsema.io.text.TextProcessor;
+import org.getalp.lexsema.ontolex.LexicalEntry;
 import org.getalp.lexsema.similarity.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,7 +35,7 @@ public class DSOCorpusLoader extends CorpusLoaderImpl {
 
 
     public DSOCorpusLoader(String pathToDSO, String pathToWordnet) {
-        this(pathToDSO,pathToWordnet,false);
+        this(pathToDSO, pathToWordnet, false);
     }
 
     public DSOCorpusLoader(String pathToDSO, String pathToWordnet, boolean lemmatizeAndPosTag) {
@@ -42,10 +43,10 @@ public class DSOCorpusLoader extends CorpusLoaderImpl {
         wordnet = new Dictionary(new File(pathToWordnet));
         text = new TextImpl();
         text.setId("");
-        if(!lemmatizeAndPosTag){
-            textProcessor = new SpaceSegmentingTextProcessor();
-        } else {
+        if (lemmatizeAndPosTag) {
             textProcessor = new EnglishDKPTextProcessor();
+        } else {
+            textProcessor = new SpaceSegmentingTextProcessor();
         }
     }
 
@@ -71,13 +72,13 @@ public class DSOCorpusLoader extends CorpusLoaderImpl {
         }
     }
 
-    private void processWordInList(String word, String pos) {
+    private void processWordInList(String word, final String pos) {
         logger.info(MessageFormat.format("[DSO] Processing word {0}...", word));
         File wordFile = new File(MessageFormat.format("{0}{1}{2}.{3}", pathToDSO, File.separator, word, pos));
         try (BufferedReader br = new BufferedReader(new FileReader(wordFile))) {
             for (String line = br.readLine(); line != null; line = br.readLine()) {
                 if (!line.isEmpty()) {
-                    processSentenceInWord(getSentence(textProcessor.process(line, "")));
+                    processSentenceInWord(getSentence(textProcessor.process(line, "")), pos);
                 }
             }
         } catch (IOException e) {
@@ -86,21 +87,22 @@ public class DSOCorpusLoader extends CorpusLoaderImpl {
     }
 
     @SuppressWarnings("FeatureEnvy")
-    private void processSentenceInWord(Document sentence) {
+    private void processSentenceInWord(Document sentence, String pos) {
         int currentWord = 3;
         Sentence cleanSentence = new SentenceImpl(sentence.getId());
-        while(currentWord<sentence.size()){
+        while (currentWord < sentence.size()) {
             Word word = sentence.getWord(currentWord);
             @SuppressWarnings("LawOfDemeter") String lemma = word.getLemma();
-            @SuppressWarnings("LawOfDemeter") String pos = word.getPartOfSpeech();
-            if(lemma.equals(">")){
-                currentWord+=2;
+            @SuppressWarnings("LawOfDemeter") String wordPos = word.getPartOfSpeech();
+            if (lemma.contains(">>")) {
+                currentWord += 1;
                 Word targetWord = sentence.getWord(currentWord);
+                setPos(targetWord, pos);
                 Word tag = sentence.getWord(currentWord + 1);
-                processTargetWord(targetWord,tag);
+                processTargetWord(targetWord, tag);
                 cleanSentence.addWord(targetWord);
-                currentWord+=3;
-            } else if(!Objects.equals(lemma, pos)){
+                currentWord += 2;
+            } else if (!Objects.equals(lemma, wordPos)) {
                 cleanSentence.addWord(word);
             }
             currentWord++;
@@ -110,39 +112,51 @@ public class DSOCorpusLoader extends CorpusLoaderImpl {
         }
     }
 
-    Sentence getSentence(Text text){
+    private void setPos(LexicalEntry word, String pos) {
+        word.setPartOfSpeech(pos);
+    }
+
+    Sentence getSentence(Text text) {
         Sentence txtSentence = NullSentence.getInstance();
-        for(Sentence snt: text.sentences()){
+        for (Sentence snt : text.sentences()) {
             txtSentence = snt;
         }
         return txtSentence;
     }
 
 
-    private void processTargetWord(Word targetWord, Word tag){
+    private void processTargetWord(Word targetWord, Word tag) {
         int senseNumber = -1;
         try {
             senseNumber = Integer.valueOf(tag.getSurfaceForm());
-        } catch (NumberFormatException ignored){
+        } catch (NumberFormatException ignored) {
 
         }
-        String tagString = getSemanticTag(targetWord.getLemma(),targetWord.getPartOfSpeech(),senseNumber);
+        String tagString = getSemanticTag(targetWord.getLemma(), targetWord.getPartOfSpeech(), senseNumber);
         targetWord.setSemanticTag(tagString);
     }
+
     private String getSemanticTag(String lemma, String pos, int senseNumber) {
         String tag = "";
         POS wnPos = getWordnetPOS(pos);
-        if(wnPos!=null) {
-            IIndexWord iw = wordnet.getIndexWord(lemma, wnPos);
-            if(iw!=null) {
+        if (wnPos != null) {
+            IIndexWord iw;
+            synchronized (wordnet) {
+                iw = wordnet.getIndexWord(lemma, wnPos);
+            }
+            if (iw != null) {
                 final List<IWordID> wordIDs = iw.getWordIDs();
                 if (senseNumber > 0 && wordIDs.size() > senseNumber - 1) {
                     IWordID wordID = wordIDs.get(senseNumber - 1);
-                    IWord word = wordnet.getWord(wordID);
-                    String senseKey = word.getSenseKey().toString();
+                    IWord word;
+                    synchronized (wordnet) {
+                        word = wordnet.getWord(wordID);
+                    }
+                    String senseKey = String.valueOf(word.getSenseKey());
                     tag = senseKey.substring(senseKey.indexOf("%") + 1);
                 }
             }
+
         }
         return tag;
     }
@@ -153,15 +167,15 @@ public class DSOCorpusLoader extends CorpusLoaderImpl {
             char lPos = s.charAt(0);
             return POS.getPartOfSpeech(lPos);
         }
-        return  null;
+        return null;
 
     }
 
     @Override
     public void load() {
         open(wordnet);
-        processWordFiles("vlist.txt", "v");
         processWordFiles("nlist.txt", "n");
+        processWordFiles("vlist.txt", "v");
         addText(text);
     }
 

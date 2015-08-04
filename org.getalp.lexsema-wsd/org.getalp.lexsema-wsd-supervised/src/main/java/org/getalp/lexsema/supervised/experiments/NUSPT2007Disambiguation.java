@@ -17,6 +17,7 @@ import org.getalp.lexsema.supervised.WekaDisambiguator;
 import org.getalp.lexsema.supervised.features.*;
 import org.getalp.lexsema.supervised.features.extractors.*;
 import org.getalp.lexsema.supervised.weka.NaiveBayesSetUp;
+import org.getalp.lexsema.supervised.weka.RBFNetworkSetUp;
 import org.getalp.lexsema.supervised.weka.RandomForestSetUp;
 import org.getalp.lexsema.util.VisualVMTools;
 import org.getalp.lexsema.wsd.configuration.Configuration;
@@ -40,7 +41,7 @@ public final class NUSPT2007Disambiguation {
                 .loadNonInstances(false);
         LRLoader lrloader = new WordnetLoader(new Dictionary(new File("../data/wordnet/2.1/dict"))).shuffle(false).extendedSignature(false).loadDefinitions(false);
 
-        boolean useSemCor = false;
+        boolean useSemCor = true;
         boolean useDso = true;
         boolean useWNG = false;
 
@@ -121,11 +122,11 @@ public final class NUSPT2007Disambiguation {
         //Disambiguator disambiguator = new WekaDisambiguator("../data/supervised", new SVMSetUp(), altfe, 4, trainingDataExtractor);
         //Disambiguator disambiguator = new WekaDisambiguator("../data/supervised", new BFTreeSetUp(), altfe, 16);
         //Disambiguator disambiguator = new WekaDisambiguator("../data/supervised", new BayesianLogisticRegressionSetUp(), altfe, 16);
-        //Disambiguator disambiguator = new WekaDisambiguator("../data/supervised", new RBFNetworkSetUp(), altfe, 16);
-//        Disambiguator disambiguator = new WekaDisambiguator("../data/supervised", new RandomForestSetUp(Integer.parseInt(args[0]), Integer.parseInt(args[1]), Integer.parseInt(args[2]),Integer.parseInt(args[3])), altfe, Integer.parseInt(args[4]), trainingDataExtractor);
-        Disambiguator disambiguator = new WekaDisambiguator("../data/supervised", new NaiveBayesSetUp(Boolean.parseBoolean(args[0]), Boolean.parseBoolean(args[1])), altfe, Integer.parseInt(args[2]), trainingDataExtractor);
+        //Disambiguator disambiguator = new WekaDisambiguator("../data/supervised", new RBFNetworkSetUp(), altfe, 16,trainingDataExtractor);
+        Disambiguator disambiguator = new WekaDisambiguator("../data/supervised", new RandomForestSetUp(Integer.parseInt(args[0]), Integer.parseInt(args[1]), Integer.parseInt(args[2]),Integer.parseInt(args[3])), altfe, Integer.parseInt(args[4]), trainingDataExtractor);
+        //Disambiguator disambiguator = new WekaDisambiguator("../data/supervised", new NaiveBayesSetUp(Boolean.parseBoolean(args[0]), Boolean.parseBoolean(args[1])), altfe, Integer.parseInt(args[2]), trainingDataExtractor);
 
-        //Disambiguator firstSenseDisambiguator = new FirstSenseDisambiguator();
+        Disambiguator firstSenseDisambiguator = new FirstSenseDisambiguator();
         GoldStandard goldStandard = new Semeval2007GoldStandard();
         Evaluation standardEvaluation = new StandardEvaluation();
 
@@ -141,7 +142,7 @@ public final class NUSPT2007Disambiguation {
             lrloader.loadSenses(d);
 
             Configuration c = disambiguator.disambiguate(d);
-            //c = firstSenseDisambiguator.disambiguate(d);
+            c = firstSenseDisambiguator.disambiguate(d);
             System.err.println(standardEvaluation.evaluate(goldStandard,c));
 
             SemevalWriter sw = new SemevalWriter(d.getId() + ".ans");

@@ -44,23 +44,26 @@ public class SemCorTrainingDataExtractor implements TrainingDataExtractor {
 
 
     private void processWord(Word w, Document text, int wordIndex) {
-        String lemma = w.getLemma();
-        String surfaceForm = w.getSurfaceForm();
-        List<String> instance = localTextFeatureExtractor.getFeatures(text, wordIndex);
         String semanticTag = w.getSenseAnnotation();
-        instance.add(0, "\"" + semanticTag + "\"");
-        String key;
-        if (useSurfaceForm) {
-            key = surfaceForm;
-        } else {
-            key = lemma;
-        }
-        synchronized (instanceVectors) {
-            if (!instanceVectors.containsKey(key)) {
-                instanceVectors.put(key, new ArrayList<>());
+        if(semanticTag!=null && !semanticTag.isEmpty()) {
+            String lemma = w.getLemma();
+            String surfaceForm = w.getSurfaceForm();
+            List<String> instance = localTextFeatureExtractor.getFeatures(text, wordIndex);
+
+            instance.add(0, "\"" + semanticTag + "\"");
+            String key;
+            if (useSurfaceForm) {
+                key = surfaceForm;
+            } else {
+                key = lemma;
             }
-            instanceVectors.get(key).add(instance);
-        }
+            synchronized (instanceVectors) {
+                if (!instanceVectors.containsKey(key)) {
+                    instanceVectors.put(key, new ArrayList<>());
+                }
+                instanceVectors.get(key).add(instance);
+            }
+       }
     }
 
     @Override
