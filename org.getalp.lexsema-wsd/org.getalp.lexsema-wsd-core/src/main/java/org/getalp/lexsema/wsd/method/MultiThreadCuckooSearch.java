@@ -1,9 +1,7 @@
 package org.getalp.lexsema.wsd.method;
 
 import java.io.PrintWriter;
-import java.text.MessageFormat;
 import java.util.Random;
-
 import org.apache.commons.math3.distribution.LevyDistribution;
 import org.getalp.lexsema.similarity.Document;
 import org.getalp.lexsema.wsd.configuration.Configuration;
@@ -13,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class MultiThreadCuckooSearch {
+    
     private static final Logger logger = LoggerFactory.getLogger(MultiThreadCuckooSearch.class);
 
     public PrintWriter scorePlotWriter;
@@ -47,6 +46,8 @@ public class MultiThreadCuckooSearch {
                     }
                     score = newScore;
                 }
+                printState();
+                stopCondition.updateMilliseconds();
             }
         }
     }
@@ -83,13 +84,11 @@ public class MultiThreadCuckooSearch {
         this(new StopCondition(StopCondition.Condition.ITERATIONS, iterations), 1, 10, 1, 10, Runtime.getRuntime().availableProcessors(), configurationScorer, verbose);
     }
 
-    public MultiThreadCuckooSearch(int iterations, double minLevyLocation, double maxLevyLocation, double minLevyScale, double maxLevyScale, ConfigurationScorer configurationScorer, boolean verbose)
-    {
+    public MultiThreadCuckooSearch(int iterations, double minLevyLocation, double maxLevyLocation, double minLevyScale, double maxLevyScale, ConfigurationScorer configurationScorer, boolean verbose) {
         this(new StopCondition(StopCondition.Condition.ITERATIONS, iterations), minLevyLocation, maxLevyLocation, minLevyScale, maxLevyScale, Runtime.getRuntime().availableProcessors(), configurationScorer, verbose);
     }
 
-    public MultiThreadCuckooSearch(int iterations, double minLevyLocation, double maxLevyLocation, double minLevyScale, double maxLevyScale, int numberThreads, ConfigurationScorer configurationScorer, boolean verbose)
-    {
+    public MultiThreadCuckooSearch(int iterations, double minLevyLocation, double maxLevyLocation, double minLevyScale, double maxLevyScale, int numberThreads, ConfigurationScorer configurationScorer, boolean verbose) {
         this(new StopCondition(StopCondition.Condition.ITERATIONS, iterations), minLevyLocation, maxLevyLocation, minLevyScale, maxLevyScale, numberThreads, configurationScorer, verbose);
     }
 
@@ -113,21 +112,7 @@ public class MultiThreadCuckooSearch {
             cuckooThreads[i] = new Thread(new Cuckoo());
             cuckooThreads[i].start();
         }
-        while (!stopCondition.stop()) {
-            Thread.sleep(1000);
-            if (verbose) {
-                int progress = (int) (stopCondition.getRemainingPercentage() * 100);
-                double progressPercent = progress / 100.0;
-                logger.info(String.format("Cuckoo Progress : %2.2f%% - Current best : %.2f \r", progressPercent, score));
-            }
-            stopCondition.updateMilliseconds();
-            if (scorePlotWriter != null) {
-                scorePlotWriter.println(MessageFormat.format("{0} {1}", stopCondition.getCurrent(), score));
-            }
-            if (perfectScorePlotWriter != null && perfectScorer != null) {
-                perfectScorePlotWriter.println(MessageFormat.format("{0} {1}", stopCondition.getCurrent(), perfectScorer.computeScore(document, configuration)));
-            }
-        }
+        new Cuckoo().run();
         for (Thread cuckoo : cuckooThreads) {
             cuckoo.join();
         }
@@ -138,6 +123,29 @@ public class MultiThreadCuckooSearch {
             perfectScorePlotWriter.flush();
         }
         return configuration;
+    }
+    
+    private int exProgress = 10000;
+    
+    private synchronized void printState()
+    {
+        int newProgress = (int) (stopCondition.getProgressPercentage() * 100);
+        if (Math.abs(exProgress - newProgress) < 10) return;
+        exProgress = newProgress;
+        if (verbose) {
+            double progressPercent = newProgress / 100.0;
+            logger.info(String.format("Cuckoo Progress : %2.2f%% - Current best : %.2f \r", progressPercent, score));
+        }
+        
+        if (scorePlotWriter != null) {
+            scorePlotWriter.println(stopCondition.getCurrent() + " " + score);
+        }
+        
+        if (perfectScorePlotWriter != null && perfectScorer != null) {
+            synchronized (configuration) {
+                perfectScorePlotWriter.println(stopCondition.getCurrent() + " " + perfectScorer.computeScore(currentDocument, configuration));
+            }
+        }
     }
 
     private static double randomDoubleInRange(double min, double max) {
