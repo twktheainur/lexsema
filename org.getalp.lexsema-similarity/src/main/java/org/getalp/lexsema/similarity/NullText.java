@@ -3,6 +3,7 @@ package org.getalp.lexsema.similarity;
 
 import org.getalp.lexsema.util.Language;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
@@ -88,6 +89,11 @@ public final class NullText implements Text{
     }
 
     @Override
+    public Collection<Word> words() {
+        return Collections.emptyList();
+    }
+
+    @Override
     public boolean isEmpty() {
         return true;
     }
@@ -102,7 +108,7 @@ public final class NullText implements Text{
     }
 
     @Override
-    public Iterable<Sentence> sentences() {
+    public Collection<Sentence> sentences() {
         return Collections.emptyList();
     }
 

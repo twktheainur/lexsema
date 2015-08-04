@@ -3,6 +3,7 @@ package org.getalp.lexsema.similarity;
 
 import org.getalp.lexsema.util.Language;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
@@ -86,6 +87,11 @@ public final class NullSentence implements Sentence{
     @Override
     public void setLanguage(Language language) {
 
+    }
+
+    @Override
+    public Collection<Word> words() {
+        return Collections.emptyList();
     }
 
     @Override

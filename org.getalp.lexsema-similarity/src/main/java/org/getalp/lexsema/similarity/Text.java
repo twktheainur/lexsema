@@ -1,5 +1,7 @@
 package org.getalp.lexsema.similarity;
 
+import java.util.Collection;
+
 /**
  * The interface represents a text loaded from a corpus
  */
@@ -11,7 +13,7 @@ public interface Text extends Document {
      * @return The number of sentences.
      */
     @Override
-    public int size();
+    int size();
 
     /**
      * Returns true of there are zero sentences contained in the text and false otherwise.
@@ -19,7 +21,7 @@ public interface Text extends Document {
      * @return Returns true of there are zero sentences contained in the text and false otherwise.
      */
     @SuppressWarnings("unused")
-    public boolean isEmpty();
+    boolean isEmpty();
 
 
     /**
@@ -27,14 +29,14 @@ public interface Text extends Document {
      *
      * @param sentence The sentence to add.
      */
-    public void addSentence(Sentence sentence);
+    void addSentence(Sentence sentence);
 
     /**
      * Returns the number of sentences in the text.
      *
      * @return The number of sentences in the text.
      */
-    public int numberOfSentences();
+    int numberOfSentences();
 
-    public Iterable<Sentence> sentences();
+    Collection<Sentence> sentences();
 }

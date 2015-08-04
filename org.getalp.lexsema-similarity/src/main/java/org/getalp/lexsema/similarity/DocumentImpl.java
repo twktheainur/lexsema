@@ -3,9 +3,7 @@ package org.getalp.lexsema.similarity;
 
 import org.getalp.lexsema.util.Language;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 public class DocumentImpl implements Document {
     private String id = "";
@@ -109,5 +107,10 @@ public class DocumentImpl implements Document {
     @Override
     public void setLanguage(Language language) {
         this.language = language;
+    }
+
+    @Override
+    public Collection<Word> words() {
+        return Collections.unmodifiableCollection(lexicalEntries);
     }
 }

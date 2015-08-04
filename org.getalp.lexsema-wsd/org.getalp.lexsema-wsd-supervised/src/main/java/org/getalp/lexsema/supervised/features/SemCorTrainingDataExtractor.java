@@ -1,19 +1,20 @@
 package org.getalp.lexsema.supervised.features;
 
+import org.getalp.lexsema.similarity.Document;
 import org.getalp.lexsema.similarity.Text;
 import org.getalp.lexsema.similarity.Word;
 import org.getalp.lexsema.supervised.features.extractors.LocalTextFeatureExtractor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.*;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class SemCorTrainingDataExtractor implements TrainingDataExtractor {
 
     private static final Logger logger = LoggerFactory.getLogger(SemCorTrainingDataExtractor.class);
     private final LocalTextFeatureExtractor localTextFeatureExtractor;
-    private Map<String, List<List<String>>> instanceVectors;
+    private final Map<String, List<List<String>>> instanceVectors;
     private final boolean useSurfaceForm;
 
     public SemCorTrainingDataExtractor(LocalTextFeatureExtractor localTextFeatureExtractor) {
@@ -21,85 +22,44 @@ public class SemCorTrainingDataExtractor implements TrainingDataExtractor {
     }
 
     public SemCorTrainingDataExtractor(LocalTextFeatureExtractor localTextFeatureExtractor, boolean useSurfaceForm) {
+        this.useSurfaceForm = useSurfaceForm;
         this.localTextFeatureExtractor = localTextFeatureExtractor;
         instanceVectors = new HashMap<>();
-        this.useSurfaceForm = useSurfaceForm;
     }
-
 
     @SuppressWarnings("all")
     @Override
     public void extract(Iterable<Text> annotatedCorpus) {
 
-        File instanceFile = new File("instances.data");
-        File attributeFile = new File("attributes.data");
+        logger.info("Extracting features...");
 
-        if (instanceFile.exists() && attributeFile.exists()) {
-            FileInputStream instanceFis;
-            ObjectInput instanceOis = null;
-            try {
-                //noinspection IOResourceOpenedButNotSafelyClosed
-                instanceFis = new FileInputStream(instanceFile);
-                //noinspection IOResourceOpenedButNotSafelyClosed
-                instanceOis = new ObjectInputStream(instanceFis);
-                instanceVectors = (Map<String, List<List<String>>>) instanceOis.readObject();
+        for (Text text : annotatedCorpus) {
+            final AtomicInteger wordIndex = new AtomicInteger(0);
 
-            } catch (FileNotFoundException e) {
-                logger.error("instances.dat deleted during execution!");
-            } catch (ClassNotFoundException | IOException e) {
-                logger.error(e.getLocalizedMessage());
-            } finally {
-                assert instanceOis != null;
-                try {
-                    instanceOis.close();
-                } catch (IOException e) {
-                    logger.error(e.getLocalizedMessage());
-                }
-            }
-
-        } else {
-            /* The file does not exist, therefore we most extract the features and write the data file*/
-            for (Text text : annotatedCorpus) {
-                int wordIndex = 0;
-                for (Word w : text) {
-                    String lemma = w.getLemma();
-                    String surfaceForm = w.getSurfaceForm();
-                    List<String> instance = localTextFeatureExtractor.getFeatures(text, wordIndex);
-                    String semanticTag = w.getSenseAnnotation();
-                    instance.add(0, String.format("\"%s\"", semanticTag));
-                    String key = "";
-                    if (useSurfaceForm) {
-                        key = surfaceForm;
-                    } else {
-                        key = lemma;
-                    }
-
-                    if (!instanceVectors.containsKey(key)) {
-                        instanceVectors.put(key, new ArrayList<List<String>>());
-                    }
-                    instanceVectors.get(key).add(instance);
-                    wordIndex++;
-                }
-            }
+            text.words().parallelStream().forEach(w -> {
+                processWord(w, text, wordIndex.getAndIncrement());
+            });
         }
-        //Serializing instance vectors
-        FileOutputStream instancesfos;
-        ObjectOutputStream instancesoos = null;
-        try {
-            instancesfos = new FileOutputStream(instanceFile);
-            instancesoos = new ObjectOutputStream(instancesfos);
-            instancesoos.writeObject(instanceVectors);
+    }
 
-        } catch (FileNotFoundException e) {
-            logger.error(e.getLocalizedMessage());
-        } catch (IOException e) {
-            logger.error(e.getLocalizedMessage());
-        } finally {
-            try {
-                instancesoos.close();
-            } catch (IOException e) {
-                logger.error(e.getLocalizedMessage());
+
+    private void processWord(Word w, Document text, int wordIndex) {
+        String lemma = w.getLemma();
+        String surfaceForm = w.getSurfaceForm();
+        List<String> instance = localTextFeatureExtractor.getFeatures(text, wordIndex);
+        String semanticTag = w.getSenseAnnotation();
+        instance.add(0, "\"" + semanticTag + "\"");
+        String key;
+        if (useSurfaceForm) {
+            key = surfaceForm;
+        } else {
+            key = lemma;
+        }
+        synchronized (instanceVectors) {
+            if (!instanceVectors.containsKey(key)) {
+                instanceVectors.put(key, new ArrayList<>());
             }
+            instanceVectors.get(key).add(instance);
         }
     }
 

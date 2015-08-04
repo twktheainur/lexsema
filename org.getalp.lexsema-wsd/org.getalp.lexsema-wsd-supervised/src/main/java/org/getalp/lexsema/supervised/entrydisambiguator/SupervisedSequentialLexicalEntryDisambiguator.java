@@ -28,14 +28,11 @@ public abstract class SupervisedSequentialLexicalEntryDisambiguator extends Sequ
             Word targetWord = getDocument().getWord(0, getCurrentIndex());
             String targetLemma = targetWord.getLemma();
 
+            getConfiguration().setSense(getCurrentIndex(), -1);
             if (!targetWord.getId().isEmpty()) {
                 List<String> features = featureExtractor.getFeatures(getDocument(), getCurrentIndex());
                 List<ClassificationOutput> results = runClassifier(targetLemma, features);
-                if (results.isEmpty()) {
-                    getConfiguration().setSense(getCurrentIndex(), 0);
-             //   getConfiguration().setSense(getCurrentIndex(), -1);
-                } else {
-                    getConfiguration().setSense(getCurrentIndex(), -1);
+                if (!results.isEmpty()) {
                     int s = -1;
                     boolean matched = false;
                     for (int re = 0; re < results.size() && !matched; re++) {
@@ -47,10 +44,11 @@ public abstract class SupervisedSequentialLexicalEntryDisambiguator extends Sequ
                         }
                     }
                     getConfiguration().setSense(getCurrentIndex(), s);
+                } else {
+                    //getConfiguration().setSense(getCurrentIndex(), 0);
+                    getConfiguration().setSense(getCurrentIndex(), -1);
                 }
                 getConfiguration().setConfidence(getCurrentIndex(), 1d);
-            } else {
-                getConfiguration().setSense(getCurrentIndex(), -1);
             }
         } catch (Exception e) {
             e.printStackTrace();

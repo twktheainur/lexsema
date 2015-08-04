@@ -16,7 +16,9 @@ import org.getalp.lexsema.similarity.Text;
 import org.getalp.lexsema.supervised.WekaDisambiguator;
 import org.getalp.lexsema.supervised.features.*;
 import org.getalp.lexsema.supervised.features.extractors.*;
+import org.getalp.lexsema.supervised.weka.NaiveBayesSetUp;
 import org.getalp.lexsema.supervised.weka.RandomForestSetUp;
+import org.getalp.lexsema.util.VisualVMTools;
 import org.getalp.lexsema.wsd.configuration.Configuration;
 import org.getalp.lexsema.wsd.evaluation.Evaluation;
 import org.getalp.lexsema.wsd.evaluation.GoldStandard;
@@ -33,12 +35,13 @@ import java.util.List;
 
 public final class NUSPT2007Disambiguation {
     public static void main(String[] args) throws IOException {
+        VisualVMTools.delayUntilReturn();
         CorpusLoader dl = new Semeval2007CorpusLoader("../data/senseval2007_task7/test/eng-coarse-all-words.xml")
                 .loadNonInstances(false);
-        LRLoader lrloader = new WordnetLoader(new Dictionary(new File("../data/wordnet/2.1/dict"))).shuffle(true).extendedSignature(true);
+        LRLoader lrloader = new WordnetLoader(new Dictionary(new File("../data/wordnet/2.1/dict"))).shuffle(false).extendedSignature(false).loadDefinitions(false);
 
         boolean useSemCor = false;
-        boolean useDso = false;
+        boolean useDso = true;
         boolean useWNG = false;
 
         CorpusLoader dso = null;
@@ -119,10 +122,10 @@ public final class NUSPT2007Disambiguation {
         //Disambiguator disambiguator = new WekaDisambiguator("../data/supervised", new BFTreeSetUp(), altfe, 16);
         //Disambiguator disambiguator = new WekaDisambiguator("../data/supervised", new BayesianLogisticRegressionSetUp(), altfe, 16);
         //Disambiguator disambiguator = new WekaDisambiguator("../data/supervised", new RBFNetworkSetUp(), altfe, 16);
-        //Disambiguator disambiguator = new WekaDisambiguator("../data/supervised", new RandomForestSetUp(Integer.parseInt(args[0]), Integer.parseInt(args[1]), Integer.parseInt(args[2]),Integer.parseInt(args[3])), altfe, Integer.parseInt(args[4]), trainingDataExtractor);
-        //Disambiguator disambiguator = new WekaDisambiguator("../data/supervised", new NaiveBayesSetUp(Boolean.parseBoolean(args[0]), Boolean.parseBoolean(args[1])), altfe, Integer.parseInt(args[2]), trainingDataExtractor);
+//        Disambiguator disambiguator = new WekaDisambiguator("../data/supervised", new RandomForestSetUp(Integer.parseInt(args[0]), Integer.parseInt(args[1]), Integer.parseInt(args[2]),Integer.parseInt(args[3])), altfe, Integer.parseInt(args[4]), trainingDataExtractor);
+        Disambiguator disambiguator = new WekaDisambiguator("../data/supervised", new NaiveBayesSetUp(Boolean.parseBoolean(args[0]), Boolean.parseBoolean(args[1])), altfe, Integer.parseInt(args[2]), trainingDataExtractor);
 
-        Disambiguator firstSenseDisambiguator = new FirstSenseDisambiguator();
+        //Disambiguator firstSenseDisambiguator = new FirstSenseDisambiguator();
         GoldStandard goldStandard = new Semeval2007GoldStandard();
         Evaluation standardEvaluation = new StandardEvaluation();
 
@@ -137,8 +140,8 @@ public final class NUSPT2007Disambiguation {
             System.err.println("\tLoading senses...");
             lrloader.loadSenses(d);
 
-            //Configuration c = disambiguator.disambiguate(d);
-            Configuration c = firstSenseDisambiguator.disambiguate(d);
+            Configuration c = disambiguator.disambiguate(d);
+            //c = firstSenseDisambiguator.disambiguate(d);
             System.err.println(standardEvaluation.evaluate(goldStandard,c));
 
             SemevalWriter sw = new SemevalWriter(d.getId() + ".ans");
@@ -146,7 +149,7 @@ public final class NUSPT2007Disambiguation {
             sw.write(d, c.getAssignments());
             System.err.println("done!");
         }
-        //disambiguator.release();
-        firstSenseDisambiguator.release();
+        disambiguator.release();
+        //firstSenseDisambiguator.release();
     }
 }

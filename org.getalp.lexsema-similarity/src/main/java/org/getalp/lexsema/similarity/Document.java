@@ -2,6 +2,7 @@ package org.getalp.lexsema.similarity;
 
 import org.getalp.lexsema.util.Language;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -45,4 +46,6 @@ public interface Document extends Iterable<Word> {
     Language getLanguage();
 
     void setLanguage(Language language);
+
+    Collection<Word> words();
 }

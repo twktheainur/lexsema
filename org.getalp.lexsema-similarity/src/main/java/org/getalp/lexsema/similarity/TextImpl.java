@@ -26,7 +26,7 @@ public class TextImpl extends DocumentImpl implements Text {
     }
 
     @Override
-    public Iterable<Sentence> sentences() {
+    public Collection<Sentence> sentences() {
         return Collections.unmodifiableCollection(sentences);
     }
 

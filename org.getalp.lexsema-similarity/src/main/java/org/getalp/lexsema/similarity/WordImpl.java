@@ -15,7 +15,7 @@ import java.util.*;
 public class WordImpl implements Word {
     private final String id;
     private final String surfaceForm;
-    private final String textPos;
+    private String textPos;
     private LexicalEntry lexicalEntry = NullLexicalEntry.getInstance();
     private String semanticTag = "";
     private Sentence enclosingSentence = NullSentence.getInstance();
@@ -29,19 +29,20 @@ public class WordImpl implements Word {
         this.id = id;
         this.lemma = lemma;
         this.surfaceForm = surfaceForm;
-        this.textPos = pos;
-        this.begin = 0;
-        if (surfaceForm != null) 
-            this.end = surfaceForm.length();
-        else
-            this.end = 0;
+        textPos = pos;
+        begin = 0;
+        if (surfaceForm != null) {
+            end = surfaceForm.length();
+        } else {
+            end = 0;
+        }
     }
 
     public WordImpl(String id, String lemma, String surfaceForm, String pos, int begin, int end) {
         this.id = id;
         this.lemma = lemma;
         this.surfaceForm = surfaceForm;
-        this.textPos = pos;
+        textPos = pos;
         this.begin = begin;
         this.end = end;
     }
@@ -96,7 +97,11 @@ public class WordImpl implements Word {
 
     @Override
     public void setPartOfSpeech(String partOfSpeech) {
-        lexicalEntry.setPartOfSpeech(partOfSpeech);
+        if(lexicalEntry.isNull()){
+            textPos = partOfSpeech;
+        } else {
+            lexicalEntry.setPartOfSpeech(partOfSpeech);
+        }
     }
 
     @Override
@@ -175,9 +180,9 @@ public class WordImpl implements Word {
     @Override
     public String toString() {
         if (lexicalEntry.isNull()) {
-            return lexicalEntry.toString();
-        } else {
             return String.format("Word|%s#%s|", lemma, textPos);
+        } else {
+            return lexicalEntry.toString();
         }
     }
 

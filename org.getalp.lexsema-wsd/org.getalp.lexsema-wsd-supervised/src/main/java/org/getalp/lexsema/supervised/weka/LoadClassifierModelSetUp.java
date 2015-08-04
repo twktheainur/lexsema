@@ -22,9 +22,8 @@ public class LoadClassifierModelSetUp implements WekaClassifierSetUp {
     @Override
     public Classifier setUpClassifier() throws ClassifierSetUpException {
         try {
-            Classifier c = (Classifier) weka.core.SerializationHelper.read(modelFile);
-            return c;
-        } catch (Exception e) {
+            return (Classifier) weka.core.SerializationHelper.read(modelFile);
+        } catch (Exception ignored) {
             throw new ClassifierSetUpException();
         }
     }

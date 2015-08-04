@@ -8,6 +8,7 @@ import org.getalp.lexsema.supervised.Echo2Classifier;
 import org.getalp.lexsema.supervised.features.TrainingDataExtractor;
 import org.getalp.lexsema.supervised.features.extractors.LocalTextFeatureExtractor;
 import org.getalp.lexsema.supervised.weka.FeatureIndex;
+import org.getalp.lexsema.supervised.weka.FeatureIndexImpl;
 import org.getalp.lexsema.wsd.configuration.Configuration;
 
 import java.io.File;
@@ -23,7 +24,7 @@ public class EchoLexicalEntryDisambiguator extends SupervisedSequentialLexicalEn
     public EchoLexicalEntryDisambiguator(Configuration c, Document d, int start, int end, int currentIndex, String dataPath, LocalTextFeatureExtractor featureExtractor, TrainingDataExtractor trainingDataExtractor) {
         super(c, d, start, end, currentIndex, featureExtractor, trainingDataExtractor);
         this.dataPath = dataPath;
-        featureIndex = new FeatureIndex();
+        featureIndex = new FeatureIndexImpl();
     }
 
     protected final List<ClassificationOutput> runClassifier(String lemma, List<String> instance) {
