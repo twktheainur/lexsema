@@ -121,7 +121,7 @@ public class BatAlgorithmDisambiguator implements Disambiguator
         while (!stopCondition.stop() && nbBatsFinished < batsNumber)
         {
             if (plotWriter != null) plotWriter.println(stopCondition.getCurrent() + " " + bestBat.score);
-            int progress = (int)(stopCondition.getRemainingPercentage() * 100);
+            int progress = (int)(stopCondition.getProgressPercentage() * 100);
 
             for (Bat currentBat : bats)
             {

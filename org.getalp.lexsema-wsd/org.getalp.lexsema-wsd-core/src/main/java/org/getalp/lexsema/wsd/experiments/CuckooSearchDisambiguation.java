@@ -47,6 +47,7 @@ public class CuckooSearchDisambiguation
 
         //ConfigurationScorer scorer = new SemEval2007Task7PerfectConfigurationScorer();
         ConfigurationScorer scorer = new ConfigurationScorerWithCache(new AnotherLeskSimilarity());
+        ConfigurationScorer perfectScorer = new SemEval2007Task7PerfectConfigurationScorer();
         //ConfigurationScorer scorer = new MultiThreadConfigurationScorerWithCache(new AnotherLeskSimilarity());
         //ConfigurationScorer scorer = new MatrixConfigurationScorer(new AnotherLeskSimilarity(), new SumMatrixScorer(),Runtime.getRuntime().availableProcessors());
         //CuckooSearchDisambiguator cuckooDisambiguator = new CuckooSearchDisambiguator(new StopCondition(StopCondition.Condition.SCORERCALLS, iterations), levyLocation, levyScale, nestsNumber, destroyedNests, scorer, true);
@@ -64,9 +65,10 @@ public class CuckooSearchDisambiguation
 
             cuckooDisambiguator.scorePlotWriter = new PrintWriter("../cuckoo_score_plot_" + d.getId() + ".dat");
             cuckooDisambiguator.perfectScorePlotWriter = new PrintWriter("../cuckoo_perfect_score_plot_" + d.getId() + ".dat");
-            cuckooDisambiguator.perfectScorer = new SemEval2007Task7PerfectConfigurationScorer();
+            cuckooDisambiguator.perfectScorer = perfectScorer;
             System.out.println("Disambiguating...");
             Configuration c = cuckooDisambiguator.disambiguate(d);
+            System.out.println("Final score : " + perfectScorer.computeScore(d, c));
             System.out.println("Writing results...");
             SemevalWriter sw = new SemevalWriter("../" + d.getId() + ".ans");
             sw.write(d, c.getAssignments());

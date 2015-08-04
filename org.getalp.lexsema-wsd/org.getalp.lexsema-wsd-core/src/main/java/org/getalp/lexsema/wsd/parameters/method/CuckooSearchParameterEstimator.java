@@ -94,7 +94,7 @@ public class CuckooSearchParameterEstimator
         }
         while (!stopCondition.stop())
         {
-            int progress = (int)(stopCondition.getRemainingPercentage() * 100);
+            int progress = (int)(stopCondition.getProgressPercentage() * 100);
             double progressPercent = (double)progress / 100.0;
             Nest newNest = nest.clone();
             newNest.randomFly();

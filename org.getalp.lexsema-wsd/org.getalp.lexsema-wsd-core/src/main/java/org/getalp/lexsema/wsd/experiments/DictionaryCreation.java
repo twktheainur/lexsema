@@ -6,6 +6,8 @@ import edu.mit.jwi.Dictionary;
 
 import org.getalp.lexsema.io.dictionary.DocumentDictionaryWriter;
 import org.getalp.lexsema.io.document.loader.DSOCorpusLoader;
+import org.getalp.lexsema.io.document.loader.GMBCorpusLoader;
+import org.getalp.lexsema.io.document.loader.OldDSOCorpusLoader;
 import org.getalp.lexsema.io.document.loader.CorpusLoader;
 import org.getalp.lexsema.io.document.loader.SemCorCorpusLoader;
 import org.getalp.lexsema.io.document.loader.Semeval2007CorpusLoader;
@@ -26,19 +28,27 @@ public class DictionaryCreation
 
     public static String wordnetGlossTagPath = "../data/wordnet/3.0/glosstag/";
     
+    public static String gmbPath = "../data/gmb-2.2.0/";
+    
     public static Dictionary wordnet = new Dictionary(new File(wordnetPath));
     
     public static CorpusLoader semCor = new SemCorCorpusLoader(semCorPath);
     
-    public static boolean semCorIsLoaded = false;
-
-    public static CorpusLoader dso = new DSOCorpusLoader(dsoPath, wordnetPath);
-
-    public static boolean dsoIsLoaded = false;
+    public static CorpusLoader dso = new OldDSOCorpusLoader(dsoPath, wordnetPath);
 
     public static CorpusLoader wordnetGlossTag = new WordnetGlossTagCorpusLoader(wordnetGlossTagPath);
 
+    public static CorpusLoader gmb = new GMBCorpusLoader(gmbPath, wordnet);
+
+    public static boolean semCorIsLoaded = false;
+
+    public static boolean dsoIsLoaded = false;
+
     public static boolean wordnetGlossTagIsLoaded = false;
+
+    public static boolean gmbgIsLoaded = false;
+    
+    public static int numberOfWordsFromThesauri = 100;
 
     public static void main(String[] args)
     {
@@ -47,7 +57,7 @@ public class DictionaryCreation
         //writeDictionary(false, true, false, "../data/dict_semeval2007task7_stemming");
         //writeDictionary(true, true, false, "../data/dict_semeval2007task7_stopwords_stemming");
 
-        //writeDictionary(false, false, true, "../data/dict_semeval2007task7_semcor");
+        //writeDictgionary(false, false, true, "../data/dict_semeval2007task7_semcor");
         //writeDictionary(true, false, true, "../data/dict_semeval2007task7_stopwords_semcor");
         //writeDictionary(false, true, true, "../data/dict_semeval2007task7_stemming_semcor");
         //writeDictionary(true, true, true, "../data/dict_semeval2007task7_stopwords_stemming_semcor");
@@ -56,7 +66,7 @@ public class DictionaryCreation
         //writeDictionary(true, true, true, true, true, true, false, true, "../data/lesk_dict/dict_semeval2007task7_stopwords_stemming_dso");
         //writeDictionary(true, true, true, true, true, true, true, true, "../data/lesk_dict/dict_semeval2007task7_stopwords_stemming_semcor_dso");
     
-        writeDictionary(true, true, true, true, true, true, true, true, true, "../data/lesk_dict/dict_semeval2007task7_stopwords_stemming_semcor_dso_wordnetglosstag");
+        writeDictionary(true, true, true, true, true, true, true, true, true, true, "../data/lesk_dict/dict_semeval2007task7_stopwords_stemming_semcor_dso_wordnetglosstag");
     }
     
     private static void writeDictionary(boolean definitions, boolean extendedDefinitions, 
@@ -65,6 +75,7 @@ public class DictionaryCreation
                                         boolean useSemCorThesaurus, 
                                         boolean useDSOThesaurus, 
                                         boolean useWordnetGlossTag,
+                                        boolean useGMBThesaurus,
                                         String newDictPath)
     {
         System.out.println("Building dictionary " + newDictPath + "...");
@@ -82,7 +93,7 @@ public class DictionaryCreation
                 semCor.load();
                 semCorIsLoaded = true;
             }
-            lrloader.addThesaurus(new AnnotatedTextThesaurusImpl(semCor, 100));
+            lrloader.addThesaurus(new AnnotatedTextThesaurusImpl(semCor, numberOfWordsFromThesauri));
         }
         if (useDSOThesaurus)
         {
@@ -90,7 +101,7 @@ public class DictionaryCreation
                 dso.load();
                 dsoIsLoaded = true;
             }
-            lrloader.addThesaurus(new AnnotatedTextThesaurusImpl(dso, 100));
+            lrloader.addThesaurus(new AnnotatedTextThesaurusImpl(dso, numberOfWordsFromThesauri));
         }
         if (useWordnetGlossTag)
         {
@@ -98,7 +109,15 @@ public class DictionaryCreation
                 wordnetGlossTag.load();
                 wordnetGlossTagIsLoaded = true;
             }
-            lrloader.addThesaurus(new AnnotatedTextThesaurusImpl(wordnetGlossTag, 100));
+            lrloader.addThesaurus(new AnnotatedTextThesaurusImpl(wordnetGlossTag, numberOfWordsFromThesauri));
+        }
+        if (useGMBThesaurus)
+        {
+            if (!gmbgIsLoaded) {
+                gmb.load();
+                gmbgIsLoaded = true;
+            }
+            lrloader.addThesaurus(new AnnotatedTextThesaurusImpl(gmb, numberOfWordsFromThesauri));
         }
         CorpusLoader dl = new Semeval2007CorpusLoader(docPath);
         dl.load();

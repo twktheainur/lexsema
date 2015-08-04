@@ -122,7 +122,7 @@ public class CuckooSearchDisambiguator implements Disambiguator
         
         while (!stopCondition.stop())
         {
-            int progress = (int)(stopCondition.getRemainingPercentage() * 100);
+            int progress = (int)(stopCondition.getProgressPercentage() * 100);
             double progressPercent = (double)progress / 100.0;
             Nest newNest = nests[0].clone();
             double distance = newNest.randomFly();
@@ -155,7 +155,7 @@ public class CuckooSearchDisambiguator implements Disambiguator
         
         while (!stopCondition.stop())
         {
-            int progress = (int)(stopCondition.getRemainingPercentage() * 100);
+            int progress = (int)(stopCondition.getProgressPercentage() * 100);
             double progressPercent = (double)progress / 100.0;
             
             int i = random.nextInt(nests.length);

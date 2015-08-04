@@ -53,7 +53,7 @@ public class StopCondition
         return current >= end;
     }
     
-    public double getRemainingPercentage()
+    public double getProgressPercentage()
     {
         return (((double) (current - begin)) / ((double) (end - begin))) * 100;
     }
