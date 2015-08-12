@@ -24,11 +24,15 @@ public class LocalCollocationFeatureExtractor implements LocalTextFeatureExtract
     public List<String> getFeatures(Document document, int currentIndex) {
         List<String> features = new ArrayList<>();
         for (int a = 0; a < contextWindows.size(); a++) {
-            for (int j = currentIndex - contextWindows.get(a).getMin(); j <= currentIndex + contextWindows.get(a).getMax(); j++) {
-                String colFeature;
+            StringBuilder colFeature = new StringBuilder();
+            colFeature.append("\"");
+            ContextWindow contextWindow = contextWindows.get(a);
+            int interval = contextWindow.getMax() - contextWindow.getMin();
+            int start = currentIndex - contextWindow.getMin();
+            for (int j = start; j <= start + interval; j++) {
                 if (currentIndex != j) {
                     if (j < 0 || j >= document.size()) {
-                        colFeature = "\"∅\"";
+                        colFeature.append("∅");
                     } else {
                         String lemma = null;
 
@@ -38,11 +42,13 @@ public class LocalCollocationFeatureExtractor implements LocalTextFeatureExtract
                         if (lemma == null) {
                             lemma = document.getWord(0, j).getSurfaceForm();
                         }
-                        colFeature = "\"" + lemma + "\"";
+                        colFeature.append(lemma).append(" ");
                     }
-                    features.add(colFeature);
+
                 }
             }
+            colFeature.append("\"");
+            features.add(colFeature.toString());
         }
         return features;
     }

@@ -40,17 +40,17 @@ public class EchoDisambiguation {
         wloader.load();
 
         List<ContextWindow> contextWindows = new ArrayList<>();
-        contextWindows.add(new ContextWindow(-1, -1));
-        contextWindows.add(new ContextWindow(1, 1));
-        contextWindows.add(new ContextWindow(-2, -2));
-        contextWindows.add(new ContextWindow(2, 2));
-        contextWindows.add(new ContextWindow(-2, -1));
-        contextWindows.add(new ContextWindow(-1, 1));
-        contextWindows.add(new ContextWindow(1, 2));
-        contextWindows.add(new ContextWindow(-3, -1));
-        contextWindows.add(new ContextWindow(-2, 1));
-        contextWindows.add(new ContextWindow(-1, 2));
-        contextWindows.add(new ContextWindow(1, 3));
+        contextWindows.add(new ContextWindowImpl(-1, -1));
+        contextWindows.add(new ContextWindowImpl(1, 1));
+        contextWindows.add(new ContextWindowImpl(-2, -2));
+        contextWindows.add(new ContextWindowImpl(2, 2));
+        contextWindows.add(new ContextWindowImpl(-2, -1));
+        contextWindows.add(new ContextWindowImpl(-1, 1));
+        contextWindows.add(new ContextWindowImpl(1, 2));
+        contextWindows.add(new ContextWindowImpl(-3, -1));
+        contextWindows.add(new ContextWindowImpl(-2, 1));
+        contextWindows.add(new ContextWindowImpl(-1, 2));
+        contextWindows.add(new ContextWindowImpl(1, 3));
 
         LocalCollocationFeatureExtractor lcfe = new LocalCollocationFeatureExtractor(contextWindows);
         PosFeatureExtractor pfe = new PosFeatureExtractor(4, 4);

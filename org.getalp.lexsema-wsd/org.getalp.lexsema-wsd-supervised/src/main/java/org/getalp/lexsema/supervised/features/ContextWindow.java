@@ -1,26 +1,10 @@
 package org.getalp.lexsema.supervised.features;
 
 /**
- * Created by tchechem on 11/5/14.
+ * Created by tchechem on 12/08/15.
  */
-public class ContextWindow {
-    private int min;
-    private int max;
+public interface ContextWindow {
+    int getMin();
 
-    public ContextWindow(int min, int max) {
-        this.min = min;
-        this.max = max;
-    }
-
-    public static ContextWindow create(int min, int max) {
-        return new ContextWindow(min, max);
-    }
-
-    public int getMin() {
-        return min;
-    }
-
-    public int getMax() {
-        return max;
-    }
+    int getMax();
 }

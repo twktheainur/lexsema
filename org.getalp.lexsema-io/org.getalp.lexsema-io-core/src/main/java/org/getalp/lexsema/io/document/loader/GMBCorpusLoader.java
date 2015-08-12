@@ -2,13 +2,13 @@ package org.getalp.lexsema.io.document.loader;
 
 
 import java.io.File;
+import java.io.IOException;
+import java.text.MessageFormat;
+import java.util.List;
 
-import org.getalp.lexsema.similarity.Sentence;
-import org.getalp.lexsema.similarity.SentenceImpl;
-import org.getalp.lexsema.similarity.Text;
-import org.getalp.lexsema.similarity.TextImpl;
-import org.getalp.lexsema.similarity.Word;
-import org.getalp.lexsema.similarity.WordImpl;
+import org.getalp.lexsema.similarity.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.xml.sax.Attributes;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.Locator;
@@ -23,206 +23,256 @@ import edu.mit.jwi.item.IWordID;
 import edu.mit.jwi.item.POS;
 
 public class GMBCorpusLoader extends CorpusLoaderImpl implements ContentHandler {
-    
-    private String path;
 
-    private Dictionary wordnet;
-    
+    private static final Logger logger = LoggerFactory.getLogger(GMBCorpusLoader.class);
+
+    private final String path;
+
+    private final Dictionary wordnet;
+
+    @SuppressWarnings("all")
     private XMLReader saxReader;
-    
+
     private Text currentText;
-    
+
     private Sentence currentSentence;
-    
+
     private boolean inSurfaceForm;
-    
+
     private boolean inPos;
-    
+
     private boolean inLemma;
-    
+
     private boolean inSenseID;
 
     private String currentSurfaceForm;
 
     private String currentPos;
-    
+
     private String currentLemma;
-    
+
     private String currentSenseID;
-    
+
     public GMBCorpusLoader(String path, Dictionary wordnet) {
         this.path = path;
         this.wordnet = wordnet;
+        inPos =false;
+        inLemma = false;
+        inSenseID = false;
+        inSurfaceForm = false;
+        currentSurfaceForm="";
+        currentPos = "";
+        currentLemma = "";
+        currentSenseID = "";
+        currentSentence = NullSentence.getInstance();
+        currentText = NullText.getInstance();
+    }
+
+    @Override
+    public void load() {
         try {
             saxReader = XMLReaderFactory.createXMLReader();
             saxReader.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
             saxReader.setContentHandler(this);
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (SAXException e) {
+            logger.error(MessageFormat.format("[GMB] Error while creating corpus streaming XML parser: {0}", e.getLocalizedMessage()));
         }
-    }
-
-    public void load() {
         openWordnet();
         File data = new File(path + "/data/");
-        for (String subFolder : data.list()) {
-            processDirectory(path + "/data/" + subFolder);
+        for (String childName : data.list()) {
+            File child = new File(String.format("%s/data/%s", path, childName));
+            if(child.isDirectory()) {
+                processDirectory(child);
+            }
         }
     }
 
+    @Override
     public CorpusLoader loadNonInstances(boolean loadExtra) {
         return this;
     }
 
-    private void processDirectory(String path) {
-        System.out.println("[GMB] Processing directory " + path + "...");
-        File dir = new File(path);
-        for (String subFolder : dir.list()) {
-            processFile(path + "/" + subFolder);
+    private void processDirectory(File dir) {
+        logger.info(MessageFormat.format("[GMB] Processing directory {0} ...", dir.getName()));
+        String[] directories = dir.list();
+        for (String child : directories) {
+            String fileName = String.format("%s%s%s", dir.getAbsolutePath(), File.separator, child);
+            if(!child.startsWith(".")) {
+                processFile(fileName);
+            }
         }
     }
-    
+
     private void processFile(String filePath) {
-        // System.out.println("[GMB] Processing file " + filePath + "...");
+        //logger.error("[GMB] Processing file " + filePath + "...");
         try {
-            saxReader.parse(filePath + "/en.drs.xml");
-        } catch (Exception e) {
-            e.printStackTrace();
+            saxReader.parse(String.format("%s%sen.drs.xml", filePath, File.separator));
+        } catch (SAXException e) {
+            logger.error(MessageFormat.format("[GMB] An error occurred during the parsing of a corpus file:{0}", e.getLocalizedMessage()));
+        } catch (IOException e) {
+            logger.error(MessageFormat.format("[GMB] An error occurred while reading a corpus file:{0}", e.getLocalizedMessage()));
         }
     }
-    
+
+    @Override
     public void startElement(String uri, String localName, String qName, Attributes atts) throws SAXException {
         switch (localName) {
-        case "taggedtokens" :
-            currentText = new TextImpl();
-            currentSentence = new SentenceImpl("");
-            inSurfaceForm = false;
-            inPos = false;
-            inLemma = false;
-            inSenseID = false;
-            currentSurfaceForm = "";
-            currentPos = "";
-            currentLemma = "";
-            currentSenseID = "";
-            break;
-        case "tagtoken":
-            break;
-        case "tag" :
-            String type = atts.getValue("type");
-            switch (type) {
-            case "tok" : inSurfaceForm = true; break;
-            case "pos" : inPos = true; break;
-            case "lemma" : inLemma = true; break;
-            case "senseid" : inSenseID = true; break;
-            }
-            break;
+            case "taggedtokens":
+                currentText = new TextImpl();
+                currentSentence = new SentenceImpl("");
+                inSurfaceForm = false;
+                inPos = false;
+                inLemma = false;
+                inSenseID = false;
+                currentSurfaceForm = "";
+                currentPos = "";
+                currentLemma = "";
+                currentSenseID = "";
+                break;
+            case "tagtoken":
+                break;
+            case "tag":
+                String type = atts.getValue("type");
+                processTagType(type);
+                break;
         }
     }
 
+    private void processTagType(String type){
+        switch (type) {
+            case "tok":
+                inSurfaceForm = true;
+                break;
+            case "pos":
+                inPos = true;
+                break;
+            case "lemma":
+                inLemma = true;
+                break;
+            case "senseid":
+                inSenseID = true;
+                break;
+        }
+    }
+
+    @Override
     public void endElement(String uri, String localName, String qName) throws SAXException {
         switch (localName) {
-        case "taggedtokens" :
-            currentText.addSentence(currentSentence);
-            addText(currentText);
-            break;
-        case "tagtoken":
-            Word w = new WordImpl("", currentLemma, currentSurfaceForm.trim(), currentPos);
-            if (!currentSenseID.equals("")) {
-                String[] tokens = currentSenseID.split("\\.");
-                if (tokens.length == 3) {
-                    String semanticTag = getSemanticTag(tokens[0], tokens[1], Integer.valueOf(tokens[2]));
-                    w.setSemanticTag(semanticTag);
+            case "taggedtokens":
+                currentText.addSentence(currentSentence);
+                addText(currentText);
+                break;
+            case "tagtoken":
+                Word w = new WordImpl("", currentLemma, currentSurfaceForm.trim(), currentPos);
+                if (!currentSenseID.isEmpty()) {
+                    String[] tokens = currentSenseID.split("\\.");
+                    if (tokens.length == 3) {
+                        String semanticTag = getSemanticTag(tokens[0], tokens[1], Integer.valueOf(tokens[2]));
+                        w.setSemanticTag(semanticTag);
+                    }
                 }
-            }
-            w.setEnclosingSentence(currentSentence);
-            currentSentence.addWord(w);
-            currentLemma = "";
-            currentPos = "";
-            currentSurfaceForm = "";
-            currentSenseID = "";
-            break;
-        case "tag":
-            inSurfaceForm = false; 
-            inPos = false; 
-            inLemma = false; 
-            inSenseID = false;
-            break;
+                w.setEnclosingSentence(currentSentence);
+                currentSentence.addWord(w);
+                currentLemma = "";
+                currentPos = "";
+                currentSurfaceForm = "";
+                currentSenseID = "";
+                break;
+            case "tag":
+                inSurfaceForm = false;
+                inPos = false;
+                inLemma = false;
+                inSenseID = false;
+                break;
         }
     }
 
+    @Override
     public void characters(char[] ch, int start, int length) throws SAXException {
-        String appendix = "";
-        for (int i = start; i < start + length; i++) appendix += ch[i];
-        if (inSurfaceForm) currentSurfaceForm += appendix;
-        else if (inPos) currentPos += appendix;
-        else if (inLemma) currentLemma += appendix;
-        else if (inSenseID) currentSenseID += appendix;
+        StringBuilder appendix = new StringBuilder();
+        for (int i = start; i < start + length; i++) {
+            appendix.append(ch[i]);
+        }
+        if (inSurfaceForm) {
+            currentSurfaceForm += appendix.toString();
+        } else if (inPos) {
+            currentPos += appendix.toString();
+        } else if (inLemma) {
+            currentLemma += appendix.toString();
+        } else if (inSenseID) {
+            currentSenseID += appendix.toString();
+        }
     }
-    
-    private String getSemanticTag(String lemma, String pos, int senseNumber)
-    {   
-        if (senseNumber <= 0) return "";
-        IIndexWord iw = wordnet.getIndexWord(lemma, getWordnetPOS(pos));
-        if (iw == null) return "";
-        if (iw.getWordIDs().size() <= senseNumber - 1) return "";
-        IWordID wordID = iw.getWordIDs().get(senseNumber - 1);
-        IWord word = wordnet.getWord(wordID);
-        String senseKey = word.getSenseKey().toString();
-        return senseKey.substring(senseKey.indexOf("%") + 1);
+
+    private String getSemanticTag(String lemma, CharSequence pos, int senseNumber) {
+        String semanticTag = "";
+        if (senseNumber > 0) {
+            @SuppressWarnings("ConstantConditions") IIndexWord iw = wordnet.getIndexWord(lemma, getWordnetPOS(pos));
+            if (iw != null){
+                List<IWordID> wordIDs = iw.getWordIDs();
+                if(wordIDs.size() > senseNumber - 1){
+                    IWordID wordID = wordIDs.get(senseNumber - 1);
+                    IWord word = wordnet.getWord(wordID);
+                    String senseKey = word.getSenseKey().toString();
+                    semanticTag = senseKey.substring(senseKey.indexOf("%") + 1);
+                }
+            }
+        }
+        return semanticTag;
     }
-    
-    private POS getWordnetPOS(String pos)
-    {
-        if (pos.equals("v")) return POS.VERB;
-        if (pos.equals("n")) return POS.NOUN; 
-        if (pos.equals("a")) return POS.ADJECTIVE;
-        if (pos.equals("s")) return POS.ADJECTIVE;
-        if (pos.equals("r")) return POS.ADVERB;
-        return null;
+
+    private POS getWordnetPOS(CharSequence pos) {
+        return POS.getPartOfSpeech(pos.charAt(0));
     }
-    
-    private void openWordnet()
-    {
+
+    private void openWordnet() {
         try {
             if (!wordnet.isOpen()) {
                 wordnet.open();
             }
-        }
-        catch (Exception e) {
-            e.printStackTrace();
+        } catch (IOException e) {
+            logger.error(MessageFormat.format("[GMB] Error while opening WordNet: {0}", e.getLocalizedMessage()));
         }
     }
- 
+
+    @Override
     public void startDocument() throws SAXException {
-        
+
     }
 
+    @Override
     public void endDocument() throws SAXException {
-        
+
     }
 
-    public void startPrefixMapping(String arg0, String arg1) throws SAXException {  
-        
+    @Override
+    public void startPrefixMapping(String prefix, String uri) throws SAXException {
+
     }
 
-    public void ignorableWhitespace(char[] arg0, int arg1, int arg2) throws SAXException {
-        
+    @Override
+    public void ignorableWhitespace(char[] ch, int start, int length) throws SAXException {
+
     }
 
-    public void processingInstruction(String arg0, String arg1) throws SAXException{
-        
+    @Override
+    public void processingInstruction(String target, String data) throws SAXException {
+
     }
 
-    public void setDocumentLocator(Locator arg0) {
-        
+    @Override
+    public void setDocumentLocator(Locator locator) {
+
     }
 
-    public void skippedEntity(String arg0) throws SAXException {
-        
+    @Override
+    public void skippedEntity(String name) throws SAXException {
+
     }
-    
-    public void endPrefixMapping(String arg0) throws SAXException {
-        
+
+    @Override
+    public void endPrefixMapping(String prefix) throws SAXException {
+
     }
 
 }
