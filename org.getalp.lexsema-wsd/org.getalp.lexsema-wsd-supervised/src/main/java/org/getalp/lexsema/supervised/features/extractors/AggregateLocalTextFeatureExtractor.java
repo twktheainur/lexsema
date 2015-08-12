@@ -29,4 +29,14 @@ public class AggregateLocalTextFeatureExtractor implements LocalTextFeatureExtra
         }
         return features;
     }
+
+   /* public String toString(){
+
+        String s = "";
+        for(LocalTextFeatureExtractor ltfe:extractors)
+            for(String features:ltfe){
+                s+=features;
+            }
+        return s;
+    }*/
 }

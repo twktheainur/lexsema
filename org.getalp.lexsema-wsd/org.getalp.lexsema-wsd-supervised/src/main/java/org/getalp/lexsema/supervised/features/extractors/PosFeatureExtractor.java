@@ -35,6 +35,7 @@ public class PosFeatureExtractor implements LocalTextFeatureExtractor {
                 features.add(posFeature);
             }
         }
+
         return features;
     }
 

@@ -2,7 +2,6 @@ package org.getalp.lexsema.supervised.experiments;
 
 
 import edu.mit.jwi.Dictionary;
-
 import org.getalp.lexsema.io.annotresult.SemevalWriter;
 import org.getalp.lexsema.io.document.loader.*;
 import org.getalp.lexsema.io.resource.LRLoader;
@@ -12,12 +11,9 @@ import org.getalp.lexsema.similarity.Text;
 import org.getalp.lexsema.supervised.WekaDisambiguator;
 import org.getalp.lexsema.supervised.features.*;
 import org.getalp.lexsema.supervised.features.extractors.*;
+import org.getalp.lexsema.supervised.weka.NaiveBayesSetUp;
 import org.getalp.lexsema.supervised.weka.RandomForestSetUp;
 import org.getalp.lexsema.wsd.configuration.Configuration;
-import org.getalp.lexsema.wsd.evaluation.Evaluation;
-import org.getalp.lexsema.wsd.evaluation.GoldStandard;
-import org.getalp.lexsema.wsd.evaluation.Semeval2007GoldStandard;
-import org.getalp.lexsema.wsd.evaluation.StandardEvaluation;
 import org.getalp.lexsema.wsd.method.Disambiguator;
 import org.getalp.lexsema.wsd.method.FirstSenseDisambiguator;
 
@@ -28,17 +24,211 @@ import java.util.List;
 
 
 public final class NUSPT2007Disambiguation {
-    public static void main(String[] args) throws IOException {
-        //VisualVMTools.delayUntilReturn();
-        CorpusLoader dl = new Semeval2007CorpusLoader("../data/senseval2007_task7/test/eng-coarse-all-words.xml")
-                .loadNonInstances(false);
-        Dictionary wordnet = new Dictionary(new File("../data/wordnet/2.1/dict"));
-        LRLoader lrloader = new WordnetLoader(wordnet).shuffle(false).extendedSignature(false).loadDefinitions(false);
+
+    public static void main(String[] args)  throws IOException {
 
         boolean useSemCor = true;
         boolean useDso = false;
         boolean useWNG = false;
         boolean useGMB = false;
+        boolean backoff = false;
+
+        classicDisamb(args, useSemCor, useDso, useWNG, useGMB, backoff);
+
+    }
+
+    public static void incrementalDisamb(String[] args, boolean useSemCor, boolean useDso, boolean useWNG)  throws IOException {
+
+        CorpusLoader dl = new Semeval2007CorpusLoader("../data/senseval2007_task7/test/eng-coarse-all-words.xml")
+                .loadNonInstances(false);
+        LRLoader lrloader = new WordnetLoader(new Dictionary(new File("../data/wordnet/2.1/dict")));//.shuffle(true).extendedSignature(true);
+
+
+        CorpusLoader dso = null;
+        CorpusLoader semCor = null;
+        CorpusLoader wng = null;
+
+
+        List<Text> taggedCorpora = new ArrayList<>();
+
+        Configuration config = null;
+
+        Disambiguator firstSenseDisambiguator = new FirstSenseDisambiguator();
+        //GoldStandard goldStandard = new Semeval2007GoldStandard();
+       // Evaluation standardEvaluation = new StandardEvaluation();
+
+        System.err.println("Loading texts");
+        dl.load();
+        int i = 0;
+        if (args.length == 1) {
+            i = Integer.valueOf(args[0]) - 1;
+        }
+        System.err.println("Texts loaded");
+
+        if (useDso) {
+            dso = new DSOCorpusLoader("../data/dso", "../data/wordnet/2.1/dict", false);
+            dso.load();
+            for (Text t : dso) {
+                taggedCorpora.add(t);
+            }
+
+            WindowLoader wloader = new DocumentCollectionWindowLoader(taggedCorpora);
+            wloader.load();
+
+            List<ContextWindow> contextWindows = new ArrayList<>();
+            contextWindows.add(new ContextWindowImpl(-1, -1));
+            contextWindows.add(new ContextWindowImpl(1, 1));
+            contextWindows.add(new ContextWindowImpl(-2, -2));
+            contextWindows.add(new ContextWindowImpl(2, 2));
+            contextWindows.add(new ContextWindowImpl(-2, -1));
+            contextWindows.add(new ContextWindowImpl(-1, 1));
+            contextWindows.add(new ContextWindowImpl(1, 2));
+            contextWindows.add(new ContextWindowImpl(-3, -1));
+            contextWindows.add(new ContextWindowImpl(-2, 1));
+            contextWindows.add(new ContextWindowImpl(-1, 2));
+            contextWindows.add(new ContextWindowImpl(1, 3));
+
+            System.err.println("Feature extraction");
+
+            LocalCollocationFeatureExtractor lcfe = new LocalCollocationFeatureExtractor(contextWindows, false);
+            System.err.println(1);
+            PosFeatureExtractor pfe = new PosFeatureExtractor(3, 3);
+            System.err.println(2);
+            LocalTextFeatureExtractor acfe = new LemmaFeatureExtractor(3, 3);
+
+            System.err.println(3);
+
+            AggregateLocalTextFeatureExtractor altfe = new AggregateLocalTextFeatureExtractor();
+            altfe.addExtractor(lcfe);
+            altfe.addExtractor(pfe);
+            altfe.addExtractor(acfe);
+
+            System.err.println(4);
+
+            TrainingDataExtractor trainingDataExtractor = new SemCorTrainingDataExtractor(altfe);
+            trainingDataExtractor.extract(taggedCorpora);
+
+            System.err.println("Feature extraction done");
+
+            Disambiguator disambiguator = new WekaDisambiguator("../data/supervised", new RandomForestSetUp(Integer.parseInt(args[0]), Integer.parseInt(args[1]), Integer.parseInt(args[2]), Integer.parseInt(args[3])), altfe, Integer.parseInt(args[4]), trainingDataExtractor);
+
+
+            System.err.println("Desambiguation with DSO");
+            for (Document d : dl) {
+                System.err.println("Starting document " + d.getId());
+                System.err.println("\tLoading senses...");
+                lrloader.loadSenses(d);
+
+                config = disambiguator.disambiguate(d);
+           //     System.err.println(standardEvaluation.evaluate(goldStandard, config));
+
+                SemevalWriter sw = new SemevalWriter(d.getId() + "-DSO.ans");
+                System.err.println("\n\tWriting results...");
+                sw.write(d, config.getAssignments());
+                System.err.println("done!");
+
+            }
+
+            disambiguator.release();
+            System.err.println("Desambiguation with DSO done");
+
+
+        }
+
+        if (useSemCor) {
+            semCor = new SemCorCorpusLoader("../data/semcor3.0/semcor_full.xml");
+            semCor.load();
+            for (Text t : semCor) {
+                taggedCorpora.add(t);
+            }
+        }
+
+        if (useWNG) {
+            wng = new WordnetGlossTagCorpusLoader("../data/glosstag");
+            wng.load();
+            for (Text t : wng) {
+                taggedCorpora.add(t);
+            }
+        }
+
+        WindowLoader wloader = new DocumentCollectionWindowLoader(taggedCorpora);
+        wloader.load();
+
+        List<ContextWindow> contextWindows = new ArrayList<>();
+        contextWindows.add(new ContextWindowImpl(-1, -1));
+        contextWindows.add(new ContextWindowImpl(1, 1));
+        contextWindows.add(new ContextWindowImpl(-2, -2));
+        contextWindows.add(new ContextWindowImpl(2, 2));
+        contextWindows.add(new ContextWindowImpl(-2, -1));
+        contextWindows.add(new ContextWindowImpl(-1, 1));
+        contextWindows.add(new ContextWindowImpl(1, 2));
+        contextWindows.add(new ContextWindowImpl(-3, -1));
+        contextWindows.add(new ContextWindowImpl(-2, 1));
+        contextWindows.add(new ContextWindowImpl(-1, 2));
+        contextWindows.add(new ContextWindowImpl(1, 3));
+
+        System.err.println("Feature extraction");
+
+        LocalCollocationFeatureExtractor lcfe = new LocalCollocationFeatureExtractor(contextWindows, false);
+        PosFeatureExtractor pfe = new PosFeatureExtractor(3, 3);
+        LocalTextFeatureExtractor acfe = new LemmaFeatureExtractor(3, 3);
+
+        AggregateLocalTextFeatureExtractor altfe = new AggregateLocalTextFeatureExtractor();
+        altfe.addExtractor(lcfe);
+        altfe.addExtractor(pfe);
+        altfe.addExtractor(acfe);
+
+        TrainingDataExtractor trainingDataExtractor = new SemCorTrainingDataExtractor(altfe);
+        trainingDataExtractor.extract(taggedCorpora);
+
+        System.err.println("Feature extraction done");
+
+        Disambiguator disambiguator = new WekaDisambiguator("../data/supervised", new RandomForestSetUp(Integer.parseInt(args[0]), Integer.parseInt(args[1]), Integer.parseInt(args[2]), Integer.parseInt(args[3])), altfe, Integer.parseInt(args[4]), trainingDataExtractor);
+
+        System.err.println("Desambiguation");
+        for (Document d : dl) {
+            System.err.println("Starting document " + d.getId());
+            System.err.println("\tLoading senses...");
+            lrloader.loadSenses(d);
+
+            config = disambiguator.disambiguate(d, config);
+          //  System.err.println(standardEvaluation.evaluate(goldStandard, config));
+
+            SemevalWriter sw = new SemevalWriter(d.getId() + "-desamb.ans");
+            System.err.println("\n\tWriting results...");
+            sw.write(d, config.getAssignments());
+            System.err.println("done!");
+
+        }
+
+        disambiguator.release();
+        System.err.println("Desambiguation done");
+
+        System.err.println("Backoff first sense");
+
+        for (Document d : dl) {
+            System.err.println("Starting document " + d.getId());
+            System.err.println("\tLoading senses...");
+            lrloader.loadSenses(d);
+
+            config = firstSenseDisambiguator.disambiguate(d, config);
+        //    System.err.println(standardEvaluation.evaluate(goldStandard, config));
+
+            SemevalWriter sw = new SemevalWriter(d.getId() + "-backoff.ans");
+            System.err.println("\n\tWriting results...");
+            sw.write(d, config.getAssignments());
+            System.err.println("done!");
+            System.err.println("Backoff first sense done");
+        }
+
+    }
+
+    public static void classicDisamb(String[] args, boolean useSemCor, boolean useDso, boolean useWNG, boolean useGMB, boolean backoff)  throws IOException {
+
+        CorpusLoader dl = new Semeval2007CorpusLoader("../data/senseval2007_task7/test/eng-coarse-all-words.xml")
+                .loadNonInstances(false);
+        LRLoader lrloader = new WordnetLoader(new Dictionary(new File("../data/wordnet/2.1/dict")));//.shuffle(true).extendedSignature(true);
+
 
         CorpusLoader dso = null;
         CorpusLoader semCor = null;
@@ -46,59 +236,37 @@ public final class NUSPT2007Disambiguation {
         CorpusLoader gmb = null;
 
 
-        if (useSemCor) {
-            semCor = new SemCorCorpusLoader("../data/semcor3.0/semcor_full.xml");
-        }
-
-        if (useDso) {
-            dso = new DSOCorpusLoader("../data/dso", "../data/wordnet/2.1/dict");
-        }
-
-        if (useWNG) {
-            wng = new WordnetGlossTagCorpusLoader("../data/glosstag");
-        }
-        if (useGMB) {
-            gmb = new GMBCorpusLoader("../data/gmb/", wordnet);
-        }
-
-        if (useSemCor) {
-            semCor.load();
-        }
-
-        if (useDso) {
-            dso.load();
-        }
-
-        if (useWNG) {
-            wng.load();
-        }
-
-        if (useGMB) {
-            gmb.load();
-        }
-
         List<Text> taggedCorpora = new ArrayList<>();
 
+        if(useGMB){
+
+            gmb = new GMBCorpusLoader("../data/GMB/gmb-2.2.0/", new Dictionary(new File("../data/wordnet/2.1/dict")));
+            gmb.load();
+            for (Text t : gmb) {
+                taggedCorpora.add(t);
+            }
+        }
+
         if (useSemCor) {
+            semCor = new SemCorCorpusLoader("../data/semcor3.0/semcor_full.xml");
+            semCor.load();
             for (Text t : semCor) {
                 taggedCorpora.add(t);
             }
         }
 
         if (useDso) {
+            dso = new DSOCorpusLoader("../data/dso", "../data/wordnet/2.1/dict", false);
+            dso.load();
             for (Text t : dso) {
                 taggedCorpora.add(t);
             }
         }
 
         if (useWNG) {
+            wng = new WordnetGlossTagCorpusLoader("../data/glosstag");
+            wng.load();
             for (Text t : wng) {
-                taggedCorpora.add(t);
-            }
-        }
-
-        if (useGMB) {
-            for (Text t : gmb) {
                 taggedCorpora.add(t);
             }
         }
@@ -125,6 +293,9 @@ public final class NUSPT2007Disambiguation {
         contextWindows.add(new ContextWindow(-2, 2));
         contextWindows.add(new ContextWindow(-1, 1));
         */
+
+        System.err.println("Feature extraction");
+
         LocalCollocationFeatureExtractor lcfe = new LocalCollocationFeatureExtractor(contextWindows, false);
         PosFeatureExtractor pfe = new PosFeatureExtractor(3, 3);
         LocalTextFeatureExtractor acfe = new LemmaFeatureExtractor(3, 3);
@@ -137,16 +308,18 @@ public final class NUSPT2007Disambiguation {
         TrainingDataExtractor trainingDataExtractor = new SemCorTrainingDataExtractor(altfe);
         trainingDataExtractor.extract(taggedCorpora);
 
+        System.err.println("Feature extraction done");
+
         //Disambiguator disambiguator = new WekaDisambiguator("../data/supervised", new SVMSetUp(), altfe, 4, trainingDataExtractor);
         //Disambiguator disambiguator = new WekaDisambiguator("../data/supervised", new BFTreeSetUp(), altfe, 16);
         //Disambiguator disambiguator = new WekaDisambiguator("../data/supervised", new BayesianLogisticRegressionSetUp(), altfe, 16);
-        //Disambiguator disambiguator = new WekaDisambiguator("../data/supervised", new RBFNetworkSetUp(), altfe, 16,trainingDataExtractor);
-        Disambiguator disambiguator = new WekaDisambiguator("../data/supervised", new RandomForestSetUp(Integer.parseInt(args[0]), Integer.parseInt(args[1]), Integer.parseInt(args[2]), Integer.parseInt(args[3])), altfe, Integer.parseInt(args[4]), trainingDataExtractor);
-        //Disambiguator disambiguator = new WekaDisambiguator("../data/supervised", new NaiveBayesSetUp(Boolean.parseBoolean(args[0]), Boolean.parseBoolean(args[1])), altfe, Integer.parseInt(args[2]), trainingDataExtractor);
+        //Disambiguator disambiguator = new WekaDisambiguator("../data/supervised", new RBFNetworkSetUp(), altfe, 16);
+        Disambiguator disambiguator = new WekaDisambiguator("../data/supervised", new RandomForestSetUp(Integer.parseInt(args[0]), Integer.parseInt(args[1]), Integer.parseInt(args[2]), Integer.parseInt(args[3])), altfe, Integer.parseInt(args[4]), trainingDataExtractor); //100 0 1 0 4
+        //Disambiguator disambiguator = new WekaDisambiguator("../data/supervised", new NaiveBayesSetUp(Boolean.parseBoolean(args[0]), Boolean.parseBoolean(args[1])), altfe, Integer.parseInt(args[2]), trainingDataExtractor); //false false 4
 
         Disambiguator firstSenseDisambiguator = new FirstSenseDisambiguator();
-        GoldStandard goldStandard = new Semeval2007GoldStandard();
-        Evaluation standardEvaluation = new StandardEvaluation();
+        //GoldStandard goldStandard = new Semeval2007GoldStandard();
+        //Evaluation standardEvaluation = new StandardEvaluation();
 
         System.err.println("Loading texts");
         dl.load();
@@ -160,8 +333,11 @@ public final class NUSPT2007Disambiguation {
             lrloader.loadSenses(d);
 
             Configuration c = disambiguator.disambiguate(d);
-            c = firstSenseDisambiguator.disambiguate(d);
-            System.err.println(standardEvaluation.evaluate(goldStandard, c));
+            // System.err.println(standardEvaluation.evaluate(goldStandard,c));
+
+            if(backoff)
+                c = firstSenseDisambiguator.disambiguate(d, c);
+            // System.err.println(standardEvaluation.evaluate(goldStandard,c));
 
             SemevalWriter sw = new SemevalWriter(d.getId() + ".ans");
             System.err.println("\n\tWriting results...");

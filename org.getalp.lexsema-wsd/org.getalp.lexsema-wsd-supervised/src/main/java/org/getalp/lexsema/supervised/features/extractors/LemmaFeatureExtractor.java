@@ -43,6 +43,7 @@ public class LemmaFeatureExtractor implements LocalTextFeatureExtractor {
                 features.add(lemmaFeature);
             }
         }
+
         return features;
     }
 }

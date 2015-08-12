@@ -35,6 +35,7 @@ public class DocumentImpl implements Document {
 
     @Override
     public Word getWord(int offset, int index) {
+
         return lexicalEntries.get(index + offset);
     }
 
