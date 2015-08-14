@@ -41,7 +41,7 @@ public class DocumentImpl implements Document {
 
     @Override
     public Word getWord(int index) {
-        return getWord(0,index);
+        return getWord(0, index);
     }
 
     @Override
@@ -59,6 +59,13 @@ public class DocumentImpl implements Document {
         target.loadSenses(currentWordSenses);
         this.senses.add(currentWordSenses);
     }
+
+    @Override
+    public boolean alreadyLoaded(){
+
+        return (this.senses.size()>=lexicalEntries.size());
+    }
+
 
     @Override
     public void addWords(Iterable<Word> words) {

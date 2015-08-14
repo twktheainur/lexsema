@@ -94,6 +94,11 @@ public final class NullText implements Text{
     }
 
     @Override
+    public boolean alreadyLoaded() {
+        return false;
+    }
+
+    @Override
     public boolean isEmpty() {
         return true;
     }

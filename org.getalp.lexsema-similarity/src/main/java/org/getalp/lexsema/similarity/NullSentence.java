@@ -95,6 +95,11 @@ public final class NullSentence implements Sentence{
     }
 
     @Override
+    public boolean alreadyLoaded() {
+        return true;
+    }
+
+    @Override
     public Iterator<Word> iterator() {
         final List<Word> emptyList = Collections.<Word>emptyList();
         return emptyList.iterator();

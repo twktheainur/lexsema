@@ -47,12 +47,12 @@ public class LocalCollocationFeatureExtractor implements LocalTextFeatureExtract
 
                 }
             }
-           // colFeature.append("\"");
-           // features.add(colFeature.toString());
+            //colFeature.append("\"");
+            //features.add(colFeature.toString());
             features.add(colFeature.toString().trim()+"\"");
         }
-       // System.out.println(features);
-       // System.exit(0);
+       //System.out.println(features);
+       //System.exit(0);
         return features;
     }
 }
