@@ -65,6 +65,7 @@ public abstract class SequentialDisambiguator implements Disambiguator {
                     completedEntries++;
                     String progress = String.format("\tDisambiguating: %.2f%%", (double) completedEntries / (double) totalWords * 100d);
                     System.err.print(progress + "\r");
+
                 } else {
                     i++;
                 }

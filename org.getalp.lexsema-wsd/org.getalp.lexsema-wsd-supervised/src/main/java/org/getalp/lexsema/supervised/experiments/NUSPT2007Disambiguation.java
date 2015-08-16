@@ -33,7 +33,7 @@ public final class NUSPT2007Disambiguation {
         boolean useGMB = false;
         boolean backoff = false;
 
-        boolean toDisambiguate[] = {true, false, false, false, false};
+        boolean toDisambiguate[] = {true, true, true, true, true};
 
         classicDisamb(args, toDisambiguate, useSemCor, useDso, useWNG, useGMB, backoff);
 
@@ -391,11 +391,12 @@ public final class NUSPT2007Disambiguation {
 
         System.err.println("Feature extraction done");
 
-        //Disambiguator disambiguator = new WekaDisambiguator("../data/supervised", new SVMSetUp(), altfe, 4, trainingDataExtractor);
+
+        Disambiguator disambiguator = new WekaDisambiguator("../data/supervised", new SVMSetUp(), altfe, 4, trainingDataExtractor);
         //Disambiguator disambiguator = new WekaDisambiguator("../data/supervised", new BFTreeSetUp(), altfe, 16);
         //Disambiguator disambiguator = new WekaDisambiguator("../data/supervised", new BayesianLogisticRegressionSetUp(), altfe, 16);
         //Disambiguator disambiguator = new WekaDisambiguator("../data/supervised", new RBFNetworkSetUp(), altfe, 16);
-        Disambiguator disambiguator = new WekaDisambiguator("../data/supervised", new RandomForestSetUp(Integer.parseInt(args[0]), Integer.parseInt(args[1]), Integer.parseInt(args[2]), Integer.parseInt(args[3])), altfe, Integer.parseInt(args[4]), trainingDataExtractor); //100 0 1 0 4
+        //Disambiguator disambiguator = new WekaDisambiguator("../data/supervised", new RandomForestSetUp(Integer.parseInt(args[0]), Integer.parseInt(args[1]), Integer.parseInt(args[2]), Integer.parseInt(args[3])), altfe, Integer.parseInt(args[4]), trainingDataExtractor); //100 0 1 0 4
         //Disambiguator disambiguator = new WekaDisambiguator("../data/supervised", new NaiveBayesSetUp(Boolean.parseBoolean(args[0]), Boolean.parseBoolean(args[1])), altfe, Integer.parseInt(args[2]), trainingDataExtractor); //false false 4
 
         Disambiguator firstSenseDisambiguator = new FirstSenseDisambiguator();
