@@ -44,7 +44,11 @@ public class WordImpl implements Word {
         this.surfaceForm = surfaceForm;
         textPos = pos;
         this.begin = begin;
-        this.end = end;
+
+        if (surfaceForm != null)
+            this.end = surfaceForm.length();
+        else
+            this.end = 0;
     }
 
 

@@ -48,4 +48,6 @@ public interface Document extends Iterable<Word> {
     void setLanguage(Language language);
 
     Collection<Word> words();
+
+    boolean alreadyLoaded();
 }
