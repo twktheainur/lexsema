@@ -53,7 +53,7 @@ public class SingleWordSurroundingContextFeatureExtractor implements LocalTextFe
     }
 
     @Override
-    public synchronized List<String>  getFeatures(Document d, int currentIndex) {
+    public synchronized List<String> getFeatures(Document d, int currentIndex) {
 
         if (index == null) {
 
@@ -71,7 +71,7 @@ public class SingleWordSurroundingContextFeatureExtractor implements LocalTextFe
             feats[i] = 0;
         }
 
-        for (int j = Math.max(0, currentIndex - lemmamin); j <= currentIndex + lemmamax && j<d.size(); j++) {
+        for (int j = Math.max(0, currentIndex - lemmamin); j <= currentIndex + lemmamax && j < d.size(); j++) {
 
             logger.debug("j = " + j);
             if (j != currentIndex) {
@@ -81,21 +81,16 @@ public class SingleWordSurroundingContextFeatureExtractor implements LocalTextFe
                 logger.debug("d = " + d);
                 Word w = d.getWord(0, j);
                 logger.debug("w = " + w);
-                logger.debug("lemma = \"" + w.getLemma() + "\"");;
+                logger.debug("lemma = \"" + w.getLemma() + "\"");
+                ;
 
-                if(!w.getLemma().equals("")) {
-                    int value = 0;
-                    try {
-                        value = index.get(w.getLemma());
-                        logger.debug("GET " + value);
-                        feats[value]++;
-                    } catch (Exception e) {
-                      //  e.printStackTrace();
-                    }
-                }
-                else{
-
-                    logger.debug("w = mot vide");
+                int value = 0;
+                try {
+                    value = index.get(w.getLemma());
+                    logger.debug("GET " + value);
+                    feats[value]++;
+                } catch (Exception e) {
+                    //  e.printStackTrace();
                 }
             }
         }
@@ -106,8 +101,8 @@ public class SingleWordSurroundingContextFeatureExtractor implements LocalTextFe
         }
 
         logger.debug(features.toString());
-        if(++nbDone%1000==0)
-            logger.info(""+nbDone);
+        if (++nbDone % 1000 == 0)
+            logger.info("" + nbDone);
         //System.exit(0);
         return features;
     }
