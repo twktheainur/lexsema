@@ -27,8 +27,8 @@ public final class NUSPT2007Disambiguation {
 
     public static void main(String[] args) throws IOException {
 
-        boolean useSemCor = false;
-        boolean useDso = true;
+        boolean useSemCor = true;
+        boolean useDso = false;
         boolean useWNG = false;
         boolean useGMB = false;
         boolean backoff = false;
@@ -110,7 +110,8 @@ public final class NUSPT2007Disambiguation {
 
             System.err.println("Feature extraction done");
 
-            Disambiguator disambiguator = new WekaDisambiguator("../data/supervised", new RandomForestSetUp(Integer.parseInt(args[0]), Integer.parseInt(args[1]), Integer.parseInt(args[2]), Integer.parseInt(args[3])), altfe, Integer.parseInt(args[4]), trainingDataExtractor);
+            Disambiguator disambiguator = new WekaDisambiguator("../data/supervised", new SVMSetUp(), altfe, 4, trainingDataExtractor);
+            //Disambiguator disambiguator = new WekaDisambiguator("../data/supervised", new RandomForestSetUp(Integer.parseInt(args[0]), Integer.parseInt(args[1]), Integer.parseInt(args[2]), Integer.parseInt(args[3])), altfe, Integer.parseInt(args[4]), trainingDataExtractor);
 
 
             System.err.println("Desambiguation with DSO");
@@ -153,7 +154,8 @@ public final class NUSPT2007Disambiguation {
 
             System.err.println("Feature extraction done");
 
-            Disambiguator disambiguator = new WekaDisambiguator("../data/supervised", new RandomForestSetUp(Integer.parseInt(args[0]), Integer.parseInt(args[1]), Integer.parseInt(args[2]), Integer.parseInt(args[3])), altfe, Integer.parseInt(args[4]), trainingDataExtractor);
+            Disambiguator disambiguator = new WekaDisambiguator("../data/supervised", new SVMSetUp(), altfe, 4, trainingDataExtractor);
+            //Disambiguator disambiguator = new WekaDisambiguator("../data/supervised", new RandomForestSetUp(Integer.parseInt(args[0]), Integer.parseInt(args[1]), Integer.parseInt(args[2]), Integer.parseInt(args[3])), altfe, Integer.parseInt(args[4]), trainingDataExtractor);
 
 
             System.err.println("Desambiguation with Groningen Meaning Bank");
@@ -196,7 +198,8 @@ public final class NUSPT2007Disambiguation {
 
             System.err.println("Feature extraction done");
 
-            Disambiguator disambiguator = new WekaDisambiguator("../data/supervised", new RandomForestSetUp(Integer.parseInt(args[0]), Integer.parseInt(args[1]), Integer.parseInt(args[2]), Integer.parseInt(args[3])), altfe, Integer.parseInt(args[4]), trainingDataExtractor);
+            Disambiguator disambiguator = new WekaDisambiguator("../data/supervised", new SVMSetUp(), altfe, 4, trainingDataExtractor);
+            //Disambiguator disambiguator = new WekaDisambiguator("../data/supervised", new RandomForestSetUp(Integer.parseInt(args[0]), Integer.parseInt(args[1]), Integer.parseInt(args[2]), Integer.parseInt(args[3])), altfe, Integer.parseInt(args[4]), trainingDataExtractor);
 
 
             System.err.println("Desambiguation with SemCor");
@@ -240,7 +243,8 @@ public final class NUSPT2007Disambiguation {
 
             System.err.println("Feature extraction done");
 
-            Disambiguator disambiguator = new WekaDisambiguator("../data/supervised", new RandomForestSetUp(Integer.parseInt(args[0]), Integer.parseInt(args[1]), Integer.parseInt(args[2]), Integer.parseInt(args[3])), altfe, Integer.parseInt(args[4]), trainingDataExtractor);
+            Disambiguator disambiguator = new WekaDisambiguator("../data/supervised", new SVMSetUp(), altfe, 4, trainingDataExtractor);
+            //Disambiguator disambiguator = new WekaDisambiguator("../data/supervised", new RandomForestSetUp(Integer.parseInt(args[0]), Integer.parseInt(args[1]), Integer.parseInt(args[2]), Integer.parseInt(args[3])), altfe, Integer.parseInt(args[4]), trainingDataExtractor);
 
 
             System.err.println("Desambiguation with WordNet Glosses");
@@ -377,13 +381,16 @@ public final class NUSPT2007Disambiguation {
 
         System.err.println("Feature extraction");
 
-        LocalCollocationFeatureExtractor lcfe = new LocalCollocationFeatureExtractor(contextWindows, false);
-        PosFeatureExtractor pfe = new PosFeatureExtractor(3, 3);
-        LocalTextFeatureExtractor acfe = new LemmaFeatureExtractor(3, 3);
+        //LocalCollocationFeatureExtractor lcfe = new LocalCollocationFeatureExtractor(contextWindows, false);
+        //PosFeatureExtractor pfe = new PosFeatureExtractor(3, 3);
+        //LocalTextFeatureExtractor acfe = new LemmaFeatureExtractor(3, 3);
+        dl.load();
+        SingleWordSurroundingContextFeatureExtractor.buildIndex(dl);
+        LocalTextFeatureExtractor acfe = new SingleWordSurroundingContextFeatureExtractor(3, 3);
 
         AggregateLocalTextFeatureExtractor altfe = new AggregateLocalTextFeatureExtractor();
-        altfe.addExtractor(lcfe);
-        altfe.addExtractor(pfe);
+        //altfe.addExtractor(lcfe);
+        //altfe.addExtractor(pfe);
         altfe.addExtractor(acfe);
 
         TrainingDataExtractor trainingDataExtractor = new SemCorTrainingDataExtractor(altfe);
@@ -392,7 +399,7 @@ public final class NUSPT2007Disambiguation {
         System.err.println("Feature extraction done");
 
 
-        Disambiguator disambiguator = new WekaDisambiguator("../data/supervised", new SVMSetUp(), altfe, 4, trainingDataExtractor);
+        Disambiguator disambiguator = new WekaDisambiguator("../data/supervised", new SVMSetUp(), altfe, 4 , trainingDataExtractor);
         //Disambiguator disambiguator = new WekaDisambiguator("../data/supervised", new BFTreeSetUp(), altfe, 16);
         //Disambiguator disambiguator = new WekaDisambiguator("../data/supervised", new BayesianLogisticRegressionSetUp(), altfe, 16);
         //Disambiguator disambiguator = new WekaDisambiguator("../data/supervised", new RBFNetworkSetUp(), altfe, 16);
@@ -404,7 +411,7 @@ public final class NUSPT2007Disambiguation {
         //Evaluation standardEvaluation = new StandardEvaluation();
 
         System.err.println("Loading texts");
-        dl.load();
+        //dl.load();
         int i = 0;
         if (args.length == 1) {
             i = Integer.valueOf(args[0]) - 1;

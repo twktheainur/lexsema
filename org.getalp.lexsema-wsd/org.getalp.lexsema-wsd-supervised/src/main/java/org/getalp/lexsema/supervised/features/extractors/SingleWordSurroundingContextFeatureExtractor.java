@@ -1,8 +1,13 @@
 package org.getalp.lexsema.supervised.features.extractors;
 
+import org.getalp.lexsema.io.document.loader.CorpusLoader;
 import org.getalp.lexsema.similarity.Document;
+import org.getalp.lexsema.similarity.Word;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 
@@ -10,22 +15,100 @@ public class SingleWordSurroundingContextFeatureExtractor implements LocalTextFe
 
     private final int lemmamin;
     private final int lemmamax;
+    private static HashMap<String, Integer> index;
+    private static Logger logger = LoggerFactory.getLogger(SingleWordSurroundingContextFeatureExtractor.class);
+    private static int nbDone = 0;
 
     public SingleWordSurroundingContextFeatureExtractor(int lemmaMin, int lemmaMax) {
         lemmamin = lemmaMin;
         lemmamax = lemmaMax;
     }
 
+    public static void buildIndex(CorpusLoader cl) {
+
+        logger.debug("Entrée de buildIndex : " + cl);
+
+        index = new HashMap<String, Integer>(1000, 1000);
+        int value = 0;
+        String lemma;
+
+        for (Document d : cl) {
+
+            for (int i = 0; i < d.size(); i++) {
+
+                lemma = d.getWord(i).getLemma();
+
+                if (index.get(lemma) == null) {
+
+                    index.put(lemma, new Integer(value++));
+                }
+            }
+            logger.debug("taille de d " + d.size());
+            logger.debug("taille de index " + index.size());
+            logger.debug("taille de value " + value);
+        }
+        logger.debug(" ");
+        logger.debug("taille de index " + index.size());
+        logger.debug("taille de value " + value);
+    }
+
     @Override
-    public List<String> getFeatures(Document d, int currentIndex) {
-        List<String> features = new ArrayList<>();
-        for (int j = currentIndex - lemmamin; j <= currentIndex + lemmamax; j++) {
-            if (j == currentIndex) {
-                features.add("\"1\"");
-            } else {
-                features.add("\"0\"");
+    public synchronized List<String>  getFeatures(Document d, int currentIndex) {
+
+        if (index == null) {
+
+            logger.debug("Index is empty, please build it with static method buildIndex");
+            System.exit(0);
+
+        }
+
+        List<String> features = new ArrayList<>(index.size());
+
+        int[] feats = new int[index.size()];
+
+        for (int i = 0; i < feats.length; i++) {
+
+            feats[i] = 0;
+        }
+
+        for (int j = Math.max(0, currentIndex - lemmamin); j <= currentIndex + lemmamax && j<d.size(); j++) {
+
+            logger.debug("j = " + j);
+            if (j != currentIndex) {
+                logger.debug("\t###########");
+                logger.debug("index.get(d.getWord(0, " + j + "))");
+                logger.debug("#################");
+                logger.debug("d = " + d);
+                Word w = d.getWord(0, j);
+                logger.debug("w = " + w);
+                logger.debug("lemma = \"" + w.getLemma() + "\"");;
+
+                if(!w.getLemma().equals("")) {
+                    int value = 0;
+                    try {
+                        value = index.get(w.getLemma());
+                        logger.debug("GET " + value);
+                        feats[value]++;
+                    } catch (Exception e) {
+                      //  e.printStackTrace();
+                    }
+                }
+                else{
+
+                    logger.debug("w = mot vide");
+                }
             }
         }
+
+        for (int i = 0; i < feats.length; i++) {
+
+            features.add("\"" + feats[i] + "\"");
+        }
+
+        logger.debug(features.toString());
+        if(++nbDone%1000==0)
+            logger.info(""+nbDone);
+        //System.exit(0);
         return features;
     }
 }

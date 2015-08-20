@@ -38,7 +38,12 @@ public class SemCorTrainingDataExtractor implements TrainingDataExtractor {
 
             text.words().parallelStream().forEach(w -> {
                 processWord(w, text, wordIndex.getAndIncrement());
-            });
+            });/*
+            try {
+                Thread.sleep(100000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }*/
         }
     }
 

@@ -40,7 +40,7 @@ public class WekaLexicalEntryDisambiguator extends SupervisedSequentialLexicalEn
 
     @Override
     protected final List<ClassificationOutput> runClassifier(String lemma, List<String> instance) {
-        System.out.println("disambiguation of " + lemma);
+        logger.debug("disambiguation of " + lemma);
         WekaClassifier classifier;
         List<ClassificationOutput> result = Collections.emptyList();
         boolean trainingSuccessful = false;
@@ -54,7 +54,7 @@ public class WekaLexicalEntryDisambiguator extends SupervisedSequentialLexicalEn
 
                     if (trainingInstances != null) {
 
-                        System.out.println("Number of examples :" + trainingInstances.size());
+                        logger.debug("Number of examples :" + trainingInstances.size());
                         if(trainingInstances.size() <= 5000) {
                             performTraining(classifier, trainingInstances, lemma);
                             trainingSuccessful = true;
@@ -70,7 +70,7 @@ public class WekaLexicalEntryDisambiguator extends SupervisedSequentialLexicalEn
         if (classifier != null && trainingSuccessful && classifier.isClassifierTrained()) {
             result = classifyInstance(classifier,instance);
         }
-        System.out.println("disambiguation of " + lemma + " done");
+        logger.debug("disambiguation of " + lemma + " done");
         return result;
 
     }
