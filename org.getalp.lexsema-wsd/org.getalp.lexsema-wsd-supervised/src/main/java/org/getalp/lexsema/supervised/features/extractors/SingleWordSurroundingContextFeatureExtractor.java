@@ -2,6 +2,7 @@ package org.getalp.lexsema.supervised.features.extractors;
 
 import org.getalp.lexsema.io.document.loader.CorpusLoader;
 import org.getalp.lexsema.similarity.Document;
+import org.getalp.lexsema.similarity.Text;
 import org.getalp.lexsema.similarity.Word;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,7 +25,7 @@ public class SingleWordSurroundingContextFeatureExtractor implements LocalTextFe
         lemmamax = lemmaMax;
     }
 
-    public static void buildIndex(CorpusLoader cl) {
+    public static void buildIndex(List<Text> cl) {
 
         logger.debug("Entrée de buildIndex : " + cl);
 
@@ -38,8 +39,9 @@ public class SingleWordSurroundingContextFeatureExtractor implements LocalTextFe
 
                 lemma = d.getWord(i).getLemma();
 
-                if (index.get(lemma) == null) {
+                if (!lemma.equals("") && index.get(lemma) == null) {
 
+                    logger.debug("lemma " + lemma);
                     index.put(lemma, new Integer(value++));
                 }
             }
@@ -71,25 +73,29 @@ public class SingleWordSurroundingContextFeatureExtractor implements LocalTextFe
             feats[i] = 0;
         }
 
-        for (int j = Math.max(0, currentIndex - lemmamin); j <= currentIndex + lemmamax && j < d.size(); j++) {
+        for (int i = Math.max(0, currentIndex - lemmamin); i <= currentIndex + lemmamax && i < d.size(); i++) {
 
-            logger.debug("j = " + j);
-            if (j != currentIndex) {
+            logger.debug("j = " + i);
+            if (i != currentIndex) {
                 logger.debug("\t###########");
-                logger.debug("index.get(d.getWord(0, " + j + "))");
+                logger.debug("index.get(d.getWord(0, " + i + "))");
                 logger.debug("#################");
                 logger.debug("d = " + d);
-                Word w = d.getWord(0, j);
+                Word w = d.getWord(i);
                 logger.debug("w = " + w);
                 logger.debug("lemma = \"" + w.getLemma() + "\"");
-                ;
 
                 int value = 0;
-                try {
+
+                if(!w.getLemma().equals("") && index.containsKey(w.getLemma())){
+
                     value = index.get(w.getLemma());
                     logger.debug("GET " + value);
                     feats[value]++;
-                } catch (Exception e) {
+                } else {
+
+                    logger.debug("Non présent \"" + w.getLemma()+"\"");
+                    //System.exit(0);
                     //  e.printStackTrace();
                 }
             }

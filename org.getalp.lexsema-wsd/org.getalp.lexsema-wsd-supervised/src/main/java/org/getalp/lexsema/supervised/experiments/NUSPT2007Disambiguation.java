@@ -384,8 +384,7 @@ public final class NUSPT2007Disambiguation {
         //LocalCollocationFeatureExtractor lcfe = new LocalCollocationFeatureExtractor(contextWindows, false);
         //PosFeatureExtractor pfe = new PosFeatureExtractor(3, 3);
         //LocalTextFeatureExtractor acfe = new LemmaFeatureExtractor(3, 3);
-        dl.load();
-        SingleWordSurroundingContextFeatureExtractor.buildIndex(dl);
+        SingleWordSurroundingContextFeatureExtractor.buildIndex(taggedCorpora);
         LocalTextFeatureExtractor acfe = new SingleWordSurroundingContextFeatureExtractor(3, 3);
 
         AggregateLocalTextFeatureExtractor altfe = new AggregateLocalTextFeatureExtractor();
