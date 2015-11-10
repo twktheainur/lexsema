@@ -92,7 +92,7 @@ public final class AcceptionClusteringExperimentGenerationSim {
     }
 
 
-    public static void main(String[] args) throws IOException, NoSuchVocableException {
+    public static void main(String... args) throws IOException, NoSuchVocableException {
         try {
 
             loadProperties();
@@ -153,7 +153,7 @@ public final class AcceptionClusteringExperimentGenerationSim {
 
     private static void loadProperties() {
         final Properties properties = new Properties();
-        try (InputStream props = AcceptionClusteringExperimentGenerationSim.class.getResourceAsStream(separator + "acceptali.properties")) {
+        try (InputStream props = AcceptionClusteringExperimentGenerationSim.class.getResourceAsStream(String.format("%sacceptali.properties", separator))) {
             if (props != null) {
                 properties.load(props);
                 if (properties.containsKey("acceptali.config.tdbPath")) {
@@ -183,7 +183,7 @@ public final class AcceptionClusteringExperimentGenerationSim {
             } else {
                 logger.info("No acceptali.properties in the classpath, using default configuration.");
             }
-        } catch (IOException e) {
+        } catch (IOException ignored) {
             logger.info("No acceptali.properties in the classpath, using default configuration.");
         }
     }
@@ -219,11 +219,11 @@ public final class AcceptionClusteringExperimentGenerationSim {
         } else {
             Vocable v = dbNary.getVocable("river", Language.ENGLISH);
             List<LexicalEntry> ventries = dbNary.getLexicalEntries(v);
-            if (!ventries.isEmpty()) {
+            if (ventries.isEmpty()) {
+                closure = new LexicalResourceTranslationClosureImpl();
+            } else {
                 TranslationClosureGenerator gtc = TranslationClosureGeneratorFactory.createVocablePOSGenerator(v, "http://www.lexinfo.net/ontology/2.0/lexinfo#noun", dbNary);
                 closure = generateLexicalSenseClosure(gtc, DEPTH);
-            } else {
-                closure = new LexicalResourceTranslationClosureImpl();
             }
         }
         TranslationClosureSemanticSignatureGenerator semanticSignatureGenerator =
@@ -247,7 +247,7 @@ public final class AcceptionClusteringExperimentGenerationSim {
     }
 
     private static void writeSourceMatrix(long matrix_time, DoubleMatrix2D matrix) {
-        try (PrintWriter pw = new PrintWriter(MATRIX_PATH + separator + matrix_time + separator + "source.dat")) {
+        try (PrintWriter pw = new PrintWriter(String.format("%s%s%d%ssource.dat", MATRIX_PATH, separator, matrix_time, separator))) {
             Matrices.matrixCSVWriter(pw, matrix);
             pw.close();
         } catch (FileNotFoundException e) {
@@ -260,7 +260,7 @@ public final class AcceptionClusteringExperimentGenerationSim {
         if (!dir.exists()) {
             boolean result = dir.mkdirs();
             if (!result) {
-                logger.error("Cannot create " + MATRIX_PATH + separator + matrix_time);
+                logger.error("Cannot create {}{}{}", MATRIX_PATH, separator, matrix_time);
             }
         }
     }

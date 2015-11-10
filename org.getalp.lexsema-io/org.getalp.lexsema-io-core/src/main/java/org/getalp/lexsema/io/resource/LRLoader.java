@@ -5,10 +5,13 @@ import org.getalp.lexsema.similarity.Document;
 import org.getalp.lexsema.similarity.Sense;
 import org.getalp.lexsema.similarity.Word;
 import java.util.List;
+import java.util.Map;
 
 public interface LRLoader
 {
     List<Sense> getSenses(Word w);
+
+    Map<Word,List<Sense>> getAllSenses();
 
     void loadSenses(Document document);
 

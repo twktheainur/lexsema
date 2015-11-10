@@ -15,10 +15,7 @@ import org.getalp.lexsema.ontolex.graph.OntologyModel;
 import org.getalp.lexsema.ontolex.graph.storage.JenaTDBStore;
 import org.getalp.lexsema.ontolex.graph.storage.StoreHandler;
 import org.getalp.lexsema.ontolex.graph.store.Store;
-import org.getalp.lexsema.similarity.Document;
-import org.getalp.lexsema.similarity.Sense;
-import org.getalp.lexsema.similarity.SenseImpl;
-import org.getalp.lexsema.similarity.Word;
+import org.getalp.lexsema.similarity.*;
 import org.getalp.lexsema.similarity.cache.SenseCache;
 import org.getalp.lexsema.similarity.cache.SenseCacheImpl;
 import org.getalp.lexsema.similarity.signatures.SemanticSignature;
@@ -29,10 +26,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.StringTokenizer;
+import java.util.*;
 
 @SuppressWarnings("OverlyCoupledClass")
 public class DBNaryLoaderImpl implements DBNaryLoader {
@@ -145,6 +139,34 @@ public class DBNaryLoaderImpl implements DBNaryLoader {
             senseCache.addToCache(w, senses);
         }
         return senses;
+    }
+
+    @Override
+    public Map<Word, List<Sense>> getAllSenses(){
+        Map<Word, List<Sense>> sensesAll = new HashMap<>();
+        List<Vocable> vocables = dbnary.getVocables();
+        for(Vocable vocable: vocables){
+            List<LexicalEntry> lexicalEntries = dbnary.getLexicalEntries(vocable);
+            for(LexicalEntry entry: lexicalEntries){
+                String lemma = entry.getLemma();
+                String partOfSpeech = entry.getPartOfSpeech();
+                Word w = new WordImpl(entry.toString(),lemma,lemma,partOfSpeech);
+                List<Sense> senses = new ArrayList<>();
+                for (LexicalSense ls : dbnary.getLexicalSenses(entry)) {
+                    Sense sense = new SenseImpl(ls);
+                    SemanticSignature signature = new SemanticSignatureImpl();
+                    if (loadDefinitions) {
+                        String def = ls.getDefinition();
+                        addToSignature(signature, def);
+                    }
+                    sense.setSemanticSignature(signature);
+                    senses.add(sense);
+                }
+                sensesAll.put(w,senses);
+            }
+
+        }
+        return sensesAll;
     }
 
     private void addToSignature(SemanticSignature signature, String def) {

@@ -1,7 +1,5 @@
 package org.getalp.lexsema.translation;
 
-
-import org.cleartk.snowball.SnowballStemmer;
 import org.getalp.lexsema.io.resource.LRLoader;
 import org.getalp.lexsema.io.resource.dbnary.DBNaryLoaderImpl;
 import org.getalp.lexsema.io.text.TextProcessor;
@@ -14,6 +12,7 @@ import org.getalp.lexsema.ontolex.dbnary.Vocable;
 import org.getalp.lexsema.ontolex.dbnary.exceptions.NoSuchVocableException;
 import org.getalp.lexsema.similarity.Document;
 import org.getalp.lexsema.similarity.Text;
+import org.getalp.lexsema.similarity.Word;
 import org.getalp.lexsema.util.Language;
 import org.getalp.lexsema.wsd.configuration.Configuration;
 import org.getalp.lexsema.wsd.method.Disambiguator;
@@ -24,24 +23,27 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
+import java.util.regex.Pattern;
 
 public class DbNaryDisambiguatingTranslator implements Translator {
 
-    private static Logger logger = LoggerFactory.getLogger(DbNaryDisambiguatingTranslator.class);
+    private static final Logger logger = LoggerFactory.getLogger(DbNaryDisambiguatingTranslator.class);
+    private static final Pattern PUNCT_PATTERN = Pattern.compile("\\p{Punct}");
+    private static final Pattern BRAKETS_PATTERN = Pattern.compile("[\\[\\]]+");
+    private static final Pattern COMP_PATTERN = Pattern.compile("''comp.");
     private final Disambiguator disambiguator;
-    private final SnowballStemmer snowballStemmer;
+    //private final SnowballStemmer snowballStemmer;
     private final Collection<String> sourceStopList;
     private final Collection<String> targetStopList;
-    private DBNary dbNary;
-    private TextProcessor textProcessor;
+    private final DBNary dbNary;
+    private final TextProcessor textProcessor;
 
-    public DbNaryDisambiguatingTranslator(DBNary dbNary, TextProcessor textProcessor, Disambiguator disambiguator, SnowballStemmer snowballStemmer, Collection<String> sourceStopList, Collection<String> targetStopList) {
+    public DbNaryDisambiguatingTranslator(DBNary dbNary, TextProcessor textProcessor, Disambiguator disambiguator, Collection<String> sourceStopList, Collection<String> targetStopList) {
         this.dbNary = dbNary;
         this.textProcessor = textProcessor;
         this.disambiguator = disambiguator;
-        this.snowballStemmer = snowballStemmer;
         this.sourceStopList = Collections.unmodifiableCollection(sourceStopList);
-        this.targetStopList = targetStopList;
+        this.targetStopList = Collections.unmodifiableCollection(targetStopList);
     }
 
     @Override
@@ -58,26 +60,26 @@ public class DbNaryDisambiguatingTranslator implements Translator {
                 outputBuilder.append(String.format("%s ", getWordTranslation(i, result, sentence, sourceLanguage, targetLanguage)));
             }
         } catch (IOException e) {
-            logger.error("IO " + e.getLocalizedMessage());
+            logger.error("IO {}", e.getLocalizedMessage());
         } catch (InvocationTargetException e) {
-            logger.error("Invoke " + e.getLocalizedMessage());
+            logger.error("Invoke {}", e.getLocalizedMessage());
         } catch (NoSuchMethodException e) {
             logger.error(e.getLocalizedMessage());
         } catch (ClassNotFoundException e) {
-            logger.error("Class not found: " + e.getLocalizedMessage());
+            logger.error("Class not found: {}", e.getLocalizedMessage());
         } catch (InstantiationException e) {
-            logger.error("Cannot instantiate" + e.getLocalizedMessage());
+            logger.error("Cannot instantiate{}", e.getLocalizedMessage());
         } catch (IllegalAccessException e) {
-            logger.error("Illegal access" + e.getLocalizedMessage());
+            logger.error("Illegal access{}", e.getLocalizedMessage());
         }
         return outputBuilder.toString();
     }
 
-    private String filterInput(String input) {
-        return input.replaceAll("\\p{Punct}", " ");
+    private String filterInput(CharSequence input) {
+        return PUNCT_PATTERN.matcher(input).replaceAll(" ");
     }
-    private String filterOutput(String output){
-        return output.replaceAll("[\\[\\]]+","").replaceAll("\\p{Punct}", " ").replaceAll("''comp.","");
+    private String filterOutput(CharSequence output){
+        return COMP_PATTERN.matcher(PUNCT_PATTERN.matcher(BRAKETS_PATTERN.matcher(output).replaceAll("")).replaceAll(" ")).replaceAll("");
     }
 
     @Override
@@ -93,7 +95,7 @@ public class DbNaryDisambiguatingTranslator implements Translator {
         int selectedSense = c.getAssignment(index);
         List<Translation> translations = null;
         Collection<String> uniqueTranslations = new TreeSet<>();
-        String lemma = d.getWord(0, index).getLemma();
+        String lemma = getWordLemma(d.getWord(0, index));
         if (selectedSense >= 0 && !targetStopList.contains(lemma)) {
             LexicalSense sense = getAssignedSense(d, index, selectedSense);
             if (sense != null) {
@@ -110,7 +112,7 @@ public class DbNaryDisambiguatingTranslator implements Translator {
         }
         if (translations != null) {
             for (Translation translation : translations) {
-                if (translation.getLanguage().equals(targetLanguage)) {
+                if (translation.getLanguage() == targetLanguage) {
                     uniqueTranslations.add(translation.getWrittenForm());
                 }
             }

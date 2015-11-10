@@ -9,10 +9,7 @@ import it.uniroma1.lcl.babelnet.BabelSense;
 import it.uniroma1.lcl.babelnet.BabelSynset;
 import org.getalp.lexsema.io.resource.LRLoader;
 import org.getalp.lexsema.io.thesaurus.AnnotatedTextThesaurus;
-import org.getalp.lexsema.similarity.Document;
-import org.getalp.lexsema.similarity.Sense;
-import org.getalp.lexsema.similarity.SenseImpl;
-import org.getalp.lexsema.similarity.Word;
+import org.getalp.lexsema.similarity.*;
 import org.getalp.lexsema.similarity.cache.SenseCache;
 import org.getalp.lexsema.similarity.cache.SenseCacheImpl;
 import org.getalp.lexsema.similarity.signatures.SemanticSignature;
@@ -108,6 +105,16 @@ public class BabelNetAPILoader implements LRLoader {
             senseCache.addToCache(w, senses);
         }
         return senses;
+    }
+
+    @Override
+    public Map<Word, List<Sense>> getAllSenses() {
+        Map<Word, List<Sense>> allSenses = new HashMap<>();
+        babelNet.getLexiconIterator().forEachRemaining(w -> {
+            Word word = new WordImpl(w.getId(),w.getWord(),w.getWord(),w.getPOS().toString());
+                allSenses.put(word, getSenses(w.getWord(), w.getPOS().toString(), word));
+        });
+        return allSenses;
     }
 
     private void addToSignature(SemanticSignature signature, String def) {

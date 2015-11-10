@@ -45,12 +45,14 @@ public final class AcceptionClusteringExperimentFromFile {
     public static final String SIM_MATRIX_PATH = String.format("%s%ssource.dat", MATRIX_PATH, separator);
 
     public static final int DEPTH = 1;
+    private static final double CLUSTERING_THRESHOLD = .5;
+
     static Language[] loadLanguages = {
             Language.FRENCH, Language.ENGLISH, Language.ITALIAN, Language.SPANISH,
             Language.PORTUGUESE, Language.BULGARIAN, Language.CATALAN, Language.FINNISH,
             Language.GERMAN, Language.RUSSIAN, Language.GREEK, Language.TURKISH
     };
-    private static Logger logger = LoggerFactory.getLogger(AcceptionClusteringExperimentFromFile.class);
+    private static final Logger logger = LoggerFactory.getLogger(AcceptionClusteringExperimentFromFile.class);
 
 
     private AcceptionClusteringExperimentFromFile() {
@@ -59,7 +61,7 @@ public final class AcceptionClusteringExperimentFromFile {
     }
 
 
-    public static void main(String[] args) throws IOException, NoSuchVocableException {
+    public static void main(String... args) throws IOException, NoSuchVocableException {
 
 
         try {
@@ -67,7 +69,7 @@ public final class AcceptionClusteringExperimentFromFile {
             PairwiseSimilarityMatrixGenerator matrixGenerator =
                     new PairwiseCLSimilarityMatrixGeneratorFile(SIM_MATRIX_PATH);
             matrixGenerator.generateMatrix();
-            SenseClusterer clusterer = new TricklSenseClusterer(new FuzzyCMeans(), .5);
+            SenseClusterer clusterer = new TricklSenseClusterer(new FuzzyCMeans(), CLUSTERING_THRESHOLD);
             clusterer.setKernelFilter(new NeuralICAMatrixFactorizationFilter(5));
             DoubleMatrix2D inputData = matrixGenerator.getScoreMatrix();
             //inputData.normalize();

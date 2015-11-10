@@ -5,6 +5,7 @@ import org.getalp.lexsema.io.thesaurus.AnnotatedTextThesaurus;
 import org.getalp.lexsema.similarity.Document;
 import org.getalp.lexsema.similarity.Sense;
 import org.getalp.lexsema.similarity.Word;
+import org.getalp.lexsema.similarity.WordImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.InputSource;
@@ -21,6 +22,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 @SuppressWarnings("BooleanParameter")
 public class DictionaryLRLoader implements LRLoader {
@@ -59,6 +61,18 @@ public class DictionaryLRLoader implements LRLoader {
             tag = MessageFormat.format("{0}%{1}", lemma.toLowerCase(), partOfSpeech);
         }
         return wordSenses.get(tag);
+    }
+
+    @Override
+    public Map<Word, List<Sense>> getAllSenses() {
+        Map<Word,List<Sense>> senses = new ConcurrentHashMap<>();
+
+        wordSenses.keySet().parallelStream().forEach(word -> {
+            String[] idParts = word.split("%");
+            Word w = new WordImpl(word,idParts[0],idParts[0],idParts[1]);
+            senses.put(w,wordSenses.get(word));
+        });
+        return senses;
     }
 
     @Override

@@ -4,9 +4,7 @@ import edu.mit.jwi.Dictionary;
 import edu.mit.jwi.item.*;
 import org.getalp.lexsema.io.resource.LRLoader;
 import org.getalp.lexsema.io.thesaurus.AnnotatedTextThesaurus;
-import org.getalp.lexsema.similarity.Document;
-import org.getalp.lexsema.similarity.Sense;
-import org.getalp.lexsema.similarity.SenseImpl;
+import org.getalp.lexsema.similarity.*;
 import org.getalp.lexsema.similarity.Word;
 import org.getalp.lexsema.similarity.cache.SenseCache;
 import org.getalp.lexsema.similarity.cache.SenseCacheImpl;
@@ -19,10 +17,9 @@ import org.slf4j.LoggerFactory;
 import org.tartarus.snowball.ext.EnglishStemmer;
 import java.io.IOException;
 import java.text.MessageFormat;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Consumer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -216,6 +213,27 @@ public class WordnetLoader implements LRLoader {
         return senses;
     }
 
+    @Override
+    public Map<Word,List<Sense>> getAllSenses(){
+        Map<Word,List<Sense>> senses = new ConcurrentHashMap<>();
+        Iterator<IIndexWord> nounIIndexWordIterator = dictionary.getBackingDictionary().getIndexWordIterator(POS.NOUN);
+        Iterator<IIndexWord> adjectiveIIndexWordIterator = dictionary.getBackingDictionary().getIndexWordIterator(POS.ADJECTIVE);
+        Iterator<IIndexWord> adverbIIndexWordIterator = dictionary.getBackingDictionary().getIndexWordIterator(POS.ADVERB);
+        Iterator<IIndexWord> verbIIndexWordIterator = dictionary.getBackingDictionary().getIndexWordIterator(POS.VERB);
+
+        Consumer<IIndexWord> processor = iidx->{
+            List<Sense> senseList = getSenses(iidx.getLemma(), String.valueOf(iidx.getPOS().getTag()));
+            Word word = new WordImpl(iidx.getID().toString(),iidx.getLemma(),iidx.getLemma(),iidx.getPOS().toString());
+            senses.put(word, senseList);
+        };
+        nounIIndexWordIterator.forEachRemaining(processor);
+        verbIIndexWordIterator.forEachRemaining(processor);
+        adjectiveIIndexWordIterator.forEachRemaining(processor);
+        adverbIIndexWordIterator.forEachRemaining(processor);
+
+        return senses;
+    }
+
     private SenseCache getSenseCache(){
         return SenseCacheImpl.getInstance();
     }
@@ -276,6 +294,7 @@ public class WordnetLoader implements LRLoader {
         }
         return w;
     }
+
 
     @Override
     public LRLoader extendedSignature(boolean hasExtendedSignature) {

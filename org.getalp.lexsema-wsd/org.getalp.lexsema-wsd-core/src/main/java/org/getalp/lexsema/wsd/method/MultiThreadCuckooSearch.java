@@ -2,6 +2,7 @@ package org.getalp.lexsema.wsd.method;
 
 import java.io.PrintWriter;
 import java.util.Random;
+
 import org.apache.commons.math3.distribution.LevyDistribution;
 import org.getalp.lexsema.similarity.Document;
 import org.getalp.lexsema.wsd.configuration.Configuration;
@@ -10,8 +11,8 @@ import org.getalp.lexsema.wsd.score.ConfigurationScorer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class MultiThreadCuckooSearch {
-    
+public class MultiThreadCuckooSearch implements Disambiguator {
+
     private static final Logger logger = LoggerFactory.getLogger(MultiThreadCuckooSearch.class);
 
     public PrintWriter scorePlotWriter;
@@ -21,7 +22,7 @@ public class MultiThreadCuckooSearch {
     public ConfigurationScorer perfectScorer;
 
     private class Cuckoo implements Runnable {
-        
+
         private final LevyDistribution levyDistribution;
 
         Cuckoo() {
@@ -103,7 +104,8 @@ public class MultiThreadCuckooSearch {
         this.verbose = verbose;
     }
 
-    public Configuration disambiguate(Document document) throws InterruptedException {
+    public Configuration disambiguate(Document document) {
+
         currentDocument = document;
         stopCondition.reset();
         configuration = new ContinuousConfiguration(currentDocument);
@@ -113,9 +115,14 @@ public class MultiThreadCuckooSearch {
             cuckooThreads[i].start();
         }
         new Cuckoo().run();
-        for (Thread cuckoo : cuckooThreads) {
-            cuckoo.join();
+        try {
+            for (Thread cuckoo : cuckooThreads) {
+                cuckoo.join();
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
+
         if (scorePlotWriter != null) {
             scorePlotWriter.flush();
         }
@@ -124,11 +131,10 @@ public class MultiThreadCuckooSearch {
         }
         return configuration;
     }
-    
+
     private int exProgress = 10000;
-    
-    private synchronized void printState()
-    {
+
+    private synchronized void printState() {
         int newProgress = (int) (stopCondition.getProgressPercentage() * 100);
         if (Math.abs(exProgress - newProgress) < 10) return;
         exProgress = newProgress;
@@ -136,11 +142,11 @@ public class MultiThreadCuckooSearch {
             double progressPercent = newProgress / 100.0;
             logger.info(String.format("Cuckoo Progress : %2.2f%% - Current best : %.2f \r", progressPercent, score));
         }
-        
+
         if (scorePlotWriter != null) {
             scorePlotWriter.println(stopCondition.getCurrent() + " " + score);
         }
-        
+
         if (perfectScorePlotWriter != null && perfectScorer != null) {
             synchronized (configuration) {
                 perfectScorePlotWriter.println(stopCondition.getCurrent() + " " + perfectScorer.computeScore(currentDocument, configuration));
@@ -158,7 +164,7 @@ public class MultiThreadCuckooSearch {
         return configurationScorer.computeScore(currentDocument, config);
     }
 
-    public Configuration disambiguate(Document document, Configuration c) throws InterruptedException {
+    public Configuration disambiguate(Document document, Configuration c){
         return disambiguate(document);
     }
 
