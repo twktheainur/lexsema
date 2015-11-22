@@ -223,7 +223,7 @@ public class WordnetLoader implements LRLoader {
 
         Consumer<IIndexWord> processor = iidx->{
             List<Sense> senseList = getSenses(iidx.getLemma(), String.valueOf(iidx.getPOS().getTag()));
-            Word word = new WordImpl(iidx.getID().toString(),iidx.getLemma(),iidx.getLemma(),iidx.getPOS().toString());
+            Word word = new WordImpl(iidx.getID().toString(), iidx.getLemma(), iidx.getLemma(), String.valueOf(iidx.getPOS().getTag()));
             senses.put(word, senseList);
         };
         nounIIndexWordIterator.forEachRemaining(processor);
