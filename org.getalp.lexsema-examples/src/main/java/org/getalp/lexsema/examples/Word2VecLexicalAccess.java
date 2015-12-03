@@ -30,6 +30,7 @@ public final class Word2VecLexicalAccess {
         word2VecLoader.loadGoogle(new File(args[2]),true);
 
         SimilarityMeasure similarityMeasure = new Word2VecGlossCosineSimilarity(word2VecLoader.getWord2Vec(),true);
+
         double sim = similarityMeasure.compute(signature1, signature2);
         String output = String.format("The similarity between \"%s\" and \"%s\" is %s", signature1.toString(), signature2.toString(), sim);
         logger.info(output);
