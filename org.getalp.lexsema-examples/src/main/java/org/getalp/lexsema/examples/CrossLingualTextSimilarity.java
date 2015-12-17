@@ -15,9 +15,9 @@ import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 
 public class CrossLingualTextSimilarity {
-    private static Logger logger = LoggerFactory.getLogger(CrossLingualTextSimilarity.class);
+    private static final Logger logger = LoggerFactory.getLogger(CrossLingualTextSimilarity.class);
 
-    public static void main(String[] args) throws IOException, InvocationTargetException, NoSuchMethodException, ClassNotFoundException, InstantiationException, IllegalAccessException {
+    public static void main(String... args) throws IOException, InvocationTargetException, NoSuchMethodException, ClassNotFoundException, InstantiationException, IllegalAccessException {
         if(args.length<4){
             usage();
         }

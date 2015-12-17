@@ -33,21 +33,18 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.*;
 
 public final class SenseClustering {
 
     public static final String ONTOLOGY_PROPERTIES = "data" + File.separator + "ontology.properties";
-    private static Language[] languages = {Language.ENGLISH, Language.BULGARIAN, Language.CATALAN, Language.BULGARIAN,
+    private static final Language[] languages = {Language.ENGLISH, Language.BULGARIAN, Language.CATALAN, Language.BULGARIAN,
     Language.FINNISH, Language.GERMAN, Language.ITALIAN, Language.JAPANESE, Language.PORTUGUESE, Language.RUSSIAN,
             Language.TURKISH, Language.FRENCH};
 
-    private static Logger logger = LoggerFactory.getLogger(SenseClustering.class);
+    private static final Logger logger = LoggerFactory.getLogger(SenseClustering.class);
 
-    public static void main(String args[]) throws IOException, InvocationTargetException, NoSuchMethodException, ClassNotFoundException, InstantiationException, IllegalAccessException, NoSuchVocableException {
+    public static void main(String... args) throws IOException, InvocationTargetException, NoSuchMethodException, ClassNotFoundException, InstantiationException, IllegalAccessException, NoSuchVocableException {
 
 
         Store store = new JenaTDBStore(args[0]);
@@ -93,14 +90,14 @@ public final class SenseClustering {
 
         SenseClusterCombFilter filter = new SimilaritySenseClusterCombFilter(crossLingualMeasure, dimRedFilter);
 
-        List<SenseCluster> filteredClusters = new ArrayList<>();
+        Collection<SenseCluster> filteredClusters = new ArrayList<>();
 
         for(SenseCluster senseCluster : clusters){
             filteredClusters.add(filter.apply(senseCluster));
         }
 
         logger.info("Filtered clusters");
-        for (SenseCluster sc : clusters) {
+        for (SenseCluster sc : filteredClusters) {
             logger.info(sc.toString());
         }
 

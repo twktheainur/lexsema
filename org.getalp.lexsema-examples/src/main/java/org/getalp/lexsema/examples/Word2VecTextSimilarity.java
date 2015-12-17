@@ -12,17 +12,23 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.regex.Pattern;
 
 public final class Word2VecTextSimilarity {
-    private static Logger logger = LoggerFactory.getLogger(Word2VecTextSimilarity.class);
+    private static final Logger logger = LoggerFactory.getLogger(Word2VecTextSimilarity.class);
+    private static final Pattern PUNC_PATTERN = Pattern.compile("\\p{Punct}");
 
-    public static void main(String[] args) throws IOException {
+    private Word2VecTextSimilarity() {
+    }
+
+
+    public static void main(String... args) throws IOException {
 
         if (args.length <2) {
             usage();
         }
-        SemanticSignature signature1 = new SemanticSignatureImpl(args[0].replaceAll("\\p{Punct}","").toLowerCase().trim());
-        SemanticSignature signature2 = new SemanticSignatureImpl(args[1].replaceAll("\\p{Punct}","").toLowerCase().trim());
+        SemanticSignature signature1 = new SemanticSignatureImpl(PUNC_PATTERN.matcher(args[0]).replaceAll("").toLowerCase().trim());
+        SemanticSignature signature2 = new SemanticSignatureImpl(PUNC_PATTERN.matcher(args[1]).replaceAll("").toLowerCase().trim());
 
         MultilingualWord2VecLoader word2VecLoader = new MultilingualSerializedModelWord2VecLoader();
         word2VecLoader.loadGoogle(new File(args[2]),true);

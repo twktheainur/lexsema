@@ -14,9 +14,12 @@ import java.io.File;
 import java.io.IOException;
 
 public final class TextSimilarityEmbeddings {
-    private static Logger logger = LoggerFactory.getLogger(TextSimilarityEmbeddings.class);
+    private static final Logger logger = LoggerFactory.getLogger(TextSimilarityEmbeddings.class);
 
-    public static void main(String[] args) throws IOException {
+    private TextSimilarityEmbeddings() {
+    }
+
+    public static void main(String... args) throws IOException {
 
         if (args.length <2) {
             usage();

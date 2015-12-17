@@ -16,20 +16,20 @@ import java.util.List;
 
 
 /**
- * Operations and  attributes common to all classes implementing <code>LexicalResource</code>.
- * - <code>getGraph</code>
- * - <code>getFactory</code>
- * - <code>getURIParser</code>
- * - <code>getURIModel</code>
+ * Operations and  attributes common to all classes implementing {@code LexicalResource}.
+ * - {@code getGraph}
+ * - {@code getFactory}
+ * - {@code getURIParser}
+ * - {@code getURIModel}
  */
 public abstract class OntolexLexicalResource implements LexicalResource {
 
     private Graph graph;
-    private OntologyModel model;
-    private LexicalResourceEntityFactory lexicalResourceEntityFactory;
+    private final OntologyModel model;
+    private final LexicalResourceEntityFactory lexicalResourceEntityFactory;
     @SuppressWarnings("all")
     private URIParserRegister uriParserRegister;
-    private String uri;
+    private final String uri;
 
 
     public OntolexLexicalResource(OntologyModel model, String uri, URIParserRegister uriParserRegister, LexicalResourceEntityFactory lexicalResourceEntityFactory) {

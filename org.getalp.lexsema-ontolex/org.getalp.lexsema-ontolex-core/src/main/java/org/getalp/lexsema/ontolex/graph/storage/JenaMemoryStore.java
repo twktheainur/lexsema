@@ -25,14 +25,15 @@ public class JenaMemoryStore implements Store {
     @Override
     public ResultSet runQuery(Query q) {
         ResultSet rs = null;
-        QueryExecution queryExecution = QueryExecutionFactory.create(q, model);
-        if (StoreHandler.DEBUG_ON) {
-            logger.info(queryExecution.getQuery().toString(Syntax.defaultSyntax));
-        }
-        try {
-            rs = queryExecution.execSelect();
-        } catch (RuntimeException e) {
-            logger.error(e.getLocalizedMessage());
+        try (QueryExecution queryExecution = QueryExecutionFactory.create(q, model)) {
+            if (StoreHandler.DEBUG_ON) {
+                logger.info(queryExecution.getQuery().toString(Syntax.defaultSyntax));
+            }
+            try {
+                rs = queryExecution.execSelect();
+            } catch (RuntimeException e) {
+                logger.error(e.getLocalizedMessage());
+            }
         }
         return rs;
     }

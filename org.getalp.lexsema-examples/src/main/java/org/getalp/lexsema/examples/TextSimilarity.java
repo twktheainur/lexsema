@@ -8,9 +8,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public final class TextSimilarity {
-    private static Logger logger = LoggerFactory.getLogger(TextSimilarity.class);
+    private static final Logger logger = LoggerFactory.getLogger(TextSimilarity.class);
 
-    public static void main(String[] args) {
+    private TextSimilarity() {
+    }
+
+    @SuppressWarnings("FeatureEnvy")
+    public static void main(String... args) {
 
         if (args.length <2) {
             usage();
@@ -18,9 +22,9 @@ public final class TextSimilarity {
         SemanticSignature signature1 = new SemanticSignatureImpl(args[0]);
         SemanticSignature signature2 = new SemanticSignatureImpl(args[1]);
 
-        SimilarityMeasure similarityMeasure = new TverskiIndexSimilarityMeasureBuilder()
+        @SuppressWarnings("LawOfDemeter") SimilarityMeasure similarityMeasure = new TverskiIndexSimilarityMeasureBuilder()
                 .alpha(1d).beta(0).gamma(0).computeRatio(false).fuzzyMatching(false).normalize(true).regularizeOverlapInput(true).build();
-        double sim = similarityMeasure.compute(signature1, signature2);
+        @SuppressWarnings("LawOfDemeter") double sim = similarityMeasure.compute(signature1, signature2);
         String output = String.format("The similarity between \"%s\" and \"%s\" is %s", signature1.toString(), signature2.toString(), sim);
         logger.info(output);
     }
