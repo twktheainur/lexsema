@@ -1,5 +1,7 @@
 package org.getalp.lexsema.examples;
 
+import org.getalp.lexsema.io.word2vec.MultilingualSerializedModelWord2VecLoader;
+import org.getalp.lexsema.io.word2vec.MultilingualWord2VecLoader;
 import org.getalp.lexsema.io.word2vec.SerializedModelWord2VecLoader;
 import org.getalp.lexsema.io.word2vec.Word2VecLoader;
 import org.getalp.lexsema.similarity.measures.SimilarityMeasure;
