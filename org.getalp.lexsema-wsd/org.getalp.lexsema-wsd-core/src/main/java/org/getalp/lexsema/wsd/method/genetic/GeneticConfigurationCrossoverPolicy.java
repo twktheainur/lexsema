@@ -38,8 +38,8 @@ public class GeneticConfigurationCrossoverPolicy implements CrossoverPolicy
             new_c2_list[i] = c1.configuration.getAssignment(i);
         }
 
-        GeneticConfigurationChromosome new_c1 = new GeneticConfigurationChromosome(c1.configuration.getDocument(), new_c1_list, c1.scorer, stopCondition);
-        GeneticConfigurationChromosome new_c2 = new GeneticConfigurationChromosome(c2.configuration.getDocument(), new_c2_list, c2.scorer, stopCondition);
+        GeneticConfigurationChromosome new_c1 = new GeneticConfigurationChromosome(c1.configuration.getDocument(), new_c1_list, c1.scorer, stopCondition, c1.plotWriter);
+        GeneticConfigurationChromosome new_c2 = new GeneticConfigurationChromosome(c2.configuration.getDocument(), new_c2_list, c2.scorer, stopCondition, c2.plotWriter);
         
         return new ChromosomePair(new_c1, new_c2);
     }
