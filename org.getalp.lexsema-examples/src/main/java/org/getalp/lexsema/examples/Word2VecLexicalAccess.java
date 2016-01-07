@@ -1,5 +1,6 @@
 package org.getalp.lexsema.examples;
 
+import org.deeplearning4j.models.word2vec.Word2Vec;
 import org.getalp.lexsema.io.word2vec.MultilingualSerializedModelWord2VecLoader;
 import org.getalp.lexsema.io.word2vec.MultilingualWord2VecLoader;
 import org.getalp.lexsema.io.word2vec.SerializedModelWord2VecLoader;
@@ -28,16 +29,32 @@ public final class Word2VecLexicalAccess {
         if (args.length <2) {
             usage();
         }
-        SemanticSignature signature1 = new SemanticSignatureImpl(PUNCTPATTERN.matcher(args[0]).replaceAll("").toLowerCase().trim());
-        SemanticSignature signature2 = new SemanticSignatureImpl(PUNCTPATTERN.matcher(args[1]).replaceAll("").toLowerCase().trim());
+//        SemanticSignature signature1 = new SemanticSignatureImpl(PUNCTPATTERN.matcher(args[0]).replaceAll("").toLowerCase().trim());
+//        SemanticSignature signature2 = new SemanticSignatureImpl(PUNCTPATTERN.matcher(args[1]).replaceAll("").toLowerCase().trim());
+
+        SemanticSignature signature1 = new SemanticSignatureImpl(args[0]);
+        SemanticSignature signature2 = new SemanticSignatureImpl(args[1]);
+
 
         Word2VecLoader word2VecLoader = new SerializedModelWord2VecLoader();
         word2VecLoader.loadGoogle(new File(args[2]),true);
+
+
 
         SimilarityMeasure similarityMeasure = new Word2VecGlossCosineSimilarity(word2VecLoader.getWord2Vec(),true);
         double sim = similarityMeasure.compute(signature1, signature2);
         String output = String.format("The similarity between \"%s\" and \"%s\" is %s", signature1.toString(), signature2.toString(), sim);
         logger.info(output);
+
+        Word2Vec wv = word2VecLoader.getWord2Vec();
+
+        int numNeigh = 0;
+
+        for (String w : wv.wordsNearestSum(args[0], 10)){
+            logger.info(String.valueOf(numNeigh++));
+            logger.info(w);
+        }
+
     }
 
     private static void usage() {
