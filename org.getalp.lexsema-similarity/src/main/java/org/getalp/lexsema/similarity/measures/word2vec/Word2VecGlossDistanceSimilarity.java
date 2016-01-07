@@ -4,6 +4,7 @@ package org.getalp.lexsema.similarity.measures.word2vec;
 import com.wcohen.ss.ScaledLevenstein;
 import com.wcohen.ss.api.StringDistance;
 import org.deeplearning4j.models.embeddings.WeightLookupTable;
+import org.deeplearning4j.models.embeddings.wordvectors.WordVectors;
 import org.deeplearning4j.models.word2vec.Word2Vec;
 import org.getalp.lexsema.similarity.measures.SimilarityMeasure;
 import org.getalp.lexsema.similarity.signatures.SemanticSignature;
@@ -25,14 +26,14 @@ public class Word2VecGlossDistanceSimilarity implements SimilarityMeasure {
 
 
     private static final Logger logger = LoggerFactory.getLogger(Word2VecGlossDistanceSimilarity.class);
-    private final Word2Vec word2Vec;
+    private final WordVectors word2Vec;
     private final Distance distance;
     private final Filter filter;
 
     private final StringDistance levenshtein = new ScaledLevenstein();
     private static final double THRESHOLD = .8;
 
-    public Word2VecGlossDistanceSimilarity(Word2Vec word2Vec, Distance distance, Filter factorizationFilter) {
+    public Word2VecGlossDistanceSimilarity(WordVectors word2Vec, Distance distance, Filter factorizationFilter) {
         this.word2Vec = word2Vec;
         this.distance = distance;
         filter = factorizationFilter;

@@ -62,7 +62,7 @@ public class TextDisambiguation {
         word2VecLoader.loadGoogle(new File(args[1]),true);
 
 //        SimilarityMeasure similarityMeasure =
-//                new Word2VecGlossDistanceSimilarity(word2VecLoader.getWord2Vec(Language.ENGLISH),
+//                new Word2VecGlossDistanceSimilarity(word2VecLoader.getWordVectors(Language.ENGLISH),
 //                        new MahalanobisDistance());
 
         @SuppressWarnings("LawOfDemeter") SimilarityMeasure similarityMeasure =

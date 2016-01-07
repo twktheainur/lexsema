@@ -1,6 +1,7 @@
 package org.getalp.lexsema.similarity.measures.word2vec;
 
 
+import org.deeplearning4j.models.embeddings.wordvectors.WordVectors;
 import org.deeplearning4j.models.word2vec.Word2Vec;
 import org.getalp.lexsema.similarity.measures.SimilarityMeasure;
 import org.getalp.lexsema.similarity.signatures.SemanticSignature;
@@ -19,11 +20,11 @@ public class Word2VecGlossCosineSimilarity implements SimilarityMeasure {
 
 
     private static final Logger logger = LoggerFactory.getLogger(Word2VecGlossCosineSimilarity.class);
-    private final Word2Vec word2Vec;
+    private final WordVectors wordVectors;
     private final boolean useCentroids;
 
-    public Word2VecGlossCosineSimilarity(Word2Vec word2Vec, boolean useCentroids) {
-        this.word2Vec = word2Vec;
+    public Word2VecGlossCosineSimilarity(WordVectors wordVectors, boolean useCentroids) {
+        this.wordVectors = wordVectors;
         this.useCentroids = useCentroids;
     }
 
@@ -74,8 +75,8 @@ public class Word2VecGlossCosineSimilarity implements SimilarityMeasure {
         int size= semanticSignature.size();
         int currentRow = 0;
         for(SemanticSymbol symbol : semanticSignature) {
-            double[] vec = word2Vec.getWordVector(symbol.getSymbol());
-            INDArray vector = word2Vec.getWordVectorMatrix(symbol.getSymbol());
+            double[] vec = wordVectors.getWordVector(symbol.getSymbol());
+            INDArray vector = wordVectors.getWordVectorMatrix(symbol.getSymbol());
             for(int i=0; i<vector.rows();i++){
                 logger.info(String.valueOf(vector.getDouble(i)));
             }

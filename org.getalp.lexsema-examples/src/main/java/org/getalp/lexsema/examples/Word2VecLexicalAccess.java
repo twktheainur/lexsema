@@ -1,19 +1,19 @@
 package org.getalp.lexsema.examples;
 
-import org.deeplearning4j.models.word2vec.Word2Vec;
-import org.getalp.lexsema.io.word2vec.MultilingualSerializedModelWord2VecLoader;
-import org.getalp.lexsema.io.word2vec.MultilingualWord2VecLoader;
+
+import org.deeplearning4j.models.embeddings.wordvectors.WordVectors;
 import org.getalp.lexsema.io.word2vec.SerializedModelWord2VecLoader;
 import org.getalp.lexsema.io.word2vec.Word2VecLoader;
-import org.getalp.lexsema.similarity.measures.SimilarityMeasure;
-import org.getalp.lexsema.similarity.measures.word2vec.Word2VecGlossCosineSimilarity;
 import org.getalp.lexsema.similarity.signatures.SemanticSignature;
 import org.getalp.lexsema.similarity.signatures.SemanticSignatureImpl;
+import org.nd4j.linalg.api.buffer.DataBuffer;
+import org.nd4j.linalg.factory.Nd4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Collection;
 import java.util.regex.Pattern;
 
 public final class Word2VecLexicalAccess {
@@ -25,6 +25,8 @@ public final class Word2VecLexicalAccess {
 
 
     public static void main(String... args) throws IOException {
+
+        Nd4j.dtype = DataBuffer.Type.FLOAT;
 
         if (args.length <2) {
             usage();
@@ -41,18 +43,19 @@ public final class Word2VecLexicalAccess {
 
 
 
-        SimilarityMeasure similarityMeasure = new Word2VecGlossCosineSimilarity(word2VecLoader.getWord2Vec(),true);
-        double sim = similarityMeasure.compute(signature1, signature2);
-        String output = String.format("The similarity between \"%s\" and \"%s\" is %s", signature1.toString(), signature2.toString(), sim);
-        logger.info(output);
+        //SimilarityMeasure similarityMeasure = new Word2VecGlossCosineSimilarity(word2VecLoader.getWordVectors(),true);
+        //double sim = similarityMeasure.compute(signature1, signature2);
+        //String output = String.format("The similarity between \"%s\" and \"%s\" is %s", signature1.toString(), signature2.toString(), sim);
+        //logger.info(output);
 
-        Word2Vec wv = word2VecLoader.getWord2Vec();
+        WordVectors wv = word2VecLoader.getWordVectors();
 
+        Collection<String> neighbours = wv.wordsNearest(args[0],10);
         int numNeigh = 0;
 
-        for (String w : wv.wordsNearestSum(args[0], 10)){
-            logger.info(String.valueOf(numNeigh++));
-            logger.info(w);
+        for (String w : neighbours){
+            numNeigh++;
+            logger.info("{} -- {}", String.valueOf(numNeigh), w);
         }
 
     }
