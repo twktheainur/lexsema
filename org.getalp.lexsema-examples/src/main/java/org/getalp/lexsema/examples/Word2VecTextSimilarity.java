@@ -37,6 +37,7 @@ public final class Word2VecTextSimilarity {
         double sim = similarityMeasure.compute(signature1, signature2);
         String output = String.format("The similarity between \"%s\" and \"%s\" is %s", signature1.toString(), signature2.toString(), sim);
         logger.info(output);
+
     }
 
     private static void usage() {

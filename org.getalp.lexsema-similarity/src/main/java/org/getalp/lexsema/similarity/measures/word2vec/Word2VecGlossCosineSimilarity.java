@@ -74,7 +74,11 @@ public class Word2VecGlossCosineSimilarity implements SimilarityMeasure {
         int size= semanticSignature.size();
         int currentRow = 0;
         for(SemanticSymbol symbol : semanticSignature) {
+            double[] vec = word2Vec.getWordVector(symbol.getSymbol());
             INDArray vector = word2Vec.getWordVectorMatrix(symbol.getSymbol());
+            for(int i=0; i<vector.rows();i++){
+                logger.info(String.valueOf(vector.getDouble(i)));
+            }
             if(sigASignatureMatrix ==null){
                 sigASignatureMatrix = Nd4j.create(size,vector.columns());
             }

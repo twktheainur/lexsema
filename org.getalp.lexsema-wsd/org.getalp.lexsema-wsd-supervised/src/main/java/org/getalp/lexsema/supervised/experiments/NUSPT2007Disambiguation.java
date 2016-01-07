@@ -28,6 +28,7 @@ public final class NUSPT2007Disambiguation {
     public static void main(String[] args) throws IOException {
 
         boolean useSemCor = true;
+
         boolean useDso = false;
         boolean useWNG = false;
         boolean useGMB = false;
