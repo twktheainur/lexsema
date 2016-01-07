@@ -10,9 +10,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TricklSenseClusterer implements SenseClusterer {
-    private ClusterAlgorithm clusterAlgorithm;
+    private final ClusterAlgorithm clusterAlgorithm;
     private Filter kernelFilter;
-    private double threshold;
+    private final double threshold;
 
     public TricklSenseClusterer(ClusterAlgorithm clusterAlgorithm) {
         this(clusterAlgorithm, 0);
