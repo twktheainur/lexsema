@@ -73,6 +73,10 @@ public class BatAlgorithmDisambiguator implements Disambiguator
         {
             score = configurationScorer.computeScore(currentDocument, position);
             stopCondition.incrementScorerCalls();
+            if (plotWriter != null)
+            {
+            	plotWriter.println(stopCondition.getCurrent() + " " + (bestBat != null ? bestBat.score : 0));
+            }
             return score;
         }
     }
@@ -120,7 +124,7 @@ public class BatAlgorithmDisambiguator implements Disambiguator
 
         while (!stopCondition.stop() && nbBatsFinished < batsNumber)
         {
-            if (plotWriter != null) plotWriter.println(stopCondition.getCurrent() + " " + bestBat.score);
+            
             int progress = (int)(stopCondition.getProgressPercentage() * 100);
 
             for (Bat currentBat : bats)

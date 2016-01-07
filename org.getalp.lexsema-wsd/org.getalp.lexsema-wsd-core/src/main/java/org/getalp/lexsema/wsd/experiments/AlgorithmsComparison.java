@@ -51,7 +51,7 @@ public class AlgorithmsComparison
 
         configScorer = new SemEval2007Task7PerfectConfigurationScorer();
 
-        Scanner reader = new Scanner(new File("../parameters.txt"));
+        Scanner reader = new Scanner(new File("../parameters_" + value + ".txt"));
         reader.useLocale(Locale.ENGLISH);
         
         double csaLevyLocation = reader.nextDouble();
@@ -84,19 +84,19 @@ public class AlgorithmsComparison
         {
             System.out.println();
             
-            csa.scorePlotWriter = open("cuckoo", d.getId());
+            csa.scorePlotWriter = open("cuckoo_" + value, d.getId());
             Configuration c = csa.disambiguate(d);
             System.out.println("Cuckoo Search Score : " + configScorer.computeScore(d, c));
 
-            ba.plotWriter = open("bat", d.getId());
+            ba.plotWriter = open("bat_" + value, d.getId());
             c = ba.disambiguate(d);
             System.out.println("Bat Score : " + configScorer.computeScore(d, c));
 
-            ga.plotWriter = open("genetic", d.getId());
+            ga.plotWriter = open("genetic_" + value, d.getId());
             c = ga.disambiguate(d);
             System.out.println("Genetic Score : " + configScorer.computeScore(d, c));
 
-            sa.plotWriter = open("annealing", d.getId());
+            sa.plotWriter = open("annealing_" + value, d.getId());
             c = sa.disambiguate(d);
             System.out.println("Annealing Score : " + configScorer.computeScore(d, c));
         }

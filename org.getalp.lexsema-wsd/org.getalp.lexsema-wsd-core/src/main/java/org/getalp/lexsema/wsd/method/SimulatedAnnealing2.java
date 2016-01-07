@@ -92,6 +92,7 @@ public class SimulatedAnnealing2 implements Disambiguator
         cp.makeRandomChange();
         double score = configurationScorer.computeScore(document, cp);
         stopCondition.incrementScorerCalls();
+        if (plotWriter != null) plotWriter.println(stopCondition.getCurrent() + " " + bestScore);
 
         double delta = prevScore - score;
         if (delta < 0)
@@ -117,7 +118,6 @@ public class SimulatedAnnealing2 implements Disambiguator
 
     private boolean evaluate() 
     {
-        if (plotWriter != null) plotWriter.println(stopCondition.getCurrent() + " " + bestScore);
         T = calculateT(T0, currentCycle);
         currentCycle++;
         stopCondition.incrementIterations();

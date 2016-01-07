@@ -26,6 +26,8 @@ public class GeneticAlgorithmDisambiguator implements Disambiguator
 
     private ConfigurationScorer scorer;
     
+    public static double bestScore = 0;
+    
     public GeneticAlgorithmDisambiguator(StopCondition stopCondition, int population, double crossoverRate, double mutationRate, ConfigurationScorer scorer)
     {
         this.stopCondition = stopCondition;
@@ -44,7 +46,7 @@ public class GeneticAlgorithmDisambiguator implements Disambiguator
             {
                 stopCondition.incrementIterations();
                 stopCondition.updateMilliseconds();
-                if (plotWriter != null) plotWriter.println(stopCondition.getCurrent() + " " + population.getFittestChromosome().getFitness());
+                bestScore = population.getFittestChromosome().getFitness();
                 return stopCondition.stop();
             }
         };
@@ -52,7 +54,7 @@ public class GeneticAlgorithmDisambiguator implements Disambiguator
         Population population = new ElitisticListPopulation(this.population, 0.2);
         for (int i = 0 ; i < this.population ; i++)
         {
-            population.addChromosome(new GeneticConfigurationChromosome(document, scorer, stopCondition));
+            population.addChromosome(new GeneticConfigurationChromosome(document, scorer, stopCondition, plotWriter));
         }
         
         GeneticConfigurationCrossoverPolicy crossoverPolicy = new GeneticConfigurationCrossoverPolicy(stopCondition);

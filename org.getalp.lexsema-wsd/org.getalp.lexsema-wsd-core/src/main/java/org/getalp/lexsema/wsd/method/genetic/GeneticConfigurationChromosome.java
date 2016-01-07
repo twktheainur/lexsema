@@ -1,5 +1,7 @@
 package org.getalp.lexsema.wsd.method.genetic;
 
+import java.io.PrintWriter;
+
 import org.apache.commons.math3.genetics.Chromosome;
 import org.getalp.lexsema.similarity.Document;
 import org.getalp.lexsema.wsd.configuration.ContinuousConfiguration;
@@ -13,29 +15,35 @@ public class GeneticConfigurationChromosome extends Chromosome
     public ConfigurationScorer scorer;
     
     public StopCondition stopCondition;
-
-    public GeneticConfigurationChromosome(Document doc, ConfigurationScorer scorer, StopCondition stopCondition)
+    
+    public PrintWriter plotWriter = null;
+    
+    public GeneticConfigurationChromosome(Document doc, ConfigurationScorer scorer, StopCondition stopCondition, PrintWriter plotWriter)
     {
         configuration = new ContinuousConfiguration(doc);
         this.scorer = scorer;
         this.stopCondition = stopCondition;
+        this.plotWriter = plotWriter;
     }
     
-    public GeneticConfigurationChromosome(Document doc, int[] senses, ConfigurationScorer scorer, StopCondition stopCondition)
+    public GeneticConfigurationChromosome(Document doc, int[] senses, ConfigurationScorer scorer, StopCondition stopCondition, PrintWriter plotWriter)
     {
         configuration = new ContinuousConfiguration(doc, senses);
         this.scorer = scorer;
         this.stopCondition = stopCondition;
+        this.plotWriter = plotWriter;
     }
     
     public double fitness()
     {
-        stopCondition.incrementScorerCalls();
-        return scorer.computeScore(configuration.getDocument(), configuration);
+		double score = scorer.computeScore(configuration.getDocument(), configuration);
+		stopCondition.incrementScorerCalls();
+		if (plotWriter != null) plotWriter.println(stopCondition.getCurrent() + " " + GeneticAlgorithmDisambiguator.bestScore);
+        return score;
     }
     
     public GeneticConfigurationChromosome clone()
     {
-        return new GeneticConfigurationChromosome(configuration.getDocument(), configuration.getAssignments(), scorer, stopCondition);
+        return new GeneticConfigurationChromosome(configuration.getDocument(), configuration.getAssignments(), scorer, stopCondition, plotWriter);
     }
 }
