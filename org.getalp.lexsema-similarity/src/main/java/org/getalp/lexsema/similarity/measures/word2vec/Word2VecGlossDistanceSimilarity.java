@@ -55,7 +55,7 @@ public class Word2VecGlossDistanceSimilarity implements SimilarityMeasure {
 
         double dist = 1 - distance.compute(first, second);
         //if(logger.isDebugEnabled()){
-            logger.info(String.format("Distance computed=%s", dist));
+            //logger.info(String.format("Distance computed=%s", dist));
         //}
         return dist;
     }

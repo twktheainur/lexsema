@@ -1,5 +1,6 @@
 package org.getalp.lexsema.similarity.signatures.enrichment;
 
+import org.deeplearning4j.models.embeddings.wordvectors.WordVectors;
 import org.deeplearning4j.models.word2vec.Word2Vec;
 import org.getalp.lexsema.similarity.signatures.SemanticSignature;
 import org.getalp.lexsema.similarity.signatures.SemanticSignatureImpl;
@@ -18,15 +19,15 @@ public class Word2VecLocalSignatureEnrichment implements SignatureEnrichment {
     public static final int DEFAULT_TOP_N = 10;
     private static final Pattern PUNCTUATION_PATTERN = Pattern.compile("\\p{Punct}");
 
-    private final Word2Vec word2Vec;
+    private final WordVectors word2Vec;
     private final int topN;
 
 
-    public Word2VecLocalSignatureEnrichment(Word2Vec word2Vec) {
+    public Word2VecLocalSignatureEnrichment(WordVectors word2Vec) {
         this(word2Vec, DEFAULT_TOP_N);
     }
 
-    public Word2VecLocalSignatureEnrichment(Word2Vec word2Vec, int topN) {
+    public Word2VecLocalSignatureEnrichment(WordVectors word2Vec, int topN) {
         this.word2Vec = word2Vec;
         this.topN = topN;
     }

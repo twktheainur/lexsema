@@ -490,7 +490,7 @@ public class MatrixUtils {
             INDArray mean = Nd4j.create(array.columns());
             for (int i = 0; i < array.columns(); i++) {
                 mean.putScalar(i,
-                        vectorSum(array.getRow(i)));
+                        vectorSum(array.getColumn(i)));
             }
             return mean;
         }

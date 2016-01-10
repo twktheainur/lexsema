@@ -4,6 +4,8 @@ package org.getalp.lexsema.examples;
 import org.deeplearning4j.models.embeddings.wordvectors.WordVectors;
 import org.getalp.lexsema.io.word2vec.SerializedModelWord2VecLoader;
 import org.getalp.lexsema.io.word2vec.Word2VecLoader;
+import org.getalp.lexsema.similarity.measures.SimilarityMeasure;
+import org.getalp.lexsema.similarity.measures.word2vec.Word2VecGlossCosineSimilarity;
 import org.getalp.lexsema.similarity.signatures.SemanticSignature;
 import org.getalp.lexsema.similarity.signatures.SemanticSignatureImpl;
 import org.nd4j.linalg.api.buffer.DataBuffer;
@@ -43,10 +45,10 @@ public final class Word2VecLexicalAccess {
 
 
 
-        //SimilarityMeasure similarityMeasure = new Word2VecGlossCosineSimilarity(word2VecLoader.getWordVectors(),true);
-        //double sim = similarityMeasure.compute(signature1, signature2);
-        //String output = String.format("The similarity between \"%s\" and \"%s\" is %s", signature1.toString(), signature2.toString(), sim);
-        //logger.info(output);
+        SimilarityMeasure similarityMeasure = new Word2VecGlossCosineSimilarity(word2VecLoader.getWordVectors(),true);
+        double sim = similarityMeasure.compute(signature1, signature2);
+        String output = String.format("The similarity between \"%s\" and \"%s\" is %s", signature1.toString(), signature2.toString(), sim);
+        logger.info(output);
 
         WordVectors wv = word2VecLoader.getWordVectors();
 

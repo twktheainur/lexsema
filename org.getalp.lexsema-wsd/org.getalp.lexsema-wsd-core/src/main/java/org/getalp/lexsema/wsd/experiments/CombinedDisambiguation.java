@@ -82,7 +82,7 @@ public class CombinedDisambiguation {
             System.err.println("Disambiguating...");
             //sl_full.disambiguate(d, c);
             Configuration c = sl_full.disambiguate(d);
-            System.err.println(evaluation.evaluate(goldStandard, c).getPrecision());
+            System.err.println(evaluation.evaluate(goldStandard, c));
             //SemevalWriter sw = new SemevalWriter(d.getId() + ".ans");
             //System.err.println("\n\tWriting results...");
             //sw.write(d, c.getAssignments());

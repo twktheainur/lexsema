@@ -37,7 +37,7 @@ public class Word2VecGlossCosineSimilarity implements SimilarityMeasure {
         if (useCentroids) {
             INDArray averageA = MatrixUtils.getColumnWiseSumVector(sigASignatureMatrix);
             INDArray averageB = MatrixUtils.getColumnWiseSumVector(sigBSignatureMatrix);
-            double fin = Transforms.cosineSim(averageA, averageB.transpose());
+            double fin = Transforms.cosineSim(averageA, averageB);
             if (Double.isNaN(fin)) {
                 fin = -1;
             }
@@ -49,7 +49,7 @@ public class Word2VecGlossCosineSimilarity implements SimilarityMeasure {
                 for (int j = 0; j < sigBSignatureMatrix.rows(); j++) {
                     INDArray row2 = sigBSignatureMatrix.getRow(j);
                     deNanVector(row2);
-                    double fin = Transforms.cosineSim(row1, row2.transpose());
+                    double fin = Transforms.cosineSim(row1, row2);
                     if (Double.isNaN(fin)) {
                         fin = -1;
                     }
@@ -77,9 +77,9 @@ public class Word2VecGlossCosineSimilarity implements SimilarityMeasure {
         for(SemanticSymbol symbol : semanticSignature) {
             double[] vec = wordVectors.getWordVector(symbol.getSymbol());
             INDArray vector = wordVectors.getWordVectorMatrix(symbol.getSymbol());
-            for(int i=0; i<vector.rows();i++){
+            /*for(int i=0; i<vector.rows();i++){
                 logger.info(String.valueOf(vector.getDouble(i)));
-            }
+            }*/
             if(sigASignatureMatrix ==null){
                 sigASignatureMatrix = Nd4j.create(size,vector.columns());
             }

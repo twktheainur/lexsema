@@ -11,15 +11,15 @@ import java.util.Map;
 
 public class Word2VecSignatureEnrichment implements SignatureEnrichment {
 
-    private Map<Language, SignatureEnrichment> processors;
+    private final Map<Language, SignatureEnrichment> processors;
 
     public Word2VecSignatureEnrichment(Map<Language, Word2Vec> multilingualWord2VecLoader, int topN) {
         processors = new HashMap<>();
         if (multilingualWord2VecLoader != null) {
-            for (Language language : multilingualWord2VecLoader.keySet()) {
-                processors.put(language, new JedisCachedSignatureEnrichment(
+            for (Map.Entry<Language, Word2Vec> languageWord2VecEntry : multilingualWord2VecLoader.entrySet()) {
+                processors.put(languageWord2VecEntry.getKey(), new JedisCachedSignatureEnrichment(
                         String.format("es%d", topN),
-                        new Word2VecLocalSignatureEnrichment(multilingualWord2VecLoader.get(language), topN)));
+                        new Word2VecLocalSignatureEnrichment(languageWord2VecEntry.getValue(), topN)));
             }
         }
         processors.put(Language.UNSUPPORTED, new JedisCachedSignatureEnrichment(
@@ -29,8 +29,8 @@ public class Word2VecSignatureEnrichment implements SignatureEnrichment {
     @Override
     public SemanticSignature enrichSemanticSignature(SemanticSignature semanticSignature) {
         SemanticSignature finalSig = new SemanticSignatureImpl();
-        for (Language language : processors.keySet()) {
-            finalSig.appendSignature(processors.get(language).enrichSemanticSignature(semanticSignature));
+        for (Map.Entry<Language, SignatureEnrichment> languageSignatureEnrichmentEntry : processors.entrySet()) {
+            finalSig.appendSignature(languageSignatureEnrichmentEntry.getValue().enrichSemanticSignature(semanticSignature));
         }
         return finalSig;
     }
