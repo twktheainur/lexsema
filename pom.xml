@@ -7,6 +7,7 @@
     <packaging>pom</packaging>
     <version>1.0-SNAPSHOT</version>
     <modules>
+        <module>trickl-cluster</module>
         <module>org.getalp.lexsema-ml</module>
         <module>org.getalp.lexsema-util</module>
         <module>org.getalp.lexsema-ontolex</module>

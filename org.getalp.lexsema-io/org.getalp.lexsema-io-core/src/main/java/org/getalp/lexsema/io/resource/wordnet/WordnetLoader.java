@@ -388,12 +388,13 @@ public class WordnetLoader implements LRLoader {
     public void loadSenses(Document document) {
 
         try(IntStream range = IntStream.range(0, document.size())) {
-            try(IntStream parallelRange = range.parallel()) {
-                List<List<Sense>> senses = parallelRange
+            //try(IntStream parallelRange = range.parallel()) {
+            //  List<List<Sense>> senses = parallelRange
+            List<List<Sense>> senses = range
                         .mapToObj(i -> getSenses(document.getWord(i)))
                         .collect(Collectors.toList());
                 senses.forEach(document::addWordSenses);
-            }
+            //}
         }
 
     }

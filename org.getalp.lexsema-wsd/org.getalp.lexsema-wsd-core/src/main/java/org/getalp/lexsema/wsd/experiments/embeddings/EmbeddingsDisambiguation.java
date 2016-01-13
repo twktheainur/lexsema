@@ -5,24 +5,17 @@ import org.deeplearning4j.models.embeddings.wordvectors.WordVectors;
 import org.getalp.lexsema.io.document.loader.CorpusLoader;
 import org.getalp.lexsema.io.document.loader.Semeval2007CorpusLoader;
 import org.getalp.lexsema.io.resource.LRLoader;
-import org.getalp.lexsema.io.resource.wordnet.WordnetLoader;
+import org.getalp.lexsema.io.resource.dictionary.DictionaryLRLoader;
 import org.getalp.lexsema.io.word2vec.SerializedModelWord2VecLoader;
 import org.getalp.lexsema.io.word2vec.Word2VecLoader;
 import org.getalp.lexsema.similarity.Document;
-import org.getalp.lexsema.similarity.measures.lesk.AnotherLeskSimilarity;
 import org.getalp.lexsema.similarity.measures.word2vec.Word2VecGlossCosineSimilarity;
-import org.getalp.lexsema.similarity.measures.word2vec.Word2VecGlossDistanceSimilarity;
 import org.getalp.lexsema.wsd.configuration.Configuration;
 import org.getalp.lexsema.wsd.evaluation.Semeval2007GoldStandard;
 import org.getalp.lexsema.wsd.evaluation.StandardEvaluation;
 import org.getalp.lexsema.wsd.method.MultiThreadCuckooSearch;
 import org.getalp.lexsema.wsd.score.ConfigurationScorer;
-import org.getalp.lexsema.wsd.score.ConfigurationScorerWithCache;
 import org.getalp.lexsema.wsd.score.MultiThreadConfigurationScorerWithCache;
-import org.getalp.ml.matrix.distance.MahalanobisDistance;
-import org.getalp.ml.matrix.factorization.LocalNonnegativeMatrixFactorizationFactory;
-import org.getalp.ml.matrix.filters.Filter;
-import org.getalp.ml.matrix.filters.MatrixFactorizationFilter;
 
 import java.io.File;
 
@@ -60,11 +53,11 @@ public final class EmbeddingsDisambiguation
         Dictionary dictionary = new Dictionary(new File("../data/wordnet/2.1/dict"));
         dictionary.open();
 
-        LRLoader lrloader = new WordnetLoader(dictionary).extendedSignature(true).loadDefinitions(true).shuffle(true);
+        LRLoader lrloader = new DictionaryLRLoader(new File("../data/lesk_dict/dict_semeval2007task7_embeddings.xml"), false);
 
         Word2VecLoader word2VecLoader = new SerializedModelWord2VecLoader();
         word2VecLoader.loadGoogle(new File(args[0]),true);
-        WordVectors vectors = word2VecLoader.getWordVectors();
+            WordVectors vectors = word2VecLoader.getWordVectors();
 
         //ConfigurationScorer scorer = new SemEval2007Task7PerfectConfigurationScorer();
         //ConfigurationScorer scorer = new ConfigurationScorerWithCache(new Word2VecGlossDistanceSimilarity(vectors,new MahalanobisDistance(), (Filter)null));
