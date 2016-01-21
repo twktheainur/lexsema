@@ -22,6 +22,18 @@ public class DistributedConfigurationScorerWithCache implements ConfigurationSco
 
     private Document currentDocument;
 
+    @SuppressWarnings("LawOfDemeter")
+    private static double computeDistributedScore(Document document, Configuration configuration, List<IntermediateScorer> scorers){
+        double score;
+        //noinspection LocalVariableOfConcreteClass
+        try (JavaSparkContext context = SparkSingleton.getSparkContext()){
+            //noinspection LocalVariableOfConcreteClass,LawOfDemeter
+            JavaRDD<IntermediateScorer> distributedScorers = context.parallelize(scorers);
+            score = distributedScorers.mapToDouble(IntermediateScorer::call).sum();
+        }
+        return score;
+    }
+
     public DistributedConfigurationScorerWithCache(SimilarityMeasure similarityMeasure) {
         this.similarityMeasure = similarityMeasure;
     }
@@ -45,7 +57,6 @@ public class DistributedConfigurationScorerWithCache implements ConfigurationSco
 
 
     @Override
-    @SuppressWarnings("LawOfDemeter")
     public double computeScore(Document document, Configuration configuration) {
         if (currentDocument != document) {
            initializeCache(document);
@@ -56,14 +67,8 @@ public class DistributedConfigurationScorerWithCache implements ConfigurationSco
         for (int i = 0; i < configuration.size(); i++) {
             scorers.add(new IntermediateScorer(i, document, configuration));
         }
-        double score;
-        //noinspection LocalVariableOfConcreteClass
-        try (JavaSparkContext context = SparkSingleton.getSparkContext()){
-            //noinspection LocalVariableOfConcreteClass,LawOfDemeter
-        JavaRDD<IntermediateScorer> distributedScorers = context.parallelize(scorers);
-            score = distributedScorers.mapToDouble(IntermediateScorer::call).sum();
-        }
-        return score;
+        return computeDistributedScore(document,configuration,scorers);
+
     }
 
     public final class IntermediateScorer implements Callable<Double>, Serializable {
