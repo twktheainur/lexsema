@@ -64,8 +64,8 @@ public class GMBCorpusLoader extends CorpusLoaderImpl implements ContentHandler 
         currentPos = "";
         currentLemma = "";
         currentSenseID = "";
-        currentSentence = NullSentence.getInstance();
-        currentText = NullText.getInstance();
+        currentSentence = new NullSentence();
+        currentText = new NullText();
     }
 
     @Override

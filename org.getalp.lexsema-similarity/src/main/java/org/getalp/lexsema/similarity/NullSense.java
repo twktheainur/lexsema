@@ -15,14 +15,6 @@ import java.util.Map;
 
 
 public final class NullSense implements Sense {
-    private static final Sense ourInstance = new NullSense();
-
-    public static Sense getInstance() {
-        return ourInstance;
-    }
-
-    private NullSense() {
-    }
 
     @Override
     public String getId() {
