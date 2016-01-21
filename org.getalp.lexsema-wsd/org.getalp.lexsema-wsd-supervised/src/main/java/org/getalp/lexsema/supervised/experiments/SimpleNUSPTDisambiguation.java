@@ -18,6 +18,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +27,7 @@ public class SimpleNUSPTDisambiguation {
     private static Logger logger = LoggerFactory.getLogger(SimpleNUSPTDisambiguation.class);
 
     public static void main(String[] args) throws IOException {
-        CorpusLoader dl = new Semeval2007CorpusLoader(args[0]).loadNonInstances(false);
+        CorpusLoader dl = new Semeval2007CorpusLoader(new FileInputStream(args[0])).loadNonInstances(false);
         CorpusLoader semCor = new SemCorCorpusLoader(args[1]);
         LRLoader lrloader = new WordnetLoader(new Dictionary(new File("../data/wordnet/2.1/dict"))).extendedSignature(true).shuffle(false);
 

@@ -9,6 +9,7 @@ import org.getalp.lexsema.io.resource.dictionary.DictionaryLRLoader;
 import org.getalp.lexsema.similarity.Document;
 import org.getalp.lexsema.similarity.Text;
 import org.getalp.lexsema.similarity.measures.lesk.AnotherLeskSimilarity;
+import org.getalp.lexsema.util.distribution.SparkSingleton;
 import org.getalp.lexsema.wsd.configuration.Configuration;
 import org.getalp.lexsema.wsd.evaluation.*;
 import org.getalp.lexsema.wsd.method.Disambiguator;
@@ -76,6 +77,8 @@ public final class DistributedDisambiguation
         double minLevyScale = MIN_LEVY_SCALE;
         double maxLevyScale = MAX_LEVY_SCALE;
 
+        SparkSingleton.initialize("spark://localhost:12345", "DistributedDisambiguation");
+
         long startTime = System.currentTimeMillis();
 
         logger.info("Loading corpus...");
@@ -86,7 +89,7 @@ public final class DistributedDisambiguation
 
         loadSensesForDocument(corpusLoader,lrLoader);
 
-        ConfigurationScorer scorer = new DistributedConfigurationScorerWithCache(new AnotherLeskSimilarity(),"spark://localhost:12345");
+        ConfigurationScorer scorer = new DistributedConfigurationScorerWithCache(new AnotherLeskSimilarity());
         Disambiguator cuckooDisambiguator = new MultiThreadCuckooSearch(iterations, minLevyLocation, maxLevyLocation, minLevyScale, maxLevyScale, scorer, true);
         disambiguate(corpusLoader,cuckooDisambiguator);
         cuckooDisambiguator.release();

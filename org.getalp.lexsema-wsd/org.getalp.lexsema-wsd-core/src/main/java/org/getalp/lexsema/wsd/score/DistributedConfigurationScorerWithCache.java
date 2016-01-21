@@ -3,6 +3,7 @@ package org.getalp.lexsema.wsd.score;
 import org.getalp.lexsema.similarity.Document;
 import org.getalp.lexsema.similarity.Sense;
 import org.getalp.lexsema.similarity.measures.SimilarityMeasure;
+import org.getalp.lexsema.util.distribution.SparkSingleton;
 import org.getalp.lexsema.wsd.configuration.Configuration;
 
 import java.io.Serializable;
@@ -12,22 +13,17 @@ import java.util.concurrent.Callable;
 
 import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.api.java.JavaRDD;
-import org.apache.spark.SparkConf;
 
 public class DistributedConfigurationScorerWithCache implements ConfigurationScorer {
     private final SimilarityMeasure similarityMeasure;
     @SuppressWarnings("InstanceVariableOfConcreteClass")
-    private final JavaSparkContext sparkContext;
 
     private double[][][][] cache;
 
     private Document currentDocument;
 
-    public DistributedConfigurationScorerWithCache(SimilarityMeasure similarityMeasure, String sparkMaster) {
+    public DistributedConfigurationScorerWithCache(SimilarityMeasure similarityMeasure) {
         this.similarityMeasure = similarityMeasure;
-        int nbThreads = Runtime.getRuntime().availableProcessors();@SuppressWarnings("LocalVariableOfConcreteClass") final SparkConf sparkConf = new SparkConf().setAppName("DistributedConfigurationScorerWithCache");
-        //noinspection LawOfDemeter
-        sparkContext = new JavaSparkContext(sparkConf.setMaster(sparkMaster));
     }
 
     private void initializeCache(Document document){
@@ -48,6 +44,8 @@ public class DistributedConfigurationScorerWithCache implements ConfigurationSco
     }
 
 
+    @Override
+    @SuppressWarnings("LawOfDemeter")
     public double computeScore(Document document, Configuration configuration) {
         if (currentDocument != document) {
            initializeCache(document);
@@ -58,11 +56,14 @@ public class DistributedConfigurationScorerWithCache implements ConfigurationSco
         for (int i = 0; i < configuration.size(); i++) {
             scorers.add(new IntermediateScorer(i, document, configuration));
         }
-
+        double score;
         //noinspection LocalVariableOfConcreteClass
-        JavaRDD<IntermediateScorer> distributedScorers = sparkContext.parallelize(scorers);
-        //noinspection LawOfDemeter
-        return distributedScorers.mapToDouble(IntermediateScorer::call).sum();
+        try (JavaSparkContext context = SparkSingleton.getSparkContext()){
+            //noinspection LocalVariableOfConcreteClass,LawOfDemeter
+        JavaRDD<IntermediateScorer> distributedScorers = context.parallelize(scorers);
+            score = distributedScorers.mapToDouble(IntermediateScorer::call).sum();
+        }
+        return score;
     }
 
     public final class IntermediateScorer implements Callable<Double>, Serializable {
