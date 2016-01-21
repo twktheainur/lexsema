@@ -69,7 +69,7 @@ public class MultilingualSerializedModelWord2VecLoader implements MultilingualWo
                 Language language = Language.fromCode(langCode);
                 Word2VecLoader word2VecLoader = new SerializedModelWord2VecLoader();
                 logger.info(String.format("\tLoading %s model...", language.toString()));
-                word2VecLoader.loadGoogle(file, binary);
+                word2VecLoader.loadGoogle(file, binary,true);
                 word2VecMap.put(language, word2VecLoader.getWordVectors());
                 vocabCacheMap.put(language, word2VecLoader.getCache());
             }

@@ -58,7 +58,7 @@ public final class EmbeddingsDisambiguation
         LRLoader lrloader = new DictionaryLRLoader(new FileInputStream("../data/lesk_dict/dict_semeval2007task7_embeddings.xml"), true);
 
         Word2VecLoader word2VecLoader = new SerializedModelWord2VecLoader();
-        word2VecLoader.loadGoogle(new File(args[0]),true);
+        word2VecLoader.loadGoogle(new File(args[0]),true, true  );
             WordVectors vectors = word2VecLoader.getWordVectors();
 
         //ConfigurationScorer scorer = new SemEval2007Task7PerfectConfigurationScorer();
