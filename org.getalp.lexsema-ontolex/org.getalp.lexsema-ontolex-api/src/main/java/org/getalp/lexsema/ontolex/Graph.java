@@ -1,13 +1,17 @@
-package org.getalp.lexsema.ontolex.graph;
+package org.getalp.lexsema.ontolex;
+
+import org.getalp.lexsema.ontolex.graph.OntologyModel;
+
+import java.io.Serializable;
 
 /**
  * A wrapper interface for the Jena Graph API
  */
-public interface Graph {
+public interface Graph extends Serializable{
     /**
-     * Get the associated <code>OntologyModel</code>
+     * Get the associated {@code OntologyModel}
      *
-     * @return The <code>Ontology</code> model
+     * @return The {@code Ontology} model
      */
     public OntologyModel getModel();
 

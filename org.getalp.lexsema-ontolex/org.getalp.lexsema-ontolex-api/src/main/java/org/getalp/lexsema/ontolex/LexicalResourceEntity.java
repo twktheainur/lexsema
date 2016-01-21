@@ -5,10 +5,12 @@ import com.hp.hpl.jena.graph.Node;
 import org.getalp.lexsema.util.Language;
 import org.getalp.lexsema.ontolex.graph.OntologyModel;
 
+import java.io.Serializable;
+
 /**
  * A node that is part of a Lexical Resource, i.e. corresponding to an instance of one of the Lemon classes
  */
-public interface LexicalResourceEntity extends Comparable<LexicalResourceEntity> {
+public interface LexicalResourceEntity extends Comparable<LexicalResourceEntity>, Serializable {
     /**
      * @return The lexical resource the Entity belongs to
      */
