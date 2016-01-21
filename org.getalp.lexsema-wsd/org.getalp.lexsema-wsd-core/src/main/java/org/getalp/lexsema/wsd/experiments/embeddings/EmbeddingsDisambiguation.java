@@ -11,14 +11,12 @@ import org.getalp.lexsema.io.word2vec.SerializedModelWord2VecLoader;
 import org.getalp.lexsema.io.word2vec.Word2VecLoader;
 import org.getalp.lexsema.similarity.Document;
 import org.getalp.lexsema.similarity.measures.lesk.AnotherLeskSimilarity;
-import org.getalp.lexsema.similarity.measures.word2vec.Word2VecGlossCosineSimilarity;
 import org.getalp.lexsema.wsd.configuration.Configuration;
 import org.getalp.lexsema.wsd.evaluation.Semeval2007GoldStandard;
 import org.getalp.lexsema.wsd.evaluation.StandardEvaluation;
 import org.getalp.lexsema.wsd.method.MultiThreadCuckooSearch;
 import org.getalp.lexsema.wsd.score.ConfigurationScorer;
 import org.getalp.lexsema.wsd.score.ConfigurationScorerWithCache;
-import org.getalp.lexsema.wsd.score.MultiThreadConfigurationScorerWithCache;
 
 import java.io.File;
 
