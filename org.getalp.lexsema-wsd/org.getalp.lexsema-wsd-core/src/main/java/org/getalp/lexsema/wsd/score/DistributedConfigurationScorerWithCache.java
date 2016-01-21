@@ -5,6 +5,7 @@ import org.getalp.lexsema.similarity.Sense;
 import org.getalp.lexsema.similarity.measures.SimilarityMeasure;
 import org.getalp.lexsema.wsd.configuration.Configuration;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Callable;
@@ -64,7 +65,7 @@ public class DistributedConfigurationScorerWithCache implements ConfigurationSco
         return distributedScorers.mapToDouble(IntermediateScorer::call).sum();
     }
 
-    private final class IntermediateScorer implements Callable<Double> {
+    public final class IntermediateScorer implements Callable<Double>, Serializable {
         private final int i;
 
         private final Document document;

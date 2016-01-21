@@ -2,13 +2,14 @@ package org.getalp.lexsema.similarity;
 
 import org.getalp.lexsema.util.Language;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
 
 /**
  * Interface that represents a document (Sentence or Text).
  */
-public interface Document extends Iterable<Word> {
+public interface Document extends Iterable<Word>, Serializable {
     /**
      * Returns the ID of the document.
      *
