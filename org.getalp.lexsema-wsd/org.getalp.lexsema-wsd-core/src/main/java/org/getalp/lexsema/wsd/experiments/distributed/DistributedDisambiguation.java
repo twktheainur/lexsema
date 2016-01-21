@@ -79,10 +79,10 @@ public final class DistributedDisambiguation
         long startTime = System.currentTimeMillis();
 
         logger.info("Loading corpus...");
-        CorpusLoader corpusLoader = loadCorpus("semeval2007/eng-coarse-all-words.xml");
+        CorpusLoader corpusLoader = loadCorpus("/semeval2007/eng-coarse-all-words.xml");
 
         logger.info("Loading lexical resource...");
-        LRLoader lrLoader = loadLexicalResource("semeval2007/dict_semeval2007task7_embeddings.xml");
+        LRLoader lrLoader = loadLexicalResource("/semeval2007/dict_semeval2007task7_embeddings.xml");
 
         loadSensesForDocument(corpusLoader,lrLoader);
 
