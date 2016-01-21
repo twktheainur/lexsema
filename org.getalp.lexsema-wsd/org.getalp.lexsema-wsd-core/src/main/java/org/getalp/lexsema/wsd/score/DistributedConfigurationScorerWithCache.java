@@ -1,9 +1,9 @@
 package org.getalp.lexsema.wsd.score;
 
+import org.apache.spark.api.java.JavaRDD;
 import org.getalp.lexsema.similarity.Document;
 import org.getalp.lexsema.similarity.Sense;
 import org.getalp.lexsema.similarity.measures.SimilarityMeasure;
-import org.getalp.lexsema.util.distribution.SparkSingleton;
 import org.getalp.lexsema.wsd.configuration.Configuration;
 
 import java.io.Serializable;
@@ -11,10 +11,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Callable;
 
-import org.apache.spark.api.java.JavaSparkContext;
-import org.apache.spark.api.java.JavaRDD;
+import static org.getalp.lexsema.util.distribution.SparkSingleton.getSparkContext;
 
-public class DistributedConfigurationScorerWithCache implements ConfigurationScorer {
+public class DistributedConfigurationScorerWithCache implements ConfigurationScorer,Serializable {
     private final SimilarityMeasure similarityMeasure;
     @SuppressWarnings("InstanceVariableOfConcreteClass")
 
@@ -23,14 +22,13 @@ public class DistributedConfigurationScorerWithCache implements ConfigurationSco
     private Document currentDocument;
 
     @SuppressWarnings("LawOfDemeter")
-    private static double computeDistributedScore(Document document, Configuration configuration, List<IntermediateScorer> scorers){
+    private static double computeDistributedScore(Document document, Configuration configuration, List<IntermediateScorer> scorers) {
         double score;
         //noinspection LocalVariableOfConcreteClass
-        try (JavaSparkContext context = SparkSingleton.getSparkContext()){
-            //noinspection LocalVariableOfConcreteClass,LawOfDemeter
-            JavaRDD<IntermediateScorer> distributedScorers = context.parallelize(scorers);
-            score = distributedScorers.mapToDouble(IntermediateScorer::call).sum();
-        }
+        //noinspection LocalVariableOfConcreteClass,LawOfDemeter,resource
+        JavaRDD<IntermediateScorer> distributedScorers = getSparkContext().parallelize(scorers);
+        score = distributedScorers.mapToDouble(IntermediateScorer::call).sum();
+
         return score;
     }
 
@@ -38,7 +36,7 @@ public class DistributedConfigurationScorerWithCache implements ConfigurationSco
         this.similarityMeasure = similarityMeasure;
     }
 
-    private void initializeCache(Document document){
+    private void initializeCache(Document document) {
         int documentSize = document.size();
         cache = new double[documentSize][documentSize][][];
         for (int i = 0; i < documentSize; i++) {
@@ -59,7 +57,7 @@ public class DistributedConfigurationScorerWithCache implements ConfigurationSco
     @Override
     public double computeScore(Document document, Configuration configuration) {
         if (currentDocument != document) {
-           initializeCache(document);
+            initializeCache(document);
             currentDocument = document;
         }
 
@@ -67,7 +65,7 @@ public class DistributedConfigurationScorerWithCache implements ConfigurationSco
         for (int i = 0; i < configuration.size(); i++) {
             scorers.add(new IntermediateScorer(i, document, configuration));
         }
-        return computeDistributedScore(document,configuration,scorers);
+        return computeDistributedScore(document, configuration, scorers);
 
     }
 
