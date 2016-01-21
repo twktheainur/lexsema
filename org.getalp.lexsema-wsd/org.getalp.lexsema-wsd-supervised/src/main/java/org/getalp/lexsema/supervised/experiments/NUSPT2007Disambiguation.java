@@ -12,7 +12,6 @@ import org.getalp.lexsema.supervised.WekaDisambiguator;
 import org.getalp.lexsema.supervised.weka.SVMSetUp;
 import org.getalp.lexsema.supervised.features.*;
 import org.getalp.lexsema.supervised.features.extractors.*;
-import org.getalp.lexsema.supervised.weka.RandomForestSetUp;
 import org.getalp.lexsema.wsd.configuration.Configuration;
 import org.getalp.lexsema.wsd.method.Disambiguator;
 import org.getalp.lexsema.wsd.method.FirstSenseDisambiguator;
@@ -123,7 +122,7 @@ public final class NUSPT2007Disambiguation {
                 if (toDisambiguate[numconfig]) {
                     System.err.println("Starting document " + d.getId());
                     System.err.println("\tLoading senses...");
-                    if (!d.alreadyLoaded())
+                    if (!d.isAlreadyLoaded())
                         lrloader.loadSenses(d);
 
                     configs[numconfig] = disambiguator.disambiguate(d);
@@ -167,7 +166,7 @@ public final class NUSPT2007Disambiguation {
                 if (toDisambiguate[numconfig]) {
                     System.err.println("Starting document " + d.getId());
                     System.err.println("\tLoading senses...");
-                    if (!d.alreadyLoaded())
+                    if (!d.isAlreadyLoaded())
                         lrloader.loadSenses(d);
 
                     configs[numconfig] = disambiguator.disambiguate(d);
@@ -211,7 +210,7 @@ public final class NUSPT2007Disambiguation {
                 if (toDisambiguate[numconfig]) {
                     System.err.println("Starting document " + d.getId());
                     System.err.println("\tLoading senses...");
-                    if (!d.alreadyLoaded())
+                    if (!d.isAlreadyLoaded())
                         lrloader.loadSenses(d);
 
                     configs[numconfig] = disambiguator.disambiguate(d);
@@ -256,7 +255,7 @@ public final class NUSPT2007Disambiguation {
                 if (toDisambiguate[numconfig]) {
                     System.err.println("Starting document " + d.getId());
                     System.err.println("\tLoading senses...");
-                    if (!d.alreadyLoaded())
+                    if (!d.isAlreadyLoaded())
                         lrloader.loadSenses(d);
 
                     configs[numconfig] = disambiguator.disambiguate(d);
@@ -289,7 +288,7 @@ public final class NUSPT2007Disambiguation {
 
                     System.err.println("Starting document " + d.getId());
                     System.err.println("\tLoading senses...");
-                    if (!d.alreadyLoaded())
+                    if (!d.isAlreadyLoaded())
                         lrloader.loadSenses(d);
 
                     if (configs[numconfig] == null)

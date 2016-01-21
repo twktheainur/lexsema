@@ -75,6 +75,11 @@ public final class NullSentence implements Sentence{
     }
 
     @Override
+    public int numberOfSensesForWord(int index) {
+        return 0;
+    }
+
+    @Override
     public int indexOfWord(Word word) {
         return 0;
     }
@@ -95,7 +100,7 @@ public final class NullSentence implements Sentence{
     }
 
     @Override
-    public boolean alreadyLoaded() {
+    public boolean isAlreadyLoaded() {
         return true;
     }
 

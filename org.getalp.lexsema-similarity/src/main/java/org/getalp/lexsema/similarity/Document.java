@@ -40,6 +40,7 @@ public interface Document extends Iterable<Word> {
     List<Sense> getSenses(int index);
 
     int size();
+    int numberOfSensesForWord(int index);
 
     int indexOfWord(Word word);
 
@@ -49,5 +50,5 @@ public interface Document extends Iterable<Word> {
 
     Collection<Word> words();
 
-    boolean alreadyLoaded();
+    boolean isAlreadyLoaded();
 }

@@ -2,6 +2,7 @@ package org.getalp.lexsema.wsd.experiments.embeddings;
 
 import edu.mit.jwi.Dictionary;
 import org.deeplearning4j.models.embeddings.wordvectors.WordVectors;
+import org.getalp.lexsema.io.annotresult.SemevalWriter;
 import org.getalp.lexsema.io.document.loader.CorpusLoader;
 import org.getalp.lexsema.io.document.loader.Semeval2007CorpusLoader;
 import org.getalp.lexsema.io.resource.LRLoader;
@@ -9,12 +10,14 @@ import org.getalp.lexsema.io.resource.dictionary.DictionaryLRLoader;
 import org.getalp.lexsema.io.word2vec.SerializedModelWord2VecLoader;
 import org.getalp.lexsema.io.word2vec.Word2VecLoader;
 import org.getalp.lexsema.similarity.Document;
+import org.getalp.lexsema.similarity.measures.lesk.AnotherLeskSimilarity;
 import org.getalp.lexsema.similarity.measures.word2vec.Word2VecGlossCosineSimilarity;
 import org.getalp.lexsema.wsd.configuration.Configuration;
 import org.getalp.lexsema.wsd.evaluation.Semeval2007GoldStandard;
 import org.getalp.lexsema.wsd.evaluation.StandardEvaluation;
 import org.getalp.lexsema.wsd.method.MultiThreadCuckooSearch;
 import org.getalp.lexsema.wsd.score.ConfigurationScorer;
+import org.getalp.lexsema.wsd.score.ConfigurationScorerWithCache;
 import org.getalp.lexsema.wsd.score.MultiThreadConfigurationScorerWithCache;
 
 import java.io.File;
@@ -53,18 +56,18 @@ public final class EmbeddingsDisambiguation
         Dictionary dictionary = new Dictionary(new File("../data/wordnet/2.1/dict"));
         dictionary.open();
 
-        LRLoader lrloader = new DictionaryLRLoader(new File("../data/lesk_dict/dict_semeval2007task7_embeddings.xml"), false);
+        LRLoader lrloader = new DictionaryLRLoader(new File("../data/lesk_dict/dict_semeval2007task7_embeddings.xml"), true);
 
         Word2VecLoader word2VecLoader = new SerializedModelWord2VecLoader();
         word2VecLoader.loadGoogle(new File(args[0]),true);
             WordVectors vectors = word2VecLoader.getWordVectors();
 
         //ConfigurationScorer scorer = new SemEval2007Task7PerfectConfigurationScorer();
-        //ConfigurationScorer scorer = new ConfigurationScorerWithCache(new Word2VecGlossDistanceSimilarity(vectors,new MahalanobisDistance(), (Filter)null));
+        ConfigurationScorer scorer = new ConfigurationScorerWithCache(new AnotherLeskSimilarity());
         //ConfigurationScorer perfectScorer = new SemEval2007Task7PerfectConfigurationScorer();
         //ConfigurationScorer scorer = new MultiThreadConfigurationScorerWithCache(new Word2VecGlossDistanceSimilarity(vectors,new MahalanobisDistance(), (Filter)null));
         //ConfigurationScorer scorer = new MultiThreadConfigurationScorerWithCache(new AnotherLeskSimilarity());
-        ConfigurationScorer scorer = new MultiThreadConfigurationScorerWithCache(new Word2VecGlossCosineSimilarity(vectors,false));
+        //ConfigurationScorer scorer = new MultiThreadConfigurationScorerWithCache(new Word2VecGlossCosineSimilarity(vectors,false));
         //ConfigurationScorer scorer = new MatrixConfigurationScorer(new AnotherLeskSimilarity(), new SumMatrixScorer(),Runtime.getRuntime().availableProcessors());
         //CuckooSearchDisambiguator cuckooDisambiguator = new CuckooSearchDisambiguator(new StopCondition(StopCondition.Condition.SCORERCALLS, iterations), levyLocation, levyScale, nestsNumber, destroyedNests, scorer, true);
         MultiThreadCuckooSearch cuckooDisambiguator = new MultiThreadCuckooSearch(iterations, minLevyLocation, maxLevyLocation, minLevyScale, maxLevyScale, scorer, true);
@@ -85,9 +88,9 @@ public final class EmbeddingsDisambiguation
             System.out.println("Disambiguating...");
             Configuration c = cuckooDisambiguator.disambiguate(d);
             System.err.println(evaluation.evaluate(goldStandard, c));
-            //System.out.println("Writing results...");
-            //SemevalWriter sw = new SemevalWriter("../" + d.getId() + ".ans");
-            //sw.write(d, c.getAssignments());
+            System.out.println("Writing results...");
+            SemevalWriter sw = new SemevalWriter("../" + d.getId() + ".ans");
+            sw.write(d, c.getAssignments());
             
             System.out.println("Done!");
         }

@@ -74,6 +74,11 @@ public final class NullText implements Text{
     }
 
     @Override
+    public int numberOfSensesForWord(int index) {
+        return 0;
+    }
+
+    @Override
     public int indexOfWord(Word word) {
         return 0;
     }
@@ -94,7 +99,7 @@ public final class NullText implements Text{
     }
 
     @Override
-    public boolean alreadyLoaded() {
+    public boolean isAlreadyLoaded() {
         return false;
     }
 
