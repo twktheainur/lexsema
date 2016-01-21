@@ -30,6 +30,7 @@ import org.getalp.ml.matrix.score.NormMatrixScorer;
 import org.getalp.ml.matrix.score.SumMatrixScorer;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.PrintWriter;
 
 public class ACADisambiguator
@@ -62,7 +63,7 @@ public class ACADisambiguator
 
         long startTime = System.currentTimeMillis();
 
-        CorpusLoader dl = new Semeval2007CorpusLoader("../data/senseval2007_task7/test/eng-coarse-all-words.xml");
+        CorpusLoader dl = new Semeval2007CorpusLoader(new FileInputStream("../data/senseval2007_task7/test/eng-coarse-all-words.xml"));
 
         //LRLoader lrloader = new DictionaryLRLoader(new File("../data/dictionnaires-lesk/dict-adapted-all-relations.xml"));
 

@@ -1,6 +1,7 @@
 package org.getalp.lexsema.wsd.experiments;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.PrintWriter;
 import java.util.Locale;
 import java.util.Scanner;
@@ -42,9 +43,9 @@ public class AlgorithmsComparison
         else if (condition.equals("sc")) stopConditionEvaluation = new StopCondition(StopCondition.Condition.SCORERCALLS, value);
         else stopConditionEvaluation = new StopCondition(StopCondition.Condition.MILLISECONDS, value);
         
-        lrloader = new DictionaryLRLoader(new File("../data/dictionnaires-lesk/dict-adapted-all-relations.xml"));
+        lrloader = new DictionaryLRLoader(new FileInputStream("../data/dictionnaires-lesk/dict-adapted-all-relations.xml"));
 
-        dlEvaluation = new Semeval2007CorpusLoader("../data/senseval2007_task7/test/evaluation.xml");
+        dlEvaluation = new Semeval2007CorpusLoader(new FileInputStream("../data/senseval2007_task7/test/evaluation.xml"));
         dlEvaluation.loadNonInstances(false);
         dlEvaluation.load();
         for (Document d : dlEvaluation) lrloader.loadSenses(d);

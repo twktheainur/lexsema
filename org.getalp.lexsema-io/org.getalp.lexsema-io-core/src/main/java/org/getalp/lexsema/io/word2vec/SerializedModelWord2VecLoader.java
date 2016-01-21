@@ -34,9 +34,8 @@ public class SerializedModelWord2VecLoader implements Word2VecLoader {
     }
 
     @Override
-    public void loadGoogle(File directory, boolean binary) throws IOException {
-
-        word2Vec = WordVectorSerializer.loadGoogleModel(new File(directory, "model.bin"), binary,true);
+    public void loadGoogle(File directory, boolean binary, boolean newLines) throws IOException {
+        word2Vec = WordVectorSerializer.loadGoogleModel(new File(directory, "model.bin"), binary, newLines);
         vocabCache = word2Vec.vocab();
     }
 }

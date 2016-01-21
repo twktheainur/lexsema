@@ -1,9 +1,6 @@
 package org.getalp.lexsema.wsd.experiments;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.PrintWriter;
-import java.io.UnsupportedEncodingException;
+import java.io.*;
 
 import org.getalp.lexsema.io.annotresult.SemevalWriter;
 import org.getalp.lexsema.io.document.loader.CorpusLoader;
@@ -52,10 +49,10 @@ public class BatAlgorithmDisambiguation
         
         long startTime = System.currentTimeMillis();
 
-        CorpusLoader dl = new Semeval2007CorpusLoader("../data/senseval2007_task7/test/eng-coarse-all-words.xml")
+        CorpusLoader dl = new Semeval2007CorpusLoader(new FileInputStream("../data/senseval2007_task7/test/eng-coarse-all-words.xml"))
                 .loadNonInstances(false);
 
-        LRLoader lrloader = new DictionaryLRLoader(new File("../data/dictionnaires-lesk/dict-adapted-all-relations.xml"));
+        LRLoader lrloader = new DictionaryLRLoader(new FileInputStream("../data/dictionnaires-lesk/dict-adapted-all-relations.xml"));
 
         ConfigurationScorer scorer = new SemEval2007Task7PerfectConfigurationScorer();
 

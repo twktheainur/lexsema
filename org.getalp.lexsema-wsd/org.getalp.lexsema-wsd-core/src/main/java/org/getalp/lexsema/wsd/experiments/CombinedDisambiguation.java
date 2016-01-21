@@ -22,15 +22,17 @@ import org.getalp.lexsema.wsd.method.sequencial.parameters.SimplifiedLeskParamet
 import org.getalp.lexsema.wsd.method.sequencial.parameters.WindowedLeskParameters;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 
 @SuppressWarnings("all")
 public class CombinedDisambiguation {
     public CombinedDisambiguation() {
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws FileNotFoundException {
         long startTime = System.currentTimeMillis();
-        CorpusLoader dl = new Semeval2007CorpusLoader("../data/senseval2007_task7/test/eng-coarse-all-words.xml").loadNonInstances(true);
+        CorpusLoader dl = new Semeval2007CorpusLoader(new FileInputStream("../data/senseval2007_task7/test/eng-coarse-all-words.xml")).loadNonInstances(true);
         LRLoader lrloader = new WordnetLoader(new Dictionary(new File("../data/wordnet/2.1/dict")))
 		.extendedSignature(true)
 		.filterStopWords(false)

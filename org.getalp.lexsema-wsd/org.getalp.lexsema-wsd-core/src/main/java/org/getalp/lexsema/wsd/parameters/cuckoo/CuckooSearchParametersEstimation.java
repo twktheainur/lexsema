@@ -1,6 +1,7 @@
 package org.getalp.lexsema.wsd.parameters.cuckoo;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.PrintWriter;
 
 import org.getalp.lexsema.io.document.loader.Semeval2007CorpusLoader;
@@ -45,11 +46,11 @@ public class CuckooSearchParametersEstimation
         
         long startTime = System.currentTimeMillis();
 
-        CorpusLoader dl = new Semeval2007CorpusLoader("../data/senseval2007_task7/test/training.xml");
+        CorpusLoader dl = new Semeval2007CorpusLoader(new FileInputStream("../data/senseval2007_task7/test/training.xml"));
         dl.loadNonInstances(false);
         dl.load();
         
-        LRLoader lrloader = new DictionaryLRLoader(new File("../data/dictionnaires-lesk/dict-adapted-all-relations.xml"));
+        LRLoader lrloader = new DictionaryLRLoader(new FileInputStream("../data/dictionnaires-lesk/dict-adapted-all-relations.xml"));
         for (Document d : dl) lrloader.loadSenses(d);
         
         ConfigurationScorer configScorer = new SemEval2007Task7PerfectConfigurationScorer();

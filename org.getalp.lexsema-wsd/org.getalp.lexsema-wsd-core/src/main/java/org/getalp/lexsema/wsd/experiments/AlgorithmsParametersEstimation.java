@@ -1,6 +1,7 @@
 package org.getalp.lexsema.wsd.experiments;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.PrintWriter;
 
 import org.getalp.lexsema.io.document.loader.Semeval2007CorpusLoader;
@@ -52,9 +53,9 @@ public class AlgorithmsParametersEstimation
         else if (condition.equals("sc")) stopConditionTraining = new StopCondition(StopCondition.Condition.SCORERCALLS, value);
         else stopConditionTraining = new StopCondition(StopCondition.Condition.MILLISECONDS, value);
         
-        lrloader = new DictionaryLRLoader(new File("../data/dictionnaires-lesk/dict-adapted-all-relations.xml"));
+        lrloader = new DictionaryLRLoader(new FileInputStream("../data/dictionnaires-lesk/dict-adapted-all-relations.xml"));
 
-        dlTraining = new Semeval2007CorpusLoader("../data/senseval2007_task7/test/eng-coarse-all-words-t1.xml");
+        dlTraining = new Semeval2007CorpusLoader(new FileInputStream("../data/senseval2007_task7/test/eng-coarse-all-words-t1.xml"));
         dlTraining.loadNonInstances(false);
         dlTraining.load();
         for (Document d : dlTraining) lrloader.loadSenses(d);

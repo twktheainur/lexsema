@@ -1,6 +1,8 @@
 package org.getalp.lexsema.wsd.experiments;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 
 import edu.mit.jwi.Dictionary;
 
@@ -50,8 +52,7 @@ public class DictionaryCreation
     
     public static int numberOfWordsFromThesauri = 100;
 
-    public static void main(String[] args)
-    {
+    public static void main(String[] args) throws FileNotFoundException {
         //writeDictionary(false, false, false, "../data/dict_semeval2007task7");
         //writeDictionary(true, false, false, "../data/dict_semeval2007task7_stopwords");
         //writeDictionary(false, true, false, "../data/dict_semeval2007task7_stemming");
@@ -76,8 +77,7 @@ public class DictionaryCreation
                                         boolean useDSOThesaurus, 
                                         boolean useWordnetGlossTag,
                                         boolean useGMBThesaurus,
-                                        String newDictPath)
-    {
+                                        String newDictPath) throws FileNotFoundException {
         System.out.println("Building dictionary " + newDictPath + "...");
         WordnetLoader lrloader = new WordnetLoader(wordnet);
         lrloader.loadDefinitions(definitions);
@@ -119,7 +119,7 @@ public class DictionaryCreation
             }
             lrloader.addThesaurus(new AnnotatedTextThesaurusImpl(gmb, numberOfWordsFromThesauri));
         }
-        CorpusLoader dl = new Semeval2007CorpusLoader(docPath);
+        CorpusLoader dl = new Semeval2007CorpusLoader(new FileInputStream(docPath));
         dl.load();
         for (Text txt : dl)
         {

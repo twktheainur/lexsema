@@ -12,6 +12,8 @@ import org.getalp.lexsema.similarity.Text;
 import org.getalp.lexsema.similarity.signatures.enrichment.Word2VecLocalSignatureEnrichment;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 
 public class DictionaryCreation
@@ -63,17 +65,16 @@ public class DictionaryCreation
         //writeDictionary(true, true, true, true, true, true, false, true, "../data/lesk_dict/dict_semeval2007task7_stopwords_stemming_dso");
         //writeDictionary(true, true, true, true, true, true, true, true, "../data/lesk_dict/dict_semeval2007task7_stopwords_stemming_semcor_dso");
         Word2VecLoader word2VecLoader = new SerializedModelWord2VecLoader();
-        word2VecLoader.loadGoogle(new File(args[0]), true);
+        word2VecLoader.loadGoogle(new File(args[0]), true ,Boolean.valueOf(args[1]));
         WordVectors vectors = word2VecLoader.getWordVectors();
     
-        writeDictionary(true, true, false, false, false, true, vectors, "../data/lesk_dict/dict_semeval2007task7_embeddings.xml");
+        writeDictionary(true, true, false, false, true, true, vectors, "../data/lesk_dict/dict_semeval2007task7_embeddings.xml");
     }
     
     private static void writeDictionary(boolean definitions, boolean extendedDefinitions, 
                                         boolean stopWords, boolean stemming, 
                                         boolean index, boolean shuffle,WordVectors wordVectors,
-                                        String newDictPath)
-    {
+                                        String newDictPath) throws FileNotFoundException {
         System.out.println("Building dictionary " + newDictPath + "...");
         WordnetLoader lrloader = new WordnetLoader(wordnet,new Word2VecLocalSignatureEnrichment(wordVectors,10));
         lrloader.loadDefinitions(definitions);
@@ -88,7 +89,7 @@ public class DictionaryCreation
 
 
 
-        CorpusLoader dl = new Semeval2007CorpusLoader(docPath);
+        CorpusLoader dl = new Semeval2007CorpusLoader(new FileInputStream(docPath));
         dl.load();
         for (Text txt : dl)
         {

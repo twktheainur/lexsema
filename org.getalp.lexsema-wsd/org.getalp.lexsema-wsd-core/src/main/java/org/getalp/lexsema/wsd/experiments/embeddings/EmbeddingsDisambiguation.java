@@ -19,6 +19,7 @@ import org.getalp.lexsema.wsd.score.ConfigurationScorer;
 import org.getalp.lexsema.wsd.score.ConfigurationScorerWithCache;
 
 import java.io.File;
+import java.io.FileInputStream;
 
 public final class EmbeddingsDisambiguation
 {
@@ -49,12 +50,12 @@ public final class EmbeddingsDisambiguation
         */
         long startTime = System.currentTimeMillis();
 
-        CorpusLoader dl = new Semeval2007CorpusLoader("../data/senseval2007_task7/test/eng-coarse-all-words.xml");
+        CorpusLoader dl = new Semeval2007CorpusLoader(new FileInputStream("../data/senseval2007_task7/test/eng-coarse-all-words.xml"));
 
         Dictionary dictionary = new Dictionary(new File("../data/wordnet/2.1/dict"));
         dictionary.open();
 
-        LRLoader lrloader = new DictionaryLRLoader(new File("../data/lesk_dict/dict_semeval2007task7_embeddings.xml"), true);
+        LRLoader lrloader = new DictionaryLRLoader(new FileInputStream("../data/lesk_dict/dict_semeval2007task7_embeddings.xml"), true);
 
         Word2VecLoader word2VecLoader = new SerializedModelWord2VecLoader();
         word2VecLoader.loadGoogle(new File(args[0]),true);

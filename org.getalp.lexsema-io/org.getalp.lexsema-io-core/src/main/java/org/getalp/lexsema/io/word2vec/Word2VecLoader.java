@@ -13,5 +13,5 @@ public interface Word2VecLoader {
     VocabCache getCache();
 
     void load(File directory);
-    void loadGoogle(File directory, boolean binary) throws IOException;
+    void loadGoogle(File directory, boolean binary, boolean newLines) throws IOException;
 }

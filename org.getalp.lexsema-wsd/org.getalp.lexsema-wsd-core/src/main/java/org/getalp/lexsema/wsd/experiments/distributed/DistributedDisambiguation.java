@@ -32,16 +32,15 @@ public final class DistributedDisambiguation
     private DistributedDisambiguation() {
     }
 
-    private static CorpusLoader loadCorpus(String ressourceURI){
-        String corpusFile =DistributedDisambiguation.class.getResource(ressourceURI).getFile();
-        CorpusLoader corpusLoader = new Semeval2007CorpusLoader(corpusFile);
+    private static CorpusLoader loadCorpus(String resourceURI){
+
+        CorpusLoader corpusLoader = new Semeval2007CorpusLoader(DistributedDisambiguation.class.getResourceAsStream(resourceURI));
         corpusLoader.load();
         return corpusLoader;
     }
 
     private static LRLoader loadLexicalResource(String resourceURI){
-        File dictionaryFile = new File(DistributedDisambiguation.class.getResource(resourceURI).getFile());
-        return new DictionaryLRLoader(dictionaryFile, true);
+        return new DictionaryLRLoader(DistributedDisambiguation.class.getResourceAsStream(resourceURI), true);
     }
 
     private static void loadSensesForDocument(Iterable<Text> corpusLoader, LRLoader lrLoader){
@@ -80,10 +79,10 @@ public final class DistributedDisambiguation
         long startTime = System.currentTimeMillis();
 
         logger.info("Loading corpus...");
-        CorpusLoader corpusLoader = loadCorpus("/semeval2007/eng-coarse-all-words.xml");
+        CorpusLoader corpusLoader = loadCorpus("semeval2007/eng-coarse-all-words.xml");
 
         logger.info("Loading lexical resource...");
-        LRLoader lrLoader = loadLexicalResource("/semeval2007/dict_semeval2007task7_embeddings.xml");
+        LRLoader lrLoader = loadLexicalResource("semeval2007/dict_semeval2007task7_embeddings.xml");
 
         loadSensesForDocument(corpusLoader,lrLoader);
 

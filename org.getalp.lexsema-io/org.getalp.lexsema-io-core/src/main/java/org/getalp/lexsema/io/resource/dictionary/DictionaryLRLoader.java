@@ -13,10 +13,7 @@ import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLReaderFactory;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -32,17 +29,17 @@ public class DictionaryLRLoader implements LRLoader {
     Map<String, List<Sense>> wordSenses;
     boolean indexed = false;
 
-    public DictionaryLRLoader(File dictionaryFile) {
+    public DictionaryLRLoader(InputStream dictionaryFile) {
         this(dictionaryFile, true);
     }
 
-    public DictionaryLRLoader(File dictionaryFile, boolean indexed) {
+    public DictionaryLRLoader(InputStream dictionaryFile, boolean indexed) {
         this.indexed = true;
         wordSenses = new HashMap<>();
         try {
             XMLReader saxReader = XMLReaderFactory.createXMLReader();
             saxReader.setContentHandler(new DictionaryParser(wordSenses, indexed));
-            saxReader.parse(new InputSource(new FileReader(dictionaryFile)));
+            saxReader.parse(new InputSource(dictionaryFile));
         } catch (SAXException e) {
             logger.error(MessageFormat.format("Parser error :{0}", e.getLocalizedMessage()));
         } catch (FileNotFoundException e) {
