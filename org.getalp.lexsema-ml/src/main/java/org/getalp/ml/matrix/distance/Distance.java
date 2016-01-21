@@ -5,13 +5,15 @@ package org.getalp.ml.matrix.distance;
 
 import org.nd4j.linalg.api.ndarray.INDArray;
 
+import java.io.Serializable;
+
 
 /**
  * @author tchechem
  * 
  */
 @SuppressWarnings("ClassWithoutLogger")
-public abstract class Distance {
+public abstract class Distance implements Serializable{
 
 	protected Distance() {
 		super();

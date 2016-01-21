@@ -18,7 +18,7 @@ import java.util.Map;
 public class TverskiIndexSimilarityMeasureMatrixImpl implements TverskiIndexSimilarityMeasure {
 
 
-    private AbstractStringDistance distance;
+    private final AbstractStringDistance distance;
     private double alpha = DEFAULT_ALPHA;
     private double beta = DEFAULT_BETA_GAMMA;
     private double gamma = DEFAULT_BETA_GAMMA;
@@ -26,7 +26,7 @@ public class TverskiIndexSimilarityMeasureMatrixImpl implements TverskiIndexSimi
     private boolean fuzzyMatching = true;
     private boolean isDistance;
     private MatrixScorer matrixScorer;
-    private List<Filter> filters;
+    private final List<Filter> filters;
 
 
     public TverskiIndexSimilarityMeasureMatrixImpl() {

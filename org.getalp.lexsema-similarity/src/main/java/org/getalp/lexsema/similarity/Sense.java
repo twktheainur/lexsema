@@ -4,12 +4,13 @@ import org.getalp.lexsema.ontolex.LexicalSense;
 import org.getalp.lexsema.similarity.measures.SimilarityMeasure;
 import org.getalp.lexsema.similarity.signatures.SemanticSignature;
 
+import java.io.Serializable;
 import java.util.Map;
 
 /**
  * The representation of a LexicalSense in a text annotation setting
  */
-public interface Sense extends LexicalSense {
+public interface Sense extends LexicalSense, Serializable {
     String getId();
 
     Map<String, SemanticSignature> getRelatedSignatures();
@@ -23,6 +24,4 @@ public interface Sense extends LexicalSense {
     void addRelatedSignature(String key, SemanticSignature semanticSignature);
 
     double computeSimilarityWith(SimilarityMeasure measure, Sense other);
-
-    boolean isNull();
 }

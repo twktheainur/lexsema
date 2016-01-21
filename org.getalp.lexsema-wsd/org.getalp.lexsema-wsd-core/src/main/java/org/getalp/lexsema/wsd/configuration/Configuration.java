@@ -22,12 +22,12 @@ public interface Configuration extends Serializable{
 
     int getEnd();
 
-    public void initialize(int value);
+    void initialize(int value);
 
-    public int countUnassigned();
+    int countUnassigned();
 
     @SuppressWarnings("ReturnOfCollectionOrArrayField")
     int[] getAssignments();
 
-    public Document getDocument();
+    Document getDocument();
 }

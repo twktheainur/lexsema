@@ -13,9 +13,9 @@ public class Word2VecPerGlobalSignatureEnrichment implements SignatureEnrichment
 
     public static final int DEFAULT_TOP_N = 10;
 
-    private Word2Vec word2Vec;
-    private VocabCache vocab;
-    private int topN;
+    private final Word2Vec word2Vec;
+    private final VocabCache vocab;
+    private final int topN;
 
 
     public Word2VecPerGlobalSignatureEnrichment(Word2Vec word2Vec, VocabCache vocab) {
