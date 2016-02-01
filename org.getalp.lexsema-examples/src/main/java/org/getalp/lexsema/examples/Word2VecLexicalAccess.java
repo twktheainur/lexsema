@@ -41,7 +41,7 @@ public final class Word2VecLexicalAccess {
 
     private static WordVectors loadEmbeddings(String path) throws IOException {
         Word2VecLoader word2VecLoader = new SerializedModelWord2VecLoader();
-        word2VecLoader.loadGoogle(new File(path), true);
+        word2VecLoader.loadGoogle(new File(path), true, false);
         return word2VecLoader.getWordVectors();
     }
 

@@ -24,6 +24,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -35,7 +36,7 @@ public class TALNDisambiguation {
         CorpusLoader dl = new Semeval2013Task13CorpusLoader(args[0])
                 .loadNonInstances(false);
         CorpusLoader semCor = new SemCorCorpusLoader(args[1]);
-        LRLoader lrloader = new DictionaryLRLoader(new File(args[2]));
+        LRLoader lrloader = new DictionaryLRLoader(new FileInputStream(args[2]));
         semCor.load();
         WindowLoader wloader = new DocumentCollectionWindowLoader(semCor);
         wloader.load();
