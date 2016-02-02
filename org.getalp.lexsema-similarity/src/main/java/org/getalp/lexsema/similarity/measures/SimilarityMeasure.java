@@ -3,12 +3,13 @@ package org.getalp.lexsema.similarity.measures;
 
 import org.getalp.lexsema.similarity.signatures.SemanticSignature;
 
+import java.io.Serializable;
 import java.util.Map;
 
 /**
  * Interface representing a Similarity Measure
  */
-public interface SimilarityMeasure {
+public interface SimilarityMeasure extends Serializable{
     /**
      * Compute the semantic similarity between
      * semantic signatures <code>a</code> and <code>b</code>

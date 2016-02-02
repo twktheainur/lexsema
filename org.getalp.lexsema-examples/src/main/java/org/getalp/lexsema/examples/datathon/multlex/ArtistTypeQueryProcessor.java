@@ -3,7 +3,7 @@ package org.getalp.lexsema.examples.datathon.multlex;
 import com.hp.hpl.jena.query.QuerySolution;
 import com.hp.hpl.jena.rdf.model.RDFNode;
 import com.hp.hpl.jena.sparql.core.Var;
-import org.getalp.lexsema.ontolex.graph.Graph;
+import org.getalp.lexsema.ontolex.Graph;
 import org.getalp.lexsema.ontolex.queries.ARQSelectQueryImpl;
 import org.getalp.lexsema.ontolex.queries.AbstractQueryProcessor;
 import org.getalp.lexsema.util.Language;

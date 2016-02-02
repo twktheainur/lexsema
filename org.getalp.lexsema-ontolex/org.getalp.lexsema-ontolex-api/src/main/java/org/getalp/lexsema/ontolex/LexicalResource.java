@@ -3,16 +3,16 @@ package org.getalp.lexsema.ontolex;
 
 import org.getalp.lexsema.util.Language;
 import org.getalp.lexsema.ontolex.factories.entities.LexicalResourceEntityFactory;
-import org.getalp.lexsema.ontolex.graph.Graph;
 import org.getalp.lexsema.ontolex.graph.OntologyModel;
 import org.getalp.lexsema.ontolex.uri.URIParser;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Generic Interface for LexicalResources
  */
-public interface LexicalResource {
+public interface LexicalResource extends Serializable{
     /**
      * @return Returns the base URI of the lexical resource
      */

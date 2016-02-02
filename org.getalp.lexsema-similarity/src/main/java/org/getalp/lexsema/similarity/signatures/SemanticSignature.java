@@ -4,11 +4,12 @@ import org.getalp.lexsema.similarity.measures.SimilarityMeasure;
 import org.getalp.lexsema.similarity.signatures.symbols.SemanticSymbol;
 import org.getalp.lexsema.util.Language;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
 
-public interface SemanticSignature extends Iterable<SemanticSymbol> {
+public interface SemanticSignature extends Iterable<SemanticSymbol>, Serializable {
 
     double computeSimilarityWith(SimilarityMeasure measure, SemanticSignature other,
                                  Map<String,SemanticSignature> relatedA,

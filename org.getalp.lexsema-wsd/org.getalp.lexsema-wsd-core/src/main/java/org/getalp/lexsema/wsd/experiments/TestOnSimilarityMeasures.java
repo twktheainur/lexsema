@@ -1,6 +1,7 @@
 package org.getalp.lexsema.wsd.experiments;
 
 import java.io.File;
+import java.io.FileInputStream;
 
 import org.apache.commons.math3.stat.inference.MannWhitneyUTest;
 import org.getalp.lexsema.io.document.loader.Semeval2007CorpusLoader;
@@ -83,9 +84,9 @@ public class TestOnSimilarityMeasures
         int n = 30;
         double[] scores = new double[n];
         long[] times = new long[n];
-        LRLoader lrloader = new DictionaryLRLoader(new File(dict), true);
+        LRLoader lrloader = new DictionaryLRLoader(new FileInputStream(dict), true);
 
-        CorpusLoader dl = new Semeval2007CorpusLoader("../data/senseval2007_task7/test/eng-coarse-all-words.xml");
+        CorpusLoader dl = new Semeval2007CorpusLoader(new FileInputStream("../data/senseval2007_task7/test/eng-coarse-all-words.xml"));
         dl.load();
         for (Document d : dl) lrloader.loadSenses(d);
 

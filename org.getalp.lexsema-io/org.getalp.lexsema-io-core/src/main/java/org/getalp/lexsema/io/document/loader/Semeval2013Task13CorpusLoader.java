@@ -15,7 +15,7 @@ import java.util.List;
 @SuppressWarnings({"BooleanParameter", "ClassWithTooManyFields"})
 public class Semeval2013Task13CorpusLoader extends CorpusLoaderImpl implements ContentHandler {
 
-    private Logger logger = LoggerFactory.getLogger(Semeval2013Task13CorpusLoader.class);
+    private final Logger logger = LoggerFactory.getLogger(Semeval2013Task13CorpusLoader.class);
 
     private boolean inWord;
     private String currentSurfaceForm;
@@ -24,12 +24,14 @@ public class Semeval2013Task13CorpusLoader extends CorpusLoaderImpl implements C
     private String currentId;
     private Language language;
 
-    private String path;
+    private final String path;
 
 
-    private List<Word> currentPrecedingWords;
+    private final List<Word> currentPrecedingWords;
     private Sentence currentSentence;
     private Text currentDocument;
+
+    private String lemmaAttribute;
 
     public Semeval2013Task13CorpusLoader(String path) {
         inWord = false;
@@ -39,7 +41,20 @@ public class Semeval2013Task13CorpusLoader extends CorpusLoaderImpl implements C
         currentPos = "";
         currentSurfaceForm = "";
         currentPrecedingWords = new ArrayList<>();
+        lemmaAttribute = "lemma";
     }
+
+    public Semeval2013Task13CorpusLoader(String path, String lemmaAttribute) {
+        inWord = false;
+        this.path = path;
+        currentId = "";
+        currentLemma = "";
+        currentPos = "";
+        currentSurfaceForm = "";
+        currentPrecedingWords = new ArrayList<>();
+        this.lemmaAttribute = lemmaAttribute;
+    }
+
 
     @Override
     public void setDocumentLocator(Locator locator) {
@@ -82,7 +97,7 @@ public class Semeval2013Task13CorpusLoader extends CorpusLoaderImpl implements C
                 break;
             case "wf":
                 currentPos = atts.getValue("pos");
-                currentLemma = atts.getValue("lemma");
+                currentLemma = atts.getValue(lemmaAttribute);
                 currentId = "";
                 currentPrecedingWords.add(new WordImpl("non-target", currentLemma, currentSurfaceForm, currentPos));
                 inWord = true;
@@ -90,7 +105,7 @@ public class Semeval2013Task13CorpusLoader extends CorpusLoaderImpl implements C
             case "instance":
                 inWord = true;
                 currentPos = atts.getValue("pos");
-                currentLemma = atts.getValue("lemma");
+                currentLemma = atts.getValue(lemmaAttribute);
                 currentId = atts.getValue("id");
                 break;
         }

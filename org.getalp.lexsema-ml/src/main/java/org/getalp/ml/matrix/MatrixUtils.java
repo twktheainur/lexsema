@@ -484,11 +484,16 @@ public class MatrixUtils {
     }
 
     public static INDArray getColumnWiseSumVector(INDArray array){
-        INDArray mean = Nd4j.create(array.columns());
-        for (int i = 0; i < array.columns(); i++) {
-            mean.putScalar(i, vectorSum(array.getColumn(i)));
+        if(array.isRowVector()){
+            return array;
+        } else {
+            INDArray mean = Nd4j.create(array.columns());
+            for (int i = 0; i < array.columns(); i++) {
+                mean.putScalar(i,
+                        vectorSum(array.getColumn(i)));
+            }
+            return mean;
         }
-        return mean;
     }
 
 

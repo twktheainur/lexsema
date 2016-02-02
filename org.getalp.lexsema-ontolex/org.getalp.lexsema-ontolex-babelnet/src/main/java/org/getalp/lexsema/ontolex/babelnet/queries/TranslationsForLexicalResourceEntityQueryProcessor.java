@@ -6,7 +6,7 @@ import com.hp.hpl.jena.sparql.core.Var;
 import org.getalp.lexsema.ontolex.LexicalResourceEntity;
 import org.getalp.lexsema.ontolex.babelnet.Translation;
 import org.getalp.lexsema.ontolex.factories.entities.LexicalResourceEntityFactory;
-import org.getalp.lexsema.ontolex.graph.Graph;
+import org.getalp.lexsema.ontolex.Graph;
 import org.getalp.lexsema.ontolex.queries.ARQSelectQueryImpl;
 import org.getalp.lexsema.ontolex.queries.AbstractQueryProcessor;
 import org.getalp.lexsema.util.Language;

@@ -26,6 +26,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 
@@ -38,7 +39,7 @@ public class Semeval2007Disambiguation {
             usage();
         }
 
-        CorpusLoader corpusLoader = new Semeval2007CorpusLoader("../data/senseval2007_task7/test/eng-coarse-all-words-t1.xml");
+        CorpusLoader corpusLoader = new Semeval2007CorpusLoader(new FileInputStream("../data/senseval2007_task7/test/eng-coarse-all-words-t1.xml"));
 
         LRLoader lrloader = new WordnetLoader(new Dictionary(new File("../data/wordnet/2.1/dict")))
                 .extendedSignature(true).loadDefinitions(true);
@@ -46,10 +47,10 @@ public class Semeval2007Disambiguation {
         word2VecLoader.loadGoogle(new File(args[0]),true);
 
         SimilarityMeasure similarityMeasure =
-                new Word2VecGlossDistanceSimilarity(word2VecLoader.getWord2Vec(Language.ENGLISH),
+                new Word2VecGlossDistanceSimilarity(word2VecLoader.getWordVectors(Language.ENGLISH),
                         new RiemannianDistance(), null);
 //        SimilarityMeasure similarityMeasure =
-//                new Word2VecGlossCosineSimilarity(word2VecLoader.getWord2Vec(Language.ENGLISH),
+//                new Word2VecGlossCosineSimilarity(word2VecLoader.getWordVectors(Language.ENGLISH),
 //                       false);
 
 //        SimilarityMeasure similarityMeasure =

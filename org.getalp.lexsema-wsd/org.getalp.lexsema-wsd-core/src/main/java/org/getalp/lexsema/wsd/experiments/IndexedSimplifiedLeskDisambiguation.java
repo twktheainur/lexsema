@@ -20,6 +20,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 
 @SuppressWarnings("all")
 public class IndexedSimplifiedLeskDisambiguation {
@@ -29,10 +31,10 @@ public class IndexedSimplifiedLeskDisambiguation {
     public IndexedSimplifiedLeskDisambiguation() {
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws FileNotFoundException {
         long startTime = System.currentTimeMillis();
-        CorpusLoader dl = new Semeval2007CorpusLoader("../data/senseval2007_task7/test/eng-coarse-all-words-t1.xml").loadNonInstances(true);
-        LRLoader lrloader = new DictionaryLRLoader(new File("../data/dictionnaires-lesk/dict-adapted-all-relations.xml"), true);
+        CorpusLoader dl = new Semeval2007CorpusLoader(new FileInputStream("../data/senseval2007_task7/test/eng-coarse-all-words-t1.xml")).loadNonInstances(true);
+        LRLoader lrloader = new DictionaryLRLoader(new FileInputStream("../data/dictionnaires-lesk/dict-adapted-all-relations.xml"), true);
         SimilarityMeasure sim = new TverskiIndexSimilarityMeasureImpl();
 
         GoldStandard goldStandard = new Semeval2007GoldStandard();

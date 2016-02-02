@@ -9,10 +9,10 @@ import org.getalp.lexsema.ontolex.graph.OntologyModel;
  */
 public abstract class AbstractLexicalResourceEntity implements LexicalResourceEntity {
 
-    private LexicalResource lexicalResource;
-    private OntologyModel model;
-    private LexicalResourceEntity parent;
-    private Node node;
+    private final LexicalResource lexicalResource;
+    private final OntologyModel model;
+    private final LexicalResourceEntity parent;
+    private final String nodeURI;
 
 
     /**
@@ -35,7 +35,7 @@ public abstract class AbstractLexicalResourceEntity implements LexicalResourceEn
             }
         }
         newUri += uri;
-        node = NodeFactory.createURI(newUri);
+        nodeURI = newUri;
     }
 
     @Override
@@ -50,7 +50,7 @@ public abstract class AbstractLexicalResourceEntity implements LexicalResourceEn
 
     @Override
     public Node getNode() {
-        return node;
+        return NodeFactory.createURI(nodeURI);
     }
 
     @SuppressWarnings("all")
@@ -64,21 +64,27 @@ public abstract class AbstractLexicalResourceEntity implements LexicalResourceEn
         return parent;
     }
 
+    @SuppressWarnings("ALL")
     @Override
     public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-        @SuppressWarnings("LocalVariableOfConcreteClass")
+        if (this == o) return true;
+        if (!(o instanceof AbstractLexicalResourceEntity)) return false;
+
         AbstractLexicalResourceEntity that = (AbstractLexicalResourceEntity) o;
-        return !(node != null ? !node.equals(that.node) : that.node != null);
+
+        if (getLexicalResource() != null ? !getLexicalResource().equals(that.getLexicalResource()) : that.getLexicalResource() != null)
+            return false;
+        if (getParent() != null ? !getParent().equals(that.getParent()) : that.getParent() != null) return false;
+        return !(nodeURI != null ? !nodeURI.equals(that.nodeURI) : that.nodeURI != null);
+
     }
 
+    @SuppressWarnings("ALL")
     @Override
     public int hashCode() {
-        return node != null ? node.hashCode() : 0;
+        int result = getLexicalResource() != null ? getLexicalResource().hashCode() : 0;
+        result = 31 * result + (getParent() != null ? getParent().hashCode() : 0);
+        result = 31 * result + (nodeURI != null ? nodeURI.hashCode() : 0);
+        return result;
     }
 }

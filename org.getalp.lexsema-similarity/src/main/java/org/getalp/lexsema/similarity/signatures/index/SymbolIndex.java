@@ -1,9 +1,11 @@
 package org.getalp.lexsema.similarity.signatures.index;
 
+import java.io.Serializable;
+
 /**
  * The index holds a map of unique (Index, Symbol) pairs, that associate a unique index to each unique symbol
  */
-public interface SymbolIndex {
+public interface SymbolIndex extends Serializable{
     /**
      * Return the index for the specified symbol. If the symbol was not present in
      * the index map, it is added and a new index is assigned sequentially to the

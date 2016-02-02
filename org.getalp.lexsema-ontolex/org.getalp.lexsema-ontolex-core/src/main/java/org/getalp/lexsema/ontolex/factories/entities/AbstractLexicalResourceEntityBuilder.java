@@ -2,7 +2,7 @@ package org.getalp.lexsema.ontolex.factories.entities;
 
 import org.getalp.lexsema.ontolex.LexicalResource;
 import org.getalp.lexsema.ontolex.LexicalResourceEntity;
-import org.getalp.lexsema.ontolex.graph.Graph;
+import org.getalp.lexsema.ontolex.Graph;
 import org.getalp.lexsema.ontolex.uri.URIParser;
 
 import java.util.Map;

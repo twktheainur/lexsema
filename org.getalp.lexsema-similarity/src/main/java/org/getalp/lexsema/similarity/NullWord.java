@@ -15,15 +15,6 @@ import java.util.List;
 
 public class NullWord implements Word{
 
-    private static final Word instance = new NullWord();
-
-    private NullWord() {
-    }
-
-    public static Word getInstance() {
-        return instance;
-    }
-
     @Override
     public void addPrecedingInstance(Word precedingNonInstance) {
 
@@ -31,7 +22,7 @@ public class NullWord implements Word{
 
     @Override
     public Sentence getEnclosingSentence() {
-        return NullSentence.getInstance();
+        return new NullSentence();
     }
 
     @Override

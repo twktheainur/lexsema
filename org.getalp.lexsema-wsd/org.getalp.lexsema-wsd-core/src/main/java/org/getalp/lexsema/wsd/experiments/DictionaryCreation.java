@@ -1,9 +1,13 @@
 package org.getalp.lexsema.wsd.experiments;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 
 import edu.mit.jwi.Dictionary;
 
+import org.deeplearning4j.models.embeddings.wordvectors.WordVectors;
 import org.getalp.lexsema.io.dictionary.DocumentDictionaryWriter;
 import org.getalp.lexsema.io.document.loader.DSOCorpusLoader;
 import org.getalp.lexsema.io.document.loader.GMBCorpusLoader;
@@ -14,7 +18,11 @@ import org.getalp.lexsema.io.document.loader.Semeval2007CorpusLoader;
 import org.getalp.lexsema.io.document.loader.WordnetGlossTagCorpusLoader;
 import org.getalp.lexsema.io.resource.wordnet.WordnetLoader;
 import org.getalp.lexsema.similarity.Text;
+import org.getalp.lexsema.similarity.signatures.enrichment.SignatureEnrichment;
+import org.getalp.lexsema.similarity.signatures.enrichment.Word2VecLocalSignatureEnrichment;
 import org.getalp.lexsema.io.thesaurus.AnnotatedTextThesaurusImpl;
+import org.getalp.lexsema.io.word2vec.SerializedModelWord2VecLoader;
+import org.getalp.lexsema.io.word2vec.Word2VecLoader;
 
 public class DictionaryCreation
 {
@@ -30,6 +38,8 @@ public class DictionaryCreation
     
     public static String gmbPath = "../data/gmb-2.2.0/";
     
+    public static String word2vecPath = "../data/word2vec/";
+    
     public static Dictionary wordnet = new Dictionary(new File(wordnetPath));
     
     public static CorpusLoader semCor = new SemCorCorpusLoader(semCorPath);
@@ -39,6 +49,10 @@ public class DictionaryCreation
     public static CorpusLoader wordnetGlossTag = new WordnetGlossTagCorpusLoader(wordnetGlossTagPath);
 
     public static CorpusLoader gmb = new GMBCorpusLoader(gmbPath, wordnet);
+    
+    public static Word2VecLoader word2VecLoader = new SerializedModelWord2VecLoader();
+    
+    public static SignatureEnrichment signatureEnrichment = null;
 
     public static boolean semCorIsLoaded = false;
 
@@ -48,36 +62,25 @@ public class DictionaryCreation
 
     public static boolean gmbgIsLoaded = false;
     
+    public static boolean word2vecIsLoaded = false;
+    
     public static int numberOfWordsFromThesauri = 100;
 
-    public static void main(String[] args)
-    {
-        //writeDictionary(false, false, false, "../data/dict_semeval2007task7");
-        //writeDictionary(true, false, false, "../data/dict_semeval2007task7_stopwords");
-        //writeDictionary(false, true, false, "../data/dict_semeval2007task7_stemming");
-        //writeDictionary(true, true, false, "../data/dict_semeval2007task7_stopwords_stemming");
+    public static void main(String[] args) throws Exception {
 
-        //writeDictgionary(false, false, true, "../data/dict_semeval2007task7_semcor");
-        //writeDictionary(true, false, true, "../data/dict_semeval2007task7_stopwords_semcor");
-        //writeDictionary(false, true, true, "../data/dict_semeval2007task7_stemming_semcor");
-        //writeDictionary(true, true, true, "../data/dict_semeval2007task7_stopwords_stemming_semcor");
-
-        //writeDictionary(true, true, true, true, true, true, true, false, "../data/lesk_dict/dict_semeval2007task7_stopwords_stemming_semcor");
-        //writeDictionary(true, true, true, true, true, true, false, true, "../data/lesk_dict/dict_semeval2007task7_stopwords_stemming_dso");
-        //writeDictionary(true, true, true, true, true, true, true, true, "../data/lesk_dict/dict_semeval2007task7_stopwords_stemming_semcor_dso");
-    
-        writeDictionary(true, true, true, true, true, true, true, true, true, true, "../data/lesk_dict/dict_semeval2007task7_stopwords_stemming_semcor_dso_wordnetglosstag");
+        //writeDictionary(true, true, true, true, true, true, true, true, true, true, false, "../data/lesk_dict/dict_semeval2007task7_stopwords_stemming_semcor_dso_wordnetglosstag");
+    	writeDictionary(true, true, true, true, true, true, false, false, false, false, true, "../data/lesk_dict/dict_semeval2007task7_w2v");
     }
     
-    private static void writeDictionary(boolean definitions, boolean extendedDefinitions, 
+    public static void writeDictionary(boolean definitions, boolean extendedDefinitions, 
                                         boolean stopWords, boolean stemming, 
                                         boolean index, boolean shuffle, 
                                         boolean useSemCorThesaurus, 
                                         boolean useDSOThesaurus, 
                                         boolean useWordnetGlossTag,
                                         boolean useGMBThesaurus,
-                                        String newDictPath)
-    {
+                                        boolean useWord2Vec,
+                                        String newDictPath) throws Exception {
         System.out.println("Building dictionary " + newDictPath + "...");
         WordnetLoader lrloader = new WordnetLoader(wordnet);
         lrloader.loadDefinitions(definitions);
@@ -89,7 +92,8 @@ public class DictionaryCreation
         lrloader.stemming(stemming);
         if (useSemCorThesaurus)
         {
-            if (!semCorIsLoaded) {
+            if (!semCorIsLoaded) 
+            {
                 semCor.load();
                 semCorIsLoaded = true;
             }
@@ -97,7 +101,8 @@ public class DictionaryCreation
         }
         if (useDSOThesaurus)
         {
-            if (!dsoIsLoaded) {
+            if (!dsoIsLoaded) 
+            {
                 dso.load();
                 dsoIsLoaded = true;
             }
@@ -105,7 +110,8 @@ public class DictionaryCreation
         }
         if (useWordnetGlossTag)
         {
-            if (!wordnetGlossTagIsLoaded) {
+            if (!wordnetGlossTagIsLoaded) 
+            {
                 wordnetGlossTag.load();
                 wordnetGlossTagIsLoaded = true;
             }
@@ -113,13 +119,24 @@ public class DictionaryCreation
         }
         if (useGMBThesaurus)
         {
-            if (!gmbgIsLoaded) {
+            if (!gmbgIsLoaded) 
+            {
                 gmb.load();
                 gmbgIsLoaded = true;
             }
             lrloader.addThesaurus(new AnnotatedTextThesaurusImpl(gmb, numberOfWordsFromThesauri));
         }
-        CorpusLoader dl = new Semeval2007CorpusLoader(docPath);
+        if (useWord2Vec)
+        {
+        	if (!word2vecIsLoaded)
+        	{
+                word2VecLoader.loadGoogle(new File(word2vecPath), true, false);
+                signatureEnrichment = new Word2VecLocalSignatureEnrichment(word2VecLoader.getWordVectors(), 10);
+                word2vecIsLoaded = true;
+        	}
+        	lrloader.signatureEnrichment(signatureEnrichment);
+        }
+        CorpusLoader dl = new Semeval2007CorpusLoader(new FileInputStream(docPath));
         dl.load();
         for (Text txt : dl)
         {

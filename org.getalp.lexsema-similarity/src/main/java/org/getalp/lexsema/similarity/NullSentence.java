@@ -12,13 +12,6 @@ public final class NullSentence implements Sentence{
 
     private static final Sentence instance = new NullSentence();
 
-    public static Sentence getInstance() {
-        return instance;
-    }
-
-    private NullSentence() {
-    }
-
     @Override
     public boolean isNull() {
         return true;
@@ -40,7 +33,7 @@ public final class NullSentence implements Sentence{
 
     @Override
     public Word getWord(int index) {
-        return NullWord.getInstance();
+        return new NullWord();
     }
 
     @Override
@@ -75,6 +68,11 @@ public final class NullSentence implements Sentence{
     }
 
     @Override
+    public int numberOfSensesForWord(int index) {
+        return 0;
+    }
+
+    @Override
     public int indexOfWord(Word word) {
         return 0;
     }
@@ -95,7 +93,7 @@ public final class NullSentence implements Sentence{
     }
 
     @Override
-    public boolean alreadyLoaded() {
+    public boolean isAlreadyLoaded() {
         return true;
     }
 

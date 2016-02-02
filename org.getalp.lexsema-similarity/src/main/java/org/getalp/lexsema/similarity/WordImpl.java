@@ -16,9 +16,9 @@ public class WordImpl implements Word {
     private final String id;
     private final String surfaceForm;
     private String textPos;
-    private LexicalEntry lexicalEntry = NullLexicalEntry.getInstance();
+    private LexicalEntry lexicalEntry = new NullLexicalEntry();
     private String semanticTag = "";
-    private Sentence enclosingSentence = NullSentence.getInstance();
+    private Sentence enclosingSentence = new NullSentence();
     private final List<Word> precedingNonInstances = new ArrayList<>();
     private String lemma;
     private final int begin;
@@ -45,10 +45,11 @@ public class WordImpl implements Word {
         textPos = pos;
         this.begin = begin;
 
-        if (surfaceForm != null)
+        if (surfaceForm != null) {
             this.end = surfaceForm.length();
-        else
+        } else {
             this.end = 0;
+        }
     }
 
 

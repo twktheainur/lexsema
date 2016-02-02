@@ -14,7 +14,7 @@ import java.util.Collection;
 
 public class TokenAnnotationConsumer extends CasConsumer_ImplBase implements TokenConsumer {
 
-    private Text text = NullText.getInstance();
+    private Text text = new NullText();
 
     @Override
     public void process(CAS aCAS) throws AnalysisEngineProcessException {

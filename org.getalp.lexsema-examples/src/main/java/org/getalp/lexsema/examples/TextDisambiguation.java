@@ -37,9 +37,16 @@ import java.lang.reflect.InvocationTargetException;
 
 public class TextDisambiguation {
     public static final String ONTOLOGY_PROPERTIES = "data" + File.separator + "ontology.properties";
-    private static Logger logger = LoggerFactory.getLogger(TextSimilarity.class);
+    private static final Logger logger = LoggerFactory.getLogger(TextSimilarity.class);
+    private static final double SA_P_0 = 0.5;
+    private static final double SA_COOLING_RATE = 0.99;
+    private static final int CONVERGENCE_THRESHOLD = 5;
+    private static final int ITERATIONS = 10;
 
-    public static void main(String[] args) throws InvocationTargetException, NoSuchMethodException, ClassNotFoundException, InstantiationException, IllegalAccessException, IOException {
+    private TextDisambiguation() {
+    }
+
+    public static void main(String... args) throws InvocationTargetException, NoSuchMethodException, ClassNotFoundException, InstantiationException, IllegalAccessException, IOException {
         if(args.length<1){
             usage();
         }
@@ -55,32 +62,32 @@ public class TextDisambiguation {
         word2VecLoader.loadGoogle(new File(args[1]),true);
 
 //        SimilarityMeasure similarityMeasure =
-//                new Word2VecGlossDistanceSimilarity(word2VecLoader.getWord2Vec(Language.ENGLISH),
+//                new Word2VecGlossDistanceSimilarity(word2VecLoader.getWordVectors(Language.ENGLISH),
 //                        new MahalanobisDistance());
 
-        SimilarityMeasure similarityMeasure =
+        @SuppressWarnings("LawOfDemeter") SimilarityMeasure similarityMeasure =
                 new TverskiIndexSimilarityMeasureBuilder()
                         .distance(new ScaledLevenstein()).alpha(1d).beta(0.0d).gamma(0.0d).fuzzyMatching(true)
                         .build();
         ConfigurationScorer configurationScorer =
                 new TverskyConfigurationScorer(similarityMeasure,Runtime.getRuntime().availableProcessors());
-        Disambiguator disambiguator = new SimulatedAnnealing(0.5,0.99,5,10,configurationScorer);
-        System.err.println("Loading texts");
+        Disambiguator disambiguator = new SimulatedAnnealing(SA_P_0, SA_COOLING_RATE,CONVERGENCE_THRESHOLD,ITERATIONS,configurationScorer);
+        logger.info("Loading texts");
         corpusLoader.load();
         for (Document document : corpusLoader) {
-            System.err.println("\tLoading senses...");
+            logger.info("\tLoading senses...");
             lrloader.loadSenses(document);
-            System.err.println("\tDisambiguating... ");
+            logger.info("\tDisambiguating... ");
             Configuration result = disambiguator.disambiguate(document);
             for(int i=0;i<result.size();i++){
                 Word word = document.getWord(i);
                 if(!document.getSenses(i).isEmpty()) {
                     String sense = document.getSenses(i).get(result.getAssignment(i)).getId();
-                    logger.info("Sense " + sense + " assigned to " + word);
+                    logger.info("Sense {} assigned to {}", sense, word);
                 }
             }
 
-            System.err.println("done!");
+            logger.info("done!");
         }
         disambiguator.release();
     }

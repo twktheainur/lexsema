@@ -1,6 +1,7 @@
 package org.getalp.lexsema.wsd.experiments;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.PrintWriter;
 import java.util.Locale;
 import java.util.Scanner;
@@ -42,16 +43,16 @@ public class AlgorithmsComparison
         else if (condition.equals("sc")) stopConditionEvaluation = new StopCondition(StopCondition.Condition.SCORERCALLS, value);
         else stopConditionEvaluation = new StopCondition(StopCondition.Condition.MILLISECONDS, value);
         
-        lrloader = new DictionaryLRLoader(new File("../data/dictionnaires-lesk/dict-adapted-all-relations.xml"));
+        lrloader = new DictionaryLRLoader(new FileInputStream("../data/dictionnaires-lesk/dict-adapted-all-relations.xml"));
 
-        dlEvaluation = new Semeval2007CorpusLoader("../data/senseval2007_task7/test/evaluation.xml");
+        dlEvaluation = new Semeval2007CorpusLoader(new FileInputStream("../data/senseval2007_task7/test/evaluation.xml"));
         dlEvaluation.loadNonInstances(false);
         dlEvaluation.load();
         for (Document d : dlEvaluation) lrloader.loadSenses(d);
 
         configScorer = new SemEval2007Task7PerfectConfigurationScorer();
 
-        Scanner reader = new Scanner(new File("../parameters.txt"));
+        Scanner reader = new Scanner(new File("../parameters_" + value + ".txt"));
         reader.useLocale(Locale.ENGLISH);
         
         double csaLevyLocation = reader.nextDouble();
@@ -84,19 +85,19 @@ public class AlgorithmsComparison
         {
             System.out.println();
             
-            csa.scorePlotWriter = open("cuckoo", d.getId());
+            csa.scorePlotWriter = open("cuckoo_" + value, d.getId());
             Configuration c = csa.disambiguate(d);
             System.out.println("Cuckoo Search Score : " + configScorer.computeScore(d, c));
 
-            ba.plotWriter = open("bat", d.getId());
+            ba.plotWriter = open("bat_" + value, d.getId());
             c = ba.disambiguate(d);
             System.out.println("Bat Score : " + configScorer.computeScore(d, c));
 
-            ga.plotWriter = open("genetic", d.getId());
+            ga.plotWriter = open("genetic_" + value, d.getId());
             c = ga.disambiguate(d);
             System.out.println("Genetic Score : " + configScorer.computeScore(d, c));
 
-            sa.plotWriter = open("annealing", d.getId());
+            sa.plotWriter = open("annealing_" + value, d.getId());
             c = sa.disambiguate(d);
             System.out.println("Annealing Score : " + configScorer.computeScore(d, c));
         }

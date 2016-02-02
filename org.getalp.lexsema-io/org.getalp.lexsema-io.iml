@@ -97,7 +97,7 @@
     <orderEntry type="module" module-name="org.getalp.lexsema-util" />
     <orderEntry type="module" module-name="org.getalp.lexsema-ontolex-dbnary" />
     <orderEntry type="module" module-name="org.getalp.lexsema-ontolex-core" />
-    <orderEntry type="library" name="Maven: org.getalp:dbnary:1.2" level="project" />
+    <orderEntry type="library" name="Maven: org.getalp:dbnary:1.2.1" level="project" />
     <orderEntry type="library" name="Maven: org.codehaus.woodstox:woodstox-core-lgpl:4.0.8" level="project" />
     <orderEntry type="library" name="Maven: javax.xml.stream:stax-api:1.0-2" level="project" />
     <orderEntry type="library" name="Maven: org.codehaus.woodstox:stax2-api:3.0.2" level="project" />

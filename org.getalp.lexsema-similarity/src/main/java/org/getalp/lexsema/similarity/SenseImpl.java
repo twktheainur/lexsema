@@ -20,7 +20,7 @@ import java.util.Map;
 public class SenseImpl implements Sense {
     private SemanticSignature semanticSignature;
     private String id = "";
-    private LexicalSense lexicalSense = NullLexicalSense.getInstance();
+    private LexicalSense lexicalSense = new NullLexicalSense();
     private final Map<String, SemanticSignature> relatedSignatures;
 
     public SenseImpl(String id) {

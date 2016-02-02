@@ -61,9 +61,9 @@ public class DocumentImpl implements Document {
     }
 
     @Override
-    public boolean alreadyLoaded(){
+    public boolean isAlreadyLoaded(){
 
-        return (this.senses.size()>=lexicalEntries.size());
+        return senses.size()>=lexicalEntries.size();
     }
 
 
@@ -94,6 +94,12 @@ public class DocumentImpl implements Document {
     @Override
     public int size() {
         return lexicalEntries.size();
+    }
+
+    @Override
+    public int numberOfSensesForWord(int index) {
+        final List<Sense> wordSenses = senses.get(index);
+        return wordSenses.size();
     }
 
     @Override

@@ -17,6 +17,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,9 +26,9 @@ public class ArabicNUSPTDisambiguation {
     private static Logger logger = LoggerFactory.getLogger(ArabicNUSPTDisambiguation.class);
 
     public static void main(String[] args) throws IOException {
-        CorpusLoader dl = new Semeval2007CorpusLoader(args[0]).loadNonInstances(false);
+        CorpusLoader dl = new Semeval2007CorpusLoader(new FileInputStream(args[0])).loadNonInstances(false);
         CorpusLoader semCor = new SemCorCorpusLoader(args[1]);
-        LRLoader lrloader = new DictionaryLRLoader(new File(args[2]));
+        LRLoader lrloader = new DictionaryLRLoader(new FileInputStream(args[2]));
 
 //        LemmaFeatureExtractor lfe = new LemmaFeatureExtractor(3,1);
 //        PosFeatureExtractor pfe = new PosFeatureExtractor(1, 2);

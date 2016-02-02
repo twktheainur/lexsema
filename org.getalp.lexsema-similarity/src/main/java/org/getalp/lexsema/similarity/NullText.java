@@ -9,14 +9,8 @@ import java.util.Iterator;
 import java.util.List;
 
 public final class NullText implements Text{
-    private static final Text instance = new NullText();
 
-    public static Text getInstance() {
-        return instance;
-    }
-
-    private NullText() {
-    }
+    private Word nullWord = new NullWord();
 
     @Override
     public String getId() {
@@ -30,12 +24,12 @@ public final class NullText implements Text{
 
     @Override
     public Word getWord(int offset, int index) {
-        return NullWord.getInstance();
+        return nullWord;
     }
 
     @Override
     public Word getWord(int index) {
-        return NullWord.getInstance();
+        return nullWord;
     }
 
     @Override
@@ -74,6 +68,11 @@ public final class NullText implements Text{
     }
 
     @Override
+    public int numberOfSensesForWord(int index) {
+        return 0;
+    }
+
+    @Override
     public int indexOfWord(Word word) {
         return 0;
     }
@@ -94,7 +93,7 @@ public final class NullText implements Text{
     }
 
     @Override
-    public boolean alreadyLoaded() {
+    public boolean isAlreadyLoaded() {
         return false;
     }
 

@@ -3,7 +3,7 @@ package org.getalp.lexsema.ontolex.queries;
 import com.hp.hpl.jena.graph.Triple;
 import com.hp.hpl.jena.query.ResultSet;
 import com.hp.hpl.jena.sparql.expr.Expr;
-import org.getalp.lexsema.ontolex.graph.Graph;
+import org.getalp.lexsema.ontolex.Graph;
 
 /**
  * Wrapper for creating and running queries through Jena ARQ

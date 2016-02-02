@@ -5,7 +5,7 @@ import org.getalp.lexsema.examples.datathon.multlex.lexicalization.Confidence;
 import org.getalp.lexsema.examples.datathon.multlex.lexicalization.Lexicalization;
 import org.getalp.lexsema.examples.datathon.multlex.lexicalization.LexicalizationAlternatives;
 import org.getalp.lexsema.ontolex.graph.DefaultGraph;
-import org.getalp.lexsema.ontolex.graph.Graph;
+import org.getalp.lexsema.ontolex.Graph;
 import org.getalp.lexsema.ontolex.graph.OWLTBoxModel;
 import org.getalp.lexsema.ontolex.graph.OntologyModel;
 import org.getalp.lexsema.ontolex.graph.storage.JenaTDBStore;

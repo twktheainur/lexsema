@@ -14,9 +14,12 @@ import java.io.File;
 import java.io.IOException;
 
 public final class TextSimilarityEmbeddings {
-    private static Logger logger = LoggerFactory.getLogger(TextSimilarityEmbeddings.class);
+    private static final Logger logger = LoggerFactory.getLogger(TextSimilarityEmbeddings.class);
 
-    public static void main(String[] args) throws IOException {
+    private TextSimilarityEmbeddings() {
+    }
+
+    public static void main(String... args) throws IOException {
 
         if (args.length <2) {
             usage();
@@ -27,8 +30,8 @@ public final class TextSimilarityEmbeddings {
         MultilingualWord2VecLoader word2VecLoader = new MultilingualSerializedModelWord2VecLoader();
         word2VecLoader.loadGoogle(new File(args[2]),true);
 
-        //SimilarityMeasure similarityMeasure = new Word2VecGlossDistanceSimilarity(word2VecLoader.getWord2Vec(Language.ENGLISH),new MahalanobisDistance(),null);
-        SimilarityMeasure similarityMeasure = new Word2VecGlossCosineSimilarity(word2VecLoader.getWord2Vec(Language.ENGLISH),true);
+        //SimilarityMeasure similarityMeasure = new Word2VecGlossDistanceSimilarity(word2VecLoader.getWordVectors(Language.ENGLISH),new MahalanobisDistance(),null);
+        SimilarityMeasure similarityMeasure = new Word2VecGlossCosineSimilarity(word2VecLoader.getWordVectors(Language.ENGLISH),true);
         double sim = similarityMeasure.compute(signature1, signature2);
         String output = String.format("The similarity between \"%s\" and \"%s\" is %s", signature1.toString(), signature2.toString(), sim);
         logger.info(output);

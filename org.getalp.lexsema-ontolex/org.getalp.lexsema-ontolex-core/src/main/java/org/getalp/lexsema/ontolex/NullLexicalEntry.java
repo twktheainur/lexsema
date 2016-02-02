@@ -6,15 +6,6 @@ import org.getalp.lexsema.util.Language;
 
 public final class NullLexicalEntry implements LexicalEntry{
 
-    private static final LexicalEntry instance = new NullLexicalEntry();
-
-    public static LexicalEntry getInstance() {
-        return instance;
-    }
-
-    private NullLexicalEntry() {
-    }
-
     @Override
     public String getLemma() {
         return "";

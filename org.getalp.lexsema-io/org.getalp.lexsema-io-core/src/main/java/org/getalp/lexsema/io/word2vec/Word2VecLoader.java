@@ -1,5 +1,6 @@
 package org.getalp.lexsema.io.word2vec;
 
+import org.deeplearning4j.models.embeddings.wordvectors.WordVectors;
 import org.deeplearning4j.models.word2vec.Word2Vec;
 import org.deeplearning4j.models.word2vec.wordstore.VocabCache;
 
@@ -7,10 +8,10 @@ import java.io.File;
 import java.io.IOException;
 
 public interface Word2VecLoader {
-    public Word2Vec getWord2Vec();
+    WordVectors getWordVectors();
 
-    public VocabCache getCache();
+    VocabCache getCache();
 
-    public void load(File directory);
-    public void loadGoogle(File directory, boolean binary) throws IOException;
+    void load(File directory);
+    void loadGoogle(File directory, boolean binary, boolean newLines) throws IOException;
 }

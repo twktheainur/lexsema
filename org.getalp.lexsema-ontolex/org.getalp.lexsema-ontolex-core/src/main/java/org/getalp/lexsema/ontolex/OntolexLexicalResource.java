@@ -4,7 +4,6 @@ import org.getalp.lexsema.util.Language;
 import org.getalp.lexsema.ontolex.exceptions.NotRegisteredException;
 import org.getalp.lexsema.ontolex.factories.entities.LexicalResourceEntityFactory;
 import org.getalp.lexsema.ontolex.graph.DefaultGraph;
-import org.getalp.lexsema.ontolex.graph.Graph;
 import org.getalp.lexsema.ontolex.graph.OntologyModel;
 import org.getalp.lexsema.ontolex.queries.LexicalEntriesFromLemmaPosQueryProcessor;
 import org.getalp.lexsema.ontolex.queries.LexicalSensesOfLexicalEntryQueryProcessor;
@@ -16,23 +15,23 @@ import java.util.List;
 
 
 /**
- * Operations and  attributes common to all classes implementing <code>LexicalResource</code>.
- * - <code>getGraph</code>
- * - <code>getFactory</code>
- * - <code>getURIParser</code>
- * - <code>getURIModel</code>
+ * Operations and  attributes common to all classes implementing {@code LexicalResource}.
+ * - {@code getGraph}
+ * - {@code getFactory}
+ * - {@code getURIParser}
+ * - {@code getURIModel}
  */
 public abstract class OntolexLexicalResource implements LexicalResource {
 
     private Graph graph;
-    private OntologyModel model;
-    private LexicalResourceEntityFactory lexicalResourceEntityFactory;
+    private final OntologyModel model;
+    private final LexicalResourceEntityFactory lexicalResourceEntityFactory;
     @SuppressWarnings("all")
     private URIParserRegister uriParserRegister;
-    private String uri;
+    private final String uri;
 
 
-    public OntolexLexicalResource(OntologyModel model, String uri, URIParserRegister uriParserRegister, LexicalResourceEntityFactory lexicalResourceEntityFactory) {
+    protected OntolexLexicalResource(OntologyModel model, String uri, URIParserRegister uriParserRegister, LexicalResourceEntityFactory lexicalResourceEntityFactory) {
         this.model = model;
         this.uriParserRegister = uriParserRegister;
         this.lexicalResourceEntityFactory = lexicalResourceEntityFactory;
@@ -66,7 +65,7 @@ public abstract class OntolexLexicalResource implements LexicalResource {
     public URIParser getURIParser(Class<? extends LexicalResourceEntity> entityClass) {
         try {
             return uriParserRegister.getFactory(entityClass);
-        } catch (NotRegisteredException e) {
+        } catch (NotRegisteredException ignored) {
             return null;
         }
     }
@@ -82,8 +81,8 @@ public abstract class OntolexLexicalResource implements LexicalResource {
     }
 
     @Override
-    public List<LexicalEntry> getLexicalEntries(String lemma, String pos) {
-        QueryProcessor<LexicalEntry> getLexicalEntries = new LexicalEntriesFromLemmaPosQueryProcessor(getGraph(), getLanguage(), getLexicalResourceEntityFactory(), lemma, pos);
+    public List<LexicalEntry> getLexicalEntries(String entry, String pos) {
+        QueryProcessor<LexicalEntry> getLexicalEntries = new LexicalEntriesFromLemmaPosQueryProcessor(getGraph(), getLanguage(), getLexicalResourceEntityFactory(), entry, pos);
         getLexicalEntries.runQuery();
         return getLexicalEntries.processResults();
     }
@@ -108,7 +107,4 @@ public abstract class OntolexLexicalResource implements LexicalResource {
     protected void registerSelfToLexicalEntityResourceFactory() {
         lexicalResourceEntityFactory.setLexicalResource(this);
     }
-
-    @Override
-    public abstract Language getLanguage();
 }

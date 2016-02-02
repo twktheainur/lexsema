@@ -2,6 +2,7 @@ package org.getalp.lexsema.acceptali.experiments;
 
 import cern.colt.matrix.tdouble.DoubleMatrix2D;
 import com.trickl.cluster.KMeans;
+import org.deeplearning4j.models.embeddings.wordvectors.WordVectors;
 import org.deeplearning4j.models.word2vec.Word2Vec;
 import org.getalp.lexsema.acceptali.cli.org.getalp.lexsema.acceptali.acceptions.SenseCluster;
 import org.getalp.lexsema.acceptali.cli.org.getalp.lexsema.acceptali.acceptions.SenseClusterer;
@@ -100,13 +101,13 @@ public final class AcceptionClusteringExperimentGenerationSim {
             logger.info("Generating or Loading Closure...");
             Set<Sense> closureSet =  generateTranslationClosureWithSignatures(instantiateDBNary());
 
-            logger.info("Loading Word2Vec...");
+            logger.info("Loading Word2VecImpl...");
             MultilingualWord2VecLoader word2VecLoader = new MultilingualSerializedModelWord2VecLoader();
             word2VecLoader.loadGoogle(new File(WORD_2_VEC_MODEL),true);
 
             long matrix_time = System.currentTimeMillis();
 
-            SimilarityMeasure similarityMeasure = createSimilarityMeasure(word2VecLoader.getWord2Vec(Language.ENGLISH));
+            SimilarityMeasure similarityMeasure = createSimilarityMeasure(word2VecLoader.getWordVectors(Language.ENGLISH));
 
             Translator translator = new GoogleWebTranslator();
 
@@ -193,7 +194,7 @@ public final class AcceptionClusteringExperimentGenerationSim {
     }
 
     @SuppressWarnings({"LawOfDemeter", "MagicNumber", "FeatureEnvy"})
-    private static SimilarityMeasure createSimilarityMeasure(Word2Vec word2Vec) {
+    private static SimilarityMeasure createSimilarityMeasure(WordVectors word2Vec) {
         /*return new TverskiIndexSimilarityMeasureMatrixImplBuilder()
                 .computeRatio(true)
                 .alpha(1d)

@@ -63,8 +63,10 @@ public class CuckooSearchDisambiguator implements Disambiguator
             if (needRecomputeScore)
             {
                 score = configurationScorer.computeScore(currentDocument, configuration);
-                stopCondition.incrementScorerCalls();
                 needRecomputeScore = false;
+                stopCondition.incrementScorerCalls();
+                if (scorePlotWriter != null) scorePlotWriter.println(stopCondition.getCurrent() + " " + (nests[0] != null ? nests[0].getScore() : 0));
+                if (perfectScorePlotWriter != null && perfectScorer != null) perfectScorePlotWriter.println(stopCondition.getCurrent() + " " + perfectScorer.computeScore(currentDocument, nests[0].configuration));
             }
             return score;
         }
@@ -138,8 +140,6 @@ public class CuckooSearchDisambiguator implements Disambiguator
             }
             stopCondition.incrementIterations();
             stopCondition.updateMilliseconds();
-            if (scorePlotWriter != null)  scorePlotWriter.println(stopCondition.getCurrent() + " " + nests[0].getScore());
-            if (perfectScorePlotWriter != null && perfectScorer != null) perfectScorePlotWriter.println(stopCondition.getCurrent() + " " + perfectScorer.computeScore(document, nests[0].configuration));
         }
         return nests[0].configuration;
     }

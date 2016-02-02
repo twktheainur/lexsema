@@ -4,6 +4,7 @@ import org.getalp.lexsema.ontolex.LexicalEntry;
 import org.getalp.lexsema.similarity.Document;
 import org.getalp.lexsema.similarity.Sense;
 import org.getalp.lexsema.similarity.Text;
+import org.getalp.lexsema.similarity.Word;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -49,13 +50,15 @@ public class DocumentDictionaryWriter implements DictionaryWriter {
             printWriter.println("<dict>");
             for (Document document : documents) {
                 for (int wordIndex = 0; wordIndex < document.size(); wordIndex++) {
-                    writeWordStartTag(printWriter, document.getWord(0, wordIndex));
+                    Word w = document.getWord(0, wordIndex);
+                    writeWordStartTag(printWriter, w);
                     for (Sense sense : document.getSenses(wordIndex)) {
                         writeSenseStartTag(printWriter);
                         writeSenseContent(printWriter, sense);
                         writeSenseEndTag(printWriter);
                     }
                     writeWordEndTag(printWriter);
+                    logger.trace("Word {} ({}/{})", w.getLemma() ,wordIndex, document.size());
                 }
             }
             printWriter.println("</dict>");

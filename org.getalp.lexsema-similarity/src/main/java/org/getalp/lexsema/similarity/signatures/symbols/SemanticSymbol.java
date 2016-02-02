@@ -1,7 +1,9 @@
 package org.getalp.lexsema.similarity.signatures.symbols;
 
 
-public interface SemanticSymbol extends Comparable<SemanticSymbol> {
+import java.io.Serializable;
+
+public interface SemanticSymbol extends Comparable<SemanticSymbol>, Serializable {
     String getSymbol();
     double getWeight();
 }

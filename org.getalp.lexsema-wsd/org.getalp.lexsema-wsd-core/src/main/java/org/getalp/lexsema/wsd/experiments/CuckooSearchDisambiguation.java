@@ -1,6 +1,7 @@
 package org.getalp.lexsema.wsd.experiments;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.PrintWriter;
 
 import org.getalp.lexsema.io.annotresult.SemevalWriter;
@@ -41,9 +42,9 @@ public class CuckooSearchDisambiguation
         */
         long startTime = System.currentTimeMillis();
 
-        CorpusLoader dl = new Semeval2007CorpusLoader("../data/senseval2007_task7/test/eng-coarse-all-words.xml");
+        CorpusLoader dl = new Semeval2007CorpusLoader(new FileInputStream("../data/senseval2007_task7/test/eng-coarse-all-words.xml"));
         
-        LRLoader lrloader = new DictionaryLRLoader(new File("../data/lesk_dict/dict_semeval2007task7_stopwords_stemming_semcor_dso_wordnetglosstag"), true);
+        LRLoader lrloader = new DictionaryLRLoader(new FileInputStream("../data/lesk_dict/dict_semeval2007task7_embeddings.xml"), false);
 
         //ConfigurationScorer scorer = new SemEval2007Task7PerfectConfigurationScorer();
         ConfigurationScorer scorer = new ConfigurationScorerWithCache(new AnotherLeskSimilarity());

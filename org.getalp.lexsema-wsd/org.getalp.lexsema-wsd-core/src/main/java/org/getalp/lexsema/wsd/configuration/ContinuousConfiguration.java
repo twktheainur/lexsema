@@ -8,24 +8,24 @@ public class ContinuousConfiguration implements Configuration
 {
     private static final Random random = new Random();
     
-    private Document document;
+    private final Document document;
 
-    private int documentSize;
+    private final int documentSize;
 
-    private int[] assignments;
+    private final int[] assignments;
     
-    public ContinuousConfiguration(Document d)
+    public ContinuousConfiguration(Document document)
     {
-        document = d;
-        documentSize = d.size();
+        this.document = document;
+        documentSize = document.size();
         assignments = new int[documentSize];
         setRandomSenses();
     }
 
-    public ContinuousConfiguration(Document d, int[] senses)
+    public ContinuousConfiguration(Document document, int[] senses)
     {
-        document = d;
-        documentSize = d.size();
+        this.document = document;
+        documentSize = document.size();
         assignments = new int[documentSize];
         setSenses(senses);
     }

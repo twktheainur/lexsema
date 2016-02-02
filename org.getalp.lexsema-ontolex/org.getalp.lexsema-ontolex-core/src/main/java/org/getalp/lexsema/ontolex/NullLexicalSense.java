@@ -6,15 +6,6 @@ import org.getalp.lexsema.util.Language;
 
 public final class NullLexicalSense implements LexicalSense{
 
-    private static final LexicalSense instance = new NullLexicalSense();
-
-    public static LexicalSense getInstance() {
-        return instance;
-    }
-
-    private NullLexicalSense() {
-    }
-
     @Override
     public String getDefinition() {
         return "";

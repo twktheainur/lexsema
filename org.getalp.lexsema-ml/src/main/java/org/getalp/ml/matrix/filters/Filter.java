@@ -6,13 +6,15 @@ package org.getalp.ml.matrix.filters;
 import cern.colt.matrix.tdouble.DoubleMatrix2D;
 import org.nd4j.linalg.api.ndarray.INDArray;
 
+import java.io.Serializable;
+
 /**
  * @author tchechem
  */
-public interface Filter {
+public interface Filter extends Serializable{
 
-    public DoubleMatrix2D apply(DoubleMatrix2D signal);
-    public INDArray apply(INDArray signal);
-    public void setEnabled(boolean enabled);
+    DoubleMatrix2D apply(DoubleMatrix2D signal);
+    INDArray apply(INDArray signal);
+    void setEnabled(boolean enabled);
 
 }

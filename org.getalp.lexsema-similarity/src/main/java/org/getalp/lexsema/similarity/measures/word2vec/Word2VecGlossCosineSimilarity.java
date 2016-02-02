@@ -1,7 +1,7 @@
 package org.getalp.lexsema.similarity.measures.word2vec;
 
 
-import org.deeplearning4j.models.word2vec.Word2Vec;
+import org.deeplearning4j.models.embeddings.wordvectors.WordVectors;
 import org.getalp.lexsema.similarity.measures.SimilarityMeasure;
 import org.getalp.lexsema.similarity.signatures.SemanticSignature;
 import org.getalp.lexsema.similarity.signatures.symbols.SemanticSymbol;
@@ -18,12 +18,12 @@ public class Word2VecGlossCosineSimilarity implements SimilarityMeasure {
 
 
 
-    private static Logger logger = LoggerFactory.getLogger(Word2VecGlossCosineSimilarity.class);
-    private Word2Vec word2Vec;
-    private boolean useCentroids;
+    private static final Logger logger = LoggerFactory.getLogger(Word2VecGlossCosineSimilarity.class);
+    private final WordVectors wordVectors;
+    private final boolean useCentroids;
 
-    public Word2VecGlossCosineSimilarity(Word2Vec word2Vec, boolean useCentroids) {
-        this.word2Vec = word2Vec;
+    public Word2VecGlossCosineSimilarity(WordVectors wordVectors, boolean useCentroids) {
+        this.wordVectors = wordVectors;
         this.useCentroids = useCentroids;
     }
 
@@ -33,14 +33,22 @@ public class Word2VecGlossCosineSimilarity implements SimilarityMeasure {
         INDArray sigBSignatureMatrix = generateSignatureMatrix(sigB);
 
         double totalSim = 0d;
-        if(!useCentroids) {
+        if (useCentroids) {
+            INDArray averageA = MatrixUtils.getColumnWiseSumVector(sigASignatureMatrix);
+            INDArray averageB = MatrixUtils.getColumnWiseSumVector(sigBSignatureMatrix);
+            double fin = Transforms.cosineSim(averageA, averageB);
+            if (Double.isNaN(fin)) {
+                fin = -1;
+            }
+            totalSim = 1 - Math.acos(fin) / Math.PI;
+        } else {
             for (int i = 0; i < sigASignatureMatrix.rows(); i++) {
                 INDArray row1 = sigASignatureMatrix.getRow(i);
                 deNanVector(row1);
                 for (int j = 0; j < sigBSignatureMatrix.rows(); j++) {
                     INDArray row2 = sigBSignatureMatrix.getRow(j);
                     deNanVector(row2);
-                    double fin = Transforms.cosineSim(row1, row2.transpose());
+                    double fin = Transforms.cosineSim(row1, row2);
                     if (Double.isNaN(fin)) {
                         fin = -1;
                     }
@@ -48,14 +56,6 @@ public class Word2VecGlossCosineSimilarity implements SimilarityMeasure {
                 }
             }
             totalSim /= sigASignatureMatrix.rows() + sigBSignatureMatrix.rows();
-        } else {
-            INDArray averageA = MatrixUtils.getColumnWiseSumVector(sigASignatureMatrix);
-            INDArray averageB = MatrixUtils.getColumnWiseSumVector(sigBSignatureMatrix);
-            double fin = Transforms.cosineSim(averageA, averageB.transpose());
-            if (Double.isNaN(fin)) {
-                fin = -1;
-            }
-            totalSim = 1 - Math.acos(fin) / Math.PI;
         }
         return totalSim;
     }
@@ -74,17 +74,22 @@ public class Word2VecGlossCosineSimilarity implements SimilarityMeasure {
         int size= semanticSignature.size();
         int currentRow = 0;
         for(SemanticSymbol symbol : semanticSignature) {
-            INDArray vector = word2Vec.getWordVectorMatrix(symbol.getSymbol());
+            double[] vec = wordVectors.getWordVector(symbol.getSymbol());
+            INDArray vector = wordVectors.getWordVectorMatrix(symbol.getSymbol());
+            /*for(int i=0; i<vector.rows();i++){
+                logger.info(String.valueOf(vector.getDouble(i)));
+            }*/
             if(sigASignatureMatrix ==null){
                 sigASignatureMatrix = Nd4j.create(size,vector.columns());
             }
             try {
                 sigASignatureMatrix.putRow(currentRow, vector);
-            } catch (Exception e){
-                //e.printStackTrace();
+            } catch (RuntimeException e){
+                if(logger.isDebugEnabled()) {
+                    logger.debug(e.getMessage());
+                }
             }
             currentRow++;
-            //logger.info("Processed "+symbol.getSymbol());
         }
         return  sigASignatureMatrix;
     }
