@@ -193,4 +193,9 @@ public class BabelNetAPILoader implements LRLoader {
     public LRLoader index(boolean useIndex) {
         return this;
     }
+
+    @Override
+    public LRLoader distributed(boolean isDistributed) {
+        return this;
+    }
 }

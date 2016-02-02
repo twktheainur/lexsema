@@ -2,6 +2,11 @@ package org.getalp.lexsema.io.resource.wordnet;
 
 import edu.mit.jwi.Dictionary;
 import edu.mit.jwi.item.*;
+import org.apache.spark.SparkContext;
+import org.apache.spark.api.java.JavaRDD;
+import org.apache.spark.api.java.JavaRDDLike;
+import org.apache.spark.api.java.JavaSparkContext;
+import org.apache.spark.api.java.function.Function;
 import org.getalp.lexsema.io.resource.LRLoader;
 import org.getalp.lexsema.io.thesaurus.AnnotatedTextThesaurus;
 import org.getalp.lexsema.similarity.*;
@@ -13,6 +18,7 @@ import org.getalp.lexsema.similarity.signatures.enrichment.SignatureEnrichment;
 import org.getalp.lexsema.similarity.signatures.index.SymbolIndex;
 import org.getalp.lexsema.similarity.signatures.index.SymbolIndexImpl;
 import org.getalp.lexsema.util.StopList;
+import org.getalp.lexsema.util.distribution.SparkSingleton;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.tartarus.snowball.ext.EnglishStemmer;
@@ -58,6 +64,7 @@ public class WordnetLoader implements LRLoader {
     private final List<AnnotatedTextThesaurus> thesauri;
 
     private final Map<String, List<Sense>> senseCache;
+    private boolean distributed = false;
 
     /**
      * Creates a WordnetLoader with an existing Wordnet Dictionary object.
@@ -227,9 +234,9 @@ public class WordnetLoader implements LRLoader {
 
     @Override
     public List<Sense> getSenses(Word w) {
-        final SenseCache senseCache = getSenseCache();
+        final SenseCache localSenseCache = getSenseCache();
         List<Sense> senses;
-        senses = retrieveSenseFromCache(w, senseCache);
+        senses = retrieveSenseFromCache(w, localSenseCache);
         if (senses == null) {
             if (w != null) {
                 String lemma = w.getLemma();
@@ -248,7 +255,7 @@ public class WordnetLoader implements LRLoader {
             if (shuffle) {
                 Collections.shuffle(senses);
             }
-            commitSensesToCache(w, senses, senseCache);
+            commitSensesToCache(w, senses, localSenseCache);
         }
         return senses;
     }
@@ -385,17 +392,40 @@ public class WordnetLoader implements LRLoader {
     }
 
     @Override
-    public void loadSenses(Document document) {
+    public LRLoader distributed(boolean isDistributed) {
+        distributed = isDistributed;
+        return this;
+    }
 
-        try(IntStream range = IntStream.range(0, document.size())) {
-            //try(IntStream parallelRange = range.parallel()) {
-            //  List<List<Sense>> senses = parallelRange
-            List<List<Sense>> senses = range
+    @Override
+    public void loadSenses(Document document) {
+        //noinspection LocalVariableOfConcreteClass
+        List<List<Sense>> senses;
+        if (distributed) {
+            senses = loadSensesDistributed(document);
+        } else {
+            try (IntStream range = IntStream.range(0, document.size())) {
+                senses = range
                         .mapToObj(i -> getSenses(document.getWord(i)))
                         .collect(Collectors.toList());
-                senses.forEach(document::addWordSenses);
-            //}
-        }
 
+            }
+        }
+        senses.forEach(document::addWordSenses);
     }
+
+    @SuppressWarnings({"LocalVariableOfConcreteClass", "LawOfDemeter"})
+    private List<List<Sense>> loadSensesDistributed(Document document) {
+        List<List<Sense>> senses;
+        try (JavaSparkContext sparkContext = SparkSingleton.getSparkContext()) {
+            List<Integer> wordIndexes = new ArrayList<>();
+            for (int i = 0; i < document.size(); i++) {
+                wordIndexes.add(i);
+            }
+            JavaRDD<Integer> parallelSenses = sparkContext.parallelize(wordIndexes);
+            senses = parallelSenses.map(v1 -> getSenses(document.getWord(v1))).collect();
+        }
+        return senses;
+    }
+
 }
