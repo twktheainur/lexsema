@@ -43,7 +43,7 @@ public class WordnetLoader implements LRLoader {
 
     private final Dictionary dictionary;
 
-    private final SignatureEnrichment signatureEnrichment;
+    private SignatureEnrichment signatureEnrichment;
 
     private boolean loadDefinitions;
 
@@ -383,6 +383,11 @@ public class WordnetLoader implements LRLoader {
     public LRLoader addThesaurus(AnnotatedTextThesaurus thesaurus) {
         thesauri.add(thesaurus);
         return this;
+    }
+    
+    public LRLoader signatureEnrichment(SignatureEnrichment signatureEnrichment) {
+    	this.signatureEnrichment = signatureEnrichment;
+    	return this;
     }
 
     @Override
