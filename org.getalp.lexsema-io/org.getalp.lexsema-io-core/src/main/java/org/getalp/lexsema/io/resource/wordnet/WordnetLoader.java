@@ -17,6 +17,7 @@ import org.getalp.lexsema.similarity.signatures.*;
 import org.getalp.lexsema.similarity.signatures.enrichment.SignatureEnrichment;
 import org.getalp.lexsema.similarity.signatures.index.SymbolIndex;
 import org.getalp.lexsema.similarity.signatures.index.SymbolIndexImpl;
+import org.getalp.lexsema.similarity.signatures.symbols.SemanticSymbol;
 import org.getalp.lexsema.util.StopList;
 import org.getalp.lexsema.util.distribution.SparkSingleton;
 import org.slf4j.Logger;
@@ -116,11 +117,7 @@ public class WordnetLoader implements LRLoader {
     }
 
     private SemanticSignature createSignature() {
-        if (useIndex) {
-            return new IndexedSemanticSignatureImpl(symbolIndex);
-        } else {
-            return new SemanticSignatureImpl();
-        }
+        return new SemanticSignatureImpl();
     }
 
     private String processPOS(String pos) {
@@ -173,21 +170,31 @@ public class WordnetLoader implements LRLoader {
                             addToSignature(signature, relatedWord);
                         }
                     }
-
+                    
+                    if (usesStopWords) {
+                        signature = removeStopWords(signature);
+                    }
+                    
                     if (signatureEnrichment != null) {
-                        signatureEnrichment.enrichSemanticSignature(signature);
+                        signature = signatureEnrichment.enrichSemanticSignature(signature);
                         logger.trace("\tEnritching a semantic signature...");
+                    }
+                
+                    if (usesStemming) {
+                        signature = stemSignatureWords(signature);
                     }
 
                     if (useIndex) {
-                        ((IndexedSemanticSignature) signature).sort();
+                        signature = indexSignature(signature);
                     }
+                    
                     sense.setSemanticSignature(signature);
 
                     senses.add(sense);
                 }
 
             }
+            senseCache.put(id, senses);
         }
         logger.trace("Senses for {} processed and enritched.", lemma);
         return senses;
@@ -230,7 +237,36 @@ public class WordnetLoader implements LRLoader {
             }
         }
     }
+    
+    private SemanticSignature indexSignature(SemanticSignature signature) {
+        IndexedSemanticSignature indexedSignature = new IndexedSemanticSignatureImpl(symbolIndex);
+        for (SemanticSymbol symbol : signature) {
+            indexedSignature.addSymbol(symbol);
+        }
+        indexedSignature.sort();
+        return indexedSignature;
+    }
+    
+    private SemanticSignature removeStopWords(SemanticSignature signature) {
+        SemanticSignature newSignature = new SemanticSignatureImpl();
+        for (SemanticSymbol symbol : signature) {
+            if (!StopList.isStopWord(symbol.getSymbol())) {
+                newSignature.addSymbol(symbol);
+            }
+        }
+        return newSignature;
+    }
 
+    private SemanticSignature stemSignatureWords(SemanticSignature signature) {
+        SemanticSignature newSignature = new SemanticSignatureImpl();
+        EnglishStemmer stemmer = new EnglishStemmer();
+        for (SemanticSymbol symbol : signature) {
+            stemmer.setCurrent(symbol.getSymbol());
+            stemmer.stem();
+            newSignature.addSymbol(stemmer.getCurrent());
+        }
+        return newSignature;
+    }
 
     @Override
     public List<Sense> getSenses(Word w) {
@@ -298,20 +334,7 @@ public class WordnetLoader implements LRLoader {
         final Matcher matcher = NON_LETTERS.matcher(def);
         String noPunctuation = matcher.replaceAll("");
         String[] words = WHITESPACE.split(noPunctuation.toLowerCase());
-        EnglishStemmer stemmer = new EnglishStemmer();
         for (String token : words) {
-
-            if (usesStopWords && StopList.isStopWord(token)) {
-                //noinspection ContinueStatement
-                continue;
-            }
-
-            if (usesStemming) {
-                stemmer.setCurrent(token);
-                stemmer.stem();
-                token = stemmer.getCurrent();
-            }
-
             signature.addSymbol(token);
         }
     }

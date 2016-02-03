@@ -165,7 +165,7 @@ public class DictionaryCreation
         {
         	if (!word2vecIsLoaded)
         	{
-                word2VecLoader.loadGoogle(new File(word2vecPath), true, false);
+                word2VecLoader.loadGoogle(new File(word2vecPath), true, true);
                 signatureEnrichment = new Word2VecLocalSignatureEnrichment(word2VecLoader.getWordVectors(), 10);
                 word2vecIsLoaded = true;
         	}

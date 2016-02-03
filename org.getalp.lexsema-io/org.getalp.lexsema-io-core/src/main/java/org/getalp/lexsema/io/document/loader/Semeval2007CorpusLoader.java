@@ -9,6 +9,7 @@ import org.xml.sax.helpers.XMLReaderFactory;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.StringReader;
 
 @SuppressWarnings({"BooleanParameter", "ClassWithTooManyFields"})
 public class Semeval2007CorpusLoader extends CorpusLoaderImpl implements ContentHandler {
@@ -148,8 +149,8 @@ public class Semeval2007CorpusLoader extends CorpusLoaderImpl implements Content
     public void load() {
         try {
             XMLReader saxReader = XMLReaderFactory.createXMLReader();
-            saxReader
-                    .setContentHandler(this);
+            saxReader.setContentHandler(this);
+            saxReader.setEntityResolver(new EntityResolverIgnoringDTD());
             saxReader.parse(new InputSource(inputStream));
         } catch (IOException | SAXException t) {
             logger.error(t.getLocalizedMessage());
@@ -163,5 +164,13 @@ public class Semeval2007CorpusLoader extends CorpusLoaderImpl implements Content
         return this;
     }
 
-
+    static private class EntityResolverIgnoringDTD implements EntityResolver {
+        public InputSource resolveEntity(String publicId, String systemId) throws SAXException, IOException {
+            if (systemId.contains("coarse-all-words.dtd")) {
+                return new InputSource(new StringReader(""));
+            } else {
+                return null;
+            }
+        }
+    }
 }
