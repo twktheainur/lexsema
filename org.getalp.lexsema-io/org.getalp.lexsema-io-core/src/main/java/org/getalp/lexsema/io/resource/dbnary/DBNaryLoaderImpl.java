@@ -268,4 +268,9 @@ public class DBNaryLoaderImpl implements DBNaryLoader {
         return this;
     }
 
+    @Override
+    public LRLoader distributed(boolean isDistributed) {
+        return this;
+    }
+
 }

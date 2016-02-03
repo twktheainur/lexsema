@@ -4,6 +4,7 @@ package org.getalp.lexsema.io.resource.dictionary;
 import org.getalp.lexsema.similarity.Sense;
 import org.getalp.lexsema.similarity.SenseImpl;
 import org.getalp.lexsema.similarity.signatures.*;
+import org.getalp.lexsema.similarity.signatures.enrichment.SignatureEnrichment;
 import org.getalp.lexsema.similarity.signatures.index.SymbolIndex;
 import org.getalp.lexsema.similarity.signatures.index.SymbolIndexImpl;
 import org.xml.sax.Attributes;
@@ -29,13 +30,14 @@ public class DictionaryParser implements ContentHandler {
     boolean emptyDef;
     boolean ids, def;
     boolean indexed;
+    boolean toIndex;
     @SuppressWarnings("unused")
     private Locator locator;
     private String currentSemanticSignature = "";
     private final SymbolIndex symbolIndex = new SymbolIndexImpl();
 
 
-    public DictionaryParser(Map<String, List<Sense>> senseMap, boolean indexed) throws FileNotFoundException {
+    public DictionaryParser(Map<String, List<Sense>> senseMap, boolean indexed, boolean toIndex) throws FileNotFoundException {
         super();
         //noinspection AssignmentToCollectionOrArrayFieldFromParameter
         dico = senseMap;
@@ -44,6 +46,7 @@ public class DictionaryParser implements ContentHandler {
         locator = new LocatorImpl();
         emptyDef = false;
         this.indexed = indexed;
+        this.toIndex = toIndex;
     }
 
 
@@ -105,11 +108,15 @@ public class DictionaryParser implements ContentHandler {
                 break;
             case "def":
                 def = false;
-                if (indexed) {
+                if (indexed || toIndex) {
                     IndexedSemanticSignature semanticSignature = new IndexedSemanticSignatureImpl(symbolIndex);
                     StringTokenizer st = new StringTokenizer(currentSemanticSignature);
                     while (st.hasMoreTokens()) {
-                        semanticSignature.addIndexedSymbol(Integer.valueOf(st.nextToken()));
+                        if(indexed){
+                            semanticSignature.addIndexedSymbol(Integer.valueOf(st.nextToken()));
+                        } else {
+                            semanticSignature.addSymbol(st.nextToken());
+                        }
                     }
                     mw.setSemanticSignature(semanticSignature);
                 } else {
