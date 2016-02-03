@@ -31,4 +31,6 @@ public interface LRLoader
 
     LRLoader index(boolean useIndex);
 
+    LRLoader distributed(boolean isDistributed);
+
 }

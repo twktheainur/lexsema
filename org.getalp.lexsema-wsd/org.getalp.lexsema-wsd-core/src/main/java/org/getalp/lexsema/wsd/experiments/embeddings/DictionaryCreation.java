@@ -85,10 +85,6 @@ public class DictionaryCreation
         lrloader.filterStopWords(stopWords);
         lrloader.stemming(stemming);
 
-
-
-
-
         CorpusLoader dl = new Semeval2007CorpusLoader(new FileInputStream(docPath));
         dl.load();
         for (Text txt : dl)
