@@ -8,6 +8,7 @@ target
 *.data
 out
 .project
+.classpath
 *.iml
 *.rdb
 tapkee_nle_server
