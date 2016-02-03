@@ -11,6 +11,7 @@ import org.getalp.lexsema.io.word2vec.SerializedModelWord2VecLoader;
 import org.getalp.lexsema.io.word2vec.Word2VecLoader;
 import org.getalp.lexsema.similarity.Text;
 import org.getalp.lexsema.similarity.signatures.enrichment.Word2VecLocalSignatureEnrichment;
+import org.getalp.lexsema.util.distribution.SparkSingleton;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -91,7 +92,7 @@ public final class DistributedEmbeddingsDictionaryCreation {
 
     public static void main(String... args) throws java.io.IOException {
 
-        //SparkSingleton.initialize("spark://localhost:12345", "DistributedDictionaryCreation");
+        SparkSingleton.initialize("spark://localhost:12345", "DistributedDictionaryCreation");
 
         long startTime = System.currentTimeMillis();
 
