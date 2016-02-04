@@ -48,7 +48,7 @@ public class DictionaryLRLoader implements LRLoader {
     }
 
     public DictionaryLRLoader(InputStream dictionaryFile, boolean indexed) {
-        this(dictionaryFile,indexed,null);
+        this(dictionaryFile, indexed, null);
     }
 
     public DictionaryLRLoader(InputStream dictionaryFile, boolean indexed, SignatureEnrichment signatureEnrichment) {
@@ -56,7 +56,7 @@ public class DictionaryLRLoader implements LRLoader {
         this.signatureEnrichment = signatureEnrichment;
         try {
             XMLReader saxReader = XMLReaderFactory.createXMLReader();
-            saxReader.setContentHandler(new DictionaryParser(wordSenses, indexed,useIndex));
+            saxReader.setContentHandler(new DictionaryParser(wordSenses, indexed, useIndex));
             saxReader.parse(new InputSource(dictionaryFile));
         } catch (SAXException e) {
             logger.error(MessageFormat.format("Parser error :{0}", e.getLocalizedMessage()));
@@ -77,8 +77,8 @@ public class DictionaryLRLoader implements LRLoader {
             tag = MessageFormat.format("{0}%{1}", lemma.toLowerCase(), partOfSpeech);
         }
         List<Sense> senses = wordSenses.get(tag);
-        if(signatureEnrichment!=null){
-            for(Sense sense: senses){
+        if (signatureEnrichment != null) {
+            for (Sense sense : senses) {
                 signatureEnrichment.enrichSemanticSignature(sense.getSemanticSignature());
             }
         }
@@ -87,12 +87,12 @@ public class DictionaryLRLoader implements LRLoader {
 
     @Override
     public Map<Word, List<Sense>> getAllSenses() {
-        Map<Word,List<Sense>> senses = new ConcurrentHashMap<>();
+        Map<Word, List<Sense>> senses = new ConcurrentHashMap<>();
 
         wordSenses.keySet().parallelStream().forEach(word -> {
             String[] idParts = word.split("%");
-            Word w = new WordImpl(word,idParts[0],idParts[0],idParts[1]);
-            senses.put(w,wordSenses.get(word));
+            Word w = new WordImpl(word, idParts[0], idParts[0], idParts[1]);
+            senses.put(w, wordSenses.get(word));
         });
         return senses;
     }
@@ -115,18 +115,18 @@ public class DictionaryLRLoader implements LRLoader {
         senses.forEach(document::addWordSenses);
     }
 
-    @SuppressWarnings({"LocalVariableOfConcreteClass", "LawOfDemeter"})
+    @SuppressWarnings({"LocalVariableOfConcreteClass", "LawOfDemeter", "resource"})
     private List<List<Sense>> loadSensesDistributed(Document document) {
         List<List<Sense>> senses;
-        try (JavaSparkContext sparkContext = SparkSingleton.getSparkContext()) {
-            List<Integer> wordIndexes = new ArrayList<>();
-            for (int i = 0; i < document.size(); i++) {
-                wordIndexes.add(i);
-            }
-            JavaRDD<Integer> parallelSenses = sparkContext.parallelize(wordIndexes);
-            //senses = parallelSenses.map(v1 -> getSenses(document.getWord(v1))).collect();
-            senses = parallelSenses.map(v1 -> getSenses(document.getWord(v1))).collect();
+        JavaSparkContext sparkContext = SparkSingleton.getSparkContext();
+        List<Integer> wordIndexes = new ArrayList<>();
+        for (int i = 0; i < document.size(); i++) {
+            wordIndexes.add(i);
         }
+        JavaRDD<Integer> parallelSenses = sparkContext.parallelize(wordIndexes);
+        //senses = parallelSenses.map(v1 -> getSenses(document.getWord(v1))).collect();
+        senses = parallelSenses.map(v1 -> getSenses(document.getWord(v1))).collect();
+
         return senses;
     }
 
