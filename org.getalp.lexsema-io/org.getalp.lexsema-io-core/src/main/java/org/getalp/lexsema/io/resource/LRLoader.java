@@ -4,10 +4,12 @@ import org.getalp.lexsema.io.thesaurus.AnnotatedTextThesaurus;
 import org.getalp.lexsema.similarity.Document;
 import org.getalp.lexsema.similarity.Sense;
 import org.getalp.lexsema.similarity.Word;
+
+import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
-public interface LRLoader
+public interface LRLoader extends Serializable
 {
     List<Sense> getSenses(Word w);
 
