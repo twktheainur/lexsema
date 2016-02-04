@@ -104,7 +104,7 @@ public final class DistributedEmbeddingsDictionaryCreation {
 
         loadSensesForDocument(corpusLoader, lrLoader);
 
-        writeDictionary(corpusLoader, new File("embeddings_dict_distr.xml"));
+        writeDictionary(corpusLoader, new File("/home/tchechem/embeddings_dict_distr.xml"));
 
         long endTime = System.currentTimeMillis();
         logger.info("Total time elapsed in execution of Cuckoo Search Algorithm is : ");
