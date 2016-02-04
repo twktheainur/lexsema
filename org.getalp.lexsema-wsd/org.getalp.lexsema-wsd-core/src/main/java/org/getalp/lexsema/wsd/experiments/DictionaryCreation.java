@@ -78,8 +78,10 @@ public class DictionaryCreation
     
     public static void main(String[] args) throws Exception
     {
-        //writeDictionary(true, true, true, true, true, true, true, true, true, true, false, "../data/lesk_dict/dict_semeval2007task7_stopwords_stemming_semcor_dso_wordnetglosstag");
-    	writeDictionary(true, true, true, true, true, true, false, false, false, false, 100, true, true, "../data/lesk_dict/dict_semeval2007task7_w2v");
+        writeDictionary(true, true, true, true, true, true, false, false, false, false, 100, true, 20, true, "../data/lesk_dict/semeval2007task7/w2v20");
+        writeDictionary(true, true, true, true, true, true, false, false, false, false, 100, true, 15, true, "../data/lesk_dict/semeval2007task7/w2v15");
+        writeDictionary(true, true, true, true, true, true, false, false, false, false, 100, true, 5, true, "../data/lesk_dict/semeval2007task7/w2v5");
+        writeDictionary(true, true, true, true, true, true, false, false, false, false, 100, true, 3, true, "../data/lesk_dict/semeval2007task7/w2v3");
     }
     
     public static void writeDictionary(boolean definitions, boolean extendedDefinitions, 
@@ -91,6 +93,7 @@ public class DictionaryCreation
                                         boolean useGMBThesaurus,
                                         int numberOfWordsFromThesauri,
                                         boolean useWord2Vec,
+                                        int numberOfWordsFromWord2Vec,
                                         boolean limitToCorpus, 
                                         String newDictPath) throws Exception
     {
@@ -166,7 +169,7 @@ public class DictionaryCreation
         	if (!word2vecIsLoaded)
         	{
                 word2VecLoader.loadGoogle(new File(word2vecPath), true, true);
-                signatureEnrichment = new Word2VecLocalSignatureEnrichment(word2VecLoader.getWordVectors(), 10);
+                signatureEnrichment = new Word2VecLocalSignatureEnrichment(word2VecLoader.getWordVectors(), numberOfWordsFromWord2Vec);
                 word2vecIsLoaded = true;
         	}
         	lrloader.signatureEnrichment(signatureEnrichment);

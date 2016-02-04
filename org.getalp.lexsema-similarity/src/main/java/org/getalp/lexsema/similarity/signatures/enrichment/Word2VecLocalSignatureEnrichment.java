@@ -10,6 +10,9 @@ import org.getalp.lexsema.util.Language;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -21,6 +24,8 @@ public class Word2VecLocalSignatureEnrichment implements SignatureEnrichment {
 
     private final WordVectors word2Vec;
     private final int topN;
+    
+    private static final HashMap<SemanticSymbol, List<SemanticSymbol>> symbolsCache = new HashMap<>();
 
 
     public Word2VecLocalSignatureEnrichment(WordVectors word2Vec) {
@@ -33,13 +38,19 @@ public class Word2VecLocalSignatureEnrichment implements SignatureEnrichment {
     }
 
     private List<SemanticSymbol> enrichSemanticSymbol(SemanticSymbol semanticSymbol) {
+        if (symbolsCache.containsKey(semanticSymbol) && symbolsCache.get(semanticSymbol).size() >= topN) {
+            return symbolsCache.get(semanticSymbol).subList(0, topN);
+        }
         String word = semanticSymbol.getSymbol();
         final Matcher matcher = PUNCTUATION_PATTERN.matcher(word);
         Collection<String> related = word2Vec.wordsNearest(matcher.replaceAll(""), topN);
+        List<String> relatedSorted = sortRelatedList(word, related);
         List<SemanticSymbol> symbols = new ArrayList<>();
-        for (String sword : related) {
+        symbols.add(semanticSymbol);
+        for (String sword : relatedSorted) {
             symbols.add(new SemanticSymbolImpl(sword, 1.0));
         }
+        symbolsCache.put(semanticSymbol, symbols);
         return symbols;
     }
 
@@ -60,5 +71,19 @@ public class Word2VecLocalSignatureEnrichment implements SignatureEnrichment {
     @Override
     public void close() {
 
+    }
+    
+    public List<String> sortRelatedList(String word, Collection<String> related) {
+        List<String> relatedSorted = new ArrayList<>(related);
+        relatedSorted.sort(new Comparator<String>(){
+            public int compare(String arg0, String arg1) {
+                if (word2Vec.similarity(word, arg0) > word2Vec.similarity(word, arg1)) {
+                    return -1;
+                } else {
+                    return 1;
+                }
+            }
+        });
+        return relatedSorted;
     }
 }
