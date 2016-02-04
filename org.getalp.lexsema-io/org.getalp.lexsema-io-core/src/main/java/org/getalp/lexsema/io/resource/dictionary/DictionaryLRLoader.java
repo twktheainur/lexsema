@@ -124,6 +124,7 @@ public class DictionaryLRLoader implements LRLoader {
                 wordIndexes.add(i);
             }
             JavaRDD<Integer> parallelSenses = sparkContext.parallelize(wordIndexes);
+            //senses = parallelSenses.map(v1 -> getSenses(document.getWord(v1))).collect();
             senses = parallelSenses.map(v1 -> getSenses(document.getWord(v1))).collect();
         }
         return senses;
