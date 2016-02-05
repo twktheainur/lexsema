@@ -8,15 +8,19 @@ import org.getalp.lexsema.similarity.Document;
 import org.getalp.lexsema.similarity.Sense;
 import org.getalp.lexsema.similarity.Word;
 import org.getalp.lexsema.similarity.WordImpl;
+import org.getalp.lexsema.similarity.signatures.IndexedSemanticSignature;
 import org.getalp.lexsema.similarity.signatures.IndexedSemanticSignatureImpl;
 import org.getalp.lexsema.similarity.signatures.SemanticSignature;
 import org.getalp.lexsema.similarity.signatures.SemanticSignatureImpl;
 import org.getalp.lexsema.similarity.signatures.enrichment.SignatureEnrichment;
 import org.getalp.lexsema.similarity.signatures.index.SymbolIndex;
 import org.getalp.lexsema.similarity.signatures.index.SymbolIndexImpl;
+import org.getalp.lexsema.similarity.signatures.symbols.SemanticSymbol;
+import org.getalp.lexsema.util.StopList;
 import org.getalp.lexsema.util.distribution.SparkSingleton;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.tartarus.snowball.ext.EnglishStemmer;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
@@ -24,10 +28,7 @@ import org.xml.sax.helpers.XMLReaderFactory;
 
 import java.io.*;
 import java.text.MessageFormat;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -39,24 +40,33 @@ public class DictionaryLRLoader implements LRLoader {
 
     private final Map<String, List<Sense>> wordSenses;
     private boolean useIndex = false;
+    private boolean indexed = false;
     private boolean distributed = false;
 
     private final SignatureEnrichment signatureEnrichment;
+    private boolean usesStopWords;
+    private boolean usesStemming;
+
+    private final SymbolIndex symbolIndex;
 
     public DictionaryLRLoader(InputStream dictionaryFile) {
         this(dictionaryFile, true, null);
     }
 
     public DictionaryLRLoader(InputStream dictionaryFile, boolean indexed) {
-        this(dictionaryFile,indexed,null);
+        this(dictionaryFile, indexed, null);
     }
 
     public DictionaryLRLoader(InputStream dictionaryFile, boolean indexed, SignatureEnrichment signatureEnrichment) {
         wordSenses = new HashMap<>();
+        this.indexed = indexed;
         this.signatureEnrichment = signatureEnrichment;
+        usesStopWords = false;
+        usesStemming = false;
+        symbolIndex = new SymbolIndexImpl();
         try {
             XMLReader saxReader = XMLReaderFactory.createXMLReader();
-            saxReader.setContentHandler(new DictionaryParser(wordSenses, indexed,useIndex));
+            saxReader.setContentHandler(new DictionaryParser(wordSenses, indexed));
             saxReader.parse(new InputSource(dictionaryFile));
         } catch (SAXException e) {
             logger.error(MessageFormat.format("Parser error :{0}", e.getLocalizedMessage()));
@@ -77,22 +87,68 @@ public class DictionaryLRLoader implements LRLoader {
             tag = MessageFormat.format("{0}%{1}", lemma.toLowerCase(), partOfSpeech);
         }
         List<Sense> senses = wordSenses.get(tag);
-        if(signatureEnrichment!=null){
-            for(Sense sense: senses){
+        if (signatureEnrichment != null) {
+            for (Sense sense : senses) {
+                SemanticSignature semanticSignature = sense.getSemanticSignature();
+
+                if (usesStopWords) {
+                    semanticSignature = removeStopWords(semanticSignature);
+                }
                 signatureEnrichment.enrichSemanticSignature(sense.getSemanticSignature());
+                if (usesStemming && !indexed) {
+                    semanticSignature = stemSignatureWords(semanticSignature);
+                }
+                if (useIndex) {
+                    semanticSignature = indexSignature(semanticSignature);
+                }
+
             }
         }
         return senses;
     }
 
+    private SemanticSignature indexSignature(Iterable<SemanticSymbol> signature) {
+        IndexedSemanticSignature indexedSignature = new IndexedSemanticSignatureImpl(symbolIndex);
+        for (SemanticSymbol symbol : signature) {
+            indexedSignature.addSymbol(symbol);
+        }
+        indexedSignature.sort();
+        return indexedSignature;
+    }
+
+    private SemanticSignature removeStopWords(Iterable<SemanticSymbol> signature) {
+        SemanticSignature newSignature = new SemanticSignatureImpl();
+        for (SemanticSymbol symbol : signature) {
+            if (!StopList.isStopWord(symbol.getSymbol())) {
+                newSignature.addSymbol(symbol);
+            }
+        }
+        return newSignature;
+    }
+
+    private SemanticSignature stemSignatureWords(Iterable<SemanticSymbol> signature) {
+        SemanticSignature newSignature = new SemanticSignatureImpl();
+        EnglishStemmer stemmer = new EnglishStemmer();
+        for (SemanticSymbol symbol : signature) {
+            stemmer.setCurrent(symbol.getSymbol());
+            stemmer.stem();
+            addSymbolToSignature(newSignature, stemmer.getCurrent());
+        }
+        return newSignature;
+    }
+
+    private void addSymbolToSignature(SemanticSignature semanticSignature, String semanticSymbol){
+        semanticSignature.addSymbol(semanticSymbol);
+    }
+
     @Override
     public Map<Word, List<Sense>> getAllSenses() {
-        Map<Word,List<Sense>> senses = new ConcurrentHashMap<>();
+        Map<Word, List<Sense>> senses = new ConcurrentHashMap<>();
 
         wordSenses.keySet().parallelStream().forEach(word -> {
             String[] idParts = word.split("%");
-            Word w = new WordImpl(word,idParts[0],idParts[0],idParts[1]);
-            senses.put(w,wordSenses.get(word));
+            Word w = new WordImpl(word, idParts[0], idParts[0], idParts[1]);
+            senses.put(w, wordSenses.get(word));
         });
         return senses;
     }
@@ -115,19 +171,33 @@ public class DictionaryLRLoader implements LRLoader {
         senses.forEach(document::addWordSenses);
     }
 
-    @SuppressWarnings({"LocalVariableOfConcreteClass", "LawOfDemeter"})
-    private List<List<Sense>> loadSensesDistributed(Document document) {
-        List<List<Sense>> senses;
-        try (JavaSparkContext sparkContext = SparkSingleton.getSparkContext()) {
-            List<Integer> wordIndexes = new ArrayList<>();
-            for (int i = 0; i < document.size(); i++) {
-                wordIndexes.add(i);
+    @SuppressWarnings({"LocalVariableOfConcreteClass", "LawOfDemeter", "resource"})
+    private List<List<Sense>> loadSensesDistributed(Iterable<Word> document) {
+        List<List<Sense>> uniqueWordSenses;
+        JavaSparkContext sparkContext = SparkSingleton.getSparkContext();
+        Map<Word,Integer> wordIndexMap = new HashMap<>();
+        List<Word> wordsToProcess = new ArrayList<>();
+        int uniqueWordIndex = 0;
+        for (Word word: document) {
+            if(!wordIndexMap.containsKey(word)){
+                wordIndexMap.put(word,uniqueWordIndex);
+                wordsToProcess.add(word);
+                uniqueWordIndex++;
             }
-            JavaRDD<Integer> parallelSenses = sparkContext.parallelize(wordIndexes);
-            //senses = parallelSenses.map(v1 -> getSenses(document.getWord(v1))).collect();
-            senses = parallelSenses.map(v1 -> getSenses(document.getWord(v1))).collect();
         }
-        return senses;
+
+
+        JavaRDD<Word> parallelSenses = sparkContext.parallelize(wordsToProcess);
+        parallelSenses.cache();
+        uniqueWordSenses = parallelSenses.map(this::getSenses).collect();
+
+        List<List<Sense>> documentSenses = new ArrayList<>();
+        for(Word word: document){
+            List<Sense> currentWordSenses = uniqueWordSenses.get(wordIndexMap.get(word));
+            documentSenses.add(currentWordSenses);
+        }
+
+        return documentSenses;
     }
 
     @SuppressWarnings("BooleanParameter")
@@ -157,12 +227,14 @@ public class DictionaryLRLoader implements LRLoader {
     @SuppressWarnings("BooleanParameter")
     @Override
     public LRLoader stemming(boolean stemming) {
+        usesStemming = stemming;
         return this;
     }
 
     @SuppressWarnings("BooleanParameter")
     @Override
     public LRLoader filterStopWords(boolean usesStopWords) {
+        this.usesStopWords = usesStopWords;
         return this;
     }
 
