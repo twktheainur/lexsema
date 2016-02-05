@@ -63,7 +63,7 @@ public class DictionaryCreation
 
     public static String word2vecPath = "../data/word2vec/";
 
-    public static String word2vecResourcePath = "/word2vec/eng/";
+    public static String word2vecResourcePath = "/word2vec/eng";
 
     public static Dictionary wordnet = new Dictionary(new File(wordnetPath));
 
@@ -142,7 +142,7 @@ public class DictionaryCreation
         WordVectors vectors = word2VecLoader.getWordVectors();
         SignatureEnrichment w2vSigEnr = new Word2VecLocalSignatureEnrichment(vectors, numberOfWordsFromWord2Vec);
 
-        LRLoader lrloader = new DictionaryLRLoader(DistributedEmbeddingsDictionaryCreation.class.getResourceAsStream(wordnetResourcePath), false, w2vSigEnr);
+        LRLoader lrloader = new DictionaryLRLoader(DictionaryCreation.class.getResourceAsStream(wordnetResourcePath), false, w2vSigEnr);
 
         lrloader.loadDefinitions(definitions);
         lrloader.extendedSignature(extendedDefinitions);
@@ -153,7 +153,7 @@ public class DictionaryCreation
         lrloader.stemming(stemming);
         lrloader.distributed(true);
 
-        CorpusLoader corpusLoader = new Semeval2007CorpusLoader(DistributedEmbeddingsDictionaryCreation.class.getResourceAsStream(docResourcePath));
+        CorpusLoader corpusLoader = new Semeval2007CorpusLoader(DictionaryCreation.class.getResourceAsStream(docResourcePath));
         corpusLoader.load();
 
         for (Text document : corpusLoader) {
@@ -322,7 +322,7 @@ public class DictionaryCreation
 
     public static File materializeModel(String resourceURI) throws IOException {
 
-        String mURI = DistributedEmbeddingsDictionaryCreation.class.getResource(String.format("%s/model.bin", resourceURI)).toString();
+        String mURI = DictionaryCreation.class.getResource(String.format("%s/model.bin", resourceURI)).toString();
 
         Path targetModelDir;
         final Map<String, String> env = new HashMap<>();
