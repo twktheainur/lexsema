@@ -28,6 +28,7 @@ public final class DistributedEmbeddingsDictionaryCreation {
     private static final Logger logger = LoggerFactory.getLogger(DistributedEmbeddingsDictionaryCreation.class);
     private static final long MS_IN_S = 1000L;
     private static final long MS_IN_M = 60000L;
+    private static final int TOP_N = 30;
 
     private DistributedEmbeddingsDictionaryCreation() {
     }
@@ -73,7 +74,7 @@ public final class DistributedEmbeddingsDictionaryCreation {
         WordVectors vectors = word2VecLoader.getWordVectors();
 
         return new DictionaryLRLoader(DistributedEmbeddingsDictionaryCreation.class.getResourceAsStream(resourceURI), false,
-                new Word2VecLocalSignatureEnrichment(vectors, 10)).index(true).distributed(true);
+                new Word2VecLocalSignatureEnrichment(vectors, TOP_N)).index(true).distributed(true);
     }
 
     private static void loadSensesForDocument(Iterable<Text> corpusLoader, LRLoader lrLoader) {

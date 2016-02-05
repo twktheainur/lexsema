@@ -130,6 +130,7 @@ public class DictionaryLRLoader implements LRLoader {
         wordIndexMap.keySet().stream().map(wordsToProcess::add);
 
         JavaRDD<Word> parallelSenses = sparkContext.parallelize(wordsToProcess);
+        parallelSenses.cache();
         uniqueWordSenses = parallelSenses.map(this::getSenses).collect();
 
         List<List<Sense>> documentSenses = new ArrayList<>();
