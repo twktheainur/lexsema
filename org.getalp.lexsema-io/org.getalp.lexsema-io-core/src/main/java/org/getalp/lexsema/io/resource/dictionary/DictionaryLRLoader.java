@@ -119,15 +119,16 @@ public class DictionaryLRLoader implements LRLoader {
         List<List<Sense>> uniqueWordSenses;
         JavaSparkContext sparkContext = SparkSingleton.getSparkContext();
         Map<Word,Integer> wordIndexMap = new HashMap<>();
+        List<Word> wordsToProcess = new ArrayList<>();
         int uniqueWordIndex = 0;
         for (Word word: document) {
             if(!wordIndexMap.containsKey(word)){
                 wordIndexMap.put(word,uniqueWordIndex);
+                wordsToProcess.add(word);
                 uniqueWordIndex++;
             }
         }
-        List<Word> wordsToProcess = new ArrayList<>();
-        wordIndexMap.keySet().stream().map(wordsToProcess::add);
+
 
         JavaRDD<Word> parallelSenses = sparkContext.parallelize(wordsToProcess);
         parallelSenses.cache();
