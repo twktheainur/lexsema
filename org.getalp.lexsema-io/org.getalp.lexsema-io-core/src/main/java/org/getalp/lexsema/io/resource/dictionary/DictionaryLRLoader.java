@@ -1,5 +1,6 @@
 package org.getalp.lexsema.io.resource.dictionary;
 
+import org.apache.spark.api.java.JavaPairRDD;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
 import org.getalp.lexsema.io.resource.LRLoader;
@@ -21,13 +22,11 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLReaderFactory;
+import scala.Tuple2;
 
 import java.io.*;
 import java.text.MessageFormat;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -116,18 +115,30 @@ public class DictionaryLRLoader implements LRLoader {
     }
 
     @SuppressWarnings({"LocalVariableOfConcreteClass", "LawOfDemeter", "resource"})
-    private List<List<Sense>> loadSensesDistributed(Document document) {
-        List<List<Sense>> senses;
+    private List<List<Sense>> loadSensesDistributed(Iterable<Word> document) {
+        List<List<Sense>> uniqueWordSenses;
         JavaSparkContext sparkContext = SparkSingleton.getSparkContext();
-        List<Integer> wordIndexes = new ArrayList<>();
-        for (int i = 0; i < document.size(); i++) {
-            wordIndexes.add(i);
+        Map<Word,Integer> wordIndexMap = new HashMap<>();
+        int uniqueWordIndex = 0;
+        for (Word word: document) {
+            if(!wordIndexMap.containsKey(word)){
+                wordIndexMap.put(word,uniqueWordIndex);
+                uniqueWordIndex++;
+            }
         }
-        JavaRDD<Integer> parallelSenses = sparkContext.parallelize(wordIndexes);
-        //senses = parallelSenses.map(v1 -> getSenses(document.getWord(v1))).collect();
-        senses = parallelSenses.map(v1 -> getSenses(document.getWord(v1))).collect();
+        List<Word> wordsToProcess = new ArrayList<>();
+        wordIndexMap.keySet().stream().map(wordsToProcess::add);
 
-        return senses;
+        JavaRDD<Word> parallelSenses = sparkContext.parallelize(wordsToProcess);
+        uniqueWordSenses = parallelSenses.map(this::getSenses).collect();
+
+        List<List<Sense>> documentSenses = new ArrayList<>();
+        for(Word word: document){
+            List<Sense> currentWordSenses = uniqueWordSenses.get(wordIndexMap.get(word));
+            documentSenses.add(currentWordSenses);
+        }
+
+        return documentSenses;
     }
 
     @SuppressWarnings("BooleanParameter")
