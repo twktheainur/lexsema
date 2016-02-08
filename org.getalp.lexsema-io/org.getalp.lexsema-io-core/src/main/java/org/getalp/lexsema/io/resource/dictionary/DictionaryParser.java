@@ -110,9 +110,7 @@ public class DictionaryParser implements ContentHandler {
                     IndexedSemanticSignature semanticSignature = new IndexedSemanticSignatureImpl(symbolIndex);
                     StringTokenizer st = new StringTokenizer(currentSemanticSignature);
                     while (st.hasMoreTokens()) {
-                        if(indexed){
-                            semanticSignature.addIndexedSymbol(Integer.valueOf(st.nextToken()));
-                        }
+                        semanticSignature.addIndexedSymbol(Integer.valueOf(st.nextToken()));
                     }
                     mw.setSemanticSignature(semanticSignature);
                 } else {
