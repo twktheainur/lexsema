@@ -91,7 +91,7 @@ public class DictionaryLRLoader implements LRLoader {
             for (Sense sense : senses) {
                 SemanticSignature semanticSignature = sense.getSemanticSignature();
 
-                if (usesStopWords) {
+                if (usesStopWords && !indexed) {
                     semanticSignature = removeStopWords(semanticSignature);
                 }
                 signatureEnrichment.enrichSemanticSignature(sense.getSemanticSignature());
@@ -101,7 +101,7 @@ public class DictionaryLRLoader implements LRLoader {
                 if (useIndex) {
                     semanticSignature = indexSignature(semanticSignature);
                 }
-
+                sense.setSemanticSignature(semanticSignature);
             }
         }
         return senses;
