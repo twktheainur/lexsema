@@ -95,10 +95,10 @@ public class DictionaryCreation
 
     public static void main(String[] args) throws Exception
     {
-        writeDictionary(true, true, true, true, true, true, false, false, false, false, 100, true, 20, true, true, "../data/lesk_dict/semeval2007task7/w2v20");
-        writeDictionary(true, true, true, true, true, true, false, false, false, false, 100, true, 15, true, true, "../data/lesk_dict/semeval2007task7/w2v15");
-        writeDictionary(true, true, true, true, true, true, false, false, false, false, 100, true, 5, true, true, "../data/lesk_dict/semeval2007task7/w2v5");
-        writeDictionary(true, true, true, true, true, true, false, false, false, false, 100, true, 3, true, true, "../data/lesk_dict/semeval2007task7/w2v3");
+        writeDictionary(true, true, true, true, true, true, false, false, false, false, 100, false, 20, true, true, "/home/viall/current/data/lesk_dict/semeval2007task7/w2v20");
+        //writeDictionary(true, true, true, true, true, true, false, false, false, false, 100, true, 15, true, true, "../data/lesk_dict/semeval2007task7/w2v15");
+        //writeDictionary(true, true, true, true, true, true, false, false, false, false, 100, true, 5, true, true, "../data/lesk_dict/semeval2007task7/w2v5");
+        //writeDictionary(true, true, true, true, true, true, false, false, false, false, 100, true, 3, true, true, "../data/lesk_dict/semeval2007task7/w2v3");
     }
 
     public static void writeDictionary(boolean definitions, boolean extendedDefinitions, 
@@ -136,12 +136,14 @@ public class DictionaryCreation
 
         SparkSingleton.initialize("spark://localhost:12345", "DictionaryCreation");
 
-        File modelDir = materializeModel(word2vecResourcePath);
-        Word2VecLoader word2VecLoader = new SerializedModelWord2VecLoader();
-        word2VecLoader.loadGoogle(modelDir, true, true);
-        WordVectors vectors = word2VecLoader.getWordVectors();
-        SignatureEnrichment w2vSigEnr = new Word2VecLocalSignatureEnrichment(vectors, numberOfWordsFromWord2Vec);
-
+        SignatureEnrichment w2vSigEnr = null;
+        if (useWord2Vec) {
+            File modelDir = materializeModel(word2vecResourcePath);
+            Word2VecLoader word2VecLoader = new SerializedModelWord2VecLoader();
+            word2VecLoader.loadGoogle(modelDir, true, true);
+            WordVectors vectors = word2VecLoader.getWordVectors();
+            w2vSigEnr = new Word2VecLocalSignatureEnrichment(vectors, numberOfWordsFromWord2Vec);
+        }
         LRLoader lrloader = new DictionaryLRLoader(DictionaryCreation.class.getResourceAsStream(wordnetResourcePath), false, w2vSigEnr);
 
         lrloader.loadDefinitions(definitions);
@@ -157,10 +159,11 @@ public class DictionaryCreation
         corpusLoader.load();
 
         for (Text document : corpusLoader) {
+            System.out.println("Loading senses of " + document.getId() + "...");
             lrloader.loadSenses(document);
         }
 
-        DocumentDictionaryWriter writer = new DocumentDictionaryWriter(corpus);
+        DocumentDictionaryWriter writer = new DocumentDictionaryWriter(corpusLoader);
         writer.writeDictionary(new File(newDictPath));
     }
 

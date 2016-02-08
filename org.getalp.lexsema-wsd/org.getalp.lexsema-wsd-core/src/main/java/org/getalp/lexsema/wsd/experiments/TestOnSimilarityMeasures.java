@@ -1,20 +1,18 @@
 package org.getalp.lexsema.wsd.experiments;
 
-import java.io.File;
 import java.io.FileInputStream;
-
 import org.apache.commons.math3.stat.inference.MannWhitneyUTest;
 import org.getalp.lexsema.io.document.loader.Semeval2007CorpusLoader;
 import org.getalp.lexsema.io.document.loader.CorpusLoader;
 import org.getalp.lexsema.io.resource.LRLoader;
 import org.getalp.lexsema.io.resource.dictionary.DictionaryLRLoader;
 import org.getalp.lexsema.similarity.Document;
-import org.getalp.lexsema.similarity.measures.lesk.AnotherLeskSimilarity;
+import org.getalp.lexsema.similarity.measures.lesk.IndexedDiceLeskSimilarity;
 import org.getalp.lexsema.wsd.configuration.Configuration;
 import org.getalp.lexsema.wsd.method.*;
 import org.getalp.lexsema.wsd.score.*;
-
 import com.google.common.math.DoubleMath;
+import org.apache.commons.math3.stat.descriptive.moment.StandardDeviation;
 
 import org.apache.commons.math3.stat.descriptive.moment.StandardDeviation;
 
@@ -41,42 +39,57 @@ public class TestOnSimilarityMeasures
 
     public static void main(String[] args) throws Exception
     {
-	Result res = getScores("../data/lesk_dict/semeval2007task7/0");
-        System.out.println("Test 0");
+        Result res = getScores("../data/lesk_dict/semeval2007task7/7/150");
+
+        System.out.println("Test 7/150");
         System.out.println("Mean Scores : " + res.meanScore);
         System.out.println("Standard Deviation Scores : " + res.standardDeviationScore);
         System.out.println("Mean Times : " + res.meanTime);
-	/*
-        Result[][] res = new Result[15][6];
+        
+        //System.out.println("MWUTest Semcor / DSO : " + mannTest.mannWhitneyUTest(res1.scores, res2.scores));
+        //System.out.println("MWUTest Semcor / Semcor + DSO : " + mannTest.mannWhitneyUTest(res1.scores, res3.scores));
+        //System.out.println("MWUTest DSO / Semcor + DSO : " + mannTest.mannWhitneyUTest(res2.scores, res3.scores));
+        //System.out.println("MWUTest Semcor + DSO / Semcor + DSO + WordnetGlosstag : " + mannTest.mannWhitneyUTest(res3.scores, res4.scores));
+        
+        //double[] scores = getScores("../data/lesk_dict/dict_semeval2007task7");
+        //double[] scoresStopWords = getScores("../data/lesk_dict/dict_semeval2007task7_stopwords");
+        //double[] scoresStemming = getScores("../data/lesk_dict/dict_semeval2007task7_stemming");
+        //double[] scoresStopWordsStemming = getScores("../data/lesk_dict/all/dict_semeval2007task7_stopwords_stemming");
 
-        for (int i = 0 ; i < 15 ; i++)
-        {
-            for (int j = 0 ; j < 6 ; j++)
-            {
-                int k = i + 1;
-                int l = (j + 1) * 50;
-                res[i][j] = getScores("../data/lesk_dict/semeval2007task7/" + k + "/" + l);
-                System.out.println("Test " + k + "/" + l);
-                System.out.println("Mean Scores : " + res[i][j].meanScore);
-                System.out.println("Standard Deviation Scores : " + res[i][j].standardDeviationScore);
-                System.out.println("Mean Times : " + res[i][j].meanTime);
-            }
-        }
+        //double[] scoresSemCor = getScores("../data/lesk_dict/dict_semeval2007task7");
+        //double[] scoresStopWordsSemCor = getScores("../data/lesk_dict/dict_semeval2007task7_stopwords");
+        //double[] scoresStemmingSemCor = getScores("../data/lesk_dict/dict_semeval2007task7_stemming");
+        //double[] scoresStopWordsStemmingSemCor = getScores("../data/lesk_dict/all/dict_semeval2007task7_stopwords_stemming_semcor");
 
-        for (int i = 0 ; i < 15 ; i++)
-        {
-            for (int j = 0 ; j < 6 ; j++)
-            {
-                for (int k = 0 ; k < 15 ; k++)
-                {
-                    for (int l = 0 ; l < 6 ; l++)
-                    {
-                        System.out.println("MWUTest " + i + "/" + j + " vs " + k + "/" + l + " : " + mannTest.mannWhitneyUTest(res[i][j].scores, res[k][l].scores));
-                    }
-                }
-            }
-        }
-	*/
+        //double meanScores = getMean(scores);
+        //double meanScoresStopWords = getMean(scoresStopWords);
+        //double meanScoresStemming = getMean(scoresStemming);
+        //double meanScoresStopWordsStemming = getMean(scoresStopWordsStemming);
+
+        //double meanScoresSemCor = getMean(scoresSemCor);
+        //double meanScoresStopWordsSemCor = getMean(scoresStopWordsSemCor);
+        //double meanScoresStemmingSemCor = getMean(scoresStemmingSemCor);
+        //double meanScoresStopWordsStemmingSemCor = getMean(scoresStopWordsStemmingSemCor);
+        
+        //System.out.println("Mean Scores : " + meanScores);
+        //System.out.println("Mean Scores StopWords : " + meanScoresStopWords);
+        //System.out.println("Mean Scores Stemming : " + meanScoresStemming);
+        //System.out.println("Mean Scores StopWords Stemming: " + meanScoresStopWordsStemming);
+
+        //System.out.println("Mean Scores SemCor : " + meanScoresSemCor);
+        //System.out.println("Mean Scores StopWords SemCor : " + meanScoresStopWordsSemCor);
+        //System.out.println("Mean Scores Stemming SemCor: " + meanScoresStemmingSemCor);
+        //System.out.println("Mean Scores StopWords Stemming SemCor: " + meanScoresStopWordsStemmingSemCor);
+        
+        //System.out.println("MWUTest between Scores And Scores StopWords : " + mannTest.mannWhitneyUTest(scores, scoresStopWords));
+        //System.out.println("MWUTest between Scores And Scores Stemming : " + mannTest.mannWhitneyUTest(scores, scoresStemming));
+        //System.out.println("MWUTest between Scores And Scores StopWords And Stemming : " + mannTest.mannWhitneyUTest(scores, scoresStopWordsStemming));
+        //System.out.println("MWUTest between Scores StopWords And Scores Stemming : " + mannTest.mannWhitneyUTest(scoresStopWords, scoresStemming));
+        //System.out.println("MWUTest between Scores StopWords And Scores StopWords And Stemming : " + mannTest.mannWhitneyUTest(scoresStopWords, scoresStopWordsStemming));
+        //System.out.println("MWUTest between Scores Stemming And Scores StopWords And Stemming : " + mannTest.mannWhitneyUTest(scoresStemming, scoresStopWordsStemming));
+        
+        //System.out.println("MWUTest between Scores StopWords Stemming And Scores StopWords Stemming SemCor : " + mannTest.mannWhitneyUTest(scoresStopWordsStemming, scoresStopWordsStemmingSemCor));
+
     }
 
     private static Result getScores(String dict) throws Exception
@@ -90,8 +103,7 @@ public class TestOnSimilarityMeasures
         dl.load();
         for (Document d : dl) lrloader.loadSenses(d);
 
-        ConfigurationScorer scorer = new ConfigurationScorerWithCache(new AnotherLeskSimilarity());
-        //ConfigurationScorer scorer = new MultiThreadConfigurationScorerWithCache(new AnotherLeskSimilarity());
+        ConfigurationScorer scorer = new ConfigurationScorerWithCache(new IndexedDiceLeskSimilarity());
 
         SemEval2007Task7PerfectConfigurationScorer perfectScorer = new SemEval2007Task7PerfectConfigurationScorer();
 
@@ -101,7 +113,6 @@ public class TestOnSimilarityMeasures
         double minLevyScale = 0.5;
         double maxLevyScale = 1.5;
 
-        //CuckooSearchDisambiguator cuckooDisambiguator = new CuckooSearchDisambiguator(new StopCondition(StopCondition.Condition.SCORERCALLS, iterations), levyLocation, levyScale, nestsNumber, destroyedNests, scorer, false);
         MultiThreadCuckooSearch cuckooDisambiguator = new MultiThreadCuckooSearch(iterations, minLevyLocation, maxLevyLocation, minLevyScale, maxLevyScale, scorer, false);
 
         for (int i = 0 ; i < n ; i++)
