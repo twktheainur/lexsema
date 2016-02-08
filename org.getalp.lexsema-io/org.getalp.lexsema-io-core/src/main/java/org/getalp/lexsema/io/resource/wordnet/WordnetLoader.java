@@ -442,18 +442,33 @@ public class WordnetLoader implements LRLoader {
         senses.forEach(document::addWordSenses);
     }
 
-    @SuppressWarnings({"LocalVariableOfConcreteClass", "LawOfDemeter"})
-    private List<List<Sense>> loadSensesDistributed(Document document) {
-        List<List<Sense>> senses;
-        try (JavaSparkContext sparkContext = SparkSingleton.getSparkContext()) {
-            List<Integer> wordIndexes = new ArrayList<>();
-            for (int i = 0; i < document.size(); i++) {
-                wordIndexes.add(i);
+    @SuppressWarnings({"LocalVariableOfConcreteClass", "LawOfDemeter", "resource"})
+    private List<List<Sense>> loadSensesDistributed(Iterable<Word> document) {
+        List<List<Sense>> uniqueWordSenses;
+        JavaSparkContext sparkContext = SparkSingleton.getSparkContext();
+        Map<Word,Integer> wordIndexMap = new HashMap<>();
+        List<Word> wordsToProcess = new ArrayList<>();
+        int uniqueWordIndex = 0;
+        for (Word word: document) {
+            if(!wordIndexMap.containsKey(word)){
+                wordIndexMap.put(word,uniqueWordIndex);
+                wordsToProcess.add(word);
+                uniqueWordIndex++;
             }
-            JavaRDD<Integer> parallelSenses = sparkContext.parallelize(wordIndexes);
-            senses = parallelSenses.map(v1 -> getSenses(document.getWord(v1))).collect();
         }
-        return senses;
+
+
+        JavaRDD<Word> parallelSenses = sparkContext.parallelize(wordsToProcess);
+        parallelSenses.cache();
+        uniqueWordSenses = parallelSenses.map(this::getSenses).collect();
+
+        List<List<Sense>> documentSenses = new ArrayList<>();
+        for(Word word: document){
+            List<Sense> currentWordSenses = uniqueWordSenses.get(wordIndexMap.get(word));
+            documentSenses.add(currentWordSenses);
+        }
+
+        return documentSenses;
     }
 
 }
