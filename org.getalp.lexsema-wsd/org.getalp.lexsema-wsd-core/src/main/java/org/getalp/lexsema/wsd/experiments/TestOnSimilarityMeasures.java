@@ -1,20 +1,18 @@
 package org.getalp.lexsema.wsd.experiments;
 
-import java.io.File;
 import java.io.FileInputStream;
-
 import org.apache.commons.math3.stat.inference.MannWhitneyUTest;
 import org.getalp.lexsema.io.document.loader.Semeval2007CorpusLoader;
 import org.getalp.lexsema.io.document.loader.CorpusLoader;
 import org.getalp.lexsema.io.resource.LRLoader;
 import org.getalp.lexsema.io.resource.dictionary.DictionaryLRLoader;
 import org.getalp.lexsema.similarity.Document;
-import org.getalp.lexsema.similarity.measures.lesk.AnotherLeskSimilarity;
+import org.getalp.lexsema.similarity.measures.lesk.IndexedDiceLeskSimilarity;
 import org.getalp.lexsema.wsd.configuration.Configuration;
 import org.getalp.lexsema.wsd.method.*;
 import org.getalp.lexsema.wsd.score.*;
-
 import com.google.common.math.DoubleMath;
+import org.apache.commons.math3.stat.descriptive.moment.StandardDeviation;
 
 public class TestOnSimilarityMeasures
 {
@@ -24,11 +22,13 @@ public class TestOnSimilarityMeasures
         { 
             this.scores = scores; 
             this.meanScore = getMean(this.scores);
+            this.standardDeviationScore = new StandardDeviation().evaluate(scores, meanScore);
             this.times = times; 
             this.meanTime = getMean(this.times);
         }
         public double[] scores;
         public double meanScore;
+        public double standardDeviationScore;
         public long[] times;
         public long meanTime;
     }
@@ -37,25 +37,17 @@ public class TestOnSimilarityMeasures
     
     public static void main(String[] args) throws Exception
     {
-        //Result res1 = getScores("../data/lesk_dict/dict_semeval2007task7_stopwords_stemming_semcor");
-        //Result res2 = getScores("../data/lesk_dict/dict_semeval2007task7_stopwords_stemming_dso");
-        Result res4 = getScores("../data/lesk_dict/dict_semeval2007task7_stopwords_stemming_semcor_dso_wordnetglosstag");
-        Result res3 = getScores("../data/lesk_dict/dict_semeval2007task7_stopwords_stemming_semcor_dso");
+        Result res = getScores("../data/lesk_dict/semeval2007task7/7/150");
 
-        //System.out.println("Mean Scores Semcor : " + res1.meanScore);
-        //System.out.println("Mean Scores DSO : " + res2.meanScore);
-        System.out.println("Mean Scores Semcor + DSO : " + res3.meanScore);
-        System.out.println("Mean Scores Semcor + DSO + WordnetGlossTag : " + res4.meanScore);
-
-        //System.out.println("Mean Times Semcor : " + res1.meanTime);
-        //System.out.println("Mean Times DSO : " + res2.meanTime);
-        System.out.println("Mean Times Semcor + DSO : " + res3.meanTime);
-        System.out.println("Mean Times Semcor + DSO + WordnetGlossTag : " + res4.meanTime);
+        System.out.println("Test 7/150");
+        System.out.println("Mean Scores : " + res.meanScore);
+        System.out.println("Standard Deviation Scores : " + res.standardDeviationScore);
+        System.out.println("Mean Times : " + res.meanTime);
         
         //System.out.println("MWUTest Semcor / DSO : " + mannTest.mannWhitneyUTest(res1.scores, res2.scores));
         //System.out.println("MWUTest Semcor / Semcor + DSO : " + mannTest.mannWhitneyUTest(res1.scores, res3.scores));
         //System.out.println("MWUTest DSO / Semcor + DSO : " + mannTest.mannWhitneyUTest(res2.scores, res3.scores));
-        System.out.println("MWUTest Semcor + DSO / Semcor + DSO + WordnetGlosstag : " + mannTest.mannWhitneyUTest(res3.scores, res4.scores));
+        //System.out.println("MWUTest Semcor + DSO / Semcor + DSO + WordnetGlosstag : " + mannTest.mannWhitneyUTest(res3.scores, res4.scores));
         
         //double[] scores = getScores("../data/lesk_dict/dict_semeval2007task7");
         //double[] scoresStopWords = getScores("../data/lesk_dict/dict_semeval2007task7_stopwords");
@@ -99,7 +91,7 @@ public class TestOnSimilarityMeasures
     
     private static Result getScores(String dict) throws Exception
     {
-        int n = 100;
+        int n = 30;
         double[] scores = new double[n];
         long[] times = new long[n];
         LRLoader lrloader = new DictionaryLRLoader(new FileInputStream(dict), true);
@@ -108,8 +100,7 @@ public class TestOnSimilarityMeasures
         dl.load();
         for (Document d : dl) lrloader.loadSenses(d);
 
-        ConfigurationScorer scorer = new ConfigurationScorerWithCache(new AnotherLeskSimilarity());
-        //ConfigurationScorer scorer = new MultiThreadConfigurationScorerWithCache(new AnotherLeskSimilarity());
+        ConfigurationScorer scorer = new ConfigurationScorerWithCache(new IndexedDiceLeskSimilarity());
 
         SemEval2007Task7PerfectConfigurationScorer perfectScorer = new SemEval2007Task7PerfectConfigurationScorer();
         
@@ -119,7 +110,6 @@ public class TestOnSimilarityMeasures
         double minLevyScale = 0.5;
         double maxLevyScale = 1.5;
         
-        //CuckooSearchDisambiguator cuckooDisambiguator = new CuckooSearchDisambiguator(new StopCondition(StopCondition.Condition.SCORERCALLS, iterations), levyLocation, levyScale, nestsNumber, destroyedNests, scorer, false);
         MultiThreadCuckooSearch cuckooDisambiguator = new MultiThreadCuckooSearch(iterations, minLevyLocation, maxLevyLocation, minLevyScale, maxLevyScale, scorer, false);
 
         for (int i = 0 ; i < n ; i++)
