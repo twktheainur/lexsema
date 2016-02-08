@@ -87,24 +87,22 @@ public class DictionaryLRLoader implements LRLoader {
             tag = MessageFormat.format("{0}%{1}", lemma.toLowerCase(), partOfSpeech);
         }
         List<Sense> senses = wordSenses.get(tag);
-        if (signatureEnrichment != null) {
-            for (Sense sense : senses) {
-                if (!indexed) {
-                    SemanticSignature semanticSignature = sense.getSemanticSignature();
-                    if (usesStopWords) {
-                        semanticSignature = removeStopWords(semanticSignature);
-                    }
-                    if (signatureEnrichment != null) {
-                        semanticSignature = signatureEnrichment.enrichSemanticSignature(semanticSignature);
-                    }
-                    if (usesStemming) {
-                        semanticSignature = stemSignatureWords(semanticSignature);
-                    }
-                    if (useIndex) {
-                        semanticSignature = indexSignature(semanticSignature);
-                    }
-                    sense.setSemanticSignature(semanticSignature);
+        for (Sense sense : senses) {
+            if (!indexed) {
+                SemanticSignature semanticSignature = sense.getSemanticSignature();
+                if (usesStopWords) {
+                    semanticSignature = removeStopWords(semanticSignature);
                 }
+                if (signatureEnrichment != null) {
+                    semanticSignature = signatureEnrichment.enrichSemanticSignature(semanticSignature);
+                }
+                if (usesStemming) {
+                    semanticSignature = stemSignatureWords(semanticSignature);
+                }
+                if (useIndex) {
+                    semanticSignature = indexSignature(semanticSignature);
+                }
+                sense.setSemanticSignature(semanticSignature);
             }
         }
         return senses;
