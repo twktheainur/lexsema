@@ -25,7 +25,7 @@ public class Word2VecLocalSignatureEnrichment implements SignatureEnrichment {
     private final WordVectors word2Vec;
     private final int topN;
     
-    private static final HashMap<SemanticSymbol, List<SemanticSymbol>> symbolsCache = new HashMap<>();
+    private static final HashMap<String, List<SemanticSymbol>> symbolsCache = new HashMap<>();
 
 
     public Word2VecLocalSignatureEnrichment(WordVectors word2Vec) {
@@ -38,10 +38,10 @@ public class Word2VecLocalSignatureEnrichment implements SignatureEnrichment {
     }
 
     private List<SemanticSymbol> enrichSemanticSymbol(SemanticSymbol semanticSymbol) {
-        if (symbolsCache.containsKey(semanticSymbol) && symbolsCache.get(semanticSymbol).size() >= topN) {
-            return symbolsCache.get(semanticSymbol).subList(0, topN);
-        }
         String word = semanticSymbol.getSymbol();
+        if (symbolsCache.containsKey(word) && symbolsCache.get(word).size() >= topN) {
+            return symbolsCache.get(word).subList(0, topN);
+        }
         final Matcher matcher = PUNCTUATION_PATTERN.matcher(word);
         Collection<String> related = word2Vec.wordsNearest(matcher.replaceAll(""), topN);
         List<String> relatedSorted = sortRelatedList(word, related);
@@ -50,7 +50,7 @@ public class Word2VecLocalSignatureEnrichment implements SignatureEnrichment {
         for (String sword : relatedSorted) {
             symbols.add(new SemanticSymbolImpl(sword, 1.0));
         }
-        symbolsCache.put(semanticSymbol, symbols);
+        symbolsCache.put(word, symbols);
         return symbols;
     }
 

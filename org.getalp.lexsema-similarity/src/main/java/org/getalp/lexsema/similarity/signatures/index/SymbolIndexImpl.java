@@ -1,15 +1,17 @@
 package org.getalp.lexsema.similarity.signatures.index;
 
-import com.google.common.collect.BiMap;
-import com.google.common.collect.HashBiMap;
+import java.util.HashMap;
 
 public class SymbolIndexImpl implements SymbolIndex {
-    private final BiMap<String, Integer> indexMap = HashBiMap.create();
+    
+    private final HashMap<String, Integer> indexMap = new HashMap<>();
+    
     private int currentSymbol = 0;
+    
     @Override
     public Integer getSymbolIndex(String symbol) {
         if(!indexMap.containsKey(symbol)){
-            indexMap.put(symbol,currentSymbol);
+            indexMap.put(symbol, currentSymbol);
             currentSymbol++;
         }
         return indexMap.get(symbol);
