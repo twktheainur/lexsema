@@ -107,7 +107,7 @@ public class TestOnSimilarityMeasures
 
         SemEval2007Task7PerfectConfigurationScorer perfectScorer = new SemEval2007Task7PerfectConfigurationScorer();
 
-        int iterations = 50000;
+        int iterations = 100000;
         double minLevyLocation = 1;
         double maxLevyLocation = 5;
         double minLevyScale = 0.5;
@@ -115,9 +115,11 @@ public class TestOnSimilarityMeasures
 
         MultiThreadCuckooSearch cuckooDisambiguator = new MultiThreadCuckooSearch(iterations, minLevyLocation, maxLevyLocation, minLevyScale, maxLevyScale, scorer, false);
 
+        System.out.println("Dictionary " + dict);
+        
         for (int i = 0 ; i < n ; i++)
         {
-            System.out.print("" + i + " ");
+            System.out.print("" + i + "/" + n + " ");
             System.out.flush();
             scores[i] = 0;
             int j = 0;
