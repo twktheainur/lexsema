@@ -38,6 +38,7 @@ import org.getalp.lexsema.similarity.signatures.enrichment.SignatureEnrichment;
 import org.getalp.lexsema.similarity.signatures.enrichment.StemmingSignatureEnrichment;
 import org.getalp.lexsema.similarity.signatures.enrichment.StopwordsRemoveSignatureEnrichment;
 import org.getalp.lexsema.similarity.signatures.enrichment.Word2VecLocalSignatureEnrichment;
+import org.getalp.lexsema.similarity.signatures.enrichment.Word2VecSignatureEnrichment2;
 import org.getalp.lexsema.util.distribution.SparkSingleton;
 import org.getalp.lexsema.io.thesaurus.AnnotatedTextThesaurusImpl;
 import org.getalp.lexsema.io.word2vec.SerializedModelWord2VecLoader;
@@ -95,10 +96,11 @@ public class DictionaryCreation
 
     public static void main(String[] args) throws Exception
     {
-        writeDictionary(true, true, true, true, true, true, false, false, false, false, 100, true, 20, true, false, "../data/lesk_dict/semeval2007task7/w2v20");
-        writeDictionary(true, true, true, true, true, true, false, false, false, false, 100, true, 15, true, false, "../data/lesk_dict/semeval2007task7/w2v15");
-        writeDictionary(true, true, true, true, true, true, false, false, false, false, 100, true, 5, true, false, "../data/lesk_dict/semeval2007task7/w2v5");
-        writeDictionary(true, true, true, true, true, true, false, false, false, false, 100, true, 3, true, false, "../data/lesk_dict/semeval2007task7/w2v3");
+        writeDictionary(true, true, true, true, true, true, false, false, false, false, 100, true, 10, true, false, "../data/lesk_dict/test2");
+        //writeDictionary(true, true, true, true, true, true, false, false, false, false, 100, true, 20, true, false, "../data/lesk_dict/semeval2007task7/w2v20");
+        //writeDictionary(true, true, true, true, true, true, false, false, false, false, 100, true, 15, true, false, "../data/lesk_dict/semeval2007task7/w2v15");
+        //writeDictionary(true, true, true, true, true, true, false, false, false, false, 100, true, 5, true, false, "../data/lesk_dict/semeval2007task7/w2v5");
+        //writeDictionary(true, true, true, true, true, true, false, false, false, false, 100, true, 3, true, false, "../data/lesk_dict/semeval2007task7/w2v3");
     }
 
     public static void writeDictionary(boolean definitions, boolean extendedDefinitions, 
@@ -142,8 +144,6 @@ public class DictionaryCreation
         lrloader.loadRelated(extendedDefinitions);
         lrloader.index(index);
         lrloader.shuffle(shuffle);
-        lrloader.filterStopWords(stopWords);
-        lrloader.stemming(stemming);
         lrloader.distributed(false);
 
         if (useSemCorThesaurus)
@@ -207,13 +207,7 @@ public class DictionaryCreation
         
         if (useWord2Vec)
         {
-            if (!word2vecIsLoaded)
-            {
-                word2VecLoader.loadGoogle(new File(word2vecPath), true, true);
-                word2vecSignatureEnrichment = new Word2VecLocalSignatureEnrichment(word2VecLoader.getWordVectors(), numberOfWordsFromWord2Vec);
-                word2vecIsLoaded = true;
-            }
-            lrloader.addSignatureEnrichment(word2vecSignatureEnrichment);
+            lrloader.addSignatureEnrichment(new Word2VecSignatureEnrichment2(numberOfWordsFromWord2Vec));
         }
 
         if (stemming)

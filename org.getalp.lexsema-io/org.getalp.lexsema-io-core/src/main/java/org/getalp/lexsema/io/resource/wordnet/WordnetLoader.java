@@ -399,13 +399,17 @@ public class WordnetLoader implements LRLoader {
 
     @Override
     public LRLoader stemming(boolean stemming) {
-        addSignatureEnrichment(new StemmingSignatureEnrichment());
+        if (stemming) {
+            addSignatureEnrichment(new StemmingSignatureEnrichment());
+        }
         return this;
     }
 
     @Override
     public LRLoader filterStopWords(boolean usesStopWords) {
-        addSignatureEnrichment(new StopwordsRemoveSignatureEnrichment());
+        if (usesStopWords) {
+            addSignatureEnrichment(new StopwordsRemoveSignatureEnrichment());
+        }
         return this;
     }
 
