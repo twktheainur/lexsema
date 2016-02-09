@@ -2,11 +2,8 @@ package org.getalp.lexsema.io.resource.wordnet;
 
 import edu.mit.jwi.Dictionary;
 import edu.mit.jwi.item.*;
-import org.apache.spark.SparkContext;
 import org.apache.spark.api.java.JavaRDD;
-import org.apache.spark.api.java.JavaRDDLike;
 import org.apache.spark.api.java.JavaSparkContext;
-import org.apache.spark.api.java.function.Function;
 import org.getalp.lexsema.io.resource.LRLoader;
 import org.getalp.lexsema.io.thesaurus.AnnotatedTextThesaurus;
 import org.getalp.lexsema.similarity.*;
@@ -15,15 +12,14 @@ import org.getalp.lexsema.similarity.cache.SenseCache;
 import org.getalp.lexsema.similarity.cache.SenseCacheImpl;
 import org.getalp.lexsema.similarity.signatures.*;
 import org.getalp.lexsema.similarity.signatures.enrichment.SignatureEnrichment;
+import org.getalp.lexsema.similarity.signatures.enrichment.StemmingSignatureEnrichment;
+import org.getalp.lexsema.similarity.signatures.enrichment.StopwordsRemoveSignatureEnrichment;
 import org.getalp.lexsema.similarity.signatures.index.SymbolIndex;
 import org.getalp.lexsema.similarity.signatures.index.SymbolIndexImpl;
 import org.getalp.lexsema.similarity.signatures.symbols.SemanticSymbol;
-import org.getalp.lexsema.util.StopList;
 import org.getalp.lexsema.util.distribution.SparkSingleton;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.tartarus.snowball.ext.EnglishStemmer;
-
 import java.io.IOException;
 import java.text.MessageFormat;
 import java.util.*;
@@ -44,17 +40,13 @@ public class WordnetLoader implements LRLoader {
 
     private final Dictionary dictionary;
 
-    private SignatureEnrichment signatureEnrichment;
+    private List<SignatureEnrichment> signatureEnrichments;
 
     private boolean loadDefinitions;
 
     private boolean loadRelated;
 
     private boolean hasExtendedSignature;
-
-    private boolean usesStopWords;
-
-    private boolean usesStemming;
 
     private boolean useIndex;
 
@@ -65,7 +57,8 @@ public class WordnetLoader implements LRLoader {
     private final List<AnnotatedTextThesaurus> thesauri;
 
     private final Map<String, List<Sense>> senseCache;
-    private boolean distributed = false;
+    
+    private boolean distributed;
 
     /**
      * Creates a WordnetLoader with an existing Wordnet Dictionary object.
@@ -73,40 +66,20 @@ public class WordnetLoader implements LRLoader {
      * In every cases, it is opened during the call.
      */
     public WordnetLoader(Dictionary dictionary) {
-        this.dictionary = dictionary;
-        openDictionary();
-        symbolIndex = new SymbolIndexImpl();
+        this.dictionary = openDictionary(dictionary);
+        signatureEnrichments = new ArrayList<>();
         loadDefinitions = true;
         loadRelated = false;
         hasExtendedSignature = false;
-        usesStopWords = false;
-        usesStemming = false;
-        shuffle = false;
-        //noinspection all
-        thesauri = new ArrayList<AnnotatedTextThesaurus>();
         useIndex = false;
-        signatureEnrichment = null;
-        senseCache = new HashMap<>();
-    }
-
-    public WordnetLoader(Dictionary dictionary, SignatureEnrichment signatureEnrichment) {
-        this.dictionary = dictionary;
-        this.signatureEnrichment = signatureEnrichment;
-        openDictionary();
+        shuffle = false;
         symbolIndex = new SymbolIndexImpl();
-        loadDefinitions = true;
-        loadRelated = false;
-        hasExtendedSignature = false;
-        usesStopWords = false;
-        usesStemming = false;
-        shuffle = false;
-        //noinspection all
-        thesauri = new ArrayList<AnnotatedTextThesaurus>();
-        useIndex = false;
+        thesauri = new ArrayList<>();
         senseCache = new HashMap<>();
+        distributed = false;
     }
 
-    private void openDictionary() {
+    private Dictionary openDictionary(Dictionary dictionary) {
         if (dictionary != null && !dictionary.isOpen()) {
             try {
                 dictionary.open();
@@ -114,6 +87,7 @@ public class WordnetLoader implements LRLoader {
                 logger.info(e.getLocalizedMessage());
             }
         }
+        return dictionary;
     }
 
     private SemanticSignature createSignature() {
@@ -154,9 +128,7 @@ public class WordnetLoader implements LRLoader {
                     }
 
                     if (loadRelated || hasExtendedSignature) {
-
-                        // Lexical relations are bound to IWord nd are common to all
-                        // associated synsets
+                        // Lexical relations are bound to IWord and are common to all associated synsets
                         loadLexicalRelations(sense, signature, word);
 
                         // Semantic relations are bound to ISynset and are specific to each synset
@@ -171,19 +143,10 @@ public class WordnetLoader implements LRLoader {
                         }
                     }
                     
-                    if (usesStopWords) {
-                        signature = removeStopWords(signature);
-                    }
-                    
-                    if (signatureEnrichment != null) {
+                    for (SignatureEnrichment signatureEnrichment : signatureEnrichments) {
                         signature = signatureEnrichment.enrichSemanticSignature(signature);
-                        logger.trace("\tEnritching a semantic signature...");
                     }
                 
-                    if (usesStemming) {
-                        signature = stemSignatureWords(signature);
-                    }
-
                     if (useIndex) {
                         signature = indexSignature(signature);
                     }
@@ -196,7 +159,6 @@ public class WordnetLoader implements LRLoader {
             }
             senseCache.put(id, senses);
         }
-        logger.trace("Senses for {} processed and enritched.", lemma);
         return senses;
     }
 
@@ -245,27 +207,6 @@ public class WordnetLoader implements LRLoader {
         }
         indexedSignature.sort();
         return indexedSignature;
-    }
-    
-    private SemanticSignature removeStopWords(SemanticSignature signature) {
-        SemanticSignature newSignature = new SemanticSignatureImpl();
-        for (SemanticSymbol symbol : signature) {
-            if (!StopList.isStopWord(symbol.getSymbol())) {
-                newSignature.addSymbol(symbol);
-            }
-        }
-        return newSignature;
-    }
-
-    private SemanticSignature stemSignatureWords(SemanticSignature signature) {
-        SemanticSignature newSignature = new SemanticSignatureImpl();
-        EnglishStemmer stemmer = new EnglishStemmer();
-        for (SemanticSymbol symbol : signature) {
-            stemmer.setCurrent(symbol.getSymbol());
-            stemmer.stem();
-            newSignature.addSymbol(stemmer.getCurrent());
-        }
-        return newSignature;
     }
 
     @Override
@@ -329,7 +270,6 @@ public class WordnetLoader implements LRLoader {
         senseCache.addToCache(w, senses);
     }
 
-
     private void addToSignature(SemanticSignature signature, CharSequence def) {
         final Matcher matcher = NON_LETTERS.matcher(def);
         String noPunctuation = matcher.replaceAll("");
@@ -365,7 +305,6 @@ public class WordnetLoader implements LRLoader {
         return w;
     }
 
-
     @Override
     public LRLoader extendedSignature(boolean hasExtendedSignature) {
         this.hasExtendedSignature = hasExtendedSignature;
@@ -391,25 +330,13 @@ public class WordnetLoader implements LRLoader {
     }
 
     @Override
-    public LRLoader stemming(boolean stemming) {
-        usesStemming = stemming;
-        return this;
-    }
-
-    @Override
-    public LRLoader filterStopWords(boolean usesStopWords) {
-        this.usesStopWords = usesStopWords;
-        return this;
-    }
-
-    @Override
     public LRLoader addThesaurus(AnnotatedTextThesaurus thesaurus) {
         thesauri.add(thesaurus);
         return this;
     }
     
-    public LRLoader signatureEnrichment(SignatureEnrichment signatureEnrichment) {
-    	this.signatureEnrichment = signatureEnrichment;
+    public LRLoader addSignatureEnrichment(SignatureEnrichment signatureEnrichment) {
+    	signatureEnrichments.add(signatureEnrichment);
     	return this;
     }
 
@@ -427,7 +354,6 @@ public class WordnetLoader implements LRLoader {
 
     @Override
     public void loadSenses(Document document) {
-        //noinspection LocalVariableOfConcreteClass
         List<List<Sense>> senses;
         if (distributed) {
             senses = loadSensesDistributed(document);
@@ -469,6 +395,18 @@ public class WordnetLoader implements LRLoader {
         }
 
         return documentSenses;
+    }
+
+    @Override
+    public LRLoader stemming(boolean stemming) {
+        addSignatureEnrichment(new StemmingSignatureEnrichment());
+        return this;
+    }
+
+    @Override
+    public LRLoader filterStopWords(boolean usesStopWords) {
+        addSignatureEnrichment(new StopwordsRemoveSignatureEnrichment());
+        return this;
     }
 
 }

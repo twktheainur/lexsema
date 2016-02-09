@@ -22,7 +22,6 @@ import edu.mit.jwi.Dictionary;
 
 import org.deeplearning4j.models.embeddings.wordvectors.WordVectors;
 import org.getalp.lexsema.io.dictionary.DocumentDictionaryWriter;
-import org.getalp.lexsema.io.document.loader.DSOCorpusLoader;
 import org.getalp.lexsema.io.document.loader.GMBCorpusLoader;
 import org.getalp.lexsema.io.document.loader.OldDSOCorpusLoader;
 import org.getalp.lexsema.io.document.loader.CorpusLoader;
@@ -36,9 +35,10 @@ import org.getalp.lexsema.similarity.Sense;
 import org.getalp.lexsema.similarity.Text;
 import org.getalp.lexsema.similarity.Word;
 import org.getalp.lexsema.similarity.signatures.enrichment.SignatureEnrichment;
+import org.getalp.lexsema.similarity.signatures.enrichment.StemmingSignatureEnrichment;
+import org.getalp.lexsema.similarity.signatures.enrichment.StopwordsRemoveSignatureEnrichment;
 import org.getalp.lexsema.similarity.signatures.enrichment.Word2VecLocalSignatureEnrichment;
 import org.getalp.lexsema.util.distribution.SparkSingleton;
-import org.getalp.lexsema.wsd.experiments.distributed.DistributedEmbeddingsDictionaryCreation;
 import org.getalp.lexsema.io.thesaurus.AnnotatedTextThesaurusImpl;
 import org.getalp.lexsema.io.word2vec.SerializedModelWord2VecLoader;
 import org.getalp.lexsema.io.word2vec.Word2VecLoader;
@@ -53,9 +53,9 @@ public class DictionaryCreation
 
     public static String dsoPath = "../data/dso/";
 
-    public static String docPath = "../data/senseval2007_task7/test/eng-coarse-all-words.xml";
+    public static String corpusPath = "../data/senseval2007_task7/test/eng-coarse-all-words.xml";
 
-    public static String docResourcePath = "/semeval2007/eng-coarse-all-words.xml";
+    public static String corpusResourcePath = "/semeval2007/eng-coarse-all-words.xml";
 
     public static String wordnetGlossTagPath = "../data/wordnet/3.0/glosstag/";
 
@@ -75,11 +75,11 @@ public class DictionaryCreation
 
     public static CorpusLoader gmb = new GMBCorpusLoader(gmbPath, wordnet);
 
-    public static CorpusLoader corpus = initializeSemeval2007Corpus();
+    public static CorpusLoader corpus = initializeSemeval2007Corpus(corpusPath);
 
     public static Word2VecLoader word2VecLoader = new SerializedModelWord2VecLoader();
 
-    public static SignatureEnrichment signatureEnrichment = null;
+    public static SignatureEnrichment word2vecSignatureEnrichment = null;
 
     public static boolean semCorIsLoaded = false;
 
@@ -117,54 +117,6 @@ public class DictionaryCreation
     {    
         if (distributed) writeDictionaryDistributed(definitions, extendedDefinitions, stopWords, stemming, index, shuffle, useSemCorThesaurus, useDSOThesaurus, useWordnetGlossTag, useGMBThesaurus, numberOfWordsFromThesauri, useWord2Vec, numberOfWordsFromWord2Vec, limitToCorpus, newDictPath);
         else writeDictionaryNotDistributed(definitions, extendedDefinitions, stopWords, stemming, index, shuffle, useSemCorThesaurus, useDSOThesaurus, useWordnetGlossTag, useGMBThesaurus, numberOfWordsFromThesauri, useWord2Vec, numberOfWordsFromWord2Vec, limitToCorpus, newDictPath);
-    }
-
-    public static void writeDictionaryDistributed(boolean definitions, boolean extendedDefinitions, 
-            boolean stopWords, boolean stemming, 
-            boolean index, boolean shuffle, 
-            boolean useSemCorThesaurus, 
-            boolean useDSOThesaurus, 
-            boolean useWordnetGlossTag,
-            boolean useGMBThesaurus,
-            int numberOfWordsFromThesauri,
-            boolean useWord2Vec,
-            int numberOfWordsFromWord2Vec,
-            boolean limitToCorpus, 
-            String newDictPath) throws Exception
-    {
-        System.out.println("Building dictionary " + newDictPath + "...");
-
-        SparkSingleton.initialize("spark://localhost:12345", "DictionaryCreation");
-
-        SignatureEnrichment w2vSigEnr = null;
-        if (useWord2Vec) {
-            File modelDir = materializeModel(word2vecResourcePath);
-            Word2VecLoader word2VecLoader = new SerializedModelWord2VecLoader();
-            word2VecLoader.loadGoogle(modelDir, true, true);
-            WordVectors vectors = word2VecLoader.getWordVectors();
-            w2vSigEnr = new Word2VecLocalSignatureEnrichment(vectors, numberOfWordsFromWord2Vec);
-        }
-        LRLoader lrloader = new DictionaryLRLoader(DictionaryCreation.class.getResourceAsStream(wordnetResourcePath), false, w2vSigEnr);
-
-        lrloader.loadDefinitions(definitions);
-        lrloader.extendedSignature(extendedDefinitions);
-        lrloader.loadRelated(extendedDefinitions);
-        lrloader.index(index);
-        lrloader.shuffle(shuffle);
-        lrloader.filterStopWords(stopWords);
-        lrloader.stemming(stemming);
-        lrloader.distributed(true);
-
-        CorpusLoader corpusLoader = new Semeval2007CorpusLoader(DictionaryCreation.class.getResourceAsStream(docResourcePath));
-        corpusLoader.load();
-
-        for (Text document : corpusLoader) {
-            System.out.println("Loading senses of " + document.getId() + "...");
-            lrloader.loadSenses(document);
-        }
-
-        DocumentDictionaryWriter writer = new DocumentDictionaryWriter(corpusLoader);
-        writer.writeDictionary(new File(newDictPath));
     }
 
     public static void writeDictionaryNotDistributed(boolean definitions, boolean extendedDefinitions, 
@@ -248,17 +200,27 @@ public class DictionaryCreation
 
         lrloader.addThesaurus(new AnnotatedTextThesaurusImpl(corpora, numberOfWordsFromThesauri));
 
+        if (stopWords)
+        {
+            lrloader.addSignatureEnrichment(new StopwordsRemoveSignatureEnrichment());
+        }
+        
         if (useWord2Vec)
         {
             if (!word2vecIsLoaded)
             {
                 word2VecLoader.loadGoogle(new File(word2vecPath), true, true);
-                signatureEnrichment = new Word2VecLocalSignatureEnrichment(word2VecLoader.getWordVectors(), numberOfWordsFromWord2Vec);
+                word2vecSignatureEnrichment = new Word2VecLocalSignatureEnrichment(word2VecLoader.getWordVectors(), numberOfWordsFromWord2Vec);
                 word2vecIsLoaded = true;
             }
-            lrloader.signatureEnrichment(signatureEnrichment);
+            lrloader.addSignatureEnrichment(word2vecSignatureEnrichment);
         }
 
+        if (stemming)
+        {
+            lrloader.addSignatureEnrichment(new StemmingSignatureEnrichment());
+        }
+        
         if (limitToCorpus)
         {
             if (!corpusIsLoaded)
@@ -275,47 +237,99 @@ public class DictionaryCreation
         }
         else
         {
-            Map<Word, List<Sense>> senses = lrloader.getAllSenses();
-            System.out.println("" + senses.size() + " words");
-            File newDict = new File(newDictPath);
-            FileOutputStream fos = new FileOutputStream(newDict);
-            BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(fos));
-            bw.write("<dict>");
-            bw.newLine();
-            for (Word word : senses.keySet())
-            {
-                bw.write(String.format("<word tag=\"%s%%%s\">", word.getLemma(), word.getPartOfSpeech()));
-                bw.newLine();
-                for (Sense sense : senses.get(word))
-                {
-                    bw.write("<sense>");
-                    bw.newLine();
-                    bw.write(String.format("<ids>%s</ids>", sense.getId()));
-                    bw.newLine();
-                    bw.write("<def>");
-                    bw.write(sense.getSemanticSignature().toString());
-                    bw.write("</def>");
-                    bw.newLine();
-                    bw.write("</sense>");
-                    bw.newLine();
-                }
-                bw.write("</word>");
-                bw.newLine();
-            }
-            bw.write("</dict>");
-            bw.newLine();
-            bw.flush();
-            bw.close();
-            fos.flush();
-            fos.close();
+            doWriteFullDictionary(lrloader.getAllSenses(), newDictPath);
         }  
     }
 
-    public static CorpusLoader initializeSemeval2007Corpus()
+    public static void writeDictionaryDistributed(boolean definitions, boolean extendedDefinitions, 
+            boolean stopWords, boolean stemming, 
+            boolean index, boolean shuffle, 
+            boolean useSemCorThesaurus, 
+            boolean useDSOThesaurus, 
+            boolean useWordnetGlossTag,
+            boolean useGMBThesaurus,
+            int numberOfWordsFromThesauri,
+            boolean useWord2Vec,
+            int numberOfWordsFromWord2Vec,
+            boolean limitToCorpus, 
+            String newDictPath) throws Exception
+    {
+        System.out.println("Building dictionary " + newDictPath + "...");
+
+        SparkSingleton.initialize("spark://localhost:12345", "DictionaryCreation");
+
+        SignatureEnrichment w2vSigEnr = null;
+        if (useWord2Vec) {
+            File modelDir = materializeModel(word2vecResourcePath);
+            Word2VecLoader word2VecLoader = new SerializedModelWord2VecLoader();
+            word2VecLoader.loadGoogle(modelDir, true, true);
+            WordVectors vectors = word2VecLoader.getWordVectors();
+            w2vSigEnr = new Word2VecLocalSignatureEnrichment(vectors, numberOfWordsFromWord2Vec);
+        }
+        LRLoader lrloader = new DictionaryLRLoader(DictionaryCreation.class.getResourceAsStream(wordnetResourcePath), false, w2vSigEnr);
+
+        lrloader.loadDefinitions(definitions);
+        lrloader.extendedSignature(extendedDefinitions);
+        lrloader.loadRelated(extendedDefinitions);
+        lrloader.index(index);
+        lrloader.shuffle(shuffle);
+        lrloader.filterStopWords(stopWords);
+        lrloader.stemming(stemming);
+        lrloader.distributed(true);
+
+        CorpusLoader corpusLoader = new Semeval2007CorpusLoader(DictionaryCreation.class.getResourceAsStream(corpusResourcePath));
+        corpusLoader.load();
+
+        for (Text document : corpusLoader) {
+            System.out.println("Loading senses of " + document.getId() + "...");
+            lrloader.loadSenses(document);
+        }
+
+        DocumentDictionaryWriter writer = new DocumentDictionaryWriter(corpusLoader);
+        writer.writeDictionary(new File(newDictPath));
+    }
+
+    private static void doWriteFullDictionary(Map<Word, List<Sense>> senses, String newDictPath) throws Exception
+    {
+        System.out.println("" + senses.size() + " words");
+        File newDict = new File(newDictPath);
+        FileOutputStream fos = new FileOutputStream(newDict);
+        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(fos));
+        bw.write("<dict>");
+        bw.newLine();
+        for (Word word : senses.keySet())
+        {
+            bw.write(String.format("<word tag=\"%s%%%s\">", word.getLemma(), word.getPartOfSpeech()));
+            bw.newLine();
+            for (Sense sense : senses.get(word))
+            {
+                bw.write("<sense>");
+                bw.newLine();
+                bw.write(String.format("<ids>%s</ids>", sense.getId()));
+                bw.newLine();
+                bw.write("<def>");
+                bw.write(sense.getSemanticSignature().toString());
+                bw.write("</def>");
+                bw.newLine();
+                bw.write("</sense>");
+                bw.newLine();
+            }
+            bw.write("</word>");
+            bw.newLine();
+        }
+        bw.write("</dict>");
+        bw.newLine();
+        bw.flush();
+        bw.close();
+        fos.flush();
+        fos.close();
+    }
+
+    public static CorpusLoader initializeSemeval2007Corpus(String corpusPath)
     {
         try
         {
-            return new Semeval2007CorpusLoader(new FileInputStream(docPath));
+            return new Semeval2007CorpusLoader(new FileInputStream(corpusPath));
         }
         catch (FileNotFoundException e)
         {

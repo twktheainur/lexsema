@@ -76,14 +76,15 @@ public class DictionaryCreation
                                         boolean index, boolean shuffle,WordVectors wordVectors,
                                         String newDictPath) throws FileNotFoundException {
         System.out.println("Building dictionary " + newDictPath + "...");
-        WordnetLoader lrloader = new WordnetLoader(wordnet,new Word2VecLocalSignatureEnrichment(wordVectors,10));
+        WordnetLoader lrloader = new WordnetLoader(wordnet);
+        lrloader.filterStopWords(stopWords);
+        lrloader.addSignatureEnrichment(new Word2VecLocalSignatureEnrichment(wordVectors, 10));
+        lrloader.stemming(stemming);
         lrloader.loadDefinitions(definitions);
         lrloader.extendedSignature(extendedDefinitions);
         lrloader.loadRelated(extendedDefinitions);
         lrloader.index(index);
         lrloader.shuffle(shuffle);
-        lrloader.filterStopWords(stopWords);
-        lrloader.stemming(stemming);
 
         CorpusLoader dl = new Semeval2007CorpusLoader(new FileInputStream(docPath));
         dl.load();
