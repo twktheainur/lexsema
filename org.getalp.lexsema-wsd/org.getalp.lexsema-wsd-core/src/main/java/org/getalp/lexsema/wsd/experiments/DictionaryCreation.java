@@ -76,8 +76,6 @@ public class DictionaryCreation
 
     public static CorpusLoader gmb = new GMBCorpusLoader(gmbPath, wordnet);
 
-    public static CorpusLoader corpus = initializeSemeval2007Corpus(corpusPath);
-
     public static Word2VecLoader word2VecLoader = new SerializedModelWord2VecLoader();
 
     public static SignatureEnrichment word2vecSignatureEnrichment = null;
@@ -92,12 +90,10 @@ public class DictionaryCreation
 
     public static boolean word2vecIsLoaded = false;
 
-    public static boolean corpusIsLoaded = false;
-
     public static void main(String[] args) throws Exception
     {
-        writeDictionary(true, true, true, true, true, true, false, false, false, false, 100, true, 5, true, false, "../data/lesk_dict/semeval2007task7/w2v5");
-        writeDictionary(true, true, true, true, true, true, false, false, false, false, 100, true, 3, true, false, "../data/lesk_dict/semeval2007task7/w2v3");
+        //writeDictionary(true, true, true, true, true, true, false, false, false, false, 100, true, 5, true, "../data/lesk_dict/semeval2007task7/w2v5");
+        writeDictionary(true, true, true, true, true, true, false, false, false, false, 100, true, 3, true, "../data/lesk_dict/semeval2007task7/w2v3");
     }
 
     public static void writeDictionary(boolean definitions, boolean extendedDefinitions, 
@@ -110,27 +106,9 @@ public class DictionaryCreation
             int numberOfWordsFromThesauri,
             boolean useWord2Vec,
             int numberOfWordsFromWord2Vec,
-            boolean limitToCorpus, 
-            boolean distributed,
+            boolean loadOnlySemeval2007Task7Senses, 
             String newDictPath) throws Exception
     {    
-        if (distributed) writeDictionaryDistributed(definitions, extendedDefinitions, stopWords, stemming, index, shuffle, useSemCorThesaurus, useDSOThesaurus, useWordnetGlossTag, useGMBThesaurus, numberOfWordsFromThesauri, useWord2Vec, numberOfWordsFromWord2Vec, limitToCorpus, newDictPath);
-        else writeDictionaryNotDistributed(definitions, extendedDefinitions, stopWords, stemming, index, shuffle, useSemCorThesaurus, useDSOThesaurus, useWordnetGlossTag, useGMBThesaurus, numberOfWordsFromThesauri, useWord2Vec, numberOfWordsFromWord2Vec, limitToCorpus, newDictPath);
-    }
-
-    public static void writeDictionaryNotDistributed(boolean definitions, boolean extendedDefinitions, 
-            boolean stopWords, boolean stemming, 
-            boolean index, boolean shuffle, 
-            boolean useSemCorThesaurus, 
-            boolean useDSOThesaurus, 
-            boolean useWordnetGlossTag,
-            boolean useGMBThesaurus,
-            int numberOfWordsFromThesauri,
-            boolean useWord2Vec,
-            int numberOfWordsFromWord2Vec,
-            boolean limitToCorpus, 
-            String newDictPath) throws Exception
-    {
         System.out.println("Building dictionary " + newDictPath + "...");
 
         WordnetLoader lrloader = new WordnetLoader(wordnet);
@@ -212,13 +190,10 @@ public class DictionaryCreation
             lrloader.addSignatureEnrichment(new StemmingSignatureEnrichment());
         }
         
-        if (limitToCorpus)
+        if (loadOnlySemeval2007Task7Senses)
         {
-            if (!corpusIsLoaded)
-            {
-                corpus.load();
-                corpusIsLoaded = true;
-            }
+            CorpusLoader corpus = new Semeval2007CorpusLoader(new FileInputStream(corpusPath));
+            corpus.load();
             for (Text txt : corpus)
             {
                 lrloader.loadSenses(txt);
@@ -230,54 +205,6 @@ public class DictionaryCreation
         {
             doWriteFullDictionary(lrloader.getAllSenses(), newDictPath);
         }  
-    }
-
-    public static void writeDictionaryDistributed(boolean definitions, boolean extendedDefinitions, 
-            boolean stopWords, boolean stemming, 
-            boolean index, boolean shuffle, 
-            boolean useSemCorThesaurus, 
-            boolean useDSOThesaurus, 
-            boolean useWordnetGlossTag,
-            boolean useGMBThesaurus,
-            int numberOfWordsFromThesauri,
-            boolean useWord2Vec,
-            int numberOfWordsFromWord2Vec,
-            boolean limitToCorpus, 
-            String newDictPath) throws Exception
-    {
-        System.out.println("Building dictionary " + newDictPath + "...");
-
-        SparkSingleton.initialize("spark://localhost:12345", "DictionaryCreation");
-
-        SignatureEnrichment w2vSigEnr = null;
-        if (useWord2Vec) {
-            File modelDir = materializeModel(word2vecResourcePath);
-            Word2VecLoader word2VecLoader = new SerializedModelWord2VecLoader();
-            word2VecLoader.loadGoogle(modelDir, true, true);
-            WordVectors vectors = word2VecLoader.getWordVectors();
-            w2vSigEnr = new Word2VecLocalSignatureEnrichment(vectors, numberOfWordsFromWord2Vec);
-        }
-        LRLoader lrloader = new DictionaryLRLoader(DictionaryCreation.class.getResourceAsStream(wordnetResourcePath), false, w2vSigEnr);
-
-        lrloader.loadDefinitions(definitions);
-        lrloader.extendedSignature(extendedDefinitions);
-        lrloader.loadRelated(extendedDefinitions);
-        lrloader.index(index);
-        lrloader.shuffle(shuffle);
-        lrloader.filterStopWords(stopWords);
-        lrloader.stemming(stemming);
-        lrloader.distributed(true);
-
-        CorpusLoader corpusLoader = new Semeval2007CorpusLoader(DictionaryCreation.class.getResourceAsStream(corpusResourcePath));
-        corpusLoader.load();
-
-        for (Text document : corpusLoader) {
-            System.out.println("Loading senses of " + document.getId() + "...");
-            lrloader.loadSenses(document);
-        }
-
-        DocumentDictionaryWriter writer = new DocumentDictionaryWriter(corpusLoader);
-        writer.writeDictionary(new File(newDictPath));
     }
 
     private static void doWriteFullDictionary(Map<Word, List<Sense>> senses, String newDictPath) throws Exception
@@ -314,41 +241,5 @@ public class DictionaryCreation
         bw.close();
         fos.flush();
         fos.close();
-    }
-
-    public static CorpusLoader initializeSemeval2007Corpus(String corpusPath)
-    {
-        try
-        {
-            return new Semeval2007CorpusLoader(new FileInputStream(corpusPath));
-        }
-        catch (FileNotFoundException e)
-        {
-            throw new Error(e);
-        }
-    }
-
-    public static File materializeModel(String resourceURI) throws IOException {
-
-        String mURI = DictionaryCreation.class.getResource(String.format("%s/model.bin", resourceURI)).toString();
-
-        Path targetModelDir;
-        final Map<String, String> env = new HashMap<>();
-        String[] array;
-        FileSystem resourceFileSystem;
-        if(mURI.contains("!")){
-            array = mURI.split("!");
-            resourceFileSystem = FileSystems.newFileSystem(URI.create(array[0]), env);
-        } else {
-            array = mURI.split(":");
-            resourceFileSystem = FileSystems.getDefault();
-        }
-        final Path path = resourceFileSystem.getPath(array[1]);
-        try (InputStream inputStream = Files.newInputStream(path)) {
-            targetModelDir = Files.createTempDirectory("materializedResource");
-            Path targetModel = targetModelDir.resolve("model.bin");
-            Files.copy(inputStream,targetModel);
-        }
-        return targetModelDir.toFile();
     }
 }
