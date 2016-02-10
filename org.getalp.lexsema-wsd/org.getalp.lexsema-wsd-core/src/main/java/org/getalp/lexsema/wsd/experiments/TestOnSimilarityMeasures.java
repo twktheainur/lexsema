@@ -37,20 +37,19 @@ public class TestOnSimilarityMeasures
 
     public static void main(String[] args) throws Exception
     {
-        Result[] res = new Result[5];
-        int[] osef = {3, 5, 10, 15, 20};
-        for (int i = 0 ; i < 5 ; i++)
+        Result[] res = new Result[1];
+        for (int i = 0 ; i < res.length ; i++)
         {
-            res[i] = getScores("../data/lesk_dict/semeval2007task7/w2v" + osef[i]);
+            res[i] = getScores("../data/lesk_dict/semeval2007task7/5/250");
             System.out.println("Test " + i);
             System.out.println("Mean Scores : " + res[i].meanScore);
             System.out.println("Standard Deviation Scores : " + res[i].standardDeviationScore);
             System.out.println("Mean Times : " + res[i].meanTime);
         }
 
-        for (int i = 0 ; i < 5 ; i++)
+        for (int i = 0 ; i < res.length ; i++)
         {
-            for (int j = 0 ; j < 5 ; j++)
+            for (int j = 0 ; j < res.length ; j++)
             {
                 System.out.println("MWUTest " + i + " / " + j + " : " + mannTest.mannWhitneyUTest(res[i].scores, res[j].scores));
             }
@@ -59,7 +58,7 @@ public class TestOnSimilarityMeasures
 
     private static Result getScores(String dict) throws Exception
     {
-        int n = 30;
+        int n = 1;
         double[] scores = new double[n];
         long[] times = new long[n];
         LRLoader lrloader = new DictionaryLRLoader(new FileInputStream(dict), true);
@@ -80,6 +79,8 @@ public class TestOnSimilarityMeasures
 
         MultiThreadCuckooSearch cuckooDisambiguator = new MultiThreadCuckooSearch(iterations, minLevyLocation, maxLevyLocation, minLevyScale, maxLevyScale, scorer, false);
 
+        VoteDisambiguator voteDisambiguator = new VoteDisambiguator(cuckooDisambiguator, 100);
+                
         System.out.println("Dictionary " + dict);
         
         for (int i = 0 ; i < n ; i++)
@@ -93,7 +94,7 @@ public class TestOnSimilarityMeasures
             {
                 System.out.print("(" + d.getId() + ") ");
                 System.out.flush();
-                Configuration c = cuckooDisambiguator.disambiguate(d);
+                Configuration c = voteDisambiguator.disambiguate(d);
                 scores[i] += perfectScorer.computeScore(d, c);
                 j++;
             }
@@ -103,7 +104,7 @@ public class TestOnSimilarityMeasures
             System.out.println("score : " + scores[i] + " ; time : " + times[i]);
         }
         System.out.println();
-        cuckooDisambiguator.release();
+        voteDisambiguator.release();
         return new Result(scores, times);
     }
 
