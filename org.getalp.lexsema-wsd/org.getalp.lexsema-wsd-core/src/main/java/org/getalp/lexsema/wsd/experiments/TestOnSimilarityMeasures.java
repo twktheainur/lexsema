@@ -38,10 +38,12 @@ public class TestOnSimilarityMeasures
     public static void main(String[] args) throws Exception
     {
         Result[] res = new Result[1];
+        String[] dicts = {"all/dict_all_stopwords_stemming_semcor_dso_wordnetglosstag_150",
+                          "all/dict_all_stopwords_stemming_semcor_wordnetglosstag_250"};
         for (int i = 0 ; i < res.length ; i++)
         {
-            res[i] = getScores("../data/lesk_dict/semeval2007task7/5/250");
-            System.out.println("Test " + i);
+            res[i] = getScores("../data/lesk_dict/" + dicts[i]);
+            System.out.println("Test " + dicts[i]);
             System.out.println("Mean Scores : " + res[i].meanScore);
             System.out.println("Standard Deviation Scores : " + res[i].standardDeviationScore);
             System.out.println("Mean Times : " + res[i].meanTime);
@@ -58,7 +60,7 @@ public class TestOnSimilarityMeasures
 
     private static Result getScores(String dict) throws Exception
     {
-        int n = 1;
+        int n = 30;
         double[] scores = new double[n];
         long[] times = new long[n];
         LRLoader lrloader = new DictionaryLRLoader(new FileInputStream(dict), true);
@@ -80,7 +82,9 @@ public class TestOnSimilarityMeasures
         MultiThreadCuckooSearch cuckooDisambiguator = new MultiThreadCuckooSearch(iterations, minLevyLocation, maxLevyLocation, minLevyScale, maxLevyScale, scorer, false);
 
         VoteDisambiguator voteDisambiguator = new VoteDisambiguator(cuckooDisambiguator, 100);
-                
+               
+        Disambiguator disambiguator = cuckooDisambiguator;
+        
         System.out.println("Dictionary " + dict);
         
         for (int i = 0 ; i < n ; i++)
@@ -94,7 +98,7 @@ public class TestOnSimilarityMeasures
             {
                 System.out.print("(" + d.getId() + ") ");
                 System.out.flush();
-                Configuration c = voteDisambiguator.disambiguate(d);
+                Configuration c = disambiguator.disambiguate(d);
                 scores[i] += perfectScorer.computeScore(d, c);
                 j++;
             }
@@ -104,7 +108,7 @@ public class TestOnSimilarityMeasures
             System.out.println("score : " + scores[i] + " ; time : " + times[i]);
         }
         System.out.println();
-        voteDisambiguator.release();
+        disambiguator.release();
         return new Result(scores, times);
     }
 
