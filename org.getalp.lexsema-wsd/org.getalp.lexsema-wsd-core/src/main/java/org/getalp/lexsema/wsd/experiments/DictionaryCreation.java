@@ -64,7 +64,7 @@ public class DictionaryCreation
 
     public static void main(String[] args) throws Exception
     {
-        writeDictionary(true, true, true, true, true, true, false, false, false, false, 100, true, 10, true, "../data/lesk_dict/semeval2007task7/w2v10");
+        writeDictionary(true, true, true, true, true, true, true, false, true, false, 250, false, 0, false, "../data/lesk_dict/all/dict_all_stopwords_stemming_semcor_wordnetglosstag_250");
     }
 
     public static void writeDictionary(boolean definitions, boolean extendedDefinitions, 

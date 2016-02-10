@@ -7,7 +7,6 @@ import org.getalp.lexsema.io.document.loader.CorpusLoader;
 import org.getalp.lexsema.io.resource.LRLoader;
 import org.getalp.lexsema.io.resource.dictionary.DictionaryLRLoader;
 import org.getalp.lexsema.similarity.Document;
-import org.getalp.lexsema.similarity.measures.lesk.IndexedDiceLeskSimilarity;
 import org.getalp.lexsema.similarity.measures.lesk.IndexedLeskSimilarity;
 import org.getalp.lexsema.wsd.configuration.Configuration;
 import org.getalp.lexsema.wsd.method.*;
@@ -38,24 +37,27 @@ public class TestOnSimilarityMeasures
 
     public static void main(String[] args) throws Exception
     {
-        Result res = getScores("../data/lesk_dict/semeval2007task7/7/150", false);
+        Result[] res = new Result[5];
+        int[] osef = {3, 5, 10, 15, 20};
+        for (int i = 0 ; i < 5 ; i++)
+        {
+            res[i] = getScores("../data/lesk_dict/semeval2007task7/w2v" + osef[i]);
+            System.out.println("Test " + i);
+            System.out.println("Mean Scores : " + res[i].meanScore);
+            System.out.println("Standard Deviation Scores : " + res[i].standardDeviationScore);
+            System.out.println("Mean Times : " + res[i].meanTime);
+        }
 
-        System.out.println("Test 7/150 with Dice");
-        System.out.println("Mean Scores : " + res.meanScore);
-        System.out.println("Standard Deviation Scores : " + res.standardDeviationScore);
-        System.out.println("Mean Times : " + res.meanTime);
-
-        Result res2 = getScores("../data/lesk_dict/semeval2007task7/7/150", true);
-
-        System.out.println("Test 7/150 without Dice");
-        System.out.println("Mean Scores : " + res2.meanScore);
-        System.out.println("Standard Deviation Scores : " + res2.standardDeviationScore);
-        System.out.println("Mean Times : " + res2.meanTime);
-        
-        System.out.println("MWUTest 1 / 2 : " + mannTest.mannWhitneyUTest(res.scores, res2.scores));
+        for (int i = 0 ; i < 5 ; i++)
+        {
+            for (int j = 0 ; j < 5 ; j++)
+            {
+                System.out.println("MWUTest " + i + " / " + j + " : " + mannTest.mannWhitneyUTest(res[i].scores, res[j].scores));
+            }
+        }
     }
 
-    private static Result getScores(String dict, boolean patate) throws Exception
+    private static Result getScores(String dict) throws Exception
     {
         int n = 30;
         double[] scores = new double[n];
@@ -66,8 +68,7 @@ public class TestOnSimilarityMeasures
         dl.load();
         for (Document d : dl) lrloader.loadSenses(d);
 
-        ConfigurationScorer scorer = new ConfigurationScorerWithCache(new IndexedDiceLeskSimilarity());
-        if (patate) scorer = new ConfigurationScorerWithCache(new IndexedLeskSimilarity());
+        ConfigurationScorer scorer = new ConfigurationScorerWithCache(new IndexedLeskSimilarity());
             
         SemEval2007Task7PerfectConfigurationScorer perfectScorer = new SemEval2007Task7PerfectConfigurationScorer();
 
