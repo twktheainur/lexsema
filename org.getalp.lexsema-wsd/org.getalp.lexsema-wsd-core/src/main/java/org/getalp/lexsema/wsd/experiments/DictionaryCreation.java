@@ -96,11 +96,8 @@ public class DictionaryCreation
 
     public static void main(String[] args) throws Exception
     {
-        writeDictionary(true, true, true, true, true, true, false, false, false, false, 100, true, 10, true, false, "../data/lesk_dict/test2");
-        //writeDictionary(true, true, true, true, true, true, false, false, false, false, 100, true, 20, true, false, "../data/lesk_dict/semeval2007task7/w2v20");
-        //writeDictionary(true, true, true, true, true, true, false, false, false, false, 100, true, 15, true, false, "../data/lesk_dict/semeval2007task7/w2v15");
-        //writeDictionary(true, true, true, true, true, true, false, false, false, false, 100, true, 5, true, false, "../data/lesk_dict/semeval2007task7/w2v5");
-        //writeDictionary(true, true, true, true, true, true, false, false, false, false, 100, true, 3, true, false, "../data/lesk_dict/semeval2007task7/w2v3");
+        writeDictionary(true, true, true, true, true, true, false, false, false, false, 100, true, 5, true, false, "../data/lesk_dict/semeval2007task7/w2v5");
+        writeDictionary(true, true, true, true, true, true, false, false, false, false, 100, true, 3, true, false, "../data/lesk_dict/semeval2007task7/w2v3");
     }
 
     public static void writeDictionary(boolean definitions, boolean extendedDefinitions, 
