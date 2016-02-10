@@ -3,24 +3,12 @@ package org.getalp.lexsema.wsd.experiments;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStreamWriter;
-import java.net.URI;
-import java.nio.file.FileSystem;
-import java.nio.file.FileSystems;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import edu.mit.jwi.Dictionary;
-
-import org.deeplearning4j.models.embeddings.wordvectors.WordVectors;
 import org.getalp.lexsema.io.dictionary.DocumentDictionaryWriter;
 import org.getalp.lexsema.io.document.loader.GMBCorpusLoader;
 import org.getalp.lexsema.io.document.loader.OldDSOCorpusLoader;
@@ -28,43 +16,31 @@ import org.getalp.lexsema.io.document.loader.CorpusLoader;
 import org.getalp.lexsema.io.document.loader.SemCorCorpusLoader;
 import org.getalp.lexsema.io.document.loader.Semeval2007CorpusLoader;
 import org.getalp.lexsema.io.document.loader.WordnetGlossTagCorpusLoader;
-import org.getalp.lexsema.io.resource.LRLoader;
-import org.getalp.lexsema.io.resource.dictionary.DictionaryLRLoader;
 import org.getalp.lexsema.io.resource.wordnet.WordnetLoader;
 import org.getalp.lexsema.similarity.Sense;
 import org.getalp.lexsema.similarity.Text;
 import org.getalp.lexsema.similarity.Word;
-import org.getalp.lexsema.similarity.signatures.enrichment.SignatureEnrichment;
+import org.getalp.lexsema.similarity.signatures.enrichment.IndexingSignatureEnrichment;
 import org.getalp.lexsema.similarity.signatures.enrichment.StemmingSignatureEnrichment;
-import org.getalp.lexsema.similarity.signatures.enrichment.StopwordsRemoveSignatureEnrichment;
-import org.getalp.lexsema.similarity.signatures.enrichment.Word2VecLocalSignatureEnrichment;
+import org.getalp.lexsema.similarity.signatures.enrichment.StopwordsRemovingSignatureEnrichment;
 import org.getalp.lexsema.similarity.signatures.enrichment.Word2VecSignatureEnrichment2;
-import org.getalp.lexsema.util.distribution.SparkSingleton;
 import org.getalp.lexsema.io.thesaurus.AnnotatedTextThesaurusImpl;
-import org.getalp.lexsema.io.word2vec.SerializedModelWord2VecLoader;
-import org.getalp.lexsema.io.word2vec.Word2VecLoader;
 
 public class DictionaryCreation
 {
     public static String wordnetPath = "../data/wordnet/2.1/dict/";
 
-    public static String wordnetResourcePath = "/wordnet_full_dict.xml";
-
     public static String semCorPath = "../data/semcor2.1/all.xml";
 
     public static String dsoPath = "../data/dso/";
 
-    public static String corpusPath = "../data/senseval2007_task7/test/eng-coarse-all-words.xml";
-
-    public static String corpusResourcePath = "/semeval2007/eng-coarse-all-words.xml";
+    public static String semeval2007task7Path = "../data/senseval2007_task7/test/eng-coarse-all-words.xml";
 
     public static String wordnetGlossTagPath = "../data/wordnet/3.0/glosstag/";
 
     public static String gmbPath = "../data/gmb-2.2.0/";
 
     public static String word2vecPath = "../data/word2vec/";
-
-    public static String word2vecResourcePath = "/word2vec/eng";
 
     public static Dictionary wordnet = new Dictionary(new File(wordnetPath));
 
@@ -75,10 +51,6 @@ public class DictionaryCreation
     public static CorpusLoader wordnetGlossTag = new WordnetGlossTagCorpusLoader(wordnetGlossTagPath);
 
     public static CorpusLoader gmb = new GMBCorpusLoader(gmbPath, wordnet);
-
-    public static Word2VecLoader word2VecLoader = new SerializedModelWord2VecLoader();
-
-    public static SignatureEnrichment word2vecSignatureEnrichment = null;
 
     public static boolean semCorIsLoaded = false;
 
@@ -92,8 +64,7 @@ public class DictionaryCreation
 
     public static void main(String[] args) throws Exception
     {
-        //writeDictionary(true, true, true, true, true, true, false, false, false, false, 100, true, 5, true, "../data/lesk_dict/semeval2007task7/w2v5");
-        writeDictionary(true, true, true, true, true, true, false, false, false, false, 100, true, 3, true, "../data/lesk_dict/semeval2007task7/w2v3");
+        writeDictionary(true, true, true, true, true, true, false, false, false, false, 100, true, 10, true, "../data/lesk_dict/semeval2007task7/w2v10");
     }
 
     public static void writeDictionary(boolean definitions, boolean extendedDefinitions, 
@@ -117,9 +88,7 @@ public class DictionaryCreation
         lrloader.loadDefinitions(definitions);
         lrloader.extendedSignature(extendedDefinitions);
         lrloader.loadRelated(extendedDefinitions);
-        lrloader.index(index);
         lrloader.shuffle(shuffle);
-        lrloader.distributed(false);
 
         if (useSemCorThesaurus)
         {
@@ -177,7 +146,7 @@ public class DictionaryCreation
 
         if (stopWords)
         {
-            lrloader.addSignatureEnrichment(new StopwordsRemoveSignatureEnrichment());
+            lrloader.addSignatureEnrichment(new StopwordsRemovingSignatureEnrichment());
         }
         
         if (useWord2Vec)
@@ -190,9 +159,14 @@ public class DictionaryCreation
             lrloader.addSignatureEnrichment(new StemmingSignatureEnrichment());
         }
         
+        if (index)
+        {
+            lrloader.addSignatureEnrichment(new IndexingSignatureEnrichment());
+        }
+        
         if (loadOnlySemeval2007Task7Senses)
         {
-            CorpusLoader corpus = new Semeval2007CorpusLoader(new FileInputStream(corpusPath));
+            CorpusLoader corpus = new Semeval2007CorpusLoader(new FileInputStream(semeval2007task7Path));
             corpus.load();
             for (Text txt : corpus)
             {

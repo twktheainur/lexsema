@@ -11,9 +11,10 @@ import org.getalp.lexsema.similarity.Word;
 import org.getalp.lexsema.similarity.cache.SenseCache;
 import org.getalp.lexsema.similarity.cache.SenseCacheImpl;
 import org.getalp.lexsema.similarity.signatures.*;
+import org.getalp.lexsema.similarity.signatures.enrichment.IndexingSignatureEnrichment;
 import org.getalp.lexsema.similarity.signatures.enrichment.SignatureEnrichment;
 import org.getalp.lexsema.similarity.signatures.enrichment.StemmingSignatureEnrichment;
-import org.getalp.lexsema.similarity.signatures.enrichment.StopwordsRemoveSignatureEnrichment;
+import org.getalp.lexsema.similarity.signatures.enrichment.StopwordsRemovingSignatureEnrichment;
 import org.getalp.lexsema.similarity.signatures.index.SymbolIndex;
 import org.getalp.lexsema.similarity.signatures.index.SymbolIndexImpl;
 import org.getalp.lexsema.similarity.signatures.symbols.SemanticSymbol;
@@ -48,11 +49,7 @@ public class WordnetLoader implements LRLoader {
 
     private boolean hasExtendedSignature;
 
-    private boolean useIndex;
-
     private boolean shuffle;
-
-    private final SymbolIndex symbolIndex;
 
     private final List<AnnotatedTextThesaurus> thesauri;
 
@@ -71,9 +68,7 @@ public class WordnetLoader implements LRLoader {
         loadDefinitions = true;
         loadRelated = false;
         hasExtendedSignature = false;
-        useIndex = false;
         shuffle = false;
-        symbolIndex = new SymbolIndexImpl();
         thesauri = new ArrayList<>();
         senseCache = new HashMap<>();
         distributed = false;
@@ -115,10 +110,10 @@ public class WordnetLoader implements LRLoader {
 
             IIndexWord iw = getWord(id);
             if (iw != null) {
-                final List<IWordID> wordIDs = iw.getWordIDs();
+                List<IWordID> wordIDs = iw.getWordIDs();
                 for (IWordID wordID : wordIDs) {
                     IWord word = dictionary.getWord(wordID);
-                    final ISenseKey senseKey = word.getSenseKey();
+                    ISenseKey senseKey = word.getSenseKey();
                     Sense sense = new SenseImpl(senseKey.toString());
                     SemanticSignature signature = createSignature();
                     final ISynset wordSynset = word.getSynset();
@@ -146,16 +141,10 @@ public class WordnetLoader implements LRLoader {
                     for (SignatureEnrichment signatureEnrichment : signatureEnrichments) {
                         signature = signatureEnrichment.enrichSemanticSignature(signature);
                     }
-                
-                    if (useIndex) {
-                        signature = indexSignature(signature);
-                    }
-                    
+          
                     sense.setSemanticSignature(signature);
-
                     senses.add(sense);
                 }
-
             }
             senseCache.put(id, senses);
         }
@@ -176,7 +165,6 @@ public class WordnetLoader implements LRLoader {
                     IPointer key = iPointerListEntry.getKey();
                     sense.addRelatedSignature(key.getSymbol(), localSignature);
                 }
-
             }
         }
     }
@@ -198,15 +186,6 @@ public class WordnetLoader implements LRLoader {
                 }
             }
         }
-    }
-    
-    private SemanticSignature indexSignature(SemanticSignature signature) {
-        IndexedSemanticSignature indexedSignature = new IndexedSemanticSignatureImpl(symbolIndex);
-        for (SemanticSymbol symbol : signature) {
-            indexedSignature.addSymbol(symbol);
-        }
-        indexedSignature.sort();
-        return indexedSignature;
     }
 
     @Override
@@ -341,12 +320,6 @@ public class WordnetLoader implements LRLoader {
     }
 
     @Override
-    public LRLoader index(boolean useIndex) {
-        this.useIndex = useIndex;
-        return this;
-    }
-
-    @Override
     public LRLoader distributed(boolean isDistributed) {
         distributed = isDistributed;
         return this;
@@ -383,7 +356,6 @@ public class WordnetLoader implements LRLoader {
             }
         }
 
-
         JavaRDD<Word> parallelSenses = sparkContext.parallelize(wordsToProcess);
         parallelSenses.cache();
         uniqueWordSenses = parallelSenses.map(this::getSenses).collect();
@@ -408,7 +380,15 @@ public class WordnetLoader implements LRLoader {
     @Override
     public LRLoader filterStopWords(boolean usesStopWords) {
         if (usesStopWords) {
-            addSignatureEnrichment(new StopwordsRemoveSignatureEnrichment());
+            addSignatureEnrichment(new StopwordsRemovingSignatureEnrichment());
+        }
+        return this;
+    }
+
+    @Override
+    public LRLoader index(boolean useIndex) {
+        if (useIndex) {
+            addSignatureEnrichment(new IndexingSignatureEnrichment());
         }
         return this;
     }
