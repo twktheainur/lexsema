@@ -64,7 +64,13 @@ public class VoteDisambiguator implements Disambiguator
             }
             finalSenses[i] = maxKey;
         }
-        return new ContinuousConfiguration(document, finalSenses);
+        
+        Configuration finalConfiguration = new ContinuousConfiguration(document, finalSenses);
+
+        SemevalWriter sw = new SemevalWriter(ansDirectory + "/" + document.getId() + "_fusion.ans");
+        sw.write(document, finalConfiguration.getAssignments());
+        
+        return finalConfiguration;
     }
     
     public Configuration disambiguate(Document document, Configuration c)
