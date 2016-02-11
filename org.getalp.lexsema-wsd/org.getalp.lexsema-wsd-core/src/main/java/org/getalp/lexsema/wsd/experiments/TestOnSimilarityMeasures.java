@@ -37,9 +37,8 @@ public class TestOnSimilarityMeasures
 
     public static void main(String[] args) throws Exception
     {
-        Result[] res = new Result[1];
-        String[] dicts = {"all/dict_all_stopwords_stemming_semcor_dso_wordnetglosstag_150",
-                          "all/dict_all_stopwords_stemming_semcor_wordnetglosstag_250"};
+        String[] dicts = {"semeval2007task7/5/250"};
+        Result[] res = new Result[dicts.length];
         for (int i = 0 ; i < res.length ; i++)
         {
             res[i] = getScores("../data/lesk_dict/" + dicts[i]);
@@ -60,7 +59,7 @@ public class TestOnSimilarityMeasures
 
     private static Result getScores(String dict) throws Exception
     {
-        int n = 30;
+        int n = 1;
         double[] scores = new double[n];
         long[] times = new long[n];
         LRLoader lrloader = new DictionaryLRLoader(new FileInputStream(dict), true);
@@ -81,9 +80,9 @@ public class TestOnSimilarityMeasures
 
         MultiThreadCuckooSearch cuckooDisambiguator = new MultiThreadCuckooSearch(iterations, minLevyLocation, maxLevyLocation, minLevyScale, maxLevyScale, scorer, false);
 
-        VoteDisambiguator voteDisambiguator = new VoteDisambiguator(cuckooDisambiguator, 100);
+        VoteDisambiguator voteDisambiguator = new VoteDisambiguator(cuckooDisambiguator, 100, "../data/ans/");
                
-        Disambiguator disambiguator = cuckooDisambiguator;
+        Disambiguator disambiguator = voteDisambiguator;
         
         System.out.println("Dictionary " + dict);
         

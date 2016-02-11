@@ -1,6 +1,8 @@
 package org.getalp.lexsema.wsd.method;
 
 import java.util.HashMap;
+
+import org.getalp.lexsema.io.annotresult.SemevalWriter;
 import org.getalp.lexsema.similarity.Document;
 import org.getalp.lexsema.wsd.configuration.Configuration;
 import org.getalp.lexsema.wsd.configuration.ContinuousConfiguration;
@@ -11,10 +13,13 @@ public class VoteDisambiguator implements Disambiguator
     
     private int n;
     
-    public VoteDisambiguator(Disambiguator disambiguator, int n)
+    private String ansDirectory;
+    
+    public VoteDisambiguator(Disambiguator disambiguator, int n, String ansDirectory)
     {
         this.disambiguator = disambiguator;
         this.n = n;
+        this.ansDirectory = ansDirectory;
     }
 
     public Configuration disambiguate(Document document)
@@ -26,6 +31,8 @@ public class VoteDisambiguator implements Disambiguator
         {
             System.out.println("" + i + "/" + n + "...");
             configurations[i] = disambiguator.disambiguate(document);
+            SemevalWriter sw = new SemevalWriter(ansDirectory + "/" + document.getId() + "_" + i + ".ans");
+            sw.write(document, configurations[i].getAssignments());
         }
 
         int[] finalSenses = new int[nbWords];
