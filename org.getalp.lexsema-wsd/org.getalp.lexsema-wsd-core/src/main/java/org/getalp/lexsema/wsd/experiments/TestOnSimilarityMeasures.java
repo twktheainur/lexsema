@@ -37,7 +37,7 @@ public class TestOnSimilarityMeasures
 
     public static void main(String[] args) throws Exception
     {
-        String[] dicts = {"semeval2007task7/5/250"};
+        String[] dicts = {"semeval2007task7/5/250c"};
         Result[] res = new Result[dicts.length];
         for (int i = 0 ; i < res.length ; i++)
         {
