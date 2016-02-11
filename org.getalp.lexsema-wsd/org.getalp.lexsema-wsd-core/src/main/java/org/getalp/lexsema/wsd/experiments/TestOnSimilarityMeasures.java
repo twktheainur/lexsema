@@ -59,7 +59,7 @@ public class TestOnSimilarityMeasures
 
     private static Result getScores(String dict) throws Exception
     {
-        int n = 1;
+        int n = 30;
         double[] scores = new double[n];
         long[] times = new long[n];
         LRLoader lrloader = new DictionaryLRLoader(new FileInputStream(dict), true);
@@ -82,7 +82,7 @@ public class TestOnSimilarityMeasures
 
         VoteDisambiguator voteDisambiguator = new VoteDisambiguator(cuckooDisambiguator, 100, "../data/ans/");
                
-        Disambiguator disambiguator = voteDisambiguator;
+        Disambiguator disambiguator = cuckooDisambiguator;
         
         System.out.println("Dictionary " + dict);
         
