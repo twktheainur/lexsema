@@ -2,6 +2,7 @@ package org.getalp.lexsema.similarity.signatures;
 
 import org.getalp.lexsema.similarity.measures.SimilarityMeasure;
 import org.getalp.lexsema.similarity.signatures.index.SymbolIndex;
+import org.getalp.lexsema.similarity.signatures.index.SymbolIndexImpl;
 import org.getalp.lexsema.similarity.signatures.symbols.IndexedSemanticSymbol;
 import org.getalp.lexsema.similarity.signatures.symbols.IndexedSemanticSymbolImpl;
 import org.getalp.lexsema.similarity.signatures.symbols.SemanticSymbol;
@@ -28,6 +29,11 @@ public class IndexedSemanticSignatureImpl implements IndexedSemanticSignature {
     @Override
     public void setLanguage(Language language) {
         this.language = language;
+    }
+
+    public IndexedSemanticSignatureImpl() {
+
+        this(new SymbolIndexImpl());
     }
 
     public IndexedSemanticSignatureImpl(SymbolIndex symbolIndex) {
@@ -109,6 +115,13 @@ public class IndexedSemanticSignatureImpl implements IndexedSemanticSignature {
         }
     }
 
+    
+    @Override
+    public void addIndexedSymbols(List<Integer> symbols) {
+        for (Integer i : symbols) {
+            addIndexedSymbol(i);
+        }
+    }
 
     @Override
     public void addSymbolString(List<String> string, List<Double> weights) {

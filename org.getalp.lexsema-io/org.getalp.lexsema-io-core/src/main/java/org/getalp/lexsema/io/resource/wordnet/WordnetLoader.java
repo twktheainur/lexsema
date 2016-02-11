@@ -292,11 +292,22 @@ public class WordnetLoader implements LRLoader {
         }
         for (String clusteredSense : clusteredSenses.keySet()) {
             Sense newSense = new SenseImpl(clusteredSense);
-            SemanticSignature newSignature = new SemanticSignatureImpl();
-            for (Sense senseInCluster : clusteredSenses.get(clusteredSense)) {
-                newSignature.addSymbols(senseInCluster.getSemanticSignature().getSymbols());
+            if (clusteredSenses.get(clusteredSense).get(0).getSemanticSignature() instanceof IndexedSemanticSignature) {
+                IndexedSemanticSignature newSignature = new IndexedSemanticSignatureImpl();
+                for (Sense senseInCluster : clusteredSenses.get(clusteredSense)) {
+                    IndexedSemanticSignature signatureInCluster = (IndexedSemanticSignature) senseInCluster.getSemanticSignature();
+                    newSignature.addIndexedSymbols(signatureInCluster.getIndexedSymbols());
+                }
+                newSignature.sort();
+                newSense.setSemanticSignature(newSignature);
             }
-            newSense.setSemanticSignature(newSignature);
+            else {
+                SemanticSignature newSignature = new SemanticSignatureImpl();
+                for (Sense senseInCluster : clusteredSenses.get(clusteredSense)) {
+                    newSignature.addSymbols(senseInCluster.getSemanticSignature().getSymbols());
+                }
+                newSense.setSemanticSignature(newSignature);
+            }
             newSenses.add(newSense);
         }
         return newSenses;
