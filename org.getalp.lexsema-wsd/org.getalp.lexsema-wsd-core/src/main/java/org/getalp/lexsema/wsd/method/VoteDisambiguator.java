@@ -31,8 +31,11 @@ public class VoteDisambiguator implements Disambiguator
         {
             System.out.println("" + i + "/" + n + "...");
             configurations[i] = disambiguator.disambiguate(document);
-            SemevalWriter sw = new SemevalWriter(ansDirectory + "/" + document.getId() + "_" + i + ".ans");
-            sw.write(document, configurations[i].getAssignments());
+            if (ansDirectory != null)
+            {
+                SemevalWriter sw = new SemevalWriter(ansDirectory + "/" + document.getId() + "_" + i + ".ans");
+                sw.write(document, configurations[i].getAssignments());
+            }
         }
 
         int[] finalSenses = new int[nbWords];
@@ -67,8 +70,11 @@ public class VoteDisambiguator implements Disambiguator
         
         Configuration finalConfiguration = new ContinuousConfiguration(document, finalSenses);
 
-        SemevalWriter sw = new SemevalWriter(ansDirectory + "/" + document.getId() + "_fusion.ans");
-        sw.write(document, finalConfiguration.getAssignments());
+        if (ansDirectory != null)
+        {
+            SemevalWriter sw = new SemevalWriter(ansDirectory + "/" + document.getId() + "_fusion.ans");
+            sw.write(document, finalConfiguration.getAssignments());
+        }
         
         return finalConfiguration;
     }

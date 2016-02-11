@@ -6,8 +6,11 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Scanner;
+
 import edu.mit.jwi.Dictionary;
 import org.getalp.lexsema.io.dictionary.DocumentDictionaryWriter;
 import org.getalp.lexsema.io.document.loader.GMBCorpusLoader;
@@ -42,6 +45,8 @@ public class DictionaryCreation
 
     public static String word2vecPath = "../data/word2vec/";
 
+    public static String senseClustersPath = "../data/senseval2007_task7/key/sense_clusters-21.senses";
+    
     public static Dictionary wordnet = new Dictionary(new File(wordnetPath));
 
     public static CorpusLoader semCor = new SemCorCorpusLoader(semCorPath);
@@ -52,6 +57,8 @@ public class DictionaryCreation
 
     public static CorpusLoader gmb = new GMBCorpusLoader(gmbPath, wordnet);
 
+    public static List<List<String>> senseClusters = new ArrayList<>();
+    
     public static boolean semCorIsLoaded = false;
 
     public static boolean dsoIsLoaded = false;
@@ -61,10 +68,12 @@ public class DictionaryCreation
     public static boolean gmbgIsLoaded = false;
 
     public static boolean word2vecIsLoaded = false;
+    
+    public static boolean senseClustersIsLoaded = false;
 
     public static void main(String[] args) throws Exception
     {
-        writeDictionary(true, true, true, true, true, true, true, true, true, false, 150, false, 0, false, "../data/lesk_dict/all/dict_all_stopwords_stemming_semcor_dso_wordnetglosstag_150");
+        writeDictionary(true, true, true, true, true, true, true, false, true, false, 250, false, 0, true, true, "../data/lesk_dict/semeval2007task7/5/250c");
     }
 
     public static void writeDictionary(boolean definitions, boolean extendedDefinitions, 
@@ -78,6 +87,7 @@ public class DictionaryCreation
             boolean useWord2Vec,
             int numberOfWordsFromWord2Vec,
             boolean loadOnlySemeval2007Task7Senses, 
+            boolean useSenseClusters,
             String newDictPath) throws Exception
     {    
         System.out.println("Building dictionary " + newDictPath + "...");
@@ -164,6 +174,16 @@ public class DictionaryCreation
             lrloader.addSignatureEnrichment(new IndexingSignatureEnrichment());
         }
         
+        if (useSenseClusters)
+        {
+            if (!senseClustersIsLoaded)
+            {
+                loadSenseClusters();
+                senseClustersIsLoaded = true;
+            }
+            lrloader.setSenseClusters(senseClusters);
+        }
+        
         if (loadOnlySemeval2007Task7Senses)
         {
             CorpusLoader corpus = new Semeval2007CorpusLoader(new FileInputStream(semeval2007task7Path));
@@ -215,5 +235,18 @@ public class DictionaryCreation
         bw.close();
         fos.flush();
         fos.close();
+    }
+    
+    private static void loadSenseClusters() throws Exception
+    {
+        Scanner sc = new Scanner(new File(senseClustersPath));
+        while (sc.hasNextLine())
+        {
+            String line = sc.nextLine();
+            String[] tokens = line.split(" ");
+            List<String> senses = new ArrayList<>(Arrays.asList(tokens));
+            senseClusters.add(senses);
+        }
+        sc.close();
     }
 }

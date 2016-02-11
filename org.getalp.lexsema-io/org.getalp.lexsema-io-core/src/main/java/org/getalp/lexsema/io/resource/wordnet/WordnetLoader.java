@@ -57,6 +57,8 @@ public class WordnetLoader implements LRLoader {
     
     private boolean distributed;
 
+    private List<List<String>> senseClusters;
+    
     /**
      * Creates a WordnetLoader with an existing Wordnet Dictionary object.
      * The dictionary may or may not be open prior to this constructor call.
@@ -72,6 +74,7 @@ public class WordnetLoader implements LRLoader {
         thesauri = new ArrayList<>();
         senseCache = new HashMap<>();
         distributed = false;
+        senseClusters = null;
     }
 
     private Dictionary openDictionary(Dictionary dictionary) {
@@ -208,6 +211,9 @@ public class WordnetLoader implements LRLoader {
             } else {
                 senses = new ArrayList<>();
             }
+            if (senseClusters != null) {
+                senses = clusterize(senses);
+            }
             if (shuffle) {
                 Collections.shuffle(senses);
             }
@@ -260,6 +266,40 @@ public class WordnetLoader implements LRLoader {
 
     private void appendToSignature(SemanticSignature semanticSignature, SemanticSignature other) {
         semanticSignature.appendSignature(other);
+    }
+    
+    private List<Sense> clusterize(List<Sense> senses) {
+        Map<String, List<Sense>> clusteredSenses = new HashMap<>();
+        List<Sense> newSenses = new ArrayList<>();
+        for (Sense sense : senses) {
+            boolean inACluster = false;
+            for (List<String> cluster : senseClusters) {
+                for (String senseInCluster : cluster) {
+                    if (sense.getId().equals(senseInCluster)) {
+                        if (clusteredSenses.containsKey(cluster.get(0))) {
+                            clusteredSenses.get(cluster.get(0)).add(sense);
+                        }
+                        else {
+                            clusteredSenses.put(cluster.get(0), new ArrayList<Sense>(Arrays.asList(sense)));
+                        }
+                        inACluster = true;
+                    }
+                }
+            }
+            if (!inACluster) {
+                newSenses.add(sense);
+            }
+        }
+        for (String clusteredSense : clusteredSenses.keySet()) {
+            Sense newSense = new SenseImpl(clusteredSense);
+            SemanticSignature newSignature = new SemanticSignatureImpl();
+            for (Sense senseInCluster : clusteredSenses.get(clusteredSense)) {
+                newSignature.addSymbols(senseInCluster.getSemanticSignature().getSymbols());
+            }
+            newSense.setSemanticSignature(newSignature);
+            newSenses.add(newSense);
+        }
+        return newSenses;
     }
 
     private IIndexWord getWord(String sid) {
@@ -390,6 +430,11 @@ public class WordnetLoader implements LRLoader {
         if (useIndex) {
             addSignatureEnrichment(new IndexingSignatureEnrichment());
         }
+        return this;
+    }
+    
+    public LRLoader setSenseClusters(List<List<String>> senseClusters) {
+        this.senseClusters = senseClusters;
         return this;
     }
 
