@@ -158,7 +158,7 @@ public class TestOnSimilarityMeasures
             {
                 docs.add(Iterables.get(dls[j], i));
             }
-            Configuration c = voteDisambiguator.disambiguate((Document[]) docs.toArray());
+            Configuration c = voteDisambiguator.disambiguate(docs.toArray(new Document[docs.size()]));
             score += perfectScorer.computeScore(docs.get(0), c);
         }
         long endTime = System.currentTimeMillis();

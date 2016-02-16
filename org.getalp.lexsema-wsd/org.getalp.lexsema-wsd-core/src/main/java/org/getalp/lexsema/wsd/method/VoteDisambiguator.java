@@ -80,50 +80,7 @@ public class VoteDisambiguator implements Disambiguator
     
     public Configuration disambiguate(Document document)
     {
-        int nbWords = document.size();
-        int m = disambiguators.size();
-        Configuration[] configurations = new Configuration[n * m];
-        for (int i = 0 ; i < m ; i++)
-        {
-            for (int j = 0 ; j < n ; j++)
-            {
-                System.out.println("" + j + (i * n) + "/" + (n * m) + "...");
-                configurations[j + (i * n)] = disambiguators.get(i).disambiguate(document);
-            }
-        }
-
-        int[] finalSenses = new int[nbWords];
-        for (int i = 0 ; i < nbWords ; i++)
-        {
-            HashMap<Integer, Integer> candidates = new HashMap<>();
-            for (int j = 0 ; j < configurations.length ; j++)
-            {
-                int assignment = configurations[j].getAssignment(i);
-                if (candidates.containsKey(assignment))
-                {
-                    int oldValue = candidates.get(assignment);
-                    candidates.put(assignment, oldValue + 1);
-                }
-                else
-                {
-                    candidates.put(assignment, 0);
-                }
-            }
-            int maxKey = -1;
-            int maxValue = -1;
-            for (Integer j : candidates.keySet())
-            {
-                if (candidates.get(j) > maxValue)
-                {
-                    maxKey = j;
-                    maxValue = candidates.get(j);
-                }
-            }
-            finalSenses[i] = maxKey;
-        }
-        
-        Configuration finalConfiguration = new ContinuousConfiguration(document, finalSenses);
-        return finalConfiguration;
+        return disambiguate(new Document[]{document});
     }
     
     public Configuration disambiguate(Document document, Configuration c)
