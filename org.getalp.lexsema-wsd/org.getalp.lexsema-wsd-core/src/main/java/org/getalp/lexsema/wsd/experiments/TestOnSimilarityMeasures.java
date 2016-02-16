@@ -47,7 +47,7 @@ public class TestOnSimilarityMeasures
     {
         String[] dicts = {"../data/lesk_dict/semeval2007task7/7/150",
                           "../data/lesk_dict/semeval2007task7/5/250"};
-        getScoresWithVote(dicts, 1);
+        getScoresWithVote(dicts, 5);
     }
     
     private static void compareDicts(String[] dicts) throws Exception
@@ -159,7 +159,9 @@ public class TestOnSimilarityMeasures
                 docs.add(Iterables.get(dls[j], i));
             }
             Configuration c = voteDisambiguator.disambiguate(docs.toArray(new Document[docs.size()]));
-            score += perfectScorer.computeScore(docs.get(0), c);
+            double tmp_score = perfectScorer.computeScore(docs.get(0), c);
+            System.out.println("tmp score : " + tmp_score);
+            score += tmp_score;
         }
         long endTime = System.currentTimeMillis();
         time = (endTime - startTime);

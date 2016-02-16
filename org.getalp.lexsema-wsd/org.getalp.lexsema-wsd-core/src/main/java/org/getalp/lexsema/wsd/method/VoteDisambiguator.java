@@ -38,7 +38,7 @@ public class VoteDisambiguator implements Disambiguator
             {
                 for (int j = 0 ; j < n ; j++)
                 {
-                    System.out.println("" + j + (i * n) + (k * m * n) + "/" + (n * m * l) + "...");
+                    System.out.println("" + (j + (i * n) + (k * m * n)) + "/" + (n * m * l) + "...");
                     configurations[j + (i * n) + (k * m * n)] = disambiguators.get(i).disambiguate(documents[k]);
                 }
             }
