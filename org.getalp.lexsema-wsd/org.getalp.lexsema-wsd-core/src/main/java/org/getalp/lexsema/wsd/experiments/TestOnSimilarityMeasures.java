@@ -144,7 +144,7 @@ public class TestOnSimilarityMeasures
 
         MultiThreadCuckooSearch cuckooDisambiguator = new MultiThreadCuckooSearch(iterations, minLevyLocation, maxLevyLocation, minLevyScale, maxLevyScale, scorer, false);
 
-        VoteDisambiguator voteDisambiguator = new VoteDisambiguator(cuckooDisambiguator, 100);
+        VoteDisambiguator voteDisambiguator = new VoteDisambiguator(cuckooDisambiguator, n);
                
         System.out.println("Dictionaries " + Arrays.toString(dicts));
         
