@@ -3,19 +3,14 @@ package org.getalp.lexsema.util;
 import java.util.HashSet;
 import java.util.Set;
 
-/**
- * Utility class for managing stop words. Loads and keeps first Set of stop words from first file.
- *
- * @author Amine Aït-Mouloud
- * @since 2014-12-16
- */
 public final class StopList 
 {
     private static Set<String> stopWords;
 
-    private StopList() {
-    }
+    private StopList()
+    {
 
+    }
 
     @SuppressWarnings("OverlyLongMethod")
     private static void loadStopWords()
