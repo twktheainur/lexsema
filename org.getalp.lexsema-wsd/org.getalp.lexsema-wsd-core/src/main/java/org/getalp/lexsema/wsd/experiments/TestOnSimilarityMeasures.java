@@ -46,9 +46,13 @@ public class TestOnSimilarityMeasures
 
     public static void main(String[] args) throws Exception
     {
-        String[] dicts = {"../data/lesk_dict/semeval2007task7/test"};
-        //getScoresWithVote(dicts, 5);
-        compareDicts(dicts);
+        String[] dicts = {"../data/lesk_dict/semeval2007task7/5/250",
+                          "../data/lesk_dict/semeval2007task7/5/250",
+                          "../data/lesk_dict/semeval2007task7/5/250",
+                          "../data/lesk_dict/semeval2007task7/10/50",
+                          "../data/lesk_dict/semeval2007task7/10/50"};
+        getScoresWithVote(dicts, 1);
+        //compareDicts(dicts);
     }
     
     private static void compareDicts(String[] dicts) throws Exception
@@ -119,7 +123,7 @@ public class TestOnSimilarityMeasures
                 System.out.flush();
                 Configuration c = disambiguator.disambiguate(d);
                 double tmp_score = perfectScorer.computeScore(d, c);
-                System.out.print("[" + new DecimalFormat("##.##").format(tmp_score) + "] ");
+                System.out.print("[" + new DecimalFormat("##.##").format(tmp_score * 100) + "] ");
                 System.out.flush();
                 scores[i] += tmp_score;
                 j++;

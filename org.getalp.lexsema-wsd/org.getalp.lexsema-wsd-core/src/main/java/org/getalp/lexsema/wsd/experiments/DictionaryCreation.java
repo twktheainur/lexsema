@@ -73,7 +73,8 @@ public class DictionaryCreation
 
     public static void main(String[] args) throws Exception
     {
-        writeDictionary(false, false, true, true, true, false, true, false, true, false, 250, false, 0, true, false, "../data/lesk_dict/semeval2007task7/test");
+        writeDictionary(true, true, true, true, true, false, true, false, true, false, 250, false, 0, true, false, "../data/lesk_dict/semeval2007task7/5/250");
+        writeDictionary(true, true, true, true, true, false, false, true, false, true, 50, false, 0, true, false, "../data/lesk_dict/semeval2007task7/10/50");
     }
 
     public static void writeDictionary(boolean definitions, boolean extendedDefinitions, 
