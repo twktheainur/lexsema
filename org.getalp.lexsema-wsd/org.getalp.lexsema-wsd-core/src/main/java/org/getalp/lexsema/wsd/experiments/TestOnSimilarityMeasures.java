@@ -1,6 +1,7 @@
 package org.getalp.lexsema.wsd.experiments;
 
 import java.io.FileInputStream;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -56,10 +57,20 @@ public class TestOnSimilarityMeasures
         for (int i = 0 ; i < res.length ; i++)
         {
             res[i] = getScores(dicts[i], 30);
-            System.out.println("Test " + dicts[i]);
+            System.out.println("Test " + i + " (" + dicts[i] + ")");
             System.out.println("Mean Scores : " + res[i].meanScore);
             System.out.println("Standard Deviation Scores : " + res[i].standardDeviationScore);
             System.out.println("Mean Times : " + res[i].meanTime);
+            System.out.println();
+        }
+        System.out.println("Recap:");
+        for (int i = 0 ; i < res.length ; i++)
+        {
+            System.out.println("Test " + i + " (" + dicts[i] + ")");
+            System.out.println("Mean Scores : " + res[i].meanScore);
+            System.out.println("Standard Deviation Scores : " + res[i].standardDeviationScore);
+            System.out.println("Mean Times : " + res[i].meanTime);
+            System.out.println();
         }
         for (int i = 0 ; i < res.length ; i++)
         {
@@ -97,7 +108,7 @@ public class TestOnSimilarityMeasures
         
         for (int i = 0 ; i < n ; i++)
         {
-            System.out.print("" + i + "/" + n + " ");
+            System.out.print("" + (i+1) + "/" + n + " ");
             System.out.flush();
             scores[i] = 0;
             int j = 0;
@@ -107,7 +118,10 @@ public class TestOnSimilarityMeasures
                 System.out.print("(" + d.getId() + ") ");
                 System.out.flush();
                 Configuration c = disambiguator.disambiguate(d);
-                scores[i] += perfectScorer.computeScore(d, c);
+                double tmp_score = perfectScorer.computeScore(d, c);
+                System.out.print("[" + new DecimalFormat("##.##").format(tmp_score) + "] ");
+                System.out.flush();
+                scores[i] += tmp_score;
                 j++;
             }
             long endTime = System.currentTimeMillis();
