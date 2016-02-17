@@ -35,11 +35,11 @@ import org.getalp.lexsema.similarity.measures.word2vec.Word2VecGlossCosineSimila
 import org.getalp.lexsema.translation.GoogleWebTranslator;
 import org.getalp.lexsema.translation.Translator;
 import org.getalp.lexsema.util.Language;
+import org.getalp.ml.matrix.Matrices;
 import org.getalp.ml.matrix.factorization.TapkeeNLMatrixFactorization;
 import org.getalp.ml.matrix.factorization.TapkeeNLMatrixFactorizationFactory;
 import org.getalp.ml.matrix.filters.Filter;
 import org.getalp.ml.matrix.filters.MatrixFactorizationFilter;
-import org.getalp.ml.optimization.org.getalp.util.Matrices;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

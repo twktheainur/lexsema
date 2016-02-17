@@ -4,10 +4,10 @@ import com.hp.hpl.jena.query.QuerySolution;
 import com.hp.hpl.jena.rdf.model.RDFNode;
 import com.hp.hpl.jena.sparql.core.Var;
 import org.getalp.lexsema.ontolex.LexicalEntry;
+import org.getalp.lexsema.ontolex.LexicalResource;
 import org.getalp.lexsema.ontolex.LexicalResourceEntity;
 import org.getalp.lexsema.ontolex.dbnary.Vocable;
 import org.getalp.lexsema.ontolex.factories.entities.LexicalResourceEntityFactory;
-import org.getalp.lexsema.ontolex.Graph;
 import org.getalp.lexsema.ontolex.queries.ARQSelectQueryImpl;
 import org.getalp.lexsema.ontolex.queries.AbstractQueryProcessor;
 
@@ -16,8 +16,8 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * This query processor implements a query that retrieves all <code>LexicalSense</code>s for a
- * given <code>LexicalEntry</code>.
+ * This query processor implements a query that retrieves all {@code LexicalSense}s for a
+ * given {@code LexicalEntry}.
  */
 public final class LexicalEntriesForVocableQueryProcessor extends AbstractQueryProcessor<LexicalEntry> {
 
@@ -27,11 +27,10 @@ public final class LexicalEntriesForVocableQueryProcessor extends AbstractQueryP
     LexicalResourceEntityFactory lexicalResourceEntityFactory;
 
 
-    public LexicalEntriesForVocableQueryProcessor(Graph graph,
-                                                  LexicalResourceEntityFactory lexicalResourceEntityFactory,
+    public LexicalEntriesForVocableQueryProcessor(LexicalResource lexicalResource,
                                                   Vocable vocable) {
-        super(graph);
-        this.lexicalResourceEntityFactory = lexicalResourceEntityFactory;
+        super(lexicalResource.getGraph());
+        lexicalResourceEntityFactory = lexicalResource.getLexicalResourceEntityFactory();
         this.vocable = vocable;
         initialize();
     }

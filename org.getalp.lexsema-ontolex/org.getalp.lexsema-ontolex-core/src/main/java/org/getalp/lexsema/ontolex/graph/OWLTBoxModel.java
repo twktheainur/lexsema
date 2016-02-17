@@ -20,7 +20,7 @@ import java.util.Properties;
  * An OWL graph api model wrapper around Jena
  */
 public class OWLTBoxModel implements OntologyModel {
-    private SerializableOntModel model;
+    private OntModel model;
     private String propPath = String.format("data%sgraphapi.properties", File.separatorChar);
     private Properties properties;
 
@@ -30,7 +30,7 @@ public class OWLTBoxModel implements OntologyModel {
      * @throws IOException When loading the default properties fails (data/graphapi.properties)
      */
     @SuppressWarnings("unused")
-    public OWLTBoxModel() throws IOException {
+    public OWLTBoxModel() throws IOException{
         loadProperties();
         createModel(null);
     }
@@ -61,9 +61,9 @@ public class OWLTBoxModel implements OntologyModel {
 
     private void createModel(Model model) {
         if (model == null) {
-            this.model = (SerializableOntModel) ModelFactory.createOntologyModel(OntModelSpec.OWL_DL_MEM);
+            this.model = ModelFactory.createOntologyModel(OntModelSpec.OWL_DL_MEM);
         } else {
-            this.model = (SerializableOntModel) ModelFactory.createOntologyModel(OntModelSpec.OWL_DL_MEM, model);
+            this.model = ModelFactory.createOntologyModel(OntModelSpec.OWL_DL_MEM, model);
         }
         if (properties.containsKey("ontologies")) {
             String[] ontologies = properties.getProperty("ontologies").split(",");

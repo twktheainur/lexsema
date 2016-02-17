@@ -3,7 +3,7 @@ package org.getalp.ml.matrix.factorization;
 import cern.colt.matrix.tdouble.DoubleFactory2D;
 import cern.colt.matrix.tdouble.DoubleMatrix2D;
 import cern.colt.matrix.tdouble.impl.DenseDoubleMatrix2D;
-import org.getalp.ml.optimization.org.getalp.util.Matrices;
+import org.getalp.ml.matrix.Matrices;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

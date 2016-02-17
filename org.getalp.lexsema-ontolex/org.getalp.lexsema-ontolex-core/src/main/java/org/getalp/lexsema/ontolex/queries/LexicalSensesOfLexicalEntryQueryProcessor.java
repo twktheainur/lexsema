@@ -3,30 +3,25 @@ package org.getalp.lexsema.ontolex.queries;
 import com.hp.hpl.jena.query.QuerySolution;
 import com.hp.hpl.jena.rdf.model.RDFNode;
 import com.hp.hpl.jena.sparql.core.Var;
-import org.getalp.lexsema.ontolex.LexicalEntry;
-import org.getalp.lexsema.ontolex.LexicalResourceEntity;
-import org.getalp.lexsema.ontolex.LexicalSense;
+import org.getalp.lexsema.ontolex.*;
 import org.getalp.lexsema.ontolex.factories.entities.LexicalResourceEntityFactory;
-import org.getalp.lexsema.ontolex.Graph;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * This query processor implements a query that retrieves all <code>LexicalSense</code>s for a
- * given <code>LexicalEntry</code>.
+ * This query processor implements a query that retrieves all {@code LexicalSense}s for a
+ * given {@code LexicalEntry}.
  */
 public final class LexicalSensesOfLexicalEntryQueryProcessor extends AbstractQueryProcessor<LexicalSense> {
 
     LexicalEntry lexicalEntry;
     LexicalResourceEntityFactory lexicalResourceEntityFactory;
-    Graph graph;
 
-    public LexicalSensesOfLexicalEntryQueryProcessor(Graph graph,
-                                                     LexicalResourceEntityFactory lexicalResourceEntityFactory,
+    public LexicalSensesOfLexicalEntryQueryProcessor(LexicalResource lexicalResource,
                                                      LexicalEntry lexicalEntry) {
-        super(graph);
-        this.lexicalResourceEntityFactory = lexicalResourceEntityFactory;
+        super(lexicalResource.getGraph());
+        lexicalResourceEntityFactory = lexicalResource.getLexicalResourceEntityFactory();
         this.lexicalEntry = lexicalEntry;
         initialize();
     }

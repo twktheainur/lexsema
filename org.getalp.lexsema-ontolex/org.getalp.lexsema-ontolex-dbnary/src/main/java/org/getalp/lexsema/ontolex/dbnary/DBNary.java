@@ -14,21 +14,21 @@ import java.util.List;
  */
 public interface DBNary extends LexicalResource {
     /**
-     * Retrieve the vocable instance that corresponds to the <code>vocable</code> string
+     * Retrieve the vocable instance that corresponds to the {@code vocable} string
      *
      * @param vocable the vocable string for which the instance needs to be retrieved
-     * @return The <code>Vocable</code> instance
+     * @return The {@code Vocable} instance
      * @throws NoSuchVocableException Thrown when the vocable does not exist in the resource
      */
     @SuppressWarnings("unused")
     Vocable getVocable(String vocable) throws NoSuchVocableException;
 
     /**
-     * Retrieve the vocable instance that corresponds to the <code>vocable</code> string
+     * Retrieve the vocable instance that corresponds to the {@code vocable} string
      *
      * @param vocable  the vocable string for which the instance needs to be retrieved
      * @param language the language of the vocable
-     * @return The <code>Vocable</code> instance
+     * @return The {@code Vocable} instance
      * @throws NoSuchVocableException Thrown when the vocable does not exist in the resource
      */
     @SuppressWarnings("unused")
@@ -73,7 +73,7 @@ public interface DBNary extends LexicalResource {
 
 
     /**
-     * Returns the list of <code>LexicalEntry</code>(ies) associated (dbnary:relatedTo) with the <code>Vocable</code> <code>vocable</code>
+     * Returns the list of {@code LexicalEntry}(ies) associated (dbnary:relatedTo) with the {@code Vocable} {@code vocable}
      *
      * @return the list of LexicalEntries associated (dbnary:relatedTo) with the Vocable
      */
@@ -81,49 +81,49 @@ public interface DBNary extends LexicalResource {
     public List<LexicalEntry> getLexicalEntries(Vocable vocable);
 
     /**
-     * Retrieves translations for the current <code>LexicalResourceEntity</code> in a given <code>language</code>
+     * Retrieves translations for the current {@code LexicalResourceEntity} in a given {@code language}
      *
      * @param sourceEntity The source lexical resource entity
      * @param language     The desired language of the translation, if the language is null, all entities are retrieved
-     * @return A <code>List</code> of <code>Translation</code>s for the given entity and language, returns null when there
+     * @return A {@code List} of {@code Translation}s for the given entity and language, returns null when there
      * are no translation associated to the entity for the particular language.
      */
     public List<Translation> getTranslations(LexicalResourceEntity sourceEntity, Language language);
 
     /**
-     * Retrieves translations for the current <code>LexicalResourceEntity</code> in a given <code>language</code>
+     * Retrieves translations for the current {@code LexicalResourceEntity} in a given {@code language}
      *
      * @param sourceEntity The source lexical resource entity
      * @param languages    The desired languages of the translations
-     * @return A <code>List</code> of <code>Translation</code>s for the given entity and language, returns null when there
+     * @return A {@code List} of {@code Translation}s for the given entity and language, returns null when there
      * are no translation associated to the entity for the particular languages.
      */
     public List<Translation> getTranslations(LexicalResourceEntity sourceEntity, Language... languages);
 
     /**
-     * Retrieves translations for the current <code>LexicalResourceEntity</code> in a given <code>language</code>
+     * Retrieves translations for the current {@code LexicalResourceEntity} in a given {@code language}
      *
      * @param sourceEntity The source lexical resource entity
-     * @return A <code>List</code> of <code>Translation</code>s for the given entity and language, returns null when there
+     * @return A {@code List} of {@code Translation}s for the given entity and language, returns null when there
      * are no translation associated to the entity for the particular language.
      */
     public List<Translation> getTranslations(LexicalResourceEntity sourceEntity);
 
     /**
-     * Retrieve the related <code>LexicalResourceEntity</code> (ies) associated
-     * to <code>sourceEntity</code> through <code>relationType</code>
+     * Retrieve the related {@code LexicalResourceEntity} (ies) associated
+     * to {@code sourceEntity} through {@code relationType}
      *
-     * @param sourceEntity The source <code>LexicalResourceEntity</code>
+     * @param sourceEntity The source {@code LexicalResourceEntity}
      * @param relationType The relation type
      * @return The list of  entities related to the source entity through the provided relation type.
      */
     public List<LexicalResourceEntity> getRelatedEntities(LexicalResourceEntity sourceEntity, DBNaryRelationType relationType);
 
     /**
-     * Retrieve the related <code>LexicalResourceEntity</code> (ies) associated
-     * to <code>sourceEntity</code> through <code>relationType</code>
+     * Retrieve the related {@code LexicalResourceEntity} (ies) associated
+     * to {@code sourceEntity} through {@code relationType}
      *
-     * @param sourceEntity     The source <code>LexicalResourceEntity</code>
+     * @param sourceEntity     The source {@code LexicalResourceEntity}
      * @param relationTypeList The list relation types
      * @return The list of  entities related to the source entity through the provided relation types.
      */

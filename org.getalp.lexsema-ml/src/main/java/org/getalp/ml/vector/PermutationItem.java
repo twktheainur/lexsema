@@ -1,4 +1,4 @@
-package org.getalp.ml.optimization.org.getalp.util;
+package org.getalp.ml.vector;
 
 public class PermutationItem implements Comparable<PermutationItem> {
     public int origIndex;

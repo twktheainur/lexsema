@@ -3,6 +3,7 @@ package org.getalp.lexsema.ontolex.dbnary.queries;
 import com.hp.hpl.jena.query.QuerySolution;
 import com.hp.hpl.jena.rdf.model.RDFNode;
 import com.hp.hpl.jena.sparql.core.Var;
+import org.getalp.lexsema.ontolex.LexicalResource;
 import org.getalp.lexsema.util.Language;
 import org.getalp.lexsema.ontolex.LexicalResourceEntity;
 import org.getalp.lexsema.ontolex.dbnary.Translation;
@@ -17,8 +18,8 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * This query processor implements a query that retrieves all <code>LexicalSense</code>s for a
- * given <code>LexicalEntry</code>.
+ * This query processor implements a query that retrieves all {@code LexicalSense}s for a
+ * given {@code LexicalEntry}.
  */
 public final class TranslationsForLexicalResourceEntityQueryProcessor extends AbstractQueryProcessor<Translation> {
 
@@ -26,29 +27,27 @@ public final class TranslationsForLexicalResourceEntityQueryProcessor extends Ab
     private final LexicalResourceEntity entity;
 
     LexicalResourceEntityFactory lexicalResourceEntityFactory;
-    private Collection<Language> languages = new ArrayList<>();
+    private final Collection<Language> languages = new ArrayList<>();
 
 
-    public TranslationsForLexicalResourceEntityQueryProcessor(Graph graph,
-                                                              LexicalResourceEntityFactory lexicalResourceEntityFactory,
+    public TranslationsForLexicalResourceEntityQueryProcessor(LexicalResource lexicalResource,
                                                               LexicalResourceEntity entity, Language language) {
-        super(graph);
-        this.lexicalResourceEntityFactory = lexicalResourceEntityFactory;
+        super(lexicalResource.getGraph());
+        lexicalResourceEntityFactory = lexicalResource.getLexicalResourceEntityFactory();
         this.entity = entity;
         languages.add(language);
         initialize();
     }
 
-    public TranslationsForLexicalResourceEntityQueryProcessor(Graph graph,
-                                                              LexicalResourceEntityFactory lexicalResourceEntityFactory,
+    public TranslationsForLexicalResourceEntityQueryProcessor(LexicalResource lexicalResource,
                                                               LexicalResourceEntity entity, Language... languages) {
-        super(graph);
-        this.lexicalResourceEntityFactory = lexicalResourceEntityFactory;
+        super(lexicalResource.getGraph());
+        lexicalResourceEntityFactory = lexicalResource.getLexicalResourceEntityFactory();
         this.entity = entity;
         if (languages != null) {
-            for (Language l : languages) {
-                if (l != null) {
-                    this.languages.add(l);
+            for (Language language : languages) {
+                if (language != null) {
+                    this.languages.add(language);
                 }
             }
         }
@@ -65,7 +64,7 @@ public final class TranslationsForLexicalResourceEntityQueryProcessor extends Ab
             for (Language lang : languages) {
                 addOptionalTriple(Var.alloc(ENTRY_RESULT_VAR),
                         getNode("dbnary:targetLanguage"),
-                        getNode("lexvo:" + lang.getISO3Code()));
+                        getNode(String.format("lexvo:%s", lang.getISO3Code())));
             }
         }
         addResultVar(ENTRY_RESULT_VAR);

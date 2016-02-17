@@ -3,10 +3,9 @@
  */
 package org.getalp.ml.matrix.distance;
 
-import org.getalp.ml.matrix.MatrixUtils;
+import org.getalp.ml.matrix.Matrices;
 
 import org.nd4j.linalg.api.ndarray.INDArray;
-import org.nd4j.linalg.factory.Nd4j;
 
 /**
  * @author tchechem
@@ -14,24 +13,21 @@ import org.nd4j.linalg.factory.Nd4j;
 public class MahalanobisDistance extends Distance {
 
 
-    public MahalanobisDistance() {
-        super();
-    }
-
-
+    @SuppressWarnings("FeatureEnvy")
+    @Override
     public double compute(INDArray pointA, INDArray pointB) {
         deNan(pointA);
         deNan(pointB);
-        INDArray cov1 = MatrixUtils.covarianceMatrix(pointA);
-        INDArray cov2 = MatrixUtils.covarianceMatrix(pointB);
+        INDArray cov1 = Matrices.covarianceMatrix(pointA);
+        INDArray cov2 = Matrices.covarianceMatrix(pointB);
 
-        INDArray s1m = MatrixUtils.subtractMeanFromRows(pointA);
-        INDArray s2m = MatrixUtils.subtractMeanFromRows(pointB);
+        INDArray s1m = Matrices.subtractMeanFromRows(pointA);
+        INDArray s2m = Matrices.subtractMeanFromRows(pointB);
 
         INDArray pooledCov = cov1.add(cov2).divi(2);
 
-        INDArray averageVectorA = MatrixUtils.getColumnWiseMeanVector(s1m);
-        INDArray averageVectorB = MatrixUtils.getColumnWiseMeanVector(s2m);
+        INDArray averageVectorA = Matrices.getColumnWiseMeanVector(s1m);
+        INDArray averageVectorB = Matrices.getColumnWiseMeanVector(s2m);
 
         double distanceSum = Math.sqrt(
                 averageVectorA

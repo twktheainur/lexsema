@@ -1,6 +1,6 @@
 package org.getalp.ml.matrix.distance;
 
-import org.getalp.ml.matrix.MatrixUtils;
+import org.getalp.ml.matrix.Matrices;
 import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.eigen.Eigen;
 import org.slf4j.Logger;
@@ -24,10 +24,10 @@ public class RiemannianDistance extends Distance {
             deNan(pointA);
             deNan(pointB);
 
-            INDArray cov1 = MatrixUtils.covarianceMatrix(pointA);
-            INDArray cov2 = MatrixUtils.covarianceMatrix(pointB);
+            INDArray cov1 = Matrices.covarianceMatrix(pointA);
+            INDArray cov2 = Matrices.covarianceMatrix(pointB);
 
-            INDArray tmp = MatrixUtils.inverse(cov1).mmul(cov2);
+            INDArray tmp = Matrices.inverse(cov1).mmul(cov2);
             INDArray eigenvalues = Eigen.eigenvalues(tmp);
             for (int i = 0; i < eigenvalues.columns(); i++) {
                 double val = Math.abs(eigenvalues.getDouble(i));

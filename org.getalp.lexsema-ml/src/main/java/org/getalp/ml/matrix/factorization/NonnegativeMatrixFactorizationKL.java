@@ -17,7 +17,7 @@ import cern.colt.function.tdouble.DoubleFunction;
 import cern.colt.matrix.tdouble.DoubleMatrix2D;
 import cern.colt.matrix.tdouble.impl.DenseDoubleMatrix2D;
 import cern.jet.math.tdouble.DoubleFunctions;
-import org.getalp.ml.matrix.MatrixUtils;
+import org.getalp.ml.matrix.Matrices;
 
 /**
  * Performs matrix factorization using the Non-negative Matrix Factorization by
@@ -96,7 +96,7 @@ public class NonnegativeMatrixFactorizationKL extends IterativeMatrixFactorizati
             UV.zMult(V, UT, 1, 0, false, false); // UT <- UV * V
             U.assign(UT, DoubleFunctions.mult); // U <- U .* UT
 
-            MatrixUtils.normalizeColumnL1(U, work);
+            Matrices.normalizeColumnL1(U, work);
 
             iterationsCompleted++;
             if (stopThreshold >= 0) {

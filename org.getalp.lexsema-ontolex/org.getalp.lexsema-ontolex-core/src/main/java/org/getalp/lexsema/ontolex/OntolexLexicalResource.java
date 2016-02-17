@@ -82,7 +82,7 @@ public abstract class OntolexLexicalResource implements LexicalResource {
 
     @Override
     public List<LexicalEntry> getLexicalEntries(String entry, String pos) {
-        QueryProcessor<LexicalEntry> getLexicalEntries = new LexicalEntriesFromLemmaPosQueryProcessor(getGraph(), getLanguage(), getLexicalResourceEntityFactory(), entry, pos);
+        QueryProcessor<LexicalEntry> getLexicalEntries = new LexicalEntriesFromLemmaPosQueryProcessor(this, entry, pos);
         getLexicalEntries.runQuery();
         return getLexicalEntries.processResults();
     }
@@ -90,7 +90,7 @@ public abstract class OntolexLexicalResource implements LexicalResource {
     @Override
     public List<LexicalSense> getLexicalSenses(LexicalEntry lexicalEntry) {
         QueryProcessor<LexicalSense> getLexicalSensesQuery =
-                new LexicalSensesOfLexicalEntryQueryProcessor(getGraph(), getLexicalResourceEntityFactory(), lexicalEntry);
+                new LexicalSensesOfLexicalEntryQueryProcessor(this, lexicalEntry);
         getLexicalSensesQuery.runQuery();
         return getLexicalSensesQuery.processResults();
     }

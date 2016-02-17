@@ -1,7 +1,7 @@
 package org.getalp.ml.optimization.functions.setfunctions.input;
 
 import cern.colt.matrix.tdouble.DoubleMatrix1D;
-import org.getalp.ml.optimization.org.getalp.util.Vectors;
+import org.getalp.ml.vector.Vectors;
 
 
 public abstract class AbstractSetFunctionInput implements SetFunctionInput {

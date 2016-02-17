@@ -9,6 +9,7 @@ import com.hp.hpl.jena.sparql.expr.E_Str;
 import com.hp.hpl.jena.sparql.expr.Expr;
 import com.hp.hpl.jena.sparql.expr.ExprVar;
 import com.hp.hpl.jena.sparql.expr.nodevalue.NodeValueString;
+import org.getalp.lexsema.ontolex.LexicalResource;
 import org.getalp.lexsema.util.Language;
 import org.getalp.lexsema.ontolex.LexicalEntry;
 import org.getalp.lexsema.ontolex.LexicalResourceEntity;
@@ -21,28 +22,27 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * This query processor implements a query that retrieves all <code>LexicalSense</code>s for a
- * given <code>LexicalEntry</code>.
+ * This query processor implements a query that retrieves all {@code LexicalSense}s for a
+ * given {@code LexicalEntry}.
  */
 public final class LexicalEntriesFromLemmaPosQueryProcessor extends AbstractQueryProcessor<LexicalEntry> {
 
     private static final String ENTRY_RESULT_VAR = "le";
     private static final String WRITTEN_REP_VAR = "wf";
     LexicalResourceEntityFactory lexicalResourceEntityFactory;
-    Graph graph;
 
     private String lemma = "";
     private String pos = "";
-    private Language language;
+    private final Language language;
 
-    public LexicalEntriesFromLemmaPosQueryProcessor(Graph graph, Language language,
-                                                    LexicalResourceEntityFactory lexicalResourceEntityFactory,
+    @SuppressWarnings("FeatureEnvy")
+    public LexicalEntriesFromLemmaPosQueryProcessor(LexicalResource lexicalResource,
                                                     String lemma, String pos) {
-        super(graph);
-        this.lexicalResourceEntityFactory = lexicalResourceEntityFactory;
+        super(lexicalResource.getGraph());
+        lexicalResourceEntityFactory = lexicalResource.getLexicalResourceEntityFactory();
         this.lemma = lemma;
         this.pos = pos;
-        this.language = language;
+        language = lexicalResource.getLanguage();
         initialize();
     }
 

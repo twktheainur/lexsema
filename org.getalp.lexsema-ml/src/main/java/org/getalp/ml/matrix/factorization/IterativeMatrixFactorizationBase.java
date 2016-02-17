@@ -15,7 +15,7 @@ package org.getalp.ml.matrix.factorization;
 import cern.colt.matrix.tdouble.DoubleMatrix2D;
 import cern.jet.math.tdouble.DoubleFunctions;
 import com.carrotsearch.hppc.sorting.IndirectComparator;
-import org.getalp.ml.matrix.MatrixUtils;
+import org.getalp.ml.matrix.Matrices;
 import org.getalp.ml.matrix.factorization.seeding.RandomSeedingStrategy;
 import org.getalp.ml.matrix.factorization.seeding.SeedingStrategy;
 
@@ -118,7 +118,7 @@ abstract class IterativeMatrixFactorizationBase extends MatrixFactorizationBase 
         }
 
         // Approximation error
-        double newApproximationError = MatrixUtils.frobeniusNorm(U.zMult(V, null, 1, 0,
+        double newApproximationError = Matrices.frobeniusNorm(U.zMult(V, null, 1, 0,
                 false, true).assign(A, DoubleFunctions.minus));
 
         approximationErrors[iterationsCompleted] = newApproximationError;
@@ -145,8 +145,8 @@ abstract class IterativeMatrixFactorizationBase extends MatrixFactorizationBase 
 
         final IndirectComparator.DescendingDoubleComparator comparator = new IndirectComparator.DescendingDoubleComparator(
                 aggregates);
-        V = MatrixUtils.sortedRowsView(VT, comparator).viewDice();
-        U = MatrixUtils.sortedRowsView(U.viewDice(), comparator).viewDice();
+        V = Matrices.sortedRowsView(VT, comparator).viewDice();
+        U = Matrices.sortedRowsView(U.viewDice(), comparator).viewDice();
     }
 
     /**

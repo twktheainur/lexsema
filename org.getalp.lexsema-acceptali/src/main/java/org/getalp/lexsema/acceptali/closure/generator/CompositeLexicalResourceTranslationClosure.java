@@ -37,8 +37,8 @@ public class CompositeLexicalResourceTranslationClosure implements TranslationCl
     private LexicalResourceTranslationClosure<LexicalSense> generateSecondaryClosures(LexicalResourceTranslationClosure<LexicalSense> initialClosure, int degree) {
         LexicalResourceTranslationClosure<LexicalSense> secondaryClosure = new LexicalResourceTranslationClosureImpl();
         Set<LexicalEntry> entryClosureSet = initialClosure.entryFlatClosure();
-        for (LexicalEntry lexicalEntry : entryClosureSet) {
-            TranslationClosureGenerator translationClosureGenerator = TranslationClosureGeneratorSingle.createTranslationClosureGenerator(dbNary, lexicalEntry);
+        for (LexicalEntry localLexicalEntry : entryClosureSet) {
+            TranslationClosureGenerator translationClosureGenerator = TranslationClosureGeneratorSingle.createTranslationClosureGenerator(dbNary, localLexicalEntry);
             generateEntrySubClosure(translationClosureGenerator, degree, secondaryClosure);
         }
         initialClosure.importClosure(secondaryClosure);

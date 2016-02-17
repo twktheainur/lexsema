@@ -15,7 +15,7 @@ package org.getalp.ml.matrix.factorization;
 import cern.colt.matrix.tdouble.DoubleMatrix2D;
 import cern.colt.matrix.tdouble.impl.DenseDoubleMatrix2D;
 import cern.jet.math.tdouble.DoubleFunctions;
-import org.getalp.ml.matrix.MatrixUtils;
+import org.getalp.ml.matrix.Matrices;
 
 /**
  * Performs matrix factorization using the K-means clustering algorithm. This kind of
@@ -51,7 +51,7 @@ public class KMeansMatrixFactorization extends IterativeMatrixFactorizationBase 
         int[] minIndices = new int[D.columns()];
         double[] minValues = new double[D.columns()];
 
-        for (int iterationsCompleted = 0; iterationsCompleted < maxIterations; iterationsCompleted++) {
+        for (int iterationsCompletedCurrent = 0; iterationsCompletedCurrent < maxIterations; iterationsCompletedCurrent++) {
             // Calculate cosine distances
             U.zMult(A, D, 1, 0, true, false);
 
@@ -59,25 +59,25 @@ public class KMeansMatrixFactorization extends IterativeMatrixFactorizationBase 
             U.assign(0);
 
             // For each object
-            MatrixUtils.maxInColumns(D, minIndices, minValues);
+            Matrices.maxInColumns(D, minIndices, minValues);
             for (int i = 0; i < minIndices.length; i++) {
                 V.setQuick(i, minIndices[i], 1);
             }
 
             // Update centroids
-            for (int c = 0; c < V.columns(); c++) {
+            for (int column = 0; column < V.columns(); column++) {
                 // Sum
                 int count = 0;
-                for (int d = 0; d < V.rows(); d++) {
-                    if (V.getQuick(d, c) != 0) {
+                for (int row = 0; row < V.rows(); row++) {
+                    if (V.getQuick(row, column) != 0) {
                         count++;
-                        U.viewColumn(c).assign(A.viewColumn(d), DoubleFunctions.plus);
+                        U.viewColumn(column).assign(A.viewColumn(row), DoubleFunctions.plus);
                     }
                 }
 
                 // Divide
-                U.viewColumn(c).assign(DoubleFunctions.div(count));
-                MatrixUtils.normalizeColumnL2(U, null);
+                U.viewColumn(column).assign(DoubleFunctions.div(count));
+                Matrices.normalizeColumnL2(U, null);
             }
 
         }

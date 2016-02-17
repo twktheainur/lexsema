@@ -5,7 +5,7 @@ import org.deeplearning4j.models.embeddings.wordvectors.WordVectors;
 import org.getalp.lexsema.similarity.measures.SimilarityMeasure;
 import org.getalp.lexsema.similarity.signatures.SemanticSignature;
 import org.getalp.lexsema.similarity.signatures.symbols.SemanticSymbol;
-import org.getalp.ml.matrix.MatrixUtils;
+import org.getalp.ml.matrix.Matrices;
 import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.factory.Nd4j;
 import org.nd4j.linalg.ops.transforms.Transforms;
@@ -34,8 +34,8 @@ public class Word2VecGlossCosineSimilarity implements SimilarityMeasure {
 
         double totalSim = 0d;
         if (useCentroids) {
-            INDArray averageA = MatrixUtils.getColumnWiseSumVector(sigASignatureMatrix);
-            INDArray averageB = MatrixUtils.getColumnWiseSumVector(sigBSignatureMatrix);
+            INDArray averageA = Matrices.getColumnWiseSumVector(sigASignatureMatrix);
+            INDArray averageB = Matrices.getColumnWiseSumVector(sigBSignatureMatrix);
             double fin = Transforms.cosineSim(averageA, averageB);
             if (Double.isNaN(fin)) {
                 fin = -1;

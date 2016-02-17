@@ -3,13 +3,10 @@ package org.getalp.lexsema.ontolex.dbnary.queries;
 import com.hp.hpl.jena.query.QuerySolution;
 import com.hp.hpl.jena.rdf.model.RDFNode;
 import com.hp.hpl.jena.sparql.core.Var;
-import org.getalp.lexsema.ontolex.LexicalEntry;
-import org.getalp.lexsema.ontolex.LexicalResourceEntity;
-import org.getalp.lexsema.ontolex.LexicalSense;
+import org.getalp.lexsema.ontolex.*;
 import org.getalp.lexsema.ontolex.dbnary.Vocable;
 import org.getalp.lexsema.ontolex.dbnary.relations.DBNaryRelationType;
 import org.getalp.lexsema.ontolex.factories.entities.LexicalResourceEntityFactory;
-import org.getalp.lexsema.ontolex.Graph;
 import org.getalp.lexsema.ontolex.queries.ARQSelectQueryImpl;
 import org.getalp.lexsema.ontolex.queries.AbstractQueryProcessor;
 
@@ -18,8 +15,8 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * This query processor implements a query that retrieves all <code>LexicalSense</code>s for a
- * given <code>LexicalEntry</code>.
+ * This query processor implements a query that retrieves all {@code LexicalSense}s for a
+ * given {@code LexicalEntry}.
  */
 public final class RelatedEntitiesForLexicalResourceEntityQueryProcessor extends AbstractQueryProcessor<LexicalResourceEntity> {
 
@@ -28,14 +25,13 @@ public final class RelatedEntitiesForLexicalResourceEntityQueryProcessor extends
     private final LexicalResourceEntity entity;
 
     LexicalResourceEntityFactory lexicalResourceEntityFactory;
-    private DBNaryRelationType relationType;
+    private final DBNaryRelationType relationType;
 
 
-    public RelatedEntitiesForLexicalResourceEntityQueryProcessor(Graph graph,
-                                                                 LexicalResourceEntityFactory lexicalResourceEntityFactory,
+    public RelatedEntitiesForLexicalResourceEntityQueryProcessor(LexicalResource lexicalResource,
                                                                  LexicalResourceEntity entity, DBNaryRelationType relationType) {
-        super(graph);
-        this.lexicalResourceEntityFactory = lexicalResourceEntityFactory;
+        super(lexicalResource.getGraph());
+        lexicalResourceEntityFactory = lexicalResource.getLexicalResourceEntityFactory();
         this.entity = entity;
         this.relationType = relationType;
         initialize();
