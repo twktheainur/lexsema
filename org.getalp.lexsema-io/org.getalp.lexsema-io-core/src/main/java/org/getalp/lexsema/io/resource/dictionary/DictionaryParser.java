@@ -34,6 +34,7 @@ public class DictionaryParser implements ContentHandler {
     private Locator locator;
     private String currentSemanticSignature = "";
     private final SymbolIndex symbolIndex = new SymbolIndexImpl();
+    private String currentId = "";
 
 
     public DictionaryParser(Map<String, List<Sense>> senseMap, boolean indexed) throws FileNotFoundException {
@@ -82,6 +83,7 @@ public class DictionaryParser implements ContentHandler {
                 break;
             case "ids":
                 ids = true;
+                currentId = "";
                 break;
             case "def":
                 def = true;
@@ -103,6 +105,7 @@ public class DictionaryParser implements ContentHandler {
                 break;
             case "ids":
                 ids = false;
+                mw = new SenseImpl(currentId.trim());
                 break;
             case "def":
                 def = false;
@@ -133,12 +136,7 @@ public class DictionaryParser implements ContentHandler {
     @Override
     public void characters(char[] ch, int start, int length) throws SAXException {
         if (ids) {
-            StringTokenizer st = new StringTokenizer(new String(ch, start, length));
-            if (st.hasMoreElements()) {
-                mw = new SenseImpl(st.nextToken());
-            } else {
-                mw = new SenseImpl(new String(ch, start, length).trim());
-            }
+            currentId += new String(ch, start, length);
         } else if (def) {
             String defs = new String(ch, start, length);
             currentSemanticSignature += defs;
