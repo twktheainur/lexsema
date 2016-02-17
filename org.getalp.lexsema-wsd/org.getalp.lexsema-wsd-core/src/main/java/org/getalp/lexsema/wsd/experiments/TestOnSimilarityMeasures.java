@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.apache.commons.math3.stat.inference.MannWhitneyUTest;
 import org.getalp.lexsema.io.document.loader.Semeval2007CorpusLoader;
+import org.getalp.lexsema.io.annotresult.SemevalWriter;
 import org.getalp.lexsema.io.document.loader.CorpusLoader;
 import org.getalp.lexsema.io.resource.LRLoader;
 import org.getalp.lexsema.io.resource.dictionary.DictionaryLRLoader;
@@ -46,12 +47,8 @@ public class TestOnSimilarityMeasures
 
     public static void main(String[] args) throws Exception
     {
-        String[] dicts = {"../data/lesk_dict/semeval2007task7/5/250",
-                          "../data/lesk_dict/semeval2007task7/5/250",
-                          "../data/lesk_dict/semeval2007task7/5/250",
-                          "../data/lesk_dict/semeval2007task7/10/50",
-                          "../data/lesk_dict/semeval2007task7/10/50"};
-        getScoresWithVote(dicts, 1);
+        String[] dicts = {"../data/lesk_dict/semeval2007task7/5/250"};
+        getScoresWithVote(dicts, 10);
         //compareDicts(dicts);
     }
     
@@ -177,8 +174,10 @@ public class TestOnSimilarityMeasures
                 docs.add(Iterables.get(dls[j], i));
             }
             Configuration c = voteDisambiguator.disambiguate(docs.toArray(new Document[docs.size()]));
+            SemevalWriter sw = new SemevalWriter("../data/" + docs.get(0).getId() + ".ans");
+            sw.write(docs.get(0), c.getAssignments());
             double tmp_score = perfectScorer.computeScore(docs.get(0), c);
-            System.out.println("tmp score : " + tmp_score);
+            System.out.println("(" + docs.get(0).getId() + ") [" + tmp_score + "]");
             score += tmp_score;
         }
         long endTime = System.currentTimeMillis();
