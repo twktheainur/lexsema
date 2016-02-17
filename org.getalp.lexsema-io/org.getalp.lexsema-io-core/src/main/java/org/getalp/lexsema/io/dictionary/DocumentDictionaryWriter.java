@@ -13,7 +13,9 @@ import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 
 public class DocumentDictionaryWriter implements DictionaryWriter {
@@ -21,7 +23,10 @@ public class DocumentDictionaryWriter implements DictionaryWriter {
     private static final Logger logger = LoggerFactory.getLogger(DocumentDictionaryWriter.class);
 
     List<Text> documents;
+    
+    Set<String> wordTagAlreadyWritten = new HashSet<String>();
 
+    private boolean allowDuplicate = true;
 
     @SuppressWarnings("unused")
     public DocumentDictionaryWriter(List<Text> documents) {
@@ -51,13 +56,17 @@ public class DocumentDictionaryWriter implements DictionaryWriter {
             for (Document document : documents) {
                 for (int wordIndex = 0; wordIndex < document.size(); wordIndex++) {
                     Word w = document.getWord(0, wordIndex);
-                    writeWordStartTag(printWriter, w);
-                    for (Sense sense : document.getSenses(wordIndex)) {
-                        writeSenseStartTag(printWriter);
-                        writeSenseContent(printWriter, sense);
-                        writeSenseEndTag(printWriter);
+                    String wordTag = w.getLemma() + "%" + w.getPartOfSpeech();
+                    if (allowDuplicate || !wordTagAlreadyWritten.contains(wordTag)) {
+                        writeWordStartTag(printWriter, w);
+                        for (Sense sense : document.getSenses(wordIndex)) {
+                            writeSenseStartTag(printWriter);
+                            writeSenseContent(printWriter, sense);
+                            writeSenseEndTag(printWriter);
+                        }
+                        writeWordEndTag(printWriter);
+                        wordTagAlreadyWritten.add(wordTag);
                     }
-                    writeWordEndTag(printWriter);
                     logger.trace("Word {} ({}/{})", w.getLemma() ,wordIndex, document.size());
                 }
             }
@@ -89,5 +98,9 @@ public class DocumentDictionaryWriter implements DictionaryWriter {
         pw.print("<def>");
         pw.print(sense.getSemanticSignature().toString());
         pw.println("</def>");
+    }
+    
+    public void allowDuplicate(boolean a) {
+        allowDuplicate = a;
     }
 }
