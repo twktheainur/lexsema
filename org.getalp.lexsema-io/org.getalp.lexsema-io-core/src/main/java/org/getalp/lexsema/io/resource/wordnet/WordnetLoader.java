@@ -2,11 +2,8 @@ package org.getalp.lexsema.io.resource.wordnet;
 
 import edu.mit.jwi.Dictionary;
 import edu.mit.jwi.item.*;
-import org.apache.spark.SparkContext;
 import org.apache.spark.api.java.JavaRDD;
-import org.apache.spark.api.java.JavaRDDLike;
 import org.apache.spark.api.java.JavaSparkContext;
-import org.apache.spark.api.java.function.Function;
 import org.getalp.lexsema.io.resource.LRLoader;
 import org.getalp.lexsema.io.thesaurus.AnnotatedTextThesaurus;
 import org.getalp.lexsema.similarity.*;
@@ -14,16 +11,16 @@ import org.getalp.lexsema.similarity.Word;
 import org.getalp.lexsema.similarity.cache.SenseCache;
 import org.getalp.lexsema.similarity.cache.SenseCacheImpl;
 import org.getalp.lexsema.similarity.signatures.*;
+import org.getalp.lexsema.similarity.signatures.enrichment.IndexingSignatureEnrichment;
 import org.getalp.lexsema.similarity.signatures.enrichment.SignatureEnrichment;
+import org.getalp.lexsema.similarity.signatures.enrichment.StemmingSignatureEnrichment;
+import org.getalp.lexsema.similarity.signatures.enrichment.StopwordsRemovingSignatureEnrichment;
 import org.getalp.lexsema.similarity.signatures.index.SymbolIndex;
 import org.getalp.lexsema.similarity.signatures.index.SymbolIndexImpl;
 import org.getalp.lexsema.similarity.signatures.symbols.SemanticSymbol;
-import org.getalp.lexsema.util.StopList;
 import org.getalp.lexsema.util.distribution.SparkSingleton;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.tartarus.snowball.ext.EnglishStemmer;
-
 import java.io.IOException;
 import java.text.MessageFormat;
 import java.util.*;
@@ -44,7 +41,7 @@ public class WordnetLoader implements LRLoader {
 
     private final Dictionary dictionary;
 
-    private SignatureEnrichment signatureEnrichment;
+    private List<SignatureEnrichment> signatureEnrichments;
 
     private boolean loadDefinitions;
 
@@ -52,61 +49,35 @@ public class WordnetLoader implements LRLoader {
 
     private boolean hasExtendedSignature;
 
-    private boolean usesStopWords;
-
-    private boolean usesStemming;
-
-    private boolean useIndex;
-
     private boolean shuffle;
-
-    private final SymbolIndex symbolIndex;
 
     private final List<AnnotatedTextThesaurus> thesauri;
 
     private final Map<String, List<Sense>> senseCache;
-    private boolean distributed = false;
+    
+    private boolean distributed;
 
+    private List<List<String>> senseClusters;
+    
     /**
      * Creates a WordnetLoader with an existing Wordnet Dictionary object.
      * The dictionary may or may not be open prior to this constructor call.
      * In every cases, it is opened during the call.
      */
     public WordnetLoader(Dictionary dictionary) {
-        this.dictionary = dictionary;
-        openDictionary();
-        symbolIndex = new SymbolIndexImpl();
+        this.dictionary = openDictionary(dictionary);
+        signatureEnrichments = new ArrayList<>();
         loadDefinitions = true;
         loadRelated = false;
         hasExtendedSignature = false;
-        usesStopWords = false;
-        usesStemming = false;
         shuffle = false;
-        //noinspection all
-        thesauri = new ArrayList<AnnotatedTextThesaurus>();
-        useIndex = false;
-        signatureEnrichment = null;
+        thesauri = new ArrayList<>();
         senseCache = new HashMap<>();
+        distributed = false;
+        senseClusters = null;
     }
 
-    public WordnetLoader(Dictionary dictionary, SignatureEnrichment signatureEnrichment) {
-        this.dictionary = dictionary;
-        this.signatureEnrichment = signatureEnrichment;
-        openDictionary();
-        symbolIndex = new SymbolIndexImpl();
-        loadDefinitions = true;
-        loadRelated = false;
-        hasExtendedSignature = false;
-        usesStopWords = false;
-        usesStemming = false;
-        shuffle = false;
-        //noinspection all
-        thesauri = new ArrayList<AnnotatedTextThesaurus>();
-        useIndex = false;
-        senseCache = new HashMap<>();
-    }
-
-    private void openDictionary() {
+    private Dictionary openDictionary(Dictionary dictionary) {
         if (dictionary != null && !dictionary.isOpen()) {
             try {
                 dictionary.open();
@@ -114,6 +85,7 @@ public class WordnetLoader implements LRLoader {
                 logger.info(e.getLocalizedMessage());
             }
         }
+        return dictionary;
     }
 
     private SemanticSignature createSignature() {
@@ -141,10 +113,10 @@ public class WordnetLoader implements LRLoader {
 
             IIndexWord iw = getWord(id);
             if (iw != null) {
-                final List<IWordID> wordIDs = iw.getWordIDs();
+                List<IWordID> wordIDs = iw.getWordIDs();
                 for (IWordID wordID : wordIDs) {
                     IWord word = dictionary.getWord(wordID);
-                    final ISenseKey senseKey = word.getSenseKey();
+                    ISenseKey senseKey = word.getSenseKey();
                     Sense sense = new SenseImpl(senseKey.toString());
                     SemanticSignature signature = createSignature();
                     final ISynset wordSynset = word.getSynset();
@@ -154,9 +126,7 @@ public class WordnetLoader implements LRLoader {
                     }
 
                     if (loadRelated || hasExtendedSignature) {
-
-                        // Lexical relations are bound to IWord nd are common to all
-                        // associated synsets
+                        // Lexical relations are bound to IWord and are common to all associated synsets
                         loadLexicalRelations(sense, signature, word);
 
                         // Semantic relations are bound to ISynset and are specific to each synset
@@ -171,32 +141,16 @@ public class WordnetLoader implements LRLoader {
                         }
                     }
                     
-                    if (usesStopWords) {
-                        signature = removeStopWords(signature);
-                    }
-                    
-                    if (signatureEnrichment != null) {
+                    for (SignatureEnrichment signatureEnrichment : signatureEnrichments) {
                         signature = signatureEnrichment.enrichSemanticSignature(signature);
-                        logger.trace("\tEnritching a semantic signature...");
                     }
-                
-                    if (usesStemming) {
-                        signature = stemSignatureWords(signature);
-                    }
-
-                    if (useIndex) {
-                        signature = indexSignature(signature);
-                    }
-                    
+          
                     sense.setSemanticSignature(signature);
-
                     senses.add(sense);
                 }
-
             }
             senseCache.put(id, senses);
         }
-        logger.trace("Senses for {} processed and enritched.", lemma);
         return senses;
     }
 
@@ -214,7 +168,6 @@ public class WordnetLoader implements LRLoader {
                     IPointer key = iPointerListEntry.getKey();
                     sense.addRelatedSignature(key.getSymbol(), localSignature);
                 }
-
             }
         }
     }
@@ -237,36 +190,6 @@ public class WordnetLoader implements LRLoader {
             }
         }
     }
-    
-    private SemanticSignature indexSignature(SemanticSignature signature) {
-        IndexedSemanticSignature indexedSignature = new IndexedSemanticSignatureImpl(symbolIndex);
-        for (SemanticSymbol symbol : signature) {
-            indexedSignature.addSymbol(symbol);
-        }
-        indexedSignature.sort();
-        return indexedSignature;
-    }
-    
-    private SemanticSignature removeStopWords(SemanticSignature signature) {
-        SemanticSignature newSignature = new SemanticSignatureImpl();
-        for (SemanticSymbol symbol : signature) {
-            if (!StopList.isStopWord(symbol.getSymbol())) {
-                newSignature.addSymbol(symbol);
-            }
-        }
-        return newSignature;
-    }
-
-    private SemanticSignature stemSignatureWords(SemanticSignature signature) {
-        SemanticSignature newSignature = new SemanticSignatureImpl();
-        EnglishStemmer stemmer = new EnglishStemmer();
-        for (SemanticSymbol symbol : signature) {
-            stemmer.setCurrent(symbol.getSymbol());
-            stemmer.stem();
-            newSignature.addSymbol(stemmer.getCurrent());
-        }
-        return newSignature;
-    }
 
     @Override
     public List<Sense> getSenses(Word w) {
@@ -287,6 +210,9 @@ public class WordnetLoader implements LRLoader {
                 }
             } else {
                 senses = new ArrayList<>();
+            }
+            if (senseClusters != null) {
+                senses = clusterize(senses);
             }
             if (shuffle) {
                 Collections.shuffle(senses);
@@ -329,7 +255,6 @@ public class WordnetLoader implements LRLoader {
         senseCache.addToCache(w, senses);
     }
 
-
     private void addToSignature(SemanticSignature signature, CharSequence def) {
         final Matcher matcher = NON_LETTERS.matcher(def);
         String noPunctuation = matcher.replaceAll("");
@@ -341,6 +266,51 @@ public class WordnetLoader implements LRLoader {
 
     private void appendToSignature(SemanticSignature semanticSignature, SemanticSignature other) {
         semanticSignature.appendSignature(other);
+    }
+    
+    private List<Sense> clusterize(List<Sense> senses) {
+        Map<String, List<Sense>> clusteredSenses = new HashMap<>();
+        List<Sense> newSenses = new ArrayList<>();
+        for (Sense sense : senses) {
+            boolean inACluster = false;
+            for (List<String> cluster : senseClusters) {
+                for (String senseInCluster : cluster) {
+                    if (sense.getId().equals(senseInCluster)) {
+                        if (clusteredSenses.containsKey(cluster.get(0))) {
+                            clusteredSenses.get(cluster.get(0)).add(sense);
+                        }
+                        else {
+                            clusteredSenses.put(cluster.get(0), new ArrayList<Sense>(Arrays.asList(sense)));
+                        }
+                        inACluster = true;
+                    }
+                }
+            }
+            if (!inACluster) {
+                newSenses.add(sense);
+            }
+        }
+        for (String clusteredSense : clusteredSenses.keySet()) {
+            Sense newSense = new SenseImpl(clusteredSense);
+            if (clusteredSenses.get(clusteredSense).get(0).getSemanticSignature() instanceof IndexedSemanticSignature) {
+                IndexedSemanticSignature newSignature = new IndexedSemanticSignatureImpl();
+                for (Sense senseInCluster : clusteredSenses.get(clusteredSense)) {
+                    IndexedSemanticSignature signatureInCluster = (IndexedSemanticSignature) senseInCluster.getSemanticSignature();
+                    newSignature.addIndexedSymbols(signatureInCluster.getIndexedSymbols());
+                }
+                newSignature.sort();
+                newSense.setSemanticSignature(newSignature);
+            }
+            else {
+                SemanticSignature newSignature = new SemanticSignatureImpl();
+                for (Sense senseInCluster : clusteredSenses.get(clusteredSense)) {
+                    newSignature.addSymbols(senseInCluster.getSemanticSignature().getSymbols());
+                }
+                newSense.setSemanticSignature(newSignature);
+            }
+            newSenses.add(newSense);
+        }
+        return newSenses;
     }
 
     private IIndexWord getWord(String sid) {
@@ -364,7 +334,6 @@ public class WordnetLoader implements LRLoader {
         }
         return w;
     }
-
 
     @Override
     public LRLoader extendedSignature(boolean hasExtendedSignature) {
@@ -391,32 +360,14 @@ public class WordnetLoader implements LRLoader {
     }
 
     @Override
-    public LRLoader stemming(boolean stemming) {
-        usesStemming = stemming;
-        return this;
-    }
-
-    @Override
-    public LRLoader filterStopWords(boolean usesStopWords) {
-        this.usesStopWords = usesStopWords;
-        return this;
-    }
-
-    @Override
     public LRLoader addThesaurus(AnnotatedTextThesaurus thesaurus) {
         thesauri.add(thesaurus);
         return this;
     }
     
-    public LRLoader signatureEnrichment(SignatureEnrichment signatureEnrichment) {
-    	this.signatureEnrichment = signatureEnrichment;
+    public LRLoader addSignatureEnrichment(SignatureEnrichment signatureEnrichment) {
+    	signatureEnrichments.add(signatureEnrichment);
     	return this;
-    }
-
-    @Override
-    public LRLoader index(boolean useIndex) {
-        this.useIndex = useIndex;
-        return this;
     }
 
     @Override
@@ -427,7 +378,6 @@ public class WordnetLoader implements LRLoader {
 
     @Override
     public void loadSenses(Document document) {
-        //noinspection LocalVariableOfConcreteClass
         List<List<Sense>> senses;
         if (distributed) {
             senses = loadSensesDistributed(document);
@@ -457,7 +407,6 @@ public class WordnetLoader implements LRLoader {
             }
         }
 
-
         JavaRDD<Word> parallelSenses = sparkContext.parallelize(wordsToProcess);
         parallelSenses.cache();
         uniqueWordSenses = parallelSenses.map(this::getSenses).collect();
@@ -469,6 +418,35 @@ public class WordnetLoader implements LRLoader {
         }
 
         return documentSenses;
+    }
+
+    @Override
+    public LRLoader stemming(boolean stemming) {
+        if (stemming) {
+            addSignatureEnrichment(new StemmingSignatureEnrichment());
+        }
+        return this;
+    }
+
+    @Override
+    public LRLoader filterStopWords(boolean usesStopWords) {
+        if (usesStopWords) {
+            addSignatureEnrichment(new StopwordsRemovingSignatureEnrichment());
+        }
+        return this;
+    }
+
+    @Override
+    public LRLoader index(boolean useIndex) {
+        if (useIndex) {
+            addSignatureEnrichment(new IndexingSignatureEnrichment());
+        }
+        return this;
+    }
+    
+    public LRLoader setSenseClusters(List<List<String>> senseClusters) {
+        this.senseClusters = senseClusters;
+        return this;
     }
 
 }

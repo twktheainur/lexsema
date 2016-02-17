@@ -1,18 +1,27 @@
 package org.getalp.lexsema.wsd.experiments;
 
 import java.io.FileInputStream;
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.commons.math3.stat.inference.MannWhitneyUTest;
 import org.getalp.lexsema.io.document.loader.Semeval2007CorpusLoader;
+import org.getalp.lexsema.io.annotresult.SemevalWriter;
 import org.getalp.lexsema.io.document.loader.CorpusLoader;
 import org.getalp.lexsema.io.resource.LRLoader;
 import org.getalp.lexsema.io.resource.dictionary.DictionaryLRLoader;
 import org.getalp.lexsema.similarity.Document;
-import org.getalp.lexsema.similarity.measures.lesk.IndexedDiceLeskSimilarity;
 import org.getalp.lexsema.similarity.measures.lesk.IndexedLeskSimilarity;
 import org.getalp.lexsema.wsd.configuration.Configuration;
 import org.getalp.lexsema.wsd.method.*;
 import org.getalp.lexsema.wsd.score.*;
+
+import com.google.common.collect.Iterables;
 import com.google.common.math.DoubleMath;
+
+import cern.colt.Arrays;
+
 import org.apache.commons.math3.stat.descriptive.moment.StandardDeviation;
 
 public class TestOnSimilarityMeasures
@@ -38,26 +47,43 @@ public class TestOnSimilarityMeasures
 
     public static void main(String[] args) throws Exception
     {
-        Result res = getScores("../data/lesk_dict/semeval2007task7/7/150", false);
-
-        System.out.println("Test 7/150 with Dice");
-        System.out.println("Mean Scores : " + res.meanScore);
-        System.out.println("Standard Deviation Scores : " + res.standardDeviationScore);
-        System.out.println("Mean Times : " + res.meanTime);
-
-        Result res2 = getScores("../data/lesk_dict/semeval2007task7/7/150", true);
-
-        System.out.println("Test 7/150 without Dice");
-        System.out.println("Mean Scores : " + res2.meanScore);
-        System.out.println("Standard Deviation Scores : " + res2.standardDeviationScore);
-        System.out.println("Mean Times : " + res2.meanTime);
-        
-        System.out.println("MWUTest 1 / 2 : " + mannTest.mannWhitneyUTest(res.scores, res2.scores));
+        String[] dicts = {"../data/lesk_dict/semeval2007task7/5/250"};
+        getScoresWithVote(dicts, 10);
+        //compareDicts(dicts);
     }
-
-    private static Result getScores(String dict, boolean patate) throws Exception
+    
+    private static void compareDicts(String[] dicts) throws Exception
     {
-        int n = 30;
+        Result[] res = new Result[dicts.length];
+        for (int i = 0 ; i < res.length ; i++)
+        {
+            res[i] = getScores(dicts[i], 30);
+            System.out.println("Test " + i + " (" + dicts[i] + ")");
+            System.out.println("Mean Scores : " + res[i].meanScore);
+            System.out.println("Standard Deviation Scores : " + res[i].standardDeviationScore);
+            System.out.println("Mean Times : " + res[i].meanTime);
+            System.out.println();
+        }
+        System.out.println("Recap:");
+        for (int i = 0 ; i < res.length ; i++)
+        {
+            System.out.println("Test " + i + " (" + dicts[i] + ")");
+            System.out.println("Mean Scores : " + res[i].meanScore);
+            System.out.println("Standard Deviation Scores : " + res[i].standardDeviationScore);
+            System.out.println("Mean Times : " + res[i].meanTime);
+            System.out.println();
+        }
+        for (int i = 0 ; i < res.length ; i++)
+        {
+            for (int j = 0 ; j < res.length ; j++)
+            {
+                System.out.println("MWUTest " + i + " (" + dicts[i] + ") / " + j + " (" + dicts[j] + ") : " + mannTest.mannWhitneyUTest(res[i].scores, res[j].scores));
+            }
+        }
+    }
+    
+    private static Result getScores(String dict, int n) throws Exception
+    {
         double[] scores = new double[n];
         long[] times = new long[n];
         LRLoader lrloader = new DictionaryLRLoader(new FileInputStream(dict), true);
@@ -66,8 +92,62 @@ public class TestOnSimilarityMeasures
         dl.load();
         for (Document d : dl) lrloader.loadSenses(d);
 
-        ConfigurationScorer scorer = new ConfigurationScorerWithCache(new IndexedDiceLeskSimilarity());
-        if (patate) scorer = new ConfigurationScorerWithCache(new IndexedLeskSimilarity());
+        ConfigurationScorer scorer = new ConfigurationScorerWithCache(new IndexedLeskSimilarity());
+            
+        SemEval2007Task7PerfectConfigurationScorer perfectScorer = new SemEval2007Task7PerfectConfigurationScorer();
+
+        int iterations = 100000;
+        double minLevyLocation = 1;
+        double maxLevyLocation = 5;
+        double minLevyScale = 0.5;
+        double maxLevyScale = 1.5;
+
+        MultiThreadCuckooSearch cuckooDisambiguator = new MultiThreadCuckooSearch(iterations, minLevyLocation, maxLevyLocation, minLevyScale, maxLevyScale, scorer, false);               
+        Disambiguator disambiguator = cuckooDisambiguator;
+        
+        System.out.println("Dictionary " + dict);
+        
+        for (int i = 0 ; i < n ; i++)
+        {
+            System.out.print("" + (i+1) + "/" + n + " ");
+            System.out.flush();
+            scores[i] = 0;
+            int j = 0;
+            long startTime = System.currentTimeMillis();
+            for (Document d : dl)
+            {
+                System.out.print("(" + d.getId() + ") ");
+                System.out.flush();
+                Configuration c = disambiguator.disambiguate(d);
+                double tmp_score = perfectScorer.computeScore(d, c);
+                System.out.print("[" + new DecimalFormat("##.##").format(tmp_score * 100) + "] ");
+                System.out.flush();
+                scores[i] += tmp_score;
+                j++;
+            }
+            long endTime = System.currentTimeMillis();
+            times[i] = (endTime - startTime);
+            scores[i] /= ((double) j);
+            System.out.println("score : " + scores[i] + " ; time : " + times[i]);
+        }
+        System.out.println();
+        disambiguator.release();
+        return new Result(scores, times);
+    }
+    
+    private static Result getScoresWithVote(String[] dicts, int n) throws Exception
+    {
+        assert(dicts.length >= 1);
+        CorpusLoader[] dls = new CorpusLoader[dicts.length];
+        for (int i = 0 ; i < dicts.length ; i++)
+        {
+            LRLoader lrloader = new DictionaryLRLoader(new FileInputStream(dicts[i]), true);
+            dls[i] = new Semeval2007CorpusLoader(new FileInputStream("../data/senseval2007_task7/test/eng-coarse-all-words.xml"));
+            dls[i].load();
+            for (Document d : dls[i]) lrloader.loadSenses(d);
+        }
+
+        ConfigurationScorer scorer = new ConfigurationScorerWithCache(new IndexedLeskSimilarity());
             
         SemEval2007Task7PerfectConfigurationScorer perfectScorer = new SemEval2007Task7PerfectConfigurationScorer();
 
@@ -79,31 +159,34 @@ public class TestOnSimilarityMeasures
 
         MultiThreadCuckooSearch cuckooDisambiguator = new MultiThreadCuckooSearch(iterations, minLevyLocation, maxLevyLocation, minLevyScale, maxLevyScale, scorer, false);
 
-        System.out.println("Dictionary " + dict);
+        VoteDisambiguator voteDisambiguator = new VoteDisambiguator(cuckooDisambiguator, n);
+               
+        System.out.println("Dictionaries " + Arrays.toString(dicts));
         
-        for (int i = 0 ; i < n ; i++)
+        double score = 0;
+        long time = 0;
+        long startTime = System.currentTimeMillis();
+        for (int i = 0 ; i < Iterables.size(dls[0]) ; i++)
         {
-            System.out.print("" + i + "/" + n + " ");
-            System.out.flush();
-            scores[i] = 0;
-            int j = 0;
-            long startTime = System.currentTimeMillis();
-            for (Document d : dl)
+            List<Document> docs = new ArrayList<Document>();
+            for (int j = 0 ; j < dls.length ; j++)
             {
-                System.out.print("(" + d.getId() + ") ");
-                System.out.flush();
-                Configuration c = cuckooDisambiguator.disambiguate(d);
-                scores[i] += perfectScorer.computeScore(d, c);
-                j++;
+                docs.add(Iterables.get(dls[j], i));
             }
-            long endTime = System.currentTimeMillis();
-            times[i] = (endTime - startTime);
-            scores[i] /= ((double) j);
-            System.out.println("score : " + scores[i] + " ; time : " + times[i]);
+            Configuration c = voteDisambiguator.disambiguate(docs.toArray(new Document[docs.size()]));
+            SemevalWriter sw = new SemevalWriter("../data/" + docs.get(0).getId() + ".ans");
+            sw.write(docs.get(0), c.getAssignments());
+            double tmp_score = perfectScorer.computeScore(docs.get(0), c);
+            System.out.println("(" + docs.get(0).getId() + ") [" + tmp_score + "]");
+            score += tmp_score;
         }
+        long endTime = System.currentTimeMillis();
+        time = (endTime - startTime);
+        score /= ((double) Iterables.size(dls[0]));
+        System.out.println("score : " + score + " ; time : " + time);
         System.out.println();
-        cuckooDisambiguator.release();
-        return new Result(scores, times);
+        voteDisambiguator.release();
+        return new Result(new double[]{score}, new long[]{time});
     }
 
     private static double getMean(double[] array)

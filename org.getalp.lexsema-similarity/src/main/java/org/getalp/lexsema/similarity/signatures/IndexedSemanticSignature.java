@@ -9,5 +9,6 @@ public interface IndexedSemanticSignature extends SemanticSignature{
     List<Integer> getIndexedSymbols();
     IndexedSemanticSymbol getIndexedSymbol(int index);
     void addIndexedSymbol(Integer symbol);
+    void addIndexedSymbols(List<Integer> symbols);
     void sort();
 }

@@ -55,9 +55,19 @@ public class DocumentImpl implements Document {
         for (Sense sense : senses) {
             currentWordSenses.add(sense);
         }
-        final Word target = lexicalEntries.get(this.senses.size());
-        target.loadSenses(currentWordSenses);
-        this.senses.add(currentWordSenses);
+        try {
+            final Word target = lexicalEntries.get(this.senses.size());
+            target.loadSenses(currentWordSenses);
+            this.senses.add(currentWordSenses);
+        } catch (java.lang.IndexOutOfBoundsException e) {
+            System.err.println("Exception caught: " + e);
+            System.err.println("When trying to add the following senses:");
+            for (Sense sense : senses) {
+                System.err.println(sense.getId() + ": " + sense.getDefinition());
+            }
+            System.err.println("lexicalEntries size: " + lexicalEntries.size());
+            System.err.println("senses size: " + this.senses.size());
+        }
     }
 
     @Override
