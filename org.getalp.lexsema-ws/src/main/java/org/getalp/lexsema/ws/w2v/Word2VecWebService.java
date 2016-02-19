@@ -2,6 +2,7 @@ package org.getalp.lexsema.ws.w2v;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -54,13 +55,15 @@ public class Word2VecWebService extends WebServiceServlet
         response.getWriter().close();
     }
 
-    private void setHeaders(HttpServletRequest request, HttpServletResponse response)
-    {
+    private void setHeaders(HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException
+    {        
+        request.setCharacterEncoding("UTF-8");
         response.setHeader("Access-Control-Allow-Origin", "*");
         response.setHeader("Access-Control-Allow-Methods", "GET, PUT, POST, OPTIONS, DELETE");
         response.setHeader("Access-Control-Max-Age", "*");
         response.setHeader("Access-Control-Allow-Headers", "*");
         response.setContentType("text/plain");
+        response.setCharacterEncoding("UTF-8");
     }
     
     private void handleWhatNull(HttpServletRequest request, HttpServletResponse response) throws IOException
@@ -146,6 +149,8 @@ public class Word2VecWebService extends WebServiceServlet
     
     private Collection<String> getMostSimilarWords(INDArray zeWord, int topN) 
     {
+        return word2vec.wordsNearest(zeWord, topN);
+        /*
         PairStringDouble[] zenearests = new PairStringDouble[topN];
         for (int i = 0 ; i < topN ; i++) zenearests[i] = new PairStringDouble("", 0.0);
         Collection<String> allWords = word2vec.vocab().words();
@@ -165,6 +170,7 @@ public class Word2VecWebService extends WebServiceServlet
             zenearestsstr.add(pair.str);
         }
         return zenearestsstr;
+        */
     }
 
     private static class PairStringDouble implements Comparable<PairStringDouble> 
