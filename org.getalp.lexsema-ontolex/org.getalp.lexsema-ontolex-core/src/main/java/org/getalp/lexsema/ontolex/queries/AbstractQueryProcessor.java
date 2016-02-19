@@ -13,19 +13,19 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 /**
- * Common methods for <code>QueryProcessor</code> implementations.
+ * Common methods for {@code QueryProcessor} implementations.
  *
- * @param <T> The type of <code>QueryProcessor</code> implemented
+ * @param <T> The type of {@code QueryProcessor} implemented
  */
 public abstract class AbstractQueryProcessor<T> implements QueryProcessor<T> {
-    private OntologyModel model;
-    private Graph graph;
+    private final OntologyModel model;
+    private final Graph graph;
     private ARQQuery query;
     private ResultSet results;
-    private Collection<Triple> triples = new ArrayList<>();
-    private Collection<Triple> optionalTriples = new ArrayList<>();
-    private Collection<String> resultVars = new ArrayList<>();
-    private Collection<Expr> filters = new ArrayList<>();
+    private final Collection<Triple> triples = new ArrayList<>();
+    private final Collection<Triple> optionalTriples = new ArrayList<>();
+    private final Collection<String> resultVars = new ArrayList<>();
+    private final Collection<Expr> filters = new ArrayList<>();
 
     protected AbstractQueryProcessor(Graph graph) {
         this.graph = graph;
@@ -47,20 +47,20 @@ public abstract class AbstractQueryProcessor<T> implements QueryProcessor<T> {
         query.initialize(graph, triples, optionalTriples, resultVars, filters);
     }
 
-    protected void addTriple(Node a, Node b, Node c) {
-        triples.add(Triple.create(a, b, c));
+    protected void addTriple(Node first, Node second, Node third) {
+        triples.add(Triple.create(first, second, third));
     }
 
-    protected void addOptionalTriple(Node a, Node b, Node c) {
-        optionalTriples.add(Triple.create(a, b, c));
+    protected void addOptionalTriple(Node first, Node second, Node third) {
+        optionalTriples.add(Triple.create(first, second, third));
     }
 
     protected void addFilter(Expr e) {
         filters.add(e);
     }
 
-    protected void addResultVar(String var) {
-        resultVars.add(var);
+    protected void addResultVar(String variable) {
+        resultVars.add(variable);
     }
 
     protected boolean hasNextResult() {

@@ -3,7 +3,7 @@ package org.getalp.lexsema.ontolex.dbnary;
 import org.getalp.lexsema.ontolex.LexicalResourceEntity;
 
 /**
- * DBNary API Interface for <code>Vocable</code>s
+ * DBNary API Interface for {@code Vocable}s
  */
 public interface Vocable extends LexicalResourceEntity {
     /**

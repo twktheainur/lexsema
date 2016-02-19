@@ -8,7 +8,7 @@ import org.getalp.lexsema.acceptali.closure.similarity.PairwiseSimilarityMatrixG
 import org.getalp.lexsema.similarity.Sense;
 import org.getalp.lexsema.similarity.measures.SimilarityMeasure;
 import org.getalp.ml.matrix.filters.Filter;
-import org.getalp.ml.optimization.org.getalp.util.Vectors;
+import org.getalp.ml.vector.Vectors;
 
 import java.util.Set;
 import java.util.TreeSet;

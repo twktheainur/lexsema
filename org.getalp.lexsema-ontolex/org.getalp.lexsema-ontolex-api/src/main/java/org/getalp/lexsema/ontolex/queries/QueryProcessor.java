@@ -14,19 +14,19 @@ public interface QueryProcessor<T> {
     /**
      * Runs the query
      */
-    public void runQuery();
+    void runQuery();
 
     /**
-     * Processes the results and encapsulates them in <code>T</code> instances.
+     * Processes the results and encapsulates them in {@code T} instances.
      *
-     * @return The list of resulting <code>T</code> instances
+     * @return The list of resulting {@code T} instances
      */
-    public List<T> processResults();
+    List<T> processResults();
 
     /**
-     * Retrieves the query serviced by the <code>QueryProcessor</code>
+     * Retrieves the query serviced by the {@code QueryProcessor}
      *
-     * @return The query serviced by the <code>QueryProcessor</code>
+     * @return The query serviced by the {@code QueryProcessor}
      */
-    public ARQQuery getQuery();
+    ARQQuery getQuery();
 }

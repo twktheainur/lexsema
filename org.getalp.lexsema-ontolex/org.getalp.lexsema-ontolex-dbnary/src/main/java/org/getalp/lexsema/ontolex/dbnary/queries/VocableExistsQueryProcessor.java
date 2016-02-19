@@ -4,7 +4,6 @@ import com.hp.hpl.jena.sparql.core.Var;
 import org.getalp.lexsema.ontolex.LexicalResource;
 import org.getalp.lexsema.ontolex.dbnary.Vocable;
 import org.getalp.lexsema.ontolex.factories.entities.LexicalResourceEntityFactory;
-import org.getalp.lexsema.ontolex.Graph;
 import org.getalp.lexsema.ontolex.queries.ARQSelectQuery;
 import org.getalp.lexsema.ontolex.queries.ARQSelectQueryImpl;
 import org.getalp.lexsema.ontolex.queries.AbstractQueryProcessor;
@@ -13,24 +12,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * This query processor implements a query that retrieves all <code>LexicalSense</code>s for a
- * given <code>LexicalEntry</code>.
+ * This query processor implements a query that retrieves all {@code LexicalSense}s for a
+ * given {@code LexicalEntry}.
  */
 public final class VocableExistsQueryProcessor extends AbstractQueryProcessor<Vocable> {
 
-    private final static String VOCABLE_TYPE = "v";
+    private static final String VOCABLE_TYPE = "v";
     private final LexicalResource lexicalResource;
     private final String vocable;
     private final LexicalResourceEntityFactory lexicalResourceEntityFactory;
 
-    public VocableExistsQueryProcessor(Graph graph,
-                                       LexicalResource lexicalResource,
-                                       LexicalResourceEntityFactory lexicalResourceEntityFactory,
+    public VocableExistsQueryProcessor(LexicalResource lexicalResource,
                                        String vocable) {
-        super(graph);
+        super(lexicalResource.getGraph());
         this.lexicalResource = lexicalResource;
         this.vocable = vocable;
-        this.lexicalResourceEntityFactory = lexicalResourceEntityFactory;
+        lexicalResourceEntityFactory = lexicalResource.getLexicalResourceEntityFactory();
         initialize();
     }
 
@@ -43,7 +40,7 @@ public final class VocableExistsQueryProcessor extends AbstractQueryProcessor<Vo
             /*addTriple(getNode(URLEncoder.encode(lexicalResource.getResourceGraphURI() + vocable, "UTF-8")),
                     getNode("rdf:type"),
                     Var.alloc(VOCABLE_TYPE));*/
-        addTriple(getNode(lexicalResource.getResourceGraphURI() + vocable),
+        addTriple(getNode(String.format("%s%s", lexicalResource.getResourceGraphURI(), vocable)),
                 getNode("rdf:type"),
                 Var.alloc(VOCABLE_TYPE));
 

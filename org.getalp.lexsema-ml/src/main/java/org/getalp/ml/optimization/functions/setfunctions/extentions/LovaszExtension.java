@@ -6,7 +6,7 @@ import org.getalp.ml.optimization.functions.input.FunctionInput;
 import org.getalp.ml.optimization.functions.setfunctions.SetFunction;
 import org.getalp.ml.optimization.functions.setfunctions.input.SetFunctionInput;
 import org.getalp.ml.optimization.methods.OptimisationMethod;
-import org.getalp.ml.optimization.org.getalp.util.Vectors;
+import org.getalp.ml.vector.Vectors;
 
 public class LovaszExtension implements Extension {
 

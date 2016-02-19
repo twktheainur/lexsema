@@ -5,7 +5,7 @@ import cern.colt.matrix.tdouble.DoubleMatrix1D;
 import cern.colt.matrix.tdouble.DoubleMatrix2D;
 import cern.jet.math.tdouble.DoubleFunctions;
 import cern.jet.stat.tdouble.DoubleDescriptive;
-import org.getalp.ml.matrix.MatrixUtils;
+import org.getalp.ml.matrix.Matrices;
 import org.getalp.ml.matrix.filters.Filter;
 import org.nd4j.linalg.api.ndarray.INDArray;
 
@@ -31,7 +31,7 @@ public class ZSignificanceNormalizationFilter implements Filter {
     }
     @Override
     public INDArray apply(INDArray signal) {
-        return MatrixUtils.toINDArray(apply(MatrixUtils.toColtMatrix(signal)));
+        return Matrices.toINDArray(apply(Matrices.toColtMatrix(signal)));
     }
 
 

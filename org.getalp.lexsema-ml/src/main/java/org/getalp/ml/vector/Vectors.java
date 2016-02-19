@@ -1,4 +1,4 @@
-package org.getalp.ml.optimization.org.getalp.util;
+package org.getalp.ml.vector;
 
 import cern.colt.matrix.tdouble.DoubleMatrix1D;
 import cern.colt.matrix.tdouble.impl.DenseDoubleMatrix1D;

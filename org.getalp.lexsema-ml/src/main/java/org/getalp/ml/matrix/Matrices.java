@@ -23,6 +23,7 @@ import org.jblas.Solve;
 import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.factory.Nd4j;
 
+import java.io.PrintWriter;
 import java.util.Arrays;
 
 
@@ -30,7 +31,7 @@ import java.util.Arrays;
  * A set of <code>DoubleMatrix2D</code> shorthands and utility methods.
  */
 @SuppressWarnings("deprecation")
-public class MatrixUtils {
+public class Matrices {
     /**
      * Normalizes column vectors of matrix <code>A</code> so that their L2 norm (Euclidean
      * distance) is equal to 1.0.
@@ -496,10 +497,6 @@ public class MatrixUtils {
         }
     }
 
-
-
-
-
     public static INDArray toINDArray(DoubleMatrix2D doubleMatrix){
         INDArray matrix = Nd4j.create(doubleMatrix.rows(),doubleMatrix.columns());
         for(int i=0;i<matrix.rows();i++){
@@ -510,4 +507,17 @@ public class MatrixUtils {
         return matrix;
     }
 
+
+    public static void matrixCSVWriter(PrintWriter pw, DoubleMatrix2D matrix) {
+        for (int row = 0; row < matrix.rows(); row++) {
+            for (int col = 0; col < matrix.columns(); col++) {
+                if (col < matrix.columns() - 1) {
+                    pw.print(String.format("%s,", matrix.getQuick(row, col)));
+                } else {
+                    pw.println(matrix.getQuick(row, col));
+                }
+            }
+        }
+        pw.flush();
+    }
 }

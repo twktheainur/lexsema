@@ -14,10 +14,7 @@ import org.getalp.lexsema.ontolex.uri.URIParserRegister;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 
 /**
@@ -26,9 +23,10 @@ import java.util.Map;
 @SuppressWarnings("ClassWithTooManyMethods")
 public class MultilingualDBNaryImpl implements DBNary {
 
-    private static Logger logger = LoggerFactory.getLogger(MultilingualDBNaryImpl.class);
+    private static final Logger logger = LoggerFactory.getLogger(MultilingualDBNaryImpl.class);
     Map<Language, DBNary> resourceMap = new HashMap<>();
-    Language defaultLanguage = null;
+    @SuppressWarnings("All")
+    Language defaultLanguage;
     OntologyModel model;
     LexicalResourceEntityFactory lexicalResourceEntityFactory;
 
@@ -67,8 +65,8 @@ public class MultilingualDBNaryImpl implements DBNary {
     @Override
     public List<Vocable> getVocables() {
         List<Vocable> vocables = new ArrayList<>();
-        for(Language language : resourceMap.keySet()) {
-            vocables.addAll(resourceMap.get(language).getVocables());
+        for(Map.Entry<Language, DBNary> resourceMapEntry : resourceMap.entrySet()) {
+            vocables.addAll(resourceMapEntry.getValue().getVocables());
         }
         return vocables;
     }
@@ -93,15 +91,15 @@ public class MultilingualDBNaryImpl implements DBNary {
 
     @Override
     public List<Translation> getTranslations(LexicalResourceEntity sourceEntity, Language language) {
-        if (!resourceMap.containsKey(language)) {
-            return new ArrayList<>();
+        List<Translation> output = Collections.emptyList();
+        if (resourceMap.containsKey(language)) {
+            try {
+                return resourceMap.get(sourceEntity.getLanguage()).getTranslations(sourceEntity, language);
+            } catch (RuntimeException e) {
+                logger.error(e.getLocalizedMessage());
+            }
         }
-        try {
-            return resourceMap.get(sourceEntity.getLanguage()).getTranslations(sourceEntity, language);
-        } catch (Exception e) {
-            logger.error(e.getLocalizedMessage());
-        }
-        return new ArrayList<>();
+        return output;
     }
 
     @Override

@@ -5,6 +5,7 @@ import com.hp.hpl.jena.sparql.core.Var;
 import com.hp.hpl.jena.sparql.expr.E_Regex;
 import com.hp.hpl.jena.sparql.expr.Expr;
 import com.hp.hpl.jena.sparql.expr.ExprVar;
+import org.getalp.lexsema.ontolex.LexicalResource;
 import org.getalp.lexsema.ontolex.dbnary.Vocable;
 import org.getalp.lexsema.ontolex.factories.entities.LexicalResourceEntityFactory;
 import org.getalp.lexsema.ontolex.Graph;
@@ -17,20 +18,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * This query processor implements a query that retrieves all <code>LexicalSense</code>s for a
- * given <code>LexicalEntry</code>.
+ * This query processor implements a query that retrieves all {@code LexicalSense}s for a
+ * given {@code LexicalEntry}.
  */
 public final class RetrieveAllVocablesQueryProcessor extends AbstractQueryProcessor<Vocable> {
 
-    private final static String VOCABLE_URI = "v";
+    private static final String VOCABLE_URI = "v";
     private final LexicalResourceEntityFactory lexicalResourceEntityFactory;
-    private Language language;
+    private final Language language;
 
-    public RetrieveAllVocablesQueryProcessor(Graph graph,
-                                             LexicalResourceEntityFactory lexicalResourceEntityFactory, Language language) {
-        super(graph);
-        this.lexicalResourceEntityFactory = lexicalResourceEntityFactory;
-        this.language = language;
+    @SuppressWarnings("FeatureEnvy")
+    public RetrieveAllVocablesQueryProcessor(LexicalResource lexicalResource) {
+        super(lexicalResource.getGraph());
+        lexicalResourceEntityFactory = lexicalResource.getLexicalResourceEntityFactory();
+        language = lexicalResource.getLanguage();
         initialize();
     }
 
@@ -42,7 +43,7 @@ public final class RetrieveAllVocablesQueryProcessor extends AbstractQueryProces
         addTriple(Var.alloc(VOCABLE_URI),
                 getNode("rdf:type"),
                 getNode("dbnary:Vocable"));
-            Expr lemmaRegexMatch = new E_Regex(new ExprVar(VOCABLE_URI),"/"+language.getISO3Code()+"/","");
+            Expr lemmaRegexMatch = new E_Regex(new ExprVar(VOCABLE_URI), String.format("/%s/", language.getISO3Code()),"");
         addFilter(lemmaRegexMatch);
         addResultVar(VOCABLE_URI);
     }

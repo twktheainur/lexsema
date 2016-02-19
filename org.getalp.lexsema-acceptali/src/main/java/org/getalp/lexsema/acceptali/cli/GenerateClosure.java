@@ -21,14 +21,23 @@ import org.getalp.lexsema.ontolex.graph.storage.JenaTDBStore;
 import org.getalp.lexsema.ontolex.graph.storage.StoreHandler;
 import org.getalp.lexsema.ontolex.graph.store.Store;
 import org.getalp.lexsema.util.Language;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @SuppressWarnings("UseOfSystemOutOrSystemErr")
 public final class GenerateClosure {
+
+    private static final Logger logger = LoggerFactory.getLogger(GenerateClosure.class);
 
     private static final String ONTOLOGY_PROPERTIES = "data" + File.separatorChar + "ontology.properties";
     private static final String LANGUAGE_OPTION = "l";
@@ -64,33 +73,31 @@ public final class GenerateClosure {
     private String sourceLanguage;
 
 
-    private GenerateClosure() {
+    private GenerateClosure(String... args) throws NoSuchMethodException, IOException, InstantiationException, IllegalAccessException, InvocationTargetException, ClassNotFoundException {
+        loadArgs(args);
     }
 
-    public static void main(String[] args) throws IOException, NoSuchVocableException, InvocationTargetException, NoSuchMethodException, ClassNotFoundException, InstantiationException, IllegalAccessException {
-
-        @SuppressWarnings("LocalVariableOfConcreteClass") GenerateClosure generateClosure = new GenerateClosure();
-        generateClosure.loadArgs(args);
-        generateClosure.writeClosure(generateClosure.generateClosure());
+    public static void main(String... args) throws IOException, NoSuchVocableException, InvocationTargetException, NoSuchMethodException, ClassNotFoundException, InstantiationException, IllegalAccessException {
+        @SuppressWarnings("LocalVariableOfConcreteClass") GenerateClosure generateClosure = new GenerateClosure(args);
+        generateClosure.writeClosures(generateClosure.generate());
     }
 
     private static void printUsage() {
         HelpFormatter formatter = new HelpFormatter();
         String help =
-                String.format("Generates a translation closure and saves it to a directory that can be used as input for " +
-                        "FileTranslationClosureGenerator%s", System.lineSeparator());
+                String.format("Generates a translation closure and saves it to a directory that can be used as input for FileTranslationClosureGenerator%s", System.lineSeparator());
         formatter.printHelp("java -cp %spath%sto%slexsema-acceptali org.getalp.lexsema.acceptali.cli.GenerateClosure [OPTIONS] vocable source_language depth",
                 "With OPTIONS in:", options,
                 help, false);
     }
 
 
-    private void loadArgs(String[] args) throws IOException, InvocationTargetException, NoSuchMethodException, ClassNotFoundException, InstantiationException, IllegalAccessException {
+    private void loadArgs(String... args) throws IOException, InvocationTargetException, NoSuchMethodException, ClassNotFoundException, InstantiationException, IllegalAccessException {
         CommandLineParser parser = new PosixParser();
         try {
             cmd = parser.parse(options, args);
         } catch (ParseException e) {
-            System.err.println("Error parsing arguments: " + e.getLocalizedMessage());
+            logger.error("Error parsing arguments: {}", e.getLocalizedMessage());
             printUsage();
             System.exit(1);
         }
@@ -116,7 +123,7 @@ public final class GenerateClosure {
         String[] remainingArgs = cmd.getArgs();
 
         if (remainingArgs.length < 3) {
-            System.err.println("You must supply the vocable, source_language and the depth");
+            logger.error("You must supply the vocable, source_language and the depth");
             printUsage();
             System.exit(1);
         }
@@ -131,13 +138,14 @@ public final class GenerateClosure {
         dbNary = (DBNary) LexicalResourceFactory.getLexicalResource(DBNary.class, tBox, languages);
     }
 
+    @SuppressWarnings("InstanceVariableUsedBeforeInitialized")
     private void processStorageOptions() throws IOException {
-        if (!cmd.hasOption(STORAGE_LOCATION_OPTION)) {
-            System.err.println("You must supply a storage location (-sl option)");
+        if (cmd.hasOption(STORAGE_LOCATION_OPTION)) {
+            location = cmd.getOptionValue(STORAGE_LOCATION_OPTION);
+        } else {
+            logger.error("You must supply a storage location (-sl option)");
             printUsage();
             System.exit(1);
-        } else {
-            location = cmd.getOptionValue(STORAGE_LOCATION_OPTION);
         }
 
         String storageType = DEFAULT_STORAGE_TYPE;
@@ -149,6 +157,7 @@ public final class GenerateClosure {
         switch (storageType) {
             case "tdb":
                 vts = new JenaTDBStore(location);
+
                 break;
             case "file":
                 vts = new JenaMemoryStore(location);
@@ -156,16 +165,25 @@ public final class GenerateClosure {
             case "remote":
                 vts = new JenaRemoteSPARQLStore(location);
                 break;
+            default:
+                printUsage();
+                System.exit(1);
+                break;
         }
         StoreHandler.registerStoreInstance(vts);
+
     }
 
-    private LexicalResourceTranslationClosure<LexicalSense> generateClosure() throws NoSuchVocableException {
+    private Map<LexicalEntry, LexicalResourceTranslationClosure<LexicalSense>> generate() throws NoSuchVocableException {
         Vocable v = dbNary.getVocable(vocable, Language.fromCode(sourceLanguage));
         List<LexicalEntry> ventries = dbNary.getLexicalEntries(v);
         if (!ventries.isEmpty()) {
-            TranslationClosureGenerator gtc = TranslationClosureGeneratorFactory.createCompositeGenerator(dbNary, ventries.get(0));
-            return generateEntryClosure(gtc);
+            Map<LexicalEntry,LexicalResourceTranslationClosure<LexicalSense>> closures = new HashMap<>();
+            for(LexicalEntry lexicalEntry: ventries) {
+                TranslationClosureGenerator gtc = TranslationClosureGeneratorFactory.createCompositeGenerator(dbNary, lexicalEntry);
+                closures.put(lexicalEntry,generateEntryClosure(gtc));
+            }
+            return closures;
         }
         return null;
     }
@@ -174,8 +192,20 @@ public final class GenerateClosure {
         return generator.generateClosure(depth);
     }
 
-    private void writeClosure(LexicalResourceTranslationClosure<LexicalSense> closure) {
-        TranslationClosureWriter writer = new FileTranslationClosureWriter(targetDirectory);
-        writer.writeClosure(closure);
+    private void writeClosures(Map<LexicalEntry, LexicalResourceTranslationClosure<LexicalSense>> closures) throws IOException {
+        for(Map.Entry<LexicalEntry, LexicalResourceTranslationClosure<LexicalSense>> closureEntry : closures.entrySet()) {
+            Path p = Paths.get(targetDirectory, String.format("%s_%d", closureEntry.getKey().getLemma(), closureEntry.getKey().getNumber()));
+            Files.createDirectory(p);
+            writeClosure(closureEntry.getValue(),p);
+        }
+    }
+
+    private void writeClosure(LexicalResourceTranslationClosure<LexicalSense> closure, Path path) {
+        if (closure != null) {
+            TranslationClosureWriter writer = new FileTranslationClosureWriter(path.toString());
+            writer.writeClosure(closure);
+        } else {
+            logger.error("The closure is empty... Aborting.");
+        }
     }
 }

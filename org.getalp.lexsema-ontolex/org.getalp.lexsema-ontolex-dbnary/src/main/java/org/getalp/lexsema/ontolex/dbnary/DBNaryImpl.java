@@ -15,8 +15,6 @@ import org.getalp.lexsema.ontolex.factories.entities.LexicalResourceEntityFactor
 import org.getalp.lexsema.ontolex.graph.OntologyModel;
 import org.getalp.lexsema.ontolex.queries.QueryProcessor;
 import org.getalp.lexsema.ontolex.uri.URIParserRegister;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,7 +27,6 @@ import java.util.List;
 public final class DBNaryImpl extends OntolexLexicalResource implements DBNary {
 
     private final Language language;
-    private final Logger logger = LoggerFactory.getLogger(DBNary.class);
 
     /**
      * Constructor for DBNary
@@ -50,7 +47,7 @@ public final class DBNaryImpl extends OntolexLexicalResource implements DBNary {
     @Override
     public Vocable getVocable(final String vocable) throws NoSuchVocableException {
         String voc = vocable.toLowerCase();
-        QueryProcessor<Vocable> existVocableQueryProcessor = new org.getalp.lexsema.ontolex.dbnary.queries.VocableExistsQueryProcessor(getGraph(), this, getLexicalResourceEntityFactory(), vocable);
+        QueryProcessor<Vocable> existVocableQueryProcessor = new org.getalp.lexsema.ontolex.dbnary.queries.VocableExistsQueryProcessor(this, vocable);
         existVocableQueryProcessor.runQuery();
         List<Vocable> vocables = existVocableQueryProcessor.processResults();
         if (vocables.isEmpty()) {
@@ -66,15 +63,14 @@ public final class DBNaryImpl extends OntolexLexicalResource implements DBNary {
 
     @Override
     public List<Vocable> getVocables() {
-        QueryProcessor<Vocable> retrieveAllVocableQP = new RetrieveAllVocablesQueryProcessor(getGraph(),
-                getLexicalResourceEntityFactory(),language);
+        QueryProcessor<Vocable> retrieveAllVocableQP = new RetrieveAllVocablesQueryProcessor(this);
         retrieveAllVocableQP.runQuery();
         return retrieveAllVocableQP.processResults();
     }
 
     @Override
     public List<LexicalEntry> getLexicalEntries(String entry, String pos, int entryNumber) {
-        List<LexicalEntry> entries = super.getLexicalEntries(entry, pos);
+        List<LexicalEntry> entries = getLexicalEntries(entry, pos);
         List<LexicalEntry> output = new ArrayList<>();
         int i;
         for (i = 0; i < entries.size(); ) {
@@ -97,11 +93,7 @@ public final class DBNaryImpl extends OntolexLexicalResource implements DBNary {
     @Override
     public List<LexicalEntry> getLexicalEntries(Vocable vocable) {
 
-        QueryProcessor<LexicalEntry> lexicalEntryQueryProcessor =
-                new LexicalEntriesForVocableQueryProcessor(
-                        getGraph(),
-                        getLexicalResourceEntityFactory(),
-                        vocable);
+        QueryProcessor<LexicalEntry> lexicalEntryQueryProcessor = new LexicalEntriesForVocableQueryProcessor(this, vocable);
         lexicalEntryQueryProcessor.runQuery();
         return lexicalEntryQueryProcessor.processResults();
     }
@@ -109,23 +101,15 @@ public final class DBNaryImpl extends OntolexLexicalResource implements DBNary {
     @Override
     public List<Translation> getTranslations(LexicalResourceEntity sourceEntity, Language language) {
         QueryProcessor<Translation> translationTargets =
-                new TranslationsForLexicalResourceEntityQueryProcessor(
-                        getGraph(),
-                        getLexicalResourceEntityFactory(),
-                        sourceEntity,
-                        language);
+                new TranslationsForLexicalResourceEntityQueryProcessor(this, sourceEntity, language);
         translationTargets.runQuery();
         return translationTargets.processResults();
     }
 
     @Override
-    public List<Translation> getTranslations(LexicalResourceEntity sourceEntity, Language... language) {
+    public List<Translation> getTranslations(LexicalResourceEntity sourceEntity, Language... languages) {
         QueryProcessor<Translation> translationTargets =
-                new TranslationsForLexicalResourceEntityQueryProcessor(
-                        getGraph(),
-                        getLexicalResourceEntityFactory(),
-                        sourceEntity,
-                        language);
+                new TranslationsForLexicalResourceEntityQueryProcessor(this, sourceEntity, languages);
         translationTargets.runQuery();
         return translationTargets.processResults();
     }
@@ -134,10 +118,7 @@ public final class DBNaryImpl extends OntolexLexicalResource implements DBNary {
     public List<Translation> getTranslations(LexicalResourceEntity sourceEntity) {
         QueryProcessor<Translation> translationTargets =
                 new TranslationsForLexicalResourceEntityQueryProcessor(
-                        getGraph(),
-                        getLexicalResourceEntityFactory(),
-                        sourceEntity,
-                        null, null);
+                        this, sourceEntity, null, null);
         translationTargets.runQuery();
         return translationTargets.processResults();
     }
@@ -146,8 +127,7 @@ public final class DBNaryImpl extends OntolexLexicalResource implements DBNary {
     public List<LexicalResourceEntity> getRelatedEntities(LexicalResourceEntity sourceEntity, DBNaryRelationType relationType) {
         QueryProcessor<LexicalResourceEntity> relatedTargetsProcessor =
                 new RelatedEntitiesForLexicalResourceEntityQueryProcessor(
-                        getGraph(),
-                        getLexicalResourceEntityFactory(),
+                        this,
                         sourceEntity,
                         relationType);
         relatedTargetsProcessor.runQuery();
@@ -171,6 +151,10 @@ public final class DBNaryImpl extends OntolexLexicalResource implements DBNary {
     @Override
     public List<LexicalEntry> getLexicalEntries(String entry, String pos, Language language) {
         return getLexicalEntries(entry, pos);
+    }
+
+    public <T> QueryProcessor<T> getStuff() {
+        return null;
     }
 
     @Override
