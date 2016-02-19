@@ -15,6 +15,11 @@
 		<servlet-class>org.getalp.lexsema.ws.html.HTMLAnnotator</servlet-class>
 	</servlet>
 
+    <servlet>
+        <servlet-name>Word2VecWebService</servlet-name>
+        <servlet-class>org.getalp.lexsema.ws.w2v.Word2VecWebService</servlet-class>
+    </servlet>
+
 	<servlet-mapping>
 		<servlet-name>NIFWebService</servlet-name>
 		<url-pattern>/nifwebservice</url-pattern>
@@ -25,8 +30,8 @@
         <url-pattern>/htmlannotator</url-pattern>
     </servlet-mapping>
 
-	<servlet-mapping> <!-- DEPRECATED -->
-		<servlet-name>HTMLAnnotator</servlet-name>
-		<url-pattern>/htmltextannotator</url-pattern>
-	</servlet-mapping> <!-- DEPRECATED -->
+    <servlet-mapping>
+        <servlet-name>Word2VecWebService</servlet-name>
+        <url-pattern>/w2vservice</url-pattern>
+    </servlet-mapping>
 </web-app>
