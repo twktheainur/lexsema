@@ -20,9 +20,7 @@ import org.nd4j.linalg.ops.transforms.Transforms;
 public class Word2VecWebService extends WebServiceServlet
 {
     private static WordVectors word2vec = null; 
-    
-    private static boolean word2vecIsLoaded = false;
-    
+        
     private static final String default_path = "/home/viall/current/data/word2vec/model_large.bin";
     
     protected void handle(HttpServletRequest request, HttpServletResponse response) throws Exception
@@ -72,7 +70,7 @@ public class Word2VecWebService extends WebServiceServlet
     
     private void handleGetWordVector(HttpServletRequest request, HttpServletResponse response) throws IOException
     {
-        if (!word2vecIsLoaded) { writeErrorWord2vecNotLoaded(response); return; }
+        if (word2vec == null) { writeErrorWord2vecNotLoaded(response); return; }
         String word = request.getParameter("word");
         if (word == null) { writeErrorParameterNull(response, "word"); return; }
         double[] vector = word2vec.getWordVector(word);
@@ -81,7 +79,7 @@ public class Word2VecWebService extends WebServiceServlet
     
     private void handleGetMostSimilarWords(HttpServletRequest request, HttpServletResponse response) throws IOException
     {
-        if (!word2vecIsLoaded) { writeErrorWord2vecNotLoaded(response); return; }
+        if (word2vec == null) { writeErrorWord2vecNotLoaded(response); return; }
         String word = request.getParameter("word");
         String vector = request.getParameter("vector");
         if (word == null && vector == null) { writeErrorParameterNull(response, "word / vector"); return; }
