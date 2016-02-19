@@ -18,7 +18,9 @@ import org.nd4j.linalg.ops.transforms.Transforms;
 
 public class Word2VecWebService extends WebServiceServlet
 {
-    private static final WordVectors word2vec = loadWord2vec();
+    private static WordVectors word2vec = null; 
+    
+    private static String default_path = "/home/viall/current/data/word2vec/model_large.bin";
     
     @Override
     protected void handle(HttpServletRequest request, HttpServletResponse response) throws Exception
@@ -27,6 +29,7 @@ public class Word2VecWebService extends WebServiceServlet
         if (what.equals("get_word_vector"))
         {
             String word = request.getParameter("word");
+            response.getWriter().write("getting vector of word " + word + "...");
             double[] vector = word2vec.getWordVector(word);
             response.getWriter().write(vector.toString());
         }
@@ -34,8 +37,22 @@ public class Word2VecWebService extends WebServiceServlet
         {
             String word = request.getParameter("word");
             int n = Integer.parseInt(request.getParameter("n"));
+            response.getWriter().write("getting " + n + " most similar words to " + word + "...");
             Collection<String> most_similar_words = getMostSimilarWord(word, n);
             response.getWriter().write(most_similar_words.toString());
+        }
+        else if (what.equals("load_model"))
+        {
+            String path = request.getParameter("path");
+            word2vec = loadWord2vec(path);
+            if (word2vec == null)
+            {
+                response.getWriter().write("fail");
+            }
+            else
+            {
+                response.getWriter().write("success");
+            }
         }
     }
 
@@ -82,15 +99,16 @@ public class Word2VecWebService extends WebServiceServlet
         }
     }
     
-    private static WordVectors loadWord2vec()
+    private static WordVectors loadWord2vec(String path)
     {
         try
         {
-            return WordVectorSerializer.loadGoogleModel(new File("/home/viall/current/data/word2vec/", "model_large.bin"), true, false);
+            return WordVectorSerializer.loadGoogleModel(new File(path), true, false);
         } 
         catch (IOException e)
         {
-            throw new Error(e);
+            e.printStackTrace();
+            return null;
         }
     }
 }
