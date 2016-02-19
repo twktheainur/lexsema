@@ -53,6 +53,7 @@ public class Word2VecWebService extends WebServiceServlet
         {
             handleWhatInvalid(request, response);
         }
+        response.getWriter().close();
     }
 
     private void setHeaders(HttpServletRequest request, HttpServletResponse response)
@@ -61,7 +62,7 @@ public class Word2VecWebService extends WebServiceServlet
         response.setHeader("Access-Control-Allow-Methods", "GET, PUT, POST, OPTIONS, DELETE");
         response.setHeader("Access-Control-Max-Age", "*");
         response.setHeader("Access-Control-Allow-Headers", "*");
-        response.setContentType("text");
+        response.setContentType("text/plain");
     }
     
     private void handleWhatNull(HttpServletRequest request, HttpServletResponse response) throws IOException
