@@ -86,7 +86,7 @@ public class Word2VecWebService extends WebServiceServlet
     {
         try
         {
-            return WordVectorSerializer.loadGoogleModel(new File("/home/coyl/current/data/word2vec/", "model_large.bin"), true, false);
+            return WordVectorSerializer.loadGoogleModel(new File("/home/viall/current/data/word2vec/", "model_large.bin"), true, false);
         } 
         catch (IOException e)
         {
