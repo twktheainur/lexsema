@@ -29,17 +29,17 @@ public class Word2VecWebService extends WebServiceServlet
         if (what.equals("get_word_vector"))
         {
             String word = request.getParameter("word");
-            response.getWriter().write("getting vector of word " + word + "...");
+            //response.getWriter().println("getting vector of word " + word + "...");
             double[] vector = word2vec.getWordVector(word);
-            response.getWriter().write(vector.toString());
+            response.getWriter().println(Arrays.toString(vector));
         }
         else if (what.equals("get_most_similar_words"))
         {
             String word = request.getParameter("word");
             int n = Integer.parseInt(request.getParameter("n"));
-            response.getWriter().write("getting " + n + " most similar words to " + word + "...");
+            //response.getWriter().println("getting " + n + " most similar words to " + word + "...");
             Collection<String> most_similar_words = getMostSimilarWord(word, n);
-            response.getWriter().write(most_similar_words.toString());
+            response.getWriter().println(most_similar_words.toString());
         }
         else if (what.equals("load_model"))
         {
@@ -47,11 +47,11 @@ public class Word2VecWebService extends WebServiceServlet
             word2vec = loadWord2vec(path);
             if (word2vec == null)
             {
-                response.getWriter().write("fail");
+                response.getWriter().println("fail");
             }
             else
             {
-                response.getWriter().write("success");
+                response.getWriter().println("success");
             }
         }
     }
