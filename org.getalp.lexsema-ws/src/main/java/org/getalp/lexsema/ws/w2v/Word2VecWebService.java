@@ -149,8 +149,6 @@ public class Word2VecWebService extends WebServiceServlet
     
     private Collection<String> getMostSimilarWords(INDArray zeWord, int topN) 
     {
-        return word2vec.wordsNearest(zeWord, topN);
-        /*
         PairStringDouble[] zenearests = new PairStringDouble[topN];
         for (int i = 0 ; i < topN ; i++) zenearests[i] = new PairStringDouble("", 0.0);
         Collection<String> allWords = word2vec.vocab().words();
@@ -170,7 +168,6 @@ public class Word2VecWebService extends WebServiceServlet
             zenearestsstr.add(pair.str);
         }
         return zenearestsstr;
-        */
     }
 
     private static class PairStringDouble implements Comparable<PairStringDouble> 
