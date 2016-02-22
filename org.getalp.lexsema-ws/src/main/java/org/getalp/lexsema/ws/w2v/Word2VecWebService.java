@@ -13,6 +13,9 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.deeplearning4j.models.embeddings.loader.WordVectorSerializer;
 import org.deeplearning4j.models.embeddings.wordvectors.WordVectors;
+import org.getalp.lexsema.similarity.signatures.SemanticSignature;
+import org.getalp.lexsema.similarity.signatures.SemanticSignatureImpl;
+import org.getalp.lexsema.similarity.signatures.symbols.SemanticSymbol;
 import org.getalp.lexsema.ws.core.WebServiceServlet;
 import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.jblas.NDArray;
@@ -139,49 +142,136 @@ public class Word2VecWebService extends WebServiceServlet
     {
         return getMostSimilarWords(word2vec.getWordVectorMatrix(zeWord), topN);
     }
+    
+    private double[] slice(INDArray matrix, int colSize, int rowIndex) {
+        double[] ret = new double[colSize];
+        INDArray row = matrix.vectorAlongDimension(rowIndex, 1);
+        for (int i = 0 ; i < colSize ; i++) {
+            ret[i] = row.getDouble(i);
+        }
+        return ret;
+    }
+    
+    private double dot_product(double[] a, double[] b) {
+        double ret = 0;
+        for (int i = 0 ; i < a.length ; i++) {
+            ret += a[i] * b[i];
+        }
+        return ret;
+    }
 
     private Collection<String> getMostSimilarWords(double[] zeWord, int topN) 
     {
-        double[][] zeWord2D = new double[1][zeWord.length];
-        zeWord2D[0] = zeWord;
-        return getMostSimilarWords(new NDArray(zeWord2D), topN);
+        Stuff[] zenearests = new Stuff[topN];
+        for (int i = 0 ; i < topN ; i++) zenearests[i] = new Stuff(zeWord, 0.0, 0);
+
+        INDArray allVectors = word2vec.lookupTable().getWeights();
+        int nbOfVectors = allVectors.rows();
+        int nbOfThreads = Runtime.getRuntime().availableProcessors();
+        Thread[] threads = new Thread[nbOfThreads];
+        int nbOfVectorsPerThread = nbOfVectors / nbOfThreads;
+        int nbOfVectorsRemaining = nbOfVectors - (nbOfVectorsPerThread * nbOfThreads);
+        
+        for (int i = 0 ; i < nbOfThreads ; i++) {
+            int min = i * nbOfVectorsPerThread;
+            threads[i] = new Thread() {
+                public void run() {
+                    for (int j = min ; j < min + nbOfVectorsPerThread ; j++) {
+                        double[] v = slice(allVectors, allVectors.columns(), j);
+                        double sim = dot_product(zeWord, v);
+                        if (sim > zenearests[0].sim) {
+                            synchronized(zenearests) {
+                                zenearests[0].sim = sim; 
+                                zenearests[0].vec = v;
+                                zenearests[0].index = j;
+                                Arrays.sort(zenearests);
+                            }
+                        }
+                    }
+                }
+            };
+        }
+
+        for (Thread thread : threads) {
+            thread.start();
+        }
+
+        int min = nbOfThreads * nbOfVectorsPerThread;
+        for (int j = min ; j < min + nbOfVectorsRemaining ; j++) {
+            double[] v = slice(allVectors, allVectors.columns(), j);
+            double sim = dot_product(zeWord, v);
+            if (sim > zenearests[0].sim) {
+                synchronized(zenearests) {
+                    zenearests[0].sim = sim; 
+                    zenearests[0].vec = v;
+                    zenearests[0].index = j;
+                    Arrays.sort(zenearests);
+                }
+            }
+        }
+        
+        for (Thread thread : threads) {
+            try {
+                thread.join();
+            } catch (InterruptedException e) {
+                throw new Error(e);
+            }
+        }
+        
+        List<String> zenearestsstr = new ArrayList<>();
+        for (Stuff pair : zenearests) 
+        {
+            zenearestsstr.add(word2vec.vocab().wordAtIndex(pair.index));
+        }
+        return zenearestsstr;
     }
     
     private Collection<String> getMostSimilarWords(INDArray zeWord, int topN) 
     {
-        PairStringDouble[] zenearests = new PairStringDouble[topN];
+        double[] d = new double[zeWord.columns()];
+        for (int i = 0 ; i < d.length ; i++) {
+            d[i] = zeWord.getDouble(i);
+        }
+        return getMostSimilarWords(d, topN);
+    }
+    /*
+    private Collection<String> getMostSimilarWords(INDArray zeWord, int topN) 
+    {
+        Stuff[] zenearests = new Stuff[topN];
         for (int i = 0 ; i < topN ; i++) zenearests[i] = new PairStringDouble("", 0.0);
         Collection<String> allWords = word2vec.vocab().words();
         for (String word : allWords) 
         {
             double sim = Transforms.cosineSim(zeWord, word2vec.getWordVectorMatrix(word));
-            if (sim > zenearests[0].dbl) 
+            if (sim > zenearests[0].sim) 
             {
-                zenearests[0].dbl = sim; 
+                zenearests[0].sim = sim; 
                 zenearests[0].str = word;
                 Arrays.sort(zenearests);
             }
         }
         List<String> zenearestsstr = new ArrayList<>();
-        for (PairStringDouble pair : zenearests) 
+        for (Stuff pair : zenearests) 
         {
-            zenearestsstr.add(pair.str);
+            zenearestsstr.add(word2vec.vocab().wordAtIndex(pair.index));
         }
         return zenearestsstr;
     }
-
-    private static class PairStringDouble implements Comparable<PairStringDouble> 
+*/
+    private static class Stuff implements Comparable<Stuff> 
     {
-        public String str;
-        public Double dbl;
-        public PairStringDouble(String str, Double dbl) 
+        public double[] vec;
+        public Double sim;
+        public Integer index;
+        public Stuff(double[] vec, double dbl, int index) 
         {
-            this.str = str;
-            this.dbl = dbl;
+            this.vec = vec;
+            this.sim = dbl;
+            this.index = index;
         }
-        public int compareTo(PairStringDouble o) 
+        public int compareTo(Stuff o) 
         {
-            return dbl.compareTo(o.dbl);
+            return sim.compareTo(o.sim);
         }
     }
     
