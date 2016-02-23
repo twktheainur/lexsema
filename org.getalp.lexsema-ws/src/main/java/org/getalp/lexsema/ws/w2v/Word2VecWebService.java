@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.deeplearning4j.models.embeddings.loader.WordVectorSerializer;
 import org.deeplearning4j.models.embeddings.wordvectors.WordVectors;
 import org.getalp.lexsema.ws.core.WebServiceServlet;
+import org.nd4j.linalg.api.ndarray.INDArray;
 
 public class Word2VecWebService extends WebServiceServlet
 {
@@ -141,12 +142,22 @@ public class Word2VecWebService extends WebServiceServlet
         return getMostSimilarWords(vectors[wordsIndexes.get(zeWord)], topN);
     }
     
-    private double dot_product(double[] a, double[] b) {
+    private double dot_product(double[] a, double[] b) 
+    {
         double ret = 0;
-        for (int i = 0 ; i < a.length ; i++) {
+        for (int i = 0 ; i < a.length ; i++) 
+        {
             ret += a[i] * b[i];
         }
         return ret;
+    }
+    
+    private void put_the_first_element_in_the_right_place(Stuff[] array) 
+    {
+        for (int i = array.length - 1 ; i >= 0 ; i--)
+        {
+            
+        }
     }
     
     private Collection<String> getMostSimilarWords(double[] zeWord, int topN) 
@@ -199,14 +210,19 @@ public class Word2VecWebService extends WebServiceServlet
             words = new String[nbWords];
             wordsIndexes = new HashMap<>();
             vectors = new double[nbWords][vectorDimension];
+            int last_percentage = 0;
             for (int i = 0 ; i < nbWords ; i++) {
-                int percentage = ((int) ((((double) (i + 1)) / ((double) (nbWords))) * 100.0));
-                System.out.print("Adding words... (" + percentage + "%)\r");
+                int current_percentage = ((int) ((((double) (i + 1)) / ((double) (nbWords))) * 100.0));
+                if (current_percentage > last_percentage) System.out.println("Adding words... (" + current_percentage + "%)\r");
+                last_percentage = current_percentage;
                 words[i] = w2v.vocab().wordAtIndex(i);
                 wordsIndexes.put(words[i], i);
-                vectors[i] = w2v.lookupTable().getWeights().vectorAlongDimension(i, 1).data().asDouble();
+                INDArray ndarray = w2v.lookupTable().getWeights().vectorAlongDimension(i, 1);
+                for (int j = 0 ; j < vectorDimension ; j++)
+                {
+                    vectors[i][j] = ndarray.getDouble(j);
+                }
             }
-            System.out.println();
             loaded = true;
         } 
         catch (IOException e)
