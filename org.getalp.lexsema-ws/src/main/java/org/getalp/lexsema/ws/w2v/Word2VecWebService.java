@@ -199,7 +199,7 @@ public class Word2VecWebService extends WebServiceServlet
             wordsIndexes = new HashMap<>();
             vectors = new double[nbWords][vectorDimension];
             for (int i = 0 ; i < nbWords ; i++) {
-                int percentage =  (((i + 1) / nbWords) * 100);
+                int percentage = ((int) ((((double) (i + 1)) / ((double) (nbWords))) * 100.0));
                 System.out.print("Adding words... (" + percentage + "%)\r");
                 words[i] = w2v.vocab().wordAtIndex(i);
                 wordsIndexes.put(words[i], i);
