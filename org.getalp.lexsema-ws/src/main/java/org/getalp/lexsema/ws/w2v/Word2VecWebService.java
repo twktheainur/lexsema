@@ -8,10 +8,8 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import org.deeplearning4j.models.embeddings.loader.WordVectorSerializer;
 import org.deeplearning4j.models.embeddings.wordvectors.WordVectors;
 import org.getalp.lexsema.ws.core.WebServiceServlet;
@@ -139,8 +137,6 @@ public class Word2VecWebService extends WebServiceServlet
     
     private Collection<String> getMostSimilarWords(String zeWord, int topN) 
     {
-        getMostSimilarWordsNotParallel(vectors[wordsIndexes.get(zeWord)], topN);
-        getMostSimilarWords(vectors[wordsIndexes.get(zeWord)], topN);
         return getMostSimilarWords(vectors[wordsIndexes.get(zeWord)], topN);
     }
     
@@ -151,81 +147,9 @@ public class Word2VecWebService extends WebServiceServlet
         }
         return ret;
     }
-
+    
     private Collection<String> getMostSimilarWords(double[] zeWord, int topN) 
     {
-        long startTime = System.currentTimeMillis();
-        
-        Stuff[] zenearests = new Stuff[topN];
-        for (int i = 0 ; i < topN ; i++) zenearests[i] = new Stuff(0.0, 0);
-
-        int nbOfVectors = vectors.length;
-        int nbOfThreads = Runtime.getRuntime().availableProcessors();
-        Thread[] threads = new Thread[nbOfThreads];
-        int nbOfVectorsPerThread = nbOfVectors / nbOfThreads;
-        int nbOfVectorsRemaining = nbOfVectors - (nbOfVectorsPerThread * nbOfThreads);
-        
-        for (int i = 0 ; i < nbOfThreads ; i++) {
-            int min = i * nbOfVectorsPerThread;
-            threads[i] = new Thread() {
-                public void run() {
-                    for (int j = min ; j < min + nbOfVectorsPerThread ; j++) {
-                        double[] v = vectors[j];
-                        double sim = dot_product(zeWord, v);
-                        synchronized(zenearests) {
-                            if (sim > zenearests[0].sim) {
-                                zenearests[0].sim = sim; 
-                                zenearests[0].index = j;
-                                Arrays.sort(zenearests);
-                            }
-                        }
-                    }
-                }
-            };
-        }
-
-        for (Thread thread : threads) {
-            thread.start();
-        }
-
-        int min = nbOfThreads * nbOfVectorsPerThread;
-        for (int j = min ; j < min + nbOfVectorsRemaining ; j++) {
-            double[] v = vectors[j];
-            double sim = dot_product(zeWord, v);
-            synchronized(zenearests) {
-                if (sim > zenearests[0].sim) {
-                    zenearests[0].sim = sim; 
-                    zenearests[0].index = j;
-                    Arrays.sort(zenearests);
-                }
-            }
-        }
-        
-        for (Thread thread : threads) {
-            try {
-                thread.join();
-            } catch (InterruptedException e) {
-                throw new Error(e);
-            }
-        }
-        
-        List<String> zenearestsstr = new ArrayList<>();
-        for (Stuff pair : zenearests) 
-        {
-            zenearestsstr.add(words[pair.index]);
-        }
-        
-        long stopTime = System.currentTimeMillis();
-        long elapsedTime = stopTime - startTime;
-        System.out.println("multi threaded time : " + elapsedTime);
-        
-        return zenearestsstr;
-    }
-    
-    private Collection<String> getMostSimilarWordsNotParallel(double[] zeWord, int topN) 
-    {
-        long startTime = System.currentTimeMillis();
-        
         Stuff[] zenearests = new Stuff[topN];
         for (int i = 0 ; i < topN ; i++) zenearests[i] = new Stuff(0.0, 0);
         int nbOfVectors = vectors.length;
@@ -245,11 +169,6 @@ public class Word2VecWebService extends WebServiceServlet
         {
             zenearestsstr.add(words[pair.index]);
         }
-
-        long stopTime = System.currentTimeMillis();
-        long elapsedTime = stopTime - startTime;
-        System.out.println("single threaded time : " + elapsedTime);
-        
         return zenearestsstr;
     }
     
@@ -280,13 +199,15 @@ public class Word2VecWebService extends WebServiceServlet
             wordsIndexes = new HashMap<>();
             vectors = new double[nbWords][vectorDimension];
             for (int i = 0 ; i < nbWords ; i++) {
-                System.out.println("Adding words... (" + (i + 1) + "/" + nbWords + ")");
+                int percentage =  (((i + 1) / nbWords) * 100);
+                System.out.print("Adding words... (" + percentage + "%)\r");
                 words[i] = w2v.vocab().wordAtIndex(i);
                 wordsIndexes.put(words[i], i);
                 for (int j = 0 ; j < vectorDimension ; j++) {
                     vectors[i][j] = w2v.lookupTable().getWeights().slice(i).getDouble(j);
                 }
             }
+            System.out.println();
             loaded = true;
         } 
         catch (IOException e)
