@@ -11,13 +11,8 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Scanner;
-import java.util.zip.GZIPInputStream;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import org.apache.commons.compress.compressors.gzip.GzipUtils;
 import org.getalp.lexsema.ws.core.WebServiceServlet;
 
 public class Word2VecWebService extends WebServiceServlet
@@ -172,7 +167,7 @@ public class Word2VecWebService extends WebServiceServlet
         double norm = norm(v);
         for (int i = 0 ; i < v.length ; i++)
         {
-            ret[i] /= norm;
+            ret[i] = v[i] / norm;
         }
         return ret;
     }
@@ -223,11 +218,13 @@ public class Word2VecWebService extends WebServiceServlet
         byte b = dis.readByte();
         int i = -1;
         StringBuilder sb = new StringBuilder();
-        while (b != 32 && b != 10) {
+        while (b != ' ' && b != '\n') 
+        {
             i++;
             bytes[i] = b;
             b = dis.readByte();
-            if (i == 49) {
+            if (i == 49) 
+            {
                 sb.append(new String(bytes));
                 i = -1;
                 bytes = new byte[MAX_SIZE];
