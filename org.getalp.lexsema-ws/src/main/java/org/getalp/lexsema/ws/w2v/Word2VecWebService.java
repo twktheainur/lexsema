@@ -6,6 +6,7 @@ import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -14,17 +15,18 @@ import javax.servlet.http.HttpServletResponse;
 import org.deeplearning4j.models.embeddings.loader.WordVectorSerializer;
 import org.deeplearning4j.models.embeddings.wordvectors.WordVectors;
 import org.getalp.lexsema.ws.core.WebServiceServlet;
-import org.nd4j.linalg.api.ndarray.INDArray;
 
 public class Word2VecWebService extends WebServiceServlet
 {
-    private static WordVectors word2vec = null; 
-        
     private static final String default_path = "/home/viall/current/data/word2vec/model_large.bin";
     
     private static double[][] vectors = null;
     
     private static String[] words = null;
+    
+    private static HashMap<String, Integer> wordsIndexes = null;
+    
+    private static boolean loaded = false;
     
     protected void handle(HttpServletRequest request, HttpServletResponse response) throws Exception
     {
@@ -75,16 +77,16 @@ public class Word2VecWebService extends WebServiceServlet
     
     private void handleGetWordVector(HttpServletRequest request, HttpServletResponse response) throws IOException
     {
-        if (word2vec == null) { writeErrorWord2vecNotLoaded(response); return; }
+        if (!loadWord2vec(default_path, false)) writeErrorWord2vecNotLoaded(response);
         String word = request.getParameter("word");
         if (word == null) { writeErrorParameterNull(response, "word"); return; }
-        double[] vector = word2vec.getWordVector(word);
+        double[] vector = vectors[wordsIndexes.get(word)];
         response.getWriter().println(Arrays.toString(vector));
     }
     
     private void handleGetMostSimilarWords(HttpServletRequest request, HttpServletResponse response) throws IOException
     {
-        if (word2vec == null) { writeErrorWord2vecNotLoaded(response); return; }
+        if (!loadWord2vec(default_path, false)) writeErrorWord2vecNotLoaded(response);
         String word = request.getParameter("word");
         String vector = request.getParameter("vector");
         if (word == null && vector == null) { writeErrorParameterNull(response, "word / vector"); return; }
@@ -110,15 +112,13 @@ public class Word2VecWebService extends WebServiceServlet
     {
         String path = request.getParameter("path");
         if (path == null) { writeErrorParameterNull(response, "path"); return; }
-        word2vec = loadWord2vec(path);
-        if (word2vec == null) response.getWriter().println("fail");
+        if (!loadWord2vec(path, true)) response.getWriter().println("fail");
         else response.getWriter().println("success");
     }
 
     private void handleLoadDefaultModel(HttpServletRequest request, HttpServletResponse response) throws IOException
     {
-        word2vec = loadWord2vec(default_path);
-        if (word2vec == null) response.getWriter().println("fail");
+        if (!loadWord2vec(default_path, true)) response.getWriter().println("fail");
         else response.getWriter().println("success");
     }
 
@@ -139,7 +139,9 @@ public class Word2VecWebService extends WebServiceServlet
     
     private Collection<String> getMostSimilarWords(String zeWord, int topN) 
     {
-        return getMostSimilarWords(word2vec.getWordVectorMatrix(zeWord), topN);
+        getMostSimilarWordsNotParallel(vectors[wordsIndexes.get(zeWord)], topN);
+        getMostSimilarWords(vectors[wordsIndexes.get(zeWord)], topN);
+        return getMostSimilarWords(vectors[wordsIndexes.get(zeWord)], topN);
     }
     
     private double dot_product(double[] a, double[] b) {
@@ -149,18 +151,11 @@ public class Word2VecWebService extends WebServiceServlet
         }
         return ret;
     }
-    
-    private double[] toDoubleArray(INDArray ndarray) {
-        int length = ndarray.length();
-        double[] res = new double[length];
-        for (int i = 0 ; i < length ; i++) {
-            res[i] = ndarray.getDouble(i);
-        }
-        return res;
-    }
 
     private Collection<String> getMostSimilarWords(double[] zeWord, int topN) 
     {
+        long startTime = System.currentTimeMillis();
+        
         Stuff[] zenearests = new Stuff[topN];
         for (int i = 0 ; i < topN ; i++) zenearests[i] = new Stuff(0.0, 0);
 
@@ -219,14 +214,45 @@ public class Word2VecWebService extends WebServiceServlet
         {
             zenearestsstr.add(words[pair.index]);
         }
+        
+        long stopTime = System.currentTimeMillis();
+        long elapsedTime = stopTime - startTime;
+        System.out.println("multi threaded time : " + elapsedTime);
+        
         return zenearestsstr;
     }
     
-    private Collection<String> getMostSimilarWords(INDArray zeWord, int topN) 
+    private Collection<String> getMostSimilarWordsNotParallel(double[] zeWord, int topN) 
     {
-        return getMostSimilarWords(toDoubleArray(zeWord), topN);
-    }
+        long startTime = System.currentTimeMillis();
+        
+        Stuff[] zenearests = new Stuff[topN];
+        for (int i = 0 ; i < topN ; i++) zenearests[i] = new Stuff(0.0, 0);
+        int nbOfVectors = vectors.length;
+        for (int j = 0 ; j < nbOfVectors ; j++) 
+        {
+            double[] v = vectors[j];
+            double sim = dot_product(zeWord, v);
+            if (sim > zenearests[0].sim) 
+            {
+                zenearests[0].sim = sim; 
+                zenearests[0].index = j;
+                Arrays.sort(zenearests);
+            }
+        }
+        List<String> zenearestsstr = new ArrayList<>();
+        for (Stuff pair : zenearests) 
+        {
+            zenearestsstr.add(words[pair.index]);
+        }
 
+        long stopTime = System.currentTimeMillis();
+        long elapsedTime = stopTime - startTime;
+        System.out.println("single threaded time : " + elapsedTime);
+        
+        return zenearestsstr;
+    }
+    
     private static class Stuff implements Comparable<Stuff> 
     {
         public Double sim;
@@ -242,29 +268,32 @@ public class Word2VecWebService extends WebServiceServlet
         }
     }
     
-    private static WordVectors loadWord2vec(String path)
+    private static synchronized boolean loadWord2vec(String path, boolean reload)
     {
+        if (loaded && !reload) return true;
         try
         {
             WordVectors w2v = WordVectorSerializer.loadGoogleModel(new File(path), true, false);
             int nbWords = w2v.vocab().words().size();
-            words = new String[nbWords];
-            for (int i = 0 ; i < nbWords ; i++) {
-                words[i] = w2v.vocab().wordAtIndex(i);
-            }
             int vectorDimension = w2v.lookupTable().getWeights().columns();
+            words = new String[nbWords];
+            wordsIndexes = new HashMap<>();
             vectors = new double[nbWords][vectorDimension];
             for (int i = 0 ; i < nbWords ; i++) {
+                System.out.println("Adding words... (" + (i + 1) + "/" + nbWords + ")");
+                words[i] = w2v.vocab().wordAtIndex(i);
+                wordsIndexes.put(words[i], i);
                 for (int j = 0 ; j < vectorDimension ; j++) {
                     vectors[i][j] = w2v.lookupTable().getWeights().slice(i).getDouble(j);
                 }
             }
-            return w2v;
+            loaded = true;
         } 
         catch (IOException e)
         {
             e.printStackTrace();
-            return null;
+            loaded = false;
         }
+        return loaded;
     }
 }
