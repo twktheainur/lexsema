@@ -1,7 +1,10 @@
 package org.getalp.lexsema.ws.w2v;
 
+import java.io.BufferedInputStream;
+import java.io.DataInputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -9,8 +12,12 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Scanner;
+import java.util.zip.GZIPInputStream;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import org.apache.commons.compress.compressors.gzip.GzipUtils;
 import org.getalp.lexsema.ws.core.WebServiceServlet;
 
 public class Word2VecWebService extends WebServiceServlet
@@ -209,15 +216,55 @@ public class Word2VecWebService extends WebServiceServlet
         }
     }
     
+    public static String readString(DataInputStream dis) throws IOException
+    {
+        final int MAX_SIZE = 50;
+        byte[] bytes = new byte[MAX_SIZE];
+        byte b = dis.readByte();
+        int i = -1;
+        StringBuilder sb = new StringBuilder();
+        while (b != 32 && b != 10) {
+            i++;
+            bytes[i] = b;
+            b = dis.readByte();
+            if (i == 49) {
+                sb.append(new String(bytes));
+                i = -1;
+                bytes = new byte[MAX_SIZE];
+            }
+        }
+        sb.append(new String(bytes, 0, i + 1));
+        return sb.toString();
+    }
+    
+    public static float readFloat(InputStream is) throws IOException
+    {
+        byte[] bytes = new byte[4];
+        is.read(bytes);
+        return getFloat(bytes);
+    }
+    
+    public static float getFloat(byte[] b)
+    {
+        int accum = 0;
+        accum = accum | (b[0] & 0xff) << 0;
+        accum = accum | (b[1] & 0xff) << 8;
+        accum = accum | (b[2] & 0xff) << 16;
+        accum = accum | (b[3] & 0xff) << 24;
+        return Float.intBitsToFloat(accum);
+    }
+    
     private static synchronized boolean loadWord2vec(String path, boolean reload)
     {
         if (loaded && !reload) return true;
         try
         {
-            FileInputStream file = new FileInputStream(path);
-            Scanner scanner = new Scanner(file);
-            int nbWords = Integer.parseInt(scanner.next());
-            int vectorDimension = Integer.parseInt(scanner.next());
+            FileInputStream fis = new FileInputStream(path);
+            BufferedInputStream bis = new BufferedInputStream(fis);
+            DataInputStream dis = new DataInputStream(bis);
+            
+            int nbWords = Integer.parseInt(readString(dis));
+            int vectorDimension = Integer.parseInt(readString(dis));
             words = new String[nbWords];
             wordsIndexes = new HashMap<>();
             vectors = new double[nbWords][vectorDimension];
@@ -226,15 +273,14 @@ public class Word2VecWebService extends WebServiceServlet
                 int current_percentage = ((int) ((((double) (i + 1)) / ((double) (nbWords))) * 100.0));
                 if (current_percentage > last_percentage) System.out.println("Adding words... (" + current_percentage + "%)\r");
                 last_percentage = current_percentage;
-                words[i] = scanner.next();
+                words[i] = readString(dis);
                 wordsIndexes.put(words[i], i);
                 for (int j = 0 ; j < vectorDimension ; j++)
                 {
-                    vectors[i][j] = Double.parseDouble(scanner.next());
+                    vectors[i][j] = readFloat(dis);
                 }
                 vectors[i] = normalize(vectors[i]);
             }
-            scanner.close();
             loaded = true;
         } 
         catch (IOException e)
