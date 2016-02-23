@@ -19,6 +19,8 @@ public class Word2VecWebService extends WebServiceServlet
 {
     private static final String default_path = "/home/viall/current/data/word2vec/model_large.bin";
     
+    private static WordVectors w2v = null;
+    
     private static double[][] vectors = null;
     
     private static String[] words = null;
@@ -138,7 +140,8 @@ public class Word2VecWebService extends WebServiceServlet
     
     private Collection<String> getMostSimilarWords(String zeWord, int topN) 
     {
-        
+        System.out.println("similarz ");
+        System.out.println(Arrays.toString(w2v.wordsNearest(zeWord, topN).toArray(new String[topN])));
         return getMostSimilarWords(vectors[wordsIndexes.get(zeWord)], topN);
     }
     
@@ -214,11 +217,12 @@ public class Word2VecWebService extends WebServiceServlet
                 {
                     vectors[i][j] = ndarray.getDouble(j);
                 }
-                if (words[i].equals("Paris"))
+                if (words[i].equals("Hopital_Europeen_Georges_Pompidou"))
                 {
-                    System.out.println("Paris vector");
-                    System.out.println(Arrays.toString(w2v.getWordVector("Paris")));
-                    System.out.println("My Paris vector");
+                    System.out.println("index " + i);
+                    System.out.println("Hopital_Europeen_Georges_Pompidou vector");
+                    System.out.println(Arrays.toString(w2v.getWordVector("Hopital_Europeen_Georges_Pompidou")));
+                    System.out.println("My Hopital_Europeen_Georges_Pompidou vector");
                     System.out.println(Arrays.toString(vectors[i]));
                 }
             }
