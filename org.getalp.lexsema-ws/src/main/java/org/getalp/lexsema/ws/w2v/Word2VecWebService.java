@@ -1,6 +1,6 @@
 package org.getalp.lexsema.ws.w2v;
 
-import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
@@ -8,18 +8,14 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Scanner;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.deeplearning4j.models.embeddings.loader.WordVectorSerializer;
-import org.deeplearning4j.models.embeddings.wordvectors.WordVectors;
 import org.getalp.lexsema.ws.core.WebServiceServlet;
-import org.nd4j.linalg.api.ndarray.INDArray;
 
 public class Word2VecWebService extends WebServiceServlet
 {
     private static final String default_path = "/home/viall/current/data/word2vec/model_large.bin";
-    
-    private static WordVectors w2v = null;
     
     private static double[][] vectors = null;
     
@@ -140,17 +136,36 @@ public class Word2VecWebService extends WebServiceServlet
     
     private Collection<String> getMostSimilarWords(String zeWord, int topN) 
     {
-        System.out.println("similarz ");
-        System.out.println(Arrays.toString(w2v.wordsNearest(zeWord, topN).toArray(new String[topN])));
         return getMostSimilarWords(vectors[wordsIndexes.get(zeWord)], topN);
     }
     
-    private double dot_product(double[] a, double[] b) 
+    private static double dot_product(double[] a, double[] b) 
     {
         double ret = 0;
         for (int i = 0 ; i < a.length ; i++) 
         {
             ret += a[i] * b[i];
+        }
+        return ret;
+    }
+    
+    private static double norm(double[] v)
+    {
+        double ret = 0;
+        for (int i = 0 ; i < v.length ; i++)
+        {
+            ret += v[i] * v[i];
+        }
+        return Math.sqrt(ret);
+    }
+    
+    private static double[] normalize(double[] v)
+    {
+        double[] ret = new double[v.length];
+        double norm = norm(v);
+        for (int i = 0 ; i < v.length ; i++)
+        {
+            ret[i] /= norm;
         }
         return ret;
     }
@@ -199,9 +214,10 @@ public class Word2VecWebService extends WebServiceServlet
         if (loaded && !reload) return true;
         try
         {
-            w2v = WordVectorSerializer.loadGoogleModel(new File(path), true, false);
-            int nbWords = w2v.vocab().words().size();
-            int vectorDimension = w2v.lookupTable().getWeights().columns();
+            FileInputStream file = new FileInputStream(path);
+            Scanner scanner = new Scanner(file);
+            int nbWords = Integer.parseInt(scanner.next());
+            int vectorDimension = Integer.parseInt(scanner.next());
             words = new String[nbWords];
             wordsIndexes = new HashMap<>();
             vectors = new double[nbWords][vectorDimension];
@@ -210,22 +226,15 @@ public class Word2VecWebService extends WebServiceServlet
                 int current_percentage = ((int) ((((double) (i + 1)) / ((double) (nbWords))) * 100.0));
                 if (current_percentage > last_percentage) System.out.println("Adding words... (" + current_percentage + "%)\r");
                 last_percentage = current_percentage;
-                words[i] = w2v.vocab().wordAtIndex(i);
+                words[i] = scanner.next();
                 wordsIndexes.put(words[i], i);
-                INDArray ndarray = w2v.lookupTable().getWeights().vectorAlongDimension(i, 1);
                 for (int j = 0 ; j < vectorDimension ; j++)
                 {
-                    vectors[i][j] = ndarray.getDouble(j);
+                    vectors[i][j] = scanner.nextDouble();
                 }
-                if (words[i].equals("Hopital_Europeen_Georges_Pompidou"))
-                {
-                    System.out.println("index " + i);
-                    System.out.println("Hopital_Europeen_Georges_Pompidou vector");
-                    System.out.println(Arrays.toString(w2v.getWordVector("Hopital_Europeen_Georges_Pompidou")));
-                    System.out.println("My Hopital_Europeen_Georges_Pompidou vector");
-                    System.out.println(Arrays.toString(vectors[i]));
-                }
+                vectors[i] = normalize(vectors[i]);
             }
+            scanner.close();
             loaded = true;
         } 
         catch (IOException e)
