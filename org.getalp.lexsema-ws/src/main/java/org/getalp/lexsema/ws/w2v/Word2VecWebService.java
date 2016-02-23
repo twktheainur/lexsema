@@ -230,7 +230,7 @@ public class Word2VecWebService extends WebServiceServlet
                 wordsIndexes.put(words[i], i);
                 for (int j = 0 ; j < vectorDimension ; j++)
                 {
-                    vectors[i][j] = scanner.nextDouble();
+                    vectors[i][j] = Double.parseDouble(scanner.next());
                 }
                 vectors[i] = normalize(vectors[i]);
             }
