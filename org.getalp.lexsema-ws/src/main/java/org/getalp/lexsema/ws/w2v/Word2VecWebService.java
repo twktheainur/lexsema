@@ -138,7 +138,7 @@ public class Word2VecWebService extends WebServiceServlet
     
     private Collection<String> getMostSimilarWords(String zeWord, int topN) 
     {
-        System.out.println("word " + zeWord + " is at index " + wordsIndexes.get(zeWord));
+        
         return getMostSimilarWords(vectors[wordsIndexes.get(zeWord)], topN);
     }
     
@@ -150,14 +150,6 @@ public class Word2VecWebService extends WebServiceServlet
             ret += a[i] * b[i];
         }
         return ret;
-    }
-    
-    private void put_the_first_element_in_the_right_place(Stuff[] array) 
-    {
-        for (int i = array.length - 1 ; i >= 0 ; i--)
-        {
-            
-        }
     }
     
     private Collection<String> getMostSimilarWords(double[] zeWord, int topN) 
@@ -177,9 +169,9 @@ public class Word2VecWebService extends WebServiceServlet
             }
         }
         List<String> zenearestsstr = new ArrayList<>();
-        for (Stuff pair : zenearests) 
+        for (int i = topN - 1 ; i >= 0 ; i--) 
         {
-            zenearestsstr.add(words[pair.index]);
+            zenearestsstr.add(words[zenearests[i].index]);
         }
         return zenearestsstr;
     }
@@ -188,9 +180,9 @@ public class Word2VecWebService extends WebServiceServlet
     {
         public Double sim;
         public Integer index;
-        public Stuff(double dbl, int index) 
+        public Stuff(double sim, int index) 
         {
-            this.sim = dbl;
+            this.sim = sim;
             this.index = index;
         }
         public int compareTo(Stuff o) 
@@ -221,6 +213,13 @@ public class Word2VecWebService extends WebServiceServlet
                 for (int j = 0 ; j < vectorDimension ; j++)
                 {
                     vectors[i][j] = ndarray.getDouble(j);
+                }
+                if (words[i].equals("Paris"))
+                {
+                    System.out.println("Paris vector");
+                    System.out.println(Arrays.toString(w2v.getWordVector("Paris")));
+                    System.out.println("My Paris vector");
+                    System.out.println(Arrays.toString(vectors[i]));
                 }
             }
             loaded = true;
