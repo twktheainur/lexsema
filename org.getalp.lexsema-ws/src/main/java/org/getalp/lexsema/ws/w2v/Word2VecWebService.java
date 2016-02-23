@@ -137,6 +137,7 @@ public class Word2VecWebService extends WebServiceServlet
     
     private Collection<String> getMostSimilarWords(String zeWord, int topN) 
     {
+        System.out.println("word " + zeWord + " is at index " + wordsIndexes.get(zeWord));
         return getMostSimilarWords(vectors[wordsIndexes.get(zeWord)], topN);
     }
     
@@ -203,9 +204,7 @@ public class Word2VecWebService extends WebServiceServlet
                 System.out.print("Adding words... (" + percentage + "%)\r");
                 words[i] = w2v.vocab().wordAtIndex(i);
                 wordsIndexes.put(words[i], i);
-                for (int j = 0 ; j < vectorDimension ; j++) {
-                    vectors[i][j] = w2v.lookupTable().getWeights().slice(i).getDouble(j);
-                }
+                vectors[i] = w2v.lookupTable().getWeights().vectorAlongDimension(i, 1).data().asDouble();
             }
             System.out.println();
             loaded = true;
