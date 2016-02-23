@@ -199,7 +199,7 @@ public class Word2VecWebService extends WebServiceServlet
         if (loaded && !reload) return true;
         try
         {
-            WordVectors w2v = WordVectorSerializer.loadGoogleModel(new File(path), true, false);
+            w2v = WordVectorSerializer.loadGoogleModel(new File(path), true, false);
             int nbWords = w2v.vocab().words().size();
             int vectorDimension = w2v.lookupTable().getWeights().columns();
             words = new String[nbWords];
