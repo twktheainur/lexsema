@@ -27,6 +27,7 @@ import org.getalp.lexsema.similarity.signatures.enrichment.IndexingSignatureEnri
 import org.getalp.lexsema.similarity.signatures.enrichment.StemmingSignatureEnrichment;
 import org.getalp.lexsema.similarity.signatures.enrichment.StopwordsRemovingSignatureEnrichment;
 import org.getalp.lexsema.similarity.signatures.enrichment.Word2VecSignatureEnrichment2;
+import org.getalp.lexsema.similarity.signatures.enrichment.Word2VecSignatureEnrichment3;
 import org.getalp.lexsema.io.thesaurus.AnnotatedTextThesaurusImpl;
 
 public class DictionaryCreation
@@ -73,8 +74,10 @@ public class DictionaryCreation
 
     public static void main(String[] args) throws Exception
     {
-        writeDictionary(true, true, true, true, true, false, true, false, true, false, 250, false, 0, true, false, "../data/lesk_dict/semeval2007task7/5/250");
-        //writeDictionary(true, true, true, true, true, false, false, true, false, true, 50, false, 0, true, false, "../data/lesk_dict/semeval2007task7/10/50");
+        writeDictionary(true, true, true, true, true, false, false, false, false, false, 0, false, 0, true, false, "../data/lesk_dict/semeval2007task7/w2v0");
+        writeDictionary(true, true, true, true, true, false, false, false, false, false, 0, true, 5, true, false, "../data/lesk_dict/semeval2007task7/w2v5");
+        writeDictionary(true, true, true, true, true, false, false, false, false, false, 0, true, 10, true, false, "../data/lesk_dict/semeval2007task7/w2v10");
+        writeDictionary(true, true, true, true, true, false, false, false, false, false, 0, true, 20, true, false, "../data/lesk_dict/semeval2007task7/w2v20");
     }
 
     public static void writeDictionary(boolean definitions, boolean extendedDefinitions, 
@@ -162,7 +165,7 @@ public class DictionaryCreation
         
         if (useWord2Vec)
         {
-            lrloader.addSignatureEnrichment(new Word2VecSignatureEnrichment2(numberOfWordsFromWord2Vec));
+            lrloader.addSignatureEnrichment(new Word2VecSignatureEnrichment3(numberOfWordsFromWord2Vec));
         }
 
         if (stemming)
