@@ -79,8 +79,15 @@ public class Word2VecWebService extends WebServiceServlet
         if (!loadWord2vec(default_path, false)) writeErrorWord2vecNotLoaded(response);
         String word = request.getParameter("word");
         if (word == null) { writeErrorParameterNull(response, "word"); return; }
-        double[] vector = vectors[wordsIndexes.get(word)];
-        response.getWriter().println(Arrays.toString(vector));
+        if (!wordsIndexes.containsKey(word))
+        {
+            response.getWriter().println("[]");
+        }
+        else
+        {
+            double[] vector = vectors[wordsIndexes.get(word)];
+            response.getWriter().println(Arrays.toString(vector));
+        }
     }
     
     private void handleGetMostSimilarWords(HttpServletRequest request, HttpServletResponse response) throws IOException
@@ -259,7 +266,6 @@ public class Word2VecWebService extends WebServiceServlet
             FileInputStream fis = new FileInputStream(path);
             BufferedInputStream bis = new BufferedInputStream(fis);
             DataInputStream dis = new DataInputStream(bis);
-            
             int nbWords = Integer.parseInt(readString(dis));
             int vectorDimension = Integer.parseInt(readString(dis));
             words = new String[nbWords];
