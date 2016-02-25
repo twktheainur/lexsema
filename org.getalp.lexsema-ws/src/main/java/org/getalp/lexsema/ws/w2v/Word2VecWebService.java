@@ -13,6 +13,8 @@ import java.util.HashMap;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import org.getalp.lexsema.util.VectorOperation;
 import org.getalp.lexsema.ws.core.WebServiceServlet;
 
 public class Word2VecWebService extends WebServiceServlet
@@ -42,6 +44,10 @@ public class Word2VecWebService extends WebServiceServlet
         else if (what.equals("get_most_similar_words"))
         {
             handleGetMostSimilarWords(request, response);
+        }
+        else if (what.equals("get_most_synonym_words"))
+        {
+            handleGetMostSynonymWords(request, response);
         }
         else if (what.equals("load_model"))
         {
@@ -114,6 +120,30 @@ public class Word2VecWebService extends WebServiceServlet
         }
     }
     
+    private void handleGetMostSynonymWords(HttpServletRequest request, HttpServletResponse response) throws IOException
+    {
+        if (!loadWord2vec(default_path, false)) writeErrorWord2vecNotLoaded(response);
+        String word = request.getParameter("word");
+        String vector = request.getParameter("vector");
+        if (word == null && vector == null) { writeErrorParameterNull(response, "word / vector"); return; }
+        String nAsStr = request.getParameter("n");
+        if (nAsStr == null) nAsStr = "1";
+        int n = Integer.parseInt(nAsStr);
+        if (word != null)
+        {
+            Collection<String> most_similar_words = getMostSynonymWords(word, n);
+            response.getWriter().println(most_similar_words.toString());
+        }
+        else if (vector != null)
+        {
+            String[] strValues = vector.replace("[", "").replace("]", "").split(", ");
+            double[] vectord = new double[strValues.length];
+            for (int i = 0 ; i < vectord.length ; i++) vectord[i] = Double.parseDouble(strValues[i]);
+            Collection<String> most_similar_words = getMostSynonymWords(vectord, n);
+            response.getWriter().println(most_similar_words.toString());
+        }
+    }
+    
     private void handleLoadModel(HttpServletRequest request, HttpServletResponse response) throws IOException
     {
         String path = request.getParameter("path");
@@ -142,41 +172,17 @@ public class Word2VecWebService extends WebServiceServlet
     {
         response.getWriter().println("Error: parameter \"" + parameterName + "\" missing.");
     }
-    
+
     private Collection<String> getMostSimilarWords(String zeWord, int topN) 
     {
+        if (!wordsIndexes.containsKey(zeWord)) return new ArrayList<>();
         return getMostSimilarWords(vectors[wordsIndexes.get(zeWord)], topN);
     }
-    
-    private static double dot_product(double[] a, double[] b) 
+
+    private Collection<String> getMostSynonymWords(String zeWord, int topN) 
     {
-        double ret = 0;
-        for (int i = 0 ; i < a.length ; i++) 
-        {
-            ret += a[i] * b[i];
-        }
-        return ret;
-    }
-    
-    private static double norm(double[] v)
-    {
-        double ret = 0;
-        for (int i = 0 ; i < v.length ; i++)
-        {
-            ret += v[i] * v[i];
-        }
-        return Math.sqrt(ret);
-    }
-    
-    private static double[] normalize(double[] v)
-    {
-        double[] ret = new double[v.length];
-        double norm = norm(v);
-        for (int i = 0 ; i < v.length ; i++)
-        {
-            ret[i] = v[i] / norm;
-        }
-        return ret;
+        if (!wordsIndexes.containsKey(zeWord)) return new ArrayList<>();
+        return getMostSynonymWords(vectors[wordsIndexes.get(zeWord)], topN);
     }
     
     private Collection<String> getMostSimilarWords(double[] zeWord, int topN) 
@@ -187,7 +193,63 @@ public class Word2VecWebService extends WebServiceServlet
         for (int j = 0 ; j < nbOfVectors ; j++) 
         {
             double[] v = vectors[j];
-            double sim = dot_product(zeWord, v);
+            double sim = VectorOperation.dot_product(zeWord, v);
+            if (sim > zenearests[0].sim) 
+            {
+                zenearests[0].sim = sim; 
+                zenearests[0].index = j;
+                Arrays.sort(zenearests);
+            }
+        }
+        List<String> zenearestsstr = new ArrayList<>();
+        for (int i = topN - 1 ; i >= 0 ; i--) 
+        {
+            zenearestsstr.add(words[zenearests[i].index]);
+        }
+        return zenearestsstr;
+    }
+    
+    private static double[] term_to_term_product(double[] a, double[] b)
+    {
+        double[] ret = new double[a.length];
+        for (int i = 0 ; i < ret.length ; i++)
+        {
+            int sign = a[i] * b[i] < 0 ? -1 : 1;
+            ret[i] = sign * Math.sqrt(Math.abs(a[i] * b[i]));
+        }
+        return ret;
+    }
+    
+    private static double[] weak_contextualization(double[] a, double[] b)
+    {
+        double[] ret = new double[a.length];
+        for (int i = 0 ; i < ret.length ; i++)
+        {
+            int sign = a[i] * b[i] < 0 ? -1 : 1;
+            ret[i] = a[i] + b[i] + sign * Math.sqrt(Math.abs(a[i] * b[i]));
+        }
+        return ret;
+    }
+    
+    private static double absolute_synonymy(double[] a, double[] b)
+    {
+        double[] c = VectorOperation.normalize(term_to_term_product(a, b));
+        double[] ac = term_to_term_product(a, c);
+        double[] bc = term_to_term_product(b, c);
+        double[] aac = VectorOperation.normalize(VectorOperation.add(a, ac));
+        double[] bbc = VectorOperation.normalize(VectorOperation.add(b, bc));
+        return VectorOperation.dot_product(aac, bbc);
+    }
+
+    private Collection<String> getMostSynonymWords(double[] zeWord, int topN) 
+    {
+        Stuff[] zenearests = new Stuff[topN];
+        for (int i = 0 ; i < topN ; i++) zenearests[i] = new Stuff(0.0, 0);
+        int nbOfVectors = vectors.length;
+        for (int j = 0 ; j < nbOfVectors ; j++) 
+        {
+            double[] v = vectors[j];
+            double sim = absolute_synonymy(zeWord, v);
             if (sim > zenearests[0].sim) 
             {
                 zenearests[0].sim = sim; 
@@ -282,7 +344,7 @@ public class Word2VecWebService extends WebServiceServlet
                 {
                     vectors[i][j] = readFloat(dis);
                 }
-                vectors[i] = normalize(vectors[i]);
+                vectors[i] = VectorOperation.normalize(vectors[i]);
             }
             loaded = true;
         } 
