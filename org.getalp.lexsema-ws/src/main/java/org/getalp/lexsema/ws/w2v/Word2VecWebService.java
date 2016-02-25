@@ -87,12 +87,12 @@ public class Word2VecWebService extends WebServiceServlet
         if (word == null) { writeErrorParameterNull(response, "word"); return; }
         if (!wordsIndexes.containsKey(word))
         {
-            response.getWriter().println("[]");
+            response.getWriter().print("[]");
         }
         else
         {
             double[] vector = vectors[wordsIndexes.get(word)];
-            response.getWriter().println(Arrays.toString(vector));
+            response.getWriter().print(Arrays.toString(vector));
         }
     }
     
@@ -108,7 +108,7 @@ public class Word2VecWebService extends WebServiceServlet
         if (word != null)
         {
             Collection<String> most_similar_words = getMostSimilarWords(word, n);
-            response.getWriter().println(most_similar_words.toString());
+            response.getWriter().print(most_similar_words.toString());
         }
         else if (vector != null)
         {
@@ -116,7 +116,7 @@ public class Word2VecWebService extends WebServiceServlet
             double[] vectord = new double[strValues.length];
             for (int i = 0 ; i < vectord.length ; i++) vectord[i] = Double.parseDouble(strValues[i]);
             Collection<String> most_similar_words = getMostSimilarWords(vectord, n);
-            response.getWriter().println(most_similar_words.toString());
+            response.getWriter().print(most_similar_words.toString());
         }
     }
     
@@ -132,7 +132,7 @@ public class Word2VecWebService extends WebServiceServlet
         if (word != null)
         {
             Collection<String> most_similar_words = getMostSynonymWords(word, n);
-            response.getWriter().println(most_similar_words.toString());
+            response.getWriter().print(most_similar_words.toString());
         }
         else if (vector != null)
         {
@@ -140,7 +140,7 @@ public class Word2VecWebService extends WebServiceServlet
             double[] vectord = new double[strValues.length];
             for (int i = 0 ; i < vectord.length ; i++) vectord[i] = Double.parseDouble(strValues[i]);
             Collection<String> most_similar_words = getMostSynonymWords(vectord, n);
-            response.getWriter().println(most_similar_words.toString());
+            response.getWriter().print(most_similar_words.toString());
         }
     }
     
@@ -148,29 +148,29 @@ public class Word2VecWebService extends WebServiceServlet
     {
         String path = request.getParameter("path");
         if (path == null) { writeErrorParameterNull(response, "path"); return; }
-        if (!loadWord2vec(path, true)) response.getWriter().println("fail");
-        else response.getWriter().println("success");
+        if (!loadWord2vec(path, true)) response.getWriter().print("fail");
+        else response.getWriter().print("success");
     }
 
     private void handleLoadDefaultModel(HttpServletRequest request, HttpServletResponse response) throws IOException
     {
-        if (!loadWord2vec(default_path, true)) response.getWriter().println("fail");
-        else response.getWriter().println("success");
+        if (!loadWord2vec(default_path, true)) response.getWriter().print("fail");
+        else response.getWriter().print("success");
     }
 
     private void handleWhatInvalid(HttpServletRequest request, HttpServletResponse response) throws IOException
     {
-        response.getWriter().println("Error: parameter \"what\" invalid.");
+        response.getWriter().print("Error: parameter \"what\" invalid.");
     }
     
     private void writeErrorWord2vecNotLoaded(HttpServletResponse response) throws IOException
     {
-        response.getWriter().println("Error: word2vec is not loaded.");
+        response.getWriter().print("Error: word2vec is not loaded.");
     }
     
     private void writeErrorParameterNull(HttpServletResponse response, String parameterName) throws IOException
     {
-        response.getWriter().println("Error: parameter \"" + parameterName + "\" missing.");
+        response.getWriter().print("Error: parameter \"" + parameterName + "\" missing.");
     }
 
     private Collection<String> getMostSimilarWords(String zeWord, int topN) 
@@ -233,10 +233,10 @@ public class Word2VecWebService extends WebServiceServlet
     
     private static double absolute_synonymy(double[] a, double[] b)
     {
-        double[] c = VectorOperation.normalize(term_to_term_product(a, b));
+        double[] c = term_to_term_product(a, b);
         double[] ac = term_to_term_product(a, c);
-        double[] bc = term_to_term_product(b, c);
         double[] aac = VectorOperation.normalize(VectorOperation.add(a, ac));
+        double[] bc = term_to_term_product(b, c);
         double[] bbc = VectorOperation.normalize(VectorOperation.add(b, bc));
         return VectorOperation.dot_product(aac, bbc);
     }
