@@ -30,6 +30,7 @@ public class Word2VecSignatureEnrichment3 implements SignatureEnrichment {
                 symbolsVectors.add(symbolVector);
             }
         }
+        if (symbolsVectors.size() == 0) return semanticSignature;
         double[] sum = VectorOperation.sum(symbolsVectors.toArray(new double[symbolsVectors.size()][]));
         double[] sumNormalized = VectorOperation.normalize(sum);
         Collection<String> nearests = Word2VecClient.getMostSimilarWords(sumNormalized, topN);
