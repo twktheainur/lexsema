@@ -105,17 +105,17 @@ public class Word2VecWebService extends WebServiceServlet
         String nAsStr = request.getParameter("n");
         if (nAsStr == null) nAsStr = "1";
         int n = Integer.parseInt(nAsStr);
+        String context_vector = request.getParameter("context_vector");
+        double[] context_vectord = VectorOperation.to_vector(context_vector);
         if (word != null)
         {
-            Collection<String> most_similar_words = getMostSimilarWords(word, n);
+            Collection<String> most_similar_words = getMostSimilarWords(word, n, context_vectord);
             response.getWriter().print(most_similar_words.toString());
         }
         else if (vector != null)
         {
-            String[] strValues = vector.replace("[", "").replace("]", "").split(", ");
-            double[] vectord = new double[strValues.length];
-            for (int i = 0 ; i < vectord.length ; i++) vectord[i] = Double.parseDouble(strValues[i]);
-            Collection<String> most_similar_words = getMostSimilarWords(vectord, n);
+            double[] vectord = VectorOperation.to_vector(vector);
+            Collection<String> most_similar_words = getMostSimilarWords(vectord, n, context_vectord);
             response.getWriter().print(most_similar_words.toString());
         }
     }
@@ -173,10 +173,10 @@ public class Word2VecWebService extends WebServiceServlet
         response.getWriter().print("Error: parameter \"" + parameterName + "\" missing.");
     }
 
-    private Collection<String> getMostSimilarWords(String zeWord, int topN) 
+    private Collection<String> getMostSimilarWords(String zeWord, int topN, double[] context) 
     {
         if (!wordsIndexes.containsKey(zeWord)) return new ArrayList<>();
-        return getMostSimilarWords(vectors[wordsIndexes.get(zeWord)], topN);
+        return getMostSimilarWords(vectors[wordsIndexes.get(zeWord)], topN, context);
     }
 
     private Collection<String> getMostSynonymWords(String zeWord, int topN) 
@@ -185,7 +185,7 @@ public class Word2VecWebService extends WebServiceServlet
         return getMostSynonymWords(vectors[wordsIndexes.get(zeWord)], topN);
     }
     
-    private Collection<String> getMostSimilarWords(double[] zeWord, int topN) 
+    private Collection<String> getMostSimilarWords(double[] zeWord, int topN, double[] context) 
     {
         Stuff[] zenearests = new Stuff[topN];
         for (int i = 0 ; i < topN ; i++) zenearests[i] = new Stuff(0.0, 0);
@@ -194,6 +194,10 @@ public class Word2VecWebService extends WebServiceServlet
         {
             double[] v = vectors[j];
             double sim = VectorOperation.dot_product(zeWord, v);
+            if (context != null)
+            {
+                sim += VectorOperation.dot_product(context, v);
+            }
             if (sim > zenearests[0].sim) 
             {
                 zenearests[0].sim = sim; 
@@ -209,38 +213,6 @@ public class Word2VecWebService extends WebServiceServlet
         return zenearestsstr;
     }
     
-    private static double[] term_to_term_product(double[] a, double[] b)
-    {
-        double[] ret = new double[a.length];
-        for (int i = 0 ; i < ret.length ; i++)
-        {
-            int sign = a[i] * b[i] < 0 ? -1 : 1;
-            ret[i] = sign * Math.sqrt(Math.abs(a[i] * b[i]));
-        }
-        return ret;
-    }
-    
-    private static double[] weak_contextualization(double[] a, double[] b)
-    {
-        double[] ret = new double[a.length];
-        for (int i = 0 ; i < ret.length ; i++)
-        {
-            int sign = a[i] * b[i] < 0 ? -1 : 1;
-            ret[i] = a[i] + b[i] + sign * Math.sqrt(Math.abs(a[i] * b[i]));
-        }
-        return ret;
-    }
-    
-    private static double absolute_synonymy(double[] a, double[] b)
-    {
-        double[] c = term_to_term_product(a, b);
-        double[] ac = term_to_term_product(a, c);
-        double[] aac = VectorOperation.normalize(VectorOperation.add(a, ac));
-        double[] bc = term_to_term_product(b, c);
-        double[] bbc = VectorOperation.normalize(VectorOperation.add(b, bc));
-        return VectorOperation.dot_product(aac, bbc);
-    }
-
     private Collection<String> getMostSynonymWords(double[] zeWord, int topN) 
     {
         Stuff[] zenearests = new Stuff[topN];
@@ -249,7 +221,7 @@ public class Word2VecWebService extends WebServiceServlet
         for (int j = 0 ; j < nbOfVectors ; j++) 
         {
             double[] v = vectors[j];
-            double sim = absolute_synonymy(zeWord, v);
+            double sim = VectorOperation.absolute_synonymy(zeWord, v);
             if (sim > zenearests[0].sim) 
             {
                 zenearests[0].sim = sim; 

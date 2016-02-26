@@ -66,5 +66,55 @@ public class VectorOperation
         }
         return ret;
     }
+
+    private static double[] term_to_term_product_squared(double[] a, double[] b)
+    {
+        double[] ret = new double[a.length];
+        for (int i = 0 ; i < ret.length ; i++)
+        {
+            int sign = a[i] * b[i] < 0 ? -1 : 1;
+            ret[i] = sign * Math.sqrt(Math.abs(a[i] * b[i]));
+        }
+        return ret;
+    }
+
+    private static double[] term_to_term_product(double[] a, double[] b)
+    {
+        double[] ret = new double[a.length];
+        for (int i = 0 ; i < ret.length ; i++)
+        {
+            ret[i] = a[i] * b[i];
+        }
+        return ret;
+    }
     
+    private static double[] weak_contextualization(double[] a, double[] b)
+    {
+        double[] ret = new double[a.length];
+        for (int i = 0 ; i < ret.length ; i++)
+        {
+            int sign = a[i] * b[i] < 0 ? -1 : 1;
+            ret[i] = a[i] + b[i] + sign * Math.sqrt(Math.abs(a[i] * b[i]));
+        }
+        return ret;
+    }
+    
+    public static double absolute_synonymy(double[] a, double[] b)
+    {
+        double[] c = term_to_term_product(a, b);
+        double[] ac = term_to_term_product(a, c);
+        double[] aac = VectorOperation.normalize(VectorOperation.add(a, ac));
+        double[] bc = term_to_term_product(b, c);
+        double[] bbc = VectorOperation.normalize(VectorOperation.add(b, bc));
+        return VectorOperation.dot_product(aac, bbc);
+    }
+
+    public static double[] to_vector(String string)
+    {
+        if (string == null) return null;
+        String[] strValues = string.trim().replace("[", "").replace("]", "").split(", ");
+        double[] ret = new double[strValues.length];
+        for (int i = 0 ; i < ret.length ; i++) ret[i] = Double.parseDouble(strValues[i]);
+        return ret;
+    }
 }
