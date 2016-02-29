@@ -23,12 +23,10 @@ import org.getalp.lexsema.io.resource.wordnet.WordnetLoader;
 import org.getalp.lexsema.similarity.Sense;
 import org.getalp.lexsema.similarity.Text;
 import org.getalp.lexsema.similarity.Word;
-import org.getalp.lexsema.similarity.signatures.enrichment.IndexingSignatureEnrichment;
-import org.getalp.lexsema.similarity.signatures.enrichment.StemmingSignatureEnrichment;
-import org.getalp.lexsema.similarity.signatures.enrichment.StopwordsRemovingSignatureEnrichment;
-import org.getalp.lexsema.similarity.signatures.enrichment.Word2VecSignatureEnrichment2;
-import org.getalp.lexsema.similarity.signatures.enrichment.Word2VecSignatureEnrichment3;
+import org.getalp.lexsema.similarity.signatures.enrichment.*;
 import org.getalp.lexsema.io.thesaurus.AnnotatedTextThesaurusImpl;
+import org.getalp.lexsema.util.VectorOperation;
+import org.getalp.lexsema.util.word2vec.Word2VecClient;
 
 public class DictionaryCreation
 {
@@ -74,10 +72,22 @@ public class DictionaryCreation
 
     public static void main(String[] args) throws Exception
     {
-        writeDictionary(true, true, true, true, true, false, false, false, false, false, 0, false, 0, true, false, "../data/lesk_dict/semeval2007task7/w2v0");
-        writeDictionary(true, true, true, true, true, false, false, false, false, false, 0, true, 5, true, false, "../data/lesk_dict/semeval2007task7/w2v5");
-        writeDictionary(true, true, true, true, true, false, false, false, false, false, 0, true, 10, true, false, "../data/lesk_dict/semeval2007task7/w2v10");
-        writeDictionary(true, true, true, true, true, false, false, false, false, false, 0, true, 20, true, false, "../data/lesk_dict/semeval2007task7/w2v20");
+        /*
+         * double[] a = Word2VecClient.getWordVector("france");
+        double[] b = Word2VecClient.getWordVector("italy");
+        double[] c = Word2VecClient.getWordVector("germany");
+        double[] d = Word2VecClient.getWordVector("spain");
+        double[] e = Word2VecClient.getWordVector("england");
+        double[] f = Word2VecClient.getWordVector("continent");
+        double[] res = VectorOperation.normalize(VectorOperation.sum(a, b, c, d, e));
+        System.out.println(Arrays.toString(Word2VecClient.getMostSimilarWords(res, 10).toArray()));
+        System.out.println(Arrays.toString(Word2VecClient.getMostSimilarWords(f, 10).toArray()));
+        System.out.println(Arrays.toString(Word2VecClient.getMostSimilarWords(f, 10, res).toArray()));
+        */
+        //writeDictionary(true, true, true, true, true, false, false, false, false, false, 0, false, 0, true, false, "../data/lesk_dict/semeval2007task7/w2v0");
+        writeDictionary(true, true, true, true, true, false, false, false, false, false, 0, true, 1, true, false, "../data/lesk_dict/semeval2007task7/w2v1");
+        writeDictionary(true, true, true, true, true, false, false, false, false, false, 0, true, 2, true, false, "../data/lesk_dict/semeval2007task7/w2v2");
+        //writeDictionary(true, true, true, true, true, false, false, false, false, false, 0, true, 20, true, false, "../data/lesk_dict/semeval2007task7/w2v20");
     }
 
     public static void writeDictionary(boolean definitions, boolean extendedDefinitions, 
@@ -165,7 +175,7 @@ public class DictionaryCreation
         
         if (useWord2Vec)
         {
-            lrloader.addSignatureEnrichment(new Word2VecSignatureEnrichment3(numberOfWordsFromWord2Vec));
+            lrloader.addSignatureEnrichment(new Word2VecSignatureEnrichment2(numberOfWordsFromWord2Vec));
         }
 
         if (stemming)

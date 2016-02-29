@@ -19,7 +19,7 @@ import org.getalp.lexsema.ws.core.WebServiceServlet;
 
 public class Word2VecWebService extends WebServiceServlet
 {
-    private static final String default_path = "/home/viall/current/data/word2vec/model_large.bin";
+    private static final String default_path = "/home/viall/current/data/word2vec/default_model.bin";
     
     private static double[][] vectors = null;
     
@@ -109,7 +109,8 @@ public class Word2VecWebService extends WebServiceServlet
         double[] context_vectord = VectorOperation.to_vector(context_vector);
         if (word != null)
         {
-            Collection<String> most_similar_words = getMostSimilarWords(word, n, context_vectord);
+            Collection<String> most_similar_words = getMostSimilarWords(word, n + 1, context_vectord);
+            most_similar_words.remove(word);
             response.getWriter().print(most_similar_words.toString());
         }
         else if (vector != null)
