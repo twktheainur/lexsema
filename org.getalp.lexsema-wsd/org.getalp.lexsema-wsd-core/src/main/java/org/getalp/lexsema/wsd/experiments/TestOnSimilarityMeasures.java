@@ -47,10 +47,14 @@ public class TestOnSimilarityMeasures
 
     public static void main(String[] args) throws Exception
     {
-        String[] dicts = {"../data/lesk_dict/semeval2007task7/w2v0",
-                          "../data/lesk_dict/semeval2007task7/w2v1",
-                          "../data/lesk_dict/semeval2007task7/w2v2",
-                          "../data/lesk_dict/semeval2007task7/w2v3"};
+        List<String> dicts_list = new ArrayList<>();
+        for (int i = 1 ; i <= 15 ; i++) {
+            for (int j = 50 ; j <= 300 ; j += 50) {
+                dicts_list.add("../data/lesk_dict/semeval2007task7/" + i + "/" + j + "_alone");
+            }
+        }
+        
+        String[] dicts = dicts_list.toArray(new String[dicts_list.size()]);
         //getScoresWithVote(dicts, 10);
         compareDicts(dicts);
     }
