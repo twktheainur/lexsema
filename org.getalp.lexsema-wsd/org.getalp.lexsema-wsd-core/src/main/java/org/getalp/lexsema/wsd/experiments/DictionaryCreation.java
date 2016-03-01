@@ -85,11 +85,11 @@ public class DictionaryCreation
         System.out.println(Arrays.toString(Word2VecClient.getMostSimilarWords(f, 10, res).toArray()));
         */
         //writeDictionary(true, true, true, true, true, false, false, false, false, false, 0, false, 0, true, false, "../data/lesk_dict/semeval2007task7/w2v0");
-        //writeDictionary(true, true, true, true, true, false, false, false, false, false, 0, true, 1, true, false, "../data/lesk_dict/semeval2007task7/w2v1");
-        //writeDictionary(true, true, true, true, true, false, false, false, false, false, 0, true, 2, true, false, "../data/lesk_dict/semeval2007task7/w2v2");
-        //writeDictionary(true, true, true, true, true, false, false, false, false, false, 0, true, 20, true, false, "../data/lesk_dict/semeval2007task7/w2v20");
-        writeDictionary(false, false, true, true, true, true, true, false, true, false, 250, false, 0, true, false, "../data/lesk_dict/semeval2007task7/5/250_alone");
-        writeDictionary(false, false, true, true, true, true, true, true, true, false, 150, false, 0, true, false, "../data/lesk_dict/semeval2007task7/7/150_alone");
+        writeDictionary(true, true, true, true, true, true, false, false, false, false, 0, true, 1, true, false, "../data/lesk_dict/semeval2007task7/w2v1");
+        writeDictionary(true, true, true, true, true, true, false, false, false, false, 0, true, 2, true, false, "../data/lesk_dict/semeval2007task7/w2v2");
+        writeDictionary(true, true, true, true, true, true, false, false, false, false, 0, true, 3, true, false, "../data/lesk_dict/semeval2007task7/w2v3");
+        //writeDictionary(false, false, true, true, true, true, true, false, true, false, 250, false, 0, true, false, "../data/lesk_dict/semeval2007task7/5/250_alone");
+        //writeDictionary(false, false, true, true, true, true, true, true, true, false, 150, false, 0, true, false, "../data/lesk_dict/semeval2007task7/7/150_alone");
     }
 
     public static void writeDictionary(boolean definitions, boolean extendedDefinitions, 

@@ -47,8 +47,10 @@ public class TestOnSimilarityMeasures
 
     public static void main(String[] args) throws Exception
     {
-        String[] dicts = {"../data/lesk_dict/semeval2007task7/5/250_alone",
-                          "../data/lesk_dict/semeval2007task7/7/150_alone"};
+        String[] dicts = {"../data/lesk_dict/semeval2007task7/w2v0",
+                          "../data/lesk_dict/semeval2007task7/w2v1",
+                          "../data/lesk_dict/semeval2007task7/w2v2",
+                          "../data/lesk_dict/semeval2007task7/w2v3"};
         //getScoresWithVote(dicts, 10);
         compareDicts(dicts);
     }
