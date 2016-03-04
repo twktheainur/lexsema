@@ -112,6 +112,7 @@ public class VectorOperation
     public static double[] to_vector(String string)
     {
         if (string == null) return null;
+        if (string.equals("[]")) return new double[0];
         String[] strValues = string.trim().replace("[", "").replace("]", "").replace(" ", "").split(",");
         double[] ret = new double[strValues.length];
         for (int i = 0 ; i < ret.length ; i++) ret[i] = Double.parseDouble(strValues[i]);
