@@ -30,22 +30,26 @@ public class DictionaryParser implements ContentHandler {
     boolean emptyDef;
     boolean ids, def;
     boolean indexed;
+    boolean vectorized;
     @SuppressWarnings("unused")
     private Locator locator;
     private String currentSemanticSignature = "";
     private final SymbolIndex symbolIndex = new SymbolIndexImpl();
     private String currentId = "";
 
-
-    public DictionaryParser(Map<String, List<Sense>> senseMap, boolean indexed) throws FileNotFoundException {
+    public DictionaryParser(Map<String, List<Sense>> senseMap, boolean indexed, boolean vectorized) throws FileNotFoundException {
         super();
-        //noinspection AssignmentToCollectionOrArrayFieldFromParameter
         dico = senseMap;
         ids = false;
         def = false;
         locator = new LocatorImpl();
         emptyDef = false;
         this.indexed = indexed;
+        this.vectorized = vectorized;
+    }
+    
+    public DictionaryParser(Map<String, List<Sense>> senseMap, boolean indexed) throws FileNotFoundException {
+        this(senseMap, indexed, false);
     }
 
 
@@ -114,6 +118,13 @@ public class DictionaryParser implements ContentHandler {
                     StringTokenizer st = new StringTokenizer(currentSemanticSignature);
                     while (st.hasMoreTokens()) {
                         semanticSignature.addIndexedSymbol(Integer.valueOf(st.nextToken()));
+                    }
+                    mw.setSemanticSignature(semanticSignature);
+                } else if (vectorized) {
+                    VectorizedSemanticSignature semanticSignature = new VectorizedSemanticSignature();
+                    StringTokenizer st = new StringTokenizer(currentSemanticSignature);
+                    while (st.hasMoreTokens()) {
+                        semanticSignature.addSymbol(st.nextToken());
                     }
                     mw.setSemanticSignature(semanticSignature);
                 } else {

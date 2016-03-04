@@ -50,14 +50,22 @@ public class DictionaryLRLoader implements LRLoader {
     private final SymbolIndex symbolIndex;
 
     public DictionaryLRLoader(InputStream dictionaryFile) {
-        this(dictionaryFile, true, null);
+        this(dictionaryFile, true, false, null);
     }
 
     public DictionaryLRLoader(InputStream dictionaryFile, boolean indexed) {
-        this(dictionaryFile, indexed, null);
+        this(dictionaryFile, indexed, false);
+    }
+
+    public DictionaryLRLoader(InputStream dictionaryFile, boolean indexed, boolean vectorized) {
+        this(dictionaryFile, indexed, vectorized, null);
     }
 
     public DictionaryLRLoader(InputStream dictionaryFile, boolean indexed, SignatureEnrichment signatureEnrichment) {
+        this(dictionaryFile, indexed, false, null);
+    }
+    
+    public DictionaryLRLoader(InputStream dictionaryFile, boolean indexed, boolean vectorized, SignatureEnrichment signatureEnrichment) {
         wordSenses = new HashMap<>();
         this.indexed = indexed;
         this.signatureEnrichment = signatureEnrichment;
@@ -66,7 +74,7 @@ public class DictionaryLRLoader implements LRLoader {
         symbolIndex = new SymbolIndexImpl();
         try {
             XMLReader saxReader = XMLReaderFactory.createXMLReader();
-            saxReader.setContentHandler(new DictionaryParser(wordSenses, indexed));
+            saxReader.setContentHandler(new DictionaryParser(wordSenses, indexed, vectorized));
             saxReader.parse(new InputSource(dictionaryFile));
         } catch (SAXException e) {
             logger.error(MessageFormat.format("Parser error :{0}", e.getLocalizedMessage()));
