@@ -1,11 +1,8 @@
 package org.getalp.lexsema.io.goldstandard;
 
-import lombok.Getter;
-
 /**
  * Semeval 2007 implementation of GoldStandardEntry
  */
-@Getter
 public class Semeval2007GoldStandardEntry implements GoldStandardEntry {
 
     private String textId;
@@ -32,4 +29,29 @@ public class Semeval2007GoldStandardEntry implements GoldStandardEntry {
         }
         annotation = annotation.trim();
     }
+
+	@Override
+	public String getTextId() {
+		return textId;
+	}
+
+	@Override
+	public String getSentenceId() {
+		return sentenceId;
+	}
+
+	@Override
+	public String getWordId() {
+		return wordId;
+	}
+
+	@Override
+	public String getAnnotation() {
+		return annotation;
+	}
+
+	@Override
+	public String getComment() {
+		return comment;
+	}
 }
