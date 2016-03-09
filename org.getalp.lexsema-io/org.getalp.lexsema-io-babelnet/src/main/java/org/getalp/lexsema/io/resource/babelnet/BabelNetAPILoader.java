@@ -5,6 +5,7 @@ import edu.mit.jwi.item.IPointer;
 import edu.mit.jwi.item.POS;
 import it.uniroma1.lcl.babelnet.BabelGloss;
 import it.uniroma1.lcl.babelnet.BabelNet;
+import it.uniroma1.lcl.babelnet.BabelNetConfiguration;
 import it.uniroma1.lcl.babelnet.BabelSense;
 import it.uniroma1.lcl.babelnet.BabelSynset;
 import org.getalp.lexsema.io.resource.LRLoader;
@@ -18,6 +19,7 @@ import org.getalp.lexsema.util.Language;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.*;
 
@@ -32,8 +34,14 @@ public class BabelNetAPILoader implements LRLoader {
     private boolean loadDefinitions = true;
     private boolean loadRelated = false;
 
-    public BabelNetAPILoader(final Language language) {
+    public BabelNetAPILoader(String configurationFilePath, final Language language) {
+        senseCache = SenseCacheImpl.getInstance();
+        this.language = language;
+        BabelNetConfiguration.getInstance().setConfigurationFile(new File(configurationFilePath));
+        babelNet = BabelNet.getInstance();
+    }
 
+    public BabelNetAPILoader(final Language language) {
         senseCache = SenseCacheImpl.getInstance();
         this.language = language;
         babelNet = BabelNet.getInstance();
@@ -56,7 +64,7 @@ public class BabelNetAPILoader implements LRLoader {
                     String def = "";
                     List<BabelGloss> glosses = bs.getSynset().getGlosses(toBabelNetLanguage(language));
                     for (BabelGloss bg : glosses) {
-                        def += bg.getGloss();
+                        def += " " + bg.getGloss();
                     }
                     addToSignature(signature, def);
                 }

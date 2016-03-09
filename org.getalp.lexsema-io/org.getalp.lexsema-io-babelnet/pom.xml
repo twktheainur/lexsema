@@ -30,7 +30,50 @@
             <groupId>org.getalp</groupId>
             <artifactId>org.getalp.lexsema-io-core</artifactId>
             <version>1.0-SNAPSHOT</version>
+            <exclusions>
+		    	<exclusion>
+		        	<groupId>org.apache.lucene</groupId>
+		            <artifactId>lucene-analyzers-common</artifactId>
+		        </exclusion>
+		  	</exclusions>
         </dependency>
+		<dependency>
+			<groupId>org.jgrapht</groupId>
+			<artifactId>jgrapht-jdk1.5</artifactId>
+			<version>0.7.3</version>
+		</dependency>
+		<dependency>
+			<groupId>net.sf.jung</groupId>
+			<artifactId>jung-graph-impl</artifactId>
+			<version>2.0.1</version>
+		</dependency>
+		<dependency>
+			<groupId>net.sf.jung</groupId>
+			<artifactId>jung-api</artifactId>
+			<version>2.0.1</version>
+		</dependency>
+		<dependency>
+			<groupId>net.sf.jung</groupId>
+			<artifactId>jung-algorithms</artifactId>
+			<version>2.0.1</version>
+		</dependency>
+		<dependency>
+			<groupId>com.google.collections</groupId>
+			<artifactId>google-collections</artifactId>
+			<version>0.8</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.lucene</groupId>
+			<artifactId>lucene-core</artifactId>
+			<version>2.9.1</version>
+		</dependency>
+        <dependency>
+			<groupId>it.uniroma1.lcl</groupId>
+			<artifactId>jlt</artifactId>
+			<version>1.0.0</version>
+			<scope>system</scope>
+        	<systemPath>${basedir}/lib/jlt-1.0.0.jar</systemPath>
+		</dependency>
     </dependencies>
 
     <repositories>
