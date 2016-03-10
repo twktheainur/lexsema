@@ -28,29 +28,32 @@ import java.util.Arrays;
 
 
 /**
- * A set of <code>DoubleMatrix2D</code> shorthands and utility methods.
+ * A set of {@code DoubleMatrix2D} shorthands and utility methods.
  */
 @SuppressWarnings("deprecation")
-public class Matrices {
+public final class Matrices {
+    private Matrices() {
+    }
+
     /**
-     * Normalizes column vectors of matrix <code>A</code> so that their L2 norm (Euclidean
+     * Normalizes column vectors of matrix {@code A} so that their L2 norm (Euclidean
      * distance) is equal to 1.0.
      *
      * @param A    matrix to normalize
-     * @param work a temporary array of <code>A.columns()</code> doubles that will be
+     * @param work a temporary array of {@code A.columns()} doubles that will be
      *             overwritten with column's original L2 norms. Supply a non-null pointer
      *             to avoid continuous allocation/freeing of memory when doing calculations
-     *             in a loop. If this parameter is <code>null</code>, a new array will be
+     *             in a loop. If this parameter is {@code null}, a new array will be
      *             allocated every time this method is called.
      * @return A with length-normalized columns (for convenience only)
      */
-    public static DoubleMatrix2D normalizeColumnL2(DoubleMatrix2D A, double[] work) {
+    public static DoubleMatrix2D normalizeColumnL2(DoubleMatrix2D A, double... work) {
         work = prepareWork(A, work);
 
         // Calculate the L2 norm for each column
         for (int r = 0; r < A.rows(); r++) {
-            for (int c = 0; c < A.columns(); c++) {
-                work[c] += A.getQuick(r, c) * A.getQuick(r, c);
+            for (int column = 0; column < A.columns(); column++) {
+                work[column] += A.getQuick(r, column) * A.getQuick(r, column);
             }
         }
 
@@ -66,59 +69,53 @@ public class Matrices {
     }
 
     /**
-     * Normalizes column vectors of a sparse matrix <code>A</code> so that their L2 norm
+     * Normalizes column vectors of a sparse matrix {@code A} so that their L2 norm
      * (Euclidean distance) is equal to 1.0.
      *
      * @param A    matrix to normalize
-     * @param work a temporary array of <code>A.columns()</code> doubles that will be
+     * @param work a temporary array of {@code A.columns()} doubles that will be
      *             overwritten with column's original L2 norms. Supply a non-null pointer
      *             to avoid continuous allocation/freeing of memory when doing calculations
-     *             in a loop. If this parameter is <code>null</code>, a new array will be
+     *             in a loop. If this parameter is {@code null}, a new array will be
      *             allocated every time this method is called.
      * @return A with length-normalized columns (for convenience only)
      */
     public static DoubleMatrix2D normalizeSparseColumnL2(final DoubleMatrix2D A,
-                                                         final double[] work) {
+                                                         final double... work) {
         final double[] w = prepareWork(A, work);
 
-        A.forEachNonZero(new IntIntDoubleFunction() {
-            @Override
-            public double apply(int row, int column, double value) {
-                w[column] += value * value;
-                return value;
-            }
+        A.forEachNonZero((row, column, value) -> {
+            w[column] += value * value;
+            return value;
         });
 
         // Take the square root
-        for (int c = 0; c < A.columns(); c++) {
-            w[c] = Math.sqrt(w[c]);
+        for (int column = 0; column < A.columns(); column++) {
+            w[column] = Math.sqrt(w[column]);
         }
 
         // Normalize
-        A.forEachNonZero(new IntIntDoubleFunction() {
-            @Override
-            public double apply(int row, int column, double value) {
-                A.setQuick(row, column, value / w[column]);
-                return 0;
-            }
+        A.forEachNonZero((row, column, value) -> {
+            A.setQuick(row, column, value / w[column]);
+            return 0;
         });
 
         return A;
     }
 
     /**
-     * Normalizes column vectors of matrix <code>A</code> so that their L1 norm is equal
+     * Normalizes column vectors of matrix {@code A} so that their L1 norm is equal
      * to 1.0.
      *
      * @param A    matrix to normalize
-     * @param work a temporary array of <code>A.columns()</code> doubles that will be
+     * @param work a temporary array of {@code A.columns()} doubles that will be
      *             overwritten with column's original L1 norms. Supply a non-null pointer
      *             to avoid continuous allocation/freeing of memory when doing calculations
-     *             in a loop. If this parameter is <code>null</code>, a new array will be
+     *             in a loop. If this parameter is {@code null}, a new array will be
      *             allocated every time this method is called.
      * @return A with L1-normalized columns (for convenience only)
      */
-    public static DoubleMatrix2D normalizeColumnL1(DoubleMatrix2D A, double[] work) {
+    public static DoubleMatrix2D normalizeColumnL1(DoubleMatrix2D A, double... work) {
         work = prepareWork(A, work);
 
         // Calculate the L1 norm for each column
@@ -187,10 +184,10 @@ public class Matrices {
     }
 
     /**
-     * Computers sparseness of matrix <code>A</code> as a fraction of non-zero elements to
+     * Computers sparseness of matrix {@code A} as a fraction of non-zero elements to
      * the total number of elements.
      *
-     * @return sparseness of <code>A</code>, which is a value between 0.0 (all elements
+     * @return sparseness of {@code A}, which is a value between 0.0 (all elements
      * are zero) and 1.0 (all elements are non-zero)
      */
     public static double computeSparseness(DoubleMatrix2D A) {
@@ -212,12 +209,12 @@ public class Matrices {
      * minimum values for each column this version should perform better than scanning
      * each column separately.
      *
-     * @param indices   an array of <code>A.columns()</code> integers in which indices of
+     * @param indices   an array of {@code A.columns()} integers in which indices of
      *                  the first minimum element will be stored. If this parameter is
-     *                  <code>null</code> a new array will be allocated.
-     * @param minValues an array of <code>A.columns()</code> doubles in which values of
+     *                  {@code null} a new array will be allocated.
+     * @param minValues an array of {@code A.columns()} doubles in which values of
      *                  each column's minimum elements will be stored. If this parameter is
-     *                  <code>null</code> a new array will be allocated.
+     *                  {@code null} a new array will be allocated.
      * @return for each column of A the index of the minimum element
      */
     public static int[] minInColumns(DoubleMatrix2D A, int[] indices,
@@ -232,12 +229,12 @@ public class Matrices {
      * each column separately.
      *
      * @param A
-     * @param indices   an array of <code>A.columns()</code> integers in which indices of
+     * @param indices   an array of {@code A.columns()} integers in which indices of
      *                  the first maximum element will be stored. If this parameter is
-     *                  <code>null</code> a new array will be allocated.
-     * @param maxValues an array of <code>A.columns()</code> doubles in which values of
+     *                  {@code null} a new array will be allocated.
+     * @param maxValues an array of {@code A.columns()} doubles in which values of
      *                  each column's maximum elements will be stored. If this parameter is
-     *                  <code>null</code> a new array will be
+     *                  {@code null} a new array will be
      *                  allocated.
      * @return for each column of A the index of the maximum element
      */
@@ -288,12 +285,12 @@ public class Matrices {
     }
 
     /**
-     * Finds the index of the first maximum element in given row of <code>A</code>.
+     * Finds the index of the first maximum element in given row of {@code A}.
      *
      * @param A   the matrix to search
      * @param row the row to search
      * @return index of the first maximum element or -1 if the input matrix is
-     * <code>null</code> or has zero size.
+     * {@code null} or has zero size.
      */
     public static int maxInRow(DoubleMatrix2D A, int row) {
         int index = 0;
@@ -309,12 +306,12 @@ public class Matrices {
     }
 
     /**
-     * Calculates the sum of rows of matrix <code>A</code>.
+     * Calculates the sum of rows of matrix {@code A}.
      *
-     * @param sums an array to store the results. If the array is <code>null</code> or
-     *             does not match the number of rows in matrix <code>A</code>, a new array
+     * @param sums an array to store the results. If the array is {@code null} or
+     *             does not match the number of rows in matrix {@code A}, a new array
      *             will be created.
-     * @return sums of rows of <code>A</code>
+     * @return sums of rows of {@code A}
      */
     public static double[] sumRows(DoubleMatrix2D A, double[] sums) {
         if (sums == null || A.rows() != sums.length) {
@@ -357,18 +354,18 @@ public class Matrices {
                 .viewSelection(IndirectSort.mergesort(0, matrix.rows(), comparator), null);
     }
 
-    private static interface DoubleComparator {
-        public int compare(double a, double b);
+    private interface DoubleComparator {
+        int compare(double a, double b);
     }
 
     private static final class DoubleComparators {
         /**
-         * Compares <code>int</code> in their natural order.
+         * Compares {@code int} in their natural order.
          */
         public static final DoubleComparator NATURAL_ORDER = new NaturalOrderDoubleComparator();
 
         /**
-         * Compares <code>int</code> in their reversed order.
+         * Compares {@code int} in their reversed order.
          */
         public static final DoubleComparator REVERSED_ORDER = new ReversedOrderDoubleComparator();
 
