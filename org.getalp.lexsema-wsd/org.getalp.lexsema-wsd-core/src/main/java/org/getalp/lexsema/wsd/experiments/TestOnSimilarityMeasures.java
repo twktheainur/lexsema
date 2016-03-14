@@ -13,6 +13,7 @@ import org.getalp.lexsema.io.resource.LRLoader;
 import org.getalp.lexsema.io.resource.dictionary.DictionaryLRLoader;
 import org.getalp.lexsema.similarity.Document;
 import org.getalp.lexsema.similarity.measures.lesk.IndexedLeskSimilarity;
+import org.getalp.lexsema.similarity.measures.lesk.VectorizedLeskSimilarity;
 import org.getalp.lexsema.wsd.configuration.Configuration;
 import org.getalp.lexsema.wsd.method.*;
 import org.getalp.lexsema.wsd.score.*;
@@ -47,14 +48,16 @@ public class TestOnSimilarityMeasures
 
     public static void main(String[] args) throws Exception
     {
+    	/*
         List<String> dicts_list = new ArrayList<>();
         for (int i = 1 ; i <= 15 ; i++) {
             for (int j = 50 ; j <= 300 ; j += 50) {
                 dicts_list.add("../data/lesk_dict/semeval2007task7/" + i + "/" + j + "_alone");
             }
         }
+        */
         
-        String[] dicts = dicts_list.toArray(new String[dicts_list.size()]);
+        String[] dicts = {"../data/lesk_dict/semeval2007task7/gmb_alone_tmp"};
         //getScoresWithVote(dicts, 10);
         compareDicts(dicts);
     }
@@ -93,13 +96,13 @@ public class TestOnSimilarityMeasures
     {
         double[] scores = new double[n];
         long[] times = new long[n];
-        LRLoader lrloader = new DictionaryLRLoader(new FileInputStream(dict), true);
+        LRLoader lrloader = new DictionaryLRLoader(new FileInputStream(dict), false, true);
 
         CorpusLoader dl = new Semeval2007CorpusLoader(new FileInputStream("../data/senseval2007_task7/test/eng-coarse-all-words.xml"));
         dl.load();
         for (Document d : dl) lrloader.loadSenses(d);
 
-        ConfigurationScorer scorer = new ConfigurationScorerWithCache(new IndexedLeskSimilarity());
+        ConfigurationScorer scorer = new ConfigurationScorerWithCache(new VectorizedLeskSimilarity());
             
         SemEval2007Task7PerfectConfigurationScorer perfectScorer = new SemEval2007Task7PerfectConfigurationScorer();
 
@@ -109,7 +112,7 @@ public class TestOnSimilarityMeasures
         double minLevyScale = 0.5;
         double maxLevyScale = 1.5;
 
-        MultiThreadCuckooSearch cuckooDisambiguator = new MultiThreadCuckooSearch(iterations, minLevyLocation, maxLevyLocation, minLevyScale, maxLevyScale, scorer, false);               
+        MultiThreadCuckooSearch cuckooDisambiguator = new MultiThreadCuckooSearch(iterations, minLevyLocation, maxLevyLocation, minLevyScale, maxLevyScale, scorer, true);               
         Disambiguator disambiguator = cuckooDisambiguator;
         
         System.out.println("Dictionary " + dict);
@@ -154,7 +157,7 @@ public class TestOnSimilarityMeasures
             for (Document d : dls[i]) lrloader.loadSenses(d);
         }
 
-        ConfigurationScorer scorer = new ConfigurationScorerWithCache(new IndexedLeskSimilarity());
+        ConfigurationScorer scorer = new ConfigurationScorerWithCache(new VectorizedLeskSimilarity());
             
         SemEval2007Task7PerfectConfigurationScorer perfectScorer = new SemEval2007Task7PerfectConfigurationScorer();
 
