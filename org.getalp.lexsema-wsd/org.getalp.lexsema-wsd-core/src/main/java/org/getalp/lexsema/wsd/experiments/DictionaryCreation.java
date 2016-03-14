@@ -201,9 +201,7 @@ public class DictionaryCreation
         {
             lrloader.addSignatureEnrichment(new IndexingSignatureEnrichment());
         }
-        
-        lrloader.addSignatureEnrichment(new VectorizationSignatureEnrichment());
-        
+                
         if (useSenseClusters)
         {
             if (!senseClustersIsLoaded)
