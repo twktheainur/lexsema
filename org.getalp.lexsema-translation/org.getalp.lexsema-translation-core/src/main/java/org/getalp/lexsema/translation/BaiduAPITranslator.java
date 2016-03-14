@@ -3,13 +3,17 @@ package org.getalp.lexsema.translation;
 import org.apache.jena.atlas.json.JSON;
 import org.apache.jena.atlas.json.JsonObject;
 import org.getalp.lexsema.util.Language;
+import org.getalp.lexsema.util.dataitems.Pair;
+import org.getalp.lexsema.util.dataitems.PairImpl;
 import org.getalp.lexsema.util.rest.RestfulQuery;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.net.URLConnection;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class BaiduAPITranslator implements Translator {
@@ -23,11 +27,11 @@ public class BaiduAPITranslator implements Translator {
 
     @Override
     public String translate(String source, Language sourceLanguage, Language targetLanguage) {
-        Map<String,String> parameters = new HashMap<>();
-        parameters.put("client_id",key);
-        parameters.put("from", sourceLanguage.getISO2Code());
-        parameters.put("to", targetLanguage.getISO2Code());
-        parameters.put("q",source);
+        List<Pair<String,String>> parameters = new ArrayList<>();
+        parameters.add(new PairImpl<>("client_id", key));
+        parameters.add(new PairImpl<>("from", sourceLanguage.getISO2Code()));
+        parameters.add(new PairImpl<>("to", targetLanguage.getISO2Code()));
+        parameters.add(new PairImpl<>("q", source));
         try {
             URLConnection urlConnection = RestfulQuery.restfulQuery("http://openapi.baidu.com/public/2.0/bmt/translate",parameters);
             String response = RestfulQuery.getRequestOutput(urlConnection);

@@ -1,6 +1,8 @@
 package org.getalp.lexsema.translation;
 
 import org.getalp.lexsema.util.Language;
+import org.getalp.lexsema.util.dataitems.Pair;
+import org.getalp.lexsema.util.dataitems.PairImpl;
 import org.getalp.lexsema.util.rest.RestfulQuery;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,7 +12,9 @@ import org.xml.sax.helpers.XMLReaderFactory;
 import java.io.IOException;
 import java.io.StringReader;
 import java.net.URLConnection;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 
@@ -25,10 +29,10 @@ public class YandexAPITranslator implements Translator {
 
     @Override
     public String translate(String source, Language sourceLanguage, Language targetLanguage) {
-        Map<String,String> parameters = new HashMap<>();
-        parameters.put("key",key);
-        parameters.put("lang", String.format("%s-%s", sourceLanguage.getISO2Code(), targetLanguage.getISO2Code()));
-        parameters.put("text",source);
+        List<Pair<String,String>> parameters = new ArrayList<>();
+        parameters.add(new PairImpl<>("key",key));
+        parameters.add(new PairImpl<>("lang", String.format("%s-%s", sourceLanguage.getISO2Code(), targetLanguage.getISO2Code())));
+        parameters.add(new PairImpl<>("text",source));
         try {
             URLConnection connection = RestfulQuery.restfulQuery("https://translate.yandex.net/api/v1.5/tr/translate",parameters);
             String response = RestfulQuery.getRequestOutput(connection);

@@ -9,20 +9,20 @@ import java.util.Map;
 import java.util.Set;
 
 public interface LexicalResourceTranslationClosure<T extends LexicalSense> {
-    public void addSenses(Language language, LexicalEntry lexicalEntry, Collection<T> senses);
+    void addSenses(Language language, LexicalEntry lexicalEntry, Collection<T> senses);
 
-    public void addSense(Language language, LexicalEntry lexicalEntry, T sense);
+    void addSense(Language language, LexicalEntry lexicalEntry, T sense);
 
-    public void importClosure(LexicalResourceTranslationClosure<T> closure);
+    void importClosure(LexicalResourceTranslationClosure<T> closure);
 
-    public Map<Language, Map<LexicalEntry, Set<T>>> senseClosureByLanguageAndEntry();
+    Map<Language, Map<LexicalEntry, Set<T>>> senseClosureByLanguageAndEntry();
 
-    public Map<LexicalEntry, Set<T>> senseClosureByEntry();
+    Map<LexicalEntry, Set<T>> senseClosureByEntry();
 
-    public Map<Language, Set<LexicalEntry>> entryClosureByLanguage();
+    Map<Language, Set<LexicalEntry>> entryClosureByLanguage();
 
-    public Set<LexicalEntry> entryFlatClosure();
+    Set<LexicalEntry> entryFlatClosure();
 
-    public Set<T> senseFlatClosure();
+    Set<T> senseFlatClosure();
 
 }

@@ -2,6 +2,7 @@ package org.getalp.ml.vector;
 
 import cern.colt.matrix.tdouble.DoubleMatrix1D;
 import cern.colt.matrix.tdouble.impl.DenseDoubleMatrix1D;
+import org.nd4j.linalg.api.ndarray.INDArray;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -40,6 +41,18 @@ public class Vectors {
             perm.setQuick(i, 1);
         }
         return perm;
+    }
+
+    public static INDArray contextualProduct(INDArray vectorA, INDArray vectorB){
+        return null;
+    }
+
+    public static INDArray contextualSum(INDArray vectorA, INDArray vectorB){
+        return null;
+    }
+
+    public static INDArray weakContextualization(INDArray vectorA, INDArray vectorB){
+        return null;
     }
 
 }
