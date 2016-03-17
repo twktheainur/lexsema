@@ -88,7 +88,7 @@ public class WSDForSMT1
 	        	while (senseIterator.hasNext()) {
 	        		ISenseEntry sense = senseIterator.next();
 	        		if (sense.getSenseKey().toString().equals(senseID)) {
-	        			outputArray[i] = Integer.toString(sense.getOffset()) + sense.getPOS().getTag();
+	        			outputArray[i] = String.format("%08d", sense.getOffset()) + sense.getPOS().getTag();
 	        		}
 	        	}
         	}
