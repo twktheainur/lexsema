@@ -46,9 +46,10 @@ public class WSDForSMT1
 	 * Output: Array of Wordnet senses (form [xxxx, yyyy, zzzz]) 
 	 */
 	public static void main(String[] args) throws Exception
-	{		
+	{
 		PrintStream stdout = System.out;
 		System.setOut(new PrintStream(new File("/dev/null")));
+		System.setErr(new PrintStream(new File("/dev/null")));
 		
 		StringBuilder rawTextBuilder = new StringBuilder();
 		for (String arg : args) {
