@@ -41,6 +41,7 @@
     </profiles>
 
     <modules>
+        <module>org.getalp.lexsema-io-babelnet</module>
         <module>org.getalp.lexsema-io-core</module>
     </modules>
 

@@ -159,7 +159,6 @@ public class GMBCorpusLoader extends CorpusLoaderImpl implements ContentHandler 
     public void endElement(String uri, String localName, String qName) throws SAXException {
         switch (localName) {
             case "taggedtokens":
-                currentText.addSentence(currentSentence);
                 addText(currentText);
                 break;
             case "tagtoken":
@@ -173,6 +172,10 @@ public class GMBCorpusLoader extends CorpusLoaderImpl implements ContentHandler 
                 }
                 w.setEnclosingSentence(currentSentence);
                 currentSentence.addWord(w);
+                if (currentLemma.equals(".")) {
+                    currentText.addSentence(currentSentence);
+                    currentSentence = new SentenceImpl("");
+                }
                 currentLemma = "";
                 currentPos = "";
                 currentSurfaceForm = "";

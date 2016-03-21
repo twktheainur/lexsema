@@ -90,11 +90,13 @@ public class DictionaryLRLoader implements LRLoader {
     public List<Sense> getSenses(Word w) {
         String lemma = w.getLemma();
         String partOfSpeech = w.getPartOfSpeech();
+        partOfSpeech = processPOS(partOfSpeech);
         String tag = MessageFormat.format("{0}%{1}", lemma, partOfSpeech);
         if (wordSenses.get(tag) == null) {
             tag = MessageFormat.format("{0}%{1}", lemma.toLowerCase(), partOfSpeech);
         }
         List<Sense> senses = wordSenses.get(tag);
+        if (senses == null) return new ArrayList<>();
         for (Sense sense : senses) {
             if (!indexed) {
                 SemanticSignature semanticSignature = sense.getSemanticSignature();
@@ -263,5 +265,15 @@ public class DictionaryLRLoader implements LRLoader {
         distributed = isDistributed;
         return this;
     }
-
+    
+    private String processPOS(String pos) {
+        char newPos = 'n';
+        String lpos = pos.toLowerCase();
+        if (lpos.startsWith("n") || lpos.startsWith("v") || lpos.startsWith("r")) {
+            newPos = lpos.charAt(0);
+        } else if (pos.startsWith("j") || pos.startsWith("a")) {
+            newPos = 'a';
+        }
+        return String.valueOf(newPos);
+    }
 }
