@@ -22,6 +22,29 @@
                     <target>1.8</target>
                 </configuration>
             </plugin>
+	<plugin>
+	    <groupId>org.apache.maven.plugins</groupId>
+	    <artifactId>maven-install-plugin</artifactId>
+	    <version>2.5.1</version>
+		<executions>
+		    <execution>
+		        <id>install-external</id>
+		        <phase>clean</phase>
+		        <configuration>
+		            <file>${basedir}/lib/jlt-1.0.0.jar</file>
+		            <repositoryLayout>default</repositoryLayout>
+		            <groupId>it.uniroma1.lcl</groupId>
+		            <artifactId>jlt</artifactId>
+		            <version>1.0.0</version>
+		            <packaging>jar</packaging>
+		            <generatePom>true</generatePom>
+		        </configuration>
+		        <goals>
+		            <goal>install-file</goal>
+		        </goals>
+		    </execution>
+		</executions>
+	    </plugin>
         </plugins>
     </build>
 
@@ -67,12 +90,10 @@
 			<artifactId>lucene-core</artifactId>
 			<version>2.9.1</version>
 		</dependency>
-        <dependency>
+		<dependency>
 			<groupId>it.uniroma1.lcl</groupId>
 			<artifactId>jlt</artifactId>
 			<version>1.0.0</version>
-			<scope>system</scope>
-        	<systemPath>${basedir}/lib/jlt-1.0.0.jar</systemPath>
 		</dependency>
     </dependencies>
 
