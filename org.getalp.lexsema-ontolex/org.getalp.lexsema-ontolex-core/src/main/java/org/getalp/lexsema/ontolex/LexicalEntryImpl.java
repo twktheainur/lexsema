@@ -27,6 +27,32 @@ public class LexicalEntryImpl extends AbstractLexicalResourceEntity implements L
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof LexicalEntryImpl)) return false;
+        if (!super.equals(o)) return false;
+
+        LexicalEntryImpl that = (LexicalEntryImpl) o;
+
+        if (getNumber() != that.getNumber()) return false;
+        if (getLemma() != null ? !getLemma().equals(that.getLemma()) : that.getLemma() != null) return false;
+        if (getPartOfSpeech() != null ? !getPartOfSpeech().equals(that.getPartOfSpeech()) : that.getPartOfSpeech() != null)
+            return false;
+        return getLanguage() == that.getLanguage();
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = super.hashCode();
+        result = 31 * result + (getLemma() != null ? getLemma().hashCode() : 0);
+        result = 31 * result + (getPartOfSpeech() != null ? getPartOfSpeech().hashCode() : 0);
+        result = 31 * result + getNumber();
+        result = 31 * result + (getLanguage() != null ? getLanguage().hashCode() : 0);
+        return result;
+    }
+
+    @Override
     public String toString() {
         String localPOS = partOfSpeech.split("#")[1];
         return String.format("%s LexicalEntry|%s#%s|", language, lemma, localPOS);

@@ -11,14 +11,15 @@ import java.util.*;
 
 public class BabelNetSemCorTrainingDataExtractor implements TrainingDataExtractor {
 
-    private static Logger logger = LoggerFactory.getLogger(BabelNetSemCorTrainingDataExtractor.class);
-    private LocalTextFeatureExtractor localTextFeatureExtractor;
-    private Map<String, List<List<String>>> instanceVectors;
+    private static final Logger logger = LoggerFactory.getLogger(BabelNetSemCorTrainingDataExtractor.class);
+    private final LocalTextFeatureExtractor localTextFeatureExtractor;
+    private final Map<String, List<List<String>>> instanceVectors;
+    private Map<String, List<String>> instanceVectorsSenses;
 
     private Map<String, String> senseTagMap;
 
-    private int successfulMappings = 0;
-    private int unsuccessfulMappings = 0;
+    private int successfulMappings;
+    private int unsuccessfulMappings;
 
     public BabelNetSemCorTrainingDataExtractor(LocalTextFeatureExtractor localTextFeatureExtractor) {
         this.localTextFeatureExtractor = localTextFeatureExtractor;
@@ -28,6 +29,7 @@ public class BabelNetSemCorTrainingDataExtractor implements TrainingDataExtracto
     public BabelNetSemCorTrainingDataExtractor(LocalTextFeatureExtractor localTextFeatureExtractor, File senseTagMappingFile) {
         this.localTextFeatureExtractor = localTextFeatureExtractor;
         instanceVectors = new HashMap<>();
+        instanceVectorsSenses = new HashMap<>();
         senseTagMap = new HashMap<>();
         try (BufferedReader reader = new BufferedReader(new FileReader(senseTagMappingFile))) {
             String line = "";
@@ -43,7 +45,7 @@ public class BabelNetSemCorTrainingDataExtractor implements TrainingDataExtracto
             } while (line != null && !line.isEmpty());
         } catch (FileNotFoundException e) {
             logger.error(e.getLocalizedMessage());
-        } catch (IOException e) {
+        } catch (IOException ignored) {
             logger.error("Error while loading the sense mapping, aborting.");
         }
     }
@@ -56,7 +58,7 @@ public class BabelNetSemCorTrainingDataExtractor implements TrainingDataExtracto
         for (Text text : annotatedCorpus) {
             int wordIndex = 0;
             for (Word w : text) {
-                String lemma = w.getLemma();
+                String lemma = w.getSurfaceForm();
                 List<String> instance = localTextFeatureExtractor.getFeatures(text, wordIndex);
                 String semanticTag = w.getSenseAnnotation();
                 if (semanticTag != null && senseTagMap != null) {
@@ -72,6 +74,9 @@ public class BabelNetSemCorTrainingDataExtractor implements TrainingDataExtracto
                 if (!instanceVectors.containsKey(lemma)) {
                     instanceVectors.put(lemma, new ArrayList<List<String>>());
                 }
+                if(!instanceVectorsSenses.containsKey(semanticTag)){
+                    instanceVectorsSenses.put(semanticTag, instance);
+                }
                 instanceVectors.get(lemma).add(instance);
                 wordIndex++;
             }
@@ -85,6 +90,19 @@ public class BabelNetSemCorTrainingDataExtractor implements TrainingDataExtracto
     @Override
     public List<List<String>> getWordFeaturesInstances(String lemma) {
         return instanceVectors.get(lemma);
+    }
+
+    @Override
+    public List<List<String>> getSensesFeaturesInstances(List<String> senseTags) {
+        List<List<String>> result = new ArrayList<>();
+        for(String tag: senseTags) {
+            if(instanceVectorsSenses.containsKey(tag)) {
+                result.add(instanceVectorsSenses.get(tag));
+            } else {
+                result.add(Collections.emptyList());
+            }
+        }
+        return result;
     }
 
     @Override

@@ -6,7 +6,7 @@
         <!ENTITY xsd "http://www.w3.org/2001/XMLSchema#" >
         <!ENTITY rdfs "http://www.w3.org/2000/01/rdf-schema#" >
         <!ENTITY rdf "http://www.w3.org/1999/02/22-rdf-syntax-ns#" >
-        <!ENTITY lemon "http://lemon-model.net/lemon#" >
+        <!ENTITY lemon "http://www.lemon-model.net/lemon#" >
         <!ENTITY dbnary "http://kaiko.getalp.org/dbnary#" >
         <!ENTITY axis "http://kaiko.getalp.org/axis#" >
         <!ENTITY semio "http://www.ontologydesignpatterns.org/cp/owl/semiotics.owl#" >
@@ -19,7 +19,7 @@
 
 <rdf:RDF xmlns="http://www.lemon-model.net/lemon#"
          xml:base="http://www.lemon-model.net/lemon"
-         xmlns:lemon="http://lemon-model.net/lemon#"
+         xmlns:lemon="http://www.lemon-model.net/lemon#"
          xmlns:dbnary="http://kaiko.getalp.org/dbnary#"
          xmlns:axis="http://kaiko.getalp.org/axis#"
          xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
