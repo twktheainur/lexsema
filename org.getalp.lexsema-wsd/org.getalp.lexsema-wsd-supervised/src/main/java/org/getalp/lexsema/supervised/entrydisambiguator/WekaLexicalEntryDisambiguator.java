@@ -2,6 +2,7 @@ package org.getalp.lexsema.supervised.entrydisambiguator;
 
 
 import org.getalp.lexsema.similarity.Document;
+import org.getalp.lexsema.similarity.Sense;
 import org.getalp.lexsema.supervised.ClassificationOutput;
 import org.getalp.lexsema.supervised.Classifier;
 import org.getalp.lexsema.supervised.features.TrainingDataExtractor;
@@ -17,6 +18,7 @@ import java.text.MessageFormat;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 
 public class WekaLexicalEntryDisambiguator extends SupervisedSequentialLexicalEntryDisambiguator {
@@ -40,7 +42,7 @@ public class WekaLexicalEntryDisambiguator extends SupervisedSequentialLexicalEn
 
     @Override
     protected final List<ClassificationOutput> runClassifier(String lemma, List<String> instance) {
-        logger.debug("disambiguation of " + lemma);
+        logger.debug(MessageFormat.format("disambiguation of {0}", lemma));
         WekaClassifier classifier;
         List<ClassificationOutput> result = Collections.emptyList();
         boolean trainingSuccessful = false;
@@ -51,10 +53,9 @@ public class WekaLexicalEntryDisambiguator extends SupervisedSequentialLexicalEn
             if (!classifier.isClassifierTrained()) {
                 try {
                     List<List<String>> trainingInstances = trainingDataExtractor.getWordFeaturesInstances(lemma);
-
                     if (trainingInstances != null) {
 
-                        logger.debug("Number of examples :" + trainingInstances.size());
+                        logger.debug(MessageFormat.format("Number of examples :{0}", trainingInstances.size()));
                         if(trainingInstances.size() <= 5000) {
                             performTraining(classifier, trainingInstances, lemma);
                             trainingSuccessful = true;
@@ -70,7 +71,7 @@ public class WekaLexicalEntryDisambiguator extends SupervisedSequentialLexicalEn
         if (classifier != null && trainingSuccessful && classifier.isClassifierTrained()) {
             result = classifyInstance(classifier,instance);
         }
-        logger.debug("disambiguation of " + lemma + " done");
+        logger.debug(MessageFormat.format("disambiguation of {0} done", lemma));
         return result;
 
     }

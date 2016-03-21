@@ -116,7 +116,7 @@ public class WekaClassifierImpl implements WekaClassifier {
             } catch (Exception e1) {
                 logger.error(MessageFormat.format("Failed to create new classifier for (re)traing: {0}", e1.getLocalizedMessage()));
             }
-            saveModel();
+           // saveModel();
         }
     }
 

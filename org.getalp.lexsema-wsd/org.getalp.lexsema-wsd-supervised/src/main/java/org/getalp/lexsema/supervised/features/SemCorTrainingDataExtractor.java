@@ -77,6 +77,11 @@ public class SemCorTrainingDataExtractor implements TrainingDataExtractor {
     }
 
     @Override
+    public List<List<String>> getSensesFeaturesInstances(List<String> senseTags) {
+        return Collections.emptyList();
+    }
+
+    @Override
     public List<String> getAttributes(String lemma) {
         List<String> attributes = new ArrayList<>();
         List<List<String>> instances = getWordFeaturesInstances(lemma);

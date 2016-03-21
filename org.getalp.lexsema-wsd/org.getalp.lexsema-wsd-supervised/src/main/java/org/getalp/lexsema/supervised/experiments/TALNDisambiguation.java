@@ -18,6 +18,7 @@ import org.getalp.lexsema.supervised.features.extractors.LemmaFeatureExtractor;
 import org.getalp.lexsema.supervised.features.extractors.LocalCollocationFeatureExtractor;
 import org.getalp.lexsema.supervised.features.extractors.PosFeatureExtractor;
 import org.getalp.lexsema.supervised.weka.NaiveBayesSetUp;
+import org.getalp.lexsema.wsd.configuration.Configuration;
 import org.getalp.lexsema.wsd.method.Disambiguator;
 import org.getalp.lexsema.wsd.method.FirstSenseDisambiguator;
 import org.slf4j.Logger;
@@ -67,6 +68,11 @@ public class TALNDisambiguation {
         altfe.addExtractor(pfe);
         altfe.addExtractor(acfe);
 
+        for (Document d : dl) {
+            System.err.println("\tLoading senses for " + d.getId());
+            lrloader.loadSenses(d);
+        }
+
         TrainingDataExtractor trainingDataExtractor = new BabelNetSemCorTrainingDataExtractor(altfe, new File(args[3]));
         //TrainingDataExtractor trainingDataExtractor = new SemCorTrainingDataExtractor(altfe);
         trainingDataExtractor.extract(semCor);
@@ -74,25 +80,18 @@ public class TALNDisambiguation {
         //Le dernier argument est la taille de la poole de threads
         // pour changer echo ou echo 2 changer dans EchoLexicalEntryDisambiguator
         Disambiguator disambiguator = new WekaDisambiguator("", new NaiveBayesSetUp(true, true), altfe, Runtime.getRuntime().availableProcessors(), trainingDataExtractor);
-        Disambiguator firstSense = new FirstSenseDisambiguator(args[4]);
+        //Disambiguator firstSense = new FirstSenseDisambiguator(args[4]);
         //Disambiguator firstSense = new FirstSenseDisambiguator();
         int i = 0;
         for (Document d : dl) {
             System.err.println("Starting document " + d.getId());
-            System.err.println("\tLoading senses...");
-            lrloader.loadSenses(d);
-
-            //Configuration c = disambiguator.disambiguate(d);
-            //Configuration c = firstSense.disambiguate(d);
-            //c = firstSense.disambiguate(d, c);
+            Configuration c = disambiguator.disambiguate(d);
+            //c = firstSense.disambiguate(d,c);
             ConfigurationWriter sw = new SemevalWriter(d.getId() + ".ans", "\t");
             System.err.println("\n\tWriting results...");
-            //sw.write(d, c.getAssignments());
+            sw.write(d, c.getAssignments());
             System.err.println("done!");
         }
-        DictionaryWriter dw = new DocumentDictionaryWriter(dl);
-        dw.writeDictionary(new File("babelnet_english_dictionary.xml"));
-        //disambiguator.release();
-        //disambiguator.release();
+        disambiguator.release();
     }
 }
