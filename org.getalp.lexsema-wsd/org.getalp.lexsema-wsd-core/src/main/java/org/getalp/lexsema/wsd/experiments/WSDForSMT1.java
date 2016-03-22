@@ -48,8 +48,8 @@ public class WSDForSMT1
 	public static void main(String[] args) throws Exception
 	{
 		PrintStream stdout = System.out;
-		System.setOut(new PrintStream(new File("/dev/null")));
-		System.setErr(new PrintStream(new File("/dev/null")));
+		System.setOut(new PrintStream(new File("~/sysout")));
+		System.setErr(new PrintStream(new File("~/syserr")));
 		
 		StringBuilder rawTextBuilder = new StringBuilder();
 		for (String arg : args) {
