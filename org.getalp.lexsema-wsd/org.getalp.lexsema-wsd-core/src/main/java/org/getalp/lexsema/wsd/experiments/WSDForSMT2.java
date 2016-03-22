@@ -40,8 +40,8 @@ public class WSDForSMT2
     public static void main(String[] args) throws Exception
     {
 		PrintStream stdout = System.out;
-		System.setOut(new PrintStream(new File("~/sysout")));
-		System.setErr(new PrintStream(new File("~/syserr")));
+		System.setOut(new PrintStream(new File("sysout")));
+		System.setErr(new PrintStream(new File("syserr")));
 		
         BabelNetConfiguration.getInstance().setConfigurationFile(new File("../data/babelnet/2.5.1/babelnet.properties"));
         BabelNet babelnet = BabelNet.getInstance();
