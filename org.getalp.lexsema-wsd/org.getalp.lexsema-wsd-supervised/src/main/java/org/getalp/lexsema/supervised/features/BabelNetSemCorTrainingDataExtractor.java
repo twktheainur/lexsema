@@ -58,7 +58,7 @@ public class BabelNetSemCorTrainingDataExtractor implements TrainingDataExtracto
         for (Text text : annotatedCorpus) {
             int wordIndex = 0;
             for (Word w : text) {
-                String lemma = w.getSurfaceForm();
+                String lemma = w.getLemma();
                 List<String> instance = localTextFeatureExtractor.getFeatures(text, wordIndex);
                 String semanticTag = w.getSenseAnnotation();
                 if (semanticTag != null && senseTagMap != null) {

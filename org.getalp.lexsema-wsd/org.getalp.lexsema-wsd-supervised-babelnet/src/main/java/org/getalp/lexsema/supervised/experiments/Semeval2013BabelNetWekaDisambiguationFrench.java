@@ -13,6 +13,7 @@ import org.getalp.lexsema.supervised.WekaDisambiguator;
 import org.getalp.lexsema.supervised.features.*;
 import org.getalp.lexsema.supervised.features.extractors.*;
 import org.getalp.lexsema.supervised.weka.NaiveBayesSetUp;
+import org.getalp.lexsema.supervised.weka.RandomForestSetUp;
 import org.getalp.lexsema.util.Language;
 import org.getalp.lexsema.wsd.configuration.Configuration;
 import org.getalp.lexsema.wsd.method.Disambiguator;
@@ -71,7 +72,7 @@ public class Semeval2013BabelNetWekaDisambiguationFrench {
 
         //Le dernier argument est la taille de la poole de threads
         // pour changer echo ou echo 2 changer dans EchoLexicalEntryDisambiguator
-        Disambiguator disambiguator = new WekaDisambiguator("../data/supervised", new NaiveBayesSetUp(true, true), altfe, 2, trainingDataExtractor);
+        Disambiguator disambiguator = new WekaDisambiguator("../data/supervised", new RandomForestSetUp(5,10,23,100), altfe, 8, trainingDataExtractor);
         Disambiguator firstSense = new FirstSenseDisambiguator("data/semcor.first-sense.fr.key");
         int i = 0;
         if (args.length == 1) {
@@ -82,7 +83,7 @@ public class Semeval2013BabelNetWekaDisambiguationFrench {
             System.err.println("\tLoading senses...");
             lrloader.loadSenses(d);
             Configuration c = disambiguator.disambiguate(d);
-            //c = firstSense.disambiguate(d,c);
+            c = firstSense.disambiguate(d,c);
             //Configuration c = firstSense.disambiguate(d);
             ConfigurationWriter sw = new SemevalWriter(d.getId() + ".ans", "\t");
             System.err.println("\n\tWriting results...");
