@@ -1,5 +1,6 @@
 package org.getalp.lexsema.ontolex.dbnary;
 
+import org.getalp.lexsema.ontolex.dbnary.uriparsers.DBNaryLexicalEntryURIParser;
 import org.getalp.lexsema.util.Language;
 import org.getalp.lexsema.ontolex.LexicalEntry;
 import org.getalp.lexsema.ontolex.LexicalResource;
@@ -13,7 +14,7 @@ import org.getalp.lexsema.ontolex.dbnary.uriparsers.DBNaryLexicalSenseURIParser;
 import org.getalp.lexsema.ontolex.dbnary.uriparsers.DBNaryVocableURIParser;
 import org.getalp.lexsema.ontolex.graph.OntologyModel;
 
-@SuppressWarnings({"unused", "OverlyCoupledClass"})
+@SuppressWarnings({"unused", "OverlyCoupledClass", "RefusedBequest"})
 public class DBNaryBuilder extends OntolexLexicalResourceBuilder {
 
     public DBNaryBuilder() {
@@ -21,7 +22,7 @@ public class DBNaryBuilder extends OntolexLexicalResourceBuilder {
         /**
          * Registering specific DBNary URI Parsers
          */
-        //registerURIParser(LexicalEntry.class, new DBNaryLexicalEntryURIParser());
+        registerURIParser(LexicalEntry.class, new DBNaryLexicalEntryURIParser());
         registerURIParser(LexicalSense.class, new DBNaryLexicalSenseURIParser());
         registerURIParser(Vocable.class, new DBNaryVocableURIParser());
 

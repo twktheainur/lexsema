@@ -55,7 +55,7 @@ public class LexicalEntryImpl extends AbstractLexicalResourceEntity implements L
     @Override
     public String toString() {
         String localPOS = partOfSpeech.split("#")[1];
-        return String.format("%s LexicalEntry|%s#%s|", language, lemma, localPOS);
+        return String.format("%s LexicalEntry|%s#%s#%s|", language, lemma, localPOS, number);
     }
 
     @Override
