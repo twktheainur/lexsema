@@ -13,22 +13,20 @@ import it.uniroma1.lcl.babelnet.BabelSynset;
 
 public class WSDForSMTWebService  extends WebServiceServlet
 {
-	private static final BabelNet babelnet = loadBabelnet();
+	private static BabelNet babelnet = null;
 	
-	private static BabelNet loadBabelnet()
-	{
-        BabelNetConfiguration.getInstance().setConfigurationFile(new File("/home/viall/current/data/babelnet/2.5.1/babelnet.properties"));
-        BabelNet babelnet = BabelNet.getInstance();
-        return babelnet;
-	}
-
 	protected void handle(HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		setHeaders(request, response);
+		
+		if (babelnet == null) babelnet = loadBabelnet();
 
 		String firstArg = request.getParameter("first");
+		System.out.println("First arg : " + firstArg);
+		
 		String secondArg = request.getParameter("second");
-	
+		System.out.println("Second arg : " + secondArg);
+		
 		String[] firsts = firstArg.split(", ");
 		List<BabelSynset> synsets = new ArrayList<>();
 		for (String wordnetID : firsts)
@@ -65,6 +63,13 @@ public class WSDForSMTWebService  extends WebServiceServlet
 		response.setHeader("Access-Control-Allow-Headers", "*");
 		response.setContentType("text/plain");
 		response.setCharacterEncoding("UTF-8");
+	}
+
+	private static BabelNet loadBabelnet()
+	{
+        BabelNetConfiguration.getInstance().setConfigurationFile(new File("/home/viall/current/data/babelnet/2.5.1/babelnet.properties"));
+        BabelNet babelnet = BabelNet.getInstance();
+        return babelnet;
 	}
 
 }

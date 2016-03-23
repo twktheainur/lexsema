@@ -11,7 +11,7 @@ import org.apache.commons.io.IOUtils;
 
 public class WSDForSMT2
 {
-    private static final String serviceURL = "http://localhost:8080/org.getalp.lexsema-ws/wsdforsmtservice";
+    private static final String serviceURL = "http://localhost:8081/org.getalp.lexsema-ws/wsdforsmtservice";
 
     private static String send(String first, String second) {
         try {
