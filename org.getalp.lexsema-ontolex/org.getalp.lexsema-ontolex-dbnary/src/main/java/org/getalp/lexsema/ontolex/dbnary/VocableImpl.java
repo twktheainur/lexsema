@@ -22,6 +22,14 @@ public class VocableImpl extends AbstractLexicalResourceEntity implements Vocabl
     }
 
     @Override
+    public String toString() {
+        return "VocableImpl{" +
+                "vocable='" + vocable + '\'' +
+                ", language=" + language +
+                '}';
+    }
+
+    @Override
     public String getVocable() {
         return vocable;
     }

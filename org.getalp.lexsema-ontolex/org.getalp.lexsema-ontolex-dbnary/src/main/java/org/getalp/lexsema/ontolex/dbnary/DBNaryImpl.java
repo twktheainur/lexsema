@@ -153,10 +153,6 @@ public final class DBNaryImpl extends OntolexLexicalResource implements DBNary {
         return getLexicalEntries(entry, pos);
     }
 
-    public <T> QueryProcessor<T> getStuff() {
-        return null;
-    }
-
     @Override
     public Language getLanguage() {
         return language;
