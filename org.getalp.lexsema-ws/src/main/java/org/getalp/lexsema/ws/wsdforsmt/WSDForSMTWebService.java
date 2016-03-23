@@ -18,8 +18,7 @@ public class WSDForSMTWebService  extends WebServiceServlet
 	protected void handle(HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		setHeaders(request, response);
-		
-		if (babelnet == null) babelnet = loadBabelnet();
+		loadBabelnet();
 
 		String firstArg = request.getParameter("first");
 		System.out.println("First arg : " + firstArg);
@@ -65,11 +64,11 @@ public class WSDForSMTWebService  extends WebServiceServlet
 		response.setCharacterEncoding("UTF-8");
 	}
 
-	private static BabelNet loadBabelnet()
+	private static synchronized void loadBabelnet()
 	{
+		if (babelnet != null) return;
         BabelNetConfiguration.getInstance().setConfigurationFile(new File("/home/viall/current/data/babelnet/2.5.1/babelnet.properties"));
-        BabelNet babelnet = BabelNet.getInstance();
-        return babelnet;
+        babelnet = BabelNet.getInstance();
 	}
 
 }
