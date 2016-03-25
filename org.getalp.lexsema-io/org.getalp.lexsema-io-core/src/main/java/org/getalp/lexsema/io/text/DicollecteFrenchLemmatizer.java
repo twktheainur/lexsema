@@ -2,6 +2,7 @@ package org.getalp.lexsema.io.text;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -33,6 +34,7 @@ public class DicollecteFrenchLemmatizer
             boolean inHeader = true;
             for(String line; (line = br.readLine()) != null; ) 
             {
+                System.out.println(line);
                 if (inHeader)
                 {
                     if (line.substring(0, 2).equals("id"))
@@ -47,6 +49,7 @@ public class DicollecteFrenchLemmatizer
                 else
                 {
                     String[] tokens = line.split("\\s+");
+                    System.out.println(Arrays.toString(tokens));
                     String flexion = tokens[1];
                     String lemme = tokens[2];
                     this.toLemmaMap.put(flexion, lemme);
