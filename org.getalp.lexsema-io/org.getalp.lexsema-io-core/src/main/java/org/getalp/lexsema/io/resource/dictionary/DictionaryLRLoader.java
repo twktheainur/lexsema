@@ -91,6 +91,7 @@ public class DictionaryLRLoader implements LRLoader {
         String lemma = w.getLemma();
         String partOfSpeech = w.getPartOfSpeech();
         partOfSpeech = processPOS(partOfSpeech);
+        if (partOfSpeech == "x") return new ArrayList<>();
         String tag = MessageFormat.format("{0}%{1}", lemma, partOfSpeech);
         if (wordSenses.get(tag) == null) {
             tag = MessageFormat.format("{0}%{1}", lemma.toLowerCase(), partOfSpeech);
@@ -273,6 +274,8 @@ public class DictionaryLRLoader implements LRLoader {
             newPos = lpos.charAt(0);
         } else if (pos.startsWith("j") || pos.startsWith("a")) {
             newPos = 'a';
+        } else {
+        	newPos = 'x'; //< x means "wrong", "bad", "something else", "not a wordnet postag" 
         }
         return String.valueOf(newPos);
     }
