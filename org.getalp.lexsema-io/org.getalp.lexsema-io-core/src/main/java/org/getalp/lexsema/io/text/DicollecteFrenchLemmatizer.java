@@ -39,11 +39,11 @@ public class DicollecteFrenchLemmatizer
                 {
                     if (line.substring(0, 2).equals("id"))
                     {
-                        inHeader = true;
+                        inHeader = false;
                     }
                     else
                     {
-                        inHeader = false;
+                        inHeader = true;
                     }
                 }
                 else
