@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import org.getalp.lexsema.io.text.DicollecteFrenchLemmatizer;
 import org.getalp.lexsema.ws.core.WebServiceServlet;
 import it.uniroma1.lcl.babelnet.BabelNet;
 import it.uniroma1.lcl.babelnet.BabelNetConfiguration;
@@ -15,11 +17,14 @@ public class WSDForSMTWebService  extends WebServiceServlet
 {
 	private static BabelNet babelnet = null;
 	
+	private static DicollecteFrenchLemmatizer lemmatizer = null;
+	
 	protected void handle(HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		setHeaders(request, response);
 		loadBabelnet();
-
+		loadLemmatizer();
+		
 		String firstArg = request.getParameter("first");
 		System.out.println("First arg : " + firstArg);
 		
@@ -39,7 +44,8 @@ public class WSDForSMTWebService  extends WebServiceServlet
 		
         for (String word : seconds)
         {
-        	for (BabelSynset synset : babelnet.getSynsets(it.uniroma1.lcl.jlt.util.Language.FR, word))
+        	String lemma = lemmatizer.getLemma(word);
+        	for (BabelSynset synset : babelnet.getSynsets(it.uniroma1.lcl.jlt.util.Language.FR, lemma))
         	{
         		if (synsets.contains(synset))
         		{
@@ -69,6 +75,12 @@ public class WSDForSMTWebService  extends WebServiceServlet
 		if (babelnet != null) return;
         BabelNetConfiguration.getInstance().setConfigurationFile(new File("/home/viall/current/data/babelnet/2.5.1/babelnet.properties"));
         babelnet = BabelNet.getInstance();
+	}
+	
+	private static synchronized void loadLemmatizer()
+	{
+	    if (lemmatizer != null) return;
+	    lemmatizer = new DicollecteFrenchLemmatizer("../data/dicollecte/lexique-dicollecte-fr-v5.6.txt");
 	}
 
 }
