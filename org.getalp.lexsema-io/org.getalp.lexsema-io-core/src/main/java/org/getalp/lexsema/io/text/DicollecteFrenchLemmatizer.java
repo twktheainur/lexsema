@@ -37,7 +37,7 @@ public class DicollecteFrenchLemmatizer
                 System.out.println(line);
                 if (inHeader)
                 {
-                    if (line.substring(0, 2).equals("id"))
+                    if (line.length() > 2 && line.substring(0, 2).equals("id"))
                     {
                         inHeader = false;
                     }
