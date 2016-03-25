@@ -80,7 +80,7 @@ public class WSDForSMTWebService  extends WebServiceServlet
 	private static synchronized void loadLemmatizer()
 	{
 	    if (lemmatizer != null) return;
-	    lemmatizer = new DicollecteFrenchLemmatizer("../data/dicollecte/lexique-dicollecte-fr-v5.6.txt");
+	    lemmatizer = new DicollecteFrenchLemmatizer("home/viall/current/data/dicollecte/lexique-dicollecte-fr-v5.6.txt");
 	}
 
 }
