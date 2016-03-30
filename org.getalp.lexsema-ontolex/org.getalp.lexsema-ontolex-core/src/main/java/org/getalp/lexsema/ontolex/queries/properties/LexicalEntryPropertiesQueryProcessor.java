@@ -89,9 +89,24 @@ public final class LexicalEntryPropertiesQueryProcessor extends AbstractQueryPro
         return lexicalResource.getResourceGraphURI();
     }
 
-    @Data
-    public class LexicalEntryProperties {
-        String lemma = "";
-        String pos = "";
+    public static class LexicalEntryProperties {
+        private String lemma = "";
+        private String pos = "";
+
+        public String getLemma() {
+            return lemma;
+        }
+
+        public void setLemma(String lemma) {
+            this.lemma = lemma;
+        }
+
+        public String getPos() {
+            return pos;
+        }
+
+        public void setPos(String pos) {
+            this.pos = pos;
+        }
     }
 }

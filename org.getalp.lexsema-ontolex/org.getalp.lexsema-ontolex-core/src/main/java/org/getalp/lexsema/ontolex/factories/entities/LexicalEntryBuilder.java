@@ -24,7 +24,6 @@ public class LexicalEntryBuilder extends AbstractLexicalResourceEntityBuilder<Le
         retrieveURIParser(LexicalEntry.class);
         String entityURI = processURI(uri);
 
-
         Map<String, String> values = parseURI(entityURI);
         if (values != null) {
             lemma = values.get("canonicalFormWrittenRep");

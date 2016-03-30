@@ -78,12 +78,12 @@ public class BabelLemmaTranslateSemCorTrainingDataExtractor implements TrainingD
                                 if (babelSenses != null && !babelSenses.isEmpty()) {
                                     String langlema = babelSenses.get(0).getLemma();
                                     if (langlema != null) {
-                                        //logger.info(String.format("French lemma found for %s: %s",lemma, langlema));
+                                        logger.info(String.format("French lemma found for %s: %s",lemma, langlema));
                                         lemma = langlema;
                                         w.setLemma(lemma);
                                         translated++;
                                     } else {
-                                        //logger.info(String.format("No French lemma found for %s",lemma));
+                                        logger.info(String.format("No French lemma found for %s",lemma));
                                         notFound++;
                                     }
                                 }
@@ -114,6 +114,11 @@ public class BabelLemmaTranslateSemCorTrainingDataExtractor implements TrainingD
     @Override
     public List<List<String>> getWordFeaturesInstances(String lemma) {
         return instanceVectors.get(lemma);
+    }
+
+    @Override
+    public List<List<String>> getSensesFeaturesInstances(List<String> senseTags) {
+        return null;
     }
 
     @Override

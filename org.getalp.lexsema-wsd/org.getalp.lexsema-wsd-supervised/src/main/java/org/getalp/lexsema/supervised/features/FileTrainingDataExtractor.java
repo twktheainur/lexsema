@@ -55,4 +55,9 @@ public class FileTrainingDataExtractor implements TrainingDataExtractor {
         }
         return instanceVectors.get(lemma);
     }
+
+    @Override
+    public List<List<String>> getSensesFeaturesInstances(List<String> senseTags) {
+        return Collections.emptyList();
+    }
 }

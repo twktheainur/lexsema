@@ -13,10 +13,6 @@ import java.util.Map;
 
 public class DBNaryLexicalEntryBuilder extends AbstractLexicalResourceEntityBuilder<LexicalEntry> {
 
-    public DBNaryLexicalEntryBuilder() {
-        super();
-    }
-
     @Override
     public LexicalEntry buildEntity(final String uri, final LexicalResourceEntity parent, final Map<String, String> parameters) {
 
@@ -26,14 +22,6 @@ public class DBNaryLexicalEntryBuilder extends AbstractLexicalResourceEntityBuil
         String lexicalEntryNumber = null;
         retrieveURIParser(LexicalEntry.class);
         String entityURI = processURI(uri);
-
-
-        Map<String, String> values = parseURI(entityURI);
-        if (values != null) {
-            lemma = values.get("canonicalFormWrittenRep");
-            pos = values.get("partOfSpeech");
-            lexicalEntryNumber = values.get("number");
-        }
 
         if (parameters != null) {
             if (lemma == null) {
@@ -64,6 +52,19 @@ public class DBNaryLexicalEntryBuilder extends AbstractLexicalResourceEntityBuil
                 pos = properties.getPos();
             }
         }
+        Map<String, String> values = parseURI(entityURI);
+        if (values != null) {
+            if(lemma==null) {
+                lemma = values.get("canonicalFormWrittenRep");
+            }
+            if(pos==null) {
+                pos = values.get("partOfSpeech");
+            }
+            if(lexicalEntryNumber==null) {
+                lexicalEntryNumber = values.get("lexicalEntryNumber");
+            }
+        }
+
         LexicalEntry instance = new LexicalEntryImpl(getLexicalResource(), uri, parent, lemma, pos);
         if (lexicalEntryNumber != null) {
             instance.setNumber(Integer.valueOf(lexicalEntryNumber));
