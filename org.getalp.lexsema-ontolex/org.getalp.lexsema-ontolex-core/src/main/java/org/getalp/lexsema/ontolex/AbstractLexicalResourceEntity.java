@@ -69,7 +69,6 @@ public abstract class AbstractLexicalResourceEntity implements LexicalResourceEn
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof AbstractLexicalResourceEntity)) return false;
-
         AbstractLexicalResourceEntity that = (AbstractLexicalResourceEntity) o;
 
         if (getLexicalResource() != null ? !getLexicalResource().equals(that.getLexicalResource()) : that.getLexicalResource() != null)
