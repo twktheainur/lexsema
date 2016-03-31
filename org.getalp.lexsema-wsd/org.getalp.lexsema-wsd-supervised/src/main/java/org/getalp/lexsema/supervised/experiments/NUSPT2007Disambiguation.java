@@ -401,10 +401,7 @@ public final class NUSPT2007Disambiguation {
 
         SingleWordSurroundingContextFeatureExtractor.buildIndex(taggedCorpora);
         LocalTextFeatureExtractor acfe = new SingleWordSurroundingContextFeatureExtractor(3, 3);
-
-
-
-
+        altfe.addExtractor(acfe);
 
         TrainingDataExtractor trainingDataExtractor = new SemCorTrainingDataExtractor(altfe);
         trainingDataExtractor.extract(taggedCorpora);
