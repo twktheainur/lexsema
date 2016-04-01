@@ -20,6 +20,7 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,7 +30,7 @@ public class SimpleNUSPTDisambiguation {
     public static void main(String[] args) throws IOException {
         CorpusLoader dl = new Semeval2007CorpusLoader(new FileInputStream(args[0])).loadNonInstances(false);
         CorpusLoader semCor = new SemCorCorpusLoader(args[1]);
-        LRLoader lrloader = new WordnetLoader(new Dictionary(new File("../data/wordnet/2.1/dict"))).extendedSignature(true).shuffle(false);
+        LRLoader lrloader = new WordnetLoader(new Dictionary(new URL("../data/wordnet/2.1/dict"))).extendedSignature(true).shuffle(false);
 
 //        LemmaFeatureExtractor lfe = new LemmaFeatureExtractor(3,1);
 //        PosFeatureExtractor pfe = new PosFeatureExtractor(1, 2);

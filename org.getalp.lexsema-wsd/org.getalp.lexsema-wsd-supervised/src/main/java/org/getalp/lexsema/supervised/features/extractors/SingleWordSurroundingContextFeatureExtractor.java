@@ -29,7 +29,7 @@ public class SingleWordSurroundingContextFeatureExtractor implements LocalTextFe
 
         logger.debug("Entrée de buildIndex : " + cl);
 
-        index = new HashMap<String, Integer>(1000, 1000);
+        index = new HashMap<String, Integer>(1000000, 1000000);
         int value = 0;
         String lemma;
 
