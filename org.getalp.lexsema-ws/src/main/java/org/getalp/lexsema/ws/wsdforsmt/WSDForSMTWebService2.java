@@ -13,7 +13,7 @@ import it.uniroma1.lcl.babelnet.BabelNet;
 import it.uniroma1.lcl.babelnet.BabelNetConfiguration;
 import it.uniroma1.lcl.babelnet.BabelSynset;
 
-public class WSDForSMTWebService  extends WebServiceServlet
+public class WSDForSMTWebService2  extends WebServiceServlet
 {
 	private static BabelNet babelnet = null;
 	
