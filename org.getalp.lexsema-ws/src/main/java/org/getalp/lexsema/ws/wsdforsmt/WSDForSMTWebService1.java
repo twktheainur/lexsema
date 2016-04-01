@@ -122,7 +122,7 @@ public class WSDForSMTWebService1  extends WebServiceServlet
     private static synchronized void loadDisambiguator()
     {
         if (disambiguator != null) return;
-        ConfigurationScorer scorer = new ConfigurationScorerWithCache(new IndexedLeskSimilarity());
+        ConfigurationScorer scorer = new ConfigurationScorerWithCache(new IndexedLeskSimilarity(), true);
         int iterations = 100000;
         double minLevyLocation = 1;
         double maxLevyLocation = 5;
