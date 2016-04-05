@@ -62,7 +62,7 @@ public class WSDForSMTWebService1  extends WebServiceServlet
         //System.out.println("Loading senses...");
         dictionary.loadSenses(txt);
 
-        System.out.println("Disambiguating...");
+        //System.out.println("Disambiguating...");
         Configuration c = disambiguator.disambiguate(txt);
         disambiguator.release();
 
@@ -132,7 +132,7 @@ public class WSDForSMTWebService1  extends WebServiceServlet
         double maxLevyLocation = 5;
         double minLevyScale = 0.5;
         double maxLevyScale = 1.5;
-        disambiguator = new MultiThreadCuckooSearch(iterations, minLevyLocation, maxLevyLocation, minLevyScale, maxLevyScale, scorer, true);    
+        disambiguator = new MultiThreadCuckooSearch(iterations, minLevyLocation, maxLevyLocation, minLevyScale, maxLevyScale, scorer, false);    
     }
 
     private static Document rawToText(String raw)
