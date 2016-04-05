@@ -70,7 +70,7 @@ public class WSDForSMTWebService1  extends WebServiceServlet
         for (int i = 0 ; i < c.size() ; i++) {
             if (c.getAssignment(i) == -1) {
                 outputArray[i] = "0";
-            }
+            } 
             else {
                 String senseID = txt.getSenses(i).get(c.getAssignment(i)).getId();
                 Iterator<ISenseEntry> senseIterator = wordnet.getSenseEntryIterator();
@@ -78,6 +78,7 @@ public class WSDForSMTWebService1  extends WebServiceServlet
                     ISenseEntry sense = senseIterator.next();
                     if (sense.getSenseKey().toString().equals(senseID)) {
                         outputArray[i] = String.format("%08d", sense.getOffset()) + sense.getPOS().getTag();
+                        if (outputArray[i] == null) outputArray[i] = "0";
                     }
                 }
             }
