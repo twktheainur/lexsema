@@ -52,11 +52,12 @@ public class WSDForSMTWebService1  extends WebServiceServlet
         
         String rawText = request.getParameter("input");
 
-        System.out.println("Got the following input of size " + rawText.length() + ":");
+        System.out.println("Got the following input of size " + rawText.length() + " characters:");
         System.out.println(rawText);
 
         System.out.println("Parsing input...");
         Document txt = rawToText(rawText);
+        System.out.println("Parsed " + txt.size() + " words");
 
         System.out.println("Loading senses...");
         dictionary.loadSenses(txt);
