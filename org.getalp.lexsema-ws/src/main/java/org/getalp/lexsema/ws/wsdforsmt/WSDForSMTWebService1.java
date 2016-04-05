@@ -106,6 +106,7 @@ public class WSDForSMTWebService1  extends WebServiceServlet
         if (stanford != null) return;
         Properties props = new Properties();
         props.put("annotators", "tokenize, ssplit, pos, lemma");
+        props.put("untokenizable", "allKeep");
         stanford = new StanfordCoreNLP(props);
     }
 
