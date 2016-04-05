@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-public class Word2VecSignatureEnrichment3 implements SignatureEnrichment {
+public class Word2VecSignatureEnrichment3 extends SignatureEnrichment {
 
     private final int topN;
     
@@ -43,14 +43,4 @@ public class Word2VecSignatureEnrichment3 implements SignatureEnrichment {
         }
         return newSignature;
     }
-    @Override
-    public SemanticSignature enrichSemanticSignature(SemanticSignature semanticSignature, Language language) {
-        return null;
-    }
-
-    @Override
-    public void close() {
-
-    }
-
 }

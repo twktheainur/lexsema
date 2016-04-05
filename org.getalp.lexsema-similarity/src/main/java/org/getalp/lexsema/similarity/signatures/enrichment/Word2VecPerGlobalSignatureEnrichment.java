@@ -9,7 +9,7 @@ import org.getalp.lexsema.util.Language;
 import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.ops.transforms.Transforms;
 
-public class Word2VecPerGlobalSignatureEnrichment implements SignatureEnrichment {
+public class Word2VecPerGlobalSignatureEnrichment extends SignatureEnrichment {
 
     public static final int DEFAULT_TOP_N = 10;
 
@@ -50,13 +50,4 @@ public class Word2VecPerGlobalSignatureEnrichment implements SignatureEnrichment
         return newSignature;
     }
 
-    @Override
-    public SemanticSignature enrichSemanticSignature(SemanticSignature semanticSignature, Language language) {
-        return null;
-    }
-
-    @Override
-    public void close() {
-
-    }
 }

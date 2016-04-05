@@ -135,14 +135,15 @@ public class WordnetLoader implements LRLoader {
 
                     for (AnnotatedTextThesaurus thesaurus : thesauri) {
                         String senseKeyString = senseKey.toString();
-                        List<String> relatedWords = thesaurus.getRelatedWords(senseKeyString);
-                        for (String relatedWord : relatedWords) {
-                            addToSignature(signature, relatedWord);
-                        }
+                        addToSignature(signature, thesaurus.getRelatedWords(senseKeyString));
+                        // Special case : from old to new versions of wordnet,
+                        // the sense key for adjectives could have changed from "%5" to "%3"
+                        if (senseKeyString.contains("%5")) addToSignature(signature, thesaurus.getRelatedWords(senseKeyString.replace("%5", "%3")));
+                        if (senseKeyString.contains("%3")) addToSignature(signature, thesaurus.getRelatedWords(senseKeyString.replace("%3", "%5")));
                     }
                     
                     for (SignatureEnrichment signatureEnrichment : signatureEnrichments) {
-                        signature = signatureEnrichment.enrichSemanticSignature(signature);
+                        signature = signatureEnrichment.enrichSemanticSignature(signature, senseKey.toString());
                     }
           
                     sense.setSemanticSignature(signature);
@@ -253,6 +254,12 @@ public class WordnetLoader implements LRLoader {
 
     private void commitSensesToCache(Word w, List<Sense> senses, SenseCache senseCache) {
         senseCache.addToCache(w, senses);
+    }
+
+    private void addToSignature(SemanticSignature signature, List<String> defs) {
+        for (CharSequence def : defs) {
+            addToSignature(signature, def);
+        }
     }
 
     private void addToSignature(SemanticSignature signature, CharSequence def) {

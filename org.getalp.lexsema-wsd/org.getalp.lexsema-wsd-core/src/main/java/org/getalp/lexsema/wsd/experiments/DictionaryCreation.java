@@ -19,6 +19,7 @@ import org.getalp.lexsema.io.document.loader.CorpusLoader;
 import org.getalp.lexsema.io.document.loader.SemCorCorpusLoader;
 import org.getalp.lexsema.io.document.loader.Semeval2007CorpusLoader;
 import org.getalp.lexsema.io.document.loader.WordnetGlossTagCorpusLoader;
+import org.getalp.lexsema.io.resource.LRLoader;
 import org.getalp.lexsema.io.resource.wordnet.WordnetLoader;
 import org.getalp.lexsema.similarity.Sense;
 import org.getalp.lexsema.similarity.Text;
@@ -85,13 +86,13 @@ public class DictionaryCreation
         System.out.println(Arrays.toString(Word2VecClient.getMostSimilarWords(f, 10, res).toArray()));
         */
         
-        writeDictionary(false, false, true, true, false, true, false, false, false, true, 50, false, 0, true, false, "../data/lesk_dict/semeval2007task7/gmb_alone_tmp");
+        //writeDictionary(true, true, true, true, true, false, false, false, true, false, 250, false, 0, true, false, "../data/lesk_dict/semeval2007task7/youhou");
         
         //writeDictionary(true, true, true, true, true, false, false, false, false, false, 0, false, 0, true, false, "../data/lesk_dict/semeval2007task7/w2v0");
         //writeDictionary(true, true, true, true, true, true, false, false, false, false, 0, true, 1, true, false, "../data/lesk_dict/semeval2007task7/w2v1");
         //writeDictionary(true, true, true, true, true, true, false, false, false, false, 0, true, 2, true, false, "../data/lesk_dict/semeval2007task7/w2v2");
         //writeDictionary(true, true, true, true, true, true, false, false, false, false, 0, true, 3, true, false, "../data/lesk_dict/semeval2007task7/w2v3");
-/*
+
         for (int i = 1 ; i <= 15 ; i++) {
             for (int j = 50 ; j <= 300 ; j += 50) {
                 boolean sc = (i & 1) == 1;
@@ -101,7 +102,17 @@ public class DictionaryCreation
                 writeDictionary(false, false, true, true, true, true, sc, dso, wngt, gmb, j, false, 0, true, false, "../data/lesk_dict/semeval2007task7/" + i + "/" + j + "_alone");
             }
         }
-*/
+
+        for (int i = 1 ; i <= 15 ; i++) {
+            for (int j = 50 ; j <= 300 ; j += 50) {
+                boolean sc = (i & 1) == 1;
+                boolean dso = (i & 2) == 2;
+                boolean wngt = (i & 4) == 4;
+                boolean gmb = (i & 8) == 8;
+                writeDictionary(true, true, true, true, true, true, sc, dso, wngt, gmb, j, false, 0, true, false, "../data/lesk_dict/semeval2007task7/" + i + "/" + j + "");
+            }
+        }
+
     }
 
     public static void writeDictionary(boolean definitions, boolean extendedDefinitions, 
@@ -128,6 +139,8 @@ public class DictionaryCreation
         lrloader.loadRelated(extendedDefinitions);
         lrloader.shuffle(shuffle);
 
+        //lrloader.addSignatureEnrichment(new WordnetGlossTagEnrichment(wordnetGlossTagPath));
+                
         if (useSemCorThesaurus)
         {
             if (!semCorIsLoaded) 
@@ -201,7 +214,7 @@ public class DictionaryCreation
         {
             lrloader.addSignatureEnrichment(new IndexingSignatureEnrichment());
         }
-                
+        
         if (useSenseClusters)
         {
             if (!senseClustersIsLoaded)

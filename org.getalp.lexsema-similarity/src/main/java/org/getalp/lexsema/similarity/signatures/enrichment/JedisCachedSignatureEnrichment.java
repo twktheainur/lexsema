@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 
-public class JedisCachedSignatureEnrichment implements SignatureEnrichment {
+public class JedisCachedSignatureEnrichment extends SignatureEnrichment {
 
     private final Logger logger = LoggerFactory.getLogger(JedisCachedSignatureEnrichment.class);
 
@@ -66,8 +66,4 @@ public class JedisCachedSignatureEnrichment implements SignatureEnrichment {
         return signature;
     }
 
-    @Override
-    public SemanticSignature enrichSemanticSignature(SemanticSignature semanticSignature, Language language) {
-        return enrichSemanticSignature(semanticSignature);
-    }
 }

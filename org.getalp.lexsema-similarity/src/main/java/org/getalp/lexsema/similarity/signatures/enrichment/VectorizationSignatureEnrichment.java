@@ -12,25 +12,17 @@ import org.getalp.lexsema.util.word2vec.Word2VecClient;
 
 import cern.colt.Arrays;
 
-public class VectorizationSignatureEnrichment implements SignatureEnrichment {
+public class VectorizationSignatureEnrichment extends SignatureEnrichment {
 
     @Override
     public SemanticSignature enrichSemanticSignature(SemanticSignature signature) {
         SemanticSignature newSignature = new SemanticSignatureImpl();
         for (SemanticSymbol symbol : signature) {
-            newSignature.addSymbol(Arrays.toString(Word2VecClient.getWordVector(symbol.getSymbol())).replace(" ", ""));
+            double[] vector = Word2VecClient.getWordVector(symbol.getSymbol());
+            if (vector.length != 0) newSignature.addSymbol(Arrays.toString(vector).replace(" ", ""));
+            else System.err.println("Warning : cannot vectorize " + symbol.getSymbol());
         }
         return newSignature;
     }
 
-    @Override
-    public SemanticSignature enrichSemanticSignature(SemanticSignature signature, Language language) {
-        return enrichSemanticSignature(signature);
-    }
-
-    @Override
-    public void close() {
-
-    }
-    
 }
