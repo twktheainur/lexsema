@@ -26,10 +26,10 @@ public class WSDForSMTWebService2  extends WebServiceServlet
 		loadLemmatizer();
 		
 		String firstArg = request.getParameter("first");
-		//System.out.println("First arg : " + firstArg);
+		System.out.println("First arg : " + firstArg);
 		
 		String secondArg = request.getParameter("second");
-		//System.out.println("Second arg : " + secondArg);
+		System.out.println("Second arg : " + secondArg);
 		
 		String[] firsts = firstArg.split(", ");
 		List<BabelSynset> synsets = new ArrayList<>();

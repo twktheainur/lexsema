@@ -52,17 +52,17 @@ public class WSDForSMTWebService1  extends WebServiceServlet
         
         String rawText = request.getParameter("input");
 
-        //System.out.println("Got the following input of size " + rawText.length() + " characters:");
-        //System.out.println(rawText);
+        System.out.println("Got the following input of size " + rawText.length() + " characters:");
+        System.out.println(rawText);
 
-        //System.out.println("Parsing input...");
+        System.out.println("Parsing input...");
         Document txt = rawToText(rawText);
-        //System.out.println("Parsed " + txt.size() + " words");
+        System.out.println("Parsed " + txt.size() + " words");
 
-        //System.out.println("Loading senses...");
+        System.out.println("Loading senses...");
         dictionary.loadSenses(txt);
 
-        //System.out.println("Disambiguating...");
+        System.out.println("Disambiguating...");
         Configuration c = disambiguator.disambiguate(txt);
         disambiguator.release();
 
@@ -82,10 +82,10 @@ public class WSDForSMTWebService1  extends WebServiceServlet
                     }
                 }
             }
-            //System.out.println("Word " + i + " : \"" + txt.getWord(i).getSurfaceForm() + "\" [" + outputArray[i] + "]");
+            System.out.println("Word " + i + " : \"" + txt.getWord(i).getSurfaceForm() + "\" [" + outputArray[i] + "]");
         }
         String output = Arrays.toString(outputArray);
-        //System.out.println("Writing output of size " + output.length() + "...");
+        System.out.println("Writing output of size " + output.length() + "...");
         response.getWriter().print(output);
         response.getWriter().close();
     }
