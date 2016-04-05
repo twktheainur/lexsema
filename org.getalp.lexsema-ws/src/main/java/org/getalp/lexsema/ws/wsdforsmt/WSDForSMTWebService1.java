@@ -82,7 +82,7 @@ public class WSDForSMTWebService1  extends WebServiceServlet
                     }
                 }
             }
-            System.out.println("\"" + txt.getWord(i).getSurfaceForm() + "\" [" + outputArray[i] + "]");
+            System.out.println("Word " + i + " : \"" + txt.getWord(i).getSurfaceForm() + "\" [" + outputArray[i] + "]");
         }
         String output = Arrays.toString(outputArray);
         System.out.println("Writing output of size " + output.length() + "...");
