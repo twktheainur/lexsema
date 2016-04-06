@@ -44,13 +44,19 @@ public class WSDForSMTWebService2  extends WebServiceServlet
 		
         for (String word : seconds)
         {
-        	String lemma = lemmatizer.getLemma(word);
-        	for (BabelSynset synset : babelnet.getSynsets(it.uniroma1.lcl.jlt.util.Language.FR, lemma))
+        	List<String> lemmas = lemmatizer.getLemmas(word);
+        	for (String lemma : lemmas)
         	{
-        		if (synsets.contains(synset))
-        		{
-        			score++;
-        		}
+        	    for (edu.mit.jwi.item.POS pos : edu.mit.jwi.item.POS.values())
+        	    {
+                	for (BabelSynset synset : babelnet.getSynsets(it.uniroma1.lcl.jlt.util.Language.FR, lemma, pos))
+                	{
+                		if (synsets.contains(synset))
+                		{
+                			score++;
+                		}
+                	}
+        	    }
         	}
         }
         

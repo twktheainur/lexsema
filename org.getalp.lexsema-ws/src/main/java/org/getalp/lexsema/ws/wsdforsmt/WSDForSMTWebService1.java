@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.getalp.lexsema.io.resource.dictionary.DictionaryLRLoader;
 import org.getalp.lexsema.similarity.Document;
 import org.getalp.lexsema.similarity.DocumentImpl;
+import org.getalp.lexsema.similarity.Sense;
 import org.getalp.lexsema.similarity.Word;
 import org.getalp.lexsema.similarity.WordImpl;
 import org.getalp.lexsema.similarity.measures.lesk.IndexedLeskSimilarity;
@@ -67,19 +68,32 @@ public class WSDForSMTWebService1  extends WebServiceServlet
         disambiguator.release();
 
         String[] outputArray = new String[c.size()];
-        for (int i = 0 ; i < c.size() ; i++) {
-            if (c.getAssignment(i) == -1) {
+        for (int i = 0 ; i < c.size() ; i++) 
+        {
+            int assignment = c.getAssignment(i);
+            List<Sense> senses =txt.getSenses(i);
+            if (assignment < 0 || assignment >= senses.size()) 
+            {
                 outputArray[i] = "0";
             } 
-            else {
-                String senseID = txt.getSenses(i).get(c.getAssignment(i)).getId();
-                Iterator<ISenseEntry> senseIterator = wordnet.getSenseEntryIterator();
-                while (senseIterator.hasNext()) {
-                    ISenseEntry sense = senseIterator.next();
-                    if (sense.getSenseKey().toString().equals(senseID)) {
-                        outputArray[i] = String.format("%08d", sense.getOffset()) + sense.getPOS().getTag();
-                        if (outputArray[i] == null) outputArray[i] = "0";
-                    }
+            else 
+            {
+                String senseID = senses.get(assignment).getId();
+                String offset = getWordnetOffset(senseID);
+                if (offset.equals("0") && senseID.contains("%5"))
+                {
+                    senseID = senseID.replace("%5", "%3");
+                    offset = getWordnetOffset(senseID);
+                }
+                if (offset.equals("0") && senseID.contains("%3"))
+                {
+                    senseID = senseID.replace("%3", "%5");
+                    offset = getWordnetOffset(senseID);
+                }
+                outputArray[i] = offset;
+                if (offset.equals("0"))
+                {
+                    System.out.println("Warning : no sense found for " + senseID);
                 }
             }
             System.out.println("Word " + i + " : \"" + txt.getWord(i).getSurfaceForm() + "\" [" + outputArray[i] + "]");
@@ -90,6 +104,20 @@ public class WSDForSMTWebService1  extends WebServiceServlet
         response.getWriter().close();
     }
 
+    private String getWordnetOffset(String senseID)
+    {
+        Iterator<ISenseEntry> senseIterator = wordnet.getSenseEntryIterator();
+        while (senseIterator.hasNext())
+        {
+            ISenseEntry sense = senseIterator.next();
+            if (sense.getSenseKey().toString().equals(senseID)) 
+            {
+                return String.format("%08d", sense.getOffset()) + sense.getPOS().getTag();
+            }
+        }
+        return "0";
+    }
+    
     private void setHeaders(HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException
     {        
         request.setCharacterEncoding("UTF-8");
