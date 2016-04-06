@@ -96,7 +96,7 @@ public class WSDForSMTWebService1  extends WebServiceServlet
                     System.out.println("Warning : no sense found for " + senseID);
                 }
             }
-            System.out.println("Word " + i + " : \"" + txt.getWord(i).getSurfaceForm() + "\" [" + outputArray[i] + "]");
+            System.out.println("Word " + i + " : \"" + txt.getWord(i).getSurfaceForm() + "\" {" + txt.getWord(i).getLemma() + "%" + txt.getWord(i).getPartOfSpeech() + "} [" + outputArray[i] + "]");
         }
         String output = Arrays.toString(outputArray);
         System.out.println("Writing output of size " + output.length() + "...");
