@@ -35,7 +35,7 @@ public final class NUSPT2007Disambiguation {
         boolean useGMB = false;
         boolean backoff = false;
 
-        boolean toDisambiguate[] = {true, false, false, false, false};
+        boolean toDisambiguate[] = {true, true, true, true, true};
 
         classicDisamb(args, toDisambiguate, useSemCor, useDso, useWNG, useGMB, backoff);
 
@@ -390,11 +390,11 @@ public final class NUSPT2007Disambiguation {
         System.err.println("Feature extraction");
 
         AggregateLocalTextFeatureExtractor altfe = new AggregateLocalTextFeatureExtractor();
-        LocalCollocationFeatureExtractor lcfe = new LocalCollocationFeatureExtractor(contextWindows, false);
-        altfe.addExtractor(lcfe);
+        //LocalCollocationFeatureExtractor lcfe = new LocalCollocationFeatureExtractor(contextWindows, false);
+        //altfe.addExtractor(lcfe);
 
-        PosFeatureExtractor pfe = new PosFeatureExtractor(3, 3);
-        altfe.addExtractor(pfe);
+        //PosFeatureExtractor pfe = new PosFeatureExtractor(3, 3);
+        //altfe.addExtractor(pfe);
 
         //LocalTextFeatureExtractor acfe = new LemmaFeatureExtractor(3, 3);
         //altfe.addExtractor(acfe);
