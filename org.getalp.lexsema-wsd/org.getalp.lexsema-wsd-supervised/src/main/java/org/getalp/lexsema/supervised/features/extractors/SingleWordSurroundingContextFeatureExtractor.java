@@ -1,5 +1,7 @@
 package org.getalp.lexsema.supervised.features.extractors;
 
+import cern.colt.matrix.tdouble.DoubleMatrix1D;
+import cern.colt.matrix.tdouble.impl.SparseDoubleMatrix1D;
 import org.getalp.lexsema.io.document.loader.CorpusLoader;
 import org.getalp.lexsema.similarity.Document;
 import org.getalp.lexsema.similarity.Text;
@@ -19,6 +21,11 @@ public class SingleWordSurroundingContextFeatureExtractor implements LocalTextFe
     private static HashMap<String, Integer> index;
     private static Logger logger = LoggerFactory.getLogger(SingleWordSurroundingContextFeatureExtractor.class);
     private static int nbDone = 0;
+
+    public static int getIndexSize(){
+
+        return index.size();
+    }
 
     public SingleWordSurroundingContextFeatureExtractor(int lemmaMin, int lemmaMax) {
         lemmamin = lemmaMin;
@@ -101,15 +108,38 @@ public class SingleWordSurroundingContextFeatureExtractor implements LocalTextFe
             }
         }
 
+        //vecteurs sous la forme debVector, <taille du vocabulaire>, <les indexes à 1>, endVector
+        features.add("debVector");
+        features.add(index.size()+"");
+
         for (int i = 0; i < feats.length; i++) {
 
-            features.add("\"" + feats[i] + "\"");
+            if(feats[i] != 0)
+                features.add(i+"");
         }
 
+        features.add("endVector");
+
         logger.debug(features.toString());
-        if (++nbDone % 1000 == 0)
+        if (++nbDone % 1000 == 0) {
             logger.info("" + nbDone);
-        //System.exit(0);
+
+        }
+     /*   System.out.println("FEATURES");
+        System.out.println(features.toString());
+        System.out.println("----------");*/
         return features;
     }
+/*
+    public static   double[] convert(List<String> features){
+
+        double[] newTab = new double[tab.length];
+        int i = 0;
+        for (Object o :tab) {
+
+            String s = (String)o;
+            newTab[i++]= (Double.parseDouble(s.substring(1,s.length()-1)));
+        }
+        return newTab;
+    }*/
 }

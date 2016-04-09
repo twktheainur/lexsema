@@ -53,7 +53,17 @@ public class WekaLexicalEntryDisambiguator extends SupervisedSequentialLexicalEn
             if (!classifier.isClassifierTrained()) {
                 try {
                     List<List<String>> trainingInstances = trainingDataExtractor.getWordFeaturesInstances(lemma);
+
+
+
                     if (trainingInstances != null) {
+
+                        /***** ICI ? *******/
+                        for(List<String> l: trainingInstances){
+
+                            System.out.println("l = "+l);
+                        }
+                        /***** ICI ? *******/
 
                         logger.debug(MessageFormat.format("Number of examples :{0}", trainingInstances.size()));
                         if(trainingInstances.size() <= 5000) {

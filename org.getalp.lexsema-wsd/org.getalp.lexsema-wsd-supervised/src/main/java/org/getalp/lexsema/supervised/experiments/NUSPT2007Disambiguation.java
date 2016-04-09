@@ -9,15 +9,14 @@ import org.getalp.lexsema.io.resource.wordnet.WordnetLoader;
 import org.getalp.lexsema.similarity.Document;
 import org.getalp.lexsema.similarity.Text;
 import org.getalp.lexsema.supervised.WekaDisambiguator;
-import org.getalp.lexsema.supervised.weka.SVMSetUp;
-import org.getalp.lexsema.supervised.weka.NaiveBayesSetUp;
 import org.getalp.lexsema.supervised.features.*;
 import org.getalp.lexsema.supervised.features.extractors.*;
+import org.getalp.lexsema.supervised.weka.SVMSetUp;
+import org.getalp.lexsema.supervised.weka.NaiveBayesSetUp;
 import org.getalp.lexsema.wsd.configuration.Configuration;
 import org.getalp.lexsema.wsd.method.Disambiguator;
 import org.getalp.lexsema.wsd.method.FirstSenseDisambiguator;
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.URL;
@@ -337,6 +336,7 @@ public final class NUSPT2007Disambiguation {
 
         if (useSemCor) {
             semCor = new SemCorCorpusLoader("../data/semcor3.0/semcor_full.xml");
+            //semCor = new SemCorCorpusLoader("../data/semcor3.0/semcor_big-sample.xml");
             //semCor = new SemCorCorpusLoader("../data/semcor3.0/semcor_full_sample.xml");
             semCor.load();
             for (Text t : semCor) {
@@ -390,11 +390,11 @@ public final class NUSPT2007Disambiguation {
         System.err.println("Feature extraction");
 
         AggregateLocalTextFeatureExtractor altfe = new AggregateLocalTextFeatureExtractor();
-        //LocalCollocationFeatureExtractor lcfe = new LocalCollocationFeatureExtractor(contextWindows, false);
-        //altfe.addExtractor(lcfe);
+        LocalCollocationFeatureExtractor lcfe = new LocalCollocationFeatureExtractor(contextWindows, false);
+        altfe.addExtractor(lcfe);
 
-       // PosFeatureExtractor pfe = new PosFeatureExtractor(3, 3);
-        //altfe.addExtractor(pfe);
+        PosFeatureExtractor pfe = new PosFeatureExtractor(3, 3);
+        altfe.addExtractor(pfe);
 
         //LocalTextFeatureExtractor acfe = new LemmaFeatureExtractor(3, 3);
         //altfe.addExtractor(acfe);
@@ -408,12 +408,11 @@ public final class NUSPT2007Disambiguation {
 
         System.err.println("Feature extraction done");
 
-
         Disambiguator disambiguator = new WekaDisambiguator("../data/supervised", new SVMSetUp(), altfe, 4 , trainingDataExtractor);
         //Disambiguator disambiguator = new WekaDisambiguator("../data/supervised", new BFTreeSetUp(), altfe, 16);
         //Disambiguator disambiguator = new WekaDisambiguator("../data/supervised", new BayesianLogisticRegressionSetUp(), altfe, 16);
         //Disambiguator disambiguator = new WekaDisambiguator("../data/supervised", new RBFNetworkSetUp(), altfe, 16);
-        //Disambiguator disambiguator = new WekaDisambiguator("../data/supervised", new RandomForestSetUp(Integer.parseInt(args[0]), Integer.parseInt(args[1]), Integer.parseInt(args[2]), Integer.parseInt(args[3])), altfe, Integer.parseInt(args[4]), trainingDataExtractor); //100 0 1 0 4
+       // Disambiguator disambiguator = new WekaDisambiguator("../data/supervised", new RandomForestSetUp(Integer.parseInt(args[0]), Integer.parseInt(args[1]), Integer.parseInt(args[2]), Integer.parseInt(args[3])), altfe, Integer.parseInt(args[4]), trainingDataExtractor); //100 0 1 0 4
         //Disambiguator disambiguator = new WekaDisambiguator("../data/supervised", new NaiveBayesSetUp(Boolean.parseBoolean(args[0]), Boolean.parseBoolean(args[1])), altfe, Integer.parseInt(args[2]), trainingDataExtractor); //false false 4
 
         Disambiguator firstSenseDisambiguator = new FirstSenseDisambiguator();
