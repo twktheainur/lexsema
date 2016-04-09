@@ -21,8 +21,13 @@
     </servlet>
 
     <servlet>
-        <servlet-name>WSDForSMTWebService</servlet-name>
-        <servlet-class>org.getalp.lexsema.ws.wsdforsmt.WSDForSMTWebService</servlet-class>
+        <servlet-name>WSDForSMTWebService1</servlet-name>
+        <servlet-class>org.getalp.lexsema.ws.wsdforsmt.WSDForSMTWebService1</servlet-class>
+    </servlet>
+
+    <servlet>
+        <servlet-name>WSDForSMTWebService2</servlet-name>
+        <servlet-class>org.getalp.lexsema.ws.wsdforsmt.WSDForSMTWebService2</servlet-class>
     </servlet>
 
 	<servlet-mapping>
@@ -41,7 +46,12 @@
     </servlet-mapping>
 
     <servlet-mapping>
-        <servlet-name>WSDForSMTWebService</servlet-name>
-        <url-pattern>/wsdforsmtservice</url-pattern>
+        <servlet-name>WSDForSMTWebService1</servlet-name>
+        <url-pattern>/wsdforsmtservice1</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>WSDForSMTWebService2</servlet-name>
+        <url-pattern>/wsdforsmtservice2</url-pattern>
     </servlet-mapping>
 </web-app>

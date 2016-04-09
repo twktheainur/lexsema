@@ -6,7 +6,7 @@ import org.getalp.lexsema.similarity.signatures.symbols.SemanticSymbol;
 import org.getalp.lexsema.util.Language;
 import org.tartarus.snowball.ext.EnglishStemmer;
 
-public class StemmingSignatureEnrichment implements SignatureEnrichment {
+public class StemmingSignatureEnrichment extends SignatureEnrichment {
 
     @Override
     public SemanticSignature enrichSemanticSignature(SemanticSignature signature) {
@@ -20,14 +20,4 @@ public class StemmingSignatureEnrichment implements SignatureEnrichment {
         return newSignature;
     }
 
-    @Override
-    public SemanticSignature enrichSemanticSignature(SemanticSignature signature, Language language) {
-        return enrichSemanticSignature(signature);
-    }
-
-    @Override
-    public void close() {
-
-    }
-    
 }

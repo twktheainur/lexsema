@@ -6,11 +6,19 @@ import org.getalp.lexsema.util.Language;
 import java.io.Serializable;
 
 
-public interface SignatureEnrichment extends Serializable {
+public abstract class SignatureEnrichment implements Serializable {
 
-    SemanticSignature enrichSemanticSignature(SemanticSignature semanticSignature);
+    public abstract SemanticSignature enrichSemanticSignature(SemanticSignature semanticSignature);
 
-    SemanticSignature enrichSemanticSignature(SemanticSignature semanticSignature, Language language);
+    public SemanticSignature enrichSemanticSignature(SemanticSignature semanticSignature, Language language) {
+        return enrichSemanticSignature(semanticSignature);
+    }
 
-    void close();
+    public SemanticSignature enrichSemanticSignature(SemanticSignature semanticSignature, String id) {
+        return enrichSemanticSignature(semanticSignature);
+    }
+
+    void close() {
+        
+    }
 }

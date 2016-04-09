@@ -13,6 +13,7 @@ import org.getalp.lexsema.io.resource.LRLoader;
 import org.getalp.lexsema.io.resource.dictionary.DictionaryLRLoader;
 import org.getalp.lexsema.similarity.Document;
 import org.getalp.lexsema.similarity.measures.lesk.IndexedLeskSimilarity;
+import org.getalp.lexsema.similarity.measures.lesk.SimpleLeskSimilarity;
 import org.getalp.lexsema.similarity.measures.lesk.VectorizedLeskSimilarity;
 import org.getalp.lexsema.wsd.configuration.Configuration;
 import org.getalp.lexsema.wsd.method.*;
@@ -48,18 +49,31 @@ public class TestOnSimilarityMeasures
 
     public static void main(String[] args) throws Exception
     {
-    	/*
+    	System.out.println("XXXXXXXXXXXXXXXXXXXXXXX ALONE XXXXXXXXXXXXXXXXXXXXXXX");
+    	
         List<String> dicts_list = new ArrayList<>();
         for (int i = 1 ; i <= 15 ; i++) {
             for (int j = 50 ; j <= 300 ; j += 50) {
                 dicts_list.add("../data/lesk_dict/semeval2007task7/" + i + "/" + j + "_alone");
             }
         }
-        */
+
+        compareDicts(dicts_list.toArray(new String[dicts_list.size()]));
         
-        String[] dicts = {"../data/lesk_dict/semeval2007task7/gmb_alone_tmp"};
+        System.out.println("XXXXXXXXXXXXXXXXXXXXXXX NOT ALONE XXXXXXXXXXXXXXXXXXXXXXX");
+
+        dicts_list = new ArrayList<>();
+        for (int i = 1 ; i <= 15 ; i++) {
+            for (int j = 50 ; j <= 300 ; j += 50) {
+                dicts_list.add("../data/lesk_dict/semeval2007task7/" + i + "/" + j + "");
+            }
+        }
+        
+        compareDicts(dicts_list.toArray(new String[dicts_list.size()]));
+        
+        //String[] dicts = {"../data/lesk_dict/semeval2007task7/wii"};
         //getScoresWithVote(dicts, 10);
-        compareDicts(dicts);
+        //compareDicts(dicts);
     }
     
     private static void compareDicts(String[] dicts) throws Exception
@@ -96,13 +110,13 @@ public class TestOnSimilarityMeasures
     {
         double[] scores = new double[n];
         long[] times = new long[n];
-        LRLoader lrloader = new DictionaryLRLoader(new FileInputStream(dict), false, true);
+        LRLoader lrloader = new DictionaryLRLoader(new FileInputStream(dict), true, false);
 
         CorpusLoader dl = new Semeval2007CorpusLoader(new FileInputStream("../data/senseval2007_task7/test/eng-coarse-all-words.xml"));
         dl.load();
         for (Document d : dl) lrloader.loadSenses(d);
 
-        ConfigurationScorer scorer = new ConfigurationScorerWithCache(new VectorizedLeskSimilarity());
+        ConfigurationScorer scorer = new ConfigurationScorerWithCache(new IndexedLeskSimilarity());
             
         SemEval2007Task7PerfectConfigurationScorer perfectScorer = new SemEval2007Task7PerfectConfigurationScorer();
 
@@ -112,7 +126,7 @@ public class TestOnSimilarityMeasures
         double minLevyScale = 0.5;
         double maxLevyScale = 1.5;
 
-        MultiThreadCuckooSearch cuckooDisambiguator = new MultiThreadCuckooSearch(iterations, minLevyLocation, maxLevyLocation, minLevyScale, maxLevyScale, scorer, true);               
+        MultiThreadCuckooSearch cuckooDisambiguator = new MultiThreadCuckooSearch(iterations, minLevyLocation, maxLevyLocation, minLevyScale, maxLevyScale, scorer, false);               
         Disambiguator disambiguator = cuckooDisambiguator;
         
         System.out.println("Dictionary " + dict);

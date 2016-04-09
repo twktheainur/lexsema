@@ -12,10 +12,18 @@ public class ConfigurationScorerWithCache implements ConfigurationScorer
     private double[][][][] cache;
     
     private Document currentDocument;
+
+    private boolean verbose;
     
     public ConfigurationScorerWithCache(SimilarityMeasure similarityMeasure)
     {
+        this(similarityMeasure, false);
+    }
+
+    public ConfigurationScorerWithCache(SimilarityMeasure similarityMeasure, boolean verbose)
+    {
         this.similarityMeasure = similarityMeasure;
+        this.verbose = verbose;
         cache = null;
         currentDocument = null;
     }
@@ -39,12 +47,27 @@ public class ConfigurationScorerWithCache implements ConfigurationScorer
                     }
                 }
             }
+            if (verbose)
+            {
+                long size = 0;
+                for (int i = 0 ; i < cache.length ; i++) {
+                    for (int j = 0 ; j < cache[i].length ; j++) {
+                        for (int k = 0 ; k < cache[i][j].length ; k++) {
+                            size += cache[i][j][k].length;
+                        }
+                    }
+                }
+                System.out.println("Initialized cache of size " + size);
+            }
             currentDocument = d;
         }
         
         double totalScore = 0;
         for (int i = 0 ; i < c.size() ; i++)
         {
+            if (verbose) {
+                System.out.println("Scorer : " + (i+1) + "/" + c.size());
+            }
             double score = 0;
             int k = c.getAssignment(i);
             if (k < 0 || d.getSenses(i).isEmpty()) continue;
