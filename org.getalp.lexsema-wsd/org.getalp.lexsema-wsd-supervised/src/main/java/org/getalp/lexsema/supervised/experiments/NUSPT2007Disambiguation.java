@@ -30,7 +30,7 @@ public final class NUSPT2007Disambiguation {
 
         boolean useSemCor = false;
 
-        boolean useDso = true;
+        boolean useDso = false;
         boolean useWNG = false;
         boolean useGMB = false;
         boolean backoff = false;
