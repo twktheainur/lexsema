@@ -24,7 +24,7 @@ public class SingleWordSurroundingContextFeatureExtractor implements LocalTextFe
 
     public static int getIndexSize(){
 
-w        return index.size();
+        return index.size();
     }
 
     public SingleWordSurroundingContextFeatureExtractor(int lemmaMin, int lemmaMax) {

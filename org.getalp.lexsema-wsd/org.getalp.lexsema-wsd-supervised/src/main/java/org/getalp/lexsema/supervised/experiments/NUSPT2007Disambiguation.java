@@ -400,7 +400,7 @@ public final class NUSPT2007Disambiguation {
         LocalTextFeatureExtractor acfe = new LemmaFeatureExtractor(3, 3);
         altfe.addExtractor(acfe);
 
-        //SingleWordSurroundingContextFeatureExtractor.buildIndex(taggedCorpora);
+        SingleWordSurroundingContextFeatureExtractor.buildIndex(taggedCorpora);
         //LocalTextFeatureExtractor acfe = new SingleWordSurroundingContextFeatureExtractor(3, 3);
         //altfe.addExtractor(acfe);
 
