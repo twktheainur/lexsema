@@ -30,10 +30,10 @@ public final class NUSPT2007Disambiguation {
 
         boolean useSemCor = true;
 
-        boolean useDso = false;
-        boolean useWNG = false;
+        boolean useDso = true;
+        boolean useWNG = true;
         boolean useGMB = false;
-        boolean backoff = false;
+        boolean backoff = true;
 
         boolean toDisambiguate[] = {true, true, true, true, true};
 
@@ -390,18 +390,19 @@ public final class NUSPT2007Disambiguation {
         System.err.println("Feature extraction");
 
         AggregateLocalTextFeatureExtractor altfe = new AggregateLocalTextFeatureExtractor();
-        //LocalCollocationFeatureExtractor lcfe = new LocalCollocationFeatureExtractor(contextWindows, false);
-        //altfe.addExtractor(lcfe);
 
-        //PosFeatureExtractor pfe = new PosFeatureExtractor(3, 3);
-        //altfe.addExtractor(pfe);
+        LocalCollocationFeatureExtractor lcfe = new LocalCollocationFeatureExtractor(contextWindows, false);
+        altfe.addExtractor(lcfe);
 
-        //LocalTextFeatureExtractor acfe = new LemmaFeatureExtractor(3, 3);
-        //altfe.addExtractor(acfe);
+        PosFeatureExtractor pfe = new PosFeatureExtractor(3, 3);
+        altfe.addExtractor(pfe);
 
-        SingleWordSurroundingContextFeatureExtractor.buildIndex(taggedCorpora);
-        LocalTextFeatureExtractor acfe = new SingleWordSurroundingContextFeatureExtractor(3, 3);
+        LocalTextFeatureExtractor acfe = new LemmaFeatureExtractor(3, 3);
         altfe.addExtractor(acfe);
+
+        //SingleWordSurroundingContextFeatureExtractor.buildIndex(taggedCorpora);
+        //LocalTextFeatureExtractor acfe = new SingleWordSurroundingContextFeatureExtractor(3, 3);
+        //altfe.addExtractor(acfe);
 
         TrainingDataExtractor trainingDataExtractor = new SemCorTrainingDataExtractor(altfe);
         trainingDataExtractor.extract(taggedCorpora);
