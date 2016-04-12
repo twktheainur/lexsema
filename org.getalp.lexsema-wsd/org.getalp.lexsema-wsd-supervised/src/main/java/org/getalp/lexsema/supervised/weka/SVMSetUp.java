@@ -17,12 +17,10 @@ public class SVMSetUp implements WekaClassifierSetUp {
     // -h 0 Turns the shrinking heuristics off
     final String options[] = {"-h 0"};
 
-
-
     /* (non-Javadoc)
      * @see org.getalp.lexsema.supervised.weka.WekaClassifierSetUp#setUpClassifier()
      */
-    @Override
+
     public Classifier setUpClassifier() {
 
         System.setOut(new PrintStream(new OutputStream() {
@@ -49,7 +47,4 @@ public class SVMSetUp implements WekaClassifierSetUp {
 
         return classifier;
     }
-
-
-
 }

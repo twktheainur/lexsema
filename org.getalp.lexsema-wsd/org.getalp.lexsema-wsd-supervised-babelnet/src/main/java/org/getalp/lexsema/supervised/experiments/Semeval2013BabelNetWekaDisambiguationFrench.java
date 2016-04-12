@@ -72,7 +72,11 @@ public class Semeval2013BabelNetWekaDisambiguationFrench {
 
         //Le dernier argument est la taille de la poole de threads
         // pour changer echo ou echo 2 changer dans EchoLexicalEntryDisambiguator
-        Disambiguator disambiguator = new WekaDisambiguator("../data/supervised", new RandomForestSetUp(5,10,23,100), altfe, 8, trainingDataExtractor);
+
+        //Disambiguator disambiguator = new WekaDisambiguator("../data/supervised", new RandomForestSetUp(5,10,23,100), altfe, 8, trainingDataExtractor);
+
+        Disambiguator disambiguator = new WekaDisambiguator("../data/supervised", new NaiveBayesSetUp(true, true), altfe, 4, trainingDataExtractor);
+
         Disambiguator firstSense = new FirstSenseDisambiguator("data/semcor.first-sense.fr.key");
         int i = 0;
         if (args.length == 1) {

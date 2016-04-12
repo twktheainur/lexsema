@@ -6,6 +6,8 @@ import org.getalp.lexsema.supervised.features.ContextWindow;
 import java.util.ArrayList;
 import java.util.List;
 
+
+
 public class LocalCollocationFeatureExtractor implements LocalTextFeatureExtractor {
 
     private List<ContextWindow> contextWindows;

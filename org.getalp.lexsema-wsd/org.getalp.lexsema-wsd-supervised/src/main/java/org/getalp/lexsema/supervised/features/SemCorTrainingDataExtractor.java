@@ -71,6 +71,20 @@ public class SemCorTrainingDataExtractor implements TrainingDataExtractor {
        }
     }
 
+    /*supprimer ?*/
+    private List<String> index2Sparse(List<String> instances){
+
+       List<String> newInstances = new ArrayList<String>(instances.size());
+
+        for(String s : instances){
+
+            System.out.println(s);
+
+        }
+
+        return newInstances;
+    }
+
     @Override
     public List<List<String>> getWordFeaturesInstances(String lemma) {
         return instanceVectors.get(lemma);
@@ -87,12 +101,86 @@ public class SemCorTrainingDataExtractor implements TrainingDataExtractor {
         List<List<String>> instances = getWordFeaturesInstances(lemma);
         int size = 0;
         if (!instances.isEmpty()) {
-            size = instances.get(0).size();
+            size = convert(instances.get(0)).size();
         }
         attributes.add("SENSE");
         for (int i = 1; i < size; i++) {
             attributes.add(String.format("C%d", i));
         }
         return Collections.unmodifiableList(attributes);
+    }
+
+    private List<String> convert(List<String> tokens) {
+
+        List<String> ls = new ArrayList<String>(10000);//tokens.subList(0, tokens.size());//comment créer une liste ??
+
+        ls.add(tokens.get(0));//identifiant sens
+
+        char state = 'S';
+        int vocabularySize=-1;
+        int ivoc = 0;//iterateur sur vocabulaire
+
+        for(int i = 1 ; i < tokens.size(); i++){
+
+
+            String current = tokens.get(i);
+
+            switch(state){
+
+                case 'S':{//cas par défaut, on recopie le vecteur jusqu'à arriver à un debVector
+
+                    if(current.equals("debVector"))
+                        state = 'A';
+                    else{
+
+                        ls.add(current);
+                    }
+                    break;
+                }
+
+                case 'A':{//lecture taille vecteur
+
+                    vocabularySize=Integer.parseInt(current);
+                    state = 'B';
+                    break;
+                }
+
+                case 'B':{
+
+                    if(current.equals("endVector")) {
+
+                        //compléter le vecteur de vocabulaire par des 0
+                        for (;ivoc < vocabularySize; ivoc++){
+
+                            ls.add("0");
+                        }
+                        state = 'S';
+                    }
+                    else{//mettre des zeros dans le vecteur du vocabulaire jusqu'à l'indice et y mettre un 1
+
+                        int nextValue = Integer.parseInt(current);
+                        for (;ivoc < nextValue; ivoc++){
+
+                            ls.add("0");
+                        }
+                        ls.add("1");
+                        ivoc++;
+                    }
+
+                    break;
+                }
+
+                default:{
+
+                    System.err.println("ERROR");
+                    System.exit(0);
+                    break;
+                }
+
+
+            }
+
+        }
+        return ls;
     }
 }
