@@ -5,6 +5,8 @@ import java.util.List;
 
 import org.getalp.lexsema.similarity.Document;
 import org.getalp.lexsema.similarity.DocumentImpl;
+import org.getalp.lexsema.similarity.Sense;
+import org.getalp.lexsema.similarity.Word;
 import org.getalp.lexsema.wsd.configuration.Configuration;
 import org.getalp.lexsema.wsd.configuration.ContinuousConfiguration;
 
@@ -39,19 +41,23 @@ public class LargeDocumentDisambiguator implements Disambiguator
         int remainingWords = document.size() - (documentsNb * maxWords);
         for (int i = 0 ; i < documentsNb ; i++)
         {
-            Document newDocument = new DocumentImpl();
+            DocumentImpl newDocument = new DocumentImpl();
             for (int j = 0 ; j < maxWords ; j++)
             {
-                newDocument.addWord(document.getWord((i * maxWords) + j));
+                Word w = document.getWord((i * maxWords) + j);
+                List<Sense> s = document.getSenses((i * maxWords) + j);
+                newDocument.addWord(w, s);
             }
             ret.add(newDocument);
         }
         if (remainingWords > 0)
         {
-            Document newDocument = new DocumentImpl();
+            DocumentImpl newDocument = new DocumentImpl();
             for (int j = 0 ; j < remainingWords ; j++)
             {
-                newDocument.addWord(document.getWord((documentsNb * maxWords) + j));
+                Word w = document.getWord((documentsNb * maxWords) + j);
+                List<Sense> s = document.getSenses((documentsNb * maxWords) + j);
+                newDocument.addWord(w, s);
             }
             ret.add(newDocument);
         }
