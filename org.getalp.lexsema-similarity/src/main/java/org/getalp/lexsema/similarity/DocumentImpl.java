@@ -49,6 +49,11 @@ public class DocumentImpl implements Document {
         lexicalEntries.add(word);
     }
 
+    public void addWord(Word word, List<Sense> wordSenses) {
+        lexicalEntries.add(word);
+        senses.add(wordSenses);
+    }
+
     @Override
     public void addWordSenses(Iterable<Sense> senses) {
         List<Sense> currentWordSenses = new ArrayList<>();
