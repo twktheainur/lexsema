@@ -26,9 +26,11 @@ public class LargeDocumentDisambiguator implements Disambiguator
     public Configuration disambiguate(Document document)
     {
         List<Document> documents = splitDocument(document);
+        System.out.println("Document splitted in " + documents.size());
         List<Configuration> configurations = new ArrayList<>();
         for (int i = 0 ; i < documents.size() ; i++)
         {
+            System.out.println("Disambiguating document " + (i+1) + "...");
             configurations.add(disambiguator.disambiguate(documents.get(i)));
         }
         return mergeConfigurations(configurations, document);
