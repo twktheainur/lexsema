@@ -35,6 +35,8 @@ public class DSOCorpusLoader extends CorpusLoaderImpl {
     private final TextProcessor textProcessor;
     private final Text text;
 
+    private int nbWords=0;
+
 
     public DSOCorpusLoader(String pathToDSO, String pathToWordnet) {
         this(pathToDSO, pathToWordnet, false);
@@ -74,6 +76,9 @@ public class DSOCorpusLoader extends CorpusLoaderImpl {
                 lines.add(line);
             }
             lines.parallelStream().forEach(line -> processWordInList(line, pos));
+            //lines.stream().forEach(line -> processWordInList(line, pos));
+            logger.error("nbWords = " + nbWords);
+
         } catch (IOException e) {
             logger.error(MessageFormat.format("Error while processing DSO list file:{0}", e.getLocalizedMessage()));
         }
@@ -115,6 +120,7 @@ public class DSOCorpusLoader extends CorpusLoaderImpl {
             currentWord++;
         }
         synchronized (text) {
+            nbWords++;
             text.addSentence(cleanSentence);
         }
     }
