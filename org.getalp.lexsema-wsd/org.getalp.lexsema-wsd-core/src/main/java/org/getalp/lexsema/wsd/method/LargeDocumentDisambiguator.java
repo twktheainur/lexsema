@@ -16,21 +16,34 @@ public class LargeDocumentDisambiguator implements Disambiguator
     
     private int maxWords;
     
-    public LargeDocumentDisambiguator(Disambiguator disambiguator, int maxWords)
+    private boolean verbose;
+
+    public LargeDocumentDisambiguator(Disambiguator disambiguator, int maxWords, boolean verbose)
     {
         this.disambiguator = disambiguator;
         this.maxWords = maxWords;
+        this.verbose = verbose;
+    }
+
+    public LargeDocumentDisambiguator(Disambiguator disambiguator, int maxWords)
+    {
+        this(disambiguator, maxWords, false);
+    }
+
+    public LargeDocumentDisambiguator(Disambiguator disambiguator)
+    {
+        this(disambiguator, 300, false);
     }
 
     @Override
     public Configuration disambiguate(Document document)
     {
         List<Document> documents = splitDocument(document);
-        System.out.println("Document splitted in " + documents.size());
+        if (verbose) System.out.println("Document splitted in " + documents.size());
         List<Configuration> configurations = new ArrayList<>();
         for (int i = 0 ; i < documents.size() ; i++)
         {
-            System.out.println("Disambiguating document " + (i+1) + "...");
+            if (verbose) System.out.println("Disambiguating document " + (i+1) + "...");
             configurations.add(disambiguator.disambiguate(documents.get(i)));
         }
         return mergeConfigurations(configurations, document);
