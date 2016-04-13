@@ -28,12 +28,12 @@ public final class NUSPT2007Disambiguation {
 
     public static void main(String[] args) throws IOException {
 
-        boolean useSemCor = false;
+        boolean useSemCor = true;
 
         boolean useDso = true;
-        boolean useWNG = false;
+        boolean useWNG = true;
         boolean useGMB = false;
-        boolean backoff = false;
+        boolean backoff = true;
 
         boolean toDisambiguate[] = {true, true, true, true, true};
 
@@ -409,7 +409,7 @@ public final class NUSPT2007Disambiguation {
 
         System.err.println("Feature extraction done");
 
-         Disambiguator disambiguator = new WekaDisambiguator("../data/supervised", new SVMSetUp(), altfe, 32 , trainingDataExtractor);
+         Disambiguator disambiguator = new WekaDisambiguator("../data/supervised", new SVMSetUp(), altfe, 4 , trainingDataExtractor);
         //Disambiguator disambiguator = new WekaDisambiguator("../data/supervised", new BFTreeSetUp(), altfe, 16);
         //Disambiguator disambiguator = new WekaDisambiguator("../data/supervised", new BayesianLogisticRegressionSetUp(), altfe, 16);
         //Disambiguator disambiguator = new WekaDisambiguator("../data/supervised", new RBFNetworkSetUp(), altfe, 16);
