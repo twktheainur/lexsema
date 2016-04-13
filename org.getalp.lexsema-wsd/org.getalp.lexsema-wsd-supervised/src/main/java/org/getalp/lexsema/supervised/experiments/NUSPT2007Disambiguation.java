@@ -33,7 +33,7 @@ public final class NUSPT2007Disambiguation {
         boolean useDso = true;
         boolean useWNG = false;
         boolean useGMB = false;
-        boolean backoff = true;
+        boolean backoff = false;
 
         boolean toDisambiguate[] = {true, true, true, true, true};
 
@@ -409,7 +409,7 @@ public final class NUSPT2007Disambiguation {
 
         System.err.println("Feature extraction done");
 
-         Disambiguator disambiguator = new WekaDisambiguator("../data/supervised", new SVMSetUp(), altfe, 4 , trainingDataExtractor);
+         Disambiguator disambiguator = new WekaDisambiguator("../data/supervised", new SVMSetUp(), altfe, 1 , trainingDataExtractor);
         //Disambiguator disambiguator = new WekaDisambiguator("../data/supervised", new BFTreeSetUp(), altfe, 16);
         //Disambiguator disambiguator = new WekaDisambiguator("../data/supervised", new BayesianLogisticRegressionSetUp(), altfe, 16);
         //Disambiguator disambiguator = new WekaDisambiguator("../data/supervised", new RBFNetworkSetUp(), altfe, 16);
