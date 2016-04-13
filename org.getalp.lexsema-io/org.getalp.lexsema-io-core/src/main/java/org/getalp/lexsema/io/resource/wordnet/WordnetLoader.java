@@ -122,7 +122,7 @@ public class WordnetLoader implements LRLoader {
                     ISenseKey senseKey = word.getSenseKey();
                     String senseId = senseKey.toString();
                     if (loadSynsetOffsetInsteadOfSenseKey) {
-                        senseId = Integer.toString(word.getSynset().getOffset()) + word.getPOS().getTag();
+                        senseId = String.format("%08d", word.getSynset().getOffset()) + word.getPOS().getTag();
                     }
                     Sense sense = new SenseImpl(senseId);
                     SemanticSignature signature = createSignature();
