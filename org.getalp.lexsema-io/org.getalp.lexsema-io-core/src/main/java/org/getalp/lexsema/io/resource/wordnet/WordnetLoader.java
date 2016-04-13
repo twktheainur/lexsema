@@ -59,6 +59,8 @@ public class WordnetLoader implements LRLoader {
 
     private List<List<String>> senseClusters;
     
+    private boolean loadSynsetOffsetInsteadOfSenseKey;
+    
     /**
      * Creates a WordnetLoader with an existing Wordnet Dictionary object.
      * The dictionary may or may not be open prior to this constructor call.
@@ -75,6 +77,7 @@ public class WordnetLoader implements LRLoader {
         senseCache = new HashMap<>();
         distributed = false;
         senseClusters = null;
+        loadSynsetOffsetInsteadOfSenseKey = false;
     }
 
     private Dictionary openDictionary(Dictionary dictionary) {
@@ -97,7 +100,7 @@ public class WordnetLoader implements LRLoader {
         String lpos = pos.toLowerCase();
         if (lpos.startsWith("n") || lpos.startsWith("v") || lpos.startsWith("r")) {
             newPos = lpos.charAt(0);
-        } else if (pos.startsWith("j") || pos.startsWith("a")) {
+        } else if (lpos.startsWith("j") || lpos.startsWith("a")) {
             newPos = 'a';
         }
         return String.valueOf(newPos);
@@ -117,7 +120,11 @@ public class WordnetLoader implements LRLoader {
                 for (IWordID wordID : wordIDs) {
                     IWord word = dictionary.getWord(wordID);
                     ISenseKey senseKey = word.getSenseKey();
-                    Sense sense = new SenseImpl(senseKey.toString());
+                    String senseId = senseKey.toString();
+                    if (loadSynsetOffsetInsteadOfSenseKey) {
+                        senseId = String.format("%08d", word.getSynset().getOffset()) + word.getPOS().getTag();
+                    }
+                    Sense sense = new SenseImpl(senseId);
                     SemanticSignature signature = createSignature();
                     final ISynset wordSynset = word.getSynset();
                     if (loadDefinitions) {
@@ -453,6 +460,12 @@ public class WordnetLoader implements LRLoader {
     
     public LRLoader setSenseClusters(List<List<String>> senseClusters) {
         this.senseClusters = senseClusters;
+        return this;
+    }
+    
+    public LRLoader setloadSynsetOffsetInsteadOfSenseKey(boolean loadSynsetOffsetInsteadOfSenseKey)
+    {
+        this.loadSynsetOffsetInsteadOfSenseKey = loadSynsetOffsetInsteadOfSenseKey;
         return this;
     }
 

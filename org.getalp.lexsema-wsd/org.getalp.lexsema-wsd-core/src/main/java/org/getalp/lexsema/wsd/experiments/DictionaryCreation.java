@@ -33,7 +33,11 @@ public class DictionaryCreation
 {
     public static String wordnetPath = "../data/wordnet/2.1/dict/";
 
+    public static String wordnet30Path = "../data/wordnet/3.0/dict/";
+
     public static String semCorPath = "../data/semcor2.1/all.xml";
+
+    public static String semCor30Path = "../data/semcor/3.0/all.xml";
 
     public static String dsoPath = "../data/dso/";
 
@@ -46,10 +50,14 @@ public class DictionaryCreation
     public static String word2vecPath = "../data/word2vec/";
 
     public static String senseClustersPath = "../data/senseval2007_task7/key/sense_clusters-21.senses";
-    
+
     public static Dictionary wordnet = new Dictionary(new File(wordnetPath));
 
+    public static Dictionary wordnet30 = new Dictionary(new File(wordnet30Path));
+
     public static CorpusLoader semCor = new SemCorCorpusLoader(semCorPath);
+
+    public static CorpusLoader semCor30 = new SemCorCorpusLoader(semCor30Path);
 
     public static CorpusLoader dso = new OldDSOCorpusLoader(dsoPath, wordnetPath);
 
@@ -86,13 +94,16 @@ public class DictionaryCreation
         System.out.println(Arrays.toString(Word2VecClient.getMostSimilarWords(f, 10, res).toArray()));
         */
         
-        //writeDictionary(true, true, true, true, true, false, false, false, true, false, 250, false, 0, true, false, "../data/lesk_dict/semeval2007task7/youhou");
+        writeDictionary(true, true, true, true, true, false, true, false, true, false, 250, false, 0, false, false, "../data/lesk_dict/all/chabadou");
+
+        //writeDictionary(false, false, true, true, true, false, true, false, false, false, 250, false, 0, true, false, "../data/lesk_dict/semeval2007task7/chabadou2");
+
         
         //writeDictionary(true, true, true, true, true, false, false, false, false, false, 0, false, 0, true, false, "../data/lesk_dict/semeval2007task7/w2v0");
         //writeDictionary(true, true, true, true, true, true, false, false, false, false, 0, true, 1, true, false, "../data/lesk_dict/semeval2007task7/w2v1");
         //writeDictionary(true, true, true, true, true, true, false, false, false, false, 0, true, 2, true, false, "../data/lesk_dict/semeval2007task7/w2v2");
         //writeDictionary(true, true, true, true, true, true, false, false, false, false, 0, true, 3, true, false, "../data/lesk_dict/semeval2007task7/w2v3");
-
+/*
         for (int i = 1 ; i <= 15 ; i++) {
             for (int j = 50 ; j <= 300 ; j += 50) {
                 boolean sc = (i & 1) == 1;
@@ -112,7 +123,7 @@ public class DictionaryCreation
                 writeDictionary(true, true, true, true, true, true, sc, dso, wngt, gmb, j, false, 0, true, false, "../data/lesk_dict/semeval2007task7/" + i + "/" + j + "");
             }
         }
-
+*/
     }
 
     public static void writeDictionary(boolean definitions, boolean extendedDefinitions, 
@@ -138,6 +149,8 @@ public class DictionaryCreation
         lrloader.extendedSignature(extendedDefinitions);
         lrloader.loadRelated(extendedDefinitions);
         lrloader.shuffle(shuffle);
+        
+        lrloader.setloadSynsetOffsetInsteadOfSenseKey(true);
 
         //lrloader.addSignatureEnrichment(new WordnetGlossTagEnrichment(wordnetGlossTagPath));
                 
