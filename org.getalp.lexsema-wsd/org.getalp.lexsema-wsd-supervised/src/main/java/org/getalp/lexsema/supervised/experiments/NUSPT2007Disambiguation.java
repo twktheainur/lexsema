@@ -33,7 +33,7 @@ public final class NUSPT2007Disambiguation {
         boolean useDso = true;
         boolean useWNG = false;
         boolean useGMB = false;
-        boolean backoff = true;
+        boolean backoff = false;
 
         boolean toDisambiguate[] = {true, true, true, true, true};
 
