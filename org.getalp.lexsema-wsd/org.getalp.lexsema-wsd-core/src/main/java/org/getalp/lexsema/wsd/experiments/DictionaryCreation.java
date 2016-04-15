@@ -142,7 +142,7 @@ public class DictionaryCreation
     {    
         System.out.println("Building dictionary " + newDictPath + "...");
 
-        WordnetLoader lrloader = new WordnetLoader(wordnet);
+        WordnetLoader lrloader = new WordnetLoader(wordnet30);
         ArrayList<Text> corpora = new ArrayList<Text>();
 
         lrloader.loadDefinitions(definitions);
