@@ -21,6 +21,7 @@ import org.getalp.lexsema.wsd.configuration.Configuration;
 import org.getalp.lexsema.wsd.method.Disambiguator;
 import org.getalp.lexsema.wsd.method.LargeDocumentDisambiguator;
 import org.getalp.lexsema.wsd.method.MultiThreadCuckooSearch;
+import org.getalp.lexsema.wsd.method.RandomDisambiguator;
 import org.getalp.lexsema.wsd.score.ConfigurationScorer;
 import org.getalp.lexsema.wsd.score.ConfigurationScorerWithCache;
 import edu.stanford.nlp.ling.CoreLabel;
@@ -53,7 +54,7 @@ public class WSDForSMTWebService1  extends WebServiceServlet
         loadDisambiguator();
         
         String rawText = request.getParameter("input");
-
+        
         if (verbose) System.out.println("Got the following input of size " + rawText.length() + " characters:");
         if (verbose) System.out.println(rawText);
 
@@ -137,6 +138,7 @@ public class WSDForSMTWebService1  extends WebServiceServlet
         double maxLevyScale = 1.5;
         disambiguator = new MultiThreadCuckooSearch(iterations, minLevyLocation, maxLevyLocation, minLevyScale, maxLevyScale, scorer, false);   
         disambiguator = new LargeDocumentDisambiguator(disambiguator, 300, verbose);
+        disambiguator = new RandomDisambiguator();
     }
 
     private static Document rawToText(String raw)
