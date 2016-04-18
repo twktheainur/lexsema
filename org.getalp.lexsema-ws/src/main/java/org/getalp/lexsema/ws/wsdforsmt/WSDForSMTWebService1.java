@@ -97,6 +97,7 @@ public class WSDForSMTWebService1  extends WebServiceServlet
         }
 
         if (verbose) System.out.println("Writing output of size " + output.length() + "...");
+        response.setBufferSize(output.length());
         response.getWriter().print(output);
         response.getWriter().close();
     }
