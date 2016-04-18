@@ -2,6 +2,7 @@ package org.getalp.lexsema.ws.wsdforsmt;
 
 import java.io.FileInputStream;
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -12,7 +13,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.getalp.lexsema.io.resource.dictionary.DictionaryLRLoader;
 import org.getalp.lexsema.similarity.Document;
 import org.getalp.lexsema.similarity.DocumentImpl;
-import org.getalp.lexsema.similarity.Sense;
 import org.getalp.lexsema.similarity.Word;
 import org.getalp.lexsema.similarity.WordImpl;
 import org.getalp.lexsema.similarity.measures.lesk.IndexedLeskSimilarity;
@@ -58,6 +58,10 @@ public class WSDForSMTWebService1  extends WebServiceServlet
         if (verbose) System.out.println("Got the following input of size " + rawText.length() + " characters:");
         if (verbose) System.out.println(rawText);
 
+        List<String> tokenizedText = Arrays.asList(rawText.split(" "));
+        
+        if (verbose) System.out.println("Input has " + tokenizedText.size() + " words");
+        
         String output = "";
         
         if (cache.containsKey(rawText))
@@ -77,27 +81,22 @@ public class WSDForSMTWebService1  extends WebServiceServlet
             if (verbose) System.out.println("Disambiguating...");
             Configuration c = disambiguator.disambiguate(txt);
             disambiguator.release();
-
-            String[] outputArray = new String[c.size()];
-            for (int i = 0 ; i < c.size() ; i++) 
+            
+            if (verbose) System.out.println("Aligning disambiguation...");
+            List<String> realDisambiguation = alignDisambiguation(txt, c, tokenizedText);
+            
+            if (verbose)
             {
-                int assignment = c.getAssignment(i);
-                List<Sense> senses = txt.getSenses(i);
-                if (assignment < 0 || assignment >= senses.size()) 
+                for (int i = 0 ; i < tokenizedText.size() ; i++) 
                 {
-                    outputArray[i] = "0";
-                } 
-                else 
-                {
-                    outputArray[i] = senses.get(assignment).getId();
+                    System.out.println("Word " + i + " : \"" + tokenizedText.get(i) + "\" [" + realDisambiguation.get(i) + "]");
                 }
-                if (verbose) System.out.println("Word " + i + " : \"" + txt.getWord(i).getSurfaceForm() + "\" {" + txt.getWord(i).getLemma() + "%" + txt.getWord(i).getPartOfSpeech() + "} [" + outputArray[i] + "]");
             }
-            output = Arrays.toString(outputArray);
+            output = Arrays.toString(realDisambiguation.toArray());
         }
 
         if (verbose) System.out.println("Writing output of size " + output.length() + "...");
-        response.setBufferSize(output.length());
+        // response.setBufferSize(Integer.MAX_VALUE);
         response.getWriter().print(output);
         response.getWriter().close();
     }
@@ -113,6 +112,43 @@ public class WSDForSMTWebService1  extends WebServiceServlet
         response.setCharacterEncoding("UTF-8");
     }
 
+    private static List<String> alignDisambiguation(Document currentText, Configuration currentDisambiguation, List<String> realText)
+    {
+        List<String> realDisambiguation = new ArrayList<>();
+        final int window = 5;
+        int i = 0;
+        for (int k = 0 ; k < realText.size() ; k++)
+        {
+            int iBkp = i;
+            boolean found = false;
+            while (!found && (i - iBkp) < window && i < realText.size())
+            {
+                if (realText.get(k).contains(currentText.getWord(i).getSurfaceForm()) ||
+                    currentText.getWord(i).getSurfaceForm().contains(realText.get(k)))
+                {
+                    found = true;
+                }
+                else
+                {
+                    i++;
+                }
+            }
+            if (!found)
+            {
+                realDisambiguation.add("0");
+                i = iBkp;
+            }
+            else
+            {
+                int assignment = currentDisambiguation.getAssignment(i);
+                String senseID = (assignment >= 0) ? currentText.getSenses(i).get(assignment).getId() : "0";
+                realDisambiguation.add(senseID);
+                i++;
+            }
+        }    
+        return realDisambiguation;
+    }
+    
     private static synchronized void loadStanford()
     {
         if (stanford != null) return;
