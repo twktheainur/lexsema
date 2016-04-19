@@ -49,31 +49,9 @@ public class TestOnSimilarityMeasures
 
     public static void main(String[] args) throws Exception
     {
-    	System.out.println("XXXXXXXXXXXXXXXXXXXXXXX ALONE XXXXXXXXXXXXXXXXXXXXXXX");
-    	
         List<String> dicts_list = new ArrayList<>();
-        for (int i = 1 ; i <= 15 ; i++) {
-            for (int j = 50 ; j <= 300 ; j += 50) {
-                dicts_list.add("../data/lesk_dict/semeval2007task7/" + i + "/" + j + "_alone");
-            }
-        }
-
+        dicts_list.add("../data/lesk_dict/all/zebest"); 
         compareDicts(dicts_list.toArray(new String[dicts_list.size()]));
-        
-        System.out.println("XXXXXXXXXXXXXXXXXXXXXXX NOT ALONE XXXXXXXXXXXXXXXXXXXXXXX");
-
-        dicts_list = new ArrayList<>();
-        for (int i = 1 ; i <= 15 ; i++) {
-            for (int j = 50 ; j <= 300 ; j += 50) {
-                dicts_list.add("../data/lesk_dict/semeval2007task7/" + i + "/" + j + "");
-            }
-        }
-        
-        compareDicts(dicts_list.toArray(new String[dicts_list.size()]));
-        
-        //String[] dicts = {"../data/lesk_dict/semeval2007task7/wii"};
-        //getScoresWithVote(dicts, 10);
-        //compareDicts(dicts);
     }
     
     private static void compareDicts(String[] dicts) throws Exception
