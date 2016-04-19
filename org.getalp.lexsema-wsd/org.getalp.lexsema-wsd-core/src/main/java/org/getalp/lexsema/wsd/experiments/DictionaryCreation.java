@@ -31,13 +31,13 @@ import org.getalp.lexsema.util.word2vec.Word2VecClient;
 
 public class DictionaryCreation
 {
-    public static String wordnetPath = "../data/wordnet/2.1/dict/";
+    public static String wordnet21Path = "../data/wordnet/2.1/dict/";
 
     public static String wordnet30Path = "../data/wordnet/3.0/dict/";
 
-    public static String semCorPath = "../data/semcor2.1/all.xml";
+    public static String semcor21Path = "../data/semcor2.1/all.xml";
 
-    public static String semCor30Path = "../data/semcor/3.0/all.xml";
+    public static String semcor30Path = "../data/semcor/3.0/all.xml";
 
     public static String dsoPath = "../data/dso/";
 
@@ -51,23 +51,23 @@ public class DictionaryCreation
 
     public static String senseClustersPath = "../data/senseval2007_task7/key/sense_clusters-21.senses";
 
-    public static Dictionary wordnet = new Dictionary(new File(wordnetPath));
+    public static Dictionary wordnet21 = new Dictionary(new File(wordnet21Path));
 
     public static Dictionary wordnet30 = new Dictionary(new File(wordnet30Path));
 
-    public static CorpusLoader semCor = new SemCorCorpusLoader(semCorPath);
+    public static CorpusLoader semCor21 = new SemCorCorpusLoader(semcor21Path);
 
-    public static CorpusLoader semCor30 = new SemCorCorpusLoader(semCor30Path);
+    public static CorpusLoader semCor30 = new SemCorCorpusLoader(semcor30Path);
 
-    public static CorpusLoader dso = new OldDSOCorpusLoader(dsoPath, wordnetPath);
+    public static CorpusLoader dso = new OldDSOCorpusLoader(dsoPath, wordnet21Path);
 
     public static CorpusLoader wordnetGlossTag = new WordnetGlossTagCorpusLoader(wordnetGlossTagPath);
 
-    public static CorpusLoader gmb = new GMBCorpusLoader(gmbPath, wordnet);
+    public static CorpusLoader gmb = new GMBCorpusLoader(gmbPath, wordnet21);
 
     public static List<List<String>> senseClusters = new ArrayList<>();
     
-    public static boolean semCorIsLoaded = false;
+    public static boolean semcor21IsLoaded = false;
 
     public static boolean dsoIsLoaded = false;
 
@@ -78,96 +78,75 @@ public class DictionaryCreation
     public static boolean word2vecIsLoaded = false;
     
     public static boolean senseClustersIsLoaded = false;
-
-    public static void main(String[] args) throws Exception
+    
+    
+    public boolean withDefinitions = true;
+    
+    public boolean withExtendedDefinitions = false;
+    
+    public boolean withStopwords = false;
+    
+    public boolean withStemming = false;
+    
+    public boolean withIndexing = false;
+    
+    public boolean withShuffling = false;
+    
+    public boolean withSemcorThesaurus = false;
+    
+    public boolean withDSOThesaurus = false;
+    
+    public boolean withWNGTThesaurus = false;
+    
+    public boolean withGMBThesaurus = false;
+    
+    public int numberOfWordsFromThesauri = 0;
+    
+    public boolean withWord2Vec = false;
+    
+    public int numberOfWordsFromWord2Vec = 0;
+    
+    public boolean loadOnlySemeval2007Task7Senses = false;
+    
+    public boolean withSenseClusters = false;
+    
+    public boolean withSynsetOffsetInsteadOfSenseKey = false;
+    
+    public DictionaryCreation()
     {
-        /*
-         * double[] a = Word2VecClient.getWordVector("france");
-        double[] b = Word2VecClient.getWordVector("italy");
-        double[] c = Word2VecClient.getWordVector("germany");
-        double[] d = Word2VecClient.getWordVector("spain");
-        double[] e = Word2VecClient.getWordVector("england");
-        double[] f = Word2VecClient.getWordVector("continent");
-        double[] res = VectorOperation.normalize(VectorOperation.sum(a, b, c, d, e));
-        System.out.println(Arrays.toString(Word2VecClient.getMostSimilarWords(res, 10).toArray()));
-        System.out.println(Arrays.toString(Word2VecClient.getMostSimilarWords(f, 10).toArray()));
-        System.out.println(Arrays.toString(Word2VecClient.getMostSimilarWords(f, 10, res).toArray()));
-        */
         
-        writeDictionary(true, true, true, true, true, false, true, false, true, false, 250, false, 0, false, false, "../data/lesk_dict/all/chabadou");
-
-        //writeDictionary(false, false, true, true, true, false, true, false, false, false, 250, false, 0, true, false, "../data/lesk_dict/semeval2007task7/chabadou2");
-
-        
-        //writeDictionary(true, true, true, true, true, false, false, false, false, false, 0, false, 0, true, false, "../data/lesk_dict/semeval2007task7/w2v0");
-        //writeDictionary(true, true, true, true, true, true, false, false, false, false, 0, true, 1, true, false, "../data/lesk_dict/semeval2007task7/w2v1");
-        //writeDictionary(true, true, true, true, true, true, false, false, false, false, 0, true, 2, true, false, "../data/lesk_dict/semeval2007task7/w2v2");
-        //writeDictionary(true, true, true, true, true, true, false, false, false, false, 0, true, 3, true, false, "../data/lesk_dict/semeval2007task7/w2v3");
-/*
-        for (int i = 1 ; i <= 15 ; i++) {
-            for (int j = 50 ; j <= 300 ; j += 50) {
-                boolean sc = (i & 1) == 1;
-                boolean dso = (i & 2) == 2;
-                boolean wngt = (i & 4) == 4;
-                boolean gmb = (i & 8) == 8;
-                writeDictionary(false, false, true, true, true, true, sc, dso, wngt, gmb, j, false, 0, true, false, "../data/lesk_dict/semeval2007task7/" + i + "/" + j + "_alone");
-            }
-        }
-
-        for (int i = 1 ; i <= 15 ; i++) {
-            for (int j = 50 ; j <= 300 ; j += 50) {
-                boolean sc = (i & 1) == 1;
-                boolean dso = (i & 2) == 2;
-                boolean wngt = (i & 4) == 4;
-                boolean gmb = (i & 8) == 8;
-                writeDictionary(true, true, true, true, true, true, sc, dso, wngt, gmb, j, false, 0, true, false, "../data/lesk_dict/semeval2007task7/" + i + "/" + j + "");
-            }
-        }
-*/
     }
-
-    public static void writeDictionary(boolean definitions, boolean extendedDefinitions, 
-            boolean stopWords, boolean stemming, 
-            boolean index, boolean shuffle, 
-            boolean useSemCorThesaurus, 
-            boolean useDSOThesaurus, 
-            boolean useWordnetGlossTag,
-            boolean useGMBThesaurus,
-            int numberOfWordsFromThesauri,
-            boolean useWord2Vec,
-            int numberOfWordsFromWord2Vec,
-            boolean loadOnlySemeval2007Task7Senses, 
-            boolean useSenseClusters,
-            String newDictPath) throws Exception
-    {    
+    
+    public void write(String newDictPath) throws Exception
+    {
         System.out.println("Building dictionary " + newDictPath + "...");
 
         WordnetLoader lrloader = new WordnetLoader(wordnet30);
-        ArrayList<Text> corpora = new ArrayList<Text>();
 
-        lrloader.loadDefinitions(definitions);
-        lrloader.extendedSignature(extendedDefinitions);
-        lrloader.loadRelated(extendedDefinitions);
-        lrloader.shuffle(shuffle);
-        
-        lrloader.setloadSynsetOffsetInsteadOfSenseKey(true);
+        lrloader.loadDefinitions(withDefinitions);
+        lrloader.extendedSignature(withExtendedDefinitions);
+        lrloader.loadRelated(withExtendedDefinitions);
+        lrloader.shuffle(withShuffling);
+        lrloader.setloadSynsetOffsetInsteadOfSenseKey(withSynsetOffsetInsteadOfSenseKey);
 
         //lrloader.addSignatureEnrichment(new WordnetGlossTagEnrichment(wordnetGlossTagPath));
-                
-        if (useSemCorThesaurus)
+
+        ArrayList<Text> corpora = new ArrayList<Text>();
+        
+        if (withSemcorThesaurus)
         {
-            if (!semCorIsLoaded) 
+            if (!semcor21IsLoaded) 
             {
-                semCor.load();
-                semCorIsLoaded = true;
+                semCor21.load();
+                semcor21IsLoaded = true;
             }
-            for (Text corpusText : semCor)
+            for (Text corpusText : semCor21)
             {
                 corpora.add(corpusText);
             }
         }
 
-        if (useDSOThesaurus)
+        if (withDSOThesaurus)
         {
             if (!dsoIsLoaded) 
             {
@@ -180,7 +159,7 @@ public class DictionaryCreation
             }
         }
 
-        if (useWordnetGlossTag)
+        if (withWNGTThesaurus)
         {
             if (!wordnetGlossTagIsLoaded) 
             {
@@ -193,7 +172,7 @@ public class DictionaryCreation
             }
         }
 
-        if (useGMBThesaurus)
+        if (withGMBThesaurus)
         {
             if (!gmbgIsLoaded) 
             {
@@ -208,27 +187,27 @@ public class DictionaryCreation
 
         lrloader.addThesaurus(new AnnotatedTextThesaurusImpl(corpora, numberOfWordsFromThesauri));
 
-        if (stopWords)
+        if (withStopwords)
         {
             lrloader.addSignatureEnrichment(new StopwordsRemovingSignatureEnrichment());
         }
         
-        if (useWord2Vec)
+        if (withWord2Vec)
         {
             lrloader.addSignatureEnrichment(new Word2VecSignatureEnrichment2(numberOfWordsFromWord2Vec));
         }
 
-        if (stemming)
+        if (withStemming)
         {
             lrloader.addSignatureEnrichment(new StemmingSignatureEnrichment());
         }
         
-        if (index)
+        if (withIndexing)
         {
             lrloader.addSignatureEnrichment(new IndexingSignatureEnrichment());
         }
         
-        if (useSenseClusters)
+        if (withSenseClusters)
         {
             if (!senseClustersIsLoaded)
             {
@@ -304,4 +283,26 @@ public class DictionaryCreation
         }
         sc.close();
     }
+
+    public static void main(String[] args) throws Exception
+    {
+        DictionaryCreation dict = new DictionaryCreation();
+        dict.withDefinitions = true;
+        dict.withExtendedDefinitions = true;
+        dict.withStopwords = true;
+        dict.withStemming = true;
+        dict.withIndexing = true;
+        dict.withShuffling = false;
+        dict.withSemcorThesaurus = true;
+        dict.withWNGTThesaurus = true;
+        dict.numberOfWordsFromThesauri = 250;
+        dict.withSynsetOffsetInsteadOfSenseKey = false;
+        
+        dict.write("../data/lesk_dict/all/zebest");
+        
+        dict.withSynsetOffsetInsteadOfSenseKey = true;
+
+        dict.write("../data/lesk_dict/all/zebestalt");
+    }
+
 }
