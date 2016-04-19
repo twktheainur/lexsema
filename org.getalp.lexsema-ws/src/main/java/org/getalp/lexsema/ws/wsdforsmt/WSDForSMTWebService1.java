@@ -21,7 +21,6 @@ import org.getalp.lexsema.wsd.configuration.Configuration;
 import org.getalp.lexsema.wsd.method.Disambiguator;
 import org.getalp.lexsema.wsd.method.LargeDocumentDisambiguator;
 import org.getalp.lexsema.wsd.method.MultiThreadCuckooSearch;
-import org.getalp.lexsema.wsd.method.RandomDisambiguator;
 import org.getalp.lexsema.wsd.score.ConfigurationScorer;
 import org.getalp.lexsema.wsd.score.ConfigurationScorerWithCache;
 import edu.stanford.nlp.ling.CoreLabel;
@@ -54,14 +53,6 @@ public class WSDForSMTWebService1  extends WebServiceServlet
         loadDisambiguator();
         
         String rawText = request.getParameter("input");
-        
-        if (verbose) System.out.println("Got the following input of size " + rawText.length() + " characters:");
-        if (verbose) System.out.println(rawText);
-
-        List<String> tokenizedText = Arrays.asList(rawText.split(" "));
-        
-        if (verbose) System.out.println("Input has " + tokenizedText.size() + " words");
-        
         String output = "";
         
         if (cache.containsKey(rawText))
@@ -71,6 +62,13 @@ public class WSDForSMTWebService1  extends WebServiceServlet
         }
         else
         {
+            if (verbose) System.out.println("Got the following input of size " + rawText.length() + " characters:");
+            if (verbose) System.out.println(rawText);
+
+            List<String> tokenizedText = Arrays.asList(rawText.split(" "));
+            
+            if (verbose) System.out.println("Input has " + tokenizedText.size() + " words");
+            
             if (verbose) System.out.println("Parsing input...");
             Document txt = rawToText(rawText);
             if (verbose) System.out.println("Parsed " + txt.size() + " words");
@@ -161,7 +159,7 @@ public class WSDForSMTWebService1  extends WebServiceServlet
     private static synchronized void loadDictionary() throws Exception
     {
         if (dictionary != null) return;
-        dictionary = new DictionaryLRLoader(new FileInputStream("/home/viall/current/data/lesk_dict/all/dict_best_wordnet_30_offset"), true);
+        dictionary = new DictionaryLRLoader(new FileInputStream("/home/viall/current/data/lesk_dict/all/zebestalt"), true);
     }
 
     private static synchronized void loadDisambiguator()
@@ -175,7 +173,6 @@ public class WSDForSMTWebService1  extends WebServiceServlet
         double maxLevyScale = 1.5;
         disambiguator = new MultiThreadCuckooSearch(iterations, minLevyLocation, maxLevyLocation, minLevyScale, maxLevyScale, scorer, false);   
         disambiguator = new LargeDocumentDisambiguator(disambiguator, 300, verbose);
-        disambiguator = new RandomDisambiguator();
     }
 
     private static Document rawToText(String raw)
