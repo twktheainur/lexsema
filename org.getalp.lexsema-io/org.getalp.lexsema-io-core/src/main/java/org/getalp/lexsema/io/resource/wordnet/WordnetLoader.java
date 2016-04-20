@@ -37,7 +37,7 @@ public class WordnetLoader implements LRLoader {
 
     private static final Pattern WHITESPACE = Pattern.compile("\\s+");
 
-    private static final Pattern NON_LETTERS = Pattern.compile("[^a-zA-Z ]");
+    private static final Pattern NON_LETTERS = Pattern.compile("[^\\p{IsAlphabetic} ]");
 
     private final Dictionary dictionary;
 
