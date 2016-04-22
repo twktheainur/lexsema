@@ -50,7 +50,8 @@ public class TestOnSimilarityMeasures
     public static void main(String[] args) throws Exception
     {
         List<String> dicts_list = new ArrayList<>();
-        dicts_list.add("../data/lesk_dict/all/zebest"); 
+        dicts_list.add("../data/lil_new");
+        dicts_list.add("../data/lil_new_clusterized"); 
         compareDicts(dicts_list.toArray(new String[dicts_list.size()]));
     }
     
