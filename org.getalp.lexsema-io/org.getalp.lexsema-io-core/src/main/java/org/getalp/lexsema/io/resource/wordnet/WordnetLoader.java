@@ -108,6 +108,7 @@ public class WordnetLoader implements LRLoader {
 
     private List<Sense> getSenses(String lemma, String pos) {
         List<Sense> senses;
+        Map<String, String> senseKeyToSynsetOffset = new HashMap<>();
         String id = MessageFormat.format("{0}%{1}", lemma, processPOS(pos));
         if (senseCache.containsKey(id)) {
             senses = senseCache.get(id);
@@ -120,11 +121,12 @@ public class WordnetLoader implements LRLoader {
                 for (IWordID wordID : wordIDs) {
                     IWord word = dictionary.getWord(wordID);
                     ISenseKey senseKey = word.getSenseKey();
-                    String senseId = senseKey.toString();
+                    String senseKeyString = senseKey.toString();
                     if (loadSynsetOffsetInsteadOfSenseKey) {
-                        senseId = String.format("%08d", word.getSynset().getOffset()) + word.getPOS().getTag();
+                        String synsetOffset = String.format("%08d", word.getSynset().getOffset()) + word.getPOS().getTag();
+                        senseKeyToSynsetOffset.put(senseKeyString, synsetOffset);
                     }
-                    Sense sense = new SenseImpl(senseId);
+                    Sense sense = new SenseImpl(senseKeyString);
                     SemanticSignature signature = createSignature();
                     final ISynset wordSynset = word.getSynset();
                     if (loadDefinitions) {
@@ -141,7 +143,6 @@ public class WordnetLoader implements LRLoader {
                     }
 
                     for (AnnotatedTextThesaurus thesaurus : thesauri) {
-                        String senseKeyString = senseKey.toString();
                         addToSignature(signature, thesaurus.getRelatedWords(senseKeyString));
                         // Special case : from old to new versions of wordnet,
                         // the sense key for adjectives could have changed from "%5" to "%3"
@@ -158,6 +159,15 @@ public class WordnetLoader implements LRLoader {
                 }
             }
             senseCache.put(id, senses);
+        }
+        if (senseClusters != null) {
+            senses = clusterize(senses);
+        }
+        if (loadSynsetOffsetInsteadOfSenseKey) {
+            transformSenseKeysToSynsetOffset(senses, senseKeyToSynsetOffset);
+        }
+        if (shuffle) {
+            Collections.shuffle(senses);
         }
         return senses;
     }
@@ -218,12 +228,6 @@ public class WordnetLoader implements LRLoader {
                 }
             } else {
                 senses = new ArrayList<>();
-            }
-            if (senseClusters != null) {
-                senses = clusterize(senses);
-            }
-            if (shuffle) {
-                Collections.shuffle(senses);
             }
             commitSensesToCache(w, senses, localSenseCache);
         }
@@ -326,6 +330,16 @@ public class WordnetLoader implements LRLoader {
         }
         return newSenses;
     }
+    
+    private void transformSenseKeysToSynsetOffset(List<Sense> senses, Map<String, String> fromSenseKeyToSynsetOffset)
+    {
+        for (Sense sense : senses)
+        {
+            String senseKey = sense.getId();
+            String synsetOffset = fromSenseKeyToSynsetOffset.get(senseKey);
+            sense.setId(synsetOffset);
+        }
+    }
 
     private IIndexWord getWord(String sid) {
         String lemme;
@@ -380,8 +394,8 @@ public class WordnetLoader implements LRLoader {
     }
     
     public LRLoader addSignatureEnrichment(SignatureEnrichment signatureEnrichment) {
-    	signatureEnrichments.add(signatureEnrichment);
-    	return this;
+        signatureEnrichments.add(signatureEnrichment);
+        return this;
     }
 
     @Override

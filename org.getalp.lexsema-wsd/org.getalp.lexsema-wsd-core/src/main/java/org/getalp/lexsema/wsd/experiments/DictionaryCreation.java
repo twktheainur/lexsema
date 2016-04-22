@@ -7,6 +7,7 @@ import java.io.FileOutputStream;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
@@ -21,6 +22,8 @@ import org.getalp.lexsema.io.document.loader.Semeval2007CorpusLoader;
 import org.getalp.lexsema.io.document.loader.WordnetGlossTagCorpusLoader;
 import org.getalp.lexsema.io.resource.LRLoader;
 import org.getalp.lexsema.io.resource.wordnet.WordnetLoader;
+import org.getalp.lexsema.io.text.DicollecteFrenchLemmatizer;
+import org.getalp.lexsema.similarity.Document;
 import org.getalp.lexsema.similarity.Sense;
 import org.getalp.lexsema.similarity.Text;
 import org.getalp.lexsema.similarity.Word;
@@ -36,6 +39,8 @@ public class DictionaryCreation
     public static String wordnet30Path = "../data/wordnet/3.0/dict/";
 
     public static String semcor21Path = "../data/semcor2.1/all.xml";
+
+    public static String semcorfrPath = "../data/semcor_fr_filtered.xml";
 
     public static String semcor30Path = "../data/semcor/3.0/all.xml";
 
@@ -56,6 +61,8 @@ public class DictionaryCreation
     public static Dictionary wordnet30 = new Dictionary(new File(wordnet30Path));
 
     public static CorpusLoader semCor21 = new SemCorCorpusLoader(semcor21Path);
+
+    public static CorpusLoader semcorfr = new SemCorCorpusLoader(semcorfrPath);
 
     public static CorpusLoader semCor30 = new SemCorCorpusLoader(semcor30Path);
 
@@ -292,17 +299,80 @@ public class DictionaryCreation
         dict.withStopwords = true;
         dict.withStemming = true;
         dict.withIndexing = true;
-        dict.withShuffling = false;
         dict.withSemcorThesaurus = true;
         dict.withWNGTThesaurus = true;
         dict.numberOfWordsFromThesauri = 250;
-        dict.withSynsetOffsetInsteadOfSenseKey = false;
         
-        dict.write("../data/lesk_dict/all/zebest");
+        dict.withSynsetOffsetInsteadOfSenseKey = false;
+        dict.withSenseClusters = false;
+        dict.write("../data/lil_new");
+        
+        dict.withSynsetOffsetInsteadOfSenseKey = false;
+        dict.withSenseClusters = true;
+        dict.write("../data/lil_new_clustered");
         
         dict.withSynsetOffsetInsteadOfSenseKey = true;
+        dict.withSenseClusters = true;
+        dict.write("../data/lil_new_alt");
+        /*
+        SemCorCorpusLoader frenchSemcor = new SemCorCorpusLoader("../data/semcor_fr_filtered.xml");
+        frenchSemcor.load();
+        DicollecteFrenchLemmatizer lemmatizer = new DicollecteFrenchLemmatizer("../data/dicollecte/lexique-dicollecte-fr-v5.6.txt");
 
-        dict.write("../data/lesk_dict/all/zebestalt");
+        Map<Word, String> realLemmas = new HashMap<>();
+        
+        for (Document text : frenchSemcor)
+        {
+            for (Word word : text)
+            {
+                String realLemma = lemmatizer.getLemma(word.getSurfaceForm());
+                if (realLemma != null)
+                {
+                    // TODO HERE
+                    //realLemmas.put(key, value)
+                }
+            }
+        }
+        */
+       /* 
+        AnnotatedTextThesaurusImpl thesaurus = new AnnotatedTextThesaurusImpl(frenchSemcor, 100);
+        
+        File newDict = new File("../data/lesk_dict/all/french");
+        FileOutputStream fos = new FileOutputStream(newDict);
+        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(fos));
+        bw.write("<dict>");
+        bw.newLine();
+        for (Document text : frenchSemcor)
+        {
+            for (Word word : text)
+            {
+                DicollecteFrenchLemmatizer lemmatizer = new DicollecteFrenchLemmatizer("../data/dicollecte/lexique-dicollecte-fr-v5.6.txt");
+                String realLemma = lemmatizer.getLemma(word.getSurfaceForm());
+                bw.write(String.format("<word tag=\"%s%%%s\">", word.getLemma(), word.getPartOfSpeech()));
+                bw.newLine();
+                for (Sense sense : senses.get(word))
+                {
+                    bw.write("<sense>");
+                    bw.newLine();
+                    bw.write(String.format("<ids>%s</ids>", sense.getId()));
+                    bw.newLine();
+                    bw.write("<def>");
+                    bw.write(sense.getSemanticSignature().toString());
+                    bw.write("</def>");
+                    bw.newLine();
+                    bw.write("</sense>");
+                    bw.newLine();
+                }
+                bw.write("</word>");
+                bw.newLine();
+            }
+            bw.write("</dict>");
+            bw.newLine();
+            bw.flush();
+            bw.close();
+            fos.flush();
+            fos.close();
+        }*/
     }
 
 }
