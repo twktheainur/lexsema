@@ -38,11 +38,11 @@ public class DictionaryCreation
 
     public static String wordnet30Path = "../data/wordnet/3.0/dict/";
 
-    public static String semcor21Path = "../data/semcor2.1/all.xml";
-
-    public static String semcorfrPath = "../data/semcor_fr_filtered.xml";
+    public static String semcor21Path = "../data/semcor/2.1/all.xml";
 
     public static String semcor30Path = "../data/semcor/3.0/all.xml";
+
+    public static String semcorfrPath = "../data/semcor/fr/all.xml";
 
     public static String dsoPath = "../data/dso/";
 
@@ -62,9 +62,9 @@ public class DictionaryCreation
 
     public static CorpusLoader semCor21 = new SemCorCorpusLoader(semcor21Path);
 
-    public static CorpusLoader semcorfr = new SemCorCorpusLoader(semcorfrPath);
-
     public static CorpusLoader semCor30 = new SemCorCorpusLoader(semcor30Path);
+
+    public static CorpusLoader semcorfr = new SemCorCorpusLoader(semcorfrPath);
 
     public static CorpusLoader dso = new OldDSOCorpusLoader(dsoPath, wordnet21Path);
 
@@ -294,11 +294,41 @@ public class DictionaryCreation
     public static void main(String[] args) throws Exception
     {
         DictionaryCreation dict = new DictionaryCreation();
-        dict.withDefinitions = true;
-        dict.withExtendedDefinitions = true;
+		dict.loadOnlySemeval2007Task7Senses = true;
+		dict.withSenseClusters = true;
         dict.withStopwords = true;
         dict.withStemming = true;
         dict.withIndexing = true;
+        dict.withDefinitions = false;
+        dict.withExtendedDefinitions = false;
+        for (int i = 1 ; i <= 15 ; i++) 
+        {
+        	for (int j = 50 ; j <= 300 ; j += 50) 
+        	{
+        		dict.withSemcorThesaurus = (i & 1) == 1;
+        		dict.withDSOThesaurus = (i & 2) == 2;
+        		dict.withWNGTThesaurus = (i & 4) == 4;
+        		dict.withGMBThesaurus = (i & 8) == 8;
+        		dict.numberOfWordsFromThesauri = j;
+        		dict.write("../data/lesk_dict/semeval2007task7/wn30clust/" + i + "/" + j + "_alone");
+        	}
+        }
+        dict.withDefinitions = true;
+        dict.withExtendedDefinitions = true;
+        for (int i = 1 ; i <= 15 ; i++) 
+        {
+        	for (int j = 50 ; j <= 300 ; j += 50) 
+        	{
+        		dict.withSemcorThesaurus = (i & 1) == 1;
+        		dict.withDSOThesaurus = (i & 2) == 2;
+        		dict.withWNGTThesaurus = (i & 4) == 4;
+        		dict.withGMBThesaurus = (i & 8) == 8;
+        		dict.numberOfWordsFromThesauri = j;
+        		dict.write("../data/lesk_dict/semeval2007task7/wn30clust/" + i + "/" + j);
+        	}
+        }
+        
+        /*
         dict.withSemcorThesaurus = true;
         dict.withWNGTThesaurus = true;
         dict.numberOfWordsFromThesauri = 250;
@@ -314,6 +344,7 @@ public class DictionaryCreation
         dict.withSynsetOffsetInsteadOfSenseKey = true;
         dict.withSenseClusters = true;
         dict.write("../data/lil_new_alt");
+        */
         /*
         SemCorCorpusLoader frenchSemcor = new SemCorCorpusLoader("../data/semcor_fr_filtered.xml");
         frenchSemcor.load();
@@ -328,13 +359,14 @@ public class DictionaryCreation
                 String realLemma = lemmatizer.getLemma(word.getSurfaceForm());
                 if (realLemma != null)
                 {
-                    // TODO HERE
-                    //realLemmas.put(key, value)
+                    realLemmas.put(word, realLemma);
                 }
             }
         }
-        */
-       /* 
+        
+        List<String> allZeWords = new ArrayList<>();
+        
+       
         AnnotatedTextThesaurusImpl thesaurus = new AnnotatedTextThesaurusImpl(frenchSemcor, 100);
         
         File newDict = new File("../data/lesk_dict/all/french");
@@ -372,7 +404,8 @@ public class DictionaryCreation
             bw.close();
             fos.flush();
             fos.close();
-        }*/
+        }
+        */
     }
 
 }

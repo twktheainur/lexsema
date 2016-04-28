@@ -49,10 +49,34 @@ public class TestOnSimilarityMeasures
 
     public static void main(String[] args) throws Exception
     {
+    	List<String> dicts_list = new ArrayList<>();
+        for (int i = 1 ; i <= 15 ; i++) 
+        {
+            for (int j = 50 ; j <= 300 ; j += 50) 
+            {
+                dicts_list.add("../data/lesk_dict/semeval2007task7/wn30clust/" + i + "/" + j);
+            }
+        }
+        String[] dicts = dicts_list.toArray(new String[dicts_list.size()]);
+        compareDicts(dicts);
+        
+        dicts_list = new ArrayList<>();
+        for (int i = 1 ; i <= 15 ; i++) 
+        {
+            for (int j = 50 ; j <= 300 ; j += 50) 
+            {
+                dicts_list.add("../data/lesk_dict/semeval2007task7/wn30clust/" + i + "/" + j + "_alone");
+            }
+        }
+        dicts = dicts_list.toArray(new String[dicts_list.size()]);
+        compareDicts(dicts);
+        
+    	/*
         List<String> dicts_list = new ArrayList<>();
         dicts_list.add("../data/lil_new");
         dicts_list.add("../data/lil_new_clusterized"); 
         compareDicts(dicts_list.toArray(new String[dicts_list.size()]));
+        */
     }
     
     private static void compareDicts(String[] dicts) throws Exception
