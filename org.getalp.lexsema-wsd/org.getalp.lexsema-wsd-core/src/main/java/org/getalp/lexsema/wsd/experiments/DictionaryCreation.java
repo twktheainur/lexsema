@@ -8,9 +8,11 @@ import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
+import java.util.Set;
 
 import edu.mit.jwi.Dictionary;
 import org.getalp.lexsema.io.dictionary.DocumentDictionaryWriter;
@@ -25,10 +27,12 @@ import org.getalp.lexsema.io.resource.wordnet.WordnetLoader;
 import org.getalp.lexsema.io.text.DicollecteFrenchLemmatizer;
 import org.getalp.lexsema.similarity.Document;
 import org.getalp.lexsema.similarity.Sense;
+import org.getalp.lexsema.similarity.Sentence;
 import org.getalp.lexsema.similarity.Text;
 import org.getalp.lexsema.similarity.Word;
 import org.getalp.lexsema.similarity.signatures.enrichment.*;
 import org.getalp.lexsema.io.thesaurus.AnnotatedTextThesaurusImpl;
+import org.getalp.lexsema.util.StopList;
 import org.getalp.lexsema.util.VectorOperation;
 import org.getalp.lexsema.util.word2vec.Word2VecClient;
 
@@ -192,7 +196,9 @@ public class DictionaryCreation
             }
         }
 
-        lrloader.addThesaurus(new AnnotatedTextThesaurusImpl(corpora, numberOfWordsFromThesauri));
+        AnnotatedTextThesaurusImpl thesaurus = new AnnotatedTextThesaurusImpl(corpora, numberOfWordsFromThesauri);
+        printStats(corpora);
+        lrloader.addThesaurus(thesaurus);
 
         if (withStopwords)
         {
@@ -290,7 +296,43 @@ public class DictionaryCreation
         }
         sc.close();
     }
-
+    private static void printStats(Iterable<Text> texts)
+    {
+        Set<String> annotatedWordSet = new HashSet<>();
+        List<String> annotatedWordList = new ArrayList<>();
+        Set<String> annotatedSenseSet = new HashSet<>();
+        List<String> annotatedSenseList = new ArrayList<>();
+        //Map<String, Integer> counter = new HashMap<>();
+        for (Text txt : texts)
+        {
+            for (Sentence stc : txt.sentences())
+            {
+                for (Word w : stc)
+                {
+                    if (w.getLemma() != null && w.getSenseAnnotation() != null)
+                    {
+                        String wordStr = w.getLemma() + "%" + w.getSenseAnnotation();
+                        annotatedWordSet.add(w.getLemma());
+                        annotatedWordList.add(w.getLemma());
+                        annotatedSenseSet.add(wordStr);
+                        annotatedSenseList.add(wordStr);
+                        //counter.put(wordStr, counter.get(wordStr) + 1);
+                    }
+                }
+            }
+        }
+        System.out.println("Number of unique annotated word : " + annotatedWordSet.size());
+        System.out.println("Number of annotated word : " + annotatedWordList.size());
+        System.out.println("Number of unique annotated sense : " + annotatedSenseSet.size());
+        System.out.println("Number of annotated sense : " + annotatedSenseList.size());
+        /*
+        Integer[] counters = counter.values().toArray(new Integer[counter.values().size()]);
+        double mean = 0;
+        for (Integer i : counters) mean += i;
+        mean /= (double) counters.length;
+        System.out.println("Mean number of annotation per sense : " + mean);
+        */
+    }
     public static void main(String[] args) throws Exception
     {
         DictionaryCreation dict = new DictionaryCreation();
@@ -303,14 +345,15 @@ public class DictionaryCreation
         dict.withExtendedDefinitions = false;
         for (int i = 1 ; i <= 15 ; i++) 
         {
-        	for (int j = 50 ; j <= 300 ; j += 50) 
+        	//for (int j = 50 ; j <= 300 ; j += 50) 
+            for (int j = 50 ; j <= 50 ; j += 50) 
         	{
         		dict.withSemcorThesaurus = (i & 1) == 1;
         		dict.withDSOThesaurus = (i & 2) == 2;
         		dict.withWNGTThesaurus = (i & 4) == 4;
         		dict.withGMBThesaurus = (i & 8) == 8;
         		dict.numberOfWordsFromThesauri = j;
-        		dict.write("../data/lesk_dict/semeval2007task7/wn30clust/" + i + "/" + j + "_alone");
+        		dict.write("../data/lesk_dict/semeval2007task7/wn30clust/" + i + "/" + j + "_alone_todelete");
         	}
         }
         dict.withDefinitions = true;
