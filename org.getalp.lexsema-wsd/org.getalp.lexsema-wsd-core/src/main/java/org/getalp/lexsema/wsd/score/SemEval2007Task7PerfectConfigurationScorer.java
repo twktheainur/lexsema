@@ -2345,7 +2345,6 @@ public class SemEval2007Task7PerfectConfigurationScorer implements Configuration
     			}
     		}
     	}
-    	score /= 100.0;
     	score /= ((double) data.size());
     	System.out.println("My score : " + score);
     	WSDResult result = evaluation.evaluate(goldStandard, configuration);
