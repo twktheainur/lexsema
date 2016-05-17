@@ -2339,7 +2339,7 @@ public class SemEval2007Task7PerfectConfigurationScorer implements Configuration
     		boolean wrong = true;
     		for (String answer : answers)
     		{
-    			if (senseKey.equals(answer))
+    			if (senseKey.toLowerCase().equals(answer.toLowerCase()))
     			{
     				score += 1;
     				wrong = false;
