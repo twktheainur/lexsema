@@ -148,9 +148,8 @@ public class TestOnSimilarityMeasures
                 System.out.flush();
                 Configuration c = disambiguator.disambiguate(d);
                 String resultName = dict;
-                resultName = resultName.replaceAll(".", "");
-                resultName = resultName.replaceAll("/", "");
-                System.out.println("Writing result to " + resultName);
+                resultName = resultName.replaceAll("\\.", "");
+                resultName = resultName.replaceAll("\\/", "");
                 SemevalWriter sw = new SemevalWriter(resultName + "_" + i + "_" + d.getId() + ".ans");
                 sw.write(d, c.getAssignments());
                 double tmp_score = perfectScorer.computeScore(d, c);
