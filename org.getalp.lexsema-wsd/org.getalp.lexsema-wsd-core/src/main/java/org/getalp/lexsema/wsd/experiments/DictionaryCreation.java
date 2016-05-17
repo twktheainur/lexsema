@@ -132,7 +132,7 @@ public class DictionaryCreation
     {
         System.out.println("Building dictionary " + newDictPath + "...");
 
-        WordnetLoader lrloader = new WordnetLoader(wordnet30);
+        WordnetLoader lrloader = new WordnetLoader(wordnet21);
 
         lrloader.loadDefinitions(withDefinitions);
         lrloader.extendedSignature(withExtendedDefinitions);
@@ -197,7 +197,7 @@ public class DictionaryCreation
         }
 
         AnnotatedTextThesaurusImpl thesaurus = new AnnotatedTextThesaurusImpl(corpora, numberOfWordsFromThesauri);
-        printStats(corpora);
+        //printStats(corpora);
         lrloader.addThesaurus(thesaurus);
 
         if (withStopwords)
@@ -341,21 +341,6 @@ public class DictionaryCreation
         dict.withStopwords = true;
         dict.withStemming = true;
         dict.withIndexing = true;
-        dict.withDefinitions = false;
-        dict.withExtendedDefinitions = false;
-        for (int i = 1 ; i <= 15 ; i++) 
-        {
-        	//for (int j = 50 ; j <= 300 ; j += 50) 
-            for (int j = 50 ; j <= 50 ; j += 50) 
-        	{
-        		dict.withSemcorThesaurus = (i & 1) == 1;
-        		dict.withDSOThesaurus = (i & 2) == 2;
-        		dict.withWNGTThesaurus = (i & 4) == 4;
-        		dict.withGMBThesaurus = (i & 8) == 8;
-        		dict.numberOfWordsFromThesauri = j;
-        		dict.write("../data/lesk_dict/semeval2007task7/wn30clust/" + i + "/" + j + "_alone_todelete");
-        	}
-        }
         dict.withDefinitions = true;
         dict.withExtendedDefinitions = true;
         for (int i = 1 ; i <= 15 ; i++) 
@@ -367,7 +352,7 @@ public class DictionaryCreation
         		dict.withWNGTThesaurus = (i & 4) == 4;
         		dict.withGMBThesaurus = (i & 8) == 8;
         		dict.numberOfWordsFromThesauri = j;
-        		dict.write("../data/lesk_dict/semeval2007task7/wn30clust/" + i + "/" + j);
+        		dict.write("../data/lesk_dict/semeval2007task7/clust/" + i + "/" + j);
         	}
         }
         

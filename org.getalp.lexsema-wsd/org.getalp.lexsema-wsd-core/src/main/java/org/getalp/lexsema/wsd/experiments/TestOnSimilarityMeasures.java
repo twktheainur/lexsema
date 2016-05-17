@@ -74,8 +74,8 @@ public class TestOnSimilarityMeasures
         */
     	
         List<String> dicts_list = new ArrayList<>();
-        dicts_list.add("../data/lesk_dict/semeval2007task7/5/250");
-        dicts_list.add("../data/lesk_dict/semeval2007task7/wn30clust/5/200"); 
+        //dicts_list.add("../data/lesk_dict/semeval2007task7/5/250");
+        dicts_list.add("../data/lesk_dict/semeval2007task7/clust/5/200"); 
         compareDicts(dicts_list.toArray(new String[dicts_list.size()]));
       
     }
@@ -148,8 +148,9 @@ public class TestOnSimilarityMeasures
                 System.out.flush();
                 Configuration c = disambiguator.disambiguate(d);
                 String resultName = dict;
-                resultName.replaceAll(".", "");
-                resultName.replaceAll("/", "");
+                resultName = resultName.replaceAll(".", "");
+                resultName = resultName.replaceAll("/", "");
+                System.out.println("Writing result to " + resultName);
                 SemevalWriter sw = new SemevalWriter(resultName + "_" + i + "_" + d.getId() + ".ans");
                 sw.write(d, c.getAssignments());
                 double tmp_score = perfectScorer.computeScore(d, c);
