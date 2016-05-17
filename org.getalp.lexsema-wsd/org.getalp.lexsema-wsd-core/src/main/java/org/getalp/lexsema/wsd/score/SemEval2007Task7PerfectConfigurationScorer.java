@@ -4,6 +4,9 @@ import org.getalp.lexsema.similarity.Document;
 import org.getalp.lexsema.similarity.Sense;
 import org.getalp.lexsema.wsd.configuration.Configuration;
 import java.util.*;
+import org.getalp.lexsema.wsd.evaluation.Semeval2007GoldStandard;
+import org.getalp.lexsema.wsd.evaluation.StandardEvaluation;
+import org.getalp.lexsema.wsd.evaluation.WSDResult;
 
 public class SemEval2007Task7PerfectConfigurationScorer implements ConfigurationScorer
 {
@@ -12,6 +15,9 @@ public class SemEval2007Task7PerfectConfigurationScorer implements Configuration
     private ArrayList<ArrayList<String>> d003;
     private ArrayList<ArrayList<String>> d004;
     private ArrayList<ArrayList<String>> d005;
+    
+    private Semeval2007GoldStandard goldStandard;
+    private StandardEvaluation evaluation;
     
     private ArrayList<String> createList(String... elements)
     {
@@ -2308,6 +2314,8 @@ public class SemEval2007Task7PerfectConfigurationScorer implements Configuration
     
     public SemEval2007Task7PerfectConfigurationScorer()
     {
+    	goldStandard = new Semeval2007GoldStandard();
+    	evaluation = new StandardEvaluation();
         loadData();
     }
     
@@ -2319,6 +2327,8 @@ public class SemEval2007Task7PerfectConfigurationScorer implements Configuration
     	else if (document.getId().equals("d003")) data = d003;
     	else if (document.getId().equals("d004")) data = d004;
     	else if (document.getId().equals("d005")) data = d005;
+    	if (data == null) throw new RuntimeException();
+    	if (data.size() != configuration.size()) throw new RuntimeException();
     	double score = 0;
     	for (int i = 0 ; i < data.size() ; i++)
     	{
@@ -2331,11 +2341,15 @@ public class SemEval2007Task7PerfectConfigurationScorer implements Configuration
     			if (senseKey.equals(answer))
     			{
     				score += 1;
+    				break;
     			}
     		}
     	}
-    	score *= 100;
-    	score /= data.size();
+    	score /= 100.0;
+    	score /= ((double) data.size());
+    	System.out.println("My score : " + score);
+    	WSDResult result = evaluation.evaluate(goldStandard, configuration);
+    	System.out.println("Andon score : " + result.getPrecision());
     	return score;
     }
 
