@@ -2348,7 +2348,7 @@ public class SemEval2007Task7PerfectConfigurationScorer implements Configuration
     		}
     		if (wrong)
     		{
-    			System.out.println("Wrong: " + document.getWord(i).getId());
+    			//System.out.println("Wrong: " + document.getWord(i).getId());
     		}
     	}
     	score /= ((double) data.size());
