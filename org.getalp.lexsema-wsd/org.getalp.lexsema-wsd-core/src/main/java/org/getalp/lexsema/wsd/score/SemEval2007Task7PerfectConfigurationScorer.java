@@ -2336,19 +2336,29 @@ public class SemEval2007Task7PerfectConfigurationScorer implements Configuration
     		Sense sense = document.getSenses(i).get(assignment);
     		String senseKey = sense.getId();
     		ArrayList<String> answers = data.get(i);
+    		boolean wrong = true;
     		for (String answer : answers)
     		{
     			if (senseKey.equals(answer))
     			{
     				score += 1;
+    				wrong = false;
     				break;
     			}
+    		}
+    		if (wrong)
+    		{
+    			System.out.println("Wrong: " + document.getWord(i).getId());
     		}
     	}
     	score /= ((double) data.size());
     	System.out.println("My score : " + score);
+    	
+    	
     	WSDResult result = evaluation.evaluate(goldStandard, configuration);
     	System.out.println("Andon score : " + result.getPrecision());
+    	
+    	
     	return score;
     }
 
