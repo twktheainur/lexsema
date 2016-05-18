@@ -2352,11 +2352,11 @@ public class SemEval2007Task7PerfectConfigurationScorer implements Configuration
     		}
     	}
     	score /= ((double) data.size());
-    	System.out.println("My score : " + score);
+    	//System.out.println("My score : " + score);
     	
     	
-    	WSDResult result = evaluation.evaluate(goldStandard, configuration);
-    	System.out.println("Andon score : " + result.getPrecision());
+    	//WSDResult result = evaluation.evaluate(goldStandard, configuration);
+    	//System.out.println("Andon score : " + result.getPrecision());
     	
     	
     	return score;
