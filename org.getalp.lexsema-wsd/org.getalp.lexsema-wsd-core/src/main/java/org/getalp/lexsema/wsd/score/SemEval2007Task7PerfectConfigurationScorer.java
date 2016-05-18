@@ -2333,6 +2333,10 @@ public class SemEval2007Task7PerfectConfigurationScorer implements Configuration
     	for (int i = 0 ; i < data.size() ; i++)
     	{
     		int assignment = configuration.getAssignment(i);
+    		if (assignment == -1)
+    		{
+    			continue;
+    		}
     		Sense sense = document.getSenses(i).get(assignment);
     		String senseKey = sense.getId();
     		ArrayList<String> answers = data.get(i);
