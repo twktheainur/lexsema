@@ -341,8 +341,8 @@ public class DictionaryCreation
         dict.withStopwords = true;
         dict.withStemming = true;
         dict.withIndexing = true;
-        dict.withDefinitions = true;
-        dict.withExtendedDefinitions = true;
+        dict.withDefinitions = false;
+        dict.withExtendedDefinitions = false;
         for (int i = 1 ; i <= 15 ; i++) 
         {
         	for (int j = 50 ; j <= 300 ; j += 50) 
@@ -352,7 +352,7 @@ public class DictionaryCreation
         		dict.withWNGTThesaurus = (i & 4) == 4;
         		dict.withGMBThesaurus = (i & 8) == 8;
         		dict.numberOfWordsFromThesauri = j;
-        		dict.write("../data/lesk_dict/semeval2007task7/clust/" + i + "/" + j);
+        		dict.write("../data/lesk_dict/semeval2007task7/coarse_nodef/" + i + "/" + j);
         	}
         }
         
