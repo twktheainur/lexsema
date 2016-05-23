@@ -45,11 +45,12 @@ public class TestOnSimilarityMeasures
     {
     	List<String> dicts_list = new ArrayList<>();
     	//dicts_list.add("../data/lesk_dict/semeval2007task7/0");
-        for (int i = 8 ; i <= 15 ; i++) 
+        //for (int i =  ; i <= 15 ; i++) 
         {
+        	int i = Integer.valueOf(args[1]);
             for (int j = 50 ; j <= 300 ; j += 50) 
             {
-                dicts_list.add("../data/lesk_dict/semeval2007task7/fine_nodef" + i + "/" + j);
+                dicts_list.add("../data/lesk_dict/semeval2007task7/fine_def/" + i + "/" + j);
             }
         }
         String[] dicts = dicts_list.toArray(new String[dicts_list.size()]);
