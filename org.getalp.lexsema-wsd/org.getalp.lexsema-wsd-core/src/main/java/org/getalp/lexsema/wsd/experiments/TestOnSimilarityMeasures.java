@@ -48,7 +48,7 @@ public class TestOnSimilarityMeasures
         //for (int i =  ; i <= 15 ; i++) 
         {
         	int i = Integer.valueOf(args[1]);
-            for (int j = 50 ; j <= 300 ; j += 50) 
+            for (int j = 200 ; j <= 300 ; j += 50) 
             {
                 dicts_list.add("../data/lesk_dict/semeval2007task7/fine_def/" + i + "/" + j);
             }
