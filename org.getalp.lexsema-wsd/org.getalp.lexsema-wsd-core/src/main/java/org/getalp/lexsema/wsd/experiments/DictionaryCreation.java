@@ -337,12 +337,14 @@ public class DictionaryCreation
     {
         DictionaryCreation dict = new DictionaryCreation();
 		dict.loadOnlySemeval2007Task7Senses = true;
-		dict.withSenseClusters = true;
         dict.withStopwords = true;
         dict.withStemming = true;
         dict.withIndexing = true;
+
+		dict.withSenseClusters = true;
         dict.withDefinitions = false;
         dict.withExtendedDefinitions = false;
+        
         for (int i = 1 ; i <= 15 ; i++) 
         {
         	for (int j = 50 ; j <= 300 ; j += 50) 
@@ -353,6 +355,53 @@ public class DictionaryCreation
         		dict.withGMBThesaurus = (i & 8) == 8;
         		dict.numberOfWordsFromThesauri = j;
         		dict.write("../data/lesk_dict/semeval2007task7/coarse_nodef/" + i + "/" + j);
+        	}
+        }
+
+        dict.withDefinitions = true;
+        dict.withExtendedDefinitions = true;
+        
+        for (int i = 1 ; i <= 15 ; i++) 
+        {
+        	for (int j = 50 ; j <= 300 ; j += 50) 
+        	{
+        		dict.withSemcorThesaurus = (i & 1) == 1;
+        		dict.withDSOThesaurus = (i & 2) == 2;
+        		dict.withWNGTThesaurus = (i & 4) == 4;
+        		dict.withGMBThesaurus = (i & 8) == 8;
+        		dict.numberOfWordsFromThesauri = j;
+        		dict.write("../data/lesk_dict/semeval2007task7/coarse_def/" + i + "/" + j);
+        	}
+        }
+
+        dict.withSenseClusters = false;
+        
+        for (int i = 1 ; i <= 15 ; i++) 
+        {
+        	for (int j = 50 ; j <= 300 ; j += 50) 
+        	{
+        		dict.withSemcorThesaurus = (i & 1) == 1;
+        		dict.withDSOThesaurus = (i & 2) == 2;
+        		dict.withWNGTThesaurus = (i & 4) == 4;
+        		dict.withGMBThesaurus = (i & 8) == 8;
+        		dict.numberOfWordsFromThesauri = j;
+        		dict.write("../data/lesk_dict/semeval2007task7/fine_def/" + i + "/" + j);
+        	}
+        }
+
+        dict.withDefinitions = false;
+        dict.withExtendedDefinitions = false;
+        
+        for (int i = 1 ; i <= 15 ; i++) 
+        {
+        	for (int j = 50 ; j <= 300 ; j += 50) 
+        	{
+        		dict.withSemcorThesaurus = (i & 1) == 1;
+        		dict.withDSOThesaurus = (i & 2) == 2;
+        		dict.withWNGTThesaurus = (i & 4) == 4;
+        		dict.withGMBThesaurus = (i & 8) == 8;
+        		dict.numberOfWordsFromThesauri = j;
+        		dict.write("../data/lesk_dict/semeval2007task7/fine_nodef/" + i + "/" + j);
         	}
         }
         
