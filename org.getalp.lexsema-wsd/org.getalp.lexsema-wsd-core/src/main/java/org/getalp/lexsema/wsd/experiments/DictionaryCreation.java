@@ -344,8 +344,8 @@ public class DictionaryCreation
 		dict.withSenseClusters = true;
         dict.withDefinitions = false;
         dict.withExtendedDefinitions = false;
-        
-        for (int i = 14 ; i <= 15 ; i++) 
+        /*
+        for (int i = 1 ; i <= 15 ; i++) 
         {
         	for (int j = 50 ; j <= 300 ; j += 50) 
         	{
@@ -357,11 +357,11 @@ public class DictionaryCreation
         		dict.write("../data/lesk_dict/semeval2007task7/coarse_nodef/" + i + "/" + j);
         	}
         }
-
+*/
         dict.withDefinitions = true;
         dict.withExtendedDefinitions = true;
         
-        for (int i = 1 ; i <= 15 ; i++) 
+        for (int i = 15 ; i <= 15 ; i++) 
         {
         	for (int j = 50 ; j <= 300 ; j += 50) 
         	{
