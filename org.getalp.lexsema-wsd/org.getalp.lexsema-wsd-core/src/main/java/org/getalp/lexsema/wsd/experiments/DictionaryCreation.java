@@ -345,7 +345,7 @@ public class DictionaryCreation
         dict.withDefinitions = false;
         dict.withExtendedDefinitions = false;
         
-        for (int i = 1 ; i <= 15 ; i++) 
+        for (int i = 14 ; i <= 15 ; i++) 
         {
         	for (int j = 50 ; j <= 300 ; j += 50) 
         	{
