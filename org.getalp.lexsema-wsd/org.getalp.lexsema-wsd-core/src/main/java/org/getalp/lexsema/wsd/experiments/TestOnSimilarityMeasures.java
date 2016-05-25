@@ -49,7 +49,7 @@ public class TestOnSimilarityMeasures
         {
             for (int j = 50 ; j <= 300 ; j += 50) 
             {
-                dicts_list.add("../data/lesk_dict/semeval2007task7/fine_nodef/" + i + "/" + j);
+                dicts_list.add("../data/lesk_dict/semeval2007task7/coarse_def/" + i + "/" + j);
             }
         }
         String[] dicts = dicts_list.toArray(new String[dicts_list.size()]);
