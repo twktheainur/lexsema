@@ -196,8 +196,9 @@ public class DictionaryCreation
             }
         }
 
-        AnnotatedTextThesaurusImpl thesaurus = new AnnotatedTextThesaurusImpl(corpora, numberOfWordsFromThesauri);
-        //printStats(corpora);
+        //AnnotatedTextThesaurusImpl thesaurus = new AnnotatedTextThesaurusImpl(corpora, numberOfWordsFromThesauri);
+        printStats(corpora);
+        /*
         lrloader.addThesaurus(thesaurus);
 
         if (withStopwords)
@@ -246,6 +247,7 @@ public class DictionaryCreation
         {
             doWriteFullDictionary(lrloader.getAllSenses(), newDictPath);
         }  
+        */
     }
 
     private static void doWriteFullDictionary(Map<Word, List<Sense>> senses, String newDictPath) throws Exception
@@ -309,7 +311,8 @@ public class DictionaryCreation
             {
                 for (Word w : stc)
                 {
-                    if (w.getLemma() != null && w.getSenseAnnotation() != null)
+                    if (w.getLemma() != null && !w.getLemma().equals("") && 
+                    	w.getSenseAnnotation() != null && !w.getSenseAnnotation().equals(""))
                     {
                         String wordStr = w.getLemma() + "%" + w.getSenseAnnotation();
                         annotatedWordSet.add(w.getLemma());
@@ -341,13 +344,14 @@ public class DictionaryCreation
         dict.withStemming = true;
         dict.withIndexing = true;
 
-		dict.withSenseClusters = true;
+		dict.withSenseClusters = false;
         dict.withDefinitions = false;
         dict.withExtendedDefinitions = false;
-        /*
+        
         for (int i = 1 ; i <= 15 ; i++) 
         {
-        	for (int j = 50 ; j <= 300 ; j += 50) 
+        	int j = 50;
+        	//for (int j = 50 ; j <= 300 ; j += 50) 
         	{
         		dict.withSemcorThesaurus = (i & 1) == 1;
         		dict.withDSOThesaurus = (i & 2) == 2;
@@ -357,7 +361,8 @@ public class DictionaryCreation
         		dict.write("../data/lesk_dict/semeval2007task7/coarse_nodef/" + i + "/" + j);
         	}
         }
-*/
+
+        /*
         dict.withDefinitions = true;
         dict.withExtendedDefinitions = true;
         
@@ -404,7 +409,7 @@ public class DictionaryCreation
         		dict.write("../data/lesk_dict/semeval2007task7/fine_nodef/" + i + "/" + j);
         	}
         }
-        
+        */
         /*
         dict.withSemcorThesaurus = true;
         dict.withWNGTThesaurus = true;
