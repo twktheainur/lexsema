@@ -44,7 +44,10 @@ public class TestOnSimilarityMeasures
     public static void main(String[] args) throws Exception
     {
     	List<String> dicts_list = new ArrayList<>();
+    	dicts_list.add("../data/lesk_dict/all/fine_def/5_250");
+    	dicts_list.add("../data/lesk_dict/all/fine_def/7_100");
     	//dicts_list.add("../data/lesk_dict/semeval2007task7/0");
+    	/*
         for (int i = 1 ; i <= 15 ; i++) 
         {
             for (int j = 50 ; j <= 300 ; j += 50) 
@@ -52,6 +55,7 @@ public class TestOnSimilarityMeasures
                 dicts_list.add("../data/lesk_dict/semeval2007task7/coarse_nodef/" + i + "/" + j);
             }
         }
+        */
         String[] dicts = dicts_list.toArray(new String[dicts_list.size()]);
         compareDicts(dicts);
         /*

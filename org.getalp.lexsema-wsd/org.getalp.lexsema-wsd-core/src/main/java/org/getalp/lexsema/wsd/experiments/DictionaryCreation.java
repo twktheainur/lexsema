@@ -196,9 +196,9 @@ public class DictionaryCreation
             }
         }
 
-        //AnnotatedTextThesaurusImpl thesaurus = new AnnotatedTextThesaurusImpl(corpora, numberOfWordsFromThesauri);
-        printStats(corpora);
-        /*
+        //printStats(corpora);
+
+        AnnotatedTextThesaurusImpl thesaurus = new AnnotatedTextThesaurusImpl(corpora, numberOfWordsFromThesauri);
         lrloader.addThesaurus(thesaurus);
 
         if (withStopwords)
@@ -247,7 +247,6 @@ public class DictionaryCreation
         {
             doWriteFullDictionary(lrloader.getAllSenses(), newDictPath);
         }  
-        */
     }
 
     private static void doWriteFullDictionary(Map<Word, List<Sense>> senses, String newDictPath) throws Exception
@@ -339,19 +338,30 @@ public class DictionaryCreation
     public static void main(String[] args) throws Exception
     {
         DictionaryCreation dict = new DictionaryCreation();
-		dict.loadOnlySemeval2007Task7Senses = true;
+		dict.loadOnlySemeval2007Task7Senses = false;
         dict.withStopwords = true;
         dict.withStemming = true;
         dict.withIndexing = true;
+        dict.withShuffling = true;
 
 		dict.withSenseClusters = false;
-        dict.withDefinitions = false;
-        dict.withExtendedDefinitions = false;
+        dict.withDefinitions = true;
+        dict.withExtendedDefinitions = true;
         
+        dict.withSemcorThesaurus = true;
+        dict.withWNGTThesaurus = true;
+        dict.numberOfWordsFromThesauri = 250;
+        
+        dict.write("../data/lesk_dict/all/fine_def/5_250");
+
+        dict.withDSOThesaurus = true;
+        dict.numberOfWordsFromThesauri = 100;
+        
+        dict.write("../data/lesk_dict/all/fine_def/7_100");
+        /*
         for (int i = 1 ; i <= 15 ; i++) 
         {
-        	int j = 50;
-        	//for (int j = 50 ; j <= 300 ; j += 50) 
+        	for (int j = 50 ; j <= 300 ; j += 50) 
         	{
         		dict.withSemcorThesaurus = (i & 1) == 1;
         		dict.withDSOThesaurus = (i & 2) == 2;
@@ -361,55 +371,8 @@ public class DictionaryCreation
         		dict.write("../data/lesk_dict/semeval2007task7/coarse_nodef/" + i + "/" + j);
         	}
         }
-
-        /*
-        dict.withDefinitions = true;
-        dict.withExtendedDefinitions = true;
+		*/
         
-        for (int i = 15 ; i <= 15 ; i++) 
-        {
-        	for (int j = 50 ; j <= 300 ; j += 50) 
-        	{
-        		dict.withSemcorThesaurus = (i & 1) == 1;
-        		dict.withDSOThesaurus = (i & 2) == 2;
-        		dict.withWNGTThesaurus = (i & 4) == 4;
-        		dict.withGMBThesaurus = (i & 8) == 8;
-        		dict.numberOfWordsFromThesauri = j;
-        		dict.write("../data/lesk_dict/semeval2007task7/coarse_def/" + i + "/" + j);
-        	}
-        }
-
-        dict.withSenseClusters = false;
-        
-        for (int i = 1 ; i <= 15 ; i++) 
-        {
-        	for (int j = 50 ; j <= 300 ; j += 50) 
-        	{
-        		dict.withSemcorThesaurus = (i & 1) == 1;
-        		dict.withDSOThesaurus = (i & 2) == 2;
-        		dict.withWNGTThesaurus = (i & 4) == 4;
-        		dict.withGMBThesaurus = (i & 8) == 8;
-        		dict.numberOfWordsFromThesauri = j;
-        		dict.write("../data/lesk_dict/semeval2007task7/fine_def/" + i + "/" + j);
-        	}
-        }
-
-        dict.withDefinitions = false;
-        dict.withExtendedDefinitions = false;
-        
-        for (int i = 1 ; i <= 15 ; i++) 
-        {
-        	for (int j = 50 ; j <= 300 ; j += 50) 
-        	{
-        		dict.withSemcorThesaurus = (i & 1) == 1;
-        		dict.withDSOThesaurus = (i & 2) == 2;
-        		dict.withWNGTThesaurus = (i & 4) == 4;
-        		dict.withGMBThesaurus = (i & 8) == 8;
-        		dict.numberOfWordsFromThesauri = j;
-        		dict.write("../data/lesk_dict/semeval2007task7/fine_nodef/" + i + "/" + j);
-        	}
-        }
-        */
         /*
         dict.withSemcorThesaurus = true;
         dict.withWNGTThesaurus = true;
