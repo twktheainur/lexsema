@@ -13,6 +13,7 @@ import org.getalp.lexsema.io.resource.LRLoader;
 import org.getalp.lexsema.io.resource.dictionary.DictionaryLRLoader;
 import org.getalp.lexsema.similarity.Document;
 import org.getalp.lexsema.similarity.measures.lesk.IndexedLeskSimilarity;
+import org.getalp.lexsema.similarity.measures.lesk.SimpleLeskSimilarity;
 import org.getalp.lexsema.wsd.configuration.Configuration;
 import org.getalp.lexsema.wsd.method.*;
 import org.getalp.lexsema.wsd.score.*;
@@ -44,8 +45,8 @@ public class TestOnSimilarityMeasures
     public static void main(String[] args) throws Exception
     {
     	List<String> dicts_list = new ArrayList<>();
-    	dicts_list.add("../data/lesk_dict/all/fine_def/5_250");
-    	dicts_list.add("../data/lesk_dict/all/fine_def/7_100");
+    	dicts_list.add("../data/lesk_dict/all/fine_def/5_250_clear");
+    	dicts_list.add("../data/lesk_dict/all/fine_def/7_100_clear");
     	//dicts_list.add("../data/lesk_dict/semeval2007task7/0");
     	/*
         for (int i = 1 ; i <= 15 ; i++) 
@@ -118,7 +119,8 @@ public class TestOnSimilarityMeasures
         dl.load();
         for (Document d : dl) lrloader.loadSenses(d);
 
-        ConfigurationScorer scorer = new ConfigurationScorerWithCache(new IndexedLeskSimilarity());
+        //ConfigurationScorer scorer = new ConfigurationScorerWithCache(new IndexedLeskSimilarity());
+        ConfigurationScorer scorer = new ConfigurationScorerWithCache(new SimpleLeskSimilarity());
             
         SemEval2007Task7PerfectConfigurationScorer perfectScorer = new SemEval2007Task7PerfectConfigurationScorer();
 
@@ -148,11 +150,11 @@ public class TestOnSimilarityMeasures
                 System.out.flush();
                 Configuration c = disambiguator.disambiguate(d);
                 configurations.add(c);
-                String resultName = dict;
-                resultName = resultName.replaceAll("\\.", "");
-                resultName = resultName.replaceAll("\\/", "");
-                SemevalWriter sw = new SemevalWriter(resultName + "_" + i + "_" + d.getId() + ".ans");
-                sw.write(d, c.getAssignments());
+                //String resultName = dict;
+                //resultName = resultName.replaceAll("\\.", "");
+                //resultName = resultName.replaceAll("\\/", "");
+                //SemevalWriter sw = new SemevalWriter(resultName + "_" + i + "_" + d.getId() + ".ans");
+                //sw.write(d, c.getAssignments());
                 double tmp_score = perfectScorer.computeScore(d, c);
                 System.out.print("[" + new DecimalFormat("##.##").format(tmp_score * 100) + "] ");
                 System.out.flush();

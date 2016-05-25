@@ -341,7 +341,7 @@ public class DictionaryCreation
 		dict.loadOnlySemeval2007Task7Senses = false;
         dict.withStopwords = true;
         dict.withStemming = true;
-        dict.withIndexing = true;
+        dict.withIndexing = false;
         dict.withShuffling = true;
 
 		dict.withSenseClusters = false;
@@ -352,12 +352,12 @@ public class DictionaryCreation
         dict.withWNGTThesaurus = true;
         dict.numberOfWordsFromThesauri = 250;
         
-        dict.write("../data/lesk_dict/all/fine_def/5_250");
+        dict.write("../data/lesk_dict/all/fine_def/5_250_clear");
 
         dict.withDSOThesaurus = true;
         dict.numberOfWordsFromThesauri = 100;
         
-        dict.write("../data/lesk_dict/all/fine_def/7_100");
+        dict.write("../data/lesk_dict/all/fine_def/7_100_clear");
         /*
         for (int i = 1 ; i <= 15 ; i++) 
         {
