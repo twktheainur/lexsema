@@ -119,6 +119,8 @@ public class DictionaryCreation
     
     public final List<SignatureEnrichment> otherSignatureEnrichments = new ArrayList<>();
     
+    public boolean verbose = false;
+    
     public DictionaryCreation()
     {
         
@@ -135,6 +137,7 @@ public class DictionaryCreation
         lrloader.loadRelated(withExtendedDefinitions);
         lrloader.shuffle(withShuffling);
         lrloader.setloadSynsetOffsetInsteadOfSenseKey(withSynsetOffsetInsteadOfSenseKey);
+        lrloader.setVerbose(verbose);
 
         //lrloader.addSignatureEnrichment(new WordnetGlossTagEnrichment(wordnetGlossTagPath));
 
@@ -345,7 +348,8 @@ public class DictionaryCreation
 		dict.withSenseClusters = false;
         dict.withDefinitions = true;
         dict.withExtendedDefinitions = true;
-
+        dict.verbose = false;
+/*
         dict.withIndexing = false;
         dict.withStemming = false;
         
@@ -371,14 +375,14 @@ public class DictionaryCreation
         dict.otherSignatureEnrichments.clear();
         dict.otherSignatureEnrichments.add(new VectorizationSignatureEnrichment3(0.5));
         dict.write("../data/lesk_dict/semeval2007task7/w2v/vectorized3_0.5");
-
+*/
         dict.withIndexing = true;
         dict.withStemming = true;
-        
+  /*      
         dict.otherSignatureEnrichments.clear();
         dict.otherSignatureEnrichments.add(new Word2VecSignatureEnrichment2(1));
         dict.write("../data/lesk_dict/semeval2007task7/w2v/extended1_1");
-
+*/
         dict.otherSignatureEnrichments.clear();
         dict.otherSignatureEnrichments.add(new Word2VecSignatureEnrichment2(3));
         dict.write("../data/lesk_dict/semeval2007task7/w2v/extended1_3");
