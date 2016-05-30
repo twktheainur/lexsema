@@ -86,8 +86,6 @@ public class DictionaryCreation
 
     public static boolean gmbgIsLoaded = false;
 
-    public static boolean word2vecIsLoaded = false;
-    
     public static boolean senseClustersIsLoaded = false;
     
     
@@ -113,15 +111,13 @@ public class DictionaryCreation
     
     public int numberOfWordsFromThesauri = 0;
     
-    public boolean withWord2Vec = false;
-    
-    public int numberOfWordsFromWord2Vec = 0;
-    
     public boolean loadOnlySemeval2007Task7Senses = false;
     
     public boolean withSenseClusters = false;
     
     public boolean withSynsetOffsetInsteadOfSenseKey = false;
+    
+    public final List<SignatureEnrichment> otherSignatureEnrichments = new ArrayList<>();
     
     public DictionaryCreation()
     {
@@ -201,17 +197,16 @@ public class DictionaryCreation
         AnnotatedTextThesaurusImpl thesaurus = new AnnotatedTextThesaurusImpl(corpora, numberOfWordsFromThesauri);
         lrloader.addThesaurus(thesaurus);
 
+        for (SignatureEnrichment otherSignatureEnrichment : otherSignatureEnrichments)
+        {
+        	lrloader.addSignatureEnrichment(otherSignatureEnrichment);
+        }
+        
         if (withStopwords)
         {
             lrloader.addSignatureEnrichment(new StopwordsRemovingSignatureEnrichment());
         }
         
-        if (withWord2Vec)
-        {
-            //lrloader.addSignatureEnrichment(new Word2VecSignatureEnrichment2(numberOfWordsFromWord2Vec))
-        	lrloader.addSignatureEnrichment(new VectorizationSignatureEnrichment());
-        }
-
         if (withStemming)
         {
             lrloader.addSignatureEnrichment(new StemmingSignatureEnrichment());
@@ -349,15 +344,27 @@ public class DictionaryCreation
 
         dict.withIndexing = true;
         dict.withStemming = true;
-        dict.withWord2Vec = false;
         
         dict.write("../data/lesk_dict/semeval2007task7/w2v/baseline");
         
         dict.withIndexing = false;
         dict.withStemming = false;
-        dict.withWord2Vec = true;
 
-        dict.write("../data/lesk_dict/semeval2007task7/w2v/vectorized");        
+        dict.otherSignatureEnrichments.add(new VectorizationSignatureEnrichment2());
+        dict.write("../data/lesk_dict/semeval2007task7/w2v/vectorized2");
+        
+        dict.otherSignatureEnrichments.clear();
+        dict.otherSignatureEnrichments.add(new VectorizationSignatureEnrichment3(0));
+        dict.write("../data/lesk_dict/semeval2007task7/w2v/vectorized3_0");
+
+        dict.otherSignatureEnrichments.clear();
+        dict.otherSignatureEnrichments.add(new VectorizationSignatureEnrichment3(-0.5));
+        dict.write("../data/lesk_dict/semeval2007task7/w2v/vectorized3_-0.5");
+        
+        dict.otherSignatureEnrichments.clear();
+        dict.otherSignatureEnrichments.add(new VectorizationSignatureEnrichment3(-1));
+        dict.write("../data/lesk_dict/semeval2007task7/w2v/vectorized3_-1");
+     
         
         /*
         for (int i = 1 ; i <= 15 ; i++) 
