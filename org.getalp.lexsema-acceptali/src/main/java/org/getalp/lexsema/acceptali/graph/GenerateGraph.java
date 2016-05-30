@@ -90,33 +90,48 @@ public final class GenerateGraph {
 
     public static void main(String... args) throws IOException, NoSuchVocableException, InvocationTargetException, NoSuchMethodException, ClassNotFoundException, InstantiationException, IllegalAccessException {
         @SuppressWarnings("LocalVariableOfConcreteClass") GenerateGraph generateGraph = new GenerateGraph(args);
-        //generateGraph.writeClosures(generateGraph.generate());
         Graph<LexicalEntry,DefaultEdge> g = generateGraph.generate() ;
-        generateGraph.writeClosure(g);
+        Set<DefaultEdge> deSet = g.edgeSet() ;
+        Object[] edgesTable = deSet.toArray();
+        for(int i = 0 ; i<edgesTable.length ; i++){
+            DefaultEdge de = (DefaultEdge)edgesTable[i] ;
+            LexicalEntry v1 = g.getEdgeSource(de) ;
+            LexicalEntry v2 = g.getEdgeTarget(de) ;
+            System.out.println(i+" : source : "+v1+" target "+v2) ;
+        }
+        generateGraph.writeDot(g);
+        // PROCESSING
         TranslationProcessing tp = new TranslationProcessing() ;
         Collection<Set<LexicalEntry>> cliques = tp.getCliques(g) ;
         Collection<Set<LexicalEntry>> ambigSets = tp.getAmbiguitySets(cliques) ;
-        Vocable voc = generateGraph.dbNary.getVocable(generateGraph.vocable, Language.fromCode(generateGraph.sourceLanguage));
-        List<LexicalEntry> ventries = generateGraph.dbNary.getLexicalEntries(voc);
-        if (!ventries.isEmpty()) {
-            for(LexicalEntry v1 : ventries){
-                LexicalEntry v2 ;
-                Set<DefaultEdge> deSet = g.edgesOf(v1) ;
-                Object[] firstEdgeNeighbor = deSet.toArray();
-                DefaultEdge de = (DefaultEdge)firstEdgeNeighbor[0] ;
-                if (g.getEdgeTarget(de).equals(v1)){
-                    v2 = g.getEdgeSource(de) ;
-                }else{
-                    v2 = g.getEdgeTarget(de) ;
-                }
-                Map<LexicalEntry,Double> prob = tp.senseUniformPaths(g,v1,v2,ambigSets) ;
-                for(LexicalEntry v : prob.keySet()){
-                    System.out.println(v+" : "+prob.get(v)) ;
-                }
+        System.out.println("\nAmbiguity Sets : "+tp.seeSets(ambigSets)+"\n") ;
+        System.out.println(tp.getAmbiguityInfos(ambigSets)) ;
+        /*int ng = 2000 ;
+        int nr = 1000 ;
+        double pe = 0.9 ;
+        int maxCircuitLength = 6 ;
+        Map<LexicalEntry, Double> prob = tp.randomSenseUniformPaths(g, ambigSets,ng,nr,pe,maxCircuitLength);
+        System.out.println("ng = "+ng+"\nnr = "+nr+"\npe = "+pe+"\nmaxCircuitLength = "+maxCircuitLength) ;
+        for (LexicalEntry v : prob.keySet()) {
+            System.out.println(v + " : " + prob.get(v));
+        }*/
+
+
+        /*for(int i = 0 ; i<20 ; i++) {
+            Map<LexicalEntry, Double> prob = tp.randomSenseUniformPaths(g, ambigSets, ng, nr, pe, maxCircuitLength);
+            System.out.println("ng = "+ng+"\nnr = "+nr+"\npe = "+pe+"\nmaxCircuitLength = "+maxCircuitLength) ;
+            for (LexicalEntry v : prob.keySet()) {
+                System.out.println(v + " : " + prob.get(v));
             }
-        }
-        //System.out.println("\nCliques : "+tp.seeSets(cliques)+"\n") ;
-        //System.out.println("\nAmbiguity Sets : "+tp.seeSets(ambigSets)+"\n") ;
+        }*/
+        /*for(int i = 0 ; i<13 ; i++) {
+            Map<LexicalEntry, Double> prob = tp.fixedSenseUniformPaths(g, ambigSets,ng,nr,pe,maxCircuitLength);
+            System.out.println("ng = "+ng+"\nnr = "+nr+"\npe = "+pe+"\nmaxCircuitLength = "+maxCircuitLength) ;
+            for (LexicalEntry v : prob.keySet()) {
+                System.out.println(v + " : " + prob.get(v));
+            }
+            maxCircuitLength = maxCircuitLength + 1 ;
+        }*/
     }
 
     private static void printUsage() {
@@ -222,7 +237,7 @@ public final class GenerateGraph {
             //Map<LexicalEntry,Graph<LexicalEntry,DefaultEdge>> translations = new HashMap<>();
             Graph<LexicalEntry,DefaultEdge> translations = new SimpleGraph<LexicalEntry, DefaultEdge>(DefaultEdge.class) ;
             for(LexicalEntry lexicalEntry: ventries) {
-                System.out.println("entree : "+lexicalEntry.getLemma()+"_"+lexicalEntry.getNumber()) ;
+                System.out.println("entree : "+lexicalEntry.getLemma()+"_"+lexicalEntry.getNumber()+"_"+lexicalEntry.getPartOfSpeech()) ;
                 TranslationGraphGenerator gtg = TranslationGraphGeneratorImpl.createTranslationGraphGenerator(dbNary, lexicalEntry);
                 //translations.put(lexicalEntry,generateEntryGraph(gtg));
                 translations = ToolGraph.importGraph(translations,generateEntryGraph(gtg)) ;
@@ -251,14 +266,14 @@ public final class GenerateGraph {
         }
     }*/
 
-    private void writeClosure(Graph<LexicalEntry,DefaultEdge> translationGraph) {
+    private void writeDot(Graph<LexicalEntry,DefaultEdge> translationGraph) {
         try {
             if (translationGraph != null) {
                 File dir = new File(targetDirectory) ;
                 if(!dir.exists()){
                     dir.mkdirs() ;
                 }
-                String path = targetDirectory+"/"+vocable+"_"+sourceLanguage+".dot" ;
+                String path = targetDirectory+"/"+vocable+"_"+sourceLanguage+"_"+depth+".dot" ;
                 Writer translationGraphWriter = new PrintWriter(path);
                 VertexNameProvider vertIdProv = new LexicalEntryIdProvider() ;
                 DOTExporter dotExp = new DOTExporter(vertIdProv,null,null) ;
