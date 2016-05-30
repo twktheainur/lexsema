@@ -56,6 +56,8 @@ public class WordnetLoader implements LRLoader {
     private final Map<String, List<Sense>> senseCache;
     
     private boolean distributed;
+    
+    private boolean verbose;
 
     private List<List<String>> senseClusters;
     
@@ -76,6 +78,7 @@ public class WordnetLoader implements LRLoader {
         thesauri = new ArrayList<>();
         senseCache = new HashMap<>();
         distributed = false;
+        verbose = false;
         senseClusters = null;
         loadSynsetOffsetInsteadOfSenseKey = false;
     }
@@ -406,16 +409,19 @@ public class WordnetLoader implements LRLoader {
 
     @Override
     public void loadSenses(Document document) {
-        List<List<Sense>> senses;
+        List<List<Sense>> senses = new ArrayList<>();
         if (distributed) {
             senses = loadSensesDistributed(document);
         } else {
-            try (IntStream range = IntStream.range(0, document.size())) {
-                senses = range
-                        .mapToObj(i -> getSenses(document.getWord(i)))
-                        .collect(Collectors.toList());
-
-            }
+            int last_percentage = 0;
+        	for (int i = 0 ; i < document.size() ; i++) {
+        		if (verbose) {
+                    int current_percentage = ((int) ((((double) (i + 1)) / ((double) (document.size()))) * 100.0));
+                    if (current_percentage > last_percentage) System.out.println("Loading senses... (" + current_percentage + "%)\r");
+                    last_percentage = current_percentage;
+        		}
+        		senses.add(getSenses(document.getWord(i)));
+        	}
         }
         senses.forEach(document::addWordSenses);
     }
@@ -481,6 +487,12 @@ public class WordnetLoader implements LRLoader {
     {
         this.loadSynsetOffsetInsteadOfSenseKey = loadSynsetOffsetInsteadOfSenseKey;
         return this;
+    }
+    
+    public LRLoader setVerbose(boolean verbose)
+    {
+    	this.verbose = verbose;
+    	return this;
     }
 
 }
