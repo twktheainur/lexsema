@@ -9,7 +9,7 @@ import org.getalp.lexsema.similarity.signatures.SemanticSignatureImpl;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Word2VecSignatureEnrichment implements SignatureEnrichment {
+public class Word2VecSignatureEnrichment extends SignatureEnrichment {
 
     private final Map<Language, SignatureEnrichment> processors;
 

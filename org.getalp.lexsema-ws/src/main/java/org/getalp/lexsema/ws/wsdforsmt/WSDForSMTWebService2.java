@@ -13,11 +13,14 @@ import it.uniroma1.lcl.babelnet.BabelNet;
 import it.uniroma1.lcl.babelnet.BabelNetConfiguration;
 import it.uniroma1.lcl.babelnet.BabelSynset;
 
-public class WSDForSMTWebService  extends WebServiceServlet
+@SuppressWarnings("serial")
+public class WSDForSMTWebService2  extends WebServiceServlet
 {
 	private static BabelNet babelnet = null;
 	
 	private static DicollecteFrenchLemmatizer lemmatizer = null;
+	
+	private static boolean verbose = false;
 	
 	protected void handle(HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
@@ -26,10 +29,10 @@ public class WSDForSMTWebService  extends WebServiceServlet
 		loadLemmatizer();
 		
 		String firstArg = request.getParameter("first");
-		System.out.println("First arg : " + firstArg);
+		if (verbose) System.out.println("First arg : " + firstArg);
 		
 		String secondArg = request.getParameter("second");
-		System.out.println("Second arg : " + secondArg);
+		if (verbose) System.out.println("Second arg : " + secondArg);
 		
 		String[] firsts = firstArg.split(", ");
 		List<BabelSynset> synsets = new ArrayList<>();
@@ -44,13 +47,19 @@ public class WSDForSMTWebService  extends WebServiceServlet
 		
         for (String word : seconds)
         {
-        	String lemma = lemmatizer.getLemma(word);
-        	for (BabelSynset synset : babelnet.getSynsets(it.uniroma1.lcl.jlt.util.Language.FR, lemma))
+        	List<String> lemmas = lemmatizer.getLemmas(word);
+        	for (String lemma : lemmas)
         	{
-        		if (synsets.contains(synset))
-        		{
-        			score++;
-        		}
+        	    for (edu.mit.jwi.item.POS pos : edu.mit.jwi.item.POS.values())
+        	    {
+                	for (BabelSynset synset : babelnet.getSynsets(it.uniroma1.lcl.jlt.util.Language.FR, lemma, pos))
+                	{
+                		if (synsets.contains(synset))
+                		{
+                			score++;
+                		}
+                	}
+        	    }
         	}
         }
         

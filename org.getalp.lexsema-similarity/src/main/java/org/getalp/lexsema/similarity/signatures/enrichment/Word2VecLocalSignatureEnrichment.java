@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Word2VecLocalSignatureEnrichment implements SignatureEnrichment {
+public class Word2VecLocalSignatureEnrichment extends SignatureEnrichment {
 
     public static final int DEFAULT_TOP_N = 10;
     private static final Pattern PUNCTUATION_PATTERN = Pattern.compile("\\p{Punct}");
@@ -63,16 +63,6 @@ public class Word2VecLocalSignatureEnrichment implements SignatureEnrichment {
         return newSignature;
     }
 
-    @Override
-    public SemanticSignature enrichSemanticSignature(SemanticSignature semanticSignature, Language language) {
-        return null;
-    }
-
-    @Override
-    public void close() {
-
-    }
-    
     public List<String> sortRelatedList(String word, Collection<String> related) {
         List<String> relatedSorted = new ArrayList<>(related);
         relatedSorted.sort(new Comparator<String>(){

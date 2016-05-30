@@ -12,6 +12,8 @@ import java.util.Map;
  */
 public interface Sense extends LexicalSense, Serializable {
     String getId();
+    
+    void setId(String id);
 
     Map<String, SemanticSignature> getRelatedSignatures();
 

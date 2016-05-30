@@ -18,6 +18,8 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -28,10 +30,12 @@ public class DSOCorpusLoader extends CorpusLoaderImpl {
     private static final Logger logger = LoggerFactory.getLogger(DSOCorpusLoader.class);
     private final String pathToDSO;
 
-    private final Dictionary wordnet;
+    private Dictionary wordnet = null;
 
     private final TextProcessor textProcessor;
     private final Text text;
+
+    private int nbWords=0;
 
 
     public DSOCorpusLoader(String pathToDSO, String pathToWordnet) {
@@ -40,7 +44,12 @@ public class DSOCorpusLoader extends CorpusLoaderImpl {
 
     public DSOCorpusLoader(String pathToDSO, String pathToWordnet, boolean lemmatizeAndPosTag) {
         this.pathToDSO = pathToDSO;
-        wordnet = new Dictionary(new File(pathToWordnet));
+       // wordnet = new Dictionary(new File(pathToWordnet));
+        try {
+            wordnet = new Dictionary(new URL("file",null, pathToWordnet));
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
         text = new TextImpl();
         text.setId("");
         if (lemmatizeAndPosTag) {
@@ -50,7 +59,7 @@ public class DSOCorpusLoader extends CorpusLoaderImpl {
         }
     }
 
-    private static void open(IHasLifecycle wordnet) {
+    private static void open(Dictionary wordnet) {
         try {
             wordnet.open();
         } catch (IOException e) {
@@ -67,6 +76,9 @@ public class DSOCorpusLoader extends CorpusLoaderImpl {
                 lines.add(line);
             }
             lines.parallelStream().forEach(line -> processWordInList(line, pos));
+            //lines.stream().forEach(line -> processWordInList(line, pos));
+            logger.error("nbWords = " + nbWords);
+
         } catch (IOException e) {
             logger.error(MessageFormat.format("Error while processing DSO list file:{0}", e.getLocalizedMessage()));
         }
@@ -108,6 +120,7 @@ public class DSOCorpusLoader extends CorpusLoaderImpl {
             currentWord++;
         }
         synchronized (text) {
+            nbWords++;
             text.addSentence(cleanSentence);
         }
     }

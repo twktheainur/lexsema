@@ -59,30 +59,6 @@ public class LexicalEntryImpl extends AbstractLexicalResourceEntity implements L
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        if (!super.equals(o)) return false;
-        LexicalEntryImpl that = (LexicalEntryImpl) o;
-
-        if (number != that.number) return false;
-        if (lemma != null ? !lemma.equals(that.lemma) : that.lemma != null) return false;
-        if (partOfSpeech != null ? !partOfSpeech.equals(that.partOfSpeech) : that.partOfSpeech != null) return false;
-        return language == that.language;
-
-    }
-
-    @Override
-    public int hashCode() {
-        int result = super.hashCode();
-        result = 31 * result + (lemma != null ? lemma.hashCode() : 0);
-        result = 31 * result + (partOfSpeech != null ? partOfSpeech.hashCode() : 0);
-        result = 31 * result + number;
-        result = 31 * result + (language != null ? language.hashCode() : 0);
-        return result;
-    }
-
-    @Override
     public String getLemma() {
         return lemma;
     }

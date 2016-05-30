@@ -22,6 +22,10 @@ public final class NullSense implements Sense {
     }
 
     @Override
+    public void setId(String id) {
+    }
+
+    @Override
     public Map<String, SemanticSignature> getRelatedSignatures() {
         return Collections.emptyMap();
     }

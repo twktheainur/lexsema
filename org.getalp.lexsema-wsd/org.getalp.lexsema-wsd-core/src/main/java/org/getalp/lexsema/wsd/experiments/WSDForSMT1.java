@@ -47,8 +47,18 @@ public class WSDForSMT1
 			rawTextBuilder.append(arg + " ");
 		}
 		
+		String rawText = rawTextBuilder.toString();
+		
+		System.out.println("Got the following input of size " + rawText.length() + ":");
+		System.out.println(rawText);
+		
+		System.out.println("Loading dictionary...");
 		LRLoader lrloader = new DictionaryLRLoader(new FileInputStream("../data/lesk_dict/all/dict_all_stopwords_stemming_semcor_wordnetglosstag_250"), true);
-		Document txt = rawToText(rawTextBuilder.toString());
+		
+		System.out.println("Parsing input...");
+		Document txt = rawToText(rawText);
+		
+		System.out.println("Loading senses...");
 		lrloader.loadSenses(txt);
 
         ConfigurationScorer scorer = new ConfigurationScorerWithCache(new IndexedLeskSimilarity());
@@ -60,6 +70,7 @@ public class WSDForSMT1
         double maxLevyScale = 1.5;
 
         Disambiguator disambiguator = new MultiThreadCuckooSearch(iterations, minLevyLocation, maxLevyLocation, minLevyScale, maxLevyScale, scorer, false);               
+        System.out.println("Disambiguating...");
         Configuration c = disambiguator.disambiguate(txt);
         disambiguator.release();
         
@@ -82,8 +93,10 @@ public class WSDForSMT1
 	        	}
         	}
         }
+        String output = Arrays.toString(outputArray);
+        System.out.println("Writing output of size " + output.length() + "...");
         System.setOut(stdout);
-        System.out.println(Arrays.toString(outputArray));
+        System.out.println(output);
 	}
 
 	private static Document rawToText(String raw)

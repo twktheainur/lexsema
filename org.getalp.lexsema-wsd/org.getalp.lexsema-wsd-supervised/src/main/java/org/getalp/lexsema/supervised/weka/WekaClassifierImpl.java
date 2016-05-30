@@ -65,7 +65,7 @@ public class WekaClassifierImpl implements WekaClassifier {
         classifier = loadClassifierModelSetUp.setUpClassifier();
     }
 
-    @Override
+    /*@Override
     public void loadTrainingData(FeatureIndex featureIndex, List<List<String>> trainingInstances, List<String> attrs) throws IOException {
         classes = trainingInstances.stream().map(instance -> instance.get(0)).collect(Collectors.toSet());
         FastVector classAttribute = new FastVector(classes.size());
@@ -80,7 +80,12 @@ public class WekaClassifierImpl implements WekaClassifier {
         instances = new Instances("Training Dataset", attributes, 1);
         instances.setClassIndex(0);
 
+        System.err.println("Taille " + trainingInstances.size());
+
         for (List<String> tokens : trainingInstances) {
+
+            System.err.println("tokens " + tokens);
+            //System.exit(0);
             Instance instance = new Instance(attributes.size());
             instance.setDataset(instances);
             instance.setValue(0, tokens.get(0));
@@ -89,6 +94,131 @@ public class WekaClassifierImpl implements WekaClassifier {
             }
             instances.add(instance);
         }
+    }*/
+
+    @Override
+    public void loadTrainingData(FeatureIndex featureIndex, List<List<String>> trainingInstances, List<String> attrs) throws IOException {
+
+        //classes = sens possibles
+        classes = trainingInstances.stream().map(instance -> instance.get(0)).collect(Collectors.toSet());
+
+      //  System.err.println("classes " + classes);
+
+       // System.err.println("attrs " + attrs);
+
+        FastVector classAttribute = new FastVector(classes.size());
+
+        classes.forEach(classAttribute::addElement);
+
+        attributes = new FastVector(attrs.size());
+        attributes.addElement(new Attribute("SENSE", classAttribute));
+        for (int i = 1; i < attrs.size(); i++) {
+
+            attributes.addElement(new Attribute(attrs.get(i)));
+        }
+
+        instances = new Instances("Training Dataset", attributes, 1);
+        instances.setClassIndex(0);
+
+        //System.err.println("Taille " + trainingInstances.size());
+
+        //System.exit(0);
+
+
+        for (List<String> tokens : trainingInstances) {
+
+           // System.err.println("tokens " + tokens);
+            List<String> newToken = convert(tokens, featureIndex);
+            //System.err.println("newToken " + newToken);
+
+            Instance instance = new Instance(newToken.size());
+            instance.setDataset(instances);
+         //   System.err.println("instance " + instance);
+         //   System.err.println("newToken.get(0) " + newToken.get(0));
+            instance.setValue(0, newToken.get(0));
+            for (int i = 1; i < attributes.size(); i++) {
+                //instance.setValue(i, featureIndex.get(newToken.get(i)));
+                instance.setValue(i, Integer.parseInt(newToken.get(i)));
+            }
+            //System.err.println("instance " + instance);
+           // System.exit(0);
+            instances.add(instance);
+        }
+
+    }
+
+    private List<String> convert(List<String> tokens, FeatureIndex featureIndex) {
+
+        List<String> ls = new ArrayList<String>(10000);//tokens.subList(0, tokens.size());//comment créer une liste ??
+
+        ls.add(tokens.get(0));//identifiant sens
+
+        char state = 'S';
+        int vocabularySize=-1;
+        int ivoc = 0;//iterateur sur vocabulaire
+
+        for(int i = 1 ; i < tokens.size(); i++){
+
+
+            String current = tokens.get(i);
+
+            switch(state){
+
+                case 'S':{//cas par défaut, on recopie le vecteur jusqu'à arriver à un debVector
+
+                    if(current.equals("debVector"))
+                        state = 'A';
+                    else{
+
+                        ls.add(featureIndex.get(current)+"");
+                    }
+                    break;
+                }
+
+                case 'A':{//lecture taille vecteur
+
+                    vocabularySize=Integer.parseInt(current);
+                    state = 'B';
+                    break;
+                }
+
+                case 'B':{
+
+                    if(current.equals("endVector")) {
+
+                        //compléter le vecteur de vocabulaire par des 0
+                        for (;ivoc < vocabularySize; ivoc++){
+
+                            ls.add("0");
+                        }
+                        state = 'S';
+                    }
+                    else{//mettre des zeros dans le vecteur du vocabulaire jusqu'à l'indice et y mettre un 1
+
+                        int nextValue = Integer.parseInt(current);
+                        for (;ivoc < nextValue; ivoc++){
+
+                            ls.add("0");
+                        }
+                        ls.add("1");
+                        ivoc++;
+                    }
+
+                    break;
+                }
+
+                default:{
+
+                    System.err.println("ERROR");
+                    System.exit(0);
+                    break;
+                }
+
+
+            }
+
+        }
+        return ls;
     }
 
     @Override
