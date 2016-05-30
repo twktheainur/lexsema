@@ -378,6 +378,7 @@ public class DictionaryCreation
 */
         dict.withIndexing = true;
         dict.withStemming = true;
+        dict.verbose = true;
   /*      
         dict.otherSignatureEnrichments.clear();
         dict.otherSignatureEnrichments.add(new Word2VecSignatureEnrichment2(1));
