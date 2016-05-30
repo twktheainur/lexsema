@@ -316,12 +316,23 @@ public class Word2VecWebService extends WebServiceServlet
                 last_percentage = current_percentage;
                 words[i] = readString(dis);
                 words[i] = non_letters_pattern.matcher(words[i]).replaceAll("");
-                if (!words[i].isEmpty()) wordsIndexes.put(words[i], i);
-                for (int j = 0 ; j < vectorDimension ; j++)
+                if (words[i].isEmpty())
                 {
-                    vectors[i][j] = readFloat(dis);
+                    for (int j = 0 ; j < vectorDimension ; j++)
+                    {
+                        vectors[i][j] = readFloat(dis);
+                        vectors[i][j] = 0;
+                    }
                 }
-                vectors[i] = VectorOperation.normalize(vectors[i]);
+                else
+                {
+                	wordsIndexes.put(words[i], i);
+                    for (int j = 0 ; j < vectorDimension ; j++)
+                    {
+                        vectors[i][j] = readFloat(dis);
+                    }
+                    vectors[i] = VectorOperation.normalize(vectors[i]);
+                }
             }
             loaded = true;
         } 
