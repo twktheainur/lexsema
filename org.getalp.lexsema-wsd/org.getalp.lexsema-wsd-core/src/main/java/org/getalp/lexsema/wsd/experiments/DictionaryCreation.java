@@ -348,11 +348,13 @@ public class DictionaryCreation
         dict.withExtendedDefinitions = true;
 
         dict.withIndexing = true;
+        dict.withStemming = true;
         dict.withWord2Vec = false;
         
         dict.write("../data/lesk_dict/semeval2007task7/w2v/baseline");
         
         dict.withIndexing = false;
+        dict.withStemming = false;
         dict.withWord2Vec = true;
 
         dict.write("../data/lesk_dict/semeval2007task7/w2v/vectorized");        
