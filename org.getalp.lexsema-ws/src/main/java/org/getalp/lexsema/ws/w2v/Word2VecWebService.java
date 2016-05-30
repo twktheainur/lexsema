@@ -316,7 +316,7 @@ public class Word2VecWebService extends WebServiceServlet
                 last_percentage = current_percentage;
                 words[i] = readString(dis);
                 words[i] = non_letters_pattern.matcher(words[i]).replaceAll("");
-                wordsIndexes.put(words[i], i);
+                if (!words[i].isEmpty()) wordsIndexes.put(words[i], i);
                 for (int j = 0 ; j < vectorDimension ; j++)
                 {
                     vectors[i][j] = readFloat(dis);
