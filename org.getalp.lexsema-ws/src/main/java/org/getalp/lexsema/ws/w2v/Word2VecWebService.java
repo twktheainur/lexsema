@@ -11,6 +11,8 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
+import java.util.regex.Pattern;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -265,7 +267,7 @@ public class Word2VecWebService extends WebServiceServlet
             i++;
             bytes[i] = b;
             b = dis.readByte();
-            if (i == 49) 
+            if (i == MAX_SIZE - 1) 
             {
                 sb.append(new String(bytes));
                 i = -1;
@@ -303,6 +305,7 @@ public class Word2VecWebService extends WebServiceServlet
             DataInputStream dis = new DataInputStream(bis);
             int nbWords = Integer.parseInt(readString(dis));
             int vectorDimension = Integer.parseInt(readString(dis));
+            Pattern non_letters_pattern = Pattern.compile("[^\\p{IsAlphabetic}]");
             words = new String[nbWords];
             wordsIndexes = new HashMap<>();
             vectors = new double[nbWords][vectorDimension];
@@ -312,6 +315,7 @@ public class Word2VecWebService extends WebServiceServlet
                 if (current_percentage > last_percentage) System.out.println("Adding words... (" + current_percentage + "%)\r");
                 last_percentage = current_percentage;
                 words[i] = readString(dis);
+                words[i] = non_letters_pattern.matcher(words[i]).replaceAll("");
                 wordsIndexes.put(words[i], i);
                 for (int j = 0 ; j < vectorDimension ; j++)
                 {
