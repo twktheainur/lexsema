@@ -12,9 +12,10 @@ public class VectorizationSignatureEnrichment extends SignatureEnrichment {
     public SemanticSignature enrichSemanticSignature(SemanticSignature signature) {
         SemanticSignature newSignature = new SemanticSignatureImpl();
         for (SemanticSymbol symbol : signature) {
-            double[] vector = Word2VecClient.getWordVector(symbol.getSymbol().toLowerCase());
+        	String symbolStr = symbol.getSymbol().toLowerCase().trim();
+            double[] vector = Word2VecClient.getWordVector(symbolStr);
             if (vector.length != 0) newSignature.addSymbol(Arrays.toString(vector).replace(" ", ""));
-            else System.err.println("Warning : cannot vectorize " + symbol.getSymbol());
+            else System.err.println("Warning : cannot vectorize word \"" + symbolStr + "\"");
         }
         return newSignature;
     }

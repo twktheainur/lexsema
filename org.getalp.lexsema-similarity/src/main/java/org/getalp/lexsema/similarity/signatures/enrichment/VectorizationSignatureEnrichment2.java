@@ -10,7 +10,7 @@ import java.util.Arrays;
 public class VectorizationSignatureEnrichment2 extends SignatureEnrichment {
 
     @Override
-    public SemanticSignature enrichSemanticSignature(SemanticSignature signature) {
+    public SemanticSignature enrichSemanticSignature(SemanticSignature signature, String id) {
         SemanticSignature newSignature = new SemanticSignatureImpl();
         double[] vectorSum = null;
         for (SemanticSymbol symbol : signature) {
@@ -19,9 +19,21 @@ public class VectorizationSignatureEnrichment2 extends SignatureEnrichment {
             if (vectorSum == null) vectorSum = vector;
             else vectorSum = VectorOperation.add(vectorSum, vector);
         }
-        vectorSum = VectorOperation.normalize(vectorSum);
-        newSignature.addSymbol(Arrays.toString(vectorSum).replace(" ", ""));
-        return newSignature;
+        if (vectorSum == null)
+        {
+        	System.err.println("Warning : cannot vectorize sense \"" + id + "\"");
+        	return signature;
+        }
+        else
+        {
+        	vectorSum = VectorOperation.normalize(vectorSum);
+        	newSignature.addSymbol(Arrays.toString(vectorSum).replace(" ", ""));
+        	return newSignature;
+        }
     }
 
+    @Override
+    public SemanticSignature enrichSemanticSignature(SemanticSignature signature) {
+    	return enrichSemanticSignature(signature, "");
+    }
 }
