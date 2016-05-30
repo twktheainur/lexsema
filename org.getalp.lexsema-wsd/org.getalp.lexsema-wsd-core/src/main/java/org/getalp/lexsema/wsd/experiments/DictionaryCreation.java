@@ -336,23 +336,17 @@ public class DictionaryCreation
         DictionaryCreation dict = new DictionaryCreation();
 		dict.loadOnlySemeval2007Task7Senses = true;
         dict.withStopwords = true;
+        dict.withIndexing = false;
         dict.withStemming = false;
         dict.withShuffling = true;
 		dict.withSenseClusters = false;
         dict.withDefinitions = true;
         dict.withExtendedDefinitions = true;
-
-        dict.withIndexing = true;
-        dict.withStemming = true;
         
-        dict.write("../data/lesk_dict/semeval2007task7/w2v/baseline");
-        
-        dict.withIndexing = false;
-        dict.withStemming = false;
-
+        /*
         dict.otherSignatureEnrichments.add(new VectorizationSignatureEnrichment2());
         dict.write("../data/lesk_dict/semeval2007task7/w2v/vectorized2");
-        
+        */
         dict.otherSignatureEnrichments.clear();
         dict.otherSignatureEnrichments.add(new VectorizationSignatureEnrichment3(0));
         dict.write("../data/lesk_dict/semeval2007task7/w2v/vectorized3_0");
@@ -364,8 +358,20 @@ public class DictionaryCreation
         dict.otherSignatureEnrichments.clear();
         dict.otherSignatureEnrichments.add(new VectorizationSignatureEnrichment3(-1));
         dict.write("../data/lesk_dict/semeval2007task7/w2v/vectorized3_-1");
-     
         
+/*
+        dict.otherSignatureEnrichments.clear();
+        dict.otherSignatureEnrichments.add(new Word2VecSignatureEnrichment2(1));
+        dict.write("../data/lesk_dict/semeval2007task7/w2v/extended1_1");
+
+        dict.otherSignatureEnrichments.clear();
+        dict.otherSignatureEnrichments.add(new Word2VecSignatureEnrichment2(3));
+        dict.write("../data/lesk_dict/semeval2007task7/w2v/extended1_3");
+
+        dict.otherSignatureEnrichments.clear();
+        dict.otherSignatureEnrichments.add(new Word2VecSignatureEnrichment2(5));
+        dict.write("../data/lesk_dict/semeval2007task7/w2v/extended1_5");
+ */      
         /*
         for (int i = 1 ; i <= 15 ; i++) 
         {

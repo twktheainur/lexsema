@@ -23,7 +23,13 @@ public class VectorizationSignatureEnrichment3 extends SignatureEnrichment {
     public SemanticSignature enrichSemanticSignature(SemanticSignature signature, String id) {
         SemanticSignature newSignature = new SemanticSignatureImpl();
         double[] vectorSum = null;
-        double[] vectorId = Word2VecClient.getWordVector(id);
+        id = id.substring(0, id.indexOf('%'));
+        double[] vectorId = Word2VecClient.getWordVector(id.toLowerCase());
+        if (vectorId.length == 0)
+        {
+        	System.err.println("Warning : cannot vectorize " + id);
+        	return newSignature;
+        }
         for (SemanticSymbol symbol : signature) {
             double[] vector = Word2VecClient.getWordVector(symbol.getSymbol().toLowerCase());
             if (vector.length == 0) continue;
