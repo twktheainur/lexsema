@@ -352,6 +352,7 @@ public class DictionaryCreation
         dict.otherSignatureEnrichments.add(new VectorizationSignatureEnrichment());
         dict.write("../data/lesk_dict/semeval2007task7/w2v/vectorized1");
         
+        dict.otherSignatureEnrichments.clear();
         dict.otherSignatureEnrichments.add(new VectorizationSignatureEnrichment2());
         dict.write("../data/lesk_dict/semeval2007task7/w2v/vectorized2");
         
