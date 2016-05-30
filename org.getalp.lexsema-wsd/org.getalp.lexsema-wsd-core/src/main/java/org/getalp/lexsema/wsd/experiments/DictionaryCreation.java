@@ -208,7 +208,8 @@ public class DictionaryCreation
         
         if (withWord2Vec)
         {
-            lrloader.addSignatureEnrichment(new Word2VecSignatureEnrichment2(numberOfWordsFromWord2Vec));
+            //lrloader.addSignatureEnrichment(new Word2VecSignatureEnrichment2(numberOfWordsFromWord2Vec))
+        	lrloader.addSignatureEnrichment(new VectorizationSignatureEnrichment());
         }
 
         if (withStemming)
@@ -338,26 +339,24 @@ public class DictionaryCreation
     public static void main(String[] args) throws Exception
     {
         DictionaryCreation dict = new DictionaryCreation();
-		dict.loadOnlySemeval2007Task7Senses = false;
+		dict.loadOnlySemeval2007Task7Senses = true;
         dict.withStopwords = true;
-        dict.withStemming = true;
-        dict.withIndexing = false;
+        dict.withStemming = false;
         dict.withShuffling = true;
-
 		dict.withSenseClusters = false;
         dict.withDefinitions = true;
         dict.withExtendedDefinitions = true;
-        
-        dict.withSemcorThesaurus = true;
-        dict.withWNGTThesaurus = true;
-        dict.numberOfWordsFromThesauri = 250;
-        
-        dict.write("../data/lesk_dict/all/fine_def/5_250_clear");
 
-        dict.withDSOThesaurus = true;
-        dict.numberOfWordsFromThesauri = 100;
+        dict.withIndexing = true;
+        dict.withWord2Vec = false;
         
-        dict.write("../data/lesk_dict/all/fine_def/7_100_clear");
+        dict.write("../data/lesk_dict/semeval2007task7/w2v/baseline");
+        
+        dict.withIndexing = false;
+        dict.withWord2Vec = true;
+
+        dict.write("../data/lesk_dict/semeval2007task7/w2v/vectorized");        
+        
         /*
         for (int i = 1 ; i <= 15 ; i++) 
         {
