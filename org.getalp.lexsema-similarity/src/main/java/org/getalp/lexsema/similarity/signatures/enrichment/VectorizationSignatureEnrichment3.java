@@ -6,10 +6,13 @@ import org.getalp.lexsema.similarity.signatures.symbols.SemanticSymbol;
 import org.getalp.lexsema.util.VectorOperation;
 import org.getalp.lexsema.util.word2vec.Word2VecClient;
 import java.util.Arrays;
+import java.util.regex.Pattern;
 
 public class VectorizationSignatureEnrichment3 extends SignatureEnrichment {
 	
 	double threshold = 0;
+	
+	Pattern non_letters_pattern = Pattern.compile("[^\\p{IsAlphabetic}]");
 	
 	public VectorizationSignatureEnrichment3() {
 		this(0);
@@ -24,7 +27,8 @@ public class VectorizationSignatureEnrichment3 extends SignatureEnrichment {
         SemanticSignature newSignature = new SemanticSignatureImpl();
         double[] vectorSum = null;
         id = id.substring(0, id.indexOf('%'));
-        double[] vectorId = Word2VecClient.getWordVector(id.toLowerCase());
+        id = non_letters_pattern.matcher(id).replaceAll("").toLowerCase();
+        double[] vectorId = Word2VecClient.getWordVector(id);
         if (vectorId.length == 0)
         {
         	System.err.println("Warning : cannot vectorize " + id);
@@ -37,6 +41,7 @@ public class VectorizationSignatureEnrichment3 extends SignatureEnrichment {
             if (vectorSum == null) vectorSum = vector;
             else vectorSum = VectorOperation.add(vectorSum, vector);
         }
+        if (vectorSum == null) return newSignature;
         vectorSum = VectorOperation.normalize(vectorSum);
         newSignature.addSymbol(Arrays.toString(vectorSum).replace(" ", ""));
         return newSignature;
