@@ -128,7 +128,8 @@ public class DictionaryCreation
     
     public void write(String newDictPath) throws Exception
     {
-        System.out.println("Building dictionary " + newDictPath + "...");
+        System.out.print("Building dictionary " + newDictPath + "...");
+        System.out.flush();
 
         WordnetLoader lrloader = new WordnetLoader(wordnet21);
 
@@ -251,6 +252,8 @@ public class DictionaryCreation
         {
             doWriteFullDictionary(lrloader.getAllSenses(), newDictPath);
         }  
+        
+        System.out.println(" done");
     }
 
     private static void doWriteFullDictionary(Map<Word, List<Sense>> senses, String newDictPath) throws Exception
@@ -379,11 +382,11 @@ public class DictionaryCreation
         dict.withIndexing = true;
         dict.withStemming = true;
         dict.verbose = true;
-  /*      
+/*      
         dict.otherSignatureEnrichments.clear();
         dict.otherSignatureEnrichments.add(new Word2VecSignatureEnrichment2(1));
         dict.write("../data/lesk_dict/semeval2007task7/w2v/extended1_1");
-*/
+
         dict.otherSignatureEnrichments.clear();
         dict.otherSignatureEnrichments.add(new Word2VecSignatureEnrichment2(3));
         dict.write("../data/lesk_dict/semeval2007task7/w2v/extended1_3");
@@ -391,7 +394,62 @@ public class DictionaryCreation
         dict.otherSignatureEnrichments.clear();
         dict.otherSignatureEnrichments.add(new Word2VecSignatureEnrichment2(5));
         dict.write("../data/lesk_dict/semeval2007task7/w2v/extended1_5");
-    
+*/
+
+        dict.otherSignatureEnrichments.clear();
+        dict.otherSignatureEnrichments.add(new Word2VecSignatureEnrichment3(10));
+        dict.write("../data/lesk_dict/semeval2007task7/w2v/extended2_10");
+        
+        dict.otherSignatureEnrichments.clear();
+        dict.otherSignatureEnrichments.add(new Word2VecSignatureEnrichment3(50));
+        dict.write("../data/lesk_dict/semeval2007task7/w2v/extended2_50");
+        
+        dict.otherSignatureEnrichments.clear();
+        dict.otherSignatureEnrichments.add(new Word2VecSignatureEnrichment3(100));
+        dict.write("../data/lesk_dict/semeval2007task7/w2v/extended2_100");
+
+        
+        dict.otherSignatureEnrichments.clear();
+        dict.otherSignatureEnrichments.add(new Word2VecSignatureEnrichment32(10, -0.5));
+        dict.write("../data/lesk_dict/semeval2007task7/w2v/extended3_10_-0.5");
+        
+        dict.otherSignatureEnrichments.clear();
+        dict.otherSignatureEnrichments.add(new Word2VecSignatureEnrichment32(50, -0.5));
+        dict.write("../data/lesk_dict/semeval2007task7/w2v/extended3_50_-0.5");
+        
+        dict.otherSignatureEnrichments.clear();
+        dict.otherSignatureEnrichments.add(new Word2VecSignatureEnrichment32(100, -0.5));
+        dict.write("../data/lesk_dict/semeval2007task7/w2v/extended3_100_-0.5");
+
+
+        
+        dict.otherSignatureEnrichments.clear();
+        dict.otherSignatureEnrichments.add(new Word2VecSignatureEnrichment32(10, 0));
+        dict.write("../data/lesk_dict/semeval2007task7/w2v/extended3_10_0");
+        
+        dict.otherSignatureEnrichments.clear();
+        dict.otherSignatureEnrichments.add(new Word2VecSignatureEnrichment32(50, 0));
+        dict.write("../data/lesk_dict/semeval2007task7/w2v/extended3_50_0");
+        
+        dict.otherSignatureEnrichments.clear();
+        dict.otherSignatureEnrichments.add(new Word2VecSignatureEnrichment32(100, 0));
+        dict.write("../data/lesk_dict/semeval2007task7/w2v/extended3_100_0");
+
+
+        
+        dict.otherSignatureEnrichments.clear();
+        dict.otherSignatureEnrichments.add(new Word2VecSignatureEnrichment32(10, 0.5));
+        dict.write("../data/lesk_dict/semeval2007task7/w2v/extended3_10_0.5");
+        
+        dict.otherSignatureEnrichments.clear();
+        dict.otherSignatureEnrichments.add(new Word2VecSignatureEnrichment32(50, 0.5));
+        dict.write("../data/lesk_dict/semeval2007task7/w2v/extended3_50_0.5");
+        
+        dict.otherSignatureEnrichments.clear();
+        dict.otherSignatureEnrichments.add(new Word2VecSignatureEnrichment32(100, 0.5));
+        dict.write("../data/lesk_dict/semeval2007task7/w2v/extended3_100_0.5");
+
+        
         /*
         for (int i = 1 ; i <= 15 ; i++) 
         {
