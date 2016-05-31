@@ -12,8 +12,10 @@ import org.getalp.lexsema.io.document.loader.CorpusLoader;
 import org.getalp.lexsema.io.resource.LRLoader;
 import org.getalp.lexsema.io.resource.dictionary.DictionaryLRLoader;
 import org.getalp.lexsema.similarity.Document;
+import org.getalp.lexsema.similarity.measures.SimilarityMeasure;
 import org.getalp.lexsema.similarity.measures.lesk.IndexedLeskSimilarity;
 import org.getalp.lexsema.similarity.measures.lesk.SimpleLeskSimilarity;
+import org.getalp.lexsema.similarity.measures.lesk.VectorizedLeskSimilarity;
 import org.getalp.lexsema.wsd.configuration.Configuration;
 import org.getalp.lexsema.wsd.method.*;
 import org.getalp.lexsema.wsd.score.*;
@@ -23,6 +25,20 @@ import org.apache.commons.math3.stat.descriptive.moment.StandardDeviation;
 
 public class TestOnSimilarityMeasures
 {
+	private static class Input
+	{
+		public Input(String dict, boolean indexed, boolean vectorized)
+		{
+			this.dict = dict;
+			if (indexed && vectorized) throw new RuntimeException();
+			this.indexed = indexed;
+			this.vectorized = vectorized;
+		}
+		public String dict;
+		public boolean indexed;
+		public boolean vectorized;
+	}
+	
     private static class Result
     {
         public Result(double[] scores, long[] times)
@@ -44,20 +60,38 @@ public class TestOnSimilarityMeasures
 
     public static void main(String[] args) throws Exception
     {
-    	List<String> dicts_list = new ArrayList<>();
-    	dicts_list.add("../data/lesk_dict/all/fine_def/5_250_clear");
-    	dicts_list.add("../data/lesk_dict/all/fine_def/7_100_clear");
-    	//dicts_list.add("../data/lesk_dict/semeval2007task7/0");
-    	/*
-        for (int i = 1 ; i <= 15 ; i++) 
-        {
-            for (int j = 50 ; j <= 300 ; j += 50) 
-            {
-                dicts_list.add("../data/lesk_dict/semeval2007task7/coarse_nodef/" + i + "/" + j);
-            }
-        }
-        */
-        String[] dicts = dicts_list.toArray(new String[dicts_list.size()]);
+    	List<Input> dicts_list = new ArrayList<>();
+    	dicts_list.add(new Input("../data/lesk_dict/semeval2007task7/w2v/baseline", true, false));
+    	
+    	dicts_list.add(new Input("../data/lesk_dict/semeval2007task7/w2v/vectorized1", false, true));
+    	
+    	dicts_list.add(new Input("../data/lesk_dict/semeval2007task7/w2v/vectorized2", false, true));
+    	
+    	dicts_list.add(new Input("../data/lesk_dict/semeval2007task7/w2v/vectorized3_-0.5", false, true));
+    	dicts_list.add(new Input("../data/lesk_dict/semeval2007task7/w2v/vectorized3_0", false, true));
+    	dicts_list.add(new Input("../data/lesk_dict/semeval2007task7/w2v/vectorized3_0.5", false, true));
+    	
+    	dicts_list.add(new Input("../data/lesk_dict/semeval2007task7/w2v/extended1_1", true, false));
+    	dicts_list.add(new Input("../data/lesk_dict/semeval2007task7/w2v/extended1_3", true, false));
+    	dicts_list.add(new Input("../data/lesk_dict/semeval2007task7/w2v/extended1_5", true, false));
+
+    	dicts_list.add(new Input("../data/lesk_dict/semeval2007task7/w2v/extended2_10", true, false));
+    	dicts_list.add(new Input("../data/lesk_dict/semeval2007task7/w2v/extended2_50", true, false));
+    	dicts_list.add(new Input("../data/lesk_dict/semeval2007task7/w2v/extended2_100", true, false));
+
+    	dicts_list.add(new Input("../data/lesk_dict/semeval2007task7/w2v/extended3_10_-0.5", true, false));
+    	dicts_list.add(new Input("../data/lesk_dict/semeval2007task7/w2v/extended3_50_-0.5", true, false));
+    	dicts_list.add(new Input("../data/lesk_dict/semeval2007task7/w2v/extended3_100_-0.5", true, false));
+
+    	dicts_list.add(new Input("../data/lesk_dict/semeval2007task7/w2v/extended3_10_0", true, false));
+    	dicts_list.add(new Input("../data/lesk_dict/semeval2007task7/w2v/extended3_50_0", true, false));
+    	dicts_list.add(new Input("../data/lesk_dict/semeval2007task7/w2v/extended3_100_0", true, false));
+
+    	dicts_list.add(new Input("../data/lesk_dict/semeval2007task7/w2v/extended3_10_0.5", true, false));
+    	dicts_list.add(new Input("../data/lesk_dict/semeval2007task7/w2v/extended3_50_0.5", true, false));
+    	dicts_list.add(new Input("../data/lesk_dict/semeval2007task7/w2v/extended3_100_0.5", true, false));
+    	
+    	Input[] dicts = dicts_list.toArray(new Input[dicts_list.size()]);
         compareDicts(dicts);
         /*
         dicts_list = new ArrayList<>();
@@ -79,7 +113,7 @@ public class TestOnSimilarityMeasures
         */
     }
     
-    private static void compareDicts(String[] dicts) throws Exception
+    private static void compareDicts(Input[] dicts) throws Exception
     {
         Result[] res = new Result[dicts.length];
         for (int i = 0 ; i < res.length ; i++)
@@ -109,19 +143,21 @@ public class TestOnSimilarityMeasures
         }
     }
     
-    private static Result getScores(String dict, int n) throws Exception
+    private static Result getScores(Input input, int n) throws Exception
     {
         double[] scores = new double[n];
         long[] times = new long[n];
-        LRLoader lrloader = new DictionaryLRLoader(new FileInputStream(dict), true, false);
-
+        LRLoader lrloader = new DictionaryLRLoader(new FileInputStream(input.dict), input.indexed, input.vectorized);
         CorpusLoader dl = new Semeval2007CorpusLoader(new FileInputStream("../data/senseval2007_task7/test/eng-coarse-all-words.xml"));
         dl.load();
         for (Document d : dl) lrloader.loadSenses(d);
 
-        //ConfigurationScorer scorer = new ConfigurationScorerWithCache(new IndexedLeskSimilarity());
-        ConfigurationScorer scorer = new ConfigurationScorerWithCache(new SimpleLeskSimilarity());
-            
+        SimilarityMeasure sim = new SimpleLeskSimilarity();
+        if (input.indexed) sim = new IndexedLeskSimilarity();
+        if (input.vectorized) sim = new VectorizedLeskSimilarity();
+        
+        ConfigurationScorer scorer = new ConfigurationScorerWithCache(sim);
+        
         SemEval2007Task7PerfectConfigurationScorer perfectScorer = new SemEval2007Task7PerfectConfigurationScorer();
 
         int iterations = 100000;
@@ -133,7 +169,7 @@ public class TestOnSimilarityMeasures
         MultiThreadCuckooSearch cuckooDisambiguator = new MultiThreadCuckooSearch(iterations, minLevyLocation, maxLevyLocation, minLevyScale, maxLevyScale, scorer, false);               
         Disambiguator disambiguator = cuckooDisambiguator;
         
-        System.out.println("Dictionary " + dict);
+        System.out.println("Dictionary " + input.dict);
         
         List<Document> documents = new ArrayList<>();
         for (Document d : dl) documents.add(d);
