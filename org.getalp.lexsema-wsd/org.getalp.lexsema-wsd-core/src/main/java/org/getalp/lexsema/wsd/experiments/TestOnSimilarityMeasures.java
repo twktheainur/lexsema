@@ -29,14 +29,20 @@ public class TestOnSimilarityMeasures
 	{
 		public Input(String dict, boolean indexed, boolean vectorized)
 		{
+			this(dict, indexed, vectorized, -1);
+		}
+		public Input(String dict, boolean indexed, boolean vectorized, double vectorThreshold)
+		{
 			this.dict = dict;
 			if (indexed && vectorized) throw new RuntimeException();
 			this.indexed = indexed;
 			this.vectorized = vectorized;
+			this.vectorThreshold = vectorThreshold;
 		}
 		public String dict;
 		public boolean indexed;
 		public boolean vectorized;
+		public double vectorThreshold;
 	}
 	
     private static class Result
@@ -62,14 +68,16 @@ public class TestOnSimilarityMeasures
     {
     	List<Input> dicts_list = new ArrayList<>();
     	//dicts_list.add(new Input("../data/lesk_dict/semeval2007task7/w2v/baseline", true, false));
+
+    	dicts_list.add(new Input("../data/lesk_dict/semeval2007task7/w2v/vectorized1", false, true, -0.5));
+    	dicts_list.add(new Input("../data/lesk_dict/semeval2007task7/w2v/vectorized1", false, true, 0));
+    	dicts_list.add(new Input("../data/lesk_dict/semeval2007task7/w2v/vectorized1", false, true, 0.5));
     	
-    	dicts_list.add(new Input("../data/lesk_dict/semeval2007task7/w2v/vectorized1", false, true));
+    	//dicts_list.add(new Input("../data/lesk_dict/semeval2007task7/w2v/vectorized2", false, true));
     	
-    	dicts_list.add(new Input("../data/lesk_dict/semeval2007task7/w2v/vectorized2", false, true));
-    	
-    	dicts_list.add(new Input("../data/lesk_dict/semeval2007task7/w2v/vectorized3_-0.5", false, true));
-    	dicts_list.add(new Input("../data/lesk_dict/semeval2007task7/w2v/vectorized3_0", false, true));
-    	dicts_list.add(new Input("../data/lesk_dict/semeval2007task7/w2v/vectorized3_0.5", false, true));
+    	//dicts_list.add(new Input("../data/lesk_dict/semeval2007task7/w2v/vectorized3_-0.5", false, true));
+    	//dicts_list.add(new Input("../data/lesk_dict/semeval2007task7/w2v/vectorized3_0", false, true));
+    	//dicts_list.add(new Input("../data/lesk_dict/semeval2007task7/w2v/vectorized3_0.5", false, true));
     	/*
     	dicts_list.add(new Input("../data/lesk_dict/semeval2007task7/w2v/extended1_1", true, false));
     	dicts_list.add(new Input("../data/lesk_dict/semeval2007task7/w2v/extended1_3", true, false));
@@ -154,7 +162,7 @@ public class TestOnSimilarityMeasures
 
         SimilarityMeasure sim = new SimpleLeskSimilarity();
         if (input.indexed) sim = new IndexedLeskSimilarity();
-        if (input.vectorized) sim = new VectorizedLeskSimilarity();
+        if (input.vectorized) sim = new VectorizedLeskSimilarity(input.vectorThreshold);
         
         ConfigurationScorer scorer = new ConfigurationScorerWithCache(sim);
         
