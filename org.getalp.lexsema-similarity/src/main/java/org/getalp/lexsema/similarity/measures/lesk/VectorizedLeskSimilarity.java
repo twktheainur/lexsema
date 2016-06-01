@@ -15,7 +15,7 @@ public class VectorizedLeskSimilarity implements SimilarityMeasure
     {
         List<VectorizedSemanticSymbol> la = ((VectorizedSemanticSignature) sigA).getVectorizedSymbols();
         List<VectorizedSemanticSymbol> lb = ((VectorizedSemanticSignature) sigB).getVectorizedSymbols();
-        int count = 0;
+        double count = 0;
         for (VectorizedSemanticSymbol ala : la)
         {
             if (ala.getVector().length == 0) continue;
