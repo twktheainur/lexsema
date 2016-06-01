@@ -61,7 +61,7 @@ public class TestOnSimilarityMeasures
     public static void main(String[] args) throws Exception
     {
     	List<Input> dicts_list = new ArrayList<>();
-    	dicts_list.add(new Input("../data/lesk_dict/semeval2007task7/w2v/baseline", true, false));
+    	//dicts_list.add(new Input("../data/lesk_dict/semeval2007task7/w2v/baseline", true, false));
     	
     	dicts_list.add(new Input("../data/lesk_dict/semeval2007task7/w2v/vectorized1", false, true));
     	
@@ -70,7 +70,7 @@ public class TestOnSimilarityMeasures
     	dicts_list.add(new Input("../data/lesk_dict/semeval2007task7/w2v/vectorized3_-0.5", false, true));
     	dicts_list.add(new Input("../data/lesk_dict/semeval2007task7/w2v/vectorized3_0", false, true));
     	dicts_list.add(new Input("../data/lesk_dict/semeval2007task7/w2v/vectorized3_0.5", false, true));
-    	
+    	/*
     	dicts_list.add(new Input("../data/lesk_dict/semeval2007task7/w2v/extended1_1", true, false));
     	dicts_list.add(new Input("../data/lesk_dict/semeval2007task7/w2v/extended1_3", true, false));
     	dicts_list.add(new Input("../data/lesk_dict/semeval2007task7/w2v/extended1_5", true, false));
@@ -90,7 +90,7 @@ public class TestOnSimilarityMeasures
     	dicts_list.add(new Input("../data/lesk_dict/semeval2007task7/w2v/extended3_10_0.5", true, false));
     	dicts_list.add(new Input("../data/lesk_dict/semeval2007task7/w2v/extended3_50_0.5", true, false));
     	dicts_list.add(new Input("../data/lesk_dict/semeval2007task7/w2v/extended3_100_0.5", true, false));
-    	
+    	*/
     	Input[] dicts = dicts_list.toArray(new Input[dicts_list.size()]);
         compareDicts(dicts);
         /*
@@ -119,7 +119,7 @@ public class TestOnSimilarityMeasures
         for (int i = 0 ; i < res.length ; i++)
         {
             res[i] = getScores(dicts[i], 30);
-            System.out.println("Test " + i + " (" + dicts[i] + ")");
+            System.out.println("Test " + i + " (" + dicts[i].dict + ")");
             System.out.println("Mean Scores : " + res[i].meanScore);
             System.out.println("Standard Deviation Scores : " + res[i].standardDeviationScore);
             System.out.println("Mean Times : " + res[i].meanTime);
@@ -128,7 +128,7 @@ public class TestOnSimilarityMeasures
         System.out.println("Recap:");
         for (int i = 0 ; i < res.length ; i++)
         {
-            System.out.println("Test " + i + " (" + dicts[i] + ")");
+            System.out.println("Test " + i + " (" + dicts[i].dict + ")");
             System.out.println("Mean Scores : " + res[i].meanScore);
             System.out.println("Standard Deviation Scores : " + res[i].standardDeviationScore);
             System.out.println("Mean Times : " + res[i].meanTime);
@@ -138,7 +138,7 @@ public class TestOnSimilarityMeasures
         {
             for (int j = 0 ; j < res.length ; j++)
             {
-                System.out.println("MWUTest " + i + " (" + dicts[i] + ") / " + j + " (" + dicts[j] + ") : " + mannTest.mannWhitneyUTest(res[i].scores, res[j].scores));
+                System.out.println("MWUTest " + i + " (" + dicts[i].dict + ") / " + j + " (" + dicts[j].dict + ") : " + mannTest.mannWhitneyUTest(res[i].scores, res[j].scores));
             }
         }
     }
