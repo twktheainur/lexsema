@@ -355,7 +355,7 @@ public class DictionaryCreation
 /*
         dict.withIndexing = false;
         dict.withStemming = false;
-        
+
         dict.otherSignatureEnrichments.add(new VectorizationSignatureEnrichment());
         dict.write("../data/lesk_dict/semeval2007task7/w2v/vectorized1");
         
@@ -379,10 +379,11 @@ public class DictionaryCreation
         dict.otherSignatureEnrichments.add(new VectorizationSignatureEnrichment3(0.5));
         dict.write("../data/lesk_dict/semeval2007task7/w2v/vectorized3_0.5");
 */
+        
         dict.withIndexing = true;
         dict.withStemming = true;
         dict.verbose = true;
-/*      
+/*  
         dict.otherSignatureEnrichments.clear();
         dict.otherSignatureEnrichments.add(new Word2VecSignatureEnrichment2(1));
         dict.write("../data/lesk_dict/semeval2007task7/w2v/extended1_1");
@@ -396,6 +397,18 @@ public class DictionaryCreation
         dict.write("../data/lesk_dict/semeval2007task7/w2v/extended1_5");
 */
 
+        dict.otherSignatureEnrichments.clear();
+        dict.otherSignatureEnrichments.add(new Word2VecSignatureEnrichment2(10));
+        dict.write("../data/lesk_dict/semeval2007task7/w2v/extended1_10");
+
+        dict.otherSignatureEnrichments.clear();
+        dict.otherSignatureEnrichments.add(new Word2VecSignatureEnrichment2(20));
+        dict.write("../data/lesk_dict/semeval2007task7/w2v/extended1_20");
+
+        dict.otherSignatureEnrichments.clear();
+        dict.otherSignatureEnrichments.add(new Word2VecSignatureEnrichment2(50));
+        dict.write("../data/lesk_dict/semeval2007task7/w2v/extended1_50");        
+/*
         dict.otherSignatureEnrichments.clear();
         dict.otherSignatureEnrichments.add(new Word2VecSignatureEnrichment3(10));
         dict.write("../data/lesk_dict/semeval2007task7/w2v/extended2_10");
@@ -448,7 +461,7 @@ public class DictionaryCreation
         dict.otherSignatureEnrichments.clear();
         dict.otherSignatureEnrichments.add(new Word2VecSignatureEnrichment32(100, 0.5));
         dict.write("../data/lesk_dict/semeval2007task7/w2v/extended3_100_0.5");
-
+*/
         
         /*
         for (int i = 1 ; i <= 15 ; i++) 
