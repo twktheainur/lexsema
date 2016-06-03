@@ -23,7 +23,7 @@ public class WSDForSMTWebService2  extends WebServiceServlet
 	
 	private static DicollecteFrenchLemmatizer lemmatizer = null;
 	
-	private static boolean verbose = false;
+	private static boolean verbose = true;
 
     private static Map<String, Integer> cache = new ConcurrentHashMap<>();
     
@@ -80,6 +80,7 @@ public class WSDForSMTWebService2  extends WebServiceServlet
 	        cache.put(key, score);
 	    }
         
+        if (verbose) System.out.println("Return " + score);
         response.getWriter().print(score);
 		
 		response.getWriter().close();
