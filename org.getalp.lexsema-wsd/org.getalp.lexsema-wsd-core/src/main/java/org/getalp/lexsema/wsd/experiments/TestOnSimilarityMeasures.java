@@ -67,7 +67,8 @@ public class TestOnSimilarityMeasures
     public static void main(String[] args) throws Exception
     {
     	List<Input> dicts_list = new ArrayList<>();
-    	//dicts_list.add(new Input("../data/lesk_dict/semeval2007task7/w2v/baseline", true, false));
+    	dicts_list.add(new Input("../data/lesk_dict/semeval2007task7/w2v/baseline", true, false));
+    	dicts_list.add(new Input("../data/lesk_dict/semeval2007task7/0", true, false));
 
     	//dicts_list.add(new Input("../data/lesk_dict/semeval2007task7/w2v/vectorized1", false, true, -0.5));
     	//dicts_list.add(new Input("../data/lesk_dict/semeval2007task7/w2v/vectorized1", false, true, 0));
@@ -82,7 +83,7 @@ public class TestOnSimilarityMeasures
     	dicts_list.add(new Input("../data/lesk_dict/semeval2007task7/w2v/extended1_1", true, false));
     	dicts_list.add(new Input("../data/lesk_dict/semeval2007task7/w2v/extended1_3", true, false));
     	dicts_list.add(new Input("../data/lesk_dict/semeval2007task7/w2v/extended1_5", true, false));
-    	*/
+    	
     	
     	dicts_list.add(new Input("../data/lesk_dict/semeval2007task7/w2v/extended1_10", true, false));
     	dicts_list.add(new Input("../data/lesk_dict/semeval2007task7/w2v/extended1_20", true, false));
