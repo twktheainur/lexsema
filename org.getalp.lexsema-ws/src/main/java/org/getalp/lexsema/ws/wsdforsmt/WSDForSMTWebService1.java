@@ -4,10 +4,11 @@ import java.io.FileInputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.concurrent.ConcurrentHashMap;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.getalp.lexsema.io.resource.dictionary.DictionaryLRLoader;
@@ -41,7 +42,7 @@ public class WSDForSMTWebService1  extends WebServiceServlet
     
     private static Disambiguator disambiguator = null;
     
-    private static Map<String, String> cache = new HashMap<>();
+    private static Map<String, String> cache = new ConcurrentHashMap<>();
     
     private static boolean verbose = true;
     

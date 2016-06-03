@@ -3,9 +3,9 @@ package org.getalp.lexsema.ws.wsdforsmt;
 import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -25,7 +25,7 @@ public class WSDForSMTWebService2  extends WebServiceServlet
 	
 	private static boolean verbose = false;
 
-    private static Map<String, Integer> cache = new HashMap<>();
+    private static Map<String, Integer> cache = new ConcurrentHashMap<>();
     
 	protected void handle(HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
