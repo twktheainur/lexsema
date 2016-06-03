@@ -3,7 +3,10 @@ package org.getalp.lexsema.ws.wsdforsmt;
 import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -21,7 +24,9 @@ public class WSDForSMTWebService2  extends WebServiceServlet
 	private static DicollecteFrenchLemmatizer lemmatizer = null;
 	
 	private static boolean verbose = false;
-	
+
+    private static Map<String, Integer> cache = new HashMap<>();
+    
 	protected void handle(HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		setHeaders(request, response);
@@ -33,35 +38,47 @@ public class WSDForSMTWebService2  extends WebServiceServlet
 		
 		String secondArg = request.getParameter("second");
 		if (verbose) System.out.println("Second arg : " + secondArg);
-		
-		String[] firsts = firstArg.split(", ");
-		List<BabelSynset> synsets = new ArrayList<>();
-		for (String wordnetID : firsts)
-		{
-			List<BabelSynset> tmp = babelnet.getSynsetsFromWordNetOffset(wordnetID); 
-			if (tmp != null) synsets.addAll(tmp);
-		}
-		
-        String[] seconds = secondArg.split(", ");
+
         int score = 0;
-		
-        for (String word : seconds)
+        String key = firstArg + secondArg;
+        
+        if (cache.containsKey(key))
         {
-        	List<String> lemmas = lemmatizer.getLemmas(word);
-        	for (String lemma : lemmas)
-        	{
-        	    for (edu.mit.jwi.item.POS pos : edu.mit.jwi.item.POS.values())
-        	    {
-                	for (BabelSynset synset : babelnet.getSynsets(it.uniroma1.lcl.jlt.util.Language.FR, lemma, pos))
-                	{
-                		if (synsets.contains(synset))
-                		{
-                			score++;
-                		}
-                	}
-        	    }
-        	}
+            if (verbose) System.out.println("Found in cache");
+            score = cache.get(key);
         }
+        else
+	    {
+			String[] firsts = firstArg.split(", ");
+			List<BabelSynset> synsets = new ArrayList<>();
+			for (String wordnetID : firsts)
+			{
+				List<BabelSynset> tmp = babelnet.getSynsetsFromWordNetOffset(wordnetID); 
+				if (tmp != null) synsets.addAll(tmp);
+			}
+			
+	        String[] seconds = secondArg.split(", ");
+			
+	        for (String word : seconds)
+	        {
+	        	List<String> lemmas = lemmatizer.getLemmas(word);
+	        	for (String lemma : lemmas)
+	        	{
+	        	    for (edu.mit.jwi.item.POS pos : edu.mit.jwi.item.POS.values())
+	        	    {
+	                	for (BabelSynset synset : babelnet.getSynsets(it.uniroma1.lcl.jlt.util.Language.FR, lemma, pos))
+	                	{
+	                		if (synsets.contains(synset))
+	                		{
+	                			score++;
+	                		}
+	                	}
+	        	    }
+	        	}
+	        }
+	        
+	        cache.put(key, score);
+	    }
         
         response.getWriter().print(score);
 		
