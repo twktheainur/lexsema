@@ -23,7 +23,7 @@ public class WSDForSMTWebService2  extends WebServiceServlet
 	
 	private static DicollecteFrenchLemmatizer lemmatizer = null;
 	
-	private static boolean verbose = true;
+	private static boolean verbose = false;
 
     private static Map<String, Integer> cache = new ConcurrentHashMap<>();
     
