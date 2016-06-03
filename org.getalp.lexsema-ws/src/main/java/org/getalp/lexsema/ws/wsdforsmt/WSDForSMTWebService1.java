@@ -91,6 +91,7 @@ public class WSDForSMTWebService1  extends WebServiceServlet
                 }
             }
             output = Arrays.toString(realDisambiguation.toArray());
+            cache.put(rawText, output);
         }
 
         if (verbose) System.out.println("Writing output of size " + output.length() + "...");
