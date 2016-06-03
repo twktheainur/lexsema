@@ -25,7 +25,7 @@ public class WSDForSMTWebService2  extends WebServiceServlet
 	
 	private static boolean verbose = false;
 
-    private static Map<String, Integer> cache = new ConcurrentHashMap<>();
+    //private static Map<String, Integer> cache = new ConcurrentHashMap<>();
     
 	protected void handle(HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
@@ -40,14 +40,14 @@ public class WSDForSMTWebService2  extends WebServiceServlet
 		if (verbose) System.out.println("Second arg : " + secondArg);
 
         int score = 0;
-        String key = firstArg + secondArg;
+        //String key = firstArg + secondArg;
         
-        if (cache.containsKey(key))
+        //if (cache.containsKey(key))
         {
-            if (verbose) System.out.println("Found in cache");
-            score = cache.get(key);
+        //    if (verbose) System.out.println("Found in cache");
+        //    score = cache.get(key);
         }
-        else
+        //else
 	    {
 			String[] firsts = firstArg.split(", ");
 			List<BabelSynset> synsets = new ArrayList<>();
@@ -77,7 +77,7 @@ public class WSDForSMTWebService2  extends WebServiceServlet
 	        	}
 	        }
 	        
-	        cache.put(key, score);
+	        //cache.put(key, score);
 	    }
         
         if (verbose) System.out.println("Return " + score);
