@@ -176,7 +176,7 @@ public class WSDForSMTWebService1  extends WebServiceServlet
         double maxLevyScale = 1.5;
         disambiguator = new MultiThreadCuckooSearch(iterations, minLevyLocation, maxLevyLocation, minLevyScale, maxLevyScale, scorer, false);   
         disambiguator = new LargeDocumentDisambiguator(disambiguator, 300, verbose);
-        disambiguator = new RandomDisambiguator();
+        //disambiguator = new RandomDisambiguator();
     }
 
     private static Document rawToText(String raw)
