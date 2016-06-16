@@ -87,7 +87,7 @@ public class TestOnSimilarityMeasures
     public static void main(String[] args) throws Exception
     {
     	List<Input> dicts_list = new ArrayList<>();
-    	dicts_list.add(new Input("../data/lesk_dict/all/zebestalt", true, false, -1, semeval20013task12corpus, semeval2013task12scorer));
+    	dicts_list.add(new Input("../data/lesk_dict/all/zebest", true, false, -1, semeval20013task12corpus, semeval2013task12scorer));
 
     	//dicts_list.add(new Input("../data/lesk_dict/semeval2007task7/w2v/vectorized1", false, true, -0.5));
     	//dicts_list.add(new Input("../data/lesk_dict/semeval2007task7/w2v/vectorized1", false, true, 0));
