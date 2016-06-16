@@ -1,6 +1,8 @@
 package org.getalp.lexsema.wsd.experiments;
 
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.PrintStream;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -8,10 +10,12 @@ import java.util.List;
 import org.apache.commons.math3.stat.inference.MannWhitneyUTest;
 import org.getalp.lexsema.io.document.loader.Semeval2007CorpusLoader;
 import org.getalp.lexsema.io.document.loader.Semeval2013Task12CorpusLoader;
+import org.getalp.lexsema.io.annotresult.SemevalWriter;
 import org.getalp.lexsema.io.document.loader.CorpusLoader;
 import org.getalp.lexsema.io.resource.LRLoader;
 import org.getalp.lexsema.io.resource.dictionary.DictionaryLRLoader;
 import org.getalp.lexsema.similarity.Document;
+import org.getalp.lexsema.similarity.Word;
 import org.getalp.lexsema.similarity.measures.SimilarityMeasure;
 import org.getalp.lexsema.similarity.measures.lesk.IndexedLeskSimilarity;
 import org.getalp.lexsema.similarity.measures.lesk.SimpleLeskSimilarity;
@@ -202,7 +206,7 @@ public class TestOnSimilarityMeasures
         Disambiguator disambiguator = cuckooDisambiguator;
         
         System.out.println("Dictionary " + input.dict);
-        
+
         List<Document> documents = new ArrayList<>();
         for (Document d : input.corpus) documents.add(d);
         
@@ -211,6 +215,14 @@ public class TestOnSimilarityMeasures
             System.out.print("" + (i+1) + "/" + n + " ");
             System.out.flush();
             List<Configuration> configurations = new ArrayList<>();
+
+            String resultName = input.dict;
+            resultName = resultName.replaceAll("\\.", "");
+            resultName = resultName.replaceAll("\\/", "");
+            resultName = resultName + "_" + i + ".ans";
+            PrintStream ps = null;
+            try { ps = new PrintStream(resultName); } catch (FileNotFoundException e) { throw new RuntimeException(e); }
+            
             long startTime = System.currentTimeMillis();
             for (Document d : input.corpus)
             {
@@ -218,15 +230,23 @@ public class TestOnSimilarityMeasures
                 System.out.flush();
                 Configuration c = disambiguator.disambiguate(d);
                 configurations.add(c);
-                //String resultName = dict;
-                //resultName = resultName.replaceAll("\\.", "");
-                //resultName = resultName.replaceAll("\\/", "");
-                //SemevalWriter sw = new SemevalWriter(resultName + "_" + i + "_" + d.getId() + ".ans");
-                //sw.write(d, c.getAssignments());
+                
+                for (int j = 0 ; j < d.size() ; j++) 
+                {
+                    if (d.getWord(j).getId() != null && !d.getWord(j).getId().isEmpty()) 
+                    {
+                        if (c.getAssignment(j) >= 0 && !d.getSenses(j).isEmpty())
+                        {
+                            ps.printf("%s %s %s !! %s#%s%n", d.getId(), d.getWord(j).getId(), d.getSenses(j).get(c.getAssignment(j)).getId(), d.getWord(j).getLemma(), d.getWord(j).getPartOfSpeech());
+                        }
+                    }
+                }
+                
                 double tmp_score = perfectScorer.computeScore(d, c);
                 System.out.print("[" + new DecimalFormat("##.##").format(tmp_score * 100) + "] ");
                 System.out.flush();
             }
+            ps.close();
             long endTime = System.currentTimeMillis();
             times[i] = (endTime - startTime);
             scores[i] = perfectScorer.computeTotalScore(documents, configurations);
