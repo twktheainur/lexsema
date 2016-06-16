@@ -5,7 +5,7 @@ import org.getalp.lexsema.similarity.Sense;
 import org.getalp.lexsema.wsd.configuration.Configuration;
 import java.util.*;
 
-public class SemEval2007Task7PerfectConfigurationScorer implements ConfigurationScorer
+public class SemEval2007Task7PerfectConfigurationScorer implements PerfectConfigurationScorer
 {
     private ArrayList<ArrayList<String>> d001;
     private ArrayList<ArrayList<String>> d002;

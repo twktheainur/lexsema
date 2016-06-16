@@ -2,7 +2,7 @@ package org.getalp.lexsema.wsd.experiments;
 
 import com.wcohen.ss.ScaledLevenstein;
 import org.getalp.lexsema.io.annotresult.SemevalWriter;
-import org.getalp.lexsema.io.document.loader.Semeval2013Task13CorpusLoader;
+import org.getalp.lexsema.io.document.loader.Semeval2013Task12CorpusLoader;
 import org.getalp.lexsema.io.document.loader.CorpusLoader;
 import org.getalp.lexsema.io.resource.LRLoader;
 import org.getalp.lexsema.io.resource.dbnary.DBNaryLoaderImpl;
@@ -32,7 +32,7 @@ public class DbnaryDisambiguationSimplifiedLesk {
 
         VisualVMTools.delayUntilReturn();
 
-        CorpusLoader dl = new Semeval2013Task13CorpusLoader("../data/semeval-2013-task12-test-data/data/multilingual-all-words.en.xml")
+        CorpusLoader dl = new Semeval2013Task12CorpusLoader("../data/semeval-2013-task12-test-data/data/multilingual-all-words.en.xml")
                 .loadNonInstances(false);
         SimilarityMeasure similarityMeasure;
 

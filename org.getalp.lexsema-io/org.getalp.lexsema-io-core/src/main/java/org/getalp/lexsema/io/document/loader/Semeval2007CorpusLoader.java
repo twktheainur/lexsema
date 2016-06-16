@@ -7,11 +7,12 @@ import org.slf4j.LoggerFactory;
 import org.xml.sax.*;
 import org.xml.sax.helpers.XMLReaderFactory;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringReader;
 
-@SuppressWarnings({"BooleanParameter", "ClassWithTooManyFields"})
 public class Semeval2007CorpusLoader extends CorpusLoaderImpl implements ContentHandler {
 
     private Logger logger = LoggerFactory.getLogger(Semeval2007CorpusLoader.class);
@@ -26,13 +27,25 @@ public class Semeval2007CorpusLoader extends CorpusLoaderImpl implements Content
 
     private InputStream inputStream;
 
-
     private Sentence currentSentence;
     private Text currentDocument;
 
     public Semeval2007CorpusLoader(InputStream inputStream) {
-        inWord = false;
         this.inputStream = inputStream;
+        init();
+    }
+
+    public Semeval2007CorpusLoader(String path) {
+        try {
+			inputStream = new FileInputStream(path);
+		} catch (FileNotFoundException e) {
+			throw new RuntimeException(e);
+		}
+        init();
+    }
+    
+    private void init() {
+        inWord = false;
         currentId = "";
         currentLemma = "";
         currentPos = "";
@@ -148,7 +161,9 @@ public class Semeval2007CorpusLoader extends CorpusLoaderImpl implements Content
     @Override
     public void load() {
         try {
-            XMLReader saxReader = XMLReaderFactory.createXMLReader();
+        	clearTexts();
+        	init();
+        	XMLReader saxReader = XMLReaderFactory.createXMLReader();
             saxReader.setContentHandler(this);
             saxReader.setEntityResolver(new EntityResolverIgnoringDTD());
             saxReader.parse(new InputSource(inputStream));

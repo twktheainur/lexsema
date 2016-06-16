@@ -7,7 +7,7 @@ import java.util.List;
 
 import org.apache.commons.math3.stat.inference.MannWhitneyUTest;
 import org.getalp.lexsema.io.document.loader.Semeval2007CorpusLoader;
-import org.getalp.lexsema.io.annotresult.SemevalWriter;
+import org.getalp.lexsema.io.document.loader.Semeval2013Task12CorpusLoader;
 import org.getalp.lexsema.io.document.loader.CorpusLoader;
 import org.getalp.lexsema.io.resource.LRLoader;
 import org.getalp.lexsema.io.resource.dictionary.DictionaryLRLoader;
@@ -25,24 +25,44 @@ import org.apache.commons.math3.stat.descriptive.moment.StandardDeviation;
 
 public class TestOnSimilarityMeasures
 {
-	private static class Input
+	static CorpusLoader semeval2007task7corpus = new Semeval2007CorpusLoader("../data/senseval2007_task7/test/eng-coarse-all-words.xml");
+
+	static CorpusLoader semeval20013task12corpus = new Semeval2013Task12CorpusLoader("../data/semeval2013_task12/data/multilingual-all-words.en.xml");
+
+	static PerfectConfigurationScorer semeval2007task7scorer = new SemEval2007Task7PerfectConfigurationScorer();
+
+	static PerfectConfigurationScorer semeval2013task12scorer = new SemEval2013Task12PerfectConfigurationScorer();
+	
+	static class Input
 	{
+		public Input(String dict, boolean indexed)
+		{
+			this(dict, indexed, false, -1);
+		}
 		public Input(String dict, boolean indexed, boolean vectorized)
 		{
 			this(dict, indexed, vectorized, -1);
 		}
 		public Input(String dict, boolean indexed, boolean vectorized, double vectorThreshold)
 		{
+			this(dict, indexed, vectorized, vectorThreshold, semeval2007task7corpus, semeval2007task7scorer);
+		}
+		public Input(String dict, boolean indexed, boolean vectorized, double vectorThreshold, CorpusLoader corpus, PerfectConfigurationScorer scorer)
+		{
 			this.dict = dict;
 			if (indexed && vectorized) throw new RuntimeException();
 			this.indexed = indexed;
 			this.vectorized = vectorized;
 			this.vectorThreshold = vectorThreshold;
+			this.corpus = corpus;
+			this.scorer = scorer;
 		}
 		public String dict;
 		public boolean indexed;
 		public boolean vectorized;
 		public double vectorThreshold;
+		public CorpusLoader corpus; 
+		public PerfectConfigurationScorer scorer;
 	}
 	
     private static class Result
@@ -67,8 +87,7 @@ public class TestOnSimilarityMeasures
     public static void main(String[] args) throws Exception
     {
     	List<Input> dicts_list = new ArrayList<>();
-    	dicts_list.add(new Input("../data/lesk_dict/semeval2007task7/w2v/baseline", true, false));
-    	dicts_list.add(new Input("../data/lesk_dict/semeval2007task7/0", true, false));
+    	dicts_list.add(new Input("../data/lesk_dict/all/zebestalt", true, false, -1, semeval20013task12corpus, semeval2013task12scorer));
 
     	//dicts_list.add(new Input("../data/lesk_dict/semeval2007task7/w2v/vectorized1", false, true, -0.5));
     	//dicts_list.add(new Input("../data/lesk_dict/semeval2007task7/w2v/vectorized1", false, true, 0));
@@ -162,9 +181,8 @@ public class TestOnSimilarityMeasures
         double[] scores = new double[n];
         long[] times = new long[n];
         LRLoader lrloader = new DictionaryLRLoader(new FileInputStream(input.dict), input.indexed, input.vectorized);
-        CorpusLoader dl = new Semeval2007CorpusLoader(new FileInputStream("../data/senseval2007_task7/test/eng-coarse-all-words.xml"));
-        dl.load();
-        for (Document d : dl) lrloader.loadSenses(d);
+        input.corpus.load();
+        for (Document d : input.corpus) lrloader.loadSenses(d);
 
         SimilarityMeasure sim = new SimpleLeskSimilarity();
         if (input.indexed) sim = new IndexedLeskSimilarity();
@@ -172,7 +190,7 @@ public class TestOnSimilarityMeasures
         
         ConfigurationScorer scorer = new ConfigurationScorerWithCache(sim);
         
-        SemEval2007Task7PerfectConfigurationScorer perfectScorer = new SemEval2007Task7PerfectConfigurationScorer();
+        PerfectConfigurationScorer perfectScorer = input.scorer;
 
         int iterations = 100000;
         double minLevyLocation = 1;
@@ -186,7 +204,7 @@ public class TestOnSimilarityMeasures
         System.out.println("Dictionary " + input.dict);
         
         List<Document> documents = new ArrayList<>();
-        for (Document d : dl) documents.add(d);
+        for (Document d : input.corpus) documents.add(d);
         
         for (int i = 0 ; i < n ; i++)
         {
@@ -194,7 +212,7 @@ public class TestOnSimilarityMeasures
             System.out.flush();
             List<Configuration> configurations = new ArrayList<>();
             long startTime = System.currentTimeMillis();
-            for (Document d : dl)
+            for (Document d : input.corpus)
             {
                 System.out.print("(" + d.getId() + ") ");
                 System.out.flush();

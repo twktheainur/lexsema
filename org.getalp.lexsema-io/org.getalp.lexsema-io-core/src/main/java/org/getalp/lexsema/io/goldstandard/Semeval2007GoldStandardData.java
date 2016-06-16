@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 @SuppressWarnings("all")
-public class Semeval2007Semeval2007GoldStandardData extends AbstractGoldStandardData {
+public class Semeval2007GoldStandardData extends AbstractGoldStandardData {
 
     List<GoldStandardEntry> data = new ArrayList<>();
     Map<String, Integer> textIndex = new HashMap<>();
