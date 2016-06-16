@@ -27,6 +27,7 @@ public class SemEval2013Task12PerfectConfigurationScorer implements PerfectConfi
     
     void loadData()
     {
+    	data = new HashMap<>();
     	data.clear();
     	add("d001", "d001.s001.t002", "group%1:03:00::");
     	add("d001", "d001.s001.t003", "plan%1:09:00::");
