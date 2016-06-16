@@ -12,8 +12,6 @@ import org.getalp.lexsema.acceptali.graph.generator.TranslationGraphGeneratorImp
 import org.getalp.lexsema.acceptali.graph.processing.TranslationProcessing;
 import org.getalp.lexsema.acceptali.graph.tools.ToolGraph;
 import org.getalp.lexsema.acceptali.graph.writer.LexicalEntryIdProvider;
-import org.getalp.lexsema.acceptali.graph.writer.TranslationGraphWriter;
-import org.getalp.lexsema.acceptali.graph.writer.TranslationGraphWriterImpl;
 import org.getalp.lexsema.ontolex.LexicalEntry;
 import org.getalp.lexsema.ontolex.LexicalSense;
 import org.getalp.lexsema.ontolex.dbnary.DBNary;
@@ -279,8 +277,6 @@ public final class GenerateGraph {
                 DOTExporter dotExp = new DOTExporter(vertIdProv,null,null) ;
                 dotExp.export(translationGraphWriter,translationGraph) ;
 
-                //TranslationGraphWriter writer = new TranslationGraphWriterImpl(path.toString());
-                //writer.writeTranslation(translationGraph);
             } else {
                 logger.error("The graph is empty... Aborting.");
             }
