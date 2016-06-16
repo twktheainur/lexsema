@@ -192,7 +192,7 @@ public class TestOnSimilarityMeasures
         
         PerfectConfigurationScorer perfectScorer = input.scorer;
 
-        int iterations = 100000;
+        int iterations = 1000000;
         double minLevyLocation = 1;
         double maxLevyLocation = 5;
         double minLevyScale = 0.5;
