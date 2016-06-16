@@ -1723,9 +1723,10 @@ public class SemEval2013Task12PerfectConfigurationScorer implements PerfectConfi
         		String wordId = document.getWord(j).getId();
         		int assignment = configuration.getAssignment(j);
         		if (assignment == -1) continue;
+        		List<String> answers = documentData.get(wordId);
+        		if (answers == null) continue;
         		Sense sense = document.getSenses(j).get(assignment);
         		String senseKey = sense.getId();
-        		List<String> answers = documentData.get(wordId);
         		for (String answer : answers)
         		{
         			if (senseKey.toLowerCase().equals(answer.toLowerCase()))
