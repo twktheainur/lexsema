@@ -35,7 +35,7 @@ public class TestOnSimilarityMeasures
 
 	static PerfectConfigurationScorer semeval2007task7scorer = new SemEval2007Task7PerfectConfigurationScorer();
 
-	static PerfectConfigurationScorer semeval2013task12scorer = new SemEval2013Task12PerfectConfigurationScorer();
+	static PerfectConfigurationScorer semeval2013task12scorer = new SemEval2013Task12PerfectConfigurationScorer("../data/semeval2013_task12/scorer/scorer2", "../data/semeval2013_task12/keys/gold/wordnet/wordnet.en.key");
 	
 	static class Input
 	{
@@ -91,7 +91,9 @@ public class TestOnSimilarityMeasures
     public static void main(String[] args) throws Exception
     {
     	List<Input> dicts_list = new ArrayList<>();
-    	dicts_list.add(new Input("../data/lesk_dict/all/zebest", true, false, -1, semeval20013task12corpus, semeval2013task12scorer));
+    	dicts_list.add(new Input("../data/lesk_dict/all/sem13_baseline", true, false, -1, semeval20013task12corpus, semeval2013task12scorer));
+    	dicts_list.add(new Input("../data/lesk_dict/all/sem13_5_250", true, false, -1, semeval20013task12corpus, semeval2013task12scorer));
+    	dicts_list.add(new Input("../data/lesk_dict/all/sem13_7_100", true, false, -1, semeval20013task12corpus, semeval2013task12scorer));
 
     	//dicts_list.add(new Input("../data/lesk_dict/semeval2007task7/w2v/vectorized1", false, true, -0.5));
     	//dicts_list.add(new Input("../data/lesk_dict/semeval2007task7/w2v/vectorized1", false, true, 0));
@@ -216,12 +218,12 @@ public class TestOnSimilarityMeasures
             System.out.flush();
             List<Configuration> configurations = new ArrayList<>();
 
-            String resultName = input.dict;
-            resultName = resultName.replaceAll("\\.", "");
-            resultName = resultName.replaceAll("\\/", "");
-            resultName = resultName + "_" + i + ".ans";
-            PrintStream ps = null;
-            try { ps = new PrintStream(resultName); } catch (FileNotFoundException e) { throw new RuntimeException(e); }
+            //String resultName = input.dict;
+            //resultName = resultName.replaceAll("\\.", "");
+            //resultName = resultName.replaceAll("\\/", "");
+            //resultName = resultName + "_" + i + ".ans";
+            //PrintStream ps = null;
+            //try { ps = new PrintStream(resultName); } catch (FileNotFoundException e) { throw new RuntimeException(e); }
             
             long startTime = System.currentTimeMillis();
             for (Document d : input.corpus)
@@ -230,23 +232,24 @@ public class TestOnSimilarityMeasures
                 System.out.flush();
                 Configuration c = disambiguator.disambiguate(d);
                 configurations.add(c);
-                
+                /*
                 for (int j = 0 ; j < d.size() ; j++) 
                 {
                     if (d.getWord(j).getId() != null && !d.getWord(j).getId().isEmpty()) 
                     {
                         if (c.getAssignment(j) >= 0 && !d.getSenses(j).isEmpty())
                         {
-                            ps.printf("%s %s %s !! %s#%s%n", d.getId(), d.getWord(j).getId(), d.getSenses(j).get(c.getAssignment(j)).getId(), d.getWord(j).getLemma(), d.getWord(j).getPartOfSpeech());
+                            ps.printf("%s %s %s", d.getId(), d.getWord(j).getId(), d.getSenses(j).get(c.getAssignment(j)).getId());
                         }
                     }
                 }
+                */
                 
                 double tmp_score = perfectScorer.computeScore(d, c);
                 System.out.print("[" + new DecimalFormat("##.##").format(tmp_score * 100) + "] ");
                 System.out.flush();
             }
-            ps.close();
+            //ps.close();
             long endTime = System.currentTimeMillis();
             times[i] = (endTime - startTime);
             scores[i] = perfectScorer.computeTotalScore(documents, configurations);

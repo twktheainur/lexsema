@@ -131,7 +131,7 @@ public class DictionaryCreation
         System.out.print("Building dictionary " + newDictPath + "...");
         System.out.flush();
 
-        WordnetLoader lrloader = new WordnetLoader(wordnet21);
+        WordnetLoader lrloader = new WordnetLoader(wordnet30);
 
         lrloader.loadDefinitions(withDefinitions);
         lrloader.extendedSignature(withExtendedDefinitions);
@@ -345,13 +345,26 @@ public class DictionaryCreation
     public static void main(String[] args) throws Exception
     {
         DictionaryCreation dict = new DictionaryCreation();
-		dict.loadOnlySemeval2007Task7Senses = true;
+		dict.loadOnlySemeval2007Task7Senses = false;
         dict.withStopwords = true;
+        dict.withStemming = true;
+        dict.withIndexing = true;
         dict.withShuffling = true;
 		dict.withSenseClusters = false;
         dict.withDefinitions = true;
         dict.withExtendedDefinitions = true;
         dict.verbose = false;
+        dict.write("../data/lesk_dict/all/sem13_baseline");
+        
+        dict.withSemcorThesaurus = true;
+        dict.withWNGTThesaurus = true;
+        dict.numberOfWordsFromThesauri = 250;
+        dict.write("../data/lesk_dict/all/sem13_5_250");
+        
+        dict.withDSOThesaurus = true;
+        dict.numberOfWordsFromThesauri = 100;
+        dict.write("../data/lesk_dict/all/sem13_7_100");
+        
 /*
         dict.withIndexing = false;
         dict.withStemming = false;
@@ -378,12 +391,11 @@ public class DictionaryCreation
         dict.otherSignatureEnrichments.clear();
         dict.otherSignatureEnrichments.add(new VectorizationSignatureEnrichment3(0.5));
         dict.write("../data/lesk_dict/semeval2007task7/w2v/vectorized3_0.5");
-*/
         
         dict.withIndexing = true;
         dict.withStemming = true;
         dict.verbose = true;
-/*  
+  
         dict.otherSignatureEnrichments.clear();
         dict.otherSignatureEnrichments.add(new Word2VecSignatureEnrichment2(1));
         dict.write("../data/lesk_dict/semeval2007task7/w2v/extended1_1");
@@ -395,7 +407,7 @@ public class DictionaryCreation
         dict.otherSignatureEnrichments.clear();
         dict.otherSignatureEnrichments.add(new Word2VecSignatureEnrichment2(5));
         dict.write("../data/lesk_dict/semeval2007task7/w2v/extended1_5");
-*/
+
 
         dict.otherSignatureEnrichments.clear();
         dict.otherSignatureEnrichments.add(new Word2VecSignatureEnrichment2(10));
@@ -408,7 +420,7 @@ public class DictionaryCreation
         dict.otherSignatureEnrichments.clear();
         dict.otherSignatureEnrichments.add(new Word2VecSignatureEnrichment2(50));
         dict.write("../data/lesk_dict/semeval2007task7/w2v/extended1_50");        
-/*
+
         dict.otherSignatureEnrichments.clear();
         dict.otherSignatureEnrichments.add(new Word2VecSignatureEnrichment3(10));
         dict.write("../data/lesk_dict/semeval2007task7/w2v/extended2_10");
