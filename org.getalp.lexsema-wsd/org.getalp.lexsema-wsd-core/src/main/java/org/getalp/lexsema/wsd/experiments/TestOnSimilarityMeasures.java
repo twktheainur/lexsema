@@ -91,9 +91,9 @@ public class TestOnSimilarityMeasures
     public static void main(String[] args) throws Exception
     {
     	List<Input> dicts_list = new ArrayList<>();
-    	dicts_list.add(new Input("../data/lesk_dict/all/sem13_baseline", true, false, -1, semeval20013task12corpus, semeval2013task12scorer));
-    	dicts_list.add(new Input("../data/lesk_dict/all/sem13_5_250", true, false, -1, semeval20013task12corpus, semeval2013task12scorer));
-    	dicts_list.add(new Input("../data/lesk_dict/all/sem13_7_100", true, false, -1, semeval20013task12corpus, semeval2013task12scorer));
+    	//dicts_list.add(new Input("../data/lesk_dict/all/sem13_baseline", true, false, -1, semeval20013task12corpus, semeval2013task12scorer));
+    	//dicts_list.add(new Input("../data/lesk_dict/all/sem13_5_250", true, false, -1, semeval20013task12corpus, semeval2013task12scorer));
+    	//dicts_list.add(new Input("../data/lesk_dict/all/sem13_7_100", true, false, -1, semeval20013task12corpus, semeval2013task12scorer));
 
     	//dicts_list.add(new Input("../data/lesk_dict/semeval2007task7/w2v/vectorized1", false, true, -0.5));
     	//dicts_list.add(new Input("../data/lesk_dict/semeval2007task7/w2v/vectorized1", false, true, 0));
@@ -130,20 +130,19 @@ public class TestOnSimilarityMeasures
     	dicts_list.add(new Input("../data/lesk_dict/semeval2007task7/w2v/extended3_50_0.5", true, false));
     	dicts_list.add(new Input("../data/lesk_dict/semeval2007task7/w2v/extended3_100_0.5", true, false));
     	*/
-    	Input[] dicts = dicts_list.toArray(new Input[dicts_list.size()]);
-        compareDicts(dicts);
-        /*
+    	//Input[] dicts = dicts_list.toArray(new Input[dicts_list.size()]);
+        //compareDicts(dicts);
+        
         dicts_list = new ArrayList<>();
         for (int i = 1 ; i <= 15 ; i++) 
         {
             for (int j = 50 ; j <= 300 ; j += 50) 
             {
-                dicts_list.add("../data/lesk_dict/semeval2007task7/wn30clust/" + i + "/" + j + "_alone");
+                dicts_list.add(new Input("../data/lesk_dict/all/fine_def/" + i + "_" + j, true, false, -1, semeval20013task12corpus, semeval2013task12scorer));
             }
         }
-        dicts = dicts_list.toArray(new String[dicts_list.size()]);
-        compareDicts(dicts);
-        */
+        compareDicts(dicts_list.toArray(new Input[dicts_list.size()]));
+        
     	/*
         List<String> dicts_list = new ArrayList<>();
         //dicts_list.add("../data/lesk_dict/semeval2007task7/5/250");

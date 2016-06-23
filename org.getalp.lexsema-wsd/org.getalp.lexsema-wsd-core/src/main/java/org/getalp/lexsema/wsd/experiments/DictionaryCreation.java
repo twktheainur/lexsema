@@ -354,17 +354,19 @@ public class DictionaryCreation
         dict.withDefinitions = true;
         dict.withExtendedDefinitions = true;
         dict.verbose = false;
-        dict.write("../data/lesk_dict/all/sem13_baseline");
-        
-        dict.withSemcorThesaurus = true;
-        dict.withWNGTThesaurus = true;
-        dict.numberOfWordsFromThesauri = 250;
-        dict.write("../data/lesk_dict/all/sem13_5_250");
-        
-        dict.withDSOThesaurus = true;
-        dict.numberOfWordsFromThesauri = 100;
-        dict.write("../data/lesk_dict/all/sem13_7_100");
-        
+
+        for (int i = 1 ; i <= 15 ; i++) 
+        {
+        	for (int j = 50 ; j <= 300 ; j += 50) 
+        	{
+        		dict.withSemcorThesaurus = (i & 1) == 1;
+        		dict.withDSOThesaurus = (i & 2) == 2;
+        		dict.withWNGTThesaurus = (i & 4) == 4;
+        		dict.withGMBThesaurus = (i & 8) == 8;
+        		dict.numberOfWordsFromThesauri = j;
+        		dict.write("../data/lesk_dict/all/fine_def/" + i + "_" + j);
+        	}
+        }
 /*
         dict.withIndexing = false;
         dict.withStemming = false;
