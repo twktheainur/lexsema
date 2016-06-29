@@ -12,8 +12,11 @@ import org.getalp.lexsema.util.Language;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-public class TranslationClosureGeneratorSingle implements TranslationClosureGenerator {
+final class TranslationClosureGeneratorSingle implements TranslationClosureGenerator {
+    private static final Pattern TONIC_ACCENT_PATTERN = Pattern.compile("́", Pattern.LITERAL);
     private final DBNary dbNary;
     private final LexicalEntry lexicalEntry;
 
@@ -24,7 +27,7 @@ public class TranslationClosureGeneratorSingle implements TranslationClosureGene
         this.lexicalEntry = lexicalEntry;
     }
 
-    public static TranslationClosureGenerator createTranslationClosureGenerator(final DBNary dbNary, final LexicalEntry lexicalEntry) {
+    static TranslationClosureGenerator createTranslationClosureGenerator(final DBNary dbNary, final LexicalEntry lexicalEntry) {
         return new TranslationClosureGeneratorSingle(dbNary, lexicalEntry).includeStartingSet(true);
     }
 
@@ -69,7 +72,7 @@ public class TranslationClosureGeneratorSingle implements TranslationClosureGene
 
     private List<LexicalEntry> getTargetEntries(Translation translation, Language startingLanguage) {
         Language lang = translation.getLanguage();
-        if (lang != null && !lang.equals(startingLanguage)) {
+        if (lang != null && lang != startingLanguage) {
             try {
                                 /*
                                  * Removing language tag...
@@ -81,7 +84,7 @@ public class TranslationClosureGeneratorSingle implements TranslationClosureGene
                                 /*
                                  * Removing tonic accent marker (Russian...)
                                  */
-                writtenForm = writtenForm.replace("́", "");
+                writtenForm = TONIC_ACCENT_PATTERN.matcher(writtenForm).replaceAll(Matcher.quoteReplacement(""));
                 Vocable tv = dbNary.getVocable(writtenForm, lang);
 
                 return dbNary.getLexicalEntries(tv);

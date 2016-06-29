@@ -15,9 +15,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 class TranslationClosureGeneratorFile implements TranslationClosureGenerator {
-    private static Logger logger = LoggerFactory.getLogger(TranslationClosureGeneratorFile.class);
+    private static final Logger logger = LoggerFactory.getLogger(TranslationClosureGeneratorFile.class);
     private final String path;
-    private LexicalResource dbNary;
+    private final LexicalResource dbNary;
 
 
     TranslationClosureGeneratorFile(final LexicalResource dbNary, final String path) {
@@ -47,7 +47,7 @@ class TranslationClosureGeneratorFile implements TranslationClosureGenerator {
         }
         int currentSenseIndex = 0;
 
-        try (BufferedReader entryReader = new BufferedReader(new FileReader(path + File.separator + "LexicalEntries.csv"))) {
+        try (BufferedReader entryReader = new BufferedReader(new FileReader(String.format("%s%sLexicalEntries.csv", path, File.separator)))) {
             String line;
             do {
                 line = entryReader.readLine();

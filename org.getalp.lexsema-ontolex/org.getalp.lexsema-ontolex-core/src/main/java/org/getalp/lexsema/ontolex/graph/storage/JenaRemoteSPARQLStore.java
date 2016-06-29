@@ -19,8 +19,8 @@ import java.io.IOException;
 public class JenaRemoteSPARQLStore implements Store {
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
-    private Model model;
-    private String endpoint;
+    private final Model model;
+    private final String endpoint;
 
     public JenaRemoteSPARQLStore(String endpointURI) throws IOException {
         model = ModelFactory.createOntologyModel();

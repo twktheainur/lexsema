@@ -9,13 +9,13 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-public class SenseClusterImpl implements SenseCluster {
-    private String id;
-    private List<Sense> members;
-    private List<DoubleMatrix1D> memberLocations;
-    private List<Double> weights;
+class SenseClusterImpl implements SenseCluster {
+    private final String id;
+    private final List<Sense> members;
+    private final List<DoubleMatrix1D> memberLocations;
+    private final List<Double> weights;
 
-    public SenseClusterImpl(String id) {
+    SenseClusterImpl(String id) {
         this.id = id;
         members = new ArrayList<>();
         weights = new ArrayList<>();

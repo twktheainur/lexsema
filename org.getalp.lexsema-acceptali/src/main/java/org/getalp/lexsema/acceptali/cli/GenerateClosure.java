@@ -60,7 +60,7 @@ public final class GenerateClosure {
         options.addOption(OUTPUT_OPTION, true, "The output directory to which to write the closure");
     }
 
-    private CommandLine cmd = null; // Command Line arguments
+    private CommandLine cmd; // Command Line arguments
 
     private DBNary dbNary;
 
@@ -96,46 +96,46 @@ public final class GenerateClosure {
         CommandLineParser parser = new PosixParser();
         try {
             cmd = parser.parse(options, args);
+            if (cmd.hasOption("h")) {
+                printUsage();
+                System.exit(0);
+            }
+
+            processStorageOptions();
+
+            String cmdLanguages = DEFAULT_LANGUAGES;
+
+            String[] languageCodeList = cmdLanguages.split(",");
+            Language[] languages = new Language[languageCodeList.length];
+            for (int i = 0; i < languageCodeList.length; i++) {
+                languages[i] = Language.fromCode(languageCodeList[i]);
+            }
+
+            if (cmd.hasOption(OUTPUT_OPTION)) {
+                targetDirectory = cmd.getOptionValue(OUTPUT_OPTION);
+            }
+
+            String[] remainingArgs = cmd.getArgs();
+
+            if (remainingArgs.length < 3) {
+                logger.error("You must supply the vocable, source_language and the depth");
+                printUsage();
+                System.exit(1);
+            }
+
+            vocable = remainingArgs[0];
+
+            sourceLanguage = remainingArgs[1];
+
+            depth = Integer.valueOf(remainingArgs[2]);
+
+            OntologyModel tBox = new OWLTBoxModel(ONTOLOGY_PROPERTIES);
+            dbNary = (DBNary) LexicalResourceFactory.getLexicalResource(DBNary.class, tBox, languages);
         } catch (ParseException e) {
             logger.error("Error parsing arguments: {}", e.getLocalizedMessage());
             printUsage();
             System.exit(1);
         }
-        if (cmd.hasOption("h")) {
-            printUsage();
-            System.exit(0);
-        }
-
-        processStorageOptions();
-
-        String cmdLanguages = DEFAULT_LANGUAGES;
-
-        String[] languageCodeList = cmdLanguages.split(",");
-        Language[] languages = new Language[languageCodeList.length];
-        for (int i = 0; i < languageCodeList.length; i++) {
-            languages[i] = Language.fromCode(languageCodeList[i]);
-        }
-
-        if (cmd.hasOption(OUTPUT_OPTION)) {
-            targetDirectory = cmd.getOptionValue(OUTPUT_OPTION);
-        }
-
-        String[] remainingArgs = cmd.getArgs();
-
-        if (remainingArgs.length < 3) {
-            logger.error("You must supply the vocable, source_language and the depth");
-            printUsage();
-            System.exit(1);
-        }
-
-        vocable = remainingArgs[0];
-
-        sourceLanguage = remainingArgs[1];
-
-        depth = Integer.valueOf(remainingArgs[2]);
-
-        OntologyModel tBox = new OWLTBoxModel(ONTOLOGY_PROPERTIES);
-        dbNary = (DBNary) LexicalResourceFactory.getLexicalResource(DBNary.class, tBox, languages);
     }
 
     @SuppressWarnings("InstanceVariableUsedBeforeInitialized")
@@ -178,10 +178,10 @@ public final class GenerateClosure {
         Vocable v = dbNary.getVocable(vocable, Language.fromCode(sourceLanguage));
         List<LexicalEntry> ventries = dbNary.getLexicalEntries(v);
         if (!ventries.isEmpty()) {
-            Map<LexicalEntry,LexicalResourceTranslationClosure<LexicalSense>> closures = new HashMap<>();
-            for(LexicalEntry lexicalEntry: ventries) {
+            Map<LexicalEntry, LexicalResourceTranslationClosure<LexicalSense>> closures = new HashMap<>();
+            for (LexicalEntry lexicalEntry : ventries) {
                 TranslationClosureGenerator gtc = TranslationClosureGeneratorFactory.createCompositeGenerator(dbNary, lexicalEntry);
-                closures.put(lexicalEntry,generateEntryClosure(gtc));
+                closures.put(lexicalEntry, generateEntryClosure(gtc));
             }
             return closures;
         }
@@ -193,10 +193,10 @@ public final class GenerateClosure {
     }
 
     private void writeClosures(Map<LexicalEntry, LexicalResourceTranslationClosure<LexicalSense>> closures) throws IOException {
-        for(Map.Entry<LexicalEntry, LexicalResourceTranslationClosure<LexicalSense>> closureEntry : closures.entrySet()) {
+        for (Map.Entry<LexicalEntry, LexicalResourceTranslationClosure<LexicalSense>> closureEntry : closures.entrySet()) {
             Path p = Paths.get(targetDirectory, String.format("%s_%d", closureEntry.getKey().getLemma(), closureEntry.getKey().getNumber()));
             Files.createDirectory(p);
-            writeClosure(closureEntry.getValue(),p);
+            writeClosure(closureEntry.getValue(), p);
         }
     }
 
