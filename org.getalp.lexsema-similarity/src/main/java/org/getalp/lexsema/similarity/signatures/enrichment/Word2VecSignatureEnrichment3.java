@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-public class Word2VecSignatureEnrichment3 implements SignatureEnrichment {
+public class Word2VecSignatureEnrichment3 extends SignatureEnrichment {
 
     private final int topN;
     
@@ -21,19 +21,23 @@ public class Word2VecSignatureEnrichment3 implements SignatureEnrichment {
         this.topN = topN;
     }
 
-    @Override
-    public SemanticSignature enrichSemanticSignature(SemanticSignature semanticSignature) {
-        List<double[]> symbolsVectors = new ArrayList<>();
+    private double[] constructSenseVector(SemanticSignature semanticSignature) {
+    	double[] ret = null;
         for (SemanticSymbol semanticSymbol : semanticSignature) {
             double[] symbolVector = Word2VecClient.getWordVector(semanticSymbol.getSymbol());
-            if (symbolVector.length > 0) {
-                symbolsVectors.add(symbolVector);
-            }
+            if (symbolVector.length == 0) continue;
+            if (ret == null) ret = symbolVector;
+            else ret = VectorOperation.add(ret, symbolVector);
         }
-        if (symbolsVectors.size() == 0) return semanticSignature;
-        double[] sum = VectorOperation.sum(symbolsVectors.toArray(new double[symbolsVectors.size()][]));
-        double[] sumNormalized = VectorOperation.normalize(sum);
-        Collection<String> nearests = Word2VecClient.getMostSimilarWords(sumNormalized, topN);
+        if (ret != null) ret = VectorOperation.normalize(ret);
+        return ret;
+    }
+
+    @Override
+    public SemanticSignature enrichSemanticSignature(SemanticSignature semanticSignature) {
+    	double[] senseVector = constructSenseVector(semanticSignature);
+    	if (senseVector == null) return semanticSignature;
+        Collection<String> nearests = Word2VecClient.getMostSimilarWords(senseVector, topN);
         SemanticSignature newSignature = new SemanticSignatureImpl();
         for (String word : semanticSignature.getStringSymbols()) {
             newSignature.addSymbol(word);
@@ -43,14 +47,4 @@ public class Word2VecSignatureEnrichment3 implements SignatureEnrichment {
         }
         return newSignature;
     }
-    @Override
-    public SemanticSignature enrichSemanticSignature(SemanticSignature semanticSignature, Language language) {
-        return null;
-    }
-
-    @Override
-    public void close() {
-
-    }
-
 }

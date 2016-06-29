@@ -81,6 +81,7 @@ public class WordnetGlossTagCorpusLoader extends CorpusLoaderImpl implements Con
             break;
         case "id":
             if (inWord && currentSemanticTag.equals("")) {
+                currentLemma = atts.getValue("lemma");
                 currentSemanticTag = atts.getValue("sk");
                 currentSemanticTag = currentSemanticTag.substring(currentSemanticTag.indexOf("%") + 1);
             }

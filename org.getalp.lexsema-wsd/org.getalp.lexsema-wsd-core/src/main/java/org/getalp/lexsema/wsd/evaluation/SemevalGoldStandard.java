@@ -50,8 +50,7 @@ public class SemevalGoldStandard implements GoldStandard {
     }
 
     private boolean assignmentMatches(String goldAssignment, CharSequence wsdAssignment) {
-        return goldAssignment.contains(" ") && goldAssignment.contains(wsdAssignment) ||
-                !goldAssignment.contains(" ") && goldAssignment.equals(wsdAssignment);
+        return goldAssignment.toLowerCase().contains(wsdAssignment.toString().toLowerCase());
     }
 
     private List<String> getAssignedIds(Configuration c, Document document) {

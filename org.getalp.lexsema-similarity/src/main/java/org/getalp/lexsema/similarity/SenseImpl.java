@@ -49,6 +49,11 @@ public class SenseImpl implements Sense {
     }
 
     @Override
+    public void setId(String id) {
+    	this.id = id;
+    }
+    
+    @Override
     public Map<String, SemanticSignature> getRelatedSignatures() {
         return Collections.unmodifiableMap(relatedSignatures);
     }

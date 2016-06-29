@@ -17,8 +17,6 @@ import org.getalp.lexsema.util.StopList;
 @SuppressWarnings("ClassWithoutLogger")
 public class AnnotatedTextThesaurusImpl implements AnnotatedTextThesaurus {
 
-    private static final Pattern NON_LETTERS = Pattern.compile("[^a-zA-Z ]");
-
     private final Map<String, Map<String, Integer>> map;
     
     private final int n;
@@ -77,7 +75,7 @@ public class AnnotatedTextThesaurusImpl implements AnnotatedTextThesaurus {
                         Map<String, Integer> wordMap = map.get(wordStr);
                         for (Word w2 : stc)
                         {
-                            String word2Str = w2.getSurfaceForm().replaceAll(NON_LETTERS.pattern(), "");
+                            String word2Str = w2.getSurfaceForm().replaceAll("[^\\p{IsAlphabetic} ]", "");
                             if (w != w2 && !StopList.isStopWord(word2Str))
                             {
                                 if (!wordMap.containsKey(word2Str))

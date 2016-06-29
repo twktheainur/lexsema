@@ -10,11 +10,10 @@ import org.getalp.lexsema.similarity.signatures.symbols.SemanticSymbol;
 import org.getalp.lexsema.util.Language;
 import org.tartarus.snowball.ext.EnglishStemmer;
 
-public class IndexingSignatureEnrichment implements SignatureEnrichment {
+public class IndexingSignatureEnrichment extends SignatureEnrichment {
 
     private final SymbolIndex symbolIndex = new SymbolIndexImpl();
 
-    @Override
     public SemanticSignature enrichSemanticSignature(SemanticSignature signature) {
         IndexedSemanticSignature indexedSignature = new IndexedSemanticSignatureImpl(symbolIndex);
         for (SemanticSymbol symbol : signature) {
@@ -24,14 +23,4 @@ public class IndexingSignatureEnrichment implements SignatureEnrichment {
         return indexedSignature;
     }
 
-    @Override
-    public SemanticSignature enrichSemanticSignature(SemanticSignature signature, Language language) {
-        return enrichSemanticSignature(signature);
-    }
-
-    @Override
-    public void close() {
-
-    }
-    
 }

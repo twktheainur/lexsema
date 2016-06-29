@@ -103,7 +103,7 @@ public class DictionaryParser implements ContentHandler {
                 dico.put(word, mws);
                 break;
             case "sense":
-                if (mw.getSemanticSignature() != null && !isSignatureEmpty(mw.getSemanticSignature())) {
+                if (mw.getSemanticSignature() != null) {
                     mws.add(mw);
                 }
                 break;

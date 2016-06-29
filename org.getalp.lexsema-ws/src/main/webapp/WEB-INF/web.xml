@@ -20,6 +20,16 @@
         <servlet-class>org.getalp.lexsema.ws.w2v.Word2VecWebService</servlet-class>
     </servlet>
 
+    <servlet>
+        <servlet-name>WSDForSMTWebService1</servlet-name>
+        <servlet-class>org.getalp.lexsema.ws.wsdforsmt.WSDForSMTWebService1</servlet-class>
+    </servlet>
+
+    <servlet>
+        <servlet-name>WSDForSMTWebService2</servlet-name>
+        <servlet-class>org.getalp.lexsema.ws.wsdforsmt.WSDForSMTWebService2</servlet-class>
+    </servlet>
+
 	<servlet-mapping>
 		<servlet-name>NIFWebService</servlet-name>
 		<url-pattern>/nifwebservice</url-pattern>
@@ -33,5 +43,15 @@
     <servlet-mapping>
         <servlet-name>Word2VecWebService</servlet-name>
         <url-pattern>/w2vservice</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>WSDForSMTWebService1</servlet-name>
+        <url-pattern>/wsdforsmtservice1</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>WSDForSMTWebService2</servlet-name>
+        <url-pattern>/wsdforsmtservice2</url-pattern>
     </servlet-mapping>
 </web-app>

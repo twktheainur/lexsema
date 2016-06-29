@@ -18,6 +18,7 @@ public class FeatureIndexImpl implements FeatureIndex {
         if (!map.containsKey(feature)) {
             ++currentIndex;
             map.put(feature, currentIndex);
+            //System.err.println("feature \"" + feature + "\" " + currentIndex);
         }
         return map.get(feature);
     }

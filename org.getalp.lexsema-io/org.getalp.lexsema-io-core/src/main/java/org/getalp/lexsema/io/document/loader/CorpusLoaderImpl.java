@@ -22,6 +22,10 @@ public abstract class CorpusLoaderImpl implements CorpusLoader {
     public Iterator<Text> iterator() {
         return documents.iterator();
     }
+    
+    protected void clearTexts() {
+    	documents.clear();
+    }
 
     protected void addText(Text text) {
         documents.add(text);

@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-public class Word2VecSignatureEnrichment5 implements SignatureEnrichment {
+public class Word2VecSignatureEnrichment5 extends SignatureEnrichment {
 
     private final int topN;
     
@@ -21,7 +21,7 @@ public class Word2VecSignatureEnrichment5 implements SignatureEnrichment {
         this.topN = topN;
     }
 
-    public SemanticSignature enrichSemanticSignature(SemanticSignature semanticSignature, String zeword) {
+    public SemanticSignature enrichSemanticSignature(SemanticSignature semanticSignature, String id) {
         List<double[]> symbolsVectors = new ArrayList<>();
         for (SemanticSymbol semanticSymbol : semanticSignature) {
             double[] symbolVector = Word2VecClient.getWordVector(semanticSymbol.getSymbol());
@@ -32,6 +32,7 @@ public class Word2VecSignatureEnrichment5 implements SignatureEnrichment {
         if (symbolsVectors.size() == 0) return semanticSignature;
         double[] sum = VectorOperation.sum(symbolsVectors.toArray(new double[symbolsVectors.size()][]));
         double[] sumNormalized = VectorOperation.normalize(sum);
+        String zeword = id.substring(0, id.indexOf('%'));
         Collection<String> nearests = Word2VecClient.getMostSimilarWords(zeword.toLowerCase(), topN, sumNormalized);
         SemanticSignature newSignature = new SemanticSignatureImpl();
         for (String word : semanticSignature.getStringSymbols()) {
@@ -46,16 +47,6 @@ public class Word2VecSignatureEnrichment5 implements SignatureEnrichment {
     @Override
     public SemanticSignature enrichSemanticSignature(SemanticSignature semanticSignature) {
         return null;
-    }
-    
-    @Override
-    public SemanticSignature enrichSemanticSignature(SemanticSignature semanticSignature, Language language) {
-        return null;
-    }
-
-    @Override
-    public void close() {
-
     }
 
 }

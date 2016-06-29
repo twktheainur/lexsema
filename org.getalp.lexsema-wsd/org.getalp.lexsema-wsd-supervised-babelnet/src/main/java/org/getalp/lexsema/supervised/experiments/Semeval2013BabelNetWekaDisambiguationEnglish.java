@@ -6,7 +6,7 @@ import org.getalp.lexsema.io.annotresult.SemevalWriter;
 import org.getalp.lexsema.io.dictionary.DictionaryWriter;
 import org.getalp.lexsema.io.dictionary.DocumentDictionaryWriter;
 import org.getalp.lexsema.io.document.loader.SemCorCorpusLoader;
-import org.getalp.lexsema.io.document.loader.Semeval2013Task13CorpusLoader;
+import org.getalp.lexsema.io.document.loader.Semeval2013Task12CorpusLoader;
 import org.getalp.lexsema.io.document.loader.CorpusLoader;
 import org.getalp.lexsema.io.resource.LRLoader;
 import org.getalp.lexsema.io.resource.babelnet.BabelNetAPILoader;
@@ -38,7 +38,7 @@ public class Semeval2013BabelNetWekaDisambiguationEnglish {
     private static Logger logger = LoggerFactory.getLogger(Semeval2013BabelNetWekaDisambiguationEnglish.class);
 
     public static void main(String[] args) throws IOException {
-        CorpusLoader dl = new Semeval2013Task13CorpusLoader("data/multilingual-all-words.en.xml")
+        CorpusLoader dl = new Semeval2013Task12CorpusLoader("data/multilingual-all-words.en.xml")
                 .loadNonInstances(false);
         CorpusLoader semCor = new SemCorCorpusLoader("data/semcor_full_english.xml");
         LRLoader lrloader = new BabelNetAPILoader(Language.ENGLISH).extendedSignature(false).shuffle(false).loadDefinitions(false).loadRelated(false);

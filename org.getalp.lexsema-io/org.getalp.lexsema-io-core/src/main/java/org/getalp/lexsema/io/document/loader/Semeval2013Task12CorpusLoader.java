@@ -12,10 +12,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-@SuppressWarnings({"BooleanParameter", "ClassWithTooManyFields"})
-public class Semeval2013Task13CorpusLoader extends CorpusLoaderImpl implements ContentHandler {
+public class Semeval2013Task12CorpusLoader extends CorpusLoaderImpl implements ContentHandler {
 
-    private final Logger logger = LoggerFactory.getLogger(Semeval2013Task13CorpusLoader.class);
+    private final Logger logger = LoggerFactory.getLogger(Semeval2013Task12CorpusLoader.class);
 
     private boolean inWord;
     private String currentSurfaceForm;
@@ -26,33 +25,31 @@ public class Semeval2013Task13CorpusLoader extends CorpusLoaderImpl implements C
 
     private final String path;
 
-
-    private final List<Word> currentPrecedingWords;
+    private List<Word> currentPrecedingWords;
     private Sentence currentSentence;
     private Text currentDocument;
 
     private String lemmaAttribute;
 
-    public Semeval2013Task13CorpusLoader(String path) {
-        inWord = false;
+    public Semeval2013Task12CorpusLoader(String path) {
         this.path = path;
-        currentId = "";
-        currentLemma = "";
-        currentPos = "";
-        currentSurfaceForm = "";
-        currentPrecedingWords = new ArrayList<>();
         lemmaAttribute = "lemma";
+        init();
     }
 
-    public Semeval2013Task13CorpusLoader(String path, String lemmaAttribute) {
-        inWord = false;
+    public Semeval2013Task12CorpusLoader(String path, String lemmaAttribute) {
         this.path = path;
+        this.lemmaAttribute = lemmaAttribute;
+        init();
+    }
+    
+    private void init() {
+        inWord = false;
         currentId = "";
         currentLemma = "";
         currentPos = "";
         currentSurfaceForm = "";
         currentPrecedingWords = new ArrayList<>();
-        this.lemmaAttribute = lemmaAttribute;
     }
 
 
@@ -172,9 +169,10 @@ public class Semeval2013Task13CorpusLoader extends CorpusLoaderImpl implements C
     @Override
     public void load() {
         try {
+        	clearTexts();
+        	init();
             XMLReader saxReader = XMLReaderFactory.createXMLReader();
-            saxReader
-                    .setContentHandler(this);
+            saxReader.setContentHandler(this);
             saxReader.parse(path);
         } catch (IOException | SAXException t) {
             t.printStackTrace();

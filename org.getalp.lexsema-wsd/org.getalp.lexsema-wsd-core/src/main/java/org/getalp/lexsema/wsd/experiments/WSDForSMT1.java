@@ -2,22 +2,15 @@ package org.getalp.lexsema.wsd.experiments;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.PrintStream;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
-
 import org.getalp.lexsema.io.resource.LRLoader;
 import org.getalp.lexsema.io.resource.dictionary.DictionaryLRLoader;
-import org.getalp.lexsema.io.text.EnglishDKPTextProcessor;
-import org.getalp.lexsema.io.text.TextProcessor;
 import org.getalp.lexsema.similarity.Document;
 import org.getalp.lexsema.similarity.DocumentImpl;
-import org.getalp.lexsema.similarity.Sentence;
-import org.getalp.lexsema.similarity.SentenceImpl;
-import org.getalp.lexsema.similarity.Text;
-import org.getalp.lexsema.similarity.TextImpl;
 import org.getalp.lexsema.similarity.Word;
 import org.getalp.lexsema.similarity.WordImpl;
 import org.getalp.lexsema.similarity.measures.lesk.IndexedLeskSimilarity;
@@ -26,8 +19,6 @@ import org.getalp.lexsema.wsd.method.Disambiguator;
 import org.getalp.lexsema.wsd.method.MultiThreadCuckooSearch;
 import org.getalp.lexsema.wsd.score.ConfigurationScorer;
 import org.getalp.lexsema.wsd.score.ConfigurationScorerWithCache;
-
-import cern.colt.Arrays;
 import edu.mit.jwi.Dictionary;
 import edu.mit.jwi.item.ISenseEntry;
 import edu.stanford.nlp.ling.CoreAnnotations.LemmaAnnotation;
@@ -56,11 +47,18 @@ public class WSDForSMT1
 			rawTextBuilder.append(arg + " ");
 		}
 		
+		String rawText = rawTextBuilder.toString();
+		
+		System.out.println("Got the following input of size " + rawText.length() + ":");
+		System.out.println(rawText);
+		
+		System.out.println("Loading dictionary...");
 		LRLoader lrloader = new DictionaryLRLoader(new FileInputStream("../data/lesk_dict/all/dict_all_stopwords_stemming_semcor_wordnetglosstag_250"), true);
-		//TextProcessor txtProcessor = new EnglishDKPTextProcessor();
-		//Text txt = txtProcessor.process(rawTextBuilder.toString(), "");
-		Document txt = rawToText(rawTextBuilder.toString());
-		//Sentence txts = txt.sentences().iterator().next();
+		
+		System.out.println("Parsing input...");
+		Document txt = rawToText(rawText);
+		
+		System.out.println("Loading senses...");
 		lrloader.loadSenses(txt);
 
         ConfigurationScorer scorer = new ConfigurationScorerWithCache(new IndexedLeskSimilarity());
@@ -72,6 +70,7 @@ public class WSDForSMT1
         double maxLevyScale = 1.5;
 
         Disambiguator disambiguator = new MultiThreadCuckooSearch(iterations, minLevyLocation, maxLevyLocation, minLevyScale, maxLevyScale, scorer, false);               
+        System.out.println("Disambiguating...");
         Configuration c = disambiguator.disambiguate(txt);
         disambiguator.release();
         
@@ -94,8 +93,10 @@ public class WSDForSMT1
 	        	}
         	}
         }
+        String output = Arrays.toString(outputArray);
+        System.out.println("Writing output of size " + output.length() + "...");
         System.setOut(stdout);
-        System.out.println(Arrays.toString(outputArray));
+        System.out.println(output);
 	}
 
 	private static Document rawToText(String raw)

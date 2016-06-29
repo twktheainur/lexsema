@@ -37,7 +37,7 @@ public class WordnetLoader implements LRLoader {
 
     private static final Pattern WHITESPACE = Pattern.compile("\\s+");
 
-    private static final Pattern NON_LETTERS = Pattern.compile("[^a-zA-Z ]");
+    private static final Pattern NON_LETTERS = Pattern.compile("[^\\p{IsAlphabetic} ]");
 
     private final Dictionary dictionary;
 
@@ -56,8 +56,12 @@ public class WordnetLoader implements LRLoader {
     private final Map<String, List<Sense>> senseCache;
     
     private boolean distributed;
+    
+    private boolean verbose;
 
     private List<List<String>> senseClusters;
+    
+    private boolean loadSynsetOffsetInsteadOfSenseKey;
     
     /**
      * Creates a WordnetLoader with an existing Wordnet Dictionary object.
@@ -74,7 +78,9 @@ public class WordnetLoader implements LRLoader {
         thesauri = new ArrayList<>();
         senseCache = new HashMap<>();
         distributed = false;
+        verbose = false;
         senseClusters = null;
+        loadSynsetOffsetInsteadOfSenseKey = false;
     }
 
     private Dictionary openDictionary(Dictionary dictionary) {
@@ -97,7 +103,7 @@ public class WordnetLoader implements LRLoader {
         String lpos = pos.toLowerCase();
         if (lpos.startsWith("n") || lpos.startsWith("v") || lpos.startsWith("r")) {
             newPos = lpos.charAt(0);
-        } else if (pos.startsWith("j") || pos.startsWith("a")) {
+        } else if (lpos.startsWith("j") || lpos.startsWith("a")) {
             newPos = 'a';
         }
         return String.valueOf(newPos);
@@ -105,6 +111,7 @@ public class WordnetLoader implements LRLoader {
 
     private List<Sense> getSenses(String lemma, String pos) {
         List<Sense> senses;
+        Map<String, String> senseKeyToSynsetOffset = new HashMap<>();
         String id = MessageFormat.format("{0}%{1}", lemma, processPOS(pos));
         if (senseCache.containsKey(id)) {
             senses = senseCache.get(id);
@@ -117,7 +124,12 @@ public class WordnetLoader implements LRLoader {
                 for (IWordID wordID : wordIDs) {
                     IWord word = dictionary.getWord(wordID);
                     ISenseKey senseKey = word.getSenseKey();
-                    Sense sense = new SenseImpl(senseKey.toString());
+                    String senseKeyString = senseKey.toString();
+                    if (loadSynsetOffsetInsteadOfSenseKey) {
+                        String synsetOffset = String.format("%08d", word.getSynset().getOffset()) + word.getPOS().getTag();
+                        senseKeyToSynsetOffset.put(senseKeyString, synsetOffset);
+                    }
+                    Sense sense = new SenseImpl(senseKeyString);
                     SemanticSignature signature = createSignature();
                     final ISynset wordSynset = word.getSynset();
                     if (loadDefinitions) {
@@ -134,15 +146,15 @@ public class WordnetLoader implements LRLoader {
                     }
 
                     for (AnnotatedTextThesaurus thesaurus : thesauri) {
-                        String senseKeyString = senseKey.toString();
-                        List<String> relatedWords = thesaurus.getRelatedWords(senseKeyString);
-                        for (String relatedWord : relatedWords) {
-                            addToSignature(signature, relatedWord);
-                        }
+                        addToSignature(signature, thesaurus.getRelatedWords(senseKeyString));
+                        // Special case : from old to new versions of wordnet,
+                        // the sense key for adjectives could have changed from "%5" to "%3"
+                        if (senseKeyString.contains("%5")) addToSignature(signature, thesaurus.getRelatedWords(senseKeyString.replace("%5", "%3")));
+                        if (senseKeyString.contains("%3")) addToSignature(signature, thesaurus.getRelatedWords(senseKeyString.replace("%3", "%5")));
                     }
                     
                     for (SignatureEnrichment signatureEnrichment : signatureEnrichments) {
-                        signature = signatureEnrichment.enrichSemanticSignature(signature);
+                        signature = signatureEnrichment.enrichSemanticSignature(signature, senseKey.toString());
                     }
           
                     sense.setSemanticSignature(signature);
@@ -150,6 +162,15 @@ public class WordnetLoader implements LRLoader {
                 }
             }
             senseCache.put(id, senses);
+        }
+        if (senseClusters != null) {
+            senses = clusterize(senses);
+        }
+        if (loadSynsetOffsetInsteadOfSenseKey) {
+            transformSenseKeysToSynsetOffset(senses, senseKeyToSynsetOffset);
+        }
+        if (shuffle) {
+            Collections.shuffle(senses);
         }
         return senses;
     }
@@ -211,12 +232,6 @@ public class WordnetLoader implements LRLoader {
             } else {
                 senses = new ArrayList<>();
             }
-            if (senseClusters != null) {
-                senses = clusterize(senses);
-            }
-            if (shuffle) {
-                Collections.shuffle(senses);
-            }
             commitSensesToCache(w, senses, localSenseCache);
         }
         return senses;
@@ -253,6 +268,12 @@ public class WordnetLoader implements LRLoader {
 
     private void commitSensesToCache(Word w, List<Sense> senses, SenseCache senseCache) {
         senseCache.addToCache(w, senses);
+    }
+
+    private void addToSignature(SemanticSignature signature, List<String> defs) {
+        for (CharSequence def : defs) {
+            addToSignature(signature, def);
+        }
     }
 
     private void addToSignature(SemanticSignature signature, CharSequence def) {
@@ -312,6 +333,16 @@ public class WordnetLoader implements LRLoader {
         }
         return newSenses;
     }
+    
+    private void transformSenseKeysToSynsetOffset(List<Sense> senses, Map<String, String> fromSenseKeyToSynsetOffset)
+    {
+        for (Sense sense : senses)
+        {
+            String senseKey = sense.getId();
+            String synsetOffset = fromSenseKeyToSynsetOffset.get(senseKey);
+            sense.setId(synsetOffset);
+        }
+    }
 
     private IIndexWord getWord(String sid) {
         String lemme;
@@ -366,8 +397,8 @@ public class WordnetLoader implements LRLoader {
     }
     
     public LRLoader addSignatureEnrichment(SignatureEnrichment signatureEnrichment) {
-    	signatureEnrichments.add(signatureEnrichment);
-    	return this;
+        signatureEnrichments.add(signatureEnrichment);
+        return this;
     }
 
     @Override
@@ -378,16 +409,19 @@ public class WordnetLoader implements LRLoader {
 
     @Override
     public void loadSenses(Document document) {
-        List<List<Sense>> senses;
+        List<List<Sense>> senses = new ArrayList<>();
         if (distributed) {
             senses = loadSensesDistributed(document);
         } else {
-            try (IntStream range = IntStream.range(0, document.size())) {
-                senses = range
-                        .mapToObj(i -> getSenses(document.getWord(i)))
-                        .collect(Collectors.toList());
-
-            }
+            int last_percentage = 0;
+        	for (int i = 0 ; i < document.size() ; i++) {
+        		if (verbose) {
+                    int current_percentage = ((int) ((((double) (i + 1)) / ((double) (document.size()))) * 100.0));
+                    if (current_percentage > last_percentage) System.out.println("Loading senses... (" + current_percentage + "%)\r");
+                    last_percentage = current_percentage;
+        		}
+        		senses.add(getSenses(document.getWord(i)));
+        	}
         }
         senses.forEach(document::addWordSenses);
     }
@@ -447,6 +481,18 @@ public class WordnetLoader implements LRLoader {
     public LRLoader setSenseClusters(List<List<String>> senseClusters) {
         this.senseClusters = senseClusters;
         return this;
+    }
+    
+    public LRLoader setloadSynsetOffsetInsteadOfSenseKey(boolean loadSynsetOffsetInsteadOfSenseKey)
+    {
+        this.loadSynsetOffsetInsteadOfSenseKey = loadSynsetOffsetInsteadOfSenseKey;
+        return this;
+    }
+    
+    public LRLoader setVerbose(boolean verbose)
+    {
+    	this.verbose = verbose;
+    	return this;
     }
 
 }

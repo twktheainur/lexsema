@@ -11,18 +11,32 @@ import java.util.Map;
 
 public class VectorizedLeskSimilarity implements SimilarityMeasure
 {
+	final double threshold;
+
+	public VectorizedLeskSimilarity()
+	{
+		this(-1);
+	}
+	
+	public VectorizedLeskSimilarity(double threshold)
+	{
+		this.threshold = threshold;
+	}
+	
     public double compute(SemanticSignature sigA, SemanticSignature sigB)
     {
         List<VectorizedSemanticSymbol> la = ((VectorizedSemanticSignature) sigA).getVectorizedSymbols();
         List<VectorizedSemanticSymbol> lb = ((VectorizedSemanticSignature) sigB).getVectorizedSymbols();
-        int count = 0;
+        double count = 0;
         for (VectorizedSemanticSymbol ala : la)
         {
             if (ala.getVector().length == 0) continue;
             for (VectorizedSemanticSymbol alb : lb)
             {
                 if (alb.getVector().length == 0) continue;
-                count += VectorOperation.dot_product(ala.getVector(), alb.getVector());
+                double dot_product = VectorOperation.dot_product(ala.getVector(), alb.getVector());
+                if (dot_product < threshold) continue;
+                count += dot_product;
             }
         }
         return count;

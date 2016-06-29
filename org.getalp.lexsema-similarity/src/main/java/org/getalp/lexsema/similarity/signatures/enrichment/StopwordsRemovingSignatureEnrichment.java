@@ -6,7 +6,7 @@ import org.getalp.lexsema.similarity.signatures.symbols.SemanticSymbol;
 import org.getalp.lexsema.util.Language;
 import org.getalp.lexsema.util.StopList;
 
-public class StopwordsRemovingSignatureEnrichment implements SignatureEnrichment {
+public class StopwordsRemovingSignatureEnrichment extends SignatureEnrichment {
 
     @Override
     public SemanticSignature enrichSemanticSignature(SemanticSignature signature) {
@@ -19,14 +19,4 @@ public class StopwordsRemovingSignatureEnrichment implements SignatureEnrichment
         return newSignature;
     }
 
-    @Override
-    public SemanticSignature enrichSemanticSignature(SemanticSignature signature, Language language) {
-        return enrichSemanticSignature(signature);
-    }
-
-    @Override
-    public void close() {
-
-    }
-    
 }

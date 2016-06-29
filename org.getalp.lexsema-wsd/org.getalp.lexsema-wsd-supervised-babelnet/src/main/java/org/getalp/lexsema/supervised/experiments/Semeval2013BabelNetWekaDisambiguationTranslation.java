@@ -5,7 +5,7 @@ import org.getalp.lexsema.io.annotresult.ConfigurationWriter;
 import org.getalp.lexsema.io.annotresult.SemevalWriter;
 import org.getalp.lexsema.io.document.loader.CorpusLoader;
 import org.getalp.lexsema.io.document.loader.SemCorCorpusLoader;
-import org.getalp.lexsema.io.document.loader.Semeval2013Task13CorpusLoader;
+import org.getalp.lexsema.io.document.loader.Semeval2013Task12CorpusLoader;
 import org.getalp.lexsema.io.resource.LRLoader;
 import org.getalp.lexsema.io.resource.babelnet.BabelNetAPILoader;
 import org.getalp.lexsema.similarity.Document;
@@ -32,7 +32,7 @@ public class Semeval2013BabelNetWekaDisambiguationTranslation {
     private static Logger logger = LoggerFactory.getLogger(Semeval2013BabelNetWekaDisambiguationTranslation.class);
 
     public static void main(String[] args) throws IOException {
-        CorpusLoader dl = new Semeval2013Task13CorpusLoader(args[0])
+        CorpusLoader dl = new Semeval2013Task12CorpusLoader(args[0])
                 .loadNonInstances(false);
         CorpusLoader semCor = new SemCorCorpusLoader(args[1]);
         LRLoader lrloader = new BabelNetAPILoader(Language.FRENCH).extendedSignature(false).shuffle(false).loadDefinitions(false).loadRelated(false);
