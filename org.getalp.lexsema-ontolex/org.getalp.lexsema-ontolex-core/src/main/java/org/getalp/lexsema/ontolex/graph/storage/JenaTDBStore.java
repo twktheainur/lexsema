@@ -3,8 +3,11 @@
  */
 package org.getalp.lexsema.ontolex.graph.storage;
 
+import com.hp.hpl.jena.ontology.OntModel;
+import com.hp.hpl.jena.ontology.OntModelSpec;
 import com.hp.hpl.jena.query.*;
 import com.hp.hpl.jena.rdf.model.Model;
+import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.tdb.TDBFactory;
 import org.getalp.lexsema.ontolex.graph.store.QueryCache;
 import org.getalp.lexsema.ontolex.graph.store.Store;
@@ -27,6 +30,7 @@ public class JenaTDBStore implements Store {
         dataset.begin(ReadWrite.READ);
         model = dataset.getDefaultModel();
         dataset.end();
+        OntModel ontModel = ModelFactory.createOntologyModel(OntModelSpec.OWL_DL_MEM_RDFS_INF, model);
         if (cachingEnabled) {
             cache = new DefaultQueryCache();
         }

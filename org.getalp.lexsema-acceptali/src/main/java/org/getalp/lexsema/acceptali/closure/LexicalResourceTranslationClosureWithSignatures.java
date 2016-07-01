@@ -8,38 +8,37 @@ import org.getalp.lexsema.util.Language;
 import java.util.*;
 
 public class LexicalResourceTranslationClosureWithSignatures implements LexicalResourceTranslationClosure<Sense> {
-    Map<Language, Map<LexicalEntry, Set<Sense>>> closureData = new HashMap<>();
-
-    public LexicalResourceTranslationClosureWithSignatures() {
-    }
+    private final Map<Language, Map<LexicalEntry, Set<Sense>>> closureData = new HashMap<>();
 
     @Override
     public void addSenses(Language language, LexicalEntry lexicalEntry, Collection<Sense> senses) {
-        checkAndCreate(language, lexicalEntry);
+        create(language, lexicalEntry);
         closureData.get(language).get(lexicalEntry).addAll(senses);
     }
 
     @Override
     public void addSense(Language language, LexicalEntry lexicalEntry, Sense sense) {
-        checkAndCreate(language, lexicalEntry);
+        create(language, lexicalEntry);
         closureData.get(language).get(lexicalEntry).add(sense);
     }
 
-    private void checkAndCreate(Language language, LexicalEntry lexicalEntry) {
+    private void create(Language language, LexicalEntry lexicalEntry) {
         if (!closureData.containsKey(language)) {
-            closureData.put(language, new HashMap<LexicalEntry, Set<Sense>>());
+            closureData.put(language, new HashMap<>());
         }
         if (!closureData.get(language).containsKey(lexicalEntry)) {
-            closureData.get(language).put(lexicalEntry, new TreeSet<Sense>());
+            closureData.get(language).put(lexicalEntry, new TreeSet<>());
         }
     }
 
+
     @Override
     public void importClosure(LexicalResourceTranslationClosure closure) {
+        @SuppressWarnings("All")
         Map<Language, Map<LexicalEntry, Set<Sense>>> otherClosureData = closure.senseClosureByLanguageAndEntry();
-        for (Language language : otherClosureData.keySet()) {
-            for (LexicalEntry localLexicalEntry : otherClosureData.get(language).keySet()) {
-                addSenses(language, localLexicalEntry, otherClosureData.get(language).get(localLexicalEntry));
+        for (Map.Entry<Language, Map<LexicalEntry, Set<Sense>>> languageMapEntry : otherClosureData.entrySet()) {
+            for (LexicalEntry localLexicalEntry : languageMapEntry.getValue().keySet()) {
+                addSenses(languageMapEntry.getKey(), localLexicalEntry, languageMapEntry.getValue().get(localLexicalEntry));
             }
         }
     }
@@ -52,8 +51,8 @@ public class LexicalResourceTranslationClosureWithSignatures implements LexicalR
     @Override
     public Map<LexicalEntry, Set<Sense>> senseClosureByEntry() {
         Map<LexicalEntry, Set<Sense>> senseClosureByEntry = new HashMap<>();
-        for (Language language : closureData.keySet()) {
-            senseClosureByEntry.putAll(closureData.get(language));
+        for (Map.Entry<Language, Map<LexicalEntry, Set<Sense>>> languageMapEntry : closureData.entrySet()) {
+            senseClosureByEntry.putAll(languageMapEntry.getValue());
         }
         return senseClosureByEntry;
     }
@@ -61,8 +60,8 @@ public class LexicalResourceTranslationClosureWithSignatures implements LexicalR
     @Override
     public Map<Language, Set<LexicalEntry>> entryClosureByLanguage() {
         Map<Language, Set<LexicalEntry>> entryClosureByLanguage = new HashMap<>();
-        for (Language language : closureData.keySet()) {
-            entryClosureByLanguage.put(language, closureData.get(language).keySet());
+        for (Map.Entry<Language, Map<LexicalEntry, Set<Sense>>> languageMapEntry : closureData.entrySet()) {
+            entryClosureByLanguage.put(languageMapEntry.getKey(), languageMapEntry.getValue().keySet());
         }
         return entryClosureByLanguage;
     }
@@ -70,8 +69,8 @@ public class LexicalResourceTranslationClosureWithSignatures implements LexicalR
     @Override
     public Set<LexicalEntry> entryFlatClosure() {
         Set<LexicalEntry> entryFlatClosure = new TreeSet<>();
-        for (Language language : closureData.keySet()) {
-            entryFlatClosure.addAll(closureData.get(language).keySet());
+        for (Map.Entry<Language, Map<LexicalEntry, Set<Sense>>> languageMapEntry : closureData.entrySet()) {
+            entryFlatClosure.addAll(languageMapEntry.getValue().keySet());
         }
         return entryFlatClosure;
     }
@@ -79,9 +78,9 @@ public class LexicalResourceTranslationClosureWithSignatures implements LexicalR
     @Override
     public Set<Sense> senseFlatClosure() {
         Set<Sense> senseFlatClosure = new TreeSet<>();
-        for (Language language : closureData.keySet()) {
-            for (LexicalEntry localLexicalEntry : closureData.get(language).keySet()) {
-                senseFlatClosure.addAll(closureData.get(language).get(localLexicalEntry));
+        for (Map.Entry<Language, Map<LexicalEntry, Set<Sense>>> languageMapEntry : closureData.entrySet()) {
+            for (LexicalEntry localLexicalEntry : languageMapEntry.getValue().keySet()) {
+                senseFlatClosure.addAll(languageMapEntry.getValue().get(localLexicalEntry));
             }
         }
         return senseFlatClosure;
@@ -90,11 +89,11 @@ public class LexicalResourceTranslationClosureWithSignatures implements LexicalR
     @Override
     public String toString() {
         String output = "";
-        for (Language l : closureData.keySet()) {
-            output = String.format("%s%sLANGUAGE:%s", output, System.lineSeparator(), l);
-            for (LexicalEntry le : closureData.get(l).keySet()) {
+        for (Map.Entry<Language, Map<LexicalEntry, Set<Sense>>> languageMapEntry : closureData.entrySet()) {
+            output = String.format("%s%sLANGUAGE:%s", output, System.lineSeparator(), languageMapEntry.getKey());
+            for (LexicalEntry le : languageMapEntry.getValue().keySet()) {
                 output = String.format("%s%s\t%s", output, System.lineSeparator(), le);
-                for (LexicalSense ls : closureData.get(l).get(le)) {
+                for (LexicalSense ls : languageMapEntry.getValue().get(le)) {
                     output = String.format("%s%s\t\t%s", output, System.lineSeparator(), ls);
                 }
             }

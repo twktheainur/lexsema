@@ -75,10 +75,8 @@ public class DSOCorpusLoader extends CorpusLoaderImpl {
             for (String line = br.readLine(); line != null; line = br.readLine()) {
                 lines.add(line);
             }
-            lines.parallelStream().forEach(line -> processWordInList(line, pos));
-            //lines.stream().forEach(line -> processWordInList(line, pos));
-            logger.error("nbWords = " + nbWords);
-
+            //lines.parallelStream().forEach(line -> processWordInList(line, pos));
+            lines.stream().forEach(line -> processWordInList(line, pos));
         } catch (IOException e) {
             logger.error(MessageFormat.format("Error while processing DSO list file:{0}", e.getLocalizedMessage()));
         }

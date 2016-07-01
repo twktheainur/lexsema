@@ -15,8 +15,8 @@ import java.util.TreeSet;
 
 public class SimilaritySenseClusterCombFilter implements SenseClusterCombFilter {
 
-    SimilarityMeasure similarityMeasure;
-    Filter filter;
+    private final SimilarityMeasure similarityMeasure;
+    private final Filter filter;
 
     public SimilaritySenseClusterCombFilter(SimilarityMeasure similarityMeasure, Filter normFilter) {
         this.similarityMeasure = similarityMeasure;
