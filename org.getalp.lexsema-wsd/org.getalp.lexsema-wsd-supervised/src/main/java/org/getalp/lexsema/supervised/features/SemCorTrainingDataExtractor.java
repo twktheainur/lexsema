@@ -7,6 +7,7 @@ import org.getalp.lexsema.supervised.features.extractors.LocalTextFeatureExtract
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.text.MessageFormat;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -22,6 +23,7 @@ public class SemCorTrainingDataExtractor implements TrainingDataExtractor {
     }
 
     public SemCorTrainingDataExtractor(LocalTextFeatureExtractor localTextFeatureExtractor, boolean useSurfaceForm) {
+
         this.useSurfaceForm = useSurfaceForm;
         this.localTextFeatureExtractor = localTextFeatureExtractor;
         instanceVectors = new HashMap<>();
@@ -50,12 +52,16 @@ public class SemCorTrainingDataExtractor implements TrainingDataExtractor {
 
     private void processWord(Word w, Document text, int wordIndex) {
         String semanticTag = w.getSenseAnnotation();
+        logger.debug(MessageFormat.format("SemanticTag {0}", semanticTag));
         if(semanticTag!=null && !semanticTag.isEmpty()) {
             String lemma = w.getLemma();
+            logger.debug(MessageFormat.format("lemma {0}", lemma));
             String surfaceForm = w.getSurfaceForm();
+            logger.debug(MessageFormat.format("surfaceForm {0}", surfaceForm));
             List<String> instance = localTextFeatureExtractor.getFeatures(text, wordIndex);
 
-            instance.add(0, "\"" + semanticTag + "\"");
+           //old instance.add(0, "\"" + semanticTag + "\"");
+            instance.add(0, "\"" + lemma + "%" + semanticTag + "\"");
             String key;
             if (useSurfaceForm) {
                 key = surfaceForm;

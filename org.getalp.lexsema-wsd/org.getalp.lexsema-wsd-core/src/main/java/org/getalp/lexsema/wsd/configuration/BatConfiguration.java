@@ -36,9 +36,19 @@ public class BatConfiguration implements Configuration
         assignments[wordIndex] = senseIndex % sensesNumber;
     }
 
+    @Override
+    public void setSenseId(int wordIndex, String senseId) {
+
+    }
+
     public int getAssignment(int wordIndex)
     {
         return assignments[wordIndex];
+    }
+
+    @Override
+    public String getSenseId(int wordIndex) {
+        return null;
     }
 
     public int size()
@@ -91,6 +101,11 @@ public class BatConfiguration implements Configuration
     public int[] getAssignments()
     {
         return assignments;
+    }
+
+    @Override
+    public String[] getIdAssignments() {
+        return null;
     }
 
     @Override

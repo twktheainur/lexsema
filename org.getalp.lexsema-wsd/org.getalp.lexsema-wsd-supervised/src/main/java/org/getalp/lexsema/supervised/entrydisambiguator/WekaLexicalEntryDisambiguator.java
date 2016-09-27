@@ -42,6 +42,7 @@ public class WekaLexicalEntryDisambiguator extends SupervisedSequentialLexicalEn
 
     @Override
     protected final List<ClassificationOutput> runClassifier(String lemma, List<String> instance) {
+
         logger.debug(MessageFormat.format("disambiguation of {0}", lemma));
         WekaClassifier classifier;
         List<ClassificationOutput> result = Collections.emptyList();
@@ -54,11 +55,11 @@ public class WekaLexicalEntryDisambiguator extends SupervisedSequentialLexicalEn
                 try {
                     List<List<String>> trainingInstances = trainingDataExtractor.getWordFeaturesInstances(lemma);
 
-
+                    logger.debug(MessageFormat.format("TrainingInstances {0}", trainingInstances));
 
                     if (trainingInstances != null) {
 
-                        /***** ICI ? *******/
+                        /***** ICI ? ******
                         for(List<String> l: trainingInstances){
 
                             System.out.println("l = "+l);
@@ -78,10 +79,14 @@ public class WekaLexicalEntryDisambiguator extends SupervisedSequentialLexicalEn
 
             }
         }
+        logger.debug(MessageFormat.format("Classifier : {0}", classifier));
+        logger.debug(MessageFormat.format("TrainingSuccessful : {0}", trainingSuccessful));
+        logger.debug(MessageFormat.format("ClassifierTrained : {0}", classifier.isClassifierTrained()));
         if (classifier != null && trainingSuccessful && classifier.isClassifierTrained()) {
             result = classifyInstance(classifier,instance);
         }
         logger.debug(MessageFormat.format("disambiguation of {0} done", lemma));
+        logger.debug(MessageFormat.format("result : {0}", result));
         return result;
 
     }
@@ -92,6 +97,7 @@ public class WekaLexicalEntryDisambiguator extends SupervisedSequentialLexicalEn
     }
 
     private List<ClassificationOutput> classifyInstance(Classifier classifier, List<String> instance){
+        logger.debug(MessageFormat.format("Instances : {0}", instance.size()));
         return classifier.classify(featureIndex, instance);
     }
 }

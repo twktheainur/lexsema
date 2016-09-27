@@ -10,9 +10,13 @@ import java.io.Serializable;
 public interface Configuration extends Serializable{
     void setSense(int wordIndex, int senseIndex);
 
+    void setSenseId(int wordIndex, String senseId);
+
     void setConfidence(int wordIndex, double confidence);
 
     int getAssignment(int wordIndex);
+
+    public String getSenseId(int wordIndex); //add for Supervision
 
     double getConfidence(int wordIndex);
 
@@ -28,6 +32,9 @@ public interface Configuration extends Serializable{
 
     @SuppressWarnings("ReturnOfCollectionOrArrayField")
     int[] getAssignments();
+
+    @SuppressWarnings("ReturnOfCollectionOrArrayField")
+    String[] getIdAssignments();
 
     Document getDocument();
 }

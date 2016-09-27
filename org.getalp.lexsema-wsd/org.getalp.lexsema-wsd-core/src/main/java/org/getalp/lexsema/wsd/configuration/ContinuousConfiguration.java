@@ -96,9 +96,19 @@ public class ContinuousConfiguration implements Configuration
     	}
     }
 
+    @Override
+    public void setSenseId(int wordIndex, String senseId) {
+
+    }
+
     public int getAssignment(int wordIndex)
     {
         return assignments[wordIndex];
+    }
+
+    @Override
+    public String getSenseId(int wordIndex) {
+        return null;
     }
 
     public int size()
@@ -143,6 +153,11 @@ public class ContinuousConfiguration implements Configuration
     public int[] getAssignments()
     {
         return assignments;
+    }
+
+    @Override
+    public String[] getIdAssignments() {
+        return null;
     }
 
     public Document getDocument()

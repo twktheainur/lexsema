@@ -5,6 +5,8 @@ import org.getalp.lexsema.wsd.configuration.ConfidenceConfiguration;
 import org.getalp.lexsema.wsd.configuration.Configuration;
 import org.getalp.lexsema.wsd.method.Disambiguator;
 import org.getalp.lexsema.wsd.method.sequencial.entrydisambiguators.SequentialLexicalEntryDisambiguator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -19,6 +21,8 @@ public abstract class SequentialDisambiguator implements Disambiguator {
     ExecutorService threadPool;
     List<Future> runningTasks;
     private int window;
+    private static Logger logger = LoggerFactory.getLogger(SequentialDisambiguator.class);
+
 
 
     protected SequentialDisambiguator(int window, int numThreads) {
@@ -38,6 +42,7 @@ public abstract class SequentialDisambiguator implements Disambiguator {
 
     @Override
     public Configuration disambiguate(Document document, Configuration c) {
+
         boolean progressChecked = false;
         if (c == null) {
             c = new ConfidenceConfiguration(document);

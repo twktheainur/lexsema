@@ -45,7 +45,7 @@ public final class NUSPT2007Disambiguation {
 
         CorpusLoader dl = new Semeval2007CorpusLoader(new FileInputStream("../data/senseval2007_task7/test/eng-coarse-all-words.xml"))
                 .loadNonInstances(false);
-        LRLoader lrloader = new WordnetLoader(new Dictionary(new URL("../data/wordnet/2.1/dict")));//.shuffle(true).extendedSignature(true);
+        LRLoader lrloader = new WordnetLoader(new Dictionary(new URL("file://data/wordnet/2.1/dict")));//.shuffle(true).extendedSignature(true);
 
         Configuration[] configs = new Configuration[5];
 

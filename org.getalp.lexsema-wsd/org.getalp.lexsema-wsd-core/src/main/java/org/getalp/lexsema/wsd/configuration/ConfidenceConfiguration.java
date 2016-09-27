@@ -9,12 +9,14 @@ import java.util.Random;
 
 public class ConfidenceConfiguration implements Configuration {
     int[] assignments;
+    String[] idAssignments;
     DoubleMatrix1D confidence;
     Document document;
 
     public ConfidenceConfiguration(Document d) {
         int documentSize = d.size();
         assignments = new int[documentSize];
+        idAssignments = new String[documentSize];
         noAssignmentInit(documentSize);
         confidence = new DenseDoubleMatrix1D(documentSize);
         document = d;
@@ -23,6 +25,7 @@ public class ConfidenceConfiguration implements Configuration {
     public ConfidenceConfiguration(Document d, InitializationType initializationType) {
         int documentSize = d.size();
         assignments = new int[documentSize];
+        idAssignments = new String[documentSize];
         switch (initializationType) {
             case FIRST:
                 firstAssignment(documentSize);
@@ -41,6 +44,7 @@ public class ConfidenceConfiguration implements Configuration {
     @SuppressWarnings("MethodParameterOfConcreteClass") // Copy constructor
     public ConfidenceConfiguration(final ConfidenceConfiguration d) {
         assignments = d.assignments.clone();
+        idAssignments = d.idAssignments.clone();
         confidence = d.confidence.copy();
         document = d.getDocument();
     }
@@ -48,12 +52,14 @@ public class ConfidenceConfiguration implements Configuration {
     private void noAssignmentInit(int documentSize) {
         for (int i = 0; i < documentSize; i++) {
             assignments[i] = -1;
+            idAssignments[i] = "";
         }
     }
 
     private void firstAssignment(int documentSize) {
         for (int i = 0; i < documentSize; i++) {
             assignments[i] = 0;
+            idAssignments[i] = "";
         }
     }
 
@@ -62,6 +68,7 @@ public class ConfidenceConfiguration implements Configuration {
         Random r = new Random(System.currentTimeMillis());
         for (int i = 0; i < documentSize; i++) {
             int numSenses = d.getSenses(i).size();
+            idAssignments[i] = "";
             if (numSenses > 1) {
                 assignments[i] = r.nextInt(numSenses);
             } else {
@@ -83,6 +90,16 @@ public class ConfidenceConfiguration implements Configuration {
     @Override
     public int getAssignment(int wordIndex) {
         return assignments[wordIndex];
+    }
+
+    @Override
+    public String getSenseId(int wordIndex) {
+        return idAssignments[wordIndex];
+    }
+
+    @Override
+    public void setSenseId(int wordIndex, String senseId) {
+        idAssignments[wordIndex] = senseId;
     }
 
     @Override
@@ -143,6 +160,11 @@ public class ConfidenceConfiguration implements Configuration {
     @SuppressWarnings("ReturnOfCollectionOrArrayField")
     public int[] getAssignments() {
         return assignments;
+    }
+
+    @Override
+    public String[] getIdAssignments() {
+        return idAssignments;
     }
 
     @Override
