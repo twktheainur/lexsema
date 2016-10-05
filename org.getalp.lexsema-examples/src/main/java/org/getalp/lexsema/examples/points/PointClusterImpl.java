@@ -1,7 +1,6 @@
 package org.getalp.lexsema.examples.points;
 
 import cern.colt.matrix.tdouble.DoubleMatrix1D;
-import org.getalp.lexsema.util.URIUtils;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -12,13 +11,7 @@ import java.util.List;
  * Created by boucherj on 04/02/16.
  */
 
-import cern.colt.matrix.tdouble.DoubleMatrix1D;
-        import org.getalp.lexsema.similarity.Sense;
-        import org.getalp.lexsema.util.URIUtils;
-
-        import java.util.ArrayList;
-        import java.util.Iterator;
-        import java.util.List;
+import org.getalp.lexsema.similarity.Sense;
 
 public class PointClusterImpl implements PointCluster{
     private String id;

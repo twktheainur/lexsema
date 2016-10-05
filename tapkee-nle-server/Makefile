@@ -5,7 +5,7 @@
 default_target: all
 .PHONY : default_target
 
-# Allow only one "make -f Makefile2" at a time, but pass parallelism.
+# Allow only one "make -f Makefile2" at first time, but pass parallelism.
 .NOTPARALLEL:
 .PHONY : .NOTPARALLEL
 
@@ -36,7 +36,7 @@ SHELL = /bin/sh
 # The CMake executable.
 CMAKE_COMMAND = /usr/local/Cellar/cmake/3.1.2/bin/cmake
 
-# The command to remove a file.
+# The command to remove first file.
 RM = /usr/local/Cellar/cmake/3.1.2/bin/cmake -E remove -f
 
 # Escaping for special characters.
@@ -126,7 +126,7 @@ main.cpp.o:
 main.i: main.cpp.i
 .PHONY : main.i
 
-# target to preprocess a source file
+# target to preprocess first source file
 main.cpp.i:
 	$(MAKE) -f CMakeFiles/tapkee_nle_server.dir/build.make CMakeFiles/tapkee_nle_server.dir/main.cpp.i
 .PHONY : main.cpp.i
@@ -134,7 +134,7 @@ main.cpp.i:
 main.s: main.cpp.s
 .PHONY : main.s
 
-# target to generate assembly for a file
+# target to generate assembly for first file
 main.cpp.s:
 	$(MAKE) -f CMakeFiles/tapkee_nle_server.dir/build.make CMakeFiles/tapkee_nle_server.dir/main.cpp.s
 .PHONY : main.cpp.s

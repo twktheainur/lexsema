@@ -2,9 +2,9 @@ package org.getalp.lexsema.examples;
 
 import cern.colt.matrix.tdouble.DoubleMatrix2D;
 import com.trickl.cluster.KMeans;
-import org.getalp.lexsema.acceptali.cli.org.getalp.lexsema.acceptali.acceptions.*;
-import org.getalp.lexsema.acceptali.closure.similarity.PairwiseSimilarityMatrixGenerator;
-import org.getalp.lexsema.acceptali.closure.similarity.PairwiseSimilarityMatrixGeneratorSim;
+import org.getalp.lexsema.axalign.cli.org.getalp.lexsema.acceptali.acceptions.*;
+import org.getalp.lexsema.axalign.closure.similarity.PairwiseSimilarityMatrixGenerator;
+import org.getalp.lexsema.axalign.closure.similarity.PairwiseSimilarityMatrixGeneratorSim;
 import org.getalp.lexsema.ontolex.LexicalEntry;
 import org.getalp.lexsema.ontolex.LexicalSense;
 import org.getalp.lexsema.ontolex.dbnary.DBNary;
@@ -24,9 +24,9 @@ import org.getalp.lexsema.similarity.measures.tverski.TverskiIndexSimilarityMeas
 import org.getalp.lexsema.translation.GoogleWebTranslator;
 import org.getalp.lexsema.translation.Translator;
 import org.getalp.lexsema.util.Language;
-import org.getalp.ml.matrix.filters.Filter;
-import org.getalp.ml.matrix.filters.NMFKLMatrixFactorizationFilter;
-import org.getalp.ml.matrix.filters.normalization.ZSignificanceNormalizationFilter;
+import org.getalp.lexsema.ml.matrix.filters.Filter;
+import org.getalp.lexsema.ml.matrix.filters.NMFKLMatrixFactorizationFilter;
+import org.getalp.lexsema.ml.matrix.filters.normalization.ZSignificanceNormalizationFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -1,14 +1,12 @@
 package it.uniroma1.lcl.knowledge.graph;
 
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.Multimap;
+import com.google.common.collect.SetMultimap;
+import com.google.common.collect.Sets;
+import edu.mit.jwi.item.IPointer;
 import it.uniroma1.lcl.jlt.jgrapht.WeightedLabeledEdge;
 import it.uniroma1.lcl.knowledge.KnowledgeBase;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
 import org.jgrapht.DirectedGraph;
 import org.jgrapht.Graph;
 import org.jgrapht.Graphs;
@@ -16,12 +14,7 @@ import org.jgrapht.graph.DefaultDirectedGraph;
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.DirectedMultigraph;
 
-import com.google.common.collect.HashMultimap;
-import com.google.common.collect.Multimap;
-import com.google.common.collect.SetMultimap;
-import com.google.common.collect.Sets;
-
-import edu.mit.jwi.item.IPointer;
+import java.util.*;
 
 /**
  * A path in a {@link KnowledgeGraph}.
@@ -332,11 +325,11 @@ public class KnowledgeGraphPath
 	public static Set<String> getIntersectionConcepts(Collection<KnowledgeGraphPath> paths)
 	{
 		// map from source to its paths
-		Multimap<String, KnowledgeGraphPath> concept2paths = 
-			new HashMultimap<String, KnowledgeGraphPath>();
+		Multimap<String, KnowledgeGraphPath> concept2paths =
+				HashMultimap.create();
 		// map from source to any interviening concept occurring in its path
 		SetMultimap<String, String> concept2conceptsInPaths =
-			new HashMultimap<String, String>();
+				HashMultimap.create();
 		Set<String> intersectionNodes = new HashSet<String>();
 		
 		for (KnowledgeGraphPath path : paths)

@@ -7,21 +7,18 @@ import org.getalp.lexsema.similarity.measures.SimilarityMeasure;
 import org.getalp.lexsema.util.URIUtils;
 import org.getalp.lexsema.util.caching.Cache;
 import org.getalp.lexsema.util.caching.CachePool;
-import org.getalp.ml.matrix.filters.Filter;
+import org.getalp.lexsema.ml.matrix.filters.Filter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Set;
 
 public class PairwiseSimilarityMatrixGeneratorSim implements PairwiseSimilarityMatrixGenerator {
 
     private static final double PERCENT_MAX = 100d;
 
-    private static Logger logger = LoggerFactory.getLogger(org.getalp.lexsema.acceptali.closure.similarity.PairwiseSimilarityMatrixGenerator.class);
+    private static Logger logger = LoggerFactory.getLogger(org.getalp.lexsema.axalign.closure.similarity.PairwiseSimilarityMatrixGenerator.class);
 
     private DoubleMatrix2D similarityMatrix;
 

@@ -1,14 +1,17 @@
 package org.getalp.lexsema.io.text;
 
 
-import org.getalp.lexsema.similarity.*;
+import org.getalp.lexsema.similarity.Text;
+import org.getalp.lexsema.similarity.TextImpl;
+import org.getalp.lexsema.similarity.WordImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.*;
+import java.text.MessageFormat;
 
 public class RussianPythonTextProcessor implements TextProcessor {
-    private static Logger logger = LoggerFactory.getLogger(RussianPythonTextProcessor.class);
+    private static final Logger logger = LoggerFactory.getLogger(RussianPythonTextProcessor.class);
     @Override
     public Text process(String sentenceText, String documentId) {
         Text resultSentence = new TextImpl();
@@ -32,7 +35,7 @@ public class RussianPythonTextProcessor implements TextProcessor {
                         String pos = fields[2];
                         if (!pos.toLowerCase().contains("pnct")) {
                             resultSentence.addWord(new WordImpl(String.valueOf(index), lemma, word, pos));
-                            logger.info("Word=" + fields[0] + " Lemma=" + fields[1] + " Pos=" + fields[2]);
+                            logger.info(MessageFormat.format("Word={0} Lemma={1} Pos={2}", fields[0], fields[1], fields[2]));
                         }
                     }
                     index++;
@@ -41,9 +44,9 @@ public class RussianPythonTextProcessor implements TextProcessor {
             }
 
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error("I/O error: {}",e.getLocalizedMessage());
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            logger.error("Interrupted: {}", e.getLocalizedMessage());
         }
         return resultSentence;
     }

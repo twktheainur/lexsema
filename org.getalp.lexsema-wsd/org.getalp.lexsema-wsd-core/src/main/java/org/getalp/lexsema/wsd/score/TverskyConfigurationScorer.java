@@ -6,10 +6,10 @@ import org.getalp.lexsema.similarity.measures.SimilarityMeasure;
 import org.getalp.lexsema.util.dataitems.Pair;
 import org.getalp.lexsema.util.dataitems.PairImpl;
 import org.getalp.lexsema.wsd.configuration.Configuration;
-import org.getalp.ml.optimization.functions.Function;
-import org.getalp.ml.optimization.functions.input.FunctionInput;
-import org.getalp.ml.optimization.functions.setfunctions.input.ValueListInput;
-import org.getalp.ml.optimization.functions.setfunctions.submodular.Sum;
+import org.getalp.lexsema.ml.optimization.functions.Function;
+import org.getalp.lexsema.ml.optimization.functions.input.FunctionInput;
+import org.getalp.lexsema.ml.optimization.functions.setfunctions.input.ValueListInput;
+import org.getalp.lexsema.ml.optimization.functions.setfunctions.submodular.Sum;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

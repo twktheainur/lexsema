@@ -6,11 +6,11 @@
 import struct
 from collections import deque
 
-def eq(a, b, eps=0.00000000000000000001):
+def eq(first, second, eps=0.00000000000000000001):
     """
     Проверка равенства чисел типа float
     """
-    return abs(a - b) <=  eps
+    return abs(first - second) <=  eps
 
 def argmax(lst):
     """
@@ -18,7 +18,7 @@ def argmax(lst):
     """
     if not lst:
         return None
-    return [x for (x, y) in lst if eq(y, max([b for (a, b) in lst]))]
+    return [x for (x, y) in lst if eq(y, max([second for (first, second) in lst]))]
 
 def argmaxx(lst):
     """
@@ -26,7 +26,7 @@ def argmaxx(lst):
     """
     if not lst:
         return None
-    return [(x, y) for (x, y) in lst if eq(y, max([b for (a, b) in lst]))]
+    return [(x, y) for (x, y) in lst if eq(y, max([second for (first, second) in lst]))]
 
 def MI(f_xy, f_x, f_y, N):
     """

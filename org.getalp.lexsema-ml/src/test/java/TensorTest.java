@@ -1,5 +1,5 @@
-import org.getalp.ml.tensor.iterator.TensorIndexIterator;
-import org.getalp.ml.tensor.Tensors;
+import org.getalp.lexsema.ml.tensor.iterator.TensorIndexIterator;
+import org.getalp.lexsema.ml.tensor.Tensors;
 import org.junit.Test;
 import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.factory.Nd4j;

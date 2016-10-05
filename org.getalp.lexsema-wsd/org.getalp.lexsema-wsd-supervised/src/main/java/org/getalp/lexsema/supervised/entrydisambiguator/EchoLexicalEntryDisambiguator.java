@@ -2,13 +2,13 @@ package org.getalp.lexsema.supervised.entrydisambiguator;
 
 
 import org.getalp.lexsema.similarity.Document;
-import org.getalp.lexsema.supervised.ClassificationOutput;
-import org.getalp.lexsema.supervised.Classifier;
-import org.getalp.lexsema.supervised.Echo2Classifier;
+import org.getalp.lexsema.ml.supervised.ClassificationOutput;
+import org.getalp.lexsema.ml.supervised.Classifier;
+import org.getalp.lexsema.ml.supervised.echo.Echo2Classifier;
 import org.getalp.lexsema.supervised.features.TrainingDataExtractor;
 import org.getalp.lexsema.supervised.features.extractors.LocalTextFeatureExtractor;
-import org.getalp.lexsema.supervised.weka.FeatureIndex;
-import org.getalp.lexsema.supervised.weka.FeatureIndexImpl;
+import org.getalp.lexsema.ml.supervised.FeatureIndex;
+import org.getalp.lexsema.ml.supervised.FeatureIndexImpl;
 import org.getalp.lexsema.wsd.configuration.Configuration;
 
 import java.io.File;

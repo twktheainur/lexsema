@@ -1,26 +1,13 @@
 package it.uniroma1.lcl.babelnet;
 
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.Multimap;
+import edu.mit.jwi.item.POS;
 import it.uniroma1.lcl.babelnet.iterators.BabelLexiconIterator;
 import it.uniroma1.lcl.babelnet.iterators.BabelOffsetIterator;
 import it.uniroma1.lcl.babelnet.iterators.BabelSynsetIterator;
-import it.uniroma1.lcl.jlt.util.IntegerCounter;
-import it.uniroma1.lcl.jlt.util.Language;
-import it.uniroma1.lcl.jlt.util.ScoredItem;
-import it.uniroma1.lcl.jlt.util.Strings;
-import it.uniroma1.lcl.jlt.util.Triple;
+import it.uniroma1.lcl.jlt.util.*;
 import it.uniroma1.lcl.jlt.wordnet.WordNet;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.lucene.document.Document;
@@ -31,22 +18,15 @@ import org.apache.lucene.index.CorruptIndexException;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.MultiReader;
 import org.apache.lucene.index.Term;
-import org.apache.lucene.search.BooleanClause;
+import org.apache.lucene.search.*;
 import org.apache.lucene.search.BooleanClause.Occur;
-import org.apache.lucene.search.BooleanQuery;
-import org.apache.lucene.search.IndexSearcher;
-import org.apache.lucene.search.MatchAllDocsQuery;
-import org.apache.lucene.search.Query;
-import org.apache.lucene.search.ScoreDoc;
-import org.apache.lucene.search.TermQuery;
-import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.SimpleFSDirectory;
 
-import com.google.common.collect.HashMultimap;
-import com.google.common.collect.Multimap;
-
-import edu.mit.jwi.item.POS;
+import java.io.File;
+import java.io.IOException;
+import java.util.*;
+import java.util.Arrays;
 
 /**
  * A class to programmatically access BabelNet.
@@ -340,7 +320,7 @@ public class BabelNet
 	 */
 	private Multimap<String, Document> getDictionaryDocuments(Query q) throws CorruptIndexException, IOException
 	{
-		Multimap<String, Document> id2Docs = new HashMultimap<String, Document>();
+		Multimap<String, Document> id2Docs = HashMultimap.create();
 	
 		List<String> documentIds = new ArrayList<String>();
 		List<String> retrievedLicenseIds = new ArrayList<String>();
@@ -1302,7 +1282,7 @@ public class BabelNet
 		}
 		
 		Multimap<Language, ScoredItem<String>> babelTraslations =
-				new HashMultimap<Language, ScoredItem<String>>();
+				HashMultimap.create();
 		for (Language otherLanguage : traslationCounters.keySet())
 		{
 			IntegerCounter<String> translationCounter = traslationCounters.get(otherLanguage);

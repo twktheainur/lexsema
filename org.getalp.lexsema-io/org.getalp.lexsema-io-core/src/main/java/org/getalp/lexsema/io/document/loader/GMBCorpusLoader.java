@@ -1,26 +1,21 @@
 package org.getalp.lexsema.io.document.loader;
 
 
-import java.io.File;
-import java.io.IOException;
-import java.text.MessageFormat;
-import java.util.List;
-
-import org.getalp.lexsema.similarity.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.xml.sax.Attributes;
-import org.xml.sax.ContentHandler;
-import org.xml.sax.Locator;
-import org.xml.sax.SAXException;
-import org.xml.sax.XMLReader;
-import org.xml.sax.helpers.XMLReaderFactory;
-
 import edu.mit.jwi.Dictionary;
 import edu.mit.jwi.item.IIndexWord;
 import edu.mit.jwi.item.IWord;
 import edu.mit.jwi.item.IWordID;
 import edu.mit.jwi.item.POS;
+import org.getalp.lexsema.similarity.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.xml.sax.*;
+import org.xml.sax.helpers.XMLReaderFactory;
+
+import java.io.File;
+import java.io.IOException;
+import java.text.MessageFormat;
+import java.util.List;
 
 public class GMBCorpusLoader extends CorpusLoaderImpl implements ContentHandler {
 

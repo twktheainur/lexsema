@@ -22,7 +22,6 @@ import org.getalp.lexsema.wsd.configuration.Configuration;
 import org.getalp.lexsema.wsd.method.Disambiguator;
 import org.getalp.lexsema.wsd.method.LargeDocumentDisambiguator;
 import org.getalp.lexsema.wsd.method.MultiThreadCuckooSearch;
-import org.getalp.lexsema.wsd.method.RandomDisambiguator;
 import org.getalp.lexsema.wsd.score.ConfigurationScorer;
 import org.getalp.lexsema.wsd.score.ConfigurationScorerWithCache;
 import edu.stanford.nlp.ling.CoreLabel;

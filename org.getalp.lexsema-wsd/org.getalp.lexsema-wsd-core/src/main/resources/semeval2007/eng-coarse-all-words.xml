@@ -10,7 +10,7 @@ Oct
 <instance id="d001.s001.t001" lemma="editorial" pos="n">editorial</instance>
 ``
 The
-<instance id="d001.s001.t002" lemma="Ill" pos="a">Ill</instance>
+<instance id="d001.s001.t002" lemma="Ill" pos="first">Ill</instance>
 <instance id="d001.s001.t003" lemma="Homeless" pos="n">Homeless</instance>
 ''
 <instance id="d001.s001.t004" lemma="refer" pos="v">referred</instance>
@@ -19,7 +19,7 @@ to
 by
 us
 and
-<instance id="d001.s001.t006" lemma="six" pos="a">six</instance>
+<instance id="d001.s001.t006" lemma="six" pos="first">six</instance>
 of
 our
 <instance id="d001.s001.t007" lemma="colleague" pos="n">colleagues</instance>
@@ -52,7 +52,7 @@ had
 that
 the
 ``
-<instance id="d001.s002.t004" lemma="principal" pos="a">principal</instance>
+<instance id="d001.s002.t004" lemma="principal" pos="first">principal</instance>
 <instance id="d001.s002.t005" lemma="cause" pos="n">cause</instance>
 ''
 of
@@ -63,17 +63,17 @@ be
 <instance id="d001.s002.t008" lemma="find" pos="v">found</instance>
 in
 the
-<instance id="d001.s002.t009" lemma="large" pos="a">large</instance>
+<instance id="d001.s002.t009" lemma="large" pos="first">large</instance>
 <instance id="d001.s002.t010" lemma="number" pos="n">numbers</instance>
 of
 <instance id="d001.s002.t011" lemma="mentally" pos="r">mentally</instance>
-<instance id="d001.s002.t012" lemma="ill" pos="a">ill</instance>
+<instance id="d001.s002.t012" lemma="ill" pos="first">ill</instance>
 and
 substance-abusing
 <instance id="d001.s002.t013" lemma="people" pos="n">people</instance>
 in
 the
-<instance id="d001.s002.t014" lemma="homeless" pos="a">homeless</instance>
+<instance id="d001.s002.t014" lemma="homeless" pos="first">homeless</instance>
 <instance id="d001.s002.t015" lemma="population" pos="n">population</instance>
 .
 </sentence>
@@ -89,11 +89,11 @@ such
 <sentence id="d001.s004">
 It
 is
-<instance id="d001.s004.t001" lemma="clear" pos="a">clear</instance>
+<instance id="d001.s004.t001" lemma="clear" pos="first">clear</instance>
 that
 most
 <instance id="d001.s004.t002" lemma="mentally" pos="r">mentally</instance>
-<instance id="d001.s004.t003" lemma="ill" pos="a">ill</instance>
+<instance id="d001.s004.t003" lemma="ill" pos="first">ill</instance>
 <instance id="d001.s004.t004" lemma="people" pos="n">people</instance>
 and
 most
@@ -101,7 +101,7 @@ most
 do
 not
 <instance id="d001.s004.t006" lemma="become" pos="v">become</instance>
-<instance id="d001.s004.t007" lemma="homeless" pos="a">homeless</instance>
+<instance id="d001.s004.t007" lemma="homeless" pos="first">homeless</instance>
 .
 </sentence>
 <sentence id="d001.s005">
@@ -115,10 +115,10 @@ are
 <instance id="d001.s005.t003" lemma="poorly" pos="r">poorly</instance>
 <instance id="d001.s005.t004" lemma="understand" pos="v">understood</instance>
 and
-<instance id="d001.s005.t005" lemma="complex" pos="a">complex</instance>
+<instance id="d001.s005.t005" lemma="complex" pos="first">complex</instance>
 in
 any
-<instance id="d001.s005.t006" lemma="individual" pos="a">individual</instance>
+<instance id="d001.s005.t006" lemma="individual" pos="first">individual</instance>
 <instance id="d001.s005.t007" lemma="case" pos="n">case</instance>
 .
 </sentence>
@@ -131,10 +131,10 @@ our
 you
 <instance id="d001.s006.t003" lemma="emphasize" pos="v">emphasized</instance>
 the
-<instance id="d001.s006.t004" lemma="high" pos="a">high</instance>
+<instance id="d001.s006.t004" lemma="high" pos="first">high</instance>
 <instance id="d001.s006.t005" lemma="prevalence" pos="n">prevalence</instance>
 of
-<instance id="d001.s006.t006" lemma="mental" pos="a">mental</instance>
+<instance id="d001.s006.t006" lemma="mental" pos="first">mental</instance>
 <instance id="d001.s006.t007" lemma="illness" pos="n">illness</instance>
 and
 <instance id="d001.s006.t008" lemma="alcoholism" pos="n">alcoholism</instance>
@@ -147,20 +147,20 @@ not
 <instance id="d001.s007.t001" lemma="note" pos="v">note</instance>
 that
 the
-<instance id="d001.s007.t002" lemma="homeless" pos="a">homeless</instance>
+<instance id="d001.s007.t002" lemma="homeless" pos="first">homeless</instance>
 <instance id="d001.s007.t003" lemma="people" pos="n">people</instance>
 we
 <instance id="d001.s007.t004" lemma="examine" pos="v">examined</instance>
 <instance id="d001.s007.t005" lemma="have" pos="v">had</instance>
-a
+first
 <instance id="d001.s007.t006" lemma="multitude" pos="n">multitude</instance>
 of
-<instance id="d001.s007.t007" lemma="physical" pos="a">physical</instance>
+<instance id="d001.s007.t007" lemma="physical" pos="first">physical</instance>
 <instance id="d001.s007.t008" lemma="disorder" pos="n">disorders</instance>
 <instance id="d001.s007.t009" lemma="in_addition" pos="r">in addition</instance>
 to
 their
-<instance id="d001.s007.t010" lemma="psychiatric" pos="a">psychiatric</instance>
+<instance id="d001.s007.t010" lemma="psychiatric" pos="first">psychiatric</instance>
 <instance id="d001.s007.t011" lemma="problem" pos="n">problems</instance>
 and
 <instance id="d001.s007.t012" lemma="substance_abuse" pos="n">substance abuse</instance>
@@ -175,13 +175,13 @@ from
 <instance id="d001.s008.t003" lemma="chest" pos="n">chest</instance>
 <instance id="d001.s008.t004" lemma="disease" pos="n">diseases</instance>
 ,
-<instance id="d001.s008.t005" lemma="cardiovascular" pos="a">cardiovascular</instance>
+<instance id="d001.s008.t005" lemma="cardiovascular" pos="first">cardiovascular</instance>
 <instance id="d001.s008.t006" lemma="disorder" pos="n">disorders</instance>
 ,
 <instance id="d001.s008.t007" lemma="skin" pos="n">skin</instance>
 <instance id="d001.s008.t008" lemma="problem" pos="n">problems</instance>
 ,
-<instance id="d001.s008.t009" lemma="infectious" pos="a">infectious</instance>
+<instance id="d001.s008.t009" lemma="infectious" pos="first">infectious</instance>
 <instance id="d001.s008.t010" lemma="disease" pos="n">diseases</instance>
 and
 the
@@ -193,7 +193,7 @@ and
 .
 </sentence>
 <sentence id="d001.s009">
-<instance id="d001.s009.t001" lemma="Homeless" pos="a">Homeless</instance>
+<instance id="d001.s009.t001" lemma="Homeless" pos="first">Homeless</instance>
 <instance id="d001.s009.t002" lemma="people" pos="n">people</instance>
 not
 only
@@ -208,21 +208,21 @@ they
 <instance id="d001.s009.t007" lemma="also" pos="r">also</instance>
 <instance id="d001.s009.t008" lemma="lack" pos="v">lack</instance>
 the
-<instance id="d001.s009.t009" lemma="elementary" pos="a">elementary</instance>
+<instance id="d001.s009.t009" lemma="elementary" pos="first">elementary</instance>
 <instance id="d001.s009.t010" lemma="necessity" pos="n">necessities</instance>
 of
 <instance id="d001.s009.t011" lemma="nutrition" pos="n">nutrition</instance>
 ,
 cleanliness
 and
-<instance id="d001.s009.t012" lemma="basic" pos="a">basic</instance>
+<instance id="d001.s009.t012" lemma="basic" pos="first">basic</instance>
 <instance id="d001.s009.t013" lemma="health_care" pos="n">health care</instance>
 .
 </sentence>
 <sentence id="d001.s010">
 In
-a
-<instance id="d001.s010.t001" lemma="recent" pos="a">recent</instance>
+first
+<instance id="d001.s010.t001" lemma="recent" pos="first">recent</instance>
 <instance id="d001.s010.t002" lemma="report" pos="n">report</instance>
 ,
 the
@@ -231,12 +231,12 @@ of
 Medicine
 <instance id="d001.s010.t003" lemma="point_out" pos="v">pointed out</instance>
 that
-<instance id="d001.s010.t004" lemma="certain" pos="a">certain</instance>
+<instance id="d001.s010.t004" lemma="certain" pos="first">certain</instance>
 <instance id="d001.s010.t005" lemma="health" pos="n">health</instance>
 <instance id="d001.s010.t006" lemma="problem" pos="n">problems</instance>
 may
 <instance id="d001.s010.t007" lemma="predispose" pos="v">predispose</instance>
-a
+first
 <instance id="d001.s010.t008" lemma="person" pos="n">person</instance>
 to
 <instance id="d001.s010.t009" lemma="homelessness" pos="n">homelessness</instance>
@@ -244,14 +244,14 @@ to
 others
 may
 <instance id="d001.s010.t010" lemma="be" pos="v">be</instance>
-a
+first
 <instance id="d001.s010.t011" lemma="consequence" pos="n">consequence</instance>
 of
 it
 ,
 and
-a
-<instance id="d001.s010.t012" lemma="third" pos="a">third</instance>
+first
+<instance id="d001.s010.t012" lemma="third" pos="first">third</instance>
 <instance id="d001.s010.t013" lemma="category" pos="n">category</instance>
 is
 <instance id="d001.s010.t014" lemma="compose" pos="v">composed</instance>
@@ -260,14 +260,14 @@ of
 whose
 <instance id="d001.s010.t016" lemma="treatment" pos="n">treatment</instance>
 <instance id="d001.s010.t017" lemma="be" pos="v">is</instance>
-<instance id="d001.s010.t018" lemma="difficult" pos="a">difficult</instance>
+<instance id="d001.s010.t018" lemma="difficult" pos="first">difficult</instance>
 or
-<instance id="d001.s010.t019" lemma="impossible" pos="a">impossible</instance>
+<instance id="d001.s010.t019" lemma="impossible" pos="first">impossible</instance>
 if
-a
+first
 <instance id="d001.s010.t020" lemma="person" pos="n">person</instance>
 <instance id="d001.s010.t021" lemma="lack" pos="v">lacks</instance>
-<instance id="d001.s010.t022" lemma="adequate" pos="a">adequate</instance>
+<instance id="d001.s010.t022" lemma="adequate" pos="first">adequate</instance>
 <instance id="d001.s010.t023" lemma="shelter" pos="n">shelter</instance>
 .
 </sentence>
@@ -279,10 +279,10 @@ between
 and
 <instance id="d001.s011.t003" lemma="homelessness" pos="n">homelessness</instance>
 <instance id="d001.s011.t004" lemma="be" pos="v">are</instance>
-<instance id="d001.s011.t005" lemma="complex" pos="a">complex</instance>
+<instance id="d001.s011.t005" lemma="complex" pos="first">complex</instance>
 ,
 <instance id="d001.s011.t006" lemma="defy" pos="v">defying</instance>
-<instance id="d001.s011.t007" lemma="sweeping" pos="a">sweeping</instance>
+<instance id="d001.s011.t007" lemma="sweeping" pos="first">sweeping</instance>
 <instance id="d001.s011.t008" lemma="generalization" pos="n">generalizations</instance>
 as
 to
@@ -307,7 +307,7 @@ the
 <instance id="d001.s012.t004" lemma="homelessness" pos="n">homelessness</instance>
 <instance id="d001.s012.t005" lemma="be" pos="v">is</instance>
 an
-<instance id="d001.s012.t006" lemma="important" pos="a">important</instance>
+<instance id="d001.s012.t006" lemma="important" pos="first">important</instance>
 <instance id="d001.s012.t007" lemma="objective" pos="n">objective</instance>
 .
 </sentence>
@@ -318,10 +318,10 @@ will
 us
 to
 <instance id="d001.s013.t002" lemma="develop" pos="v">develop</instance>
-a
+first
 much
 more
-<instance id="d001.s013.t003" lemma="sophisticated" pos="a">sophisticated</instance>
+<instance id="d001.s013.t003" lemma="sophisticated" pos="first">sophisticated</instance>
 <instance id="d001.s013.t004" lemma="understanding" pos="n">understanding</instance>
 of
 the
@@ -341,7 +341,7 @@ be
 <instance id="d001.s013.t010" lemma="develop" pos="v">developed</instance>
 <instance id="d001.s013.t011" lemma="only" pos="r">only</instance>
 through
-<instance id="d001.s013.t012" lemma="careful" pos="a">careful</instance>
+<instance id="d001.s013.t012" lemma="careful" pos="first">careful</instance>
 <instance id="d001.s013.t013" lemma="study" pos="n">study</instance>
 and
 <instance id="d001.s013.t014" lemma="research" pos="n">research</instance>
@@ -389,15 +389,15 @@ Wright
 <instance id="d001.s015.t004" lemma="be" pos="v">is</instance>
 due
 to
-a
-<instance id="d001.s015.t005" lemma="complex" pos="a">complex</instance>
+first
+<instance id="d001.s015.t005" lemma="complex" pos="first">complex</instance>
 <instance id="d001.s015.t006" lemma="array" pos="n">array</instance>
 of
 <instance id="d001.s015.t007" lemma="problem" pos="n">problems</instance>
 ,
 with
 the
-<instance id="d001.s015.t008" lemma="common" pos="a">common</instance>
+<instance id="d001.s015.t008" lemma="common" pos="first">common</instance>
 <instance id="d001.s015.t009" lemma="thread" pos="n">thread</instance>
 of
 <instance id="d001.s015.t010" lemma="poverty" pos="n">poverty</instance>
@@ -413,7 +413,7 @@ that
 %
 of
 the
-<instance id="d001.s016.t004" lemma="homeless" pos="a">homeless</instance>
+<instance id="d001.s016.t004" lemma="homeless" pos="first">homeless</instance>
 <instance id="d001.s016.t005" lemma="population" pos="n">population</instance>
 is
 <instance id="d001.s016.t006" lemma="make_up" pos="v">made up</instance>
@@ -437,12 +437,12 @@ of
 ,
 <instance id="d001.s016.t014" lemma="alcohol" pos="n">alcohol</instance>
 and
-<instance id="d001.s016.t015" lemma="mental" pos="a">mental</instance>
+<instance id="d001.s016.t015" lemma="mental" pos="first">mental</instance>
 <instance id="d001.s016.t016" lemma="problem" pos="n">problems</instance>
 .
 </sentence>
 <sentence id="d001.s017">
-<instance id="d001.s017.t001" lemma="according" pos="a">According</instance>
+<instance id="d001.s017.t001" lemma="according" pos="first">According</instance>
 to
 Dr
 .
@@ -452,7 +452,7 @@ Wright
 <instance id="d001.s017.t003" lemma="be" pos="v">is</instance>
 ``
 <instance id="d001.s017.t004" lemma="simultaneously" pos="r">simultaneously</instance>
-a
+first
 <instance id="d001.s017.t005" lemma="housing" pos="n">housing</instance>
 <instance id="d001.s017.t006" lemma="problem" pos="n">problem</instance>
 ,
@@ -460,38 +460,38 @@ an
 <instance id="d001.s017.t007" lemma="employment" pos="n">employment</instance>
 <instance id="d001.s017.t008" lemma="problem" pos="n">problem</instance>
 ,
-a
-<instance id="d001.s017.t009" lemma="demographic" pos="a">demographic</instance>
+first
+<instance id="d001.s017.t009" lemma="demographic" pos="first">demographic</instance>
 <instance id="d001.s017.t010" lemma="problem" pos="n">problem</instance>
 ,
-a
+first
 <instance id="d001.s017.t011" lemma="problem" pos="n">problem</instance>
 of
-<instance id="d001.s017.t012" lemma="social" pos="a">social</instance>
+<instance id="d001.s017.t012" lemma="social" pos="first">social</instance>
 disaffiliation
 ,
-a
-<instance id="d001.s017.t013" lemma="mental" pos="a">mental</instance>
+first
+<instance id="d001.s017.t013" lemma="mental" pos="first">mental</instance>
 <instance id="d001.s017.t014" lemma="health" pos="n">health</instance>
 <instance id="d001.s017.t015" lemma="problem" pos="n">problem</instance>
 ,
-a
+first
 <instance id="d001.s017.t016" lemma="family" pos="n">family</instance>
 <instance id="d001.s017.t017" lemma="violence" pos="n">violence</instance>
 <instance id="d001.s017.t018" lemma="problem" pos="n">problem</instance>
 ,
-a
+first
 <instance id="d001.s017.t019" lemma="problem" pos="n">problem</instance>
 <instance id="d001.s017.t020" lemma="create" pos="v">created</instance>
 by
 the
 <instance id="d001.s017.t021" lemma="cutback" pos="n">cutbacks</instance>
 in
-<instance id="d001.s017.t022" lemma="social" pos="a">social</instance>
+<instance id="d001.s017.t022" lemma="social" pos="first">social</instance>
 <instance id="d001.s017.t023" lemma="welfare" pos="n">welfare</instance>
 <instance id="d001.s017.t024" lemma="spending" pos="n">spending</instance>
 ,
-a
+first
 <instance id="d001.s017.t025" lemma="problem" pos="n">problem</instance>
 <instance id="d001.s017.t026" lemma="result" pos="v">resulting</instance>
 from
@@ -499,17 +499,17 @@ the
 <instance id="d001.s017.t027" lemma="decay" pos="n">decay</instance>
 of
 the
-<instance id="d001.s017.t028" lemma="traditional" pos="a">traditional</instance>
+<instance id="d001.s017.t028" lemma="traditional" pos="first">traditional</instance>
 <instance id="d001.s017.t029" lemma="nuclear_family" pos="n">nuclear family</instance>
 ,
 and
-a
+first
 <instance id="d001.s017.t030" lemma="problem" pos="n">problem</instance>
 <instance id="d001.s017.t031" lemma="intimately" pos="r">intimately</instance>
-<instance id="d001.s017.t032" lemma="connected" pos="a">connected</instance>
+<instance id="d001.s017.t032" lemma="connected" pos="first">connected</instance>
 to
 the
-<instance id="d001.s017.t033" lemma="recent" pos="a">recent</instance>
+<instance id="d001.s017.t033" lemma="recent" pos="first">recent</instance>
 <instance id="d001.s017.t034" lemma="increase" pos="n">increase</instance>
 in
 the
@@ -553,9 +553,9 @@ the
 <instance id="d001.s019.t003" lemma="regard" pos="v">regarded</instance>
 <instance id="d001.s019.t004" lemma="director" pos="n">director</instance>
 of
-a
+first
 <instance id="d001.s019.t005" lemma="privately" pos="r">privately</instance>
-<instance id="d001.s019.t006" lemma="funded" pos="a">funded</instance>
+<instance id="d001.s019.t006" lemma="funded" pos="first">funded</instance>
 drop-in
 <instance id="d001.s019.t007" lemma="center" pos="n">center</instance>
 for
@@ -569,7 +569,7 @@ York
 If
 you
 're
-<instance id="d001.s019.t009" lemma="homeless" pos="a">homeless</instance>
+<instance id="d001.s019.t009" lemma="homeless" pos="first">homeless</instance>
 ,
 you
 do
@@ -587,8 +587,8 @@ or
 <sentence id="d001.s020">
 After
 your
-<instance id="d001.s020.t001" lemma="first" pos="a">first</instance>
-<instance id="d001.s020.t002" lemma="three" pos="a">three</instance>
+<instance id="d001.s020.t001" lemma="first" pos="first">first</instance>
+<instance id="d001.s020.t002" lemma="three" pos="first">three</instance>
 <instance id="d001.s020.t003" lemma="week" pos="n">weeks</instance>
 of
 <instance id="d001.s020.t004" lemma="sleep" pos="n">sleep</instance>
@@ -605,14 +605,14 @@ any
 more
 ;
 without
-<instance id="d001.s020.t008" lemma="psychiatric" pos="a">psychiatric</instance>
+<instance id="d001.s020.t008" lemma="psychiatric" pos="first">psychiatric</instance>
 <instance id="d001.s020.t009" lemma="treatment" pos="n">treatment</instance>
 ,
 you
 may
 <instance id="d001.s020.t010" lemma="well" pos="r">well</instance>
 <instance id="d001.s020.t011" lemma="be" pos="v">be</instance>
-<instance id="d001.s020.t012" lemma="unable" pos="a">unable</instance>
+<instance id="d001.s020.t012" lemma="unable" pos="first">unable</instance>
 to
 <instance id="d001.s020.t013" lemma="fend" pos="v">fend</instance>
 for
@@ -631,8 +631,8 @@ the
 <instance id="d001.s021.t002" lemma="obviously" pos="r">obviously</instance>
 ,
 <instance id="d001.s021.t003" lemma="have" pos="v">had</instance>
-<instance id="d001.s021.t004" lemma="pre-existing" pos="a">pre-existing</instance>
-<instance id="d001.s021.t005" lemma="mental" pos="a">mental</instance>
+<instance id="d001.s021.t004" lemma="pre-existing" pos="first">pre-existing</instance>
+<instance id="d001.s021.t005" lemma="mental" pos="first">mental</instance>
 <instance id="d001.s021.t006" lemma="illness" pos="n">illness</instance>
 or
 <instance id="d001.s021.t007" lemma="addiction" pos="n">addiction</instance>
@@ -651,9 +651,9 @@ the
 <instance id="d001.s022.t002" lemma="economy" pos="n">economy</instance>
 into
 the
-<instance id="d001.s022.t003" lemma="grim" pos="a">grim</instance>
+<instance id="d001.s022.t003" lemma="grim" pos="first">grim</instance>
 ,
-<instance id="d001.s022.t004" lemma="brutal" pos="a">brutal</instance>
+<instance id="d001.s022.t004" lemma="brutal" pos="first">brutal</instance>
 <instance id="d001.s022.t005" lemma="world" pos="n">world</instance>
 of
 our
@@ -670,7 +670,7 @@ what
 of
 <instance id="d001.s023.t004" lemma="escape" pos="n">escape</instance>
 <instance id="d001.s023.t005" lemma="be" pos="v">are</instance>
-<instance id="d001.s023.t006" lemma="open" pos="a">open</instance>
+<instance id="d001.s023.t006" lemma="open" pos="first">open</instance>
 to
 them
 other
@@ -701,7 +701,7 @@ You
 <instance id="d001.s025.t001" lemma="dismiss" pos="v">dismiss</instance>
 as
 ``
-<instance id="d001.s025.t002" lemma="sentimental" pos="a">sentimental</instance>
+<instance id="d001.s025.t002" lemma="sentimental" pos="first">sentimental</instance>
 ''
 the
 <instance id="d001.s025.t003" lemma="view" pos="n">view</instance>
@@ -709,7 +709,7 @@ that
 the
 <instance id="d001.s025.t004" lemma="reduction" pos="n">reduction</instance>
 of
-<instance id="d001.s025.t005" lemma="federal" pos="a">federal</instance>
+<instance id="d001.s025.t005" lemma="federal" pos="first">federal</instance>
 housing-assistance
 <instance id="d001.s025.t006" lemma="program" pos="n">programs</instance>
 by
@@ -718,12 +718,12 @@ by
 might
 have
 <instance id="d001.s025.t007" lemma="play" pos="v">played</instance>
-a
-<instance id="d001.s025.t008" lemma="significant" pos="a">significant</instance>
+first
+<instance id="d001.s025.t008" lemma="significant" pos="first">significant</instance>
 <instance id="d001.s025.t009" lemma="role" pos="n">role</instance>
 in
 the
-<instance id="d001.s025.t010" lemma="increased" pos="a">increased</instance>
+<instance id="d001.s025.t010" lemma="increased" pos="first">increased</instance>
 <instance id="d001.s025.t011" lemma="number" pos="n">number</instance>
 of
 <instance id="d001.s025.t012" lemma="man" pos="n">men</instance>
@@ -759,7 +759,7 @@ your
 <instance id="d001.s026.t007" lemma="namely" pos="r">namely</instance>
 ,
 that
-<instance id="d001.s026.t008" lemma="mental" pos="a">mental</instance>
+<instance id="d001.s026.t008" lemma="mental" pos="first">mental</instance>
 <instance id="d001.s026.t009" lemma="illness" pos="n">illness</instance>
 and
 <instance id="d001.s026.t010" lemma="substance_abuse" pos="n">substance abuse</instance>
@@ -781,8 +781,8 @@ Your
 <instance id="d001.s027.t001" lemma="research" pos="n">research</instance>
 <instance id="d001.s027.t002" lemma="stop" pos="v">stopped</instance>
 when
-a
-<instance id="d001.s027.t003" lemma="convenient" pos="a">convenient</instance>
+first
+<instance id="d001.s027.t003" lemma="convenient" pos="first">convenient</instance>
 <instance id="d001.s027.t004" lemma="assertion" pos="n">assertion</instance>
 could
 be
@@ -807,7 +807,7 @@ the
 <instance id="d001.s029.t002" lemma="sponsor" pos="n">sponsors</instance>
 of
 the
-<instance id="d001.s029.t003" lemma="recent" pos="a">recent</instance>
+<instance id="d001.s029.t003" lemma="recent" pos="first">recent</instance>
 <instance id="d001.s029.t004" lemma="march" pos="n">march</instance>
 in
 Washington
@@ -844,16 +844,16 @@ the
 <instance id="d001.s029.t010" lemma="march" pos="n">march</instance>
 <instance id="d001.s029.t011" lemma="get" pos="v">got</instance>
 its
-<instance id="d001.s029.t012" lemma="major" pos="a">major</instance>
+<instance id="d001.s029.t012" lemma="major" pos="first">major</instance>
 <instance id="d001.s029.t013" lemma="support" pos="n">support</instance>
 from
-<instance id="d001.s029.t014" lemma="self-serving" pos="a">self-serving</instance>
+<instance id="d001.s029.t014" lemma="self-serving" pos="first">self-serving</instance>
 <instance id="d001.s029.t015" lemma="group" pos="n">groups</instance>
 that
 ``
 <instance id="d001.s029.t016" lemma="know" pos="v">know</instance>
-a
-<instance id="d001.s029.t017" lemma="good" pos="a">good</instance>
+first
+<instance id="d001.s029.t017" lemma="good" pos="first">good</instance>
 <instance id="d001.s029.t018" lemma="thing" pos="n">thing</instance>
 when
 they
@@ -884,7 +884,7 @@ the
 for
 <instance id="d001.s030.t003" lemma="profit" pos="n">profit</instance>
 the
-<instance id="d001.s030.t004" lemma="driving" pos="a">driving</instance>
+<instance id="d001.s030.t004" lemma="driving" pos="first">driving</instance>
 <instance id="d001.s030.t005" lemma="force" pos="n">force</instance>
 behind
 those
@@ -916,10 +916,10 @@ Catholic
 Charities
 USA
 or
-a
+first
 hundred
-<instance id="d001.s031.t002" lemma="other" pos="a">other</instance>
-<instance id="d001.s031.t003" lemma="nonprofit" pos="a">nonprofit</instance>
+<instance id="d001.s031.t002" lemma="other" pos="first">other</instance>
+<instance id="d001.s031.t003" lemma="nonprofit" pos="first">nonprofit</instance>
 <instance id="d001.s031.t004" lemma="organization" pos="n">organizations</instance>
 that
 <instance id="d001.s031.t005" lemma="participate" pos="v">participated</instance>
@@ -940,7 +940,7 @@ Baltimore
 <instance id="d001.s032.t002" lemma="homeless" pos="n">homeless</instance>
 who
 <instance id="d001.s032.t003" lemma="undergo" pos="v">underwent</instance>
-<instance id="d001.s032.t004" lemma="psychiatric" pos="a">psychiatric</instance>
+<instance id="d001.s032.t004" lemma="psychiatric" pos="first">psychiatric</instance>
 <instance id="d001.s032.t005" lemma="examination" pos="n">examinations</instance>
 ,
 I
@@ -948,7 +948,7 @@ I
 you
 <instance id="d001.s032.t007" lemma="conduct" pos="v">conduct</instance>
 your
-<instance id="d001.s032.t008" lemma="own" pos="a">own</instance>
+<instance id="d001.s032.t008" lemma="own" pos="first">own</instance>
 <instance id="d001.s032.t009" lemma="survey" pos="n">survey</instance>
 .
 </sentence>
@@ -965,7 +965,7 @@ including
 someone
 from
 your
-<instance id="d001.s033.t005" lemma="own" pos="a">own</instance>
+<instance id="d001.s033.t005" lemma="own" pos="first">own</instance>
 <instance id="d001.s033.t006" lemma="staff" pos="n">staff</instance>
 ,
 and
@@ -980,7 +980,7 @@ to
 be
 <instance id="d001.s033.t009" lemma="deprive" pos="v">deprived</instance>
 for
-<instance id="d001.s033.t010" lemma="one" pos="a">one</instance>
+<instance id="d001.s033.t010" lemma="one" pos="first">one</instance>
 <instance id="d001.s033.t011" lemma="month" pos="n">month</instance>
 of
 their
@@ -997,8 +997,8 @@ would
 <instance id="d001.s034.t001" lemma="predict" pos="v">predict</instance>
 that
 within
-a
-<instance id="d001.s034.t002" lemma="short" pos="a">short</instance>
+first
+<instance id="d001.s034.t002" lemma="short" pos="first">short</instance>
 <instance id="d001.s034.t003" lemma="time" pos="n">time</instance>
 most
 of
@@ -1006,8 +1006,8 @@ them
 would
 <instance id="d001.s034.t004" lemma="find" pos="v">find</instance>
 Thunderbird
-a
-<instance id="d001.s034.t005" lemma="satisfactory" pos="a">satisfactory</instance>
+first
+<instance id="d001.s034.t005" lemma="satisfactory" pos="first">satisfactory</instance>
 <instance id="d001.s034.t006" lemma="substitute" pos="n">substitute</instance>
 for
 Chivas
@@ -1016,7 +1016,7 @@ and
 that
 their
 ``
-<instance id="d001.s034.t007" lemma="normal" pos="a">normal</instance>
+<instance id="d001.s034.t007" lemma="normal" pos="first">normal</instance>
 ''
 <instance id="d001.s034.t008" lemma="phobia" pos="n">phobias</instance>
 ,
@@ -1062,9 +1062,9 @@ $
 95
 -RRB-
 ,
-a
+first
 <instance id="d002.s001.t002" lemma="highly" pos="r">highly</instance>
-<instance id="d002.s001.t003" lemma="detailed" pos="a">detailed</instance>
+<instance id="d002.s001.t003" lemma="detailed" pos="first">detailed</instance>
 <instance id="d002.s001.t004" lemma="account" pos="n">account</instance>
 of
 the
@@ -1073,8 +1073,8 @@ Wedtech
 ,
 <instance id="d002.s001.t006" lemma="begin" pos="v">begins</instance>
 on
-a
-<instance id="d002.s001.t007" lemma="reassuring" pos="a">reassuring</instance>
+first
+<instance id="d002.s001.t007" lemma="reassuring" pos="first">reassuring</instance>
 <instance id="d002.s001.t008" lemma="note" pos="n">note</instance>
 .
 </sentence>
@@ -1095,15 +1095,15 @@ an
 <instance id="d002.s002.t005" lemma="example" pos="n">example</instance>
 of
 his
-<instance id="d002.s002.t006" lemma="own" pos="a">own</instance>
+<instance id="d002.s002.t006" lemma="own" pos="first">own</instance>
 <instance id="d002.s002.t007" lemma="integrity" pos="n">integrity</instance>
 .
 </sentence>
 <sentence id="d002.s003">
 When
 <instance id="d002.s003.t001" lemma="offer" pos="v">offered</instance>
-a
-<instance id="d002.s003.t002" lemma="free" pos="a">free</instance>
+first
+<instance id="d002.s003.t002" lemma="free" pos="first">free</instance>
 <instance id="d002.s003.t003" lemma="trip" pos="n">trip</instance>
 from
 the
@@ -1122,7 +1122,7 @@ C
 .
 ,
 by
-<instance id="d002.s003.t005" lemma="one" pos="a">one</instance>
+<instance id="d002.s003.t005" lemma="one" pos="first">one</instance>
 of
 Wedtech
 's
@@ -1134,7 +1134,7 @@ the
 <instance id="d002.s003.t008" lemma="reader" pos="n">reader</instance>
 ,
 ``
-<instance id="d002.s003.t009" lemma="mindful" pos="a">mindful</instance>
+<instance id="d002.s003.t009" lemma="mindful" pos="first">mindful</instance>
 of
 <instance id="d002.s003.t010" lemma="accept" pos="v">accepting</instance>
 anything
@@ -1165,12 +1165,12 @@ would
 this
 plaintive
 ,
-<instance id="d002.s004.t004" lemma="high-minded" pos="a">high-minded</instance>
+<instance id="d002.s004.t004" lemma="high-minded" pos="first">high-minded</instance>
 <instance id="d002.s004.t005" lemma="note" pos="n">note</instance>
 of
 <instance id="d002.s004.t006" lemma="assurance" pos="n">assurance</instance>
 <instance id="d002.s004.t007" lemma="be" pos="v">is</instance>
-<instance id="d002.s004.t008" lemma="necessary" pos="a">necessary</instance>
+<instance id="d002.s004.t008" lemma="necessary" pos="first">necessary</instance>
 is
 <instance id="d002.s004.t009" lemma="answer" pos="v">answered</instance>
 by
@@ -1216,15 +1216,15 @@ from
 its
 <instance id="d002.s005.t007" lemma="inception" pos="n">inception</instance>
 as
-a
-<instance id="d002.s005.t008" lemma="small" pos="a">small</instance>
+first
+<instance id="d002.s005.t008" lemma="small" pos="first">small</instance>
 <instance id="d002.s005.t009" lemma="manufacture" pos="v">manufacturing</instance>
 <instance id="d002.s005.t010" lemma="company" pos="n">company</instance>
 to
 the
 <instance id="d002.s005.t011" lemma="status" pos="n">status</instance>
 of
-<instance id="d002.s005.t012" lemma="full-fledged" pos="a">full-fledged</instance>
+<instance id="d002.s005.t012" lemma="full-fledged" pos="first">full-fledged</instance>
 <instance id="d002.s005.t013" lemma="defense" pos="n">defense</instance>
 <instance id="d002.s005.t014" lemma="contractor" pos="n">contractor</instance>
 ,
@@ -1234,7 +1234,7 @@ the
 <instance id="d002.s005.t016" lemma="task" pos="n">task</instance>
 of
 <instance id="d002.s005.t017" lemma="produce" pos="v">producing</instance>
-<instance id="d002.s005.t018" lemma="vital" pos="a">vital</instance>
+<instance id="d002.s005.t018" lemma="vital" pos="first">vital</instance>
 <instance id="d002.s005.t019" lemma="equipment" pos="n">equipment</instance>
 for
 the
@@ -1292,7 +1292,7 @@ Mr
 Neuberger
 <instance id="d002.s007.t004" lemma="discover" pos="v">discovered</instance>
 the
-<instance id="d002.s007.t005" lemma="federal" pos="a">federal</instance>
+<instance id="d002.s007.t005" lemma="federal" pos="first">federal</instance>
 <instance id="d002.s007.t006" lemma="government" pos="n">government</instance>
 's
 <instance id="d002.s007.t007" lemma="Section" pos="n">Section</instance>
@@ -1308,7 +1308,7 @@ A
 <sentence id="d002.s008">
 This
 <instance id="d002.s008.t001" lemma="be" pos="v">is</instance>
-a
+first
 Johnson-
 <instance id="d002.s008.t002" lemma="era" pos="n">era</instance>
 ,
@@ -1317,7 +1317,7 @@ Society
 <instance id="d002.s008.t003" lemma="creation" pos="n">creation</instance>
 that
 <instance id="d002.s008.t004" lemma="mandate" pos="v">mandates</instance>
-<instance id="d002.s008.t005" lemma="certain" pos="a">certain</instance>
+<instance id="d002.s008.t005" lemma="certain" pos="first">certain</instance>
 <instance id="d002.s008.t006" lemma="government" pos="n">government</instance>
 <instance id="d002.s008.t007" lemma="contract" pos="n">contracts</instance>
 be
@@ -1337,7 +1337,7 @@ that
 ,
 although
 of
-<instance id="d002.s009.t002" lemma="Italian" pos="a">Italian</instance>
+<instance id="d002.s009.t002" lemma="Italian" pos="first">Italian</instance>
 <instance id="d002.s009.t003" lemma="ancestry" pos="n">ancestry</instance>
 ,
 Mr
@@ -1347,7 +1347,7 @@ Mariotta
 could
 <instance id="d002.s009.t005" lemma="qualify" pos="v">qualify</instance>
 as
-a
+first
 <instance id="d002.s009.t006" lemma="minority" pos="n">minority</instance>
 <instance id="d002.s009.t007" lemma="person" pos="n">person</instance>
 since
@@ -1361,14 +1361,14 @@ Rico
 </sentence>
 <sentence id="d002.s010">
 The
-<instance id="d002.s010.t001" lemma="two" pos="a">two</instance>
+<instance id="d002.s010.t001" lemma="two" pos="first">two</instance>
 <instance id="d002.s010.t002" lemma="partner" pos="n">partners</instance>
 <instance id="d002.s010.t003" lemma="merely" pos="r">merely</instance>
 had
 to
 <instance id="d002.s010.t004" lemma="falsify" pos="v">falsify</instance>
 the
-<instance id="d002.s010.t005" lemma="true" pos="a">true</instance>
+<instance id="d002.s010.t005" lemma="true" pos="first">true</instance>
 <instance id="d002.s010.t006" lemma="ownership" pos="n">ownership</instance>
 of
 the
@@ -1408,7 +1408,7 @@ races
 <sentence id="d002.s012">
 <instance id="d002.s012.t001" lemma="Besides" pos="r">Besides</instance>
 <instance id="d002.s012.t002" lemma="be" pos="v">being</instance>
-a
+first
 ``
 minority-owned
 <instance id="d002.s012.t003" lemma="company" pos="n">company</instance>
@@ -1421,19 +1421,19 @@ the
 South
 Bronx
 ,
-a
-<instance id="d002.s012.t005" lemma="blighted" pos="a">blighted</instance>
+first
+<instance id="d002.s012.t005" lemma="blighted" pos="first">blighted</instance>
 <instance id="d002.s012.t006" lemma="area" pos="n">area</instance>
 ,
 <instance id="d002.s012.t007" lemma="make" pos="v">made</instance>
-<instance id="d002.s012.t008" lemma="famous" pos="a">famous</instance>
+<instance id="d002.s012.t008" lemma="famous" pos="first">famous</instance>
 by
 Jimmy
 Carter
 in
 his
 1976
-<instance id="d002.s012.t009" lemma="presidential" pos="a">presidential</instance>
+<instance id="d002.s012.t009" lemma="presidential" pos="first">presidential</instance>
 <instance id="d002.s012.t010" lemma="campaign" pos="n">campaign</instance>
 .
 </sentence>
@@ -1476,7 +1476,7 @@ Biaggi
 -LRB-
 <instance id="d002.s014.t002" lemma="now" pos="r">now</instance>
 <instance id="d002.s014.t003" lemma="serve" pos="v">serving</instance>
-a
+first
 <instance id="d002.s014.t004" lemma="jail" pos="n">jail</instance>
 <instance id="d002.s014.t005" lemma="sentence" pos="n">sentence</instance>
 -RRB-
@@ -1484,22 +1484,22 @@ a
 the
 <instance id="d002.s014.t006" lemma="company" pos="n">company</instance>
 <instance id="d002.s014.t007" lemma="begin" pos="v">began</instance>
-a
+first
 <instance id="d002.s014.t008" lemma="career" pos="n">career</instance>
 of
 <instance id="d002.s014.t009" lemma="bribe" pos="v">bribing</instance>
-<instance id="d002.s014.t010" lemma="federal" pos="a">federal</instance>
+<instance id="d002.s014.t010" lemma="federal" pos="first">federal</instance>
 ,
 <instance id="d002.s014.t011" lemma="state" pos="n">state</instance>
 and
-<instance id="d002.s014.t012" lemma="local" pos="a">local</instance>
-<instance id="d002.s014.t013" lemma="public" pos="a">public</instance>
+<instance id="d002.s014.t012" lemma="local" pos="first">local</instance>
+<instance id="d002.s014.t013" lemma="public" pos="first">public</instance>
 <instance id="d002.s014.t014" lemma="official" pos="n">officials</instance>
 and
 those
-<instance id="d002.s014.t015" lemma="close" pos="a">close</instance>
+<instance id="d002.s014.t015" lemma="close" pos="first">close</instance>
 to
-<instance id="d002.s014.t016" lemma="public" pos="a">public</instance>
+<instance id="d002.s014.t016" lemma="public" pos="first">public</instance>
 <instance id="d002.s014.t017" lemma="official" pos="n">officials</instance>
 ,
 <instance id="d002.s014.t018" lemma="right" pos="r">right</instance>
@@ -1512,12 +1512,12 @@ E
 Robert
 Wallach
 ,
-<instance id="d002.s014.t019" lemma="close" pos="a">close</instance>
+<instance id="d002.s014.t019" lemma="close" pos="first">close</instance>
 <instance id="d002.s014.t020" lemma="friend" pos="n">friend</instance>
 and
 <instance id="d002.s014.t021" lemma="adviser" pos="n">adviser</instance>
 to
-<instance id="d002.s014.t022" lemma="former" pos="a">former</instance>
+<instance id="d002.s014.t022" lemma="former" pos="first">former</instance>
 <instance id="d002.s014.t023" lemma="Attorney_General" pos="n">Attorney General</instance>
 Ed
 Meese
@@ -1537,11 +1537,11 @@ fashioned
 <sentence id="d002.s016">
 It
 <instance id="d002.s016.t001" lemma="make" pos="v">made</instance>
-<instance id="d002.s016.t002" lemma="ample" pos="a">ample</instance>
+<instance id="d002.s016.t002" lemma="ample" pos="first">ample</instance>
 <instance id="d002.s016.t003" lemma="use" pos="n">use</instance>
 of
 the
-<instance id="d002.s016.t004" lemma="modern" pos="a">modern</instance>
+<instance id="d002.s016.t004" lemma="modern" pos="first">modern</instance>
 <instance id="d002.s016.t005" lemma="technique" pos="n">techniques</instance>
 of
 <instance id="d002.s016.t006" lemma="influence" pos="n">influence</instance>
@@ -1549,9 +1549,9 @@ of
 ,
 <instance id="d002.s016.t008" lemma="retain" pos="v">retaining</instance>
 <instance id="d002.s016.t009" lemma="politically" pos="r">politically</instance>
-<instance id="d002.s016.t010" lemma="connected" pos="a">connected</instance>
+<instance id="d002.s016.t010" lemma="connected" pos="first">connected</instance>
 ``
-<instance id="d002.s016.t011" lemma="respectable" pos="a">respectable</instance>
+<instance id="d002.s016.t011" lemma="respectable" pos="first">respectable</instance>
 ''
 <instance id="d002.s016.t012" lemma="law" pos="n">law</instance>
 <instance id="d002.s016.t013" lemma="firm" pos="n">firms</instance>
@@ -1559,7 +1559,7 @@ of
 <instance id="d002.s016.t014" lemma="investment" pos="n">investment</instance>
 <instance id="d002.s016.t015" lemma="banker" pos="n">bankers</instance>
 and
-<instance id="d002.s016.t016" lemma="political" pos="a">political</instance>
+<instance id="d002.s016.t016" lemma="political" pos="first">political</instance>
 <instance id="d002.s016.t017" lemma="consultant" pos="n">consultants</instance>
 ,
 including
@@ -1571,7 +1571,7 @@ Nofzinger
 </sentence>
 <sentence id="d002.s017">
 When
-<instance id="d002.s017.t001" lemma="necessary" pos="a">necessary</instance>
+<instance id="d002.s017.t001" lemma="necessary" pos="first">necessary</instance>
 ,
 it
 <instance id="d002.s017.t002" lemma="seek" pos="v">sought</instance>
@@ -1579,7 +1579,7 @@ and
 <instance id="d002.s017.t003" lemma="receive" pos="v">received</instance>
 <instance id="d002.s017.t004" lemma="assistance" pos="n">assistance</instance>
 from
-<instance id="d002.s017.t005" lemma="organized" pos="a">organized</instance>
+<instance id="d002.s017.t005" lemma="organized" pos="first">organized</instance>
 <instance id="d002.s017.t006" lemma="crime" pos="n">crime</instance>
 .
 </sentence>
@@ -1608,10 +1608,10 @@ If
 you
 <instance id="d002.s020.t001" lemma="be" pos="v">were</instance>
 <instance id="d002.s020.t002" lemma="especially" pos="r">especially</instance>
-<instance id="d002.s020.t003" lemma="helpful" pos="a">helpful</instance>
+<instance id="d002.s020.t003" lemma="helpful" pos="first">helpful</instance>
 in
-a
-<instance id="d002.s020.t004" lemma="corrupt" pos="a">corrupt</instance>
+first
+<instance id="d002.s020.t004" lemma="corrupt" pos="first">corrupt</instance>
 <instance id="d002.s020.t005" lemma="scheme" pos="n">scheme</instance>
 you
 <instance id="d002.s020.t006" lemma="receive" pos="v">received</instance>
@@ -1619,7 +1619,7 @@ not
 <instance id="d002.s020.t007" lemma="just" pos="r">just</instance>
 <instance id="d002.s020.t008" lemma="cash" pos="n">cash</instance>
 in
-a
+first
 <instance id="d002.s020.t009" lemma="bag" pos="n">bag</instance>
 ,
 but
@@ -1632,7 +1632,7 @@ you
 <instance id="d002.s021.t001" lemma="be" pos="v">were</instance>
 not
 an
-<instance id="d002.s021.t002" lemma="effective" pos="a">effective</instance>
+<instance id="d002.s021.t002" lemma="effective" pos="first">effective</instance>
 <instance id="d002.s021.t003" lemma="crook" pos="n">crook</instance>
 ,
 you
@@ -1643,7 +1643,7 @@ in
 the
 cold
 ,
-a
+first
 <instance id="d002.s021.t005" lemma="fate" pos="n">fate</instance>
 that
 <instance id="d002.s021.t006" lemma="eventually" pos="r">eventually</instance>
@@ -1655,7 +1655,7 @@ Mariotta
 the
 <instance id="d002.s021.t008" lemma="firm" pos="n">firm</instance>
 's
-<instance id="d002.s021.t009" lemma="semiliterate" pos="a">semiliterate</instance>
+<instance id="d002.s021.t009" lemma="semiliterate" pos="first">semiliterate</instance>
 ``
 <instance id="d002.s021.t010" lemma="minority" pos="n">minority</instance>
 ''
@@ -1666,14 +1666,14 @@ the
 But
 despite
 the
-<instance id="d002.s022.t001" lemma="sensational" pos="a">sensational</instance>
+<instance id="d002.s022.t001" lemma="sensational" pos="first">sensational</instance>
 <instance id="d002.s022.t002" lemma="nature" pos="n">nature</instance>
 of
 the
 <instance id="d002.s022.t003" lemma="revelation" pos="n">revelations</instance>
 and
 the
-<instance id="d002.s022.t004" lemma="breezy" pos="a">breezy</instance>
+<instance id="d002.s022.t004" lemma="breezy" pos="first">breezy</instance>
 ,
 easy-to-read
 <instance id="d002.s022.t005" lemma="tabloid" pos="n">tabloid</instance>
@@ -1686,7 +1686,7 @@ Frenzy
 ''
 <instance id="d002.s022.t008" lemma="often" pos="r">often</instance>
 <instance id="d002.s022.t009" lemma="fall_short_of" pos="v">falls short of</instance>
-<instance id="d002.s022.t010" lemma="gripping" pos="a">gripping</instance>
+<instance id="d002.s022.t010" lemma="gripping" pos="first">gripping</instance>
 <instance id="d002.s022.t011" lemma="reading" pos="n">reading</instance>
 .
 </sentence>
@@ -1703,7 +1703,7 @@ much
 <instance id="d002.s023.t005" lemma="find" pos="v">found</instance>
 crookery
 the
-<instance id="d002.s023.t006" lemma="first" pos="a">first</instance>
+<instance id="d002.s023.t006" lemma="first" pos="first">first</instance>
 <instance id="d002.s023.t007" lemma="day" pos="n">day</instance>
 on
 the
@@ -1729,20 +1729,20 @@ themselves
 garden-variety
 <instance id="d002.s025.t003" lemma="lowlife" pos="n">low lifes</instance>
 ,
-<instance id="d002.s025.t004" lemma="conspicuous" pos="a">conspicuous</instance>
+<instance id="d002.s025.t004" lemma="conspicuous" pos="first">conspicuous</instance>
 <instance id="d002.s025.t005" lemma="consumer" pos="n">consumers</instance>
 who
 <instance id="d002.s025.t006" lemma="want" pos="v">wanted</instance>
-<instance id="d002.s025.t007" lemma="big" pos="a">big</instance>
+<instance id="d002.s025.t007" lemma="big" pos="first">big</instance>
 <instance id="d002.s025.t008" lemma="house" pos="n">houses</instance>
 ,
 Mercedes
 <instance id="d002.s025.t009" lemma="car" pos="n">cars</instance>
 ,
-<instance id="d002.s025.t010" lemma="beautiful" pos="a">beautiful</instance>
+<instance id="d002.s025.t010" lemma="beautiful" pos="first">beautiful</instance>
 <instance id="d002.s025.t011" lemma="woman" pos="n">women</instance>
 ,
-<instance id="d002.s025.t012" lemma="expensive" pos="a">expensive</instance>
+<instance id="d002.s025.t012" lemma="expensive" pos="first">expensive</instance>
 <instance id="d002.s025.t013" lemma="clothes" pos="n">clothes</instance>
 .
 </sentence>
@@ -1764,26 +1764,26 @@ and
 ,
 or
 <instance id="d002.s026.t005" lemma="especially" pos="r">especially</instance>
-<instance id="d002.s026.t006" lemma="intelligent" pos="a">intelligent</instance>
+<instance id="d002.s026.t006" lemma="intelligent" pos="first">intelligent</instance>
 or
 <instance id="d002.s026.t007" lemma="even" pos="r">even</instance>
 <instance id="d002.s026.t008" lemma="temporarily" pos="r">temporarily</instance>
-<instance id="d002.s026.t009" lemma="insane" pos="a">insane</instance>
+<instance id="d002.s026.t009" lemma="insane" pos="first">insane</instance>
 .
 </sentence>
 <sentence id="d002.s027">
 The
-<instance id="d002.s027.t001" lemma="one" pos="a">one</instance>
+<instance id="d002.s027.t001" lemma="one" pos="first">one</instance>
 <instance id="d002.s027.t002" lemma="character" pos="n">character</instance>
 <instance id="d002.s027.t003" lemma="at_least" pos="r">at least</instance>
 <instance id="d002.s027.t004" lemma="somewhat" pos="r">somewhat</instance>
-<instance id="d002.s027.t005" lemma="interesting" pos="a">interesting</instance>
+<instance id="d002.s027.t005" lemma="interesting" pos="first">interesting</instance>
 <instance id="d002.s027.t006" lemma="be" pos="v">was</instance>
 Irving
 Louis
 Lobsenz
 ,
-a
+first
 <instance id="d002.s027.t007" lemma="pediatrician" pos="n">pediatrician</instance>
 who
 <instance id="d002.s027.t008" lemma="change" pos="v">changed</instance>
@@ -1795,13 +1795,13 @@ Kent
 London
 and
 <instance id="d002.s027.t010" lemma="become" pos="v">became</instance>
-a
+first
 <instance id="d002.s027.t011" lemma="master" pos="n">master</instance>
 <instance id="d002.s027.t012" lemma="gambler" pos="n">gambler</instance>
 and
 <instance id="d002.s027.t013" lemma="author" pos="n">author</instance>
 of
-a
+first
 <instance id="d002.s027.t014" lemma="book" pos="n">book</instance>
 on
 <instance id="d002.s027.t015" lemma="blackjack" pos="n">blackjack</instance>
@@ -1850,7 +1850,7 @@ the
 -LRB-
 A
 -RRB-
-<instance id="d002.s029.t010" lemma="federal" pos="a">federal</instance>
+<instance id="d002.s029.t010" lemma="federal" pos="first">federal</instance>
 <instance id="d002.s029.t011" lemma="program" pos="n">program</instance>
 under
 whose
@@ -1875,7 +1875,7 @@ might
 to
 <instance id="d002.s030.t006" lemma="end" pos="v">end</instance>
 ``
-<instance id="d002.s030.t007" lemma="rigid" pos="a">rigid</instance>
+<instance id="d002.s030.t007" lemma="rigid" pos="first">rigid</instance>
 <instance id="d002.s030.t008" lemma="affirmative_action" pos="n">affirmative action</instance>
 <instance id="d002.s030.t009" lemma="program" pos="n">programs</instance>
 .
@@ -1890,7 +1890,7 @@ like
 A
 -RRB-
 <instance id="d002.s031.t003" lemma="be" pos="v">are</instance>
-<instance id="d002.s031.t004" lemma="a_little" pos="r">a little</instance>
+<instance id="d002.s031.t004" lemma="a_little" pos="r">first little</instance>
 like
 <instance id="d002.s031.t005" lemma="leave" pos="v">leaving</instance>
 <instance id="d002.s031.t006" lemma="gold" pos="n">gold</instance>
@@ -1912,8 +1912,8 @@ up
 .
 </sentence>
 <sentence id="d002.s032">
-<instance id="d002.s032.t001" lemma="Numerous" pos="a">Numerous</instance>
-<instance id="d002.s032.t002" lemma="other" pos="a">other</instance>
+<instance id="d002.s032.t001" lemma="Numerous" pos="first">Numerous</instance>
+<instance id="d002.s032.t002" lemma="other" pos="first">other</instance>
 <instance id="d002.s032.t003" lemma="scandal" pos="n">scandals</instance>
 ,
 among
@@ -1961,7 +1961,7 @@ Frenzy
 ''
 does
 <instance id="d002.s035.t001" lemma="provide" pos="v">provide</instance>
-a
+first
 few
 <instance id="d002.s035.t002" lemma="clue" pos="n">clues</instance>
 .
@@ -1991,10 +1991,10 @@ be
 <instance id="d002.s036.t006" lemma="describe" pos="v">described</instance>
 as
 <instance id="d002.s036.t007" lemma="belong_to" pos="v">belonging to</instance>
-a
-<instance id="d002.s036.t008" lemma="political" pos="a">political</instance>
+first
+<instance id="d002.s036.t008" lemma="political" pos="first">political</instance>
 <instance id="d002.s036.t009" lemma="insider" pos="n">insider</instance>
-<instance id="d002.s036.t010" lemma="commercial" pos="a">commercial</instance>
+<instance id="d002.s036.t010" lemma="commercial" pos="first">commercial</instance>
 <instance id="d002.s036.t011" lemma="party" pos="n">party</instance>
 .
 </sentence>
@@ -2012,14 +2012,14 @@ is
 <instance id="d002.s037.t006" lemma="commerce" pos="n">commerce</instance>
 or
 <instance id="d002.s037.t007" lemma="maintain" pos="v">maintaining</instance>
-a
-<instance id="d002.s037.t008" lemma="large" pos="a">large</instance>
+first
+<instance id="d002.s037.t008" lemma="large" pos="first">large</instance>
 <instance id="d002.s037.t009" lemma="defense" pos="n">defense</instance>
 <instance id="d002.s037.t010" lemma="establishment" pos="n">establishment</instance>
 ,
 there
 <instance id="d002.s037.t011" lemma="be" pos="v">is</instance>
-<instance id="d002.s037.t012" lemma="big" pos="a">big</instance>
+<instance id="d002.s037.t012" lemma="big" pos="first">big</instance>
 <instance id="d002.s037.t013" lemma="money" pos="n">money</instance>
 to
 be
@@ -2075,7 +2075,7 @@ they
 the
 <instance id="d002.s039.t006" lemma="pocket" pos="n">pockets</instance>
 of
-<instance id="d002.s039.t007" lemma="political" pos="a">political</instance>
+<instance id="d002.s039.t007" lemma="political" pos="first">political</instance>
 <instance id="d002.s039.t008" lemma="insider" pos="n">insiders</instance>
 ?
 </sentence>
@@ -2083,7 +2083,7 @@ of
 This
 is
 the
-<instance id="d002.s040.t001" lemma="real" pos="a">real</instance>
+<instance id="d002.s040.t001" lemma="real" pos="first">real</instance>
 <instance id="d002.s040.t002" lemma="issue" pos="n">issue</instance>
 <instance id="d002.s040.t003" lemma="raise" pos="v">raised</instance>
 by
@@ -2122,7 +2122,7 @@ to
 <instance id="d003.s001.t001" lemma="reach" pos="v">reach</instance>
 <instance id="d003.s001.t002" lemma="back" pos="r">back</instance>
 to
-<instance id="d003.s001.t003" lemma="French" pos="a">French</instance>
+<instance id="d003.s001.t003" lemma="French" pos="first">French</instance>
 101
 when
 the
@@ -2147,23 +2147,23 @@ I
 to
 <instance id="d003.s001.t013" lemma="ride" pos="v">ride</instance>
 in
-a
+first
 montgolfiere
 .
 </sentence>
 <sentence id="d003.s002">
 I
 <instance id="d003.s002.t001" lemma="be" pos="v">was</instance>
-a
-<instance id="d003.s002.t002" lemma="last-minute" pos="a">last-minute</instance>
+first
+<instance id="d003.s002.t002" lemma="last-minute" pos="first">last-minute</instance>
 -LRB-
 <instance id="d003.s002.t003" lemma="read" pos="v">read</instance>
 interloping
 -RRB-
 <instance id="d003.s002.t004" lemma="attendee" pos="n">attendee</instance>
 at
-a
-<instance id="d003.s002.t005" lemma="French" pos="a">French</instance>
+first
+<instance id="d003.s002.t005" lemma="French" pos="first">French</instance>
 <instance id="d003.s002.t006" lemma="journalism" pos="n">journalism</instance>
 <instance id="d003.s002.t007" lemma="convention" pos="n">convention</instance>
 and
@@ -2193,12 +2193,12 @@ with
 the
 <instance id="d003.s003.t002" lemma="clipboard" pos="n">clipboard</instance>
 <instance id="d003.s003.t003" lemma="represent" pos="v">represented</instance>
-a
-<instance id="d003.s003.t004" lemma="halfhearted" pos="a">halfhearted</instance>
+first
+<instance id="d003.s003.t004" lemma="halfhearted" pos="first">halfhearted</instance>
 <instance id="d003.s003.t005" lemma="attempt" pos="n">attempt</instance>
 to
 <instance id="d003.s003.t006" lemma="introduce" pos="v">introduce</instance>
-a
+first
 <instance id="d003.s003.t007" lemma="bit" pos="n">bit</instance>
 of
 les
@@ -2214,7 +2214,7 @@ as
 the
 <instance id="d003.s004.t001" lemma="French" pos="n">French</instance>
 <instance id="d003.s004.t002" lemma="embody" pos="v">embody</instance>
-a
+first
 Zen-like
 <instance id="d003.s004.t003" lemma="state" pos="n">state</instance>
 of
@@ -2226,7 +2226,7 @@ it
 -LRB-
 <instance id="d003.s004.t006" lemma="try" pos="v">try</instance>
 <instance id="d003.s004.t007" lemma="find" pos="v">finding</instance>
-a
+first
 Nautilus
 <instance id="d003.s004.t008" lemma="machine" pos="n">machine</instance>
 in
@@ -2260,9 +2260,9 @@ the
 <instance id="d003.s005.t006" lemma="suggestion" pos="n">suggestion</instance>
 of
 <instance id="d003.s005.t007" lemma="interrupt" pos="v">interrupting</instance>
-a
+first
 <instance id="d003.s005.t008" lemma="perfectly" pos="r">perfectly</instance>
-<instance id="d003.s005.t009" lemma="good" pos="a">good</instance>
+<instance id="d003.s005.t009" lemma="good" pos="first">good</instance>
 <instance id="d003.s005.t010" lemma="Saturday" pos="n">Saturday</instance>
 <instance id="d003.s005.t011" lemma="morning" pos="n">morning</instance>
 to
@@ -2280,14 +2280,14 @@ the
 <instance id="d003.s005.t016" lemma="brother" pos="n">brothers</instance>
 Montgolfier
 ,
-<instance id="d003.s005.t017" lemma="French" pos="a">French</instance>
+<instance id="d003.s005.t017" lemma="French" pos="first">French</instance>
 <instance id="d003.s005.t018" lemma="of_course" pos="r">of course</instance>
 ,
 <instance id="d003.s005.t019" lemma="be" pos="v">were</instance>
 the
 <instance id="d003.s005.t020" lemma="world" pos="n">world</instance>
 's
-<instance id="d003.s005.t021" lemma="first" pos="a">first</instance>
+<instance id="d003.s005.t021" lemma="first" pos="first">first</instance>
 hot-air
 <instance id="d003.s005.t022" lemma="balloonist" pos="n">balloonists</instance>
 -RRB-
@@ -2306,12 +2306,12 @@ A
 this
 <instance id="d003.s006.t002" lemma="kind" pos="n">kind</instance>
 of
-<instance id="d003.s006.t003" lemma="chichi" pos="a">chi-chi</instance>
-<instance id="d003.s006.t004" lemma="airborne" pos="a">airborne</instance>
+<instance id="d003.s006.t003" lemma="chichi" pos="first">chi-chi</instance>
+<instance id="d003.s006.t004" lemma="airborne" pos="first">airborne</instance>
 <instance id="d003.s006.t005" lemma="activity" pos="n">activity</instance>
 <instance id="d003.s006.t006" lemma="win" pos="v">wins</instance>
 heartwarmingly
-<instance id="d003.s006.t007" lemma="covetous" pos="a">covetous</instance>
+<instance id="d003.s006.t007" lemma="covetous" pos="first">covetous</instance>
 <instance id="d003.s006.t008" lemma="response" pos="n">responses</instance>
 .
 </sentence>
@@ -2352,15 +2352,15 @@ and
 <instance id="d003.s009.t005" lemma="take_to" pos="v">taken to</instance>
 <instance id="d003.s009.t006" lemma="ballooning" pos="n">ballooning</instance>
 in
-a
-<instance id="d003.s009.t007" lemma="heady" pos="a">heady</instance>
+first
+<instance id="d003.s009.t007" lemma="heady" pos="first">heady</instance>
 <instance id="d003.s009.t008" lemma="way" pos="n">way</instance>
 .
 </sentence>
 <sentence id="d003.s010">
 During
 the
-<instance id="d003.s010.t001" lemma="past" pos="a">past</instance>
+<instance id="d003.s010.t001" lemma="past" pos="first">past</instance>
 25
 <instance id="d003.s010.t002" lemma="year" pos="n">years</instance>
 ,
@@ -2373,17 +2373,17 @@ those
 who
 have
 <instance id="d003.s010.t005" lemma="pass" pos="v">passed</instance>
-a
+first
 Federal
 Aviation
 Authority
-<instance id="d003.s010.t006" lemma="lighter-than-air" pos="a">lighter-than-air</instance>
+<instance id="d003.s010.t006" lemma="lighter-than-air" pos="first">lighter-than-air</instance>
 <instance id="d003.s010.t007" lemma="test" pos="n">test</instance>
 -RRB-
 have
 <instance id="d003.s010.t008" lemma="swell" pos="v">swelled</instance>
 from
-a
+first
 <instance id="d003.s010.t009" lemma="couple" pos="n">couple</instance>
 hundred
 to
@@ -2395,7 +2395,7 @@ some
 <instance id="d003.s010.t011" lemma="estimate" pos="n">estimates</instance>
 <instance id="d003.s010.t012" lemma="run" pos="v">running</instance>
 as
-<instance id="d003.s010.t013" lemma="high" pos="a">high</instance>
+<instance id="d003.s010.t013" lemma="high" pos="first">high</instance>
 as
 10
 ,
@@ -2421,10 +2421,10 @@ including
 the
 <instance id="d003.s011.t005" lemma="world" pos="n">world</instance>
 's
-<instance id="d003.s011.t006" lemma="large" pos="a">largest</instance>
+<instance id="d003.s011.t006" lemma="large" pos="first">largest</instance>
 <instance id="d003.s011.t007" lemma="convocation" pos="n">convocation</instance>
 of
-<instance id="d003.s011.t008" lemma="ersatz" pos="a">ersatz</instance>
+<instance id="d003.s011.t008" lemma="ersatz" pos="first">ersatz</instance>
 Phineas
 Foggs
 --
@@ -2460,7 +2460,7 @@ Miranda
 ,
 Garfield
 or
-a
+first
 12-story-high
 <instance id="d003.s011.t014" lemma="condom" pos="n">condom</instance>
 .
@@ -2472,7 +2472,7 @@ The
 <instance id="d003.s012.t002" lemma="balloon" pos="n">balloon</instance>
 was
 <instance id="d003.s012.t003" lemma="deny" pos="v">denied</instance>
-<instance id="d003.s012.t004" lemma="official" pos="a">official</instance>
+<instance id="d003.s012.t004" lemma="official" pos="first">official</instance>
 <instance id="d003.s012.t005" lemma="entry" pos="n">entry</instance>
 <instance id="d003.s012.t006" lemma="status" pos="n">status</instance>
 this
@@ -2485,12 +2485,12 @@ But
 in
 Epinal
 ,
-a
-<instance id="d003.s013.t001" lemma="gray" pos="a">gray</instance>
+first
+<instance id="d003.s013.t001" lemma="gray" pos="first">gray</instance>
 16th-century
 <instance id="d003.s013.t002" lemma="river" pos="n">river</instance>
 <instance id="d003.s013.t003" lemma="town" pos="n">town</instance>
-<instance id="d003.s013.t004" lemma="adjacent" pos="a">adjacent</instance>
+<instance id="d003.s013.t004" lemma="adjacent" pos="first">adjacent</instance>
 to
 France
 's
@@ -2507,18 +2507,18 @@ for
 <instance id="d003.s013.t008" lemma="thing" pos="n">things</instance>
 aloft
 <instance id="d003.s013.t009" lemma="be" pos="v">was</instance>
-<instance id="d003.s013.t010" lemma="evident" pos="a">evident</instance>
+<instance id="d003.s013.t010" lemma="evident" pos="first">evident</instance>
 .
 </sentence>
 <sentence id="d003.s014">
 <instance id="d003.s014.t001" lemma="Ballooning" pos="n">Ballooning</instance>
 at
 the
-<instance id="d003.s014.t002" lemma="de_rigueur" pos="a">de rigueur</instance>
+<instance id="d003.s014.t002" lemma="de_rigueur" pos="first">de rigueur</instance>
 <instance id="d003.s014.t003" lemma="hour" pos="n">hour</instance>
 of
 6
-a
+first
 .
 m
 .
@@ -2540,7 +2540,7 @@ root-canal
 the
 naggings
 of
-a
+first
 <instance id="d003.s015.t002" lemma="culture" pos="n">culture</instance>
 <instance id="d003.s015.t003" lemma="imperative" pos="n">imperative</instance>
 ,
@@ -2551,7 +2551,7 @@ I
 </sentence>
 <sentence id="d003.s016">
 The
-<instance id="d003.s016.t001" lemma="first" pos="a">first</instance>
+<instance id="d003.s016.t001" lemma="first" pos="first">first</instance>
 <instance id="d003.s016.t002" lemma="thing" pos="n">thing</instance>
 anybody
 will
@@ -2568,12 +2568,12 @@ in
 the
 <instance id="d003.s016.t008" lemma="way" pos="n">way</instance>
 of
-<instance id="d003.s016.t009" lemma="athletic" pos="a">athletic</instance>
+<instance id="d003.s016.t009" lemma="athletic" pos="first">athletic</instance>
 <instance id="d003.s016.t010" lemma="prowess" pos="n">prowess</instance>
 ,
 or
 <instance id="d003.s016.t011" lemma="even" pos="r">even</instance>
-a
+first
 <instance id="d003.s016.t012" lemma="measure" pos="n">measure</instance>
 of
 <instance id="d003.s016.t013" lemma="derring-do" pos="n">derring-do</instance>
@@ -2652,7 +2652,7 @@ n't
 <instance id="d003.s021.t005" lemma="want" pos="v">want</instance>
 to
 <instance id="d003.s021.t006" lemma="get" pos="v">get</instance>
-<instance id="d003.s021.t007" lemma="wet" pos="a">wet</instance>
+<instance id="d003.s021.t007" lemma="wet" pos="first">wet</instance>
 .
 </sentence>
 <sentence id="d003.s022">
@@ -2662,7 +2662,7 @@ not
 <instance id="d003.s022.t001" lemma="refer" pos="v">referring</instance>
 to
 the
-<instance id="d003.s022.t002" lemma="traditional" pos="a">traditional</instance>
+<instance id="d003.s022.t002" lemma="traditional" pos="first">traditional</instance>
 <instance id="d003.s022.t003" lemma="champagne" pos="n">champagne</instance>
 drenching
 during
@@ -2678,21 +2678,21 @@ I
 about
 <instance id="d003.s023.t002" lemma="landing" pos="n">landing</instance>
 in
-a
+first
 <instance id="d003.s023.t003" lemma="canal" pos="n">canal</instance>
 .
 </sentence>
 <sentence id="d003.s024">
 In
-a
-<instance id="d003.s024.t001" lemma="porous" pos="a">porous</instance>
+first
+<instance id="d003.s024.t001" lemma="porous" pos="first">porous</instance>
 <instance id="d003.s024.t002" lemma="wicker" pos="n">wicker</instance>
 <instance id="d003.s024.t003" lemma="basket" pos="n">basket</instance>
 .
 </sentence>
 <sentence id="d003.s025">
 With
-a
+first
 <instance id="d003.s025.t001" lemma="pilot" pos="n">pilot</instance>
 who
 <instance id="d003.s025.t002" lemma="speak" pos="v">speaks</instance>
@@ -2705,7 +2705,7 @@ To
 wit
 ,
 my
-<instance id="d003.s026.t001" lemma="maiden" pos="a">maiden</instance>
+<instance id="d003.s026.t001" lemma="maiden" pos="first">maiden</instance>
 <instance id="d003.s026.t002" lemma="voyage" pos="n">voyage</instance>
 -LRB-
 and
@@ -2720,7 +2720,7 @@ virgins
 at
 <instance id="d003.s026.t005" lemma="dawn" pos="n">dawn</instance>
 on
-a
+first
 dew-sodden
 <instance id="d003.s026.t006" lemma="fairway" pos="n">fairway</instance>
 and
@@ -2728,8 +2728,8 @@ and
 at
 <instance id="d003.s026.t008" lemma="noon" pos="n">noon</instance>
 in
-a
-<instance id="d003.s026.t009" lemma="soggy" pos="a">soggy</instance>
+first
+<instance id="d003.s026.t009" lemma="soggy" pos="first">soggy</instance>
 <instance id="d003.s026.t010" lemma="field" pos="n">field</instance>
 .
 </sentence>
@@ -2749,7 +2749,7 @@ when
 the
 <instance id="d003.s027.t008" lemma="wind" pos="n">winds</instance>
 <instance id="d003.s027.t009" lemma="be" pos="v">are</instance>
-<instance id="d003.s027.t010" lemma="light" pos="a">lightest</instance>
+<instance id="d003.s027.t010" lemma="light" pos="first">lightest</instance>
 .
 -RRB-
 </sentence>
@@ -2789,7 +2789,7 @@ the
 no
 more
 than
-<instance id="d003.s028.t017" lemma="four" pos="a">four</instance>
+<instance id="d003.s028.t017" lemma="four" pos="first">four</instance>
 <instance id="d003.s028.t018" lemma="passenger" pos="n">passengers</instance>
 -RRB-
 .
@@ -2821,24 +2821,24 @@ the
 <instance id="d003.s029.t007" lemma="driver" pos="n">driver</instance>
 <instance id="d003.s029.t008" lemma="holler" pos="v">holler</instance>
 into
-a
+first
 <instance id="d003.s029.t009" lemma="walkie-talkie" pos="n">walkie-talkie</instance>
 .
 </sentence>
 <sentence id="d003.s030">
 After
-<instance id="d003.s030.t001" lemma="long" pos="a">long</instance>
+<instance id="d003.s030.t001" lemma="long" pos="first">long</instance>
 <instance id="d003.s030.t002" lemma="stretch" pos="n">stretches</instance>
 of
 this
-<instance id="d003.s030.t003" lemma="attendant" pos="a">attendant</instance>
+<instance id="d003.s030.t003" lemma="attendant" pos="first">attendant</instance>
 ground
 <instance id="d003.s030.t004" lemma="activity" pos="n">activity</instance>
 <instance id="d003.s030.t005" lemma="come" pos="v">came</instance>
 20
 or
 so
-<instance id="d003.s030.t006" lemma="lovely" pos="a">lovely</instance>
+<instance id="d003.s030.t006" lemma="lovely" pos="first">lovely</instance>
 <instance id="d003.s030.t007" lemma="minute" pos="n">minutes</instance>
 of
 <instance id="d003.s030.t008" lemma="drifting" pos="n">drifting</instance>
@@ -2847,7 +2847,7 @@ the
 Vosges
 <instance id="d003.s030.t009" lemma="watch" pos="v">watching</instance>
 the
-<instance id="d003.s030.t010" lemma="silver" pos="a">silver</instance>
+<instance id="d003.s030.t010" lemma="silver" pos="first">silver</instance>
 <instance id="d003.s030.t011" lemma="mist" pos="n">mists</instance>
 <instance id="d003.s030.t012" lemma="rise" pos="v">rise</instance>
 off
@@ -2855,7 +2855,7 @@ the
 <instance id="d003.s030.t013" lemma="river" pos="n">river</instance>
 and
 the
-<instance id="d003.s030.t014" lemma="French" pos="a">French</instance>
+<instance id="d003.s030.t014" lemma="French" pos="first">French</instance>
 <instance id="d003.s030.t015" lemma="cow" pos="n">cows</instance>
 <instance id="d003.s030.t016" lemma="amble" pos="v">amble</instance>
 about
@@ -2866,7 +2866,7 @@ the
 <sentence id="d003.s031">
 It
 's
-<instance id="d003.s031.t001" lemma="hard" pos="a">hard</instance>
+<instance id="d003.s031.t001" lemma="hard" pos="first">hard</instance>
 not
 to
 <instance id="d003.s031.t002" lemma="feel" pos="v">feel</instance>
@@ -2880,7 +2880,7 @@ with
 this
 <instance id="d003.s031.t005" lemma="kind" pos="n">kind</instance>
 of
-<instance id="d003.s031.t006" lemma="bird's-eye" pos="a">bird's-eye</instance>
+<instance id="d003.s031.t006" lemma="bird's-eye" pos="first">bird's-eye</instance>
 <instance id="d003.s031.t007" lemma="view" pos="n">view</instance>
 of
 the
@@ -2891,7 +2891,7 @@ if
 your
 pilote
 in
-<instance id="d003.s031.t010" lemma="silly" pos="a">silly</instance>
+<instance id="d003.s031.t010" lemma="silly" pos="first">silly</instance>
 <instance id="d003.s031.t011" lemma="plaid" pos="n">plaid</instance>
 <instance id="d003.s031.t012" lemma="beret" pos="n">beret</instance>
 <instance id="d003.s031.t013" lemma="keep" pos="v">kept</instance>
@@ -2907,13 +2907,13 @@ all
 </sentence>
 <sentence id="d003.s032">
 <instance id="d003.s032.t001" lemma="Eventually" pos="r">Eventually</instance>
-<instance id="d003.s032.t002" lemma="little" pos="a">little</instance>
-<instance id="d003.s032.t003" lemma="French" pos="a">French</instance>
+<instance id="d003.s032.t002" lemma="little" pos="first">little</instance>
+<instance id="d003.s032.t003" lemma="French" pos="first">French</instance>
 <instance id="d003.s032.t004" lemma="farmer" pos="n">farmers</instance>
 and
 their
-<instance id="d003.s032.t005" lemma="little" pos="a">little</instance>
-<instance id="d003.s032.t006" lemma="French" pos="a">French</instance>
+<instance id="d003.s032.t005" lemma="little" pos="first">little</instance>
+<instance id="d003.s032.t006" lemma="French" pos="first">French</instance>
 farmwives
 <instance id="d003.s032.t007" lemma="come" pos="v">came</instance>
 out
@@ -2927,7 +2927,7 @@ their
 <instance id="d003.s032.t011" lemma="hand" pos="n">hands</instance>
 above
 their
-<instance id="d003.s032.t012" lemma="tiny" pos="a">tiny</instance>
+<instance id="d003.s032.t012" lemma="tiny" pos="first">tiny</instance>
 <instance id="d003.s032.t013" lemma="eye" pos="n">eyes</instance>
 and
 <instance id="d003.s032.t014" lemma="squint" pos="v">squinted</instance>
@@ -2954,7 +2954,7 @@ their
 <instance id="d003.s035.t001" lemma="See" pos="v">See</instance>
 ,
 the
-<instance id="d003.s035.t002" lemma="other" pos="a">other</instance>
+<instance id="d003.s035.t002" lemma="other" pos="first">other</instance>
 <instance id="d003.s035.t003" lemma="rule_of_thumb" pos="n">rule of thumb</instance>
 about
 <instance id="d003.s035.t004" lemma="ballooning" pos="n">ballooning</instance>
@@ -2990,7 +2990,7 @@ the
 's
 <instance id="d003.s037.t005" lemma="air" pos="n">air</instance>
 with
-a
+first
 <instance id="d003.s037.t006" lemma="propane" pos="n">propane</instance>
 <instance id="d003.s037.t007" lemma="burner" pos="n">burner</instance>
 ,
@@ -3003,7 +3003,7 @@ of
 your
 <instance id="d003.s037.t010" lemma="head" pos="n">head</instance>
 <instance id="d003.s037.t011" lemma="feel" pos="v">feel</instance>
-<instance id="d003.s037.t012" lemma="hot" pos="a">hot</instance>
+<instance id="d003.s037.t012" lemma="hot" pos="first">hot</instance>
 -RRB-
 and
 <instance id="d003.s037.t013" lemma="ride" pos="v">ride</instance>
@@ -3018,7 +3018,7 @@ Which
 the
 chase
 <instance id="d003.s038.t002" lemma="car" pos="n">car</instance>
-<instance id="d003.s038.t003" lemma="necessary" pos="a">necessary</instance>
+<instance id="d003.s038.t003" lemma="necessary" pos="first">necessary</instance>
 .
 </sentence>
 <sentence id="d003.s039">
@@ -3026,7 +3026,7 @@ Most
 <instance id="d003.s039.t001" lemma="balloonist" pos="n">balloonists</instance>
 <instance id="d003.s039.t002" lemma="seldom" pos="r">seldom</instance>
 <instance id="d003.s039.t003" lemma="go" pos="v">go</instance>
-<instance id="d003.s039.t004" lemma="high" pos="a">higher</instance>
+<instance id="d003.s039.t004" lemma="high" pos="first">higher</instance>
 than
 2
 ,
@@ -3035,8 +3035,8 @@ than
 and
 most
 <instance id="d003.s039.t006" lemma="average" pos="v">average</instance>
-a
-<instance id="d003.s039.t007" lemma="leisurely" pos="a">leisurely</instance>
+first
+<instance id="d003.s039.t007" lemma="leisurely" pos="first">leisurely</instance>
 5-10
 <instance id="d003.s039.t008" lemma="mile" pos="n">miles</instance>
 an
@@ -3051,12 +3051,12 @@ is
 <instance id="d003.s040.t002" lemma="cruise" pos="v">cruising</instance>
 <instance id="d003.s040.t003" lemma="along" pos="r">along</instance>
 at
-a
-<instance id="d003.s040.t004" lemma="steady" pos="a">steady</instance>
+first
+<instance id="d003.s040.t004" lemma="steady" pos="first">steady</instance>
 <instance id="d003.s040.t005" lemma="altitude" pos="n">altitude</instance>
 there
 <instance id="d003.s040.t006" lemma="be" pos="v">is</instance>
-<instance id="d003.s040.t007" lemma="little" pos="a">little</instance>
+<instance id="d003.s040.t007" lemma="little" pos="first">little</instance>
 <instance id="d003.s040.t008" lemma="sense" pos="n">sense</instance>
 of
 <instance id="d003.s040.t009" lemma="motion" pos="n">motion</instance>
@@ -3074,7 +3074,7 @@ in
 our
 <instance id="d003.s041.t003" lemma="case" pos="n">case</instance>
 <instance id="d003.s041.t004" lemma="descend" pos="v">descending</instance>
-a
+first
 tad
 trop
 rapidement
@@ -3085,9 +3085,9 @@ one
 ,
 well
 ,
-<instance id="d003.s041.t006" lemma="airborne" pos="a">airborne</instance>
+<instance id="d003.s041.t006" lemma="airborne" pos="first">airborne</instance>
 in
-a
+first
 <instance id="d003.s041.t007" lemma="picnic" pos="n">picnic</instance>
 <instance id="d003.s041.t008" lemma="basket" pos="n">basket</instance>
 .
@@ -3109,7 +3109,7 @@ who
 the
 <instance id="d003.s042.t004" lemma="only" pos="r">only</instance>
 other
-<instance id="d003.s042.t005" lemma="English-speaking" pos="a">English-speaking</instance>
+<instance id="d003.s042.t005" lemma="English-speaking" pos="first">English-speaking</instance>
 <instance id="d003.s042.t006" lemma="member" pos="n">member</instance>
 of
 the
@@ -3118,7 +3118,7 @@ and
 whose
 <instance id="d003.s042.t008" lemma="knuckle" pos="n">knuckles</instance>
 <instance id="d003.s042.t009" lemma="be" pos="v">were</instance>
-<instance id="d003.s042.t010" lemma="white" pos="a">white</instance>
+<instance id="d003.s042.t010" lemma="white" pos="first">white</instance>
 .
 </sentence>
 <sentence id="d003.s043">
@@ -3184,8 +3184,8 @@ us
 ,
 oh
 ,
-a
-<instance id="d003.s045.t008" lemma="good" pos="a">good</instance>
+first
+<instance id="d003.s045.t008" lemma="good" pos="first">good</instance>
 12-inches
 above
 the
@@ -3198,7 +3198,7 @@ We
 <instance id="d003.s046.t001" lemma="scuttle" pos="v">scuttled</instance>
 <instance id="d003.s046.t002" lemma="along" pos="r">along</instance>
 for
-a
+first
 few
 <instance id="d003.s046.t003" lemma="foot" pos="n">feet</instance>
 before
@@ -3218,8 +3218,8 @@ we
 to
 <instance id="d003.s047.t003" lemma="rest" pos="v">rest</instance>
 in
-a
-<instance id="d003.s047.t004" lemma="soggy" pos="a">soggy</instance>
+first
+<instance id="d003.s047.t004" lemma="soggy" pos="first">soggy</instance>
 <instance id="d003.s047.t005" lemma="patch" pos="n">patch</instance>
 of
 <instance id="d003.s047.t006" lemma="field" pos="n">field</instance>
@@ -3227,7 +3227,7 @@ where
 we
 <instance id="d003.s047.t007" lemma="have" pos="v">had</instance>
 the
-<instance id="d003.s047.t008" lemma="exquisite" pos="a">exquisite</instance>
+<instance id="d003.s047.t008" lemma="exquisite" pos="first">exquisite</instance>
 <instance id="d003.s047.t009" lemma="pleasure" pos="n">pleasure</instance>
 of
 <instance id="d003.s047.t010" lemma="scramble" pos="v">scrambling</instance>
@@ -3240,7 +3240,7 @@ the
 <instance id="d003.s047.t012" lemma="mud" pos="n">mud</instance>
 while
 the
-<instance id="d003.s047.t013" lemma="French" pos="a">French</instance>
+<instance id="d003.s047.t013" lemma="French" pos="first">French</instance>
 <instance id="d003.s047.t014" lemma="half" pos="n">half</instance>
 of
 our
@@ -3281,15 +3281,15 @@ more
 <instance id="d003.s050.t004" lemma="get" pos="v">got</instance>
 <instance id="d003.s050.t005" lemma="stick" pos="v">stuck</instance>
 in
-a
+first
 <instance id="d003.s050.t006" lemma="ditch" pos="n">ditch</instance>
 ,
 <instance id="d003.s050.t007" lemma="enlist" pos="v">enlisted</instance>
 the
 <instance id="d003.s050.t008" lemma="aid" pos="n">aid</instance>
 of
-a
-<instance id="d003.s050.t009" lemma="local" pos="a">local</instance>
+first
+<instance id="d003.s050.t009" lemma="local" pos="first">local</instance>
 <instance id="d003.s050.t010" lemma="farmer" pos="n">farmer</instance>
 to
 <instance id="d003.s050.t011" lemma="get_out" pos="v">get out</instance>
@@ -3319,11 +3319,11 @@ had
 to
 <instance id="d003.s051.t005" lemma="rest" pos="v">rest</instance>
 on
-a
+first
 <instance id="d003.s051.t006" lemma="dirt" pos="n">dirt</instance>
 <instance id="d003.s051.t007" lemma="road" pos="n">road</instance>
 amid
-a
+first
 <instance id="d003.s051.t008" lemma="clutch" pos="n">clutch</instance>
 of
 Epinalers
@@ -3396,7 +3396,7 @@ our
 <instance id="d003.s052.t007" lemma="immediately" pos="r">immediately</instance>
 to
 the
-<instance id="d003.s052.t008" lemma="near" pos="a">nearest</instance>
+<instance id="d003.s052.t008" lemma="near" pos="first">nearest</instance>
 <instance id="d003.s052.t009" lemma="watering_hole" pos="n">watering hole</instance>
 .
 </sentence>
@@ -3411,13 +3411,13 @@ the
 where
 we
 <instance id="d003.s053.t004" lemma="watch" pos="v">watched</instance>
-a
+first
 few
-<instance id="d003.s053.t005" lemma="French" pos="a">French</instance>
+<instance id="d003.s053.t005" lemma="French" pos="first">French</instance>
 <instance id="d003.s053.t006" lemma="duffer" pos="n">duffers</instance>
 <instance id="d003.s053.t007" lemma="maul" pos="v">maul</instance>
 the
-<instance id="d003.s053.t008" lemma="first" pos="a">first</instance>
+<instance id="d003.s053.t008" lemma="first" pos="first">first</instance>
 <instance id="d003.s053.t009" lemma="tee" pos="n">tee</instance>
 while
 we
@@ -3437,7 +3437,7 @@ my
 </sentence>
 <sentence id="d003.s054">
 A
-<instance id="d003.s054.t001" lemma="whole" pos="a">whole</instance>
+<instance id="d003.s054.t001" lemma="whole" pos="first">whole</instance>
 <instance id="d003.s054.t002" lemma="morning" pos="n">morning</instance>
 of
 <instance id="d003.s054.t003" lemma="ballooning" pos="n">ballooning</instance>
@@ -3473,7 +3473,7 @@ A
 .
 <instance id="d003.s055.t005" lemma="be" pos="v">was</instance>
 <instance id="d003.s055.t006" lemma="near" pos="r">near</instance>
-<instance id="d003.s055.t007" lemma="peerless" pos="a">peerless</instance>
+<instance id="d003.s055.t007" lemma="peerless" pos="first">peerless</instance>
 .
 </sentence>
 <sentence id="d003.s056">
@@ -3490,8 +3490,8 @@ our
 and
 all
 the
-<instance id="d003.s056.t005" lemma="other" pos="a">other</instance>
-<instance id="d003.s056.t006" lemma="French-speaking" pos="a">French-speaking</instance>
+<instance id="d003.s056.t005" lemma="other" pos="first">other</instance>
+<instance id="d003.s056.t006" lemma="French-speaking" pos="first">French-speaking</instance>
 <instance id="d003.s056.t007" lemma="passenger" pos="n">passengers</instance>
 <instance id="d003.s056.t008" lemma="clamber" pos="v">clambered</instance>
 into
@@ -3502,7 +3502,7 @@ chase
 </sentence>
 <sentence id="d003.s057">
 My
-<instance id="d003.s057.t001" lemma="American" pos="a">American</instance>
+<instance id="d003.s057.t001" lemma="American" pos="first">American</instance>
 <instance id="d003.s057.t002" lemma="companion" pos="n">companion</instance>
 and
 I
@@ -3522,7 +3522,7 @@ As
 we
 <instance id="d003.s058.t001" lemma="streak" pos="v">streaked</instance>
 by
-a
+first
 blase
 <instance id="d003.s058.t002" lemma="gendarme" pos="n">gendarme</instance>
 ,
@@ -3534,7 +3534,7 @@ n't
 up
 on
 my
-<instance id="d003.s058.t005" lemma="soggy" pos="a">soggy</instance>
+<instance id="d003.s058.t005" lemma="soggy" pos="first">soggy</instance>
 <instance id="d003.s058.t006" lemma="loafer" pos="n">loafers</instance>
 and
 <instance id="d003.s058.t007" lemma="salute" pos="v">saluting</instance>
@@ -3546,8 +3546,8 @@ Ms
 de
 Vries
 <instance id="d003.s059.t001" lemma="be" pos="v">is</instance>
-a
-<instance id="d003.s059.t002" lemma="freelance" pos="a">free-lance</instance>
+first
+<instance id="d003.s059.t002" lemma="freelance" pos="first">free-lance</instance>
 <instance id="d003.s059.t003" lemma="writer" pos="n">writer</instance>
 .
 </sentence>
@@ -3591,7 +3591,7 @@ The
 is
 <instance id="d004.s003.t002" lemma="write" pos="v">written</instance>
 in
-a
+first
 <instance id="d004.s003.t003" lemma="programming" pos="n">programming</instance>
 <instance id="d004.s003.t004" lemma="language" pos="n">language</instance>
 .
@@ -3601,15 +3601,15 @@ This
 <instance id="d004.s004.t001" lemma="code" pos="n">code</instance>
 may
 <instance id="d004.s004.t002" lemma="be" pos="v">be</instance>
-a
+first
 <instance id="d004.s004.t003" lemma="modification" pos="n">modification</instance>
 of
-<instance id="d004.s004.t004" lemma="existing" pos="a">existing</instance>
+<instance id="d004.s004.t004" lemma="existing" pos="first">existing</instance>
 source
 or
 something
 <instance id="d004.s004.t005" lemma="completely" pos="r">completely</instance>
-<instance id="d004.s004.t006" lemma="new" pos="a">new</instance>
+<instance id="d004.s004.t006" lemma="new" pos="first">new</instance>
 .
 </sentence>
 <sentence id="d004.s005">
@@ -3622,7 +3622,7 @@ of
 <instance id="d004.s005.t005" lemma="expertise" pos="n">expertise</instance>
 in
 many
-<instance id="d004.s005.t006" lemma="different" pos="a">different</instance>
+<instance id="d004.s005.t006" lemma="different" pos="first">different</instance>
 <instance id="d004.s005.t007" lemma="subject" pos="n">subjects</instance>
 ,
 including
@@ -3636,7 +3636,7 @@ and
 to
 <instance id="d004.s005.t012" lemma="implement" pos="v">implement</instance>
 the
-<instance id="d004.s005.t013" lemma="desired" pos="a">desired</instance>
+<instance id="d004.s005.t013" lemma="desired" pos="first">desired</instance>
 <instance id="d004.s005.t014" lemma="behavior" pos="n">behavior</instance>
 .
 </sentence>
@@ -3652,10 +3652,10 @@ the
 )
 is
 <instance id="d004.s006.t005" lemma="regard_as" pos="v">regarded as</instance>
-<instance id="d004.s006.t006" lemma="one" pos="a">one</instance>
+<instance id="d004.s006.t006" lemma="one" pos="first">one</instance>
 <instance id="d004.s006.t007" lemma="phase" pos="n">phase</instance>
 in
-a
+first
 <instance id="d004.s006.t008" lemma="software" pos="n">software</instance>
 <instance id="d004.s006.t009" lemma="development" pos="n">development</instance>
 <instance id="d004.s006.t010" lemma="process" pos="n">process</instance>
@@ -3667,9 +3667,9 @@ some
 specialist
 <instance id="d004.s007.t001" lemma="application" pos="n">applications</instance>
 or
-<instance id="d004.s007.t002" lemma="extreme" pos="a">extreme</instance>
+<instance id="d004.s007.t002" lemma="extreme" pos="first">extreme</instance>
 <instance id="d004.s007.t003" lemma="situation" pos="n">situations</instance>
-a
+first
 <instance id="d004.s007.t004" lemma="program" pos="n">program</instance>
 may
 be
@@ -3677,14 +3677,14 @@ be
 or
 <instance id="d004.s007.t006" lemma="modify" pos="v">modified</instance>
 (
-<instance id="d004.s007.t007" lemma="known_as" pos="a">known as</instance>
+<instance id="d004.s007.t007" lemma="known_as" pos="first">known as</instance>
 patching
 )
 by
 <instance id="d004.s007.t008" lemma="directly" pos="r">directly</instance>
 <instance id="d004.s007.t009" lemma="store" pos="v">storing</instance>
 the
-<instance id="d004.s007.t010" lemma="numeric" pos="a">numeric</instance>
+<instance id="d004.s007.t010" lemma="numeric" pos="first">numeric</instance>
 <instance id="d004.s007.t011" lemma="value" pos="n">values</instance>
 of
 the
@@ -3701,7 +3701,7 @@ into
 There
 <instance id="d004.s008.t001" lemma="be" pos="v">is</instance>
 an
-<instance id="d004.s008.t002" lemma="ongoing" pos="a">ongoing</instance>
+<instance id="d004.s008.t002" lemma="ongoing" pos="first">ongoing</instance>
 <instance id="d004.s008.t003" lemma="debate" pos="n">debate</instance>
 on
 the
@@ -3716,7 +3716,7 @@ of
 an
 <instance id="d004.s008.t008" lemma="art" pos="n">art</instance>
 ,
-a
+first
 <instance id="d004.s008.t009" lemma="craft" pos="n">craft</instance>
 or
 an
@@ -3727,7 +3727,7 @@ an
 </sentence>
 <sentence id="d004.s009">
 Another
-<instance id="d004.s009.t001" lemma="ongoing" pos="a">ongoing</instance>
+<instance id="d004.s009.t001" lemma="ongoing" pos="first">ongoing</instance>
 <instance id="d004.s009.t002" lemma="debate" pos="n">debate</instance>
 <instance id="d004.s009.t003" lemma="be" pos="v">is</instance>
 the
@@ -3746,7 +3746,7 @@ the
 <instance id="d004.s009.t011" lemma="form" pos="n">form</instance>
 that
 the
-<instance id="d004.s009.t012" lemma="final" pos="a">final</instance>
+<instance id="d004.s009.t012" lemma="final" pos="first">final</instance>
 <instance id="d004.s009.t013" lemma="program" pos="n">program</instance>
 <instance id="d004.s009.t014" lemma="take" pos="v">takes</instance>
 .
@@ -3755,7 +3755,7 @@ the
 This
 <instance id="d004.s010.t001" lemma="debate" pos="n">debate</instance>
 <instance id="d004.s010.t002" lemma="be" pos="v">is</instance>
-<instance id="d004.s010.t003" lemma="analogous" pos="a">analogous</instance>
+<instance id="d004.s010.t003" lemma="analogous" pos="first">analogous</instance>
 to
 that
 <instance id="d004.s010.t004" lemma="surround" pos="v">surrounding</instance>
@@ -3813,11 +3813,11 @@ Coding
 <instance id="d004.s014.t002" lemma="language" pos="n">languages</instance>
 </sentence>
 <sentence id="d004.s015">
-<instance id="d004.s015.t001" lemma="Different" pos="a">Different</instance>
+<instance id="d004.s015.t001" lemma="Different" pos="first">Different</instance>
 <instance id="d004.s015.t002" lemma="programming" pos="n">programming</instance>
 <instance id="d004.s015.t003" lemma="language" pos="n">languages</instance>
 support
-<instance id="d004.s015.t004" lemma="different" pos="a">different</instance>
+<instance id="d004.s015.t004" lemma="different" pos="first">different</instance>
 <instance id="d004.s015.t005" lemma="style" pos="n">styles</instance>
 of
 <instance id="d004.s015.t006" lemma="programming" pos="n">programming</instance>
@@ -3855,11 +3855,11 @@ the
 <instance id="d004.s017.t002" lemma="programming" pos="n">programming</instance>
 <instance id="d004.s017.t003" lemma="language" pos="n">language</instance>
 <instance id="d004.s017.t004" lemma="best" pos="r">best</instance>
-<instance id="d004.s017.t005" lemma="suited" pos="a">suited</instance>
+<instance id="d004.s017.t005" lemma="suited" pos="first">suited</instance>
 for
 the
 <instance id="d004.s017.t006" lemma="task" pos="n">task</instance>
-<instance id="d004.s017.t007" lemma="at_hand" pos="a">at hand</instance>
+<instance id="d004.s017.t007" lemma="at_hand" pos="first">at hand</instance>
 will
 be
 <instance id="d004.s017.t008" lemma="select" pos="v">selected</instance>
@@ -3882,7 +3882,7 @@ the
 ,
 to
 <instance id="d004.s018.t008" lemma="build" pos="v">build</instance>
-a
+first
 <instance id="d004.s018.t009" lemma="team" pos="n">team</instance>
 ,
 the
@@ -3901,8 +3901,8 @@ which
 <instance id="d004.s018.t014" lemma="program" pos="n">programs</instance>
 <instance id="d004.s018.t015" lemma="write" pos="v">written</instance>
 in
-a
-<instance id="d004.s018.t016" lemma="given" pos="a">given</instance>
+first
+<instance id="d004.s018.t016" lemma="given" pos="first">given</instance>
 <instance id="d004.s018.t017" lemma="language" pos="n">language</instance>
 <instance id="d004.s018.t018" lemma="execute" pos="v">execute</instance>
 .
@@ -3914,14 +3914,14 @@ of
 </sentence>
 <sentence id="d004.s020">
 The
-<instance id="d004.s020.t001" lemma="earliest" pos="a">earliest</instance>
+<instance id="d004.s020.t001" lemma="earliest" pos="first">earliest</instance>
 programmable
 <instance id="d004.s020.t002" lemma="machine" pos="n">machine</instance>
 (
 that
 is
 ,
-a
+first
 <instance id="d004.s020.t003" lemma="machine" pos="n">machine</instance>
 that
 can
@@ -3955,7 +3955,7 @@ in
 The
 <instance id="d004.s021.t001" lemma="machine" pos="n">machine</instance>
 <instance id="d004.s021.t002" lemma="use" pos="v">used</instance>
-a
+first
 <instance id="d004.s021.t003" lemma="series" pos="n">series</instance>
 of
 <instance id="d004.s021.t004" lemma="pasteboard" pos="n">pasteboard</instance>
@@ -3991,10 +3991,10 @@ The
 could
 <instance id="d004.s023.t002" lemma="produce" pos="v">produce</instance>
 <instance id="d004.s023.t003" lemma="entirely" pos="r">entirely</instance>
-<instance id="d004.s023.t004" lemma="different" pos="a">different</instance>
+<instance id="d004.s023.t004" lemma="different" pos="first">different</instance>
 <instance id="d004.s023.t005" lemma="weave" pos="n">weaves</instance>
 <instance id="d004.s023.t006" lemma="use" pos="v">using</instance>
-<instance id="d004.s023.t007" lemma="different" pos="a">different</instance>
+<instance id="d004.s023.t007" lemma="different" pos="first">different</instance>
 <instance id="d004.s023.t008" lemma="set" pos="n">sets</instance>
 of
 <instance id="d004.s023.t009" lemma="card" pos="n">cards</instance>
@@ -4016,7 +4016,7 @@ the
 <instance id="d004.s024.t004" lemma="development" pos="n">development</instance>
 of
 the
-<instance id="d004.s024.t005" lemma="famous" pos="a">famous</instance>
+<instance id="d004.s024.t005" lemma="famous" pos="first">famous</instance>
 IBM
 <instance id="d004.s024.t006" lemma="punch_card" pos="n">punch card</instance>
 .
@@ -4026,7 +4026,7 @@ These
 were
 <instance id="d004.s025.t001" lemma="use" pos="v">used</instance>
 with
-a
+first
 <instance id="d004.s025.t002" lemma="variety" pos="n">variety</instance>
 of
 <instance id="d004.s025.t003" lemma="machine" pos="n">machines</instance>
@@ -4056,10 +4056,10 @@ of
 .
 </sentence>
 <sentence id="d004.s027">
-<instance id="d004.s027.t001" lemma="Early" pos="a">Early</instance>
+<instance id="d004.s027.t001" lemma="Early" pos="first">Early</instance>
 <instance id="d004.s027.t002" lemma="computer" pos="n">computers</instance>
 <instance id="d004.s027.t003" lemma="use" pos="v">used</instance>
-<instance id="d004.s027.t004" lemma="similar" pos="a">similar</instance>
+<instance id="d004.s027.t004" lemma="similar" pos="first">similar</instance>
 <instance id="d004.s027.t005" lemma="programming" pos="n">programming</instance>
 <instance id="d004.s027.t006" lemma="method" pos="n">methods</instance>
 .
@@ -4083,7 +4083,7 @@ in
 .
 </sentence>
 <sentence id="d004.s029">
-<instance id="d004.s029.t001" lemma="Early" pos="a">Early</instance>
+<instance id="d004.s029.t001" lemma="Early" pos="first">Early</instance>
 <instance id="d004.s029.t002" lemma="program" pos="n">programs</instance>
 had
 to
@@ -4095,12 +4095,12 @@ the
 <instance id="d004.s029.t006" lemma="instruction" pos="n">instructions</instance>
 of
 the
-<instance id="d004.s029.t007" lemma="particular" pos="a">particular</instance>
+<instance id="d004.s029.t007" lemma="particular" pos="first">particular</instance>
 <instance id="d004.s029.t008" lemma="machine" pos="n">machine</instance>
 ,
 <instance id="d004.s029.t009" lemma="often" pos="r">often</instance>
 in
-<instance id="d004.s029.t010" lemma="binary" pos="a">binary</instance>
+<instance id="d004.s029.t010" lemma="binary" pos="first">binary</instance>
 <instance id="d004.s029.t011" lemma="notation" pos="n">notation</instance>
 .
 </sentence>
@@ -4111,10 +4111,10 @@ of
 <instance id="d004.s030.t002" lemma="computer" pos="n">computer</instance>
 would
 <instance id="d004.s030.t003" lemma="be" pos="v">be</instance>
-<instance id="d004.s030.t004" lemma="likely" pos="a">likely</instance>
+<instance id="d004.s030.t004" lemma="likely" pos="first">likely</instance>
 to
 <instance id="d004.s030.t005" lemma="need" pos="v">need</instance>
-<instance id="d004.s030.t006" lemma="different" pos="a">different</instance>
+<instance id="d004.s030.t006" lemma="different" pos="first">different</instance>
 <instance id="d004.s030.t007" lemma="instruction" pos="n">instructions</instance>
 to
 <instance id="d004.s030.t008" lemma="do" pos="v">do</instance>
@@ -4136,7 +4136,7 @@ the
 each
 <instance id="d004.s031.t007" lemma="instruction" pos="n">instruction</instance>
 in
-a
+first
 <instance id="d004.s031.t008" lemma="text" pos="n">text</instance>
 <instance id="d004.s031.t009" lemma="format" pos="n">format</instance>
 ,
@@ -4148,13 +4148,13 @@ each
 <instance id="d004.s031.t013" lemma="code" pos="n">code</instance>
 <instance id="d004.s031.t014" lemma="instead" pos="r">instead</instance>
 of
-a
+first
 <instance id="d004.s031.t015" lemma="number" pos="n">number</instance>
 and
 <instance id="d004.s031.t016" lemma="specify" pos="v">specifying</instance>
 <instance id="d004.s031.t017" lemma="address" pos="n">addresses</instance>
 in
-<instance id="d004.s031.t018" lemma="symbolic" pos="a">symbolic</instance>
+<instance id="d004.s031.t018" lemma="symbolic" pos="first">symbolic</instance>
 <instance id="d004.s031.t019" lemma="form" pos="n">form</instance>
 (
 e
@@ -4174,8 +4174,8 @@ In
 Fortran
 ,
 the
-<instance id="d004.s032.t001" lemma="first" pos="a">first</instance>
-<instance id="d004.s032.t002" lemma="higher" pos="a">higher</instance>
+<instance id="d004.s032.t001" lemma="first" pos="first">first</instance>
+<instance id="d004.s032.t002" lemma="higher" pos="first">higher</instance>
 <instance id="d004.s032.t003" lemma="level" pos="n">level</instance>
 <instance id="d004.s032.t004" lemma="programming" pos="n">programming</instance>
 <instance id="d004.s032.t005" lemma="language" pos="n">language</instance>
@@ -4193,7 +4193,7 @@ to
 <instance id="d004.s033.t004" lemma="calculation" pos="n">calculations</instance>
 by
 <instance id="d004.s033.t005" lemma="enter" pos="v">entering</instance>
-a
+first
 <instance id="d004.s033.t006" lemma="formula" pos="n">formula</instance>
 <instance id="d004.s033.t007" lemma="directly" pos="r">directly</instance>
 (
@@ -4225,17 +4225,17 @@ into
 <instance id="d004.s034.t004" lemma="machine" pos="n">machine</instance>
 <instance id="d004.s034.t005" lemma="instruction" pos="n">instructions</instance>
 <instance id="d004.s034.t006" lemma="use" pos="v">using</instance>
-a
-<instance id="d004.s034.t007" lemma="special" pos="a">special</instance>
+first
+<instance id="d004.s034.t007" lemma="special" pos="first">special</instance>
 <instance id="d004.s034.t008" lemma="program" pos="n">program</instance>
 <instance id="d004.s034.t009" lemma="call" pos="v">called</instance>
-a
+first
 <instance id="d004.s034.t010" lemma="compiler" pos="n">compiler</instance>
 .
 </sentence>
 <sentence id="d004.s035">
 Many
-<instance id="d004.s035.t001" lemma="other" pos="a">other</instance>
+<instance id="d004.s035.t001" lemma="other" pos="first">other</instance>
 <instance id="d004.s035.t002" lemma="language" pos="n">languages</instance>
 were
 <instance id="d004.s035.t003" lemma="develop" pos="v">developed</instance>
@@ -4243,7 +4243,7 @@ were
 including
 ones
 for
-<instance id="d004.s035.t004" lemma="commercial" pos="a">commercial</instance>
+<instance id="d004.s035.t004" lemma="commercial" pos="first">commercial</instance>
 <instance id="d004.s035.t005" lemma="programming" pos="n">programming</instance>
 ,
 such
@@ -4280,14 +4280,14 @@ In
 the
 mid-1970s
 ,
-<instance id="d004.s038.t001" lemma="mass" pos="a">mass</instance>
+<instance id="d004.s038.t001" lemma="mass" pos="first">mass</instance>
 <instance id="d004.s038.t002" lemma="storage" pos="n">storage</instance>
 <instance id="d004.s038.t003" lemma="device" pos="n">devices</instance>
 and
 <instance id="d004.s038.t004" lemma="computer" pos="n">computer</instance>
 <instance id="d004.s038.t005" lemma="terminal" pos="n">terminals</instance>
 <instance id="d004.s038.t006" lemma="become" pos="v">became</instance>
-<instance id="d004.s038.t007" lemma="inexpensive" pos="a">inexpensive</instance>
+<instance id="d004.s038.t007" lemma="inexpensive" pos="first">inexpensive</instance>
 <instance id="d004.s038.t008" lemma="enough" pos="r">enough</instance>
 <instance id="d004.s038.t009" lemma="so" pos="r">so</instance>
 <instance id="d004.s038.t010" lemma="program" pos="n">programs</instance>
@@ -4331,7 +4331,7 @@ has
 <instance id="d004.s040.t003" lemma="computer" pos="n">computers</instance>
 have
 <instance id="d004.s040.t004" lemma="make" pos="v">made</instance>
-<instance id="d004.s040.t005" lemma="giant" pos="a">giant</instance>
+<instance id="d004.s040.t005" lemma="giant" pos="first">giant</instance>
 <instance id="d004.s040.t006" lemma="leap" pos="n">leaps</instance>
 in
 the
@@ -4345,16 +4345,16 @@ of
 This
 has
 <instance id="d004.s041.t001" lemma="bring_about" pos="v">brought about</instance>
-<instance id="d004.s041.t002" lemma="new" pos="a">newer</instance>
+<instance id="d004.s041.t002" lemma="new" pos="first">newer</instance>
 <instance id="d004.s041.t003" lemma="programming" pos="n">programming</instance>
 <instance id="d004.s041.t004" lemma="language" pos="n">languages</instance>
 that
 <instance id="d004.s041.t005" lemma="be" pos="v">are</instance>
 <instance id="d004.s041.t006" lemma="more" pos="r">more</instance>
-<instance id="d004.s041.t007" lemma="abstracted" pos="a">abstracted</instance>
+<instance id="d004.s041.t007" lemma="abstracted" pos="first">abstracted</instance>
 from
 the
-<instance id="d004.s041.t008" lemma="underlying" pos="a">underlying</instance>
+<instance id="d004.s041.t008" lemma="underlying" pos="first">underlying</instance>
 <instance id="d004.s041.t009" lemma="hardware" pos="n">hardware</instance>
 .
 </sentence>
@@ -4362,22 +4362,22 @@ the
 Although
 these
 more
-<instance id="d004.s042.t001" lemma="abstracted" pos="a">abstracted</instance>
+<instance id="d004.s042.t001" lemma="abstracted" pos="first">abstracted</instance>
 <instance id="d004.s042.t002" lemma="language" pos="n">languages</instance>
 <instance id="d004.s042.t003" lemma="require" pos="v">require</instance>
-<instance id="d004.s042.t004" lemma="additional" pos="a">additional</instance>
+<instance id="d004.s042.t004" lemma="additional" pos="first">additional</instance>
 <instance id="d004.s042.t005" lemma="overhead" pos="n">overhead</instance>
 ,
 in
 most
 <instance id="d004.s042.t006" lemma="case" pos="n">cases</instance>
 the
-<instance id="d004.s042.t007" lemma="huge" pos="a">huge</instance>
+<instance id="d004.s042.t007" lemma="huge" pos="first">huge</instance>
 <instance id="d004.s042.t008" lemma="increase" pos="n">increase</instance>
 in
 <instance id="d004.s042.t009" lemma="speed" pos="n">speed</instance>
 of
-<instance id="d004.s042.t010" lemma="modern" pos="a">modern</instance>
+<instance id="d004.s042.t010" lemma="modern" pos="first">modern</instance>
 <instance id="d004.s042.t011" lemma="computer" pos="n">computers</instance>
 has
 <instance id="d004.s042.t012" lemma="bring_about" pos="v">brought about</instance>
@@ -4386,7 +4386,7 @@ little
 <instance id="d004.s042.t014" lemma="decrease" pos="n">decrease</instance>
 <instance id="d004.s042.t015" lemma="compare" pos="v">compared</instance>
 to
-<instance id="d004.s042.t016" lemma="earlier" pos="a">earlier</instance>
+<instance id="d004.s042.t016" lemma="earlier" pos="first">earlier</instance>
 <instance id="d004.s042.t017" lemma="counterpart" pos="n">counterparts</instance>
 .
 </sentence>
@@ -4396,7 +4396,7 @@ The
 of
 these
 more
-<instance id="d004.s043.t002" lemma="abstracted" pos="a">abstracted</instance>
+<instance id="d004.s043.t002" lemma="abstracted" pos="first">abstracted</instance>
 <instance id="d004.s043.t003" lemma="language" pos="n">languages</instance>
 <instance id="d004.s043.t004" lemma="be" pos="v">is</instance>
 that
@@ -4404,15 +4404,15 @@ they
 <instance id="d004.s043.t005" lemma="allow" pos="v">allow</instance>
 both
 an
-<instance id="d004.s043.t006" lemma="easy" pos="a">easier</instance>
+<instance id="d004.s043.t006" lemma="easy" pos="first">easier</instance>
 <instance id="d004.s043.t007" lemma="learning" pos="n">learning</instance>
 <instance id="d004.s043.t008" lemma="curve" pos="n">curve</instance>
 for
 <instance id="d004.s043.t009" lemma="people" pos="n">people</instance>
 less
-<instance id="d004.s043.t010" lemma="familiar_with" pos="a">familiar with</instance>
+<instance id="d004.s043.t010" lemma="familiar_with" pos="first">familiar with</instance>
 the
-<instance id="d004.s043.t011" lemma="older" pos="a">older</instance>
+<instance id="d004.s043.t011" lemma="older" pos="first">older</instance>
 lower-level
 <instance id="d004.s043.t012" lemma="programming" pos="n">programming</instance>
 <instance id="d004.s043.t013" lemma="language" pos="n">languages</instance>
@@ -4421,13 +4421,13 @@ and
 they
 <instance id="d004.s043.t014" lemma="also" pos="r">also</instance>
 <instance id="d004.s043.t015" lemma="allow" pos="v">allow</instance>
-a
+first
 more
-<instance id="d004.s043.t016" lemma="experienced" pos="a">experienced</instance>
+<instance id="d004.s043.t016" lemma="experienced" pos="first">experienced</instance>
 <instance id="d004.s043.t017" lemma="programmer" pos="n">programmer</instance>
 to
 <instance id="d004.s043.t018" lemma="develop" pos="v">develop</instance>
-<instance id="d004.s043.t019" lemma="simple" pos="a">simple</instance>
+<instance id="d004.s043.t019" lemma="simple" pos="first">simple</instance>
 <instance id="d004.s043.t020" lemma="application" pos="n">applications</instance>
 <instance id="d004.s043.t021" lemma="quickly" pos="r">quickly</instance>
 .
@@ -4437,8 +4437,8 @@ Despite
 these
 <instance id="d004.s044.t001" lemma="benefit" pos="n">benefits</instance>
 ,
-<instance id="d004.s044.t002" lemma="large" pos="a">large</instance>
-<instance id="d004.s044.t003" lemma="complicated" pos="a">complicated</instance>
+<instance id="d004.s044.t002" lemma="large" pos="first">large</instance>
+<instance id="d004.s044.t003" lemma="complicated" pos="first">complicated</instance>
 <instance id="d004.s044.t004" lemma="program" pos="n">programs</instance>
 ,
 and
@@ -4446,12 +4446,12 @@ and
 that
 <instance id="d004.s044.t006" lemma="be" pos="v">are</instance>
 more
-<instance id="d004.s044.t007" lemma="dependent_on" pos="a">dependent on</instance>
+<instance id="d004.s044.t007" lemma="dependent_on" pos="first">dependent on</instance>
 <instance id="d004.s044.t008" lemma="speed" pos="n">speed</instance>
 <instance id="d004.s044.t009" lemma="still" pos="r">still</instance>
 <instance id="d004.s044.t010" lemma="require" pos="v">require</instance>
 the
-<instance id="d004.s044.t011" lemma="fast" pos="a">faster</instance>
+<instance id="d004.s044.t011" lemma="fast" pos="first">faster</instance>
 and
 <instance id="d004.s044.t012" lemma="relatively" pos="r">relatively</instance>
 lower-level
@@ -4470,7 +4470,7 @@ were
 <instance id="d004.s045.t002" lemma="raise" pos="v">raised</instance>
 about
 the
-<instance id="d004.s045.t003" lemma="original" pos="a">original</instance>
+<instance id="d004.s045.t003" lemma="original" pos="first">original</instance>
 Fortran
 <instance id="d004.s045.t004" lemma="language" pos="n">language</instance>
 .
@@ -4479,21 +4479,21 @@ Fortran
 <sentence id="d004.s046">
 Throughout
 the
-<instance id="d004.s046.t001" lemma="second" pos="a">second</instance>
+<instance id="d004.s046.t001" lemma="second" pos="first">second</instance>
 <instance id="d004.s046.t002" lemma="half" pos="n">half</instance>
 of
 the
-<instance id="d004.s046.t003" lemma="twentieth" pos="a">twentieth</instance>
+<instance id="d004.s046.t003" lemma="twentieth" pos="first">twentieth</instance>
 <instance id="d004.s046.t004" lemma="century" pos="n">century</instance>
 ,
 <instance id="d004.s046.t005" lemma="programming" pos="n">programming</instance>
 <instance id="d004.s046.t006" lemma="be" pos="v">was</instance>
 an
-<instance id="d004.s046.t007" lemma="attractive" pos="a">attractive</instance>
+<instance id="d004.s046.t007" lemma="attractive" pos="first">attractive</instance>
 <instance id="d004.s046.t008" lemma="career" pos="n">career</instance>
 in
 most
-<instance id="d004.s046.t009" lemma="developed" pos="a">developed</instance>
+<instance id="d004.s046.t009" lemma="developed" pos="first">developed</instance>
 <instance id="d004.s046.t010" lemma="country" pos="n">countries</instance>
 .
 </sentence>
@@ -4505,7 +4505,7 @@ of
 have
 <instance id="d004.s047.t003" lemma="be" pos="v">been</instance>
 <instance id="d004.s047.t004" lemma="increasingly" pos="r">increasingly</instance>
-<instance id="d004.s047.t005" lemma="subject" pos="a">subject</instance>
+<instance id="d004.s047.t005" lemma="subject" pos="first">subject</instance>
 to
 offshore
 outsourcing
@@ -4515,13 +4515,13 @@ outsourcing
 and
 <instance id="d004.s047.t008" lemma="service" pos="n">services</instance>
 from
-<instance id="d004.s047.t009" lemma="other" pos="a">other</instance>
+<instance id="d004.s047.t009" lemma="other" pos="first">other</instance>
 <instance id="d004.s047.t010" lemma="country" pos="n">countries</instance>
 ,
 <instance id="d004.s047.t011" lemma="usually" pos="r">usually</instance>
 at
-a
-<instance id="d004.s047.t012" lemma="low" pos="a">lower</instance>
+first
+<instance id="d004.s047.t012" lemma="low" pos="first">lower</instance>
 <instance id="d004.s047.t013" lemma="wage" pos="n">wage</instance>
 )
 ,
@@ -4530,25 +4530,25 @@ a
 <instance id="d004.s047.t016" lemma="career" pos="n">career</instance>
 <instance id="d004.s047.t017" lemma="decision" pos="n">decisions</instance>
 in
-<instance id="d004.s047.t018" lemma="developed" pos="a">developed</instance>
+<instance id="d004.s047.t018" lemma="developed" pos="first">developed</instance>
 <instance id="d004.s047.t019" lemma="country" pos="n">countries</instance>
 more
-<instance id="d004.s047.t020" lemma="complicated" pos="a">complicated</instance>
+<instance id="d004.s047.t020" lemma="complicated" pos="first">complicated</instance>
 ,
 while
 <instance id="d004.s047.t021" lemma="increase" pos="v">increasing</instance>
-<instance id="d004.s047.t022" lemma="economic" pos="a">economic</instance>
+<instance id="d004.s047.t022" lemma="economic" pos="first">economic</instance>
 <instance id="d004.s047.t023" lemma="opportunity" pos="n">opportunities</instance>
 in
 less
-<instance id="d004.s047.t024" lemma="developed" pos="a">developed</instance>
+<instance id="d004.s047.t024" lemma="developed" pos="first">developed</instance>
 <instance id="d004.s047.t025" lemma="area" pos="n">areas</instance>
 .
 </sentence>
 <sentence id="d004.s048">
 It
 is
-<instance id="d004.s048.t001" lemma="unclear" pos="a">unclear</instance>
+<instance id="d004.s048.t001" lemma="unclear" pos="first">unclear</instance>
 how
 <instance id="d004.s048.t002" lemma="far" pos="r">far</instance>
 this
@@ -4582,7 +4582,7 @@ that
 some
 of
 the
-<instance id="d004.s049.t003" lemma="rich" pos="a">richest</instance>
+<instance id="d004.s049.t003" lemma="rich" pos="first">richest</instance>
 <instance id="d004.s049.t004" lemma="person" pos="n">persons</instance>
 on
 the
@@ -4626,7 +4626,7 @@ SAP
 <instance id="d004.s051.t001" lemma="Programming" pos="n">Programming</instance>
 <instance id="d004.s051.t002" lemma="be" pos="v">is</instance>
 <instance id="d004.s051.t003" lemma="clearly" pos="r">clearly</instance>
-a
+first
 leading-edge
 <instance id="d004.s051.t004" lemma="craftsmanship" pos="n">craftsmanship</instance>
 that
@@ -4642,7 +4642,7 @@ such
 as
 India
 and
-<instance id="d004.s051.t009" lemma="developed" pos="a">developed</instance>
+<instance id="d004.s051.t009" lemma="developed" pos="first">developed</instance>
 <instance id="d004.s051.t010" lemma="country" pos="n">countries</instance>
 like
 the
@@ -4652,7 +4652,7 @@ Germany
 .
 </sentence>
 <sentence id="d004.s052">
-<instance id="d004.s052.t001" lemma="Modern" pos="a">Modern</instance>
+<instance id="d004.s052.t001" lemma="Modern" pos="first">Modern</instance>
 <instance id="d004.s052.t002" lemma="Programming" pos="n">Programming</instance>
 </sentence>
 <sentence id="d004.s053">
@@ -4660,7 +4660,7 @@ Germany
 </sentence>
 <sentence id="d004.s054">
 The
-<instance id="d004.s054.t001" lemma="first" pos="a">first</instance>
+<instance id="d004.s054.t001" lemma="first" pos="first">first</instance>
 <instance id="d004.s054.t002" lemma="step" pos="n">step</instance>
 in
 every
@@ -4688,7 +4688,7 @@ debugging
 <sentence id="d004.s055">
 There
 <instance id="d004.s055.t001" lemma="exist" pos="v">exist</instance>
-<instance id="d004.s055.t002" lemma="a_lot" pos="r">a lot</instance>
+<instance id="d004.s055.t002" lemma="a_lot" pos="r">first lot</instance>
 of
 differing
 <instance id="d004.s055.t003" lemma="approach" pos="n">approaches</instance>
@@ -4701,7 +4701,7 @@ those
 with
 the
 most
-<instance id="d004.s055.t005" lemma="popular" pos="a">popular</instance>
+<instance id="d004.s055.t005" lemma="popular" pos="first">popular</instance>
 modeling
 <instance id="d004.s055.t006" lemma="technique" pos="n">technique</instance>
 <instance id="d004.s055.t007" lemma="be" pos="v">being</instance>
@@ -4729,7 +4729,7 @@ language
 UML
 )
 <instance id="d004.s056.t001" lemma="be" pos="v">is</instance>
-a
+first
 <instance id="d004.s056.t002" lemma="notation" pos="n">notation</instance>
 <instance id="d004.s056.t003" lemma="use" pos="v">used</instance>
 for
@@ -4738,7 +4738,7 @@ OOAD
 </sentence>
 <sentence id="d004.s057">
 A
-<instance id="d004.s057.t001" lemma="similar" pos="a">similar</instance>
+<instance id="d004.s057.t001" lemma="similar" pos="first">similar</instance>
 <instance id="d004.s057.t002" lemma="technique" pos="n">technique</instance>
 <instance id="d004.s057.t003" lemma="use" pos="v">used</instance>
 for
@@ -4762,10 +4762,10 @@ imperative
 (
 object-oriented
 or
-<instance id="d004.s058.t005" lemma="procedural" pos="a">procedural</instance>
+<instance id="d004.s058.t005" lemma="procedural" pos="first">procedural</instance>
 )
 ,
-<instance id="d004.s058.t006" lemma="functional" pos="a">functional</instance>
+<instance id="d004.s058.t006" lemma="functional" pos="first">functional</instance>
 <instance id="d004.s058.t007" lemma="language" pos="n">languages</instance>
 and
 <instance id="d004.s058.t008" lemma="logic" pos="n">logic</instance>
@@ -4789,7 +4789,7 @@ Eclipse
 .
 </sentence>
 <sentence id="d004.s060">
-<instance id="d004.s060.t001" lemma="Separate" pos="a">Separate</instance>
+<instance id="d004.s060.t001" lemma="Separate" pos="first">Separate</instance>
 <instance id="d004.s060.t002" lemma="debugger" pos="n">debuggers</instance>
 like
 gdb
@@ -4799,13 +4799,13 @@ are
 .
 </sentence>
 <sentence id="d004.s061">
-<instance id="d004.s061.t001" lemma="Modern" pos="a">Modern</instance>
+<instance id="d004.s061.t001" lemma="Modern" pos="first">Modern</instance>
 <instance id="d004.s061.t002" lemma="Language" pos="n">Languages</instance>
 </sentence>
 <sentence id="d004.s062">
 The
 most
-<instance id="d004.s062.t001" lemma="popular" pos="a">popular</instance>
+<instance id="d004.s062.t001" lemma="popular" pos="first">popular</instance>
 <instance id="d004.s062.t002" lemma="programming" pos="n">programming</instance>
 <instance id="d004.s062.t003" lemma="language" pos="n">languages</instance>
 in
@@ -4854,7 +4854,7 @@ Java
 and
 Python
 <instance id="d004.s064.t001" lemma="be" pos="v">are</instance>
-<instance id="d004.s064.t002" lemma="popular" pos="a">popular</instance>
+<instance id="d004.s064.t002" lemma="popular" pos="first">popular</instance>
 because
 <instance id="d004.s064.t003" lemma="program" pos="n">programs</instance>
 <instance id="d004.s064.t004" lemma="write" pos="v">written</instance>
@@ -4863,8 +4863,8 @@ them
 are
 <instance id="d004.s064.t005" lemma="execute" pos="v">executed</instance>
 in
-a
-<instance id="d004.s064.t006" lemma="virtual" pos="a">virtual</instance>
+first
+<instance id="d004.s064.t006" lemma="virtual" pos="first">virtual</instance>
 <instance id="d004.s064.t007" lemma="machine" pos="n">machine</instance>
 ,
 <instance id="d004.s064.t008" lemma="avoid" pos="v">avoiding</instance>
@@ -4888,7 +4888,7 @@ as
 <instance id="d004.s064.t012" lemma="buffer" pos="n">buffer</instance>
 overruns
 and
-<instance id="d004.s064.t013" lemma="invalid" pos="a">invalid</instance>
+<instance id="d004.s064.t013" lemma="invalid" pos="first">invalid</instance>
 <instance id="d004.s064.t014" lemma="pointer" pos="n">pointers</instance>
 .
 </sentence>
@@ -4913,7 +4913,7 @@ more
 runtime
 and
 <instance id="d004.s065.t010" lemma="memory" pos="n">memory</instance>
-<instance id="d004.s065.t011" lemma="efficient" pos="a">efficient</instance>
+<instance id="d004.s065.t011" lemma="efficient" pos="first">efficient</instance>
 <instance id="d004.s065.t012" lemma="language" pos="n">languages</instance>
 like
 C
@@ -4931,7 +4931,7 @@ are
 <instance id="d004.s066.t003" lemma="exclusively" pos="r">exclusively</instance>
 <instance id="d004.s066.t004" lemma="write" pos="v">written</instance>
 in
-<instance id="d004.s066.t005" lemma="low-level" pos="a">low-level</instance>
+<instance id="d004.s066.t005" lemma="low-level" pos="first">low-level</instance>
 <instance id="d004.s066.t006" lemma="programming" pos="n">programming</instance>
 <instance id="d004.s066.t007" lemma="language" pos="n">languages</instance>
 like
@@ -4945,7 +4945,7 @@ or
 since
 <instance id="d004.s066.t009" lemma="speed" pos="n">speed</instance>
 <instance id="d004.s066.t010" lemma="be" pos="v">is</instance>
-<instance id="d004.s066.t011" lemma="necessary" pos="a">necessary</instance>
+<instance id="d004.s066.t011" lemma="necessary" pos="first">necessary</instance>
 in
 <instance id="d004.s066.t012" lemma="component" pos="n">components</instance>
 like
@@ -4963,7 +4963,7 @@ and
 .
 </sentence>
 <sentence id="d004.s067">
-<instance id="d004.s067.t001" lemma="Scientific" pos="a">Scientific</instance>
+<instance id="d004.s067.t001" lemma="Scientific" pos="first">Scientific</instance>
 <instance id="d004.s067.t002" lemma="application" pos="n">applications</instance>
 are
 <instance id="d004.s067.t003" lemma="often" pos="r">often</instance>
@@ -4972,7 +4972,7 @@ in
 Fortran
 because
 <instance id="d004.s067.t005" lemma="very" pos="r">very</instance>
-<instance id="d004.s067.t006" lemma="efficient" pos="a">efficient</instance>
+<instance id="d004.s067.t006" lemma="efficient" pos="first">efficient</instance>
 <instance id="d004.s067.t007" lemma="optimization" pos="n">optimization</instance>
 (
 <instance id="d004.s067.t008" lemma="use" pos="v">using</instance>
@@ -4980,7 +4980,7 @@ optimizing
 <instance id="d004.s067.t009" lemma="Compiler" pos="n">Compilers</instance>
 )
 <instance id="d004.s067.t010" lemma="be" pos="v">is</instance>
-<instance id="d004.s067.t011" lemma="possible" pos="a">possible</instance>
+<instance id="d004.s067.t011" lemma="possible" pos="first">possible</instance>
 for
 <instance id="d004.s067.t012" lemma="arithmetic" pos="n">arithmetic</instance>
 .
@@ -4990,16 +4990,16 @@ Cobol
 <instance id="d004.s068.t001" lemma="be" pos="v">is</instance>
 <instance id="d004.s068.t002" lemma="still" pos="r">still</instance>
 <instance id="d004.s068.t003" lemma="very" pos="r">very</instance>
-<instance id="d004.s068.t004" lemma="strong" pos="a">strong</instance>
+<instance id="d004.s068.t004" lemma="strong" pos="first">strong</instance>
 in
 the
-<instance id="d004.s068.t005" lemma="corporate" pos="a">corporate</instance>
+<instance id="d004.s068.t005" lemma="corporate" pos="first">corporate</instance>
 <instance id="d004.s068.t006" lemma="data" pos="n">data</instance>
 <instance id="d004.s068.t007" lemma="center" pos="n">center</instance>
 ,
 <instance id="d004.s068.t008" lemma="mainly" pos="r">mainly</instance>
 on
-<instance id="d004.s068.t009" lemma="large" pos="a">large</instance>
+<instance id="d004.s068.t009" lemma="large" pos="first">large</instance>
 <instance id="d004.s068.t010" lemma="Mainframe" pos="n">Mainframe</instance>
 <instance id="d004.s068.t011" lemma="computer" pos="n">computers</instance>
 .
@@ -5020,7 +5020,7 @@ over
 the
 <instance id="d004.s069.t005" lemma="internet" pos="n">internet</instance>
 or
-<instance id="d004.s069.t006" lemma="corporate" pos="a">corporate</instance>
+<instance id="d004.s069.t006" lemma="corporate" pos="first">corporate</instance>
 <instance id="d004.s069.t007" lemma="intranet" pos="n">intranets</instance>
 .
 </sentence>
@@ -5029,8 +5029,8 @@ Python
 ,
 while
 <instance id="d004.s070.t001" lemma="be" pos="v">being</instance>
-a
-<instance id="d004.s070.t002" lemma="general-purpose" pos="a">general-purpose</instance>
+first
+<instance id="d004.s070.t002" lemma="general-purpose" pos="first">general-purpose</instance>
 <instance id="d004.s070.t003" lemma="programming" pos="n">programming</instance>
 <instance id="d004.s070.t004" lemma="language" pos="n">language</instance>
 ,
@@ -5051,9 +5051,9 @@ Debugging
 <sentence id="d004.s072">
 Debugging
 <instance id="d004.s072.t001" lemma="be" pos="v">is</instance>
-a
+first
 <instance id="d004.s072.t002" lemma="very" pos="r">very</instance>
-<instance id="d004.s072.t003" lemma="important" pos="a">important</instance>
+<instance id="d004.s072.t003" lemma="important" pos="first">important</instance>
 <instance id="d004.s072.t004" lemma="task" pos="n">task</instance>
 for
 every
@@ -5061,11 +5061,11 @@ every
 ,
 because
 an
-<instance id="d004.s072.t006" lemma="erroneous" pos="a">erroneous</instance>
+<instance id="d004.s072.t006" lemma="erroneous" pos="first">erroneous</instance>
 <instance id="d004.s072.t007" lemma="program" pos="n">program</instance>
 <instance id="d004.s072.t008" lemma="be" pos="v">is</instance>
 <instance id="d004.s072.t009" lemma="often" pos="r">often</instance>
-<instance id="d004.s072.t010" lemma="useless" pos="a">useless</instance>
+<instance id="d004.s072.t010" lemma="useless" pos="first">useless</instance>
 .
 </sentence>
 <sentence id="d004.s073">
@@ -5076,10 +5076,10 @@ and
 <instance id="d004.s073.t002" lemma="Assembler" pos="n">Assembler</instance>
 <instance id="d004.s073.t003" lemma="be" pos="v">are</instance>
 <instance id="d004.s073.t004" lemma="very" pos="r">very</instance>
-<instance id="d004.s073.t005" lemma="challenging" pos="a">challenging</instance>
+<instance id="d004.s073.t005" lemma="challenging" pos="first">challenging</instance>
 <instance id="d004.s073.t006" lemma="even" pos="r">even</instance>
 to
-<instance id="d004.s073.t007" lemma="expert" pos="a">expert</instance>
+<instance id="d004.s073.t007" lemma="expert" pos="first">expert</instance>
 <instance id="d004.s073.t008" lemma="programmer" pos="n">programmers</instance>
 because
 of
@@ -5089,7 +5089,7 @@ like
 <instance id="d004.s073.t011" lemma="Buffer" pos="n">Buffer</instance>
 overruns
 ,
-<instance id="d004.s073.t012" lemma="bad" pos="a">bad</instance>
+<instance id="d004.s073.t012" lemma="bad" pos="first">bad</instance>
 <instance id="d004.s073.t013" lemma="pointer" pos="n">pointers</instance>
 or
 uninitialized
@@ -5102,17 +5102,17 @@ A
 overrun
 can
 <instance id="d004.s074.t002" lemma="damage" pos="v">damage</instance>
-<instance id="d004.s074.t003" lemma="adjacent" pos="a">adjacent</instance>
+<instance id="d004.s074.t003" lemma="adjacent" pos="first">adjacent</instance>
 <instance id="d004.s074.t004" lemma="memory" pos="n">memory</instance>
 <instance id="d004.s074.t005" lemma="region" pos="n">regions</instance>
 and
 <instance id="d004.s074.t006" lemma="cause" pos="v">cause</instance>
-a
+first
 <instance id="d004.s074.t007" lemma="failure" pos="n">failure</instance>
 in
-a
+first
 <instance id="d004.s074.t008" lemma="totally" pos="r">totally</instance>
-<instance id="d004.s074.t009" lemma="different" pos="a">different</instance>
+<instance id="d004.s074.t009" lemma="different" pos="first">different</instance>
 <instance id="d004.s074.t010" lemma="program" pos="n">program</instance>
 <instance id="d004.s074.t011" lemma="line" pos="n">line</instance>
 .
@@ -5132,10 +5132,10 @@ or
 Boundschecker
 <instance id="d004.s075.t004" lemma="be" pos="v">are</instance>
 <instance id="d004.s075.t005" lemma="virtually" pos="r">virtually</instance>
-a
+first
 <instance id="d004.s075.t006" lemma="necessity" pos="n">necessity</instance>
 for
-<instance id="d004.s075.t007" lemma="modern" pos="a">modern</instance>
+<instance id="d004.s075.t007" lemma="modern" pos="first">modern</instance>
 <instance id="d004.s075.t008" lemma="software" pos="n">software</instance>
 <instance id="d004.s075.t009" lemma="development" pos="n">development</instance>
 in
@@ -5171,14 +5171,14 @@ at
 the
 <instance id="d004.s076.t007" lemma="price" pos="n">price</instance>
 of
-a
+first
 <instance id="d004.s076.t008" lemma="dramatically" pos="r">dramatically</instance>
-<instance id="d004.s076.t009" lemma="low" pos="a">lower</instance>
+<instance id="d004.s076.t009" lemma="low" pos="first">lower</instance>
 <instance id="d004.s076.t010" lemma="execution" pos="n">execution</instance>
 <instance id="d004.s076.t011" lemma="speed" pos="n">speed</instance>
 of
 the
-<instance id="d004.s076.t012" lemma="resulting" pos="a">resulting</instance>
+<instance id="d004.s076.t012" lemma="resulting" pos="first">resulting</instance>
 <instance id="d004.s076.t013" lemma="program" pos="n">program</instance>
 .
 </sentence>
@@ -5212,9 +5212,9 @@ his
 <instance id="d005.s002.t006" lemma="picture" pos="n">pictures</instance>
 ,
 that
-a
+first
 <instance id="d005.s002.t007" lemma="very" pos="r">very</instance>
-<instance id="d005.s002.t008" lemma="different" pos="a">different</instance>
+<instance id="d005.s002.t008" lemma="different" pos="first">different</instance>
 <instance id="d005.s002.t009" lemma="kind" pos="n">kind</instance>
 of
 <instance id="d005.s002.t010" lemma="painter" pos="n">painter</instance>
@@ -5232,23 +5232,23 @@ Florence
 This
 <instance id="d005.s003.t001" lemma="be" pos="v">was</instance>
 no
-<instance id="d005.s003.t002" lemma="gentle" pos="a">gentle</instance>
+<instance id="d005.s003.t002" lemma="gentle" pos="first">gentle</instance>
 ,
-<instance id="d005.s003.t003" lemma="refined" pos="a">refined</instance>
+<instance id="d005.s003.t003" lemma="refined" pos="first">refined</instance>
 <instance id="d005.s003.t004" lemma="monk" pos="n">monk</instance>
 ,
 but
 <instance id="d005.s003.t005" lemma="just" pos="r">just</instance>
 an
-<instance id="d005.s003.t006" lemma="ordinary" pos="a">ordinary</instance>
+<instance id="d005.s003.t006" lemma="ordinary" pos="first">ordinary</instance>
 <instance id="d005.s003.t007" lemma="man" pos="n">man</instance>
 of
 the 
 <instance id="d005.s003.t008" lemma="world" pos="n">world</instance>
 an
-<instance id="d005.s003.t009" lemma="awkward" pos="a">awkward</instance>
+<instance id="d005.s003.t009" lemma="awkward" pos="first">awkward</instance>
 ,
-<instance id="d005.s003.t010" lemma="good-natured" pos="a">good-natured</instance>
+<instance id="d005.s003.t010" lemma="good-natured" pos="first">good-natured</instance>
 <instance id="d005.s003.t011" lemma="person" pos="n">person</instance>
 ,
 who
@@ -5264,7 +5264,7 @@ to
 ,
 <instance id="d005.s003.t014" lemma="care" pos="v">cared</instance>
 for
-<instance id="d005.s003.t015" lemma="little" pos="a">little</instance>
+<instance id="d005.s003.t015" lemma="little" pos="first">little</instance>
 <instance id="d005.s003.t016" lemma="else" pos="r">else</instance>
 .
 </sentence>
@@ -5298,11 +5298,11 @@ or
 to
 <instance id="d005.s004.t010" lemma="keep" pos="v">keep</instance>
 himself
-<instance id="d005.s004.t011" lemma="tidy" pos="a">tidy</instance>
+<instance id="d005.s004.t011" lemma="tidy" pos="first">tidy</instance>
 ,
 that
 <instance id="d005.s004.t012" lemma="be" pos="v">was</instance>
-a
+first
 <instance id="d005.s004.t013" lemma="thing" pos="n">thing</instance>
 he
 <instance id="d005.s004.t014" lemma="never" pos="r">never</instance>
@@ -5322,7 +5322,7 @@ him
 when
 he
 <instance id="d005.s005.t004" lemma="be" pos="v">was</instance>
-a
+first
 <instance id="d005.s005.t005" lemma="boy" pos="n">boy</instance>
 !
 </sentence>
@@ -5345,7 +5345,7 @@ it
 he
 had
 <instance id="d005.s006.t005" lemma="go" pos="v">gone</instance>
-a
+first
 <instance id="d005.s006.t006" lemma="hundred" pos="n">hundred</instance>
 <instance id="d005.s006.t007" lemma="yard" pos="n">yards</instance>
 ,
@@ -5353,9 +5353,9 @@ and
 he
 <instance id="d005.s006.t008" lemma="be" pos="v">was</instance>
 <instance id="d005.s006.t009" lemma="so" pos="r">so</instance>
-<instance id="d005.s006.t010" lemma="careless" pos="a">careless</instance>
+<instance id="d005.s006.t010" lemma="careless" pos="first">careless</instance>
 and
-<instance id="d005.s006.t011" lemma="untidy" pos="a">untidy</instance>
+<instance id="d005.s006.t011" lemma="untidy" pos="first">untidy</instance>
 that
 it
 was
@@ -5376,11 +5376,11 @@ But
 <instance id="d005.s007.t002" lemma="let" pos="v">let</instance>
 him
 <instance id="d005.s007.t003" lemma="have" pos="v">have</instance>
-a
+first
 <instance id="d005.s007.t004" lemma="pencil" pos="n">pencil</instance>
 and
-a
-<instance id="d005.s007.t005" lemma="smooth" pos="a">smooth</instance>
+first
+<instance id="d005.s007.t005" lemma="smooth" pos="first">smooth</instance>
 <instance id="d005.s007.t006" lemma="surface" pos="n">surface</instance>
 on
 which
@@ -5390,8 +5390,8 @@ to
 and
 he
 <instance id="d005.s007.t008" lemma="be" pos="v">was</instance>
-a
-<instance id="d005.s007.t009" lemma="different" pos="a">different</instance>
+first
+<instance id="d005.s007.t009" lemma="different" pos="first">different</instance>
 <instance id="d005.s007.t010" lemma="boy" pos="n">boy</instance>
 .
 </sentence>
@@ -5405,7 +5405,7 @@ that
 ,
 in
 the
-<instance id="d005.s008.t004" lemma="little" pos="a">little</instance>
+<instance id="d005.s008.t004" lemma="little" pos="first">little</instance>
 <instance id="d005.s008.t005" lemma="town" pos="n">town</instance>
 of
 Castello
@@ -5413,7 +5413,7 @@ San
 Giovanni
 ,
 some
-<instance id="d005.s008.t006" lemma="eighteen" pos="a">eighteen</instance>
+<instance id="d005.s008.t006" lemma="eighteen" pos="first">eighteen</instance>
 <instance id="d005.s008.t007" lemma="mile" pos="n">miles</instance>
 from
 Florence
@@ -5428,7 +5428,7 @@ there
 <instance id="d005.s008.t010" lemma="still" pos="r">still</instance>
 some
 <instance id="d005.s008.t011" lemma="wonderfully" pos="r">wonderfully</instance>
-<instance id="d005.s008.t012" lemma="good" pos="a">good</instance>
+<instance id="d005.s008.t012" lemma="good" pos="first">good</instance>
 <instance id="d005.s008.t013" lemma="figure" pos="n">figures</instance>
 to
 be
@@ -5441,8 +5441,8 @@ when
 he
 <instance id="d005.s008.t016" lemma="be" pos="v">was</instance>
 <instance id="d005.s008.t017" lemma="quite" pos="r">quite</instance>
-a
-<instance id="d005.s008.t018" lemma="little" pos="a">little</instance>
+first
+<instance id="d005.s008.t018" lemma="little" pos="first">little</instance>
 <instance id="d005.s008.t019" lemma="boy" pos="n">boy</instance>
 .
 </sentence>
@@ -5454,7 +5454,7 @@ no
 <instance id="d005.s009.t003" lemma="carelessness" pos="n">carelessness</instance>
 and
 nothing
-<instance id="d005.s009.t004" lemma="untidy" pos="a">untidy</instance>
+<instance id="d005.s009.t004" lemma="untidy" pos="first">untidy</instance>
 about
 his
 <instance id="d005.s009.t005" lemma="work" pos="n">work</instance>
@@ -5465,7 +5465,7 @@ As
 the
 <instance id="d005.s010.t001" lemma="boy" pos="n">boy</instance>
 <instance id="d005.s010.t002" lemma="grow" pos="v">grew</instance>
-<instance id="d005.s010.t003" lemma="older" pos="a">older</instance>
+<instance id="d005.s010.t003" lemma="older" pos="first">older</instance>
 all
 his
 <instance id="d005.s010.t004" lemma="longing" pos="n">longings</instance>
@@ -5475,7 +5475,7 @@ towards
 Florence
 ,
 the
-<instance id="d005.s010.t006" lemma="beautiful" pos="a">beautiful</instance>
+<instance id="d005.s010.t006" lemma="beautiful" pos="first">beautiful</instance>
 <instance id="d005.s010.t007" lemma="city" pos="n">city</instance>
 where
 there
@@ -5494,7 +5494,7 @@ was
 <instance id="d005.s010.t012" lemma="send" pos="v">sent</instance>
 to
 <instance id="d005.s010.t013" lemma="become" pos="v">become</instance>
-a
+first
 <instance id="d005.s010.t014" lemma="pupil" pos="n">pupil</instance>
 in
 the
@@ -5502,9 +5502,9 @@ the
 of
 Masolino
 ,
-a
-<instance id="d005.s010.t016" lemma="great" pos="a">great</instance>
-<instance id="d005.s010.t017" lemma="Florentine" pos="a">Florentine</instance>
+first
+<instance id="d005.s010.t016" lemma="great" pos="first">great</instance>
+<instance id="d005.s010.t017" lemma="Florentine" pos="first">Florentine</instance>
 <instance id="d005.s010.t018" lemma="painter" pos="n">painter</instance>
 .
 </sentence>
@@ -5516,7 +5516,7 @@ his
 <instance id="d005.s011.t002" lemma="improve" pos="v">improved</instance>
 ,
 his
-<instance id="d005.s011.t003" lemma="careless" pos="a">careless</instance>
+<instance id="d005.s011.t003" lemma="careless" pos="first">careless</instance>
 <instance id="d005.s011.t004" lemma="habit" pos="n">habits</instance>
 <instance id="d005.s011.t005" lemma="continue" pos="v">continued</instance>
 the
@@ -5539,8 +5539,8 @@ would
 ,
 <instance id="d005.s012.t005" lemma="watch" pos="v">watching</instance>
 the
-<instance id="d005.s012.t006" lemma="big" pos="a">big</instance>
-<instance id="d005.s012.t007" lemma="awkward" pos="a">awkward</instance>
+<instance id="d005.s012.t006" lemma="big" pos="first">big</instance>
+<instance id="d005.s012.t007" lemma="awkward" pos="first">awkward</instance>
 <instance id="d005.s012.t008" lemma="figure" pos="n">figure</instance>
 <instance id="d005.s012.t009" lemma="pass_through" pos="v">passing through</instance>
 the
@@ -5558,7 +5558,7 @@ to
 he
 <instance id="d005.s013.t002" lemma="pay" pos="v">pays</instance>
 but
-<instance id="d005.s013.t003" lemma="little" pos="a">little</instance>
+<instance id="d005.s013.t003" lemma="little" pos="first">little</instance>
 <instance id="d005.s013.t004" lemma="heed" pos="n">heed</instance>
 to
 his
@@ -5570,7 +5570,7 @@ his
 but
 at
 his
-<instance id="d005.s014.t002" lemma="untidy" pos="a">untidy</instance>
+<instance id="d005.s014.t002" lemma="untidy" pos="first">untidy</instance>
 <instance id="d005.s014.t003" lemma="hair" pos="n">hair</instance>
 and
 the
@@ -5640,8 +5640,8 @@ Masaccio
 ''
 would
 <instance id="d005.s018.t001" lemma="be" pos="v">be</instance>
-a
-<instance id="d005.s018.t002" lemma="fit" pos="a">fitter</instance>
+first
+<instance id="d005.s018.t002" lemma="fit" pos="first">fitter</instance>
 <instance id="d005.s018.t003" lemma="name" pos="n">name</instance>
 for
 him
@@ -5667,8 +5667,8 @@ that
 by
 which
 the
-<instance id="d005.s019.t005" lemma="big" pos="a">big</instance>
-<instance id="d005.s019.t006" lemma="awkward" pos="a">awkward</instance>
+<instance id="d005.s019.t005" lemma="big" pos="first">big</instance>
+<instance id="d005.s019.t006" lemma="awkward" pos="first">awkward</instance>
 <instance id="d005.s019.t007" lemma="painter" pos="n">painter</instance>
 was
 <instance id="d005.s019.t008" lemma="know" pos="v">known</instance>
@@ -5680,7 +5680,7 @@ no
 one
 <instance id="d005.s020.t001" lemma="think_of" pos="v">thinks of</instance>
 the
-<instance id="d005.s020.t002" lemma="unkind" pos="a">unkind</instance>
+<instance id="d005.s020.t002" lemma="unkind" pos="first">unkind</instance>
 <instance id="d005.s020.t003" lemma="meaning" pos="n">meaning</instance>
 of
 the
@@ -5692,10 +5692,10 @@ Masaccio
 is
 <instance id="d005.s020.t006" lemma="honour" pos="v">honoured</instance>
 as
-<instance id="d005.s020.t007" lemma="one" pos="a">one</instance>
+<instance id="d005.s020.t007" lemma="one" pos="first">one</instance>
 of
 the
-<instance id="d005.s020.t008" lemma="great" pos="a">great</instance>
+<instance id="d005.s020.t008" lemma="great" pos="first">great</instance>
 <instance id="d005.s020.t009" lemma="name" pos="n">names</instance>
 in
 the
@@ -5708,7 +5708,7 @@ of
 This
 <instance id="d005.s021.t001" lemma="painter" pos="n">painter</instance>
 ,
-<instance id="d005.s021.t002" lemma="careless" pos="a">careless</instance>
+<instance id="d005.s021.t002" lemma="careless" pos="first">careless</instance>
 of
 many
 <instance id="d005.s021.t003" lemma="thing" pos="n">things</instance>
@@ -5743,7 +5743,7 @@ to
 their
 <instance id="d005.s022.t006" lemma="picture" pos="n">pictures</instance>
 like
-<instance id="d005.s022.t007" lemma="living" pos="a">living</instance>
+<instance id="d005.s022.t007" lemma="living" pos="first">living</instance>
 <instance id="d005.s022.t008" lemma="thing" pos="n">things</instance>
 .
 </sentence>
@@ -5753,12 +5753,12 @@ The
 they
 <instance id="d005.s023.t002" lemma="paint" pos="v">painted</instance>
 <instance id="d005.s023.t003" lemma="be" pos="v">were</instance>
-<instance id="d005.s023.t004" lemma="flat" pos="a">flat</instance>
+<instance id="d005.s023.t004" lemma="flat" pos="first">flat</instance>
 ,
 not
 round
 as
-a
+first
 <instance id="d005.s023.t005" lemma="figure" pos="n">figure</instance>
 should
 <instance id="d005.s023.t006" lemma="be" pos="v">be</instance>
@@ -5803,7 +5803,7 @@ with
 and
 <instance id="d005.s024.t004" lemma="shadow" pos="n">shadow</instance>
 and
-<instance id="d005.s024.t005" lemma="careful" pos="a">careful</instance>
+<instance id="d005.s024.t005" lemma="careful" pos="first">careful</instance>
 <instance id="d005.s024.t006" lemma="drawing" pos="n">drawing</instance>
 until
 the
@@ -5814,7 +5814,7 @@ he
 rounded
 <instance id="d005.s024.t010" lemma="instead" pos="r">instead</instance>
 of
-<instance id="d005.s024.t011" lemma="flat" pos="a">flat</instance>
+<instance id="d005.s024.t011" lemma="flat" pos="first">flat</instance>
 ,
 and
 their
@@ -5834,8 +5834,8 @@ were
 <instance id="d005.s025.t002" lemma="take" pos="v">taken</instance>
 from
 the
-<instance id="d005.s025.t003" lemma="ordinary" pos="a">ordinary</instance>
-<instance id="d005.s025.t004" lemma="Florentine" pos="a">Florentine</instance>
+<instance id="d005.s025.t003" lemma="ordinary" pos="first">ordinary</instance>
+<instance id="d005.s025.t004" lemma="Florentine" pos="first">Florentine</instance>
 <instance id="d005.s025.t005" lemma="youth" pos="n">youths</instance>
 whom
 he
@@ -5868,7 +5868,7 @@ he
 <instance id="d005.s026.t003" lemma="make" pos="v">made</instance>
 to
 <instance id="d005.s026.t004" lemma="look_like" pos="v">look like</instance>
-<instance id="d005.s026.t005" lemma="real" pos="a">real</instance>
+<instance id="d005.s026.t005" lemma="real" pos="first">real</instance>
 <instance id="d005.s026.t006" lemma="house" pos="n">houses</instance>
 <instance id="d005.s026.t007" lemma="lead" pos="v">leading</instance>
 <instance id="d005.s026.t008" lemma="away" pos="r">away</instance>
@@ -5880,8 +5880,8 @@ and
 not
 <instance id="d005.s026.t010" lemma="just" pos="r">just</instance>
 like
-a
-<instance id="d005.s026.t011" lemma="flat" pos="a">flat</instance>
+first
+<instance id="d005.s026.t011" lemma="flat" pos="first">flat</instance>
 <instance id="d005.s026.t012" lemma="picture" pos="n">picture</instance>
 .
 </sentence>
@@ -5918,9 +5918,9 @@ they
 <instance id="d005.s027.t007" lemma="think" pos="v">thought</instance>
 him
 <instance id="d005.s027.t008" lemma="just" pos="r">just</instance>
-a
-<instance id="d005.s027.t009" lemma="great" pos="a">great</instance>
-<instance id="d005.s027.t010" lemma="awkward" pos="a">awkward</instance>
+first
+<instance id="d005.s027.t009" lemma="great" pos="first">great</instance>
+<instance id="d005.s027.t010" lemma="awkward" pos="first">awkward</instance>
 <instance id="d005.s027.t011" lemma="fellow" pos="n">fellow</instance>
 with
 his
@@ -5954,16 +5954,16 @@ when
 he
 <instance id="d005.s028.t008" lemma="be" pos="v">was</instance>
 <instance id="d005.s028.t009" lemma="still" pos="r">still</instance>
-a
+first
 <instance id="d005.s028.t010" lemma="young_man" pos="n">young man</instance>
 ,
 and
 <instance id="d005.s028.t011" lemma="only" pos="r">only</instance>
-a
+first
 few
 <instance id="d005.s028.t012" lemma="realise" pos="v">realised</instance>
 how
-<instance id="d005.s028.t013" lemma="great" pos="a">great</instance>
+<instance id="d005.s028.t013" lemma="great" pos="first">great</instance>
 he
 <instance id="d005.s028.t014" lemma="be" pos="v">was</instance>
 .
@@ -5978,13 +5978,13 @@ after
 ,
 all
 the
-<instance id="d005.s029.t003" lemma="great" pos="a">great</instance>
+<instance id="d005.s029.t003" lemma="great" pos="first">great</instance>
 <instance id="d005.s029.t004" lemma="artist" pos="n">artists</instance>
 would
 <instance id="d005.s029.t005" lemma="come" pos="v">come</instance>
 to
 that
-<instance id="d005.s029.t006" lemma="little" pos="a">little</instance>
+<instance id="d005.s029.t006" lemma="little" pos="first">little</instance>
 <instance id="d005.s029.t007" lemma="chapel" pos="n">chapel</instance>
 of
 the
@@ -5993,11 +5993,11 @@ Carmine
 to
 <instance id="d005.s029.t009" lemma="learn" pos="v">learn</instance>
 their
-<instance id="d005.s029.t010" lemma="first" pos="a">first</instance>
+<instance id="d005.s029.t010" lemma="first" pos="first">first</instance>
 <instance id="d005.s029.t011" lemma="lesson" pos="n">lessons</instance>
 from
 those
-<instance id="d005.s029.t012" lemma="lifelike" pos="a">life-like</instance>
+<instance id="d005.s029.t012" lemma="lifelike" pos="first">life-like</instance>
 <instance id="d005.s029.t013" lemma="figure" pos="n">figures</instance>
 .
 </sentence>
@@ -6015,7 +6015,7 @@ St
 .
 Peter
 <instance id="d005.s030.t005" lemma="baptize" pos="v">baptizing</instance>
-a
+first
 <instance id="d005.s030.t006" lemma="crowd" pos="n">crowd</instance>
 of
 <instance id="d005.s030.t007" lemma="people" pos="n">people</instance>
@@ -6029,12 +6029,12 @@ that
 they
 would
 <instance id="d005.s031.t002" lemma="study" pos="v">study</instance>
-<instance id="d005.s031.t003" lemma="more_than" pos="a">more than</instance>
+<instance id="d005.s031.t003" lemma="more_than" pos="first">more than</instance>
 all
 the
 <instance id="d005.s031.t004" lemma="figure" pos="n">figure</instance>
 of
-a
+first
 <instance id="d005.s031.t005" lemma="boy" pos="n">boy</instance>
 who
 has
@@ -6051,7 +6051,7 @@ with
 ,
 the
 most
-<instance id="d005.s031.t011" lemma="natural" pos="a">natural</instance>
+<instance id="d005.s031.t011" lemma="natural" pos="first">natural</instance>
 <instance id="d005.s031.t012" lemma="figure" pos="n">figure</instance>
 that
 had
@@ -6074,12 +6074,12 @@ be
 ,
 and
 each
-<instance id="d005.s032.t004" lemma="new" pos="a">new</instance>
+<instance id="d005.s032.t004" lemma="new" pos="first">new</instance>
 <instance id="d005.s032.t005" lemma="thing" pos="n">thing</instance>
 we
 <instance id="d005.s032.t006" lemma="know" pos="v">know</instance>
 <instance id="d005.s032.t007" lemma="be" pos="v">is</instance>
-a
+first
 <instance id="d005.s032.t008" lemma="step" pos="n">step</instance>
 <instance id="d005.s032.t009" lemma="onwards" pos="r">onwards</instance>
 .
@@ -6090,15 +6090,15 @@ this
 <instance id="d005.s033.t002" lemma="figure" pos="n">figure</instance>
 of
 the
-<instance id="d005.s033.t003" lemma="shivering" pos="a">shivering</instance>
+<instance id="d005.s033.t003" lemma="shivering" pos="first">shivering</instance>
 <instance id="d005.s033.t004" lemma="boy" pos="n">boy</instance>
 <instance id="d005.s033.t005" lemma="mark" pos="v">marks</instance>
-a
-<instance id="d005.s033.t006" lemma="higher" pos="a">higher</instance>
+first
+<instance id="d005.s033.t006" lemma="higher" pos="first">higher</instance>
 <instance id="d005.s033.t007" lemma="step" pos="n">step</instance>
 of
 the
-<instance id="d005.s033.t008" lemma="golden" pos="a">golden</instance>
+<instance id="d005.s033.t008" lemma="golden" pos="first">golden</instance>
 <instance id="d005.s033.t009" lemma="ladder" pos="n">ladder</instance>
 of
 <instance id="d005.s033.t010" lemma="Art" pos="n">Art</instance>
@@ -6122,7 +6122,7 @@ the
 <instance id="d005.s034.t003" lemma="name" pos="n">name</instance>
 of
 Masaccio
-<instance id="d005.s034.t004" lemma="worthy" pos="a">worthy</instance>
+<instance id="d005.s034.t004" lemma="worthy" pos="first">worthy</instance>
 to
 be
 <instance id="d005.s034.t005" lemma="place" pos="v">placed</instance>
@@ -6132,7 +6132,7 @@ the
 of
 <instance id="d005.s034.t007" lemma="world" pos="n">world</instance>
 's
-<instance id="d005.s034.t008" lemma="great" pos="a">great</instance>
+<instance id="d005.s034.t008" lemma="great" pos="first">great</instance>
 <instance id="d005.s034.t009" lemma="painter" pos="n">painters</instance>
 .
 </sentence>

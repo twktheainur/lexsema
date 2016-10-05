@@ -90,7 +90,7 @@ public class KnowledgeGraph
 		this.paths2concept = paths2concept;
 
 		this.sourceWord2concepts = sourceWord2concepts;
-		this.concepts2sourceWords = new HashMultimap<String, Word>();
+		this.concepts2sourceWords = HashMultimap.create();
 		for (Word word : sourceWord2concepts.keySet())
 			for (String concept : sourceWord2concepts.get(word))
 				concepts2sourceWords.put(concept, word);
@@ -142,8 +142,8 @@ public class KnowledgeGraph
 	 */
 	public void saveToDot(final String file)
 	{
-		Multimap<String, Pair<DotOptions, String>> options = 
-			new HashMultimap<String, Pair<DotOptions, String>>();
+		Multimap<String, Pair<DotOptions, String>> options =
+				HashMultimap.create();
 		
 		
 		List<DotColors> colorsList = Arrays.asList(DotColors.values());
@@ -206,7 +206,7 @@ public class KnowledgeGraph
 		it.uniroma1.lcl.jlt.jgrapht.Graphs.saveDotFile(
 			graph, file,
 			options,
-			new HashMultimap<WeightedLabeledEdge, Pair<DotOptions, String>>(),
+				HashMultimap.create(),
 			new VertexNameProvider<String>()
 			{
 				public String getVertexName(String arg0)

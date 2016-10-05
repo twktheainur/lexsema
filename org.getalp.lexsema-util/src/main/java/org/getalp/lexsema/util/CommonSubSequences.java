@@ -9,35 +9,34 @@ import java.util.List;
 
 
 public class CommonSubSequences {
-    private final List<String> a;
-    private final List<String> b;
-    private int[][] lengths;
+    private static final double DELTAZERO = 0.001d;
+    private final List<String> first;
+    private final List<String> second;
+    private final int[][] lengths;
     private double[][] scores;
-    private boolean[][] processed;
-    private boolean computed;
+    private final boolean[][] processed;
+    private final boolean computed;
     private double threshold;
     private StringDistance distance;
 
-    public CommonSubSequences(final List<String> a, final List<String> b) {
-        this.a = Collections.unmodifiableList(a);
-        this.b = Collections.unmodifiableList(b);
-        lengths = new int[a.size()][b.size()];
-        processed = new boolean[a.size()][b.size()];
+    public CommonSubSequences(final List<String> first, final List<String> second) {
+        this.first = Collections.unmodifiableList(first);
+        this.second = Collections.unmodifiableList(second);
+        lengths = new int[first.size()][second.size()];
+        processed = new boolean[first.size()][second.size()];
         computed = false;
     }
 
     private void computeDistances() {
         double z = 0;
-        if (a != null && b != null) {
-            for (int i = 0; i < a.size(); i++) {
-                for (int j = 0; j < b.size(); j++) {
+        if (first != null && second != null) {
+            for (int i = 0; i < first.size(); i++) {
+                for (int j = 0; j < second.size(); j++) {
                     double score = 0d;
                     if (distance != null) {
-                        score = distance.score(distance.prepare(a.get(i)), distance.prepare(b.get(j)));
+                        score = distance.score(distance.prepare(first.get(i)), distance.prepare(second.get(j)));
                         scores[i][j] = score;
-                    }
-                    if (distance == null && a.get(i).equals(b.get(j)) ||
-                            distance != null && score > threshold) {
+                    }else if (first.get(i).equals(second.get(j)) || score > threshold) {
                         if (i == 0 || j == 0) {
                             lengths[i][j] = 1;
                         } else {
@@ -62,8 +61,8 @@ public class CommonSubSequences {
 
         List<Double> ret = new ArrayList<>();
 
-        int x = a.size() - 1;
-        int y = b.size() - 1;
+        int x = first.size() - 1;
+        int y = second.size() - 1;
         double currentSequence = 0;
         while (x >= 0 && y >= 0) {
                                                                                                                     /*The case where the is first single word match at the beginning of the strings*/
@@ -78,7 +77,7 @@ public class CommonSubSequences {
                 int prevX = x == 0 ? 0 : x - 1;
                 int prevY = y == 0 ? 0 : y - 1;
                 double lengthDifference = lengths[prevX][prevY] - (lengths[x][y] - 1);
-                if (lengthDifference < 0.001d && lengthDifference > -0.001d && !processed[x][y]) {
+                if (lengthDifference < DELTAZERO && lengthDifference > -DELTAZERO && !processed[x][y]) {
                     if (distance != null) {
                         currentSequence += scores[x][y];
                     } else {
@@ -106,7 +105,7 @@ public class CommonSubSequences {
                 y--;
                 if (y == 0 && x > 0) {
                     x--;
-                    y = b.size() - 1;
+                    y = second.size() - 1;
                 }
             }
         }
@@ -117,7 +116,7 @@ public class CommonSubSequences {
     public void setFuzzyDistance(StringDistance distance, double threshold) {
         this.distance = distance;
         this.threshold = threshold;
-        scores = new double[a.size()][b.size()];
+        scores = new double[first.size()][second.size()];
     }
 }
 

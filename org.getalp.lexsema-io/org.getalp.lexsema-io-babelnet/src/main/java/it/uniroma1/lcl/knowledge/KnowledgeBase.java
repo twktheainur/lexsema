@@ -1,33 +1,11 @@
 package it.uniroma1.lcl.knowledge;
 
-import java.io.IOException;
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Locale;
-import java.util.Set;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
-
 import edu.mit.jwi.item.IPointer;
 import edu.mit.jwi.item.ISynset;
 import edu.mit.jwi.item.IWord;
-
-import it.uniroma1.lcl.babelnet.BabelNet;
-import it.uniroma1.lcl.babelnet.BabelNetConfiguration;
-import it.uniroma1.lcl.babelnet.BabelNetGraphEdge;
-import it.uniroma1.lcl.babelnet.BabelPointer;
-import it.uniroma1.lcl.babelnet.BabelSense;
-import it.uniroma1.lcl.babelnet.BabelSynset;
+import it.uniroma1.lcl.babelnet.*;
 import it.uniroma1.lcl.jlt.Configuration;
 import it.uniroma1.lcl.jlt.ling.Word;
 import it.uniroma1.lcl.jlt.util.Language;
@@ -40,6 +18,13 @@ import it.uniroma1.lcl.jlt.wordnet.data.WordNetWeights;
 import it.uniroma1.lcl.jlt.wordnetplusplus.WordNetPlusPlus;
 import it.uniroma1.lcl.jlt.wordnetplusplus.WordNetPlusPlusPointer;
 import it.uniroma1.lcl.knowledge.custom.CustomKB;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
+import java.io.IOException;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import java.util.*;
 
 /**
  * The enumeration of the available knowledge bases.
@@ -72,7 +57,8 @@ public enum KnowledgeBase
 				throw new IllegalArgumentException("Unsupported language: " + language);
 			
 			final WordNet wn = WordNet.getInstance();
-			final Multimap<Language, Word> words = new HashMultimap<Language, Word>();
+			final Multimap<Language, Word> words = HashMultimap.create(); 
+					
 			final ISynset synset = wn.getSynsetFromOffset(concept);
 			if (synset != null)
 			{
@@ -114,8 +100,8 @@ public enum KnowledgeBase
 			final WordNet wn = WordNet.getInstance();
 			final WordNetWeights wnWeights =
 				Configuration.getInstance().getWordNetWeightType().getImplementation();
-			final Multimap<IPointer, ScoredItem<String>> related = 
-				new HashMultimap<IPointer, ScoredItem<String>>();
+			final Multimap<IPointer, ScoredItem<String>> related =
+					HashMultimap.create();
 
 			final ISynset synset = wn.getSynsetFromOffset(concept);
 			final String offset = WordNet.synsetToString(synset);
@@ -456,7 +442,7 @@ public enum KnowledgeBase
 		public Multimap<Language, String> getConceptTermsByLanguage(String concept, Language language)
 		{
 			final BabelNet bn = BabelNet.getInstance();
-			final Multimap<Language, String> terms = new HashMultimap<Language, String>();
+			final Multimap<Language, String> terms = HashMultimap.create();
 			
 			try
 			{
@@ -480,7 +466,7 @@ public enum KnowledgeBase
 		public Multimap<Language, Word> getConceptWordsByLanguage(String concept, Language language)
 		{
 			final BabelNet bn = BabelNet.getInstance();
-			final Multimap<Language, Word> words = new HashMultimap<Language, Word>();
+			final Multimap<Language, Word> words = HashMultimap.create();
 			
 			try
 			{
@@ -564,8 +550,8 @@ public enum KnowledgeBase
 																			double edgeThreshold)
 		{
 			final BabelNet bn = BabelNet.getInstance();
-			final Multimap<IPointer, ScoredItem<String>> related = 
-				new HashMultimap<IPointer, ScoredItem<String>>();
+			final Multimap<IPointer, ScoredItem<String>> related =
+					HashMultimap.create();
 			
 			try
 			{
@@ -692,7 +678,7 @@ public enum KnowledgeBase
 	
 	public Multimap<Language, String> getConceptTermsByLanguage(String concept, Language language)
 	{
-		Multimap<Language, String> terms = new HashMultimap<Language, String>();
+		Multimap<Language, String> terms = HashMultimap.create();
 		Multimap<Language, Word> words = getConceptWordsByLanguage(concept, language);
 		for (Language lang : words.keySet())
 			for (Word word : words.get(lang))

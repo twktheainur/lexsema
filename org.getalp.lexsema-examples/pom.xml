@@ -173,7 +173,7 @@
         </dependency>
         <dependency>
             <groupId>org.getalp</groupId>
-            <artifactId>org.getalp.lexsema-acceptali</artifactId>
+            <artifactId>org.getalp.lexsema-axalign</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
         <dependency>

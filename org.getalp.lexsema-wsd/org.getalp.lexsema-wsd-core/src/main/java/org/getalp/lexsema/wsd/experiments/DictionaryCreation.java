@@ -1,40 +1,21 @@
 package org.getalp.lexsema.wsd.experiments;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.OutputStreamWriter;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Scanner;
-import java.util.Set;
-
 import edu.mit.jwi.Dictionary;
 import org.getalp.lexsema.io.dictionary.DocumentDictionaryWriter;
-import org.getalp.lexsema.io.document.loader.GMBCorpusLoader;
-import org.getalp.lexsema.io.document.loader.OldDSOCorpusLoader;
-import org.getalp.lexsema.io.document.loader.CorpusLoader;
-import org.getalp.lexsema.io.document.loader.SemCorCorpusLoader;
-import org.getalp.lexsema.io.document.loader.Semeval2007CorpusLoader;
-import org.getalp.lexsema.io.document.loader.WordnetGlossTagCorpusLoader;
-import org.getalp.lexsema.io.resource.LRLoader;
+import org.getalp.lexsema.io.document.loader.*;
 import org.getalp.lexsema.io.resource.wordnet.WordnetLoader;
-import org.getalp.lexsema.io.text.DicollecteFrenchLemmatizer;
-import org.getalp.lexsema.similarity.Document;
+import org.getalp.lexsema.io.thesaurus.AnnotatedTextThesaurusImpl;
 import org.getalp.lexsema.similarity.Sense;
 import org.getalp.lexsema.similarity.Sentence;
 import org.getalp.lexsema.similarity.Text;
 import org.getalp.lexsema.similarity.Word;
-import org.getalp.lexsema.similarity.signatures.enrichment.*;
-import org.getalp.lexsema.io.thesaurus.AnnotatedTextThesaurusImpl;
-import org.getalp.lexsema.util.StopList;
-import org.getalp.lexsema.util.VectorOperation;
-import org.getalp.lexsema.util.word2vec.Word2VecClient;
+import org.getalp.lexsema.similarity.signatures.enrichment.IndexingSignatureEnrichment;
+import org.getalp.lexsema.similarity.signatures.enrichment.SignatureEnrichment;
+import org.getalp.lexsema.similarity.signatures.enrichment.StemmingSignatureEnrichment;
+import org.getalp.lexsema.similarity.signatures.enrichment.StopwordsRemovingSignatureEnrichment;
+
+import java.io.*;
+import java.util.*;
 
 public class DictionaryCreation
 {

@@ -7,11 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.xml.sax.*;
 import org.xml.sax.helpers.XMLReaderFactory;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.StringReader;
+import java.io.*;
 
 public class Semeval2007CorpusLoader extends CorpusLoaderImpl implements ContentHandler {
 

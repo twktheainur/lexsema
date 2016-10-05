@@ -23,7 +23,7 @@ import org.getalp.lexsema.wsd.method.Disambiguator;
 import org.getalp.lexsema.wsd.method.SimulatedAnnealing;
 import org.getalp.lexsema.wsd.score.ConfigurationScorer;
 import org.getalp.lexsema.wsd.score.MatrixConfigurationScorer;
-import org.getalp.ml.matrix.score.SumMatrixScorer;
+import org.getalp.lexsema.ml.matrix.score.SumMatrixScorer;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Node;

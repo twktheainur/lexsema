@@ -30,21 +30,21 @@ public class SubConfiguration extends ConfidenceConfiguration {
     @Override
     public void setSense(int wordIndex, int senseIndex) {
         if (wordIndex + start < end) {
-            assignments[wordIndex + start] = senseIndex;
+            super.setSense(wordIndex + start,senseIndex);
         }
     }
 
     @Override
     public void setConfidence(int wordIndex, double confidence) {
         if (wordIndex + start < end) {
-            this.confidence.set(start + wordIndex, confidence);
+            this.getConfidence().set(start + wordIndex, confidence);
         }
     }
 
     @Override
     public int getAssignment(int wordIndex) {
         if (wordIndex + start < end) {
-            return assignments[wordIndex + start];
+            return getAssignments()[wordIndex + start];
         } else {
             return -1;
         }
@@ -53,7 +53,7 @@ public class SubConfiguration extends ConfidenceConfiguration {
     @Override
     public double getConfidence(int wordIndex) {
         if (wordIndex + start < end) {
-            return confidence.get(wordIndex + start);
+            return getConfidence().get(wordIndex + start);
         } else {
             return -1;
         }

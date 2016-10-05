@@ -5,7 +5,6 @@ import org.deeplearning4j.models.embeddings.wordvectors.WordVectors;
 import org.getalp.lexsema.io.dictionary.DocumentDictionaryWriter;
 import org.getalp.lexsema.io.document.loader.*;
 import org.getalp.lexsema.io.resource.wordnet.WordnetLoader;
-import org.getalp.lexsema.io.thesaurus.AnnotatedTextThesaurusImpl;
 import org.getalp.lexsema.io.word2vec.SerializedModelWord2VecLoader;
 import org.getalp.lexsema.io.word2vec.Word2VecLoader;
 import org.getalp.lexsema.similarity.Text;

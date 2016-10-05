@@ -3,11 +3,7 @@ package org.getalp.lexsema.io.resource.babelnet;
 
 import edu.mit.jwi.item.IPointer;
 import edu.mit.jwi.item.POS;
-import it.uniroma1.lcl.babelnet.BabelGloss;
-import it.uniroma1.lcl.babelnet.BabelNet;
-import it.uniroma1.lcl.babelnet.BabelNetConfiguration;
-import it.uniroma1.lcl.babelnet.BabelSense;
-import it.uniroma1.lcl.babelnet.BabelSynset;
+import it.uniroma1.lcl.babelnet.*;
 import org.getalp.lexsema.io.resource.LRLoader;
 import org.getalp.lexsema.io.thesaurus.AnnotatedTextThesaurus;
 import org.getalp.lexsema.similarity.*;
@@ -61,36 +57,36 @@ public class BabelNetAPILoader implements LRLoader {
             for (BabelSense bs : babelSenses) {
                 SemanticSignature signature = new SemanticSignatureImpl();
                 if (loadDefinitions) {
-                    String def = "";
+                    StringBuilder def = new StringBuilder();
                     List<BabelGloss> glosses = bs.getSynset().getGlosses(toBabelNetLanguage(language));
                     for (BabelGloss bg : glosses) {
-                        def += " " + bg.getGloss();
+                        def.append(" ").append(bg.getGloss());
                     }
-                    addToSignature(signature, def);
+                    addToSignature(signature, def.toString());
                 }
 
-                Sense s = new SenseImpl(bs.getSynset().getId());
+                Sense sense = new SenseImpl(bs.getSynset().getId());
 
                 if (loadRelated) {
                     Map<IPointer, List<BabelSynset>> related = bs.getSynset().getRelatedMap();
                     for (IPointer p : related.keySet()) {
                         for (BabelSynset babelSynset : related.get(p)) {
-                            String localDef = "";
+                            StringBuilder localDef = new StringBuilder();
                             List<BabelGloss> relatedGlosses = babelSynset.getGlosses(toBabelNetLanguage(language));
                             for (BabelGloss rbg : relatedGlosses) {
-                                localDef += rbg.getGloss();
+                                localDef.append(rbg.getGloss());
                             }
                             SemanticSignature localSignature = new SemanticSignatureImpl();
-                            addToSignature(localSignature, localDef);
+                            addToSignature(localSignature, localDef.toString());
                             if (hasExtendedSignature) {
                                 signature.appendSignature(localSignature);
                             }
-                            s.addRelatedSignature(p.getSymbol(), localSignature);
+                            sense.addRelatedSignature(p.getSymbol(), localSignature);
                         }
                     }
                 }
-                s.setSemanticSignature(signature);
-                senses.add(s);
+                sense.setSemanticSignature(signature);
+                senses.add(sense);
             }
         } catch (IOException e) {
             logger.error(e.getLocalizedMessage());
@@ -172,11 +168,13 @@ public class BabelNetAPILoader implements LRLoader {
         return this;
     }
 
+    @Override
     public LRLoader loadDefinitions(boolean loadDefinitions) {
         this.loadDefinitions = loadDefinitions;
         return this;
     }
 
+    @Override
     public LRLoader loadRelated(boolean loadRelated) {
         this.loadRelated = loadRelated;
         return this;

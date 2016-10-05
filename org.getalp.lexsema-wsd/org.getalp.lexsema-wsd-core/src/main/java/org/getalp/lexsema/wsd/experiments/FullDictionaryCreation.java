@@ -2,7 +2,6 @@ package org.getalp.lexsema.wsd.experiments;
 
 import edu.mit.jwi.Dictionary;
 import org.getalp.lexsema.io.dictionary.DictionaryWriter;
-import org.getalp.lexsema.io.dictionary.DocumentDictionaryWriter;
 import org.getalp.lexsema.io.dictionary.FullLRDictionaryWriter;
 import org.getalp.lexsema.io.document.loader.*;
 import org.getalp.lexsema.io.resource.LRLoader;
@@ -11,7 +10,6 @@ import org.getalp.lexsema.io.thesaurus.AnnotatedTextThesaurusImpl;
 import org.getalp.lexsema.similarity.Text;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
 public class FullDictionaryCreation

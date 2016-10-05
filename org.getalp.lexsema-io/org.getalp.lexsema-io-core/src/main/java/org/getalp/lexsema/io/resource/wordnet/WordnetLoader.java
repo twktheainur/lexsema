@@ -10,26 +10,24 @@ import org.getalp.lexsema.similarity.*;
 import org.getalp.lexsema.similarity.Word;
 import org.getalp.lexsema.similarity.cache.SenseCache;
 import org.getalp.lexsema.similarity.cache.SenseCacheImpl;
-import org.getalp.lexsema.similarity.signatures.*;
+import org.getalp.lexsema.similarity.signatures.IndexedSemanticSignature;
+import org.getalp.lexsema.similarity.signatures.IndexedSemanticSignatureImpl;
+import org.getalp.lexsema.similarity.signatures.SemanticSignature;
+import org.getalp.lexsema.similarity.signatures.SemanticSignatureImpl;
 import org.getalp.lexsema.similarity.signatures.enrichment.IndexingSignatureEnrichment;
 import org.getalp.lexsema.similarity.signatures.enrichment.SignatureEnrichment;
 import org.getalp.lexsema.similarity.signatures.enrichment.StemmingSignatureEnrichment;
 import org.getalp.lexsema.similarity.signatures.enrichment.StopwordsRemovingSignatureEnrichment;
-import org.getalp.lexsema.similarity.signatures.index.SymbolIndex;
-import org.getalp.lexsema.similarity.signatures.index.SymbolIndexImpl;
-import org.getalp.lexsema.similarity.signatures.symbols.SemanticSymbol;
 import org.getalp.lexsema.util.distribution.SparkSingleton;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import java.io.IOException;
+
 import java.text.MessageFormat;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 public class WordnetLoader implements LRLoader {
 
@@ -87,7 +85,7 @@ public class WordnetLoader implements LRLoader {
         if (dictionary != null && !dictionary.isOpen()) {
             try {
                 dictionary.open();
-            } catch (IOException e) {
+            } catch (Exception e) {
                 logger.info(e.getLocalizedMessage());
             }
         }

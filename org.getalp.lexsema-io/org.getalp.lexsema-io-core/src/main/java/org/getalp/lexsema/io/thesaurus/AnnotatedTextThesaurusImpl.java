@@ -1,13 +1,11 @@
 package org.getalp.lexsema.io.thesaurus;
 
-import java.text.MessageFormat;
-import java.util.*;
-import java.util.regex.Pattern;
-
 import org.getalp.lexsema.similarity.Sentence;
 import org.getalp.lexsema.similarity.Text;
 import org.getalp.lexsema.similarity.Word;
 import org.getalp.lexsema.util.StopList;
+
+import java.util.*;
 
 /**
  * This class provides the N most frequent words used in sentences

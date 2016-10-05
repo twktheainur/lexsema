@@ -1,22 +1,13 @@
 package it.uniroma1.lcl.babelnet;
 
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.Multimap;
+import edu.mit.jwi.item.IPointer;
+import edu.mit.jwi.item.POS;
 import it.uniroma1.lcl.jlt.util.Language;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import com.google.common.collect.HashMultimap;
-import com.google.common.collect.Multimap;
-
-import edu.mit.jwi.item.IPointer;
-import edu.mit.jwi.item.POS;
+import java.util.*;
 
 /**
  * 
@@ -328,7 +319,7 @@ public class BabelSynset implements Iterable<BabelSense>
 		if (translations == null)
 		{
 			// init the translation relations
-			translations = new HashMultimap<BabelSense, BabelSense>();
+			translations = HashMultimap.create();
 			for (String translationMapping : translationMappings)
 			{
 				String[] split = translationMapping.split("_");
@@ -363,7 +354,7 @@ public class BabelSynset implements Iterable<BabelSense>
 		
 		// keeps only translations with a certain score
 		Multimap<BabelSense, BabelSense> filteredTranslations =
-			new HashMultimap<BabelSense, BabelSense>();
+				HashMultimap.create();
 		
 		for (BabelSense srcSense : translations.keySet())
 		{

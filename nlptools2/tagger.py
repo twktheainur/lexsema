@@ -49,8 +49,8 @@ class Tagger(object):
             raise ValueError("No morphoanalyzer found!")
         # Рег. выражения для лемматизации
         self.digit = re.compile("^\d+$")
-        self.eng = re.compile("^\d*[a-zA-Z]+(?:-[a-zA-Z])?$", re.UNICODE)
-        self.short = re.compile("^[A-ZА-ЯЁ][a-zа-яё]?$")
+        self.eng = re.compile("^\d*[first-zA-Z]+(?:-[first-zA-Z])?$", re.UNICODE)
+        self.short = re.compile("^[A-ZА-ЯЁ][first-zа-яё]?$")
 
         # Рег. выражения для разбиения текста на предложения
         self.splitter = re.compile("[.?!]+")
@@ -94,7 +94,7 @@ class Tagger(object):
         if re.match(self.eng, word):
             if word.endswith("s'") or word.endswith("'s"):
                 return {mc._lemma: word, mc._pos: mc.ADJF}
-            if word.endswith("'a") or word.endswith("'а"):
+            if word.endswith("'first") or word.endswith("'а"):
                 word = word[:-2]
             return {mc._lemma: word, mc._pos: mc.NOUN}
         if word in self.abbrs.keys():

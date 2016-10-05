@@ -110,7 +110,7 @@ public class KnowledgeGraphFactory
 		Set<String> sourceConcepts = new HashSet<String>();
 		Set<String> contextConcepts = new HashSet<String>();
 		
-		Multimap<Word, String> sourceWordToConcept = new HashMultimap<Word, String>();
+		Multimap<Word, String> sourceWordToConcept = HashMultimap.create();
 
 		for (Word word : sourceWords)
 		{
@@ -206,11 +206,11 @@ public class KnowledgeGraphFactory
 			getPaths(sourceConcepts, contextConcepts, filters);
 		
 		// creates the hash from source to their paths
-		Multimap<String, KnowledgeGraphPath> concept2paths = 
-			new HashMultimap<String, KnowledgeGraphPath>();
+		Multimap<String, KnowledgeGraphPath> concept2paths =
+				HashMultimap.create();
 		// creates a map containing paths to each vertex
 		Multimap<String, KnowledgeGraphPath> paths2concept =
-			new HashMultimap<String, KnowledgeGraphPath>();
+				HashMultimap.create();
 		
 		for (KnowledgeGraphPath path : paths)
 		{
@@ -224,7 +224,7 @@ public class KnowledgeGraphFactory
 			KnowledgeGraphPath.toUnionGraph(concept2paths.values());
 
 		// STEP 3: creates the map from words to nodes in the graph
-		Multimap<Word, String> pathSourceWord2concepts = new HashMultimap<Word, String>();
+		Multimap<Word, String> pathSourceWord2concepts = HashMultimap.create();
 		if (sourceWord2concepts != null)
 			for (Word word : sourceWord2concepts.keySet())
 				for (String concept : sourceWord2concepts.get(word))
@@ -241,11 +241,11 @@ public class KnowledgeGraphFactory
 						  					 Collection<KnowledgeGraphPathFilter> filters) throws IOException
 	{	
 		// map from offset to paths originating with that offset
-		Multimap<String, List<String>> firstConcept2pathsStartingWithSourceSense = 
-			new HashMultimap<String, List<String>>();
+		Multimap<String, List<String>> firstConcept2pathsStartingWithSourceSense =
+				HashMultimap.create();
 		// map from offset to paths ending with that offset
-		Multimap<String, List<String>> firstConcept2pathsEndingWithContextSense = 
-			new HashMultimap<String, List<String>>();
+		Multimap<String, List<String>> firstConcept2pathsEndingWithContextSense =
+				HashMultimap.create();
 		
 		// collects the single paths
 		for (String concept : sourceConcepts)

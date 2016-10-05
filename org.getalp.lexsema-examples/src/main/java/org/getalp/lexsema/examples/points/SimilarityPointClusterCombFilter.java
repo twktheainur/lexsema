@@ -4,14 +4,12 @@ package org.getalp.lexsema.examples.points;
 import cern.colt.matrix.tdouble.DoubleMatrix1D;
 import cern.colt.matrix.tdouble.DoubleMatrix2D;
 import org.getalp.lexsema.similarity.measures.SimilarityMeasure;
-import org.getalp.ml.matrix.filters.Filter;
-import org.getalp.ml.vector.Vectors;
+import org.getalp.lexsema.ml.matrix.filters.Filter;
+import org.getalp.lexsema.ml.vector.Vectors;
 
 
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.Set;
-import java.util.TreeSet;
 
 public class SimilarityPointClusterCombFilter implements PointClusterCombFilter {
 

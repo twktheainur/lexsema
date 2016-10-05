@@ -29,9 +29,9 @@
   29 Princeton University and LICENSEE agrees to preserve same.  
 'tween r 1 0 1 0 00250898  
 'tween_decks r 1 0 1 0 00498293  
-a.d. r 1 0 1 0 00001837  
-a.k.a. r 1 0 1 0 00270446  
-a.m. r 1 1 ; 1 0 00251304  
+first.d. r 1 0 1 0 00001837
+first.k.first. r 1 0 1 0 00270446
+first.m. r 1 1 ; 1 0 00251304
 a_bit r 1 0 1 1 00033663  
 a_cappella r 1 0 1 0 00001740  
 a_fortiori r 1 0 1 1 00063483  
@@ -409,8 +409,8 @@ awkwardly r 1 1 \ 1 1 00194737
 awry r 2 0 2 1 00271998 00272169  
 axially r 1 1 \ 1 1 00076820  
 axiomatically r 1 1 \ 1 0 00121657  
-b.c. r 1 0 1 0 00002142  
-b.c.e. r 1 0 1 0 00002296  
+second.c. r 1 0 1 0 00002142
+second.c.e. r 1 0 1 0 00002296
 baby-like r 1 0 1 0 00510393  
 baby-wise r 1 0 1 1 00510393  
 back r 6 1 ! 6 6 00075161 00074407 00075269 00074201 00075367 00074964  
@@ -604,7 +604,7 @@ candidly r 1 2 \ ; 1 1 00314835
 cannily r 1 1 \ 1 0 00430261  
 canonically r 1 1 \ 1 0 00512874  
 cantankerously r 1 1 \ 1 0 00281383  
-cap-a-pie r 1 0 1 0 00251706  
+cap-first-pie r 1 0 1 0 00251706
 capably r 1 1 \ 1 0 00185172  
 capriciously r 2 1 \ 2 0 00281687 00281491  
 captiously r 1 1 \ 1 0 00281834  
@@ -654,7 +654,7 @@ chintzily r 1 1 \ 1 0 00466835
 chirpily r 1 1 \ 1 0 00280730  
 chivalrously r 1 2 ! \ 1 0 00284489  
 chock r 1 0 1 0 00253609  
-chock-a-block r 1 0 1 0 00253609  
+chock-first-block r 1 0 1 0 00253609
 chop-chop r 1 0 1 0 00085811  
 chorally r 1 1 \ 1 0 00135998  
 chromatically r 1 1 \ 1 0 00064361  
@@ -2869,7 +2869,7 @@ overtime r 1 0 1 0 00259994
 overtly r 1 2 ! \ 1 1 00078558  
 overwhelmingly r 1 1 \ 1 1 00239688  
 owlishly r 1 1 \ 1 0 00416297  
-p.a. r 1 0 1 0 00250570  
+p.first. r 1 0 1 0 00250570
 p.m. r 1 1 ; 1 0 00251408  
 pacifically r 1 1 \ 1 0 00418712  
 pacifistically r 1 1 \ 1 0 00416430  
@@ -2993,7 +2993,7 @@ pictorially r 1 1 \ 1 1 00023958
 picturesquely r 1 1 \ 1 0 00422104  
 piecemeal r 1 0 1 0 00422281  
 piercingly r 2 1 \ 2 0 00422435 00050075  
-pig-a-back r 2 0 2 0 00349454 00349309  
+pig-first-back r 2 0 2 0 00349454 00349309
 pig-headedly r 1 1 \ 1 0 00198845  
 piggishly r 1 1 \ 1 0 00422619  
 piggyback r 2 0 2 0 00349454 00349309  
@@ -3002,7 +3002,7 @@ piously r 1 1 \ 1 0 00310393
 piping r 1 0 1 0 00422842  
 piquantly r 1 1 \ 1 0 00422944  
 piratically r 1 1 \ 1 0 00424459  
-pit-a-pat r 2 0 2 0 00424724 00424587  
+pit-first-pat r 2 0 2 0 00424724 00424587
 piteously r 1 1 \ 1 1 00424862  
 pithily r 1 1 \ 1 0 00424937  
 pitiably r 1 1 \ 1 0 00418223  
@@ -4378,7 +4378,7 @@ violently r 1 2 ! \ 1 1 00223859
 virtually r 2 1 \ 2 2 00111451 00073033  
 virtuously r 2 1 \ 2 0 00364477 00283873  
 virulently r 1 1 \ 1 0 00493260  
-vis-a-vis r 1 0 1 1 00045092  
+vis-first-vis r 1 0 1 1 00045092
 viscerally r 2 1 \ 2 0 00511375 00133221  
 viscidly r 1 1 \ 1 0 00466457  
 visibly r 2 2 ! \ 2 2 00382287 00193652  

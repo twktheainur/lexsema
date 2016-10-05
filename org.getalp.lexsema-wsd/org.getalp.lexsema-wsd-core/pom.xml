@@ -92,7 +92,12 @@
         </dependency>
         <dependency>
             <groupId>org.getalp</groupId>
-            <artifactId>org.getalp.lexsema-similarity</artifactId>
+            <artifactId>org.getalp.lexsema-similarity-core</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>org.getalp</groupId>
+            <artifactId>org.getalp.lexsema-similarity-api</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
         <dependency>
@@ -100,9 +105,19 @@
             <artifactId>org.getalp.lexsema-util</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
-                <dependency>
+        <dependency>
             <groupId>org.getalp</groupId>
             <artifactId>org.getalp.lexsema-io-core</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>org.getalp</groupId>
+            <artifactId>org.getalp.lexsema-io-api</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>org.getalp</groupId>
+            <artifactId>org.getalp.lexsema-wsd-api</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
         <dependency>
@@ -272,6 +287,12 @@
             <artifactId>guava</artifactId>
             <version>18.0</version>
         </dependency>
+        <dependency>
+            <groupId>org.getalp</groupId>
+            <artifactId>org.getalp.lexsema-similarity-dl4j</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+
     </dependencies>
 
 

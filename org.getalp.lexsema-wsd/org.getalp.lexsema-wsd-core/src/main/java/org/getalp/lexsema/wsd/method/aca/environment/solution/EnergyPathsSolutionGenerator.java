@@ -6,11 +6,9 @@ import org.getalp.lexsema.wsd.configuration.Configuration;
 import org.getalp.lexsema.wsd.method.aca.environment.Environment;
 import org.getalp.lexsema.wsd.method.aca.environment.graph.Node;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Random;
-import java.util.stream.Collectors;
 
 public class EnergyPathsSolutionGenerator implements SolutionGenerator{
     private final Random random = new Random();

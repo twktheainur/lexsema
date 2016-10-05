@@ -13,9 +13,7 @@ import org.getalp.lexsema.wsd.method.StopCondition;
 import org.getalp.lexsema.wsd.score.ConfigurationScorer;
 import org.getalp.lexsema.wsd.score.ConfigurationScorerWithCache;
 
-import java.io.File;
 import java.io.FileInputStream;
-import java.io.FilterInputStream;
 import java.io.PrintWriter;
 
 public class SimulatedAnnealingDisambiguation2

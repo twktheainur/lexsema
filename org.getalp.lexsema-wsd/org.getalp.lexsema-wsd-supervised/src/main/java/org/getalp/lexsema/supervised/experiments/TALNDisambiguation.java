@@ -3,8 +3,6 @@ package org.getalp.lexsema.supervised.experiments;
 
 import org.getalp.lexsema.io.annotresult.ConfigurationWriter;
 import org.getalp.lexsema.io.annotresult.SemevalWriter;
-import org.getalp.lexsema.io.dictionary.DictionaryWriter;
-import org.getalp.lexsema.io.dictionary.DocumentDictionaryWriter;
 import org.getalp.lexsema.io.document.loader.SemCorCorpusLoader;
 import org.getalp.lexsema.io.document.loader.Semeval2013Task12CorpusLoader;
 import org.getalp.lexsema.io.document.loader.CorpusLoader;
@@ -17,10 +15,9 @@ import org.getalp.lexsema.supervised.features.extractors.AggregateLocalTextFeatu
 import org.getalp.lexsema.supervised.features.extractors.LemmaFeatureExtractor;
 import org.getalp.lexsema.supervised.features.extractors.LocalCollocationFeatureExtractor;
 import org.getalp.lexsema.supervised.features.extractors.PosFeatureExtractor;
-import org.getalp.lexsema.supervised.weka.NaiveBayesSetUp;
+import org.getalp.lexsema.ml.supervised.weka.NaiveBayesSetUp;
 import org.getalp.lexsema.wsd.configuration.Configuration;
 import org.getalp.lexsema.wsd.method.Disambiguator;
-import org.getalp.lexsema.wsd.method.FirstSenseDisambiguator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

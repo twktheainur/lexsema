@@ -1,13 +1,11 @@
 package org.getalp.lexsema.wsd.experiments;
 
-import cern.colt.matrix.Norm;
 import edu.mit.jwi.Dictionary;
 
 import org.getalp.lexsema.io.annotresult.SemevalWriter;
 import org.getalp.lexsema.io.document.loader.CorpusLoader;
 import org.getalp.lexsema.io.document.loader.Semeval2007CorpusLoader;
 import org.getalp.lexsema.io.resource.LRLoader;
-import org.getalp.lexsema.io.resource.dictionary.DictionaryLRLoader;
 import org.getalp.lexsema.io.resource.wordnet.WordnetLoader;
 import org.getalp.lexsema.similarity.Document;
 import org.getalp.lexsema.similarity.measures.SimilarityMeasure;
@@ -23,15 +21,10 @@ import org.getalp.lexsema.wsd.evaluation.GoldStandard;
 import org.getalp.lexsema.wsd.evaluation.Semeval2007GoldStandard;
 import org.getalp.lexsema.wsd.evaluation.StandardEvaluation;
 import org.getalp.lexsema.wsd.method.Disambiguator;
-import org.getalp.lexsema.wsd.method.MultiThreadCuckooSearch;
 import org.getalp.lexsema.wsd.method.aca.AntColonyAlgorithm;
-import org.getalp.lexsema.wsd.score.*;
-import org.getalp.ml.matrix.score.NormMatrixScorer;
-import org.getalp.ml.matrix.score.SumMatrixScorer;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.PrintWriter;
 
 public class ACADisambiguator
 {

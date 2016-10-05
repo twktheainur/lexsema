@@ -2,28 +2,14 @@ package org.getalp.lexsema.examples.points;
 import cern.colt.matrix.tdouble.DoubleMatrix2D;
 import cern.colt.matrix.tdouble.impl.DenseDoubleMatrix2D;
 import com.trickl.cluster.KMeans;
-import org.getalp.lexsema.acceptali.cli.org.getalp.lexsema.acceptali.acceptions.SenseCluster;
-import org.getalp.lexsema.acceptali.cli.org.getalp.lexsema.acceptali.acceptions.SenseClusterer;
-import org.getalp.lexsema.acceptali.cli.org.getalp.lexsema.acceptali.acceptions.TricklSenseClusterer;
-import org.getalp.lexsema.ontolex.dbnary.exceptions.NoSuchVocableException;
 
 import org.getalp.lexsema.similarity.measures.SimilarityMeasure;
 import org.getalp.lexsema.similarity.measures.crosslingual.TranslatorCrossLingualSimilarity;
 import org.getalp.lexsema.similarity.measures.tverski.TverskiIndexSimilarityMeasureBuilder;
-import org.getalp.lexsema.translation.GoogleWebTranslator;
-import org.getalp.lexsema.translation.Translator;
-import org.getalp.lexsema.util.Language;
-import org.getalp.ml.matrix.filters.Filter;
-import org.getalp.ml.matrix.filters.NMFKLMatrixFactorizationFilter;
-import org.getalp.ml.matrix.filters.normalization.ZSignificanceNormalizationFilter;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.awt.*;
 import java.io.*;
-import java.lang.reflect.InvocationTargetException;
 import java.util.*;
-import java.util.List;
 
 /**
  * Created by boucherj on 04/02/16.

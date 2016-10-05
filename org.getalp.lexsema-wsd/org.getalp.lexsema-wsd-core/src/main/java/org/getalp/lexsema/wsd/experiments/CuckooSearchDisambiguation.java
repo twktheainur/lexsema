@@ -1,19 +1,20 @@
 package org.getalp.lexsema.wsd.experiments;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.PrintWriter;
-
 import org.getalp.lexsema.io.annotresult.SemevalWriter;
 import org.getalp.lexsema.io.document.loader.CorpusLoader;
 import org.getalp.lexsema.io.document.loader.Semeval2007CorpusLoader;
 import org.getalp.lexsema.io.resource.LRLoader;
 import org.getalp.lexsema.io.resource.dictionary.DictionaryLRLoader;
 import org.getalp.lexsema.similarity.Document;
-import org.getalp.lexsema.similarity.measures.lesk.*;
+import org.getalp.lexsema.similarity.measures.lesk.AnotherLeskSimilarity;
 import org.getalp.lexsema.wsd.configuration.Configuration;
-import org.getalp.lexsema.wsd.method.*;
-import org.getalp.lexsema.wsd.score.*;
+import org.getalp.lexsema.wsd.method.MultiThreadCuckooSearch;
+import org.getalp.lexsema.wsd.score.ConfigurationScorer;
+import org.getalp.lexsema.wsd.score.ConfigurationScorerWithCache;
+import org.getalp.lexsema.wsd.score.SemEval2007Task7PerfectConfigurationScorer;
+
+import java.io.FileInputStream;
+import java.io.PrintWriter;
 
 public class CuckooSearchDisambiguation
 {

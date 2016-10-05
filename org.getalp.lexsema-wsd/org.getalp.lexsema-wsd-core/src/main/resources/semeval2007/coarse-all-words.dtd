@@ -11,4 +11,4 @@
 <!ELEMENT instance (#PCDATA)>
 <!ATTLIST instance id ID #REQUIRED>
 <!ATTLIST instance lemma CDATA #REQUIRED>
-<!ATTLIST instance pos (a|n|v|r) #REQUIRED>
+<!ATTLIST instance pos (first|n|v|r) #REQUIRED>

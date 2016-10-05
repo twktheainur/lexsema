@@ -5,9 +5,9 @@ import org.getalp.lexsema.similarity.Document;
 import org.getalp.lexsema.similarity.Sense;
 import org.getalp.lexsema.similarity.measures.SimilarityMeasure;
 import org.getalp.lexsema.wsd.configuration.Configuration;
-import org.getalp.ml.optimization.functions.input.FunctionInput;
-import org.getalp.ml.optimization.functions.setfunctions.input.AbstractSetFunctionInput;
-import org.getalp.ml.optimization.functions.setfunctions.input.Interval;
+import org.getalp.lexsema.ml.optimization.functions.input.FunctionInput;
+import org.getalp.lexsema.ml.optimization.functions.setfunctions.input.AbstractSetFunctionInput;
+import org.getalp.lexsema.ml.optimization.functions.setfunctions.input.Interval;
 
 import java.util.List;
 

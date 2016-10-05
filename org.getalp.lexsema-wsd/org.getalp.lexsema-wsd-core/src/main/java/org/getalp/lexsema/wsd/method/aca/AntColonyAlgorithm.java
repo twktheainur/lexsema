@@ -5,7 +5,6 @@ import cern.jet.random.engine.MersenneTwister;
 import org.getalp.lexsema.similarity.Document;
 import org.getalp.lexsema.similarity.Text;
 import org.getalp.lexsema.similarity.measures.SimilarityMeasure;
-import org.getalp.lexsema.wsd.configuration.ConfidenceConfiguration;
 import org.getalp.lexsema.wsd.configuration.Configuration;
 import org.getalp.lexsema.wsd.evaluation.Evaluation;
 import org.getalp.lexsema.wsd.evaluation.GoldStandard;
@@ -20,8 +19,6 @@ import org.getalp.lexsema.wsd.method.aca.environment.factories.DocumentEnvironme
 import org.getalp.lexsema.wsd.method.aca.environment.Environment;
 import org.getalp.lexsema.wsd.method.aca.environment.factories.EnvironmentFactory;
 import org.getalp.lexsema.wsd.method.aca.environment.factories.TextEnvironmentFactory;
-import org.getalp.lexsema.wsd.method.aca.environment.solution.EnergyPathsSolutionGenerator;
-import org.getalp.lexsema.wsd.method.aca.environment.solution.EnergySolutionGenerator;
 import org.getalp.lexsema.wsd.method.aca.environment.solution.MaxNumberOfPathsSolutionGenerator;
 import org.getalp.lexsema.wsd.method.aca.environment.solution.SolutionGenerator;
 import org.getalp.lexsema.wsd.method.aca.environment.updates.EnvironmentUpdater;

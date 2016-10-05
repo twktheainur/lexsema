@@ -1,7 +1,7 @@
 package org.getalp.lexsema.examples.points;
 
 import cern.colt.matrix.tdouble.DoubleMatrix2D;
-import org.getalp.ml.matrix.filters.Filter;
+import org.getalp.lexsema.ml.matrix.filters.Filter;
 
 
 public interface PairwiseSimilarityMatrixGenerator {

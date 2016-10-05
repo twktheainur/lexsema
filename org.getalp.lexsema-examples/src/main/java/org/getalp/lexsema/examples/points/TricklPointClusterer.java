@@ -2,7 +2,7 @@ package org.getalp.lexsema.examples.points;
 
 import cern.colt.matrix.tdouble.DoubleMatrix2D;
 import com.trickl.cluster.ClusterAlgorithm;
-import org.getalp.ml.matrix.filters.Filter;
+import org.getalp.lexsema.ml.matrix.filters.Filter;
 
 import java.awt.*;
 import java.util.ArrayList;

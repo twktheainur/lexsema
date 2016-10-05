@@ -3,9 +3,6 @@ package org.getalp.lexsema.wsd.method;
 import java.io.PrintWriter;
 import java.util.Random;
 
-import cern.jet.random.tdouble.engine.DoubleMersenneTwister;
-import cern.jet.random.tdouble.engine.DoubleRandomEngine;
-
 import org.getalp.lexsema.similarity.Document;
 import org.getalp.lexsema.wsd.configuration.Configuration;
 import org.getalp.lexsema.wsd.configuration.ContinuousConfiguration;

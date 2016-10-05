@@ -4,7 +4,7 @@ import org.getalp.lexsema.similarity.Document;
 import org.getalp.lexsema.wsd.configuration.Configuration;
 import org.getalp.lexsema.wsd.configuration.ContinuousConfiguration;
 import org.getalp.lexsema.wsd.score.ConfigurationScorer;
-import org.getalp.lexsema.wsd.method.StopCondition;
+
 import java.io.PrintWriter;
 import java.util.Random;
 

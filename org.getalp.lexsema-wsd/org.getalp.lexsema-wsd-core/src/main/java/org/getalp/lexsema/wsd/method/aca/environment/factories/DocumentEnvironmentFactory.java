@@ -1,7 +1,9 @@
 package org.getalp.lexsema.wsd.method.aca.environment.factories;
 
 
-import org.getalp.lexsema.similarity.*;
+import org.getalp.lexsema.similarity.Document;
+import org.getalp.lexsema.similarity.Sense;
+import org.getalp.lexsema.similarity.Word;
 import org.getalp.lexsema.wsd.method.aca.environment.Environment;
 import org.getalp.lexsema.wsd.method.aca.environment.EnvironmentImpl;
 import org.getalp.lexsema.wsd.method.aca.environment.graph.EnvironmentNode;

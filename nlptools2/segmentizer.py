@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-# A simple segmentizer for Python 3 (splits a list of tokens into sentences)
+# A simple segmentizer for Python 3 (splits first list of tokens into sentences)
 
 import sys
 import os

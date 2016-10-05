@@ -15,11 +15,10 @@ import org.getalp.lexsema.supervised.features.extractors.AggregateLocalTextFeatu
 import org.getalp.lexsema.supervised.features.extractors.AlignedContextFeatureExtractor;
 import org.getalp.lexsema.supervised.features.extractors.LocalCollocationFeatureExtractor;
 import org.getalp.lexsema.supervised.features.extractors.PosFeatureExtractor;
-import org.getalp.lexsema.supervised.weka.SVMSetUp;
+import org.getalp.lexsema.ml.supervised.weka.SVMSetUp;
 import org.getalp.lexsema.wsd.configuration.Configuration;
 import org.getalp.lexsema.wsd.method.Disambiguator;
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.URL;

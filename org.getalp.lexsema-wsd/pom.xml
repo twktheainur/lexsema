@@ -9,6 +9,8 @@
     <packaging>pom</packaging>
 
     <modules>
+        <module>org.getalp.lexsema-wsd-api</module>
+        <module>org.getalp.lexsema-wsd-parameters</module>
         <module>org.getalp.lexsema-wsd-core</module>
         <module>org.getalp.lexsema-wsd-supervised</module>
     </modules>

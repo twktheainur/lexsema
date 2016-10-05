@@ -167,7 +167,7 @@
 121 appear%2:39:00:: 1
 120 wife%1:18:00:: 1
 120 mind%1:09:00:: 1
-118 only%5:00:00:single(a):00 1
+118 only%5:00:00:single(first):00 1
 118 long%3:00:02:: 1
 118 believe%2:31:00:: 1
 117 word%1:10:00:: 1
@@ -183,7 +183,7 @@
 113 part%1:24:00:: 1
 113 body%1:08:00:: 1
 112 write%2:36:00:: 1
-112 several%5:00:00:some(a):00 3
+112 several%5:00:00:some(first):00 3
 112 probably%4:02:00:: 1
 112 fight%2:33:00:: 1
 111 think%2:31:00:: 3
@@ -270,7 +270,7 @@
 90 thus%4:02:00:: 1
 90 surface%1:06:00:: 1
 90 study%1:04:00:: 1
-90 next%5:00:00:succeeding(a):00 3
+90 next%5:00:00:succeeding(first):00 3
 90 learn%2:31:00:: 1
 90 god%1:18:00:: 1
 89 mean%2:42:00:: 2
@@ -464,7 +464,7 @@
 64 laugh%2:29:00:: 1
 64 have%2:30:00:: 6
 64 get%2:30:03:: 4
-64 each%5:00:00:all(a):00 1
+64 each%5:00:00:all(first):00 1
 64 care%2:37:02:: 1
 64 admit%2:32:00:: 1
 63 show%2:31:00:: 2
@@ -554,7 +554,7 @@
 57 girl%1:18:02:: 2
 57 find%2:32:00:: 4
 57 find%2:31:10:: 5
-57 every%5:00:00:all(a):00 2
+57 every%5:00:00:all(first):00 2
 57 employee%1:18:00:: 1
 57 compare%2:31:00:: 1
 57 change%2:30:01:: 1
@@ -605,7 +605,7 @@
 53 reply%2:32:00:: 1
 53 remember%2:31:01:: 2
 53 rather%4:02:04:: 2
-53 one%5:00:01:single(a):00 8
+53 one%5:00:01:single(first):00 8
 53 nearly%4:02:00:: 1
 53 learn%2:31:01:: 2
 53 kid%1:18:00:: 1
@@ -730,7 +730,7 @@
 47 feed%2:34:04:: 1
 47 demand%2:32:00:: 1
 47 cross%2:38:00:: 1
-47 any%5:00:00:some(a):00 2
+47 any%5:00:00:some(first):00 2
 46 various%5:00:02:different:00 1
 46 song%1:10:00:: 1
 46 sing%2:36:01:: 1
@@ -1298,7 +1298,7 @@
 30 hurry%2:38:00:: 1
 30 have%2:36:00:: 9
 30 hat%1:06:00:: 1
-30 following%5:00:01:succeeding(a):00 4
+30 following%5:00:01:succeeding(first):00 4
 30 fire%2:33:01:: 1
 30 expect%2:32:00:: 2
 30 empty%3:00:00:: 1
@@ -1402,7 +1402,7 @@
 28 participate%2:41:00:: 1
 28 ordinary%3:00:00:: 1
 28 order%2:32:01:: 1
-28 one%5:00:02:single(a):00 7
+28 one%5:00:02:single(first):00 7
 28 once%4:02:02:: 2
 28 nose%1:08:00:: 1
 28 nevertheless%4:02:00:: 1
@@ -1688,7 +1688,7 @@
 24 replace%2:30:00:: 1
 24 quickly%4:02:00:: 1
 24 progress%1:04:01:: 1
-24 previous%5:00:00:preceding(a):00 3
+24 previous%5:00:00:preceding(first):00 3
 24 picture%1:06:01:: 2
 24 phase%1:28:00:: 1
 24 particular%5:00:00:specific:00 1
@@ -1858,7 +1858,7 @@
 22 take%2:41:00:: 12
 22 take%2:31:03:: 13
 22 surprise%2:31:00:: 1
-22 such%5:00:00:much(a):00 3
+22 such%5:00:00:much(first):00 3
 22 suburban%3:01:00:: 1
 22 substantial%5:00:00:considerable:00 1
 22 stay%2:42:01:: 3
@@ -2014,7 +2014,7 @@
 21 metal%1:27:00:: 1
 21 matter%2:42:00:: 1
 21 manager%1:18:01:: 2
-21 lower%5:00:00:bottom(a):00 3
+21 lower%5:00:00:bottom(first):00 3
 21 jury%1:14:00:: 1
 21 issue%2:32:00:: 1
 21 introduce%2:32:00:: 1
@@ -2149,7 +2149,7 @@
 20 former%5:00:01:past:00 2
 20 foreign%3:00:02:: 1
 20 force%1:19:00:: 2
-20 following%5:00:02:succeeding(a):00 3
+20 following%5:00:02:succeeding(first):00 3
 20 follow%2:38:01:: 4
 20 fist%1:08:00:: 1
 20 finally%4:02:00:: 2
@@ -2287,7 +2287,7 @@
 19 form%1:08:00:: 5
 19 force%1:07:00:: 3
 19 finally%4:02:03:: 3
-19 existing%5:00:00:present(a):01 3
+19 existing%5:00:00:present(first):01 3
 19 everywhere%4:02:00:: 1
 19 emotional%3:00:02:: 1
 19 egg%1:05:00:: 1
@@ -2337,7 +2337,7 @@
 18 wander%2:38:00:: 1
 18 vague%5:00:00:unclear:00 1
 18 use%1:07:00:: 2
-18 upper%5:00:00:top(a):00 2
+18 upper%5:00:00:top(first):00 2
 18 uniform%1:06:00:: 1
 18 ultimate%3:00:00:: 1
 18 u.s.%1:14:00:: 1
@@ -3338,7 +3338,7 @@
 13 snow%1:19:00:: 1
 13 snatch%2:35:00:: 1
 13 small%5:00:00:limited:00 2
-13 slight%5:00:00:little(a):03 2
+13 slight%5:00:00:little(first):03 2
 13 skeletal%3:01:00:: 1
 13 sign%2:41:00:: 2
 13 shift%2:30:00:: 1
@@ -3563,7 +3563,7 @@
 13 activity%1:22:00:: 3
 13 accomplish%2:41:00:: 2
 13 absolutely%4:02:00:: 1
-13 above%5:00:00:preceding(a):00 1
+13 above%5:00:00:preceding(first):00 1
 13 a_thousand%5:00:00:cardinal:00 1
 13 9%5:00:00:cardinal:00 1
 13 4%1:23:00:: 1
@@ -4084,7 +4084,7 @@
 11 incur%2:42:00:: 1
 11 in_detail%4:02:00:: 1
 11 impact%1:11:00:: 1
-11 immediate%5:00:00:present(a):01 4
+11 immediate%5:00:00:present(first):01 4
 11 imitation%1:09:00:: 1
 11 imagine%2:31:01:: 2
 11 however%4:02:02:: 3
@@ -4133,7 +4133,7 @@
 11 exercise%2:41:00:: 2
 11 examine%2:39:00:: 2
 11 every_day%4:02:00:: 1
-11 every%5:00:02:all(a):00 1
+11 every%5:00:02:all(first):00 1
 11 equip%2:40:00:: 1
 11 entity%1:03:00:: 1
 11 entitled%5:00:00:eligible:00 1
@@ -4262,7 +4262,7 @@
 10 vivid%5:00:00:realistic:00 1
 10 vice_president%1:18:00:: 1
 10 vapor_pressure%1:19:00:: 1
-10 unique%5:00:00:single(a):00 3
+10 unique%5:00:00:single(first):00 3
 10 unique%5:00:00:incomparable:00 1
 10 two_weeks%1:28:00:: 1
 10 turn_to%2:32:00:: 2
@@ -4854,7 +4854,7 @@
 9 precision%1:07:00:: 1
 9 precede%2:42:00:: 1
 9 preach%2:32:02:: 1
-9 pre%5:00:00:preceding(a):00 1
+9 pre%5:00:00:preceding(first):00 1
 9 posture%1:07:00:: 1
 9 portray%2:32:00:: 1
 9 popular%5:00:00:democratic:00 2
@@ -5860,7 +5860,7 @@
 8 badness%1:07:00:: 1
 8 background%1:07:00:: 1
 8 back_and_forth%4:02:00:: 1
-8 b%1:14:00:: 1
+8 second%1:14:00:: 1
 8 axe%1:06:00:: 1
 8 awaken%2:29:01:: 2
 8 awaken%2:29:00:: 1
@@ -6049,7 +6049,7 @@
 7 southern%5:00:02:south:00 2
 7 son_of_a_bitch%1:18:00:: 1
 7 somehow%4:02:01:: 2
-7 some%5:00:00:much(a):00 5
+7 some%5:00:00:much(first):00 5
 7 some%5:00:00:many:00 3
 7 solder%2:35:00:: 1
 7 social%3:00:00:: 2
@@ -6731,7 +6731,7 @@
 7 absurd%5:00:00:illogical:00 1
 7 absorbed%5:00:00:attentive:00 1
 7 able%5:00:00:competent:00 2
-7 a%1:14:00:: 1
+7 first%1:14:00:: 1
 7 80%5:00:00:cardinal:00 1
 7 27%5:00:00:cardinal:00 1
 7 19th%5:00:00:ordinal:00 1
@@ -6924,7 +6924,7 @@
 6 sometime%4:02:00:: 1
 6 solution%1:14:00:: 4
 6 solid%3:00:01:: 2
-6 sole%5:00:00:single(a):00 2
+6 sole%5:00:00:single(first):00 2
 6 solar_radiation%1:19:00:: 1
 6 society%1:14:01:: 2
 6 soaked%5:00:00:wet:01 1
@@ -7116,7 +7116,7 @@
 6 pour%2:38:04:: 3
 6 potential%5:00:00:prospective:00 2
 6 pot%1:06:00:: 1
-6 post%5:00:00:succeeding(a):00 1
+6 post%5:00:00:succeeding(first):00 1
 6 possibility%1:09:01:: 4
 6 possession%1:03:00:: 2
 6 positivist%1:18:00:: 1
@@ -7858,7 +7858,7 @@
 6 abroad%5:00:00:foreign:02 1
 6 abandon%2:40:01:: 2
 6 abandon%2:38:00:: 3
-6 a%1:23:01:: 2
+6 first%1:23:01:: 2
 6 90%5:00:00:cardinal:00 1
 6 9%1:23:00:: 1
 6 29%5:00:00:cardinal:00 1
@@ -8147,7 +8147,7 @@
 5 slow_down%2:30:00:: 1
 5 slit%1:06:00:: 1
 5 slipper%1:06:00:: 1
-5 slightest%5:00:00:least(a):00 1
+5 slightest%5:00:00:least(first):00 1
 5 sleeve%1:06:00:: 1
 5 slack%5:00:00:lax:01 1
 5 skull%1:08:00:: 1
@@ -9937,7 +9937,7 @@
 4 prosecutor%1:18:00:: 1
 4 proportionately%4:02:00:: 1
 4 property%1:15:00:: 3
-4 proper%5:00:00:real(a):02 4
+4 proper%5:00:00:real(first):02 4
 4 propel%2:35:00:: 1
 4 propagandistic%3:01:00:: 1
 4 propaganda%1:10:00:: 1
@@ -10630,7 +10630,7 @@
 4 fork%1:06:00:: 1
 4 forestall%2:41:01:: 1
 4 foreign%5:00:00:extrinsic:00 3
-4 foregoing%5:00:00:preceding(a):00 1
+4 foregoing%5:00:00:preceding(first):00 1
 4 forbidden%5:00:00:impermissible:00 1
 4 footstep%1:11:00:: 1
 4 footstep%1:04:00:: 2
@@ -11152,7 +11152,7 @@
 4 bound%3:00:01:: 1
 4 bound%2:38:01:: 1
 4 bounce%2:38:02:: 3
-4 both%5:00:00:some(a):00 1
+4 both%5:00:00:some(first):00 1
 4 boss%1:18:00:: 2
 4 bore%2:35:00:: 2
 4 bombus%1:05:00:: 1
@@ -11213,7 +11213,7 @@
 4 back%2:41:01:: 3
 4 back%2:38:01:: 4
 4 back%1:15:02:: 3
-4 b-52%1:06:00:: 1
+4 second-52%1:06:00:: 1
 4 awful%5:00:00:alarming:00 2
 4 awful%4:02:00:: 1
 4 awe%1:12:02:: 1
@@ -11312,7 +11312,7 @@
 4 affect%2:32:00:: 4
 4 affair%1:11:00:: 3
 4 afar%4:02:00:: 1
-4 aerial%5:00:02:air(a):00 2
+4 aerial%5:00:02:air(first):00 2
 4 advise%2:32:02:: 3
 4 adverse%5:00:00:unfavorable:02 1
 4 advance%2:41:01:: 4
@@ -11414,7 +11414,7 @@
 3 whip%2:38:00:: 3
 3 whip%2:35:02:: 4
 3 whip%1:06:00:: 1
-3 whining%5:00:00:complaining(a):00 2
+3 whining%5:00:00:complaining(first):00 2
 3 whereabouts%1:15:00:: 1
 3 wheel%2:38:04:: 2
 3 wheel%2:38:02:: 3
@@ -11978,7 +11978,7 @@
 3 social_science%1:09:00:: 1
 3 soberly%4:02:00:: 1
 3 sober_up%2:30:00:: 1
-3 so_much%5:00:00:much(a):00 1
+3 so_much%5:00:00:much(first):00 1
 3 so-so%5:00:00:ordinary:00 1
 3 snuggle%2:35:00:: 1
 3 snub%2:32:01:: 1
@@ -12364,7 +12364,7 @@
 3 reason%2:31:01:: 1
 3 reason%1:09:00:: 3
 3 rear_window%1:06:00:: 1
-3 rear%5:00:00:back(a):00 1
+3 rear%5:00:00:back(first):00 1
 3 reap%2:35:00:: 1
 3 realization%1:09:00:: 1
 3 realization%1:04:00:: 2
@@ -12750,7 +12750,7 @@
 3 onward%5:00:00:advancing:00 1
 3 only_when%4:02:00:: 1
 3 onlooker%1:18:00:: 1
-3 one-man%5:00:00:single(a):00 1
+3 one-man%5:00:00:single(first):00 1
 3 one-fifth%1:23:00:: 1
 3 one%5:00:00:same:00 4
 3 once%5:00:00:past:00 1
@@ -12957,7 +12957,7 @@
 3 march_on%2:38:00:: 1
 3 march%1:04:02:: 4
 3 map%2:36:00:: 1
-3 many_more%5:00:00:more(a):02 1
+3 many_more%5:00:00:more(first):02 1
 3 manufacture%2:36:00:: 1
 3 manned%3:00:00:: 1
 3 manipulate%2:35:00:: 2
@@ -13576,7 +13576,7 @@
 3 foyer%1:06:00:: 1
 3 fox%1:05:00:: 1
 3 foundation%1:14:00:: 2
-3 forward%5:00:00:fore(a):00 6
+3 forward%5:00:00:fore(first):00 6
 3 forward%4:02:02:: 3
 3 forward%4:02:01:: 4
 3 forward%2:38:00:: 1
@@ -13812,7 +13812,7 @@
 3 enthusiasm%1:09:00:: 3
 3 enterprising%3:00:00:: 1
 3 entail%2:42:00:: 2
-3 ensuing%5:00:00:succeeding(a):00 1
+3 ensuing%5:00:00:succeeding(first):00 1
 3 enrol%2:41:00:: 1
 3 enraged%5:00:00:angry:00 1
 3 enormously%4:02:00:: 1
@@ -13915,7 +13915,7 @@
 3 drainage%1:04:00:: 1
 3 dozens%1:23:00:: 1
 3 dozen%5:00:00:cardinal:00 1
-3 downward%5:00:00:descending(a):00 2
+3 downward%5:00:00:descending(first):00 2
 3 downright%4:02:00:: 1
 3 down%2:34:00:: 1
 3 dough%1:13:00:: 1
@@ -14177,7 +14177,7 @@
 3 conservative%1:18:00:: 1
 3 consequence%1:07:00:: 3
 3 consensus%1:26:00:: 1
-3 consecutive%5:00:00:succeeding(a):00 3
+3 consecutive%5:00:00:succeeding(first):00 3
 3 consciously%4:02:00:: 1
 3 conscientious_objector%1:18:00:: 1
 3 connotation%1:10:00:: 1
@@ -15650,7 +15650,7 @@
 2 substance%1:09:01:: 2
 2 substance%1:09:00:: 3
 2 subscribe%2:40:01:: 1
-2 subordinator%5:00:00:subordinating(a):00 1
+2 subordinator%5:00:00:subordinating(first):00 1
 2 subordinate%3:00:01:: 1
 2 submucosa%1:08:00:: 1
 2 submit%2:41:00:: 5
@@ -15828,7 +15828,7 @@
 2 stain%2:35:00:: 2
 2 stain%2:30:00:: 3
 2 stain%1:27:00:: 2
-2 stagnant%5:00:00:standing(a):02 1
+2 stagnant%5:00:00:standing(first):02 1
 2 staggeringly%4:02:00:: 1
 2 stagger%2:31:00:: 3
 2 stage_door%1:06:00:: 1
@@ -15960,7 +15960,7 @@
 2 some_other%5:00:00:other:00 1
 2 some%4:02:00:: 1
 2 somber%5:00:00:cheerless:00 1
-2 solitary%5:00:00:single(a):00 5
+2 solitary%5:00:00:single(first):00 5
 2 solidity%1:07:02:: 1
 2 solid_angle%1:25:00:: 1
 2 solid-state%5:00:02:solid:01 1
@@ -16019,7 +16019,7 @@
 2 smallness%1:07:00:: 1
 2 small_intestine%1:08:00:: 1
 2 small-arm%1:06:00:: 1
-2 small%5:00:00:little(a):03 11
+2 small%5:00:00:little(first):03 11
 2 smack%2:35:02:: 1
 2 slump%1:22:00:: 1
 2 slumber%2:29:00:: 1
@@ -16758,7 +16758,7 @@
 2 quick%5:00:00:active:01 3
 2 questionable%3:00:00:: 1
 2 question%2:32:02:: 5
-2 querulous%5:00:00:complaining(a):00 1
+2 querulous%5:00:00:complaining(first):00 1
 2 quarter_mile%1:23:00:: 1
 2 quarrel%1:10:00:: 1
 2 qualify%2:30:02:: 3
@@ -17993,7 +17993,7 @@
 2 latch%2:35:00:: 1
 2 lasting%3:00:04:: 1
 2 last%5:00:00:unlikely:00 4
-2 last%5:00:00:dying(a):00 11
+2 last%5:00:00:dying(first):00 11
 2 large-scale%5:00:00:large:00 1
 2 large%5:00:00:significant:00 2
 2 language%1:10:02:: 3
@@ -18311,7 +18311,7 @@
 2 in_concert%4:02:00:: 1
 2 in_arrears%5:00:00:late:00 1
 2 in_agreement%4:02:00:: 1
-2 in_advance%5:00:00:front(a):00 1
+2 in_advance%5:00:00:front(first):00 1
 2 in_a_way%4:02:00:: 2
 2 in_a_moment%4:02:00:: 1
 2 in%3:00:00:: 1
@@ -19341,7 +19341,7 @@
 2 drop%2:35:03:: 9
 2 drop%2:33:00:: 10
 2 drone%1:05:00:: 1
-2 drizzling%5:00:00:descending(a):00 1
+2 drizzling%5:00:00:descending(first):00 1
 2 driving%5:00:00:dynamic:00 1
 2 driven%5:00:00:involuntary:01 1
 2 drive_off%2:38:06:: 1
@@ -19381,7 +19381,7 @@
 2 downtrodden%5:00:00:wronged:00 1
 2 downpour%1:19:00:: 1
 2 downfall%1:11:01:: 1
-2 down%5:00:00:descending(a):00 4
+2 down%5:00:00:descending(first):00 4
 2 down%4:02:03:: 3
 2 dove%1:05:00:: 1
 2 doubtful%5:00:00:uncertain:02 2
@@ -20204,7 +20204,7 @@
 2 centrifugation%1:22:00:: 1
 2 centralized%3:00:00:: 1
 2 centralize%2:30:00:: 1
-2 central%5:00:00:inner(a):00 5
+2 central%5:00:00:inner(first):00 5
 2 centerfield%1:06:00:: 1
 2 centered%5:00:00:central:01 1
 2 center_punch%2:35:00:: 1
@@ -20575,7 +20575,7 @@
 2 belch%2:29:00:: 1
 2 belch%1:04:00:: 1
 2 behalf%1:07:00:: 2
-2 beginning%5:00:00:elementary(a):00 2
+2 beginning%5:00:00:elementary(first):00 2
 2 beginning%1:15:00:: 4
 2 beginning%1:04:00:: 5
 2 beget%2:29:00:: 1
@@ -20619,7 +20619,7 @@
 2 basket%1:23:00:: 2
 2 bask%2:35:00:: 2
 2 basin%1:06:00:: 1
-2 basic%5:00:00:elementary(a):00 4
+2 basic%5:00:00:elementary(first):00 4
 2 baseball_game%1:04:00:: 1
 2 baseball%1:06:00:: 2
 2 base%1:17:00:: 4
@@ -21033,7 +21033,7 @@
 1 zest%1:12:00:: 1
 1 zero_in%2:33:12:: 1
 1 zero%5:00:02:ordinal:00 2
-1 zero%5:00:00:no(a):00 3
+1 zero%5:00:00:no(first):00 3
 1 zenith%1:15:01:: 1
 1 yugoslavia%1:15:00:: 1
 1 yucca%1:20:00:: 1
@@ -21676,7 +21676,7 @@
 1 visceral%3:01:00:: 1
 1 visage%1:08:00:: 1
 1 visage%1:07:00:: 2
-1 vis-a-vis%4:02:00:: 1
+1 vis-first-vis%4:02:00:: 1
 1 virulent%5:00:00:toxic:00 1
 1 virtuoso%5:00:00:skilled:00 1
 1 virtuoso%1:18:00:: 1
@@ -21857,7 +21857,7 @@
 1 urge%2:32:01:: 3
 1 urchin%1:18:00:: 1
 1 urbanize%2:30:00:: 1
-1 upward%5:00:00:ascending(a):00 2
+1 upward%5:00:00:ascending(first):00 2
 1 upstream%3:00:00:: 1
 1 upstate%4:02:00:: 1
 1 upside-down%5:00:00:turned:00 1
@@ -21873,7 +21873,7 @@
 1 upright%5:00:00:righteous:00 2
 1 upright%5:00:00:erect:00 3
 1 upraise%2:29:00:: 1
-1 uppermost%5:00:00:top(a):00 1
+1 uppermost%5:00:00:top(first):00 1
 1 uppercut%1:04:00:: 1
 1 upper_limit%1:15:00:: 2
 1 upper_hand%1:07:00:: 1
@@ -21891,7 +21891,7 @@
 1 upbeat%5:00:00:optimistic:00 1
 1 up_in_the_air%5:00:00:uncertain:01 1
 1 up%5:00:00:rising:00 2
-1 up%5:00:00:ascending(a):00 3
+1 up%5:00:00:ascending(first):00 3
 1 unwritten%3:00:00:: 1
 1 unwrinkled%3:00:00:: 1
 1 unworthy%3:00:00:: 1
@@ -21921,7 +21921,7 @@
 1 untouched%5:00:00:unmoved(p):00 4
 1 untouched%5:00:00:unaffected:00 2
 1 untouched%5:00:00:full:00 1
-1 untold%5:00:00:much(a):00 1
+1 untold%5:00:00:much(first):00 1
 1 unthinking%5:00:00:thoughtless:00 1
 1 unthematic%3:01:00:: 1
 1 unthaw%2:30:00:: 1
@@ -23163,7 +23163,7 @@
 1 tableau%1:14:00:: 1
 1 tableau%1:09:00:: 2
 1 table_tennis%1:04:00:: 1
-1 t.b.%1:26:00:: 1
+1 t.second.%1:26:00:: 1
 1 t-square%1:06:00:: 1
 1 system%1:08:01:: 8
 1 syrupy%5:00:00:sweet:02 1
@@ -23582,7 +23582,7 @@
 1 street_cleaner%1:18:00:: 1
 1 streamliner%1:06:00:: 1
 1 streaming%5:00:01:moving:02 2
-1 streaming%5:00:00:running(a):02 3
+1 streaming%5:00:00:running(first):02 3
 1 stream_of_consciousness%1:10:00:: 1
 1 streak%1:14:00:: 1
 1 streak%1:07:01:: 2
@@ -24747,7 +24747,7 @@
 1 set%2:30:07:: 14
 1 set%1:09:01:: 6
 1 set%1:04:01:: 7
-1 servile%5:00:00:slave(a):00 3
+1 servile%5:00:00:slave(first):00 3
 1 serviette%1:06:00:: 1
 1 service_entrance%1:06:00:: 1
 1 service%2:30:00:: 2
@@ -24922,7 +24922,7 @@
 1 seal%1:06:00:: 2
 1 seahorse%1:05:01:: 1
 1 seagull%1:05:00:: 1
-1 seafaring%5:00:00:sea(a):00 1
+1 seafaring%5:00:00:sea(first):00 1
 1 seafarer%1:18:00:: 1
 1 seacoast%1:17:00:: 1
 1 sea_spray%1:27:00:: 1
@@ -25449,7 +25449,7 @@
 1 ringing%1:11:00:: 1
 1 ringing%1:10:00:: 2
 1 ring_up%2:32:00:: 1
-1 ring-around-a-rosy%1:04:00:: 1
+1 ring-around-first-rosy%1:04:00:: 1
 1 ring%2:42:00:: 4
 1 ring%2:32:00:: 5
 1 ring%1:06:04:: 4
@@ -26007,7 +26007,7 @@
 1 reason%2:31:00:: 3
 1 reason%1:26:00:: 4
 1 reason%1:10:00:: 5
-1 rearward%5:00:00:back(a):00 2
+1 rearward%5:00:00:back(first):00 2
 1 rearward%1:15:00:: 1
 1 rearing%1:07:00:: 1
 1 rearing%1:04:00:: 2
@@ -26421,7 +26421,7 @@
 1 protoplasm%1:08:00:: 1
 1 proton_magnetic_resonance%1:19:00:: 1
 1 proton%1:17:00:: 1
-1 protesting%5:00:00:complaining(a):00 1
+1 protesting%5:00:00:complaining(first):00 1
 1 protestation%1:10:01:: 1
 1 protestation%1:10:00:: 2
 1 protest%2:32:01:: 3
@@ -26585,7 +26585,7 @@
 1 prevalence%1:07:00:: 1
 1 prevailing%5:00:00:current:00 1
 1 prettiness%1:07:00:: 1
-1 pretrial%5:00:00:preceding(a):00 1
+1 pretrial%5:00:00:preceding(first):00 1
 1 pretext%1:10:00:: 1
 1 pretension%1:07:00:: 1
 1 pretense%1:04:00:: 1
@@ -26636,8 +26636,8 @@
 1 prepubescent%5:00:00:immature:01 1
 1 prepared%5:00:00:willing:00 2
 1 prepare%2:30:01:: 7
-1 preparatory%5:00:00:preceding(a):00 1
-1 preparative%5:00:00:preceding(a):00 1
+1 preparatory%5:00:00:preceding(first):00 1
+1 preparative%5:00:00:preceding(first):00 1
 1 prepackaged%5:00:00:packaged:00 1
 1 preoccupy%2:42:00:: 1
 1 preoccupy%2:37:00:: 2
@@ -28247,7 +28247,7 @@
 1 muzzle_loader%1:06:00:: 1
 1 mutuality%1:24:01:: 1
 1 mutual_affection%1:24:00:: 1
-1 muttering%5:00:00:speaking(a):00 1
+1 muttering%5:00:00:speaking(first):00 1
 1 muttering%1:11:00:: 1
 1 mutineer%1:18:00:: 1
 1 mutilation%1:11:00:: 1
@@ -28370,7 +28370,7 @@
 1 morning_glory%1:20:00:: 1
 1 morgue%1:06:00:: 1
 1 mores%1:09:00:: 1
-1 more_than%5:00:00:more(a):02 2
+1 more_than%5:00:00:more(first):02 2
 1 moralistic%5:00:00:moral:00 1
 1 moralist%1:18:00:: 1
 1 morale_builder%1:09:00:: 1
@@ -29447,7 +29447,7 @@
 1 lasting%5:00:00:long:02 2
 1 last_rites%1:04:01:: 1
 1 last_resort%1:04:00:: 1
-1 last_mentioned%5:00:00:latter(a):00 1
+1 last_mentioned%5:00:00:latter(first):00 1
 1 last-minute%5:00:00:unpunctual:00 1
 1 last%5:00:00:ultimate:00 5
 1 last%5:00:00:high:02 6
@@ -29722,7 +29722,7 @@
 1 jig%2:38:00:: 1
 1 jibe%1:10:00:: 1
 1 jeweler's_glass%1:06:00:: 1
-1 jetting%5:00:00:running(a):02 1
+1 jetting%5:00:00:running(first):02 1
 1 jet_plane%1:06:00:: 1
 1 jet%2:35:00:: 1
 1 jet%1:11:00:: 2
@@ -30280,7 +30280,7 @@
 1 in_order%5:00:00:ready:00 3
 1 in_opposition%4:02:00:: 1
 1 in_name%4:02:00:: 1
-1 in_line%5:00:00:succeeding(a):00 2
+1 in_line%5:00:00:succeeding(first):00 2
 1 in_line%4:02:00:: 1
 1 in_kind%4:02:00:: 1
 1 in_his_right_mind%5:00:00:sane:00 1
@@ -31088,7 +31088,7 @@
 1 guarantee%2:32:02:: 4
 1 guarantee%1:10:01:: 2
 1 grunting%5:00:00:inarticulate:00 1
-1 grumbling%5:00:00:complaining(a):00 2
+1 grumbling%5:00:00:complaining(first):00 2
 1 grumbling%1:11:00:: 1
 1 grumbling%1:10:00:: 2
 1 grumble%2:32:02:: 3
@@ -31805,7 +31805,7 @@
 1 foster_home%1:14:00:: 1
 1 forwarding%1:04:01:: 1
 1 forward-moving%5:00:00:progressive:01 1
-1 forward%5:00:00:front(a):00 7
+1 forward%5:00:00:front(first):00 7
 1 forward%5:00:00:advancing:00 2
 1 fortune%1:26:00:: 4
 1 fortunate%5:00:00:blessed:00 2
@@ -31848,7 +31848,7 @@
 1 forerunner%1:18:00:: 1
 1 forerunner%1:10:00:: 2
 1 forensic%5:00:00:rhetorical:00 1
-1 foremost%5:00:00:front(a):00 3
+1 foremost%5:00:00:front(first):00 3
 1 foreknowledge%1:10:00:: 1
 1 foreknow%2:31:00:: 1
 1 foreign_office%1:14:00:: 1
@@ -31935,7 +31935,7 @@
 1 flyway%1:15:00:: 1
 1 flying%5:00:00:winged:00 1
 1 flying%5:00:00:moving:02 2
-1 flying%5:00:00:air(a):00 5
+1 flying%5:00:00:air(first):00 5
 1 flyer%1:10:00:: 1
 1 fly_open%2:35:00:: 1
 1 fly_in_the_ointment%1:07:00:: 1
@@ -32561,7 +32561,7 @@
 1 every_which_way%4:02:01:: 1
 1 every_week%4:02:00:: 1
 1 every_so_often%4:02:00:: 1
-1 every_last%5:00:00:all(a):00 1
+1 every_last%5:00:00:all(first):00 1
 1 every_bit%4:02:00:: 1
 1 everlasting%5:00:00:permanent:00 1
 1 everlasting%5:00:00:cursed:00 2
@@ -33167,7 +33167,7 @@
 1 drab%5:00:00:colorless:02 2
 1 downward%5:00:00:down:00 1
 1 downstream%4:02:00:: 1
-1 downhill%5:00:00:descending(a):00 1
+1 downhill%5:00:00:descending(first):00 1
 1 downed%3:00:02:: 1
 1 downcast%5:00:00:down:00 1
 1 down%5:00:00:perfect:00 3
@@ -35714,7 +35714,7 @@
 1 bride-gift%1:21:00:: 1
 1 bricklayer%1:18:00:: 1
 1 brick%1:18:00:: 2
-1 bric-a-brac%1:06:00:: 1
+1 bric-first-brac%1:06:00:: 1
 1 briber%1:18:00:: 1
 1 bribe%2:40:00:: 1
 1 bribe%1:21:00:: 1
@@ -36514,7 +36514,7 @@
 1 back_circle%1:04:00:: 1
 1 back_brace%1:06:00:: 1
 1 back_away%2:32:00:: 1
-1 back-to-back%5:00:00:succeeding(a):00 1
+1 back-to-back%5:00:00:succeeding(first):00 1
 1 back%5:00:00:posterior:00 2
 1 back%4:02:03:: 6
 1 bachelor_of_science%1:10:00:: 1
@@ -36526,7 +36526,7 @@
 1 babbling%5:00:02:voluble:00 1
 1 babbiting%1:04:00:: 1
 1 b_vitamin%1:27:00:: 1
-1 b%1:05:00:: 2
+1 second%1:05:00:: 2
 1 azimuth%1:25:00:: 1
 1 axle%1:06:00:: 1
 1 axiomatic%5:00:00:obvious:00 1
@@ -37038,7 +37038,7 @@
 1 align%2:31:00:: 3
 1 alight%2:38:01:: 1
 1 alienated%5:00:00:unoriented:00 1
-1 alfresco%5:00:00:outdoor(a):00 1
+1 alfresco%5:00:00:outdoor(first):00 1
 1 alexander_the_great%1:18:00:: 1
 1 alertly%4:02:00:: 1
 1 alerting%1:26:00:: 1
@@ -37160,7 +37160,7 @@
 1 advantageous%3:00:00:: 1
 1 advanced%5:00:00:late:00 6
 1 advanced%5:00:00:high-tech:00 5
-1 advanced%5:00:00:front(a):00 8
+1 advanced%5:00:00:front(first):00 8
 1 advanced%5:00:00:civilized:00 7
 1 advance%2:30:09:: 8
 1 advance%1:10:00:: 3
@@ -37332,7 +37332,7 @@
 1 abridge%2:30:00:: 1
 1 abreaction%1:04:00:: 1
 1 aboveground%5:00:00:surface:00 1
-1 above-mentioned%5:00:00:preceding(a):00 1
+1 above-mentioned%5:00:00:preceding(first):00 1
 1 about%4:02:05:: 7
 1 abounding%5:00:00:abundant:00 1
 1 abound_in%2:42:00:: 1
@@ -37370,7 +37370,7 @@
 1 a_hundred_thousand%5:00:00:cardinal:00 1
 1 a_great_deal%4:02:00:: 1
 1 a_fortiori%4:02:00:: 1
-1 a.m.%1:28:00:: 1
+1 first.m.%1:28:00:: 1
 1 70th%5:00:00:ordinal:00 1
 1 70%1:23:00:: 1
 1 3rd%5:00:00:ordinal:00 1

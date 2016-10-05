@@ -1,7 +1,6 @@
 package org.getalp.lexsema.io.word2vec;
 
 import org.deeplearning4j.models.embeddings.wordvectors.WordVectors;
-import org.deeplearning4j.models.word2vec.Word2Vec;
 import org.deeplearning4j.models.word2vec.wordstore.VocabCache;
 import org.getalp.lexsema.util.Language;
 
@@ -11,12 +10,12 @@ import java.util.Map;
 import java.util.Set;
 
 public interface MultilingualWord2VecLoader {
-    public WordVectors getWordVectors(Language language);
-    public Map<Language,WordVectors> getWordVectors();
-    public VocabCache getCache(Language language);
+    WordVectors getWordVectors(Language language);
+    Map<Language,WordVectors> getWordVectors();
+    VocabCache getCache(Language language);
 
-    public Set<Language> getLanguages();
+    Set<Language> getLanguages();
 
-    public void load(File directory);
-    public void loadGoogle(File directory, boolean binary) throws IOException;
+    void load(File directory);
+    void loadGoogle(File directory, boolean binary) throws IOException;
 }

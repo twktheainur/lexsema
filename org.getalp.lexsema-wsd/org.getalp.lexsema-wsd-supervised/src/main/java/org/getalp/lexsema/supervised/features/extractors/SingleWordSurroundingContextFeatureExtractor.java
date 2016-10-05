@@ -1,8 +1,5 @@
 package org.getalp.lexsema.supervised.features.extractors;
 
-import cern.colt.matrix.tdouble.DoubleMatrix1D;
-import cern.colt.matrix.tdouble.impl.SparseDoubleMatrix1D;
-import org.getalp.lexsema.io.document.loader.CorpusLoader;
 import org.getalp.lexsema.similarity.Document;
 import org.getalp.lexsema.similarity.Text;
 import org.getalp.lexsema.similarity.Word;

@@ -12,12 +12,11 @@ import org.getalp.lexsema.similarity.Document;
 import org.getalp.lexsema.supervised.WekaDisambiguator;
 import org.getalp.lexsema.supervised.features.*;
 import org.getalp.lexsema.supervised.features.extractors.*;
-import org.getalp.lexsema.supervised.weka.NaiveBayesSetUp;
+import org.getalp.lexsema.ml.supervised.weka.NaiveBayesSetUp;
 import org.getalp.lexsema.wsd.configuration.Configuration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.URL;

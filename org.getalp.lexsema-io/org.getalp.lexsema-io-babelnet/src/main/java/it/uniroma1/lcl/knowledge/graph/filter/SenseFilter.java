@@ -1,5 +1,7 @@
 package it.uniroma1.lcl.knowledge.graph.filter;
 
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.Multimap;
 import it.uniroma1.lcl.jlt.ling.Word;
 import it.uniroma1.lcl.jlt.util.Language;
 import it.uniroma1.lcl.knowledge.KnowledgeBase;
@@ -8,9 +10,6 @@ import it.uniroma1.lcl.knowledge.graph.KnowledgeGraphPath;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
-
-import com.google.common.collect.HashMultimap;
-import com.google.common.collect.Multimap;
 
 /**
  * Filters out paths which have sense shifts, that is, they contain different
@@ -40,7 +39,7 @@ public class SenseFilter implements KnowledgeGraphPathFilter
 	@Override
 	public void filter(Collection<KnowledgeGraphPath> paths, KnowledgeBase kb)
 	{
-		Multimap<String, Word> concept2words = new HashMultimap<String, Word>();
+		Multimap<String, Word> concept2words = HashMultimap.create();
 		for (KnowledgeGraphPath path : paths)
 		{
 			// for each element in the path

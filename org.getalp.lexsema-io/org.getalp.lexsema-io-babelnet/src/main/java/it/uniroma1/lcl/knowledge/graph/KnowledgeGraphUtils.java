@@ -105,8 +105,8 @@ public class KnowledgeGraphUtils
 			}
 		}
 
-		Multimap<String, KnowledgeGraphPath> concept2paths = new HashMultimap<String, KnowledgeGraphPath>();
-		Multimap<String, KnowledgeGraphPath> paths2concept = new HashMultimap<String, KnowledgeGraphPath>();
+		Multimap<String, KnowledgeGraphPath> concept2paths = HashMultimap.create();
+		Multimap<String, KnowledgeGraphPath> paths2concept = HashMultimap.create();
 
 		for (KnowledgeGraphPath path : paths)
 		{
@@ -119,7 +119,7 @@ public class KnowledgeGraphUtils
 		DirectedGraph<String, WeightedLabeledEdge> graph = KnowledgeGraphPath.toUnionGraph(concept2paths.values());
 
 		// STEP 3: creates the maps from concepts to nodes
-		Multimap<Word, String> sourceWord2concepts = new HashMultimap<Word, String>();
+		Multimap<Word, String> sourceWord2concepts = HashMultimap.create();
 		Multimap<Word, String> sourceWord2concepts1 = graph1.getSourceWord2concepts();
 		Multimap<Word, String> sourceWord2concepts2 = graph2.getSourceWord2concepts();
 

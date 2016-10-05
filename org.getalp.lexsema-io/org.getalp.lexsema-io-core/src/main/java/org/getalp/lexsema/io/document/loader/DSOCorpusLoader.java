@@ -1,7 +1,6 @@
 package org.getalp.lexsema.io.document.loader;
 
 import edu.mit.jwi.Dictionary;
-import edu.mit.jwi.data.IHasLifecycle;
 import edu.mit.jwi.item.IIndexWord;
 import edu.mit.jwi.item.IWord;
 import edu.mit.jwi.item.IWordID;

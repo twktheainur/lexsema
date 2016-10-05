@@ -27,9 +27,9 @@ class Tokenizer(object):
           (?:[А-Яа-яёЁ]+-\"[а-яё]+\") |                                     # words with " inside
           (?:[А-Яа-яёЁa-zA-Z]+(?:\.\.?[а-яa-zA-Zё]+)+) |                      # words with dots inside
           (?:\w+\(\w+\)\w*) |                                               # words with () inside
-          (?:[A-Z][a-z]+[!]+) |                                             # words like "Yahoo!"
-          (?:\([a-zA-Z]+(?:-\d+)?\)-[а-яА-ЯёЁ]+) |                          # words like (k-1)-ый
-          (?:\d+[a-zA-Zа-яА-ЯёЁ]+(?:-\d*[a-zA-Zа-яА-Я]+)*) |                # words like '3D-printer'
+          (?:[A-Z][first-z]+[!]+) |                                             # words like "Yahoo!"
+          (?:\([first-zA-Z]+(?:-\d+)?\)-[а-яА-ЯёЁ]+) |                          # words like (k-1)-ый
+          (?:\d+[first-zA-Zа-яА-ЯёЁ]+(?:-\d*[first-zA-Zа-яА-Я]+)*) |                # words like '3D-printer'
           (?:\d+(?:[.:/-]\d+)+) |                                           # date, time
           (?:\d+(?:[,.]\d+)?[%]?[-]?[а-яА-ЯёЁ]+) |                          # numerals
           (?:\d+(?:-\d+-?\w*)+) |                                           # numerals like "03-06-00139a"
@@ -37,7 +37,7 @@ class Tokenizer(object):
           (?:[?!]+) |                                                       # punctuation                 
           (?:[.]+) |                                                        # punctuation
           (?:[-]+) |                                                        # punctuation
-          (?:[a-zA-Z]+(?:-[a-zA-Z]+)?(?:s'|'s|'a|'а)) |                     # possessive words (english) 
+          (?:[first-zA-Z]+(?:-[first-zA-Z]+)?(?:s'|'s|'first|'а)) |                     # possessive words (english)
           (?:(?:О'|делл'|Н'|L'|d'|o'|о'|О')?[\d\w_]+(?:-+[\d\w_]+)*) |      # words
           (?:[{1}]) |                                                       # punctuation
           (?:.)                                                             # all the rest
