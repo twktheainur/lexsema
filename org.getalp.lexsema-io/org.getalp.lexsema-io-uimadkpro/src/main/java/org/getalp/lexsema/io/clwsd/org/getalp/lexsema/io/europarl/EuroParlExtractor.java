@@ -1,41 +1,7 @@
-package org.getalp.lexsema.wsd.experiments.europarl;
+package org.getalp.lexsema.io.clwsd.org.getalp.lexsema.io.europarl;
 
-import com.wcohen.ss.ScaledLevenstein;
-import org.getalp.lexsema.io.resource.LRLoader;
-import org.getalp.lexsema.io.resource.dbnary.DBNaryLoaderImpl;
-import org.getalp.lexsema.io.text.EnglishDKPTextProcessor;
-import org.getalp.lexsema.io.text.FrenchDKPTextProcessor;
-import org.getalp.lexsema.io.text.TextProcessor;
-import org.getalp.lexsema.ontolex.dbnary.DBNary;
-import org.getalp.lexsema.ontolex.factories.resource.LexicalResourceFactory;
-import org.getalp.lexsema.ontolex.graph.OWLTBoxModel;
-import org.getalp.lexsema.ontolex.graph.OntologyModel;
-import org.getalp.lexsema.ontolex.graph.storage.JenaTDBStore;
-import org.getalp.lexsema.ontolex.graph.storage.StoreHandler;
-import org.getalp.lexsema.ontolex.graph.store.Store;
-import org.getalp.lexsema.similarity.Text;
-import org.getalp.lexsema.similarity.Word;
-import org.getalp.lexsema.similarity.measures.SimilarityMeasure;
-import org.getalp.lexsema.similarity.measures.tverski.TverskiIndexSimilarityMeasureBuilder;
-import org.getalp.lexsema.util.Language;
-import org.getalp.lexsema.wsd.configuration.Configuration;
-import org.getalp.lexsema.wsd.method.Disambiguator;
-import org.getalp.lexsema.wsd.method.SimulatedAnnealing;
-import org.getalp.lexsema.wsd.score.ConfigurationScorer;
-import org.getalp.lexsema.wsd.score.MatrixConfigurationScorer;
-import org.getalp.lexsema.ml.matrix.score.SumMatrixScorer;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Node;
-import org.jsoup.nodes.TextNode;
-
-import java.io.File;
-import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
-import java.util.*;
-
-public class EuroParlExtractor {	
-	public static final String ONTOLOGY_PROPERTIES = "data" + File.separatorChar + "ontology.properties";
+public class EuroParlExtractor {
+/*	public static final String ONTOLOGY_PROPERTIES = "data" + File.separatorChar + "ontology.properties";
 	Map<String, Integer> sensePair = new HashMap<String, Integer>();
 	public static DBNary instantiateDBNary(Language l ) throws IOException, InvocationTargetException, NoSuchMethodException, ClassNotFoundException, InstantiationException, IllegalAccessException {
 		//Store vts = new JenaRemoteSPARQLStore("http://kaiko.getalp.org/sparql");
@@ -319,5 +285,5 @@ public class EuroParlExtractor {
 
 		System.out.println("FInished");
 
-	} 
+	} */
 }

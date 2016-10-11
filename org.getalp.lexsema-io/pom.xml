@@ -49,7 +49,11 @@
     </modules>
 
     <dependencies>
-
+        <dependency>
+            <groupId>org.getalp</groupId>
+            <artifactId>org.getalp.lexsema-io-api</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
     </dependencies>
 
     <repositories>

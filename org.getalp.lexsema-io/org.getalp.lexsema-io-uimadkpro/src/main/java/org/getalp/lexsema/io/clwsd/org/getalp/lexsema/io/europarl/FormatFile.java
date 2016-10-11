@@ -1,4 +1,4 @@
-package org.getalp.lexsema.wsd.experiments.europarl;
+package org.getalp.lexsema.io.clwsd.org.getalp.lexsema.io.europarl;
 
 import java.io.*;
 

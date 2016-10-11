@@ -5,7 +5,6 @@ import edu.mit.jwi.item.IIndexWord;
 import edu.mit.jwi.item.IWord;
 import edu.mit.jwi.item.IWordID;
 import edu.mit.jwi.item.POS;
-import org.getalp.lexsema.io.text.EnglishDKPTextProcessor;
 import org.getalp.lexsema.io.text.SpaceSegmentingTextProcessor;
 import org.getalp.lexsema.io.text.TextProcessor;
 import org.getalp.lexsema.ontolex.LexicalEntry;
@@ -51,11 +50,11 @@ public class DSOCorpusLoader extends CorpusLoaderImpl {
         }
         text = new TextImpl();
         text.setId("");
-        if (lemmatizeAndPosTag) {
+        /*if (lemmatizeAndPosTag) {
             textProcessor = new EnglishDKPTextProcessor();
-        } else {
+        } else {*/
             textProcessor = new SpaceSegmentingTextProcessor();
-        }
+        //}
     }
 
     private static void open(Dictionary wordnet) {

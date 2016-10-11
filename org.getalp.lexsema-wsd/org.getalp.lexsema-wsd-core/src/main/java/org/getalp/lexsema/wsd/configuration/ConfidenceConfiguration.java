@@ -107,6 +107,11 @@ public class ConfidenceConfiguration implements Configuration {
         return confidence.get(wordIndex);
     }
 
+    protected DoubleMatrix1D getConfidence(){
+        return confidence;
+    }
+
+
     @Override
     public int size() {
         return assignments.length;
