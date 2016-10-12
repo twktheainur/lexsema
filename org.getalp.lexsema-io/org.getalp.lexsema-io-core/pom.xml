@@ -132,11 +132,6 @@
         </dependency>
         <dependency>
             <groupId>org.getalp</groupId>
-            <artifactId>org.getalp.lexsema-similarity</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>org.getalp</groupId>
             <artifactId>org.getalp.lexsema-translation-core</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>

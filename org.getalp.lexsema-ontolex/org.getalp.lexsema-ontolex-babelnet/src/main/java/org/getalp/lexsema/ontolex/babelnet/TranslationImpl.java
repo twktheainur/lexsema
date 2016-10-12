@@ -38,4 +38,39 @@ public class TranslationImpl extends AbstractLexicalResourceEntity implements Tr
     public void setLanguage(Language language) {
         this.language = language;
     }
+
+	@Override
+	public String getGloss() {
+		return gloss;
+	}
+
+	@Override
+	public void setGloss(String gloss) {
+		this.gloss = gloss;
+	}
+
+	@Override
+	public Integer getTranslationNumber() {
+		return translationNumber;
+	}
+
+	@Override
+	public void setTranslationNumber(Integer translationNumber) {
+		this.translationNumber = translationNumber;
+	}
+
+	@Override
+	public String getWrittenForm() {
+		return writtenForm;
+	}
+
+	@Override
+	public void setWrittenForm(String writtenForm) {
+		this.writtenForm = writtenForm;
+	}
+
+	@Override
+	public Language getLanguage() {
+		return language;
+	}
 }

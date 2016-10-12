@@ -1,11 +1,10 @@
 package org.getalp.lexsema.io.clwsd;
 
-
 import edu.stanford.nlp.util.Pair;
 import org.getalp.lexsema.io.text.EnglishDKPTextProcessor;
 import org.getalp.lexsema.io.text.TextProcessor;
-import org.getalp.lexsema.similarity.DocumentSimilarityFactory;
 import org.getalp.lexsema.similarity.Text;
+import org.getalp.lexsema.similarity.WordImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.*;
@@ -31,13 +30,11 @@ public class Semeval2013Task10EntryLoader implements ContentHandler, TargetEntry
     private int currentContextId;
     private int currentWordIndex;
     private boolean inHead;
-    private DocumentSimilarityFactory documentSimilarityFactory;
 
 
-    public Semeval2013Task10EntryLoader(String path, DocumentSimilarityFactory documentSimilarityFactory) {
+    public Semeval2013Task10EntryLoader(String path) {
         this.path = path;
         textProcessor = new EnglishDKPTextProcessor();
-        this.documentSimilarityFactory = documentSimilarityFactory;
     }
 
     @Override
@@ -72,7 +69,7 @@ public class Semeval2013Task10EntryLoader implements ContentHandler, TargetEntry
                 targetWordId = atts.getValue("item");
                 String lemma = targetWordId.split("\\.")[0];
                 String pos = targetWordId.split("\\.")[1];
-                entry = new TargetWordEntryImpl(documentSimilarityFactory.createWord(targetWordId, lemma, lemma, pos));
+                entry = new TargetWordEntryImpl(new WordImpl(targetWordId, lemma, lemma, pos));
                 logger.info(String.format("Loading %s ...", targetWordId));
                 break;
             case "instance":
