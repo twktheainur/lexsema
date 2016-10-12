@@ -1,4 +1,4 @@
-package org.getalp.lexsema.io.clwsd.org.getalp.lexsema.io.europarl;
+package org.getalp.lexsema.io.europarl;
 
 public class EuroParlExtractor {
 /*	public static final String ONTOLOGY_PROPERTIES = "data" + File.separatorChar + "ontology.properties";
