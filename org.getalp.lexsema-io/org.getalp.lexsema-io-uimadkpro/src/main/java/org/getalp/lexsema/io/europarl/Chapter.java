@@ -1,4 +1,4 @@
-package org.getalp.lexsema.io.clwsd.org.getalp.lexsema.io.europarl;
+package org.getalp.lexsema.io.europarl;
 
 import java.util.List;
 
