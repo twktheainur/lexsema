@@ -28,7 +28,9 @@ public class DSOCorpusLoader extends CorpusLoaderImpl {
     private static final Logger logger = LoggerFactory.getLogger(DSOCorpusLoader.class);
     private final String pathToDSO;
 
-    private Dictionary wordnet = null;
+    private static final DocumentFactory DOCUMENT_FACTORY = DefaultDocumentFactory.DEFAULT_DOCUMENT_FACTORY;
+
+    private Dictionary wordnet;
 
     private final TextProcessor textProcessor;
     private final Text text;
@@ -46,9 +48,9 @@ public class DSOCorpusLoader extends CorpusLoaderImpl {
         try {
             wordnet = new Dictionary(new URL("file",null, pathToWordnet));
         } catch (MalformedURLException e) {
-            e.printStackTrace();
+            logger.error(e.getLocalizedMessage());
         }
-        text = new TextImpl();
+        text = DOCUMENT_FACTORY.createText();
         text.setId("");
         /*if (lemmatizeAndPosTag) {
             textProcessor = new EnglishDKPTextProcessor();
@@ -97,7 +99,8 @@ public class DSOCorpusLoader extends CorpusLoaderImpl {
     @SuppressWarnings("FeatureEnvy")
     private void processSentenceInWord(Document sentence, String pos) {
         int currentWord = 3;
-        Sentence cleanSentence = new SentenceImpl(sentence.getId());
+        Sentence cleanSentence = DOCUMENT_FACTORY.createSentence(sentence.getId());
+
         while (currentWord < sentence.size()) {
             Word word = sentence.getWord(currentWord);
             @SuppressWarnings("LawOfDemeter") String lemma = word.getLemma();
@@ -125,8 +128,8 @@ public class DSOCorpusLoader extends CorpusLoaderImpl {
         word.setPartOfSpeech(pos);
     }
 
-    Sentence getSentence(Text text) {
-        Sentence txtSentence = new NullSentence();
+    private Sentence getSentence(Text text) {
+        Sentence txtSentence = DOCUMENT_FACTORY.nullSentence();
         for (Sentence snt : text.sentences()) {
             txtSentence = snt;
         }

@@ -2,22 +2,27 @@ package org.getalp.lexsema.similarity;
 
 
 import org.getalp.lexsema.util.Language;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.*;
 
-public class DocumentImpl implements Document {
+class DocumentImpl implements Document {
+
+    private static final Logger logger = LoggerFactory.getLogger(DocumentImpl.class);
+
     private String id = "";
     private final List<Word> lexicalEntries;
     private final List<List<Sense>> senses;
     private Language language = Language.UNSUPPORTED;
 
 
-    public DocumentImpl() {
+    DocumentImpl() {
         lexicalEntries = new ArrayList<>();
         senses = new ArrayList<>();
     }
 
-    public DocumentImpl(Language language) {
+    DocumentImpl(Language language) {
         lexicalEntries = new ArrayList<>();
         senses = new ArrayList<>();
         this.language = language;
@@ -36,7 +41,7 @@ public class DocumentImpl implements Document {
     @Override
     public Word getWord(int offset, int index) {
 
-                return lexicalEntries.get(index + offset);
+        return lexicalEntries.get(index + offset);
     }
 
     @Override
@@ -47,11 +52,6 @@ public class DocumentImpl implements Document {
     @Override
     public void addWord(Word word) {
         lexicalEntries.add(word);
-    }
-
-    public void addWord(Word word, List<Sense> wordSenses) {
-        lexicalEntries.add(word);
-        senses.add(wordSenses);
     }
 
     @Override
@@ -65,20 +65,25 @@ public class DocumentImpl implements Document {
             target.loadSenses(currentWordSenses);
             this.senses.add(currentWordSenses);
         } catch (java.lang.IndexOutOfBoundsException e) {
-            System.err.println("Exception caught: " + e);
-            System.err.println("When trying to add the following senses:");
+            logger.debug("Exception caught: {}", e);
+            logger.debug("When trying to add the following senses:");
             for (Sense sense : senses) {
-                System.err.println(sense.getId() + ": " + sense.getDefinition());
+                logger.debug("{} : {}", sense.getId(), sense.getDefinition());
             }
-            System.err.println("lexicalEntries size: " + lexicalEntries.size());
-            System.err.println("senses size: " + this.senses.size());
+            logger.debug("lexicalEntries size: {}", lexicalEntries.size());
+            logger.debug("senses size: {}", this.senses.size());
         }
     }
 
     @Override
-    public boolean isAlreadyLoaded(){
+    public boolean isAlreadyLoaded() {
 
-        return senses.size()>=lexicalEntries.size();
+        return senses.size() >= lexicalEntries.size();
+    }
+
+    @Override
+    public boolean isNull() {
+        return false;
     }
 
 

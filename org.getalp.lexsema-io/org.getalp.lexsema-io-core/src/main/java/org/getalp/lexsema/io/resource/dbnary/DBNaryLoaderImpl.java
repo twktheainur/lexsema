@@ -18,8 +18,8 @@ import org.getalp.lexsema.ontolex.graph.store.Store;
 import org.getalp.lexsema.similarity.*;
 import org.getalp.lexsema.similarity.cache.SenseCache;
 import org.getalp.lexsema.similarity.cache.SenseCacheImpl;
+import org.getalp.lexsema.similarity.signatures.DefaultSemanticSignatureFactory;
 import org.getalp.lexsema.similarity.signatures.SemanticSignature;
-import org.getalp.lexsema.similarity.signatures.SemanticSignatureImpl;
 import org.getalp.lexsema.util.Language;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,10 +30,12 @@ import java.util.*;
 
 @SuppressWarnings("OverlyCoupledClass")
 public class DBNaryLoaderImpl implements DBNaryLoader {
+    private static final DocumentFactory DOCUMENT_FACTORY = DefaultDocumentFactory.DEFAULT_DOCUMENT_FACTORY;
     private static final Logger logger = LoggerFactory.getLogger(DBNaryLoaderImpl.class);
+
     private final DBNary dbnary;
     private final OntologyModel model;
-    SenseCache senseCache;
+    private SenseCache senseCache;
     private boolean shuffle;
     private boolean loadDefinitions = true;
     private final Language language;
@@ -108,12 +110,15 @@ public class DBNaryLoaderImpl implements DBNaryLoader {
     }
 
     private List<Sense> getLexicalEntriesAndSenses(Word w) {
-        List<Sense> senses = new ArrayList<>();
         LexicalEntry le = retrieveLexicalEntryForWord(w);
-        if (le != null) {
-            for (LexicalSense ls : dbnary.getLexicalSenses(le)) {
-                Sense sense = new SenseImpl(ls);
-                SemanticSignature signature = new SemanticSignatureImpl();
+        return retrieveSenseList(le);
+    }
+    private List<Sense> retrieveSenseList(LexicalEntry lexicalEntry){
+        List<Sense> senses = new ArrayList<>();
+        if (lexicalEntry != null) {
+            for (LexicalSense ls : dbnary.getLexicalSenses(lexicalEntry)) {
+                Sense sense = DOCUMENT_FACTORY.createSense(ls);
+                SemanticSignature signature = DefaultSemanticSignatureFactory.DEFAULT.createSemanticSignature();
                 if (loadDefinitions) {
                     String def = ls.getDefinition();
                     addToSignature(signature, def);
@@ -150,18 +155,8 @@ public class DBNaryLoaderImpl implements DBNaryLoader {
             for(LexicalEntry entry: lexicalEntries){
                 String lemma = entry.getLemma();
                 String partOfSpeech = entry.getPartOfSpeech();
-                Word w = new WordImpl(entry.toString(),lemma,lemma,partOfSpeech);
-                List<Sense> senses = new ArrayList<>();
-                for (LexicalSense ls : dbnary.getLexicalSenses(entry)) {
-                    Sense sense = new SenseImpl(ls);
-                    SemanticSignature signature = new SemanticSignatureImpl();
-                    if (loadDefinitions) {
-                        String def = ls.getDefinition();
-                        addToSignature(signature, def);
-                    }
-                    sense.setSemanticSignature(signature);
-                    senses.add(sense);
-                }
+                Word w = DOCUMENT_FACTORY.createWord(entry.toString(),lemma,lemma,partOfSpeech);
+                List<Sense> senses = retrieveSenseList(entry);
                 sensesAll.put(w,senses);
             }
 

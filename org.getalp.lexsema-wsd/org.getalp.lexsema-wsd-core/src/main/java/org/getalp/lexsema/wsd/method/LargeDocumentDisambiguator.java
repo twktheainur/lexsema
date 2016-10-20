@@ -1,22 +1,26 @@
 package org.getalp.lexsema.wsd.method;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.getalp.lexsema.similarity.Document;
-import org.getalp.lexsema.similarity.DocumentImpl;
-import org.getalp.lexsema.similarity.Sense;
-import org.getalp.lexsema.similarity.Word;
+import org.getalp.lexsema.similarity.*;
 import org.getalp.lexsema.wsd.configuration.Configuration;
 import org.getalp.lexsema.wsd.configuration.ContinuousConfiguration;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 public class LargeDocumentDisambiguator implements Disambiguator
 {
-    private Disambiguator disambiguator;
+    private static final DocumentFactory DOCUMENT_FACTORY = DefaultDocumentFactory.DEFAULT_DOCUMENT_FACTORY;
+
+    private static final Logger logger = LoggerFactory.getLogger(LargeDocumentDisambiguator.class);
+
+    private final Disambiguator disambiguator;
     
-    private int maxWords;
+    private final int maxWords;
     
-    private boolean verbose;
+    private final boolean verbose;
 
     public LargeDocumentDisambiguator(Disambiguator disambiguator, int maxWords, boolean verbose)
     {
@@ -39,11 +43,15 @@ public class LargeDocumentDisambiguator implements Disambiguator
     public Configuration disambiguate(Document document)
     {
         List<Document> documents = splitDocument(document);
-        if (verbose) System.out.println("Document splitted in " + documents.size());
-        List<Configuration> configurations = new ArrayList<>();
+        if (verbose) {
+            logger.debug("Document splitted in {}", documents.size());
+        }
+        Collection<Configuration> configurations = new ArrayList<>();
         for (int i = 0 ; i < documents.size() ; i++)
         {
-            if (verbose) System.out.println("Disambiguating document " + (i+1) + "...");
+            if (verbose) {
+                logger.debug("Disambiguating document {} ...", i + 1);
+            }
             configurations.add(disambiguator.disambiguate(documents.get(i)));
         }
         return mergeConfigurations(configurations, document);
@@ -56,39 +64,42 @@ public class LargeDocumentDisambiguator implements Disambiguator
         int remainingWords = document.size() - (documentsNb * maxWords);
         for (int i = 0 ; i < documentsNb ; i++)
         {
-            DocumentImpl newDocument = new DocumentImpl();
-            for (int j = 0 ; j < maxWords ; j++)
-            {
-                Word w = document.getWord((i * maxWords) + j);
-                List<Sense> s = document.getSenses((i * maxWords) + j);
-                newDocument.addWord(w, s);
-            }
+            Document newDocument = createSubDocument(document, 0, maxWords);
             ret.add(newDocument);
         }
         if (remainingWords > 0)
         {
-            DocumentImpl newDocument = new DocumentImpl();
-            for (int j = 0 ; j < remainingWords ; j++)
-            {
-                Word w = document.getWord((documentsNb * maxWords) + j);
-                List<Sense> s = document.getSenses((documentsNb * maxWords) + j);
-                newDocument.addWord(w, s);
-            }
+            Document newDocument = createSubDocument(document,0, remainingWords);
             ret.add(newDocument);
         }
         return ret;
     }
+
+    private Document createSubDocument(Document document, int start, int end){
+        int documentsNb = document.size() / maxWords;
+        Document newDocument = DOCUMENT_FACTORY.createDocument();
+        for (int j = 0 ; j < end ; j++)
+        {
+            Word word = document.getWord((documentsNb * maxWords) + j);
+            List<Sense> senses = document.getSenses((documentsNb * maxWords) + j);
+            addWordToDocument(newDocument, word, senses);
+        }
+        return newDocument;
+    }
+
+    private void addWordToDocument(Document document, Word word, Iterable<Sense> senses){
+        document.addWord(word);
+        document.addWordSenses(senses);
+    }
     
-    private Configuration mergeConfigurations(List<Configuration> configurations, Document document)
+    private Configuration mergeConfigurations(Iterable<Configuration> configurations, Document document)
     {
         Configuration ret = new ContinuousConfiguration(document, 0);
         int k = 0;
-        for (int i = 0 ; i < configurations.size() ; i++)
-        {
-            Configuration oldConfiguration = configurations.get(i);
-            for (int j = 0 ; j < oldConfiguration.size() ; j++)
-            {
-                ret.setSense(k++, oldConfiguration.getAssignment(j));
+        for (Configuration oldConfiguration : configurations) {
+            for (int j = 0; j < oldConfiguration.size(); j++) {
+                ret.setSense(k, oldConfiguration.getAssignment(j));
+                k++;
             }
         }
         return ret;

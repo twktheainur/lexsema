@@ -1,8 +1,8 @@
 package org.getalp.lexsema.similarity.signatures;
 
 import org.getalp.lexsema.similarity.measures.SimilarityMeasure;
+import org.getalp.lexsema.similarity.signatures.symbols.DefaultSemanticSymbolFactory;
 import org.getalp.lexsema.similarity.signatures.symbols.SemanticSymbol;
-import org.getalp.lexsema.similarity.signatures.symbols.SemanticSymbolImpl;
 import org.getalp.lexsema.util.Language;
 
 import java.util.*;
@@ -11,7 +11,7 @@ import java.util.regex.Pattern;
 
 public class SemanticSignatureImpl implements SemanticSignature {
 
-    public static final double DEFAULT_WEIGHT = 1d;
+    private static final double DEFAULT_WEIGHT = 1d;
     private static final Pattern WHITESPACE = Pattern.compile("\\s");
     private final List<SemanticSymbol> symbols;
     private Language language = Language.UNSUPPORTED;
@@ -38,7 +38,7 @@ public class SemanticSignatureImpl implements SemanticSignature {
         }
     }
 
-    private SemanticSignatureImpl(List<SemanticSymbol> symbols) {
+    public SemanticSignatureImpl(List<SemanticSymbol> symbols) {
         this.symbols = new ArrayList<>();
         Collections.copy(symbols, this.symbols);
     }
@@ -58,7 +58,7 @@ public class SemanticSignatureImpl implements SemanticSignature {
 
     @Override
     public void addSymbol(String symbol, double weight) {
-        symbols.add(new SemanticSymbolImpl(symbol, weight));
+        symbols.add(DefaultSemanticSymbolFactory.DEFAULT_FACTORY.createSemanticSymbol(symbol, weight));
     }
 
 
@@ -74,15 +74,15 @@ public class SemanticSignatureImpl implements SemanticSignature {
 
 
     @Override
-    public void addSymbolString(List<String> string, List<Double> weights) {
-        for (int i = 0; i < Math.min(string.size(), weights.size()); i++) {
-            addSymbol(string.get(i), weights.get(i));
+    public void addSymbolString(List<String> symbolString, List<Double> weights) {
+        for (int i = 0; i < Math.min(symbolString.size(), weights.size()); i++) {
+            addSymbol(symbolString.get(i), weights.get(i));
         }
     }
 
     @Override
-    public void addSymbolString(List<String> string) {
-        for (String aString : string) {
+    public void addSymbolString(List<String> symbolString) {
+        for (String aString : symbolString) {
             addSymbol(aString, 1.0);
         }
     }

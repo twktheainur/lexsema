@@ -1,8 +1,8 @@
 package org.getalp.lexsema.similarity.measures.crosslingual;
 
 import org.getalp.lexsema.similarity.measures.SimilarityMeasure;
+import org.getalp.lexsema.similarity.signatures.DefaultSemanticSignatureFactory;
 import org.getalp.lexsema.similarity.signatures.SemanticSignature;
-import org.getalp.lexsema.similarity.signatures.SemanticSignatureImpl;
 import org.getalp.lexsema.similarity.signatures.enrichment.SignatureEnrichment;
 import org.getalp.lexsema.translation.Translator;
 import org.getalp.lexsema.util.Language;
@@ -43,7 +43,7 @@ public class TranslatorCrossLingualSimilarity implements SimilarityMeasure {
             String definitionB = sigB.toString();
             String translatedDefinitionB = translator.translate(definitionB, signatureLanguage(sigB), signatureLanguage(sigA));
 
-            SemanticSignature translatedSignature = new SemanticSignatureImpl();
+            SemanticSignature translatedSignature = DefaultSemanticSignatureFactory.DEFAULT.createSemanticSignature();
             translatedSignature.addSymbolString(Arrays.asList(translatedDefinitionB.split(" ")));
 
             SemanticSignature enrichedA = sigA;
@@ -54,7 +54,7 @@ public class TranslatorCrossLingualSimilarity implements SimilarityMeasure {
                 enrichedTranslated = enrichment.enrichSemanticSignature(translatedSignature, signatureLanguage(sigA));
             }
 
-            //logger.info(String.format("%s || %s", sigA.toString(), translatedDefinitionB));
+            logger.debug("{} || {}", sigA.toString(), translatedDefinitionB);
             return similarityMeasure.compute(enrichedA, enrichedTranslated, null, null);
         }
     }

@@ -1,24 +1,5 @@
 package org.getalp.lexsema.wsd.experiments;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.PrintStream;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Properties;
-import org.getalp.lexsema.io.resource.LRLoader;
-import org.getalp.lexsema.io.resource.dictionary.DictionaryLRLoader;
-import org.getalp.lexsema.similarity.Document;
-import org.getalp.lexsema.similarity.DocumentImpl;
-import org.getalp.lexsema.similarity.Word;
-import org.getalp.lexsema.similarity.WordImpl;
-import org.getalp.lexsema.similarity.measures.lesk.IndexedLeskSimilarity;
-import org.getalp.lexsema.wsd.configuration.Configuration;
-import org.getalp.lexsema.wsd.method.Disambiguator;
-import org.getalp.lexsema.wsd.method.MultiThreadCuckooSearch;
-import org.getalp.lexsema.wsd.score.ConfigurationScorer;
-import org.getalp.lexsema.wsd.score.ConfigurationScorerWithCache;
 import edu.mit.jwi.Dictionary;
 import edu.mit.jwi.item.ISenseEntry;
 import edu.stanford.nlp.ling.CoreAnnotations.LemmaAnnotation;
@@ -29,9 +10,28 @@ import edu.stanford.nlp.ling.CoreLabel;
 import edu.stanford.nlp.pipeline.Annotation;
 import edu.stanford.nlp.pipeline.StanfordCoreNLP;
 import edu.stanford.nlp.util.CoreMap;
+import org.getalp.lexsema.io.resource.LRLoader;
+import org.getalp.lexsema.io.resource.dictionary.DictionaryLRLoader;
+import org.getalp.lexsema.similarity.*;
+import org.getalp.lexsema.similarity.measures.lesk.IndexedLeskSimilarity;
+import org.getalp.lexsema.wsd.configuration.Configuration;
+import org.getalp.lexsema.wsd.method.Disambiguator;
+import org.getalp.lexsema.wsd.method.MultiThreadCuckooSearch;
+import org.getalp.lexsema.wsd.score.ConfigurationScorer;
+import org.getalp.lexsema.wsd.score.ConfigurationScorerWithCache;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.PrintStream;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Properties;
 
 public class WSDForSMT1
 {
+	private static final DocumentFactory DOCUMENT_FACTORY = DefaultDocumentFactory.DEFAULT_DOCUMENT_FACTORY;
+
 	/**
 	 * Input: <raw text> (e.g. "this is a cat")
 	 * Output: Array of Wordnet senses (form [xxxx, yyyy, zzzz]) 
@@ -101,7 +101,7 @@ public class WSDForSMT1
 
 	private static Document rawToText(String raw)
 	{
-		Document txt = new DocumentImpl();
+		Document txt = DOCUMENT_FACTORY.createDocument();
 		Properties props = new Properties();
 		props.put("annotators", "tokenize, ssplit, pos, lemma");
 		StanfordCoreNLP stanford = new StanfordCoreNLP(props);
@@ -115,7 +115,7 @@ public class WSDForSMT1
 				String lemma = token.getString(LemmaAnnotation.class);
 				String surfaceForm = token.originalText();
 				String pos = token.getString(PartOfSpeechAnnotation.class);
-				Word word = new WordImpl("", lemma, surfaceForm, pos);
+				Word word = DOCUMENT_FACTORY.createWord("", lemma, surfaceForm, pos);
 				txt.addWord(word);
 			}
 		}

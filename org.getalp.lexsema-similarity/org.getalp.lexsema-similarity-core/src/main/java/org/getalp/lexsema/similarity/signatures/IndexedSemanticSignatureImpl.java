@@ -3,19 +3,16 @@ package org.getalp.lexsema.similarity.signatures;
 import org.getalp.lexsema.similarity.measures.SimilarityMeasure;
 import org.getalp.lexsema.similarity.signatures.index.SymbolIndex;
 import org.getalp.lexsema.similarity.signatures.index.SymbolIndexImpl;
-import org.getalp.lexsema.similarity.signatures.symbols.IndexedSemanticSymbol;
-import org.getalp.lexsema.similarity.signatures.symbols.IndexedSemanticSymbolImpl;
-import org.getalp.lexsema.similarity.signatures.symbols.SemanticSymbol;
-import org.getalp.lexsema.similarity.signatures.symbols.SemanticSymbolImpl;
+import org.getalp.lexsema.similarity.signatures.symbols.*;
 import org.getalp.lexsema.util.Language;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
 
-public class IndexedSemanticSignatureImpl implements IndexedSemanticSignature {
+class IndexedSemanticSignatureImpl implements IndexedSemanticSignature {
 
-    public static final double DEFAULT_WEIGHT = 1d;
+    private static final double DEFAULT_WEIGHT = 1d;
     private final List<IndexedSemanticSymbol> symbols;
 
     private Language language = null;
@@ -31,18 +28,18 @@ public class IndexedSemanticSignatureImpl implements IndexedSemanticSignature {
         this.language = language;
     }
 
-    public IndexedSemanticSignatureImpl() {
+    IndexedSemanticSignatureImpl() {
 
         this(new SymbolIndexImpl());
     }
 
-    public IndexedSemanticSignatureImpl(SymbolIndex symbolIndex) {
+    IndexedSemanticSignatureImpl(SymbolIndex symbolIndex) {
 
         symbols = new ArrayList<>();
         this.symbolIndex = symbolIndex;
     }
 
-    private IndexedSemanticSignatureImpl(List<IndexedSemanticSymbol> symbols, SymbolIndex symbolIndex) {
+    IndexedSemanticSignatureImpl(List<IndexedSemanticSymbol> symbols, SymbolIndex symbolIndex) {
         this.symbols = new ArrayList<>();
         Collections.copy(symbols, this.symbols);
         this.symbolIndex = symbolIndex;
@@ -95,12 +92,12 @@ public class IndexedSemanticSignatureImpl implements IndexedSemanticSignature {
 
     @Override
     public void addSymbol(String symbol, double weight) {
-        symbols.add(new IndexedSemanticSymbolImpl(symbolIndex.getSymbolIndex(symbol), weight));
+        symbols.add(DefaultSemanticSymbolFactory.DEFAULT_FACTORY.createIndexedSemanticSymbol(symbolIndex.getSymbolIndex(symbol), weight));
     }
 
     @Override
     public void addIndexedSymbol(Integer symbol) {
-        symbols.add(new IndexedSemanticSymbolImpl(symbol, 0));
+        symbols.add(DefaultSemanticSymbolFactory.DEFAULT_FACTORY.createIndexedSemanticSymbol(symbol));
     }
 
     @Override
@@ -124,15 +121,15 @@ public class IndexedSemanticSignatureImpl implements IndexedSemanticSignature {
     }
 
     @Override
-    public void addSymbolString(List<String> string, List<Double> weights) {
-        for (int i = 0; i < Math.min(string.size(), weights.size()); i++) {
-            addSymbol(string.get(i), weights.get(i));
+    public void addSymbolString(List<String> symbolString, List<Double> weights) {
+        for (int i = 0; i < Math.min(symbolString.size(), weights.size()); i++) {
+            addSymbol(symbolString.get(i), weights.get(i));
         }
     }
 
     @Override
-    public void addSymbolString(List<String> string) {
-        for (String aString : string) {
+    public void addSymbolString(List<String> symbolString) {
+        for (String aString : symbolString) {
             addSymbol(aString, 1.0);
         }
     }
@@ -164,7 +161,7 @@ public class IndexedSemanticSignatureImpl implements IndexedSemanticSignature {
     public Iterator<SemanticSymbol> iterator() {
         final Collection<SemanticSymbol> stringSymbols = new ArrayList<>();
         for(IndexedSemanticSymbol semanticSymbol: symbols){
-            stringSymbols.add(new SemanticSymbolImpl(semanticSymbol.getSymbol(), semanticSymbol.getWeight()));
+            stringSymbols.add(DefaultSemanticSymbolFactory.DEFAULT_FACTORY.createSemanticSymbol(semanticSymbol.getSymbol(), semanticSymbol.getWeight()));
         }
         return stringSymbols.iterator();
     }
@@ -208,7 +205,7 @@ public class IndexedSemanticSignatureImpl implements IndexedSemanticSignature {
             symbols.add((IndexedSemanticSymbol) symbol);
         } else {
             Integer iSymbol = symbolIndex.getSymbolIndex(symbol.getSymbol());
-            IndexedSemanticSymbol indexedSemanticSymbol = new IndexedSemanticSymbolImpl(iSymbol,symbol.getWeight());
+            IndexedSemanticSymbol indexedSemanticSymbol = DefaultSemanticSymbolFactory.DEFAULT_FACTORY.createIndexedSemanticSymbol(iSymbol,symbol.getWeight());
             symbols.add(indexedSemanticSymbol);
         }
     }

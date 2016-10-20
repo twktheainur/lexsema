@@ -1,9 +1,7 @@
 package org.getalp.lexsema.io.text;
 
 
-import org.getalp.lexsema.similarity.Text;
-import org.getalp.lexsema.similarity.TextImpl;
-import org.getalp.lexsema.similarity.WordImpl;
+import org.getalp.lexsema.similarity.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -11,10 +9,11 @@ import java.io.*;
 import java.text.MessageFormat;
 
 public class RussianPythonTextProcessor implements TextProcessor {
+    private static final DocumentFactory DOCUMENT_FACTORY = DefaultDocumentFactory.DEFAULT_DOCUMENT_FACTORY;
     private static final Logger logger = LoggerFactory.getLogger(RussianPythonTextProcessor.class);
     @Override
     public Text process(String sentenceText, String documentId) {
-        Text resultSentence = new TextImpl();
+        Text resultSentence = DOCUMENT_FACTORY.createText();
         try {
             File tempText = File.createTempFile("lexsema_nlptools2", null);
             try (PrintWriter pw = new PrintWriter(tempText)) {
@@ -34,7 +33,7 @@ public class RussianPythonTextProcessor implements TextProcessor {
                         String lemma = fields[1];
                         String pos = fields[2];
                         if (!pos.toLowerCase().contains("pnct")) {
-                            resultSentence.addWord(new WordImpl(String.valueOf(index), lemma, word, pos));
+                            resultSentence.addWord(DOCUMENT_FACTORY.createWord(String.valueOf(index), lemma, word, pos));
                             logger.info(MessageFormat.format("Word={0} Lemma={1} Pos={2}", fields[0], fields[1], fields[2]));
                         }
                     }

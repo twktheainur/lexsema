@@ -2,23 +2,24 @@ package org.getalp.lexsema.similarity.signatures.symbols;
 
 import java.util.Arrays;
 
-public class VectorizedSemanticSymbol implements SemanticSymbol 
-{
+public class VectorizedSemanticSymbolImpl implements VectorizedSemanticSymbol {
     private final double[] vector;
     
     private double weight = 1;
     
-    public VectorizedSemanticSymbol(double[] vector, double weight)
+    VectorizedSemanticSymbolImpl(double[] vector, double weight)
     {
         this.vector = vector;
         this.weight = weight;
     }
     
+    @Override
     public int compareTo(SemanticSymbol o)
     {
         return 0;
     }
 
+    @Override
     public String getSymbol()
     {
         return Arrays.toString(vector);
@@ -30,6 +31,7 @@ public class VectorizedSemanticSymbol implements SemanticSymbol
         return weight;
     }
     
+    @Override
     public double[] getVector()
     {
         return vector;

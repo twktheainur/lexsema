@@ -6,8 +6,8 @@ import org.getalp.lexsema.similarity.Document;
 import org.getalp.lexsema.similarity.Sense;
 import org.getalp.lexsema.similarity.Word;
 import org.getalp.lexsema.similarity.measures.SimilarityMeasure;
+import org.getalp.lexsema.similarity.signatures.DefaultSemanticSignatureFactory;
 import org.getalp.lexsema.similarity.signatures.SemanticSignature;
-import org.getalp.lexsema.similarity.signatures.SemanticSignatureImpl;
 import org.getalp.lexsema.wsd.configuration.Configuration;
 import org.getalp.lexsema.wsd.method.sequencial.parameters.SimplifiedLeskParameters;
 
@@ -53,7 +53,7 @@ public class SimplifiedLeskLexicalEntryDisambiguator extends SequentialLexicalEn
                         context.add(cw.getSurfaceForm());
                     }
             }
-            SemanticSignature lcontext = new SemanticSignatureImpl();
+            SemanticSignature lcontext = DefaultSemanticSignatureFactory.DEFAULT.createSemanticSignature();
             lcontext.addSymbolString(new ArrayList<>(context));
             int index;
             int minIndex = -1;

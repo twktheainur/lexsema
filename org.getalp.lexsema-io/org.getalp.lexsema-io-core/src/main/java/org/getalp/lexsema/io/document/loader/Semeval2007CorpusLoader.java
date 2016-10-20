@@ -11,7 +11,8 @@ import java.io.*;
 
 public class Semeval2007CorpusLoader extends CorpusLoaderImpl implements ContentHandler {
 
-    private Logger logger = LoggerFactory.getLogger(Semeval2007CorpusLoader.class);
+    private static final DocumentFactory DOCUMENT_FACTORY = DefaultDocumentFactory.DEFAULT_DOCUMENT_FACTORY;
+    private static final Logger logger = LoggerFactory.getLogger(Semeval2007CorpusLoader.class);
 
     private boolean inWord;
     private boolean loadExtra;
@@ -33,13 +34,13 @@ public class Semeval2007CorpusLoader extends CorpusLoaderImpl implements Content
 
     public Semeval2007CorpusLoader(String path) {
         try {
-			inputStream = new FileInputStream(path);
-		} catch (FileNotFoundException e) {
-			throw new RuntimeException(e);
-		}
+            inputStream = new FileInputStream(path);
+        } catch (FileNotFoundException e) {
+            logger.error(e.getLocalizedMessage());
+        }
         init();
     }
-    
+
     private void init() {
         inWord = false;
         currentId = "";
@@ -78,11 +79,11 @@ public class Semeval2007CorpusLoader extends CorpusLoaderImpl implements Content
     public void startElement(String uri, String localName, String qName, Attributes atts) throws SAXException {
         switch (localName) {
             case "text":
-                currentDocument = new TextImpl();
+                currentDocument = DOCUMENT_FACTORY.createText();
                 currentDocument.setId(atts.getValue("id"));
                 break;
             case "sentence":
-                currentSentence = new SentenceImpl(atts.getValue("id"));
+                currentSentence = DOCUMENT_FACTORY.createSentence(atts.getValue("id"));
                 break;
             case "instance":
                 inWord = true;
@@ -104,12 +105,12 @@ public class Semeval2007CorpusLoader extends CorpusLoaderImpl implements Content
                 break;
             case "instance":
                 inWord = false;
-                Word w = new WordImpl(currentId, currentLemma, currentSurfaceForm, currentPos);
+                Word w = DOCUMENT_FACTORY.createWord(currentId, currentLemma, currentSurfaceForm, currentPos);
 
                 if (loadExtra) {
                     for (String e : extraWords.trim().split(System.getProperty("line.separator"))) {
                         if (!e.isEmpty()) {
-                            w.addPrecedingInstance(new WordImpl("non-target", "", e, ""));
+                            w.addPrecedingInstance(DOCUMENT_FACTORY.createWord("non-target", "", e, ""));
                         }
                     }
                 }
@@ -157,9 +158,9 @@ public class Semeval2007CorpusLoader extends CorpusLoaderImpl implements Content
     @Override
     public void load() {
         try {
-        	clearTexts();
-        	init();
-        	XMLReader saxReader = XMLReaderFactory.createXMLReader();
+            clearTexts();
+            init();
+            XMLReader saxReader = XMLReaderFactory.createXMLReader();
             saxReader.setContentHandler(this);
             saxReader.setEntityResolver(new EntityResolverIgnoringDTD());
             saxReader.parse(new InputSource(inputStream));
@@ -175,7 +176,8 @@ public class Semeval2007CorpusLoader extends CorpusLoaderImpl implements Content
         return this;
     }
 
-    static private class EntityResolverIgnoringDTD implements EntityResolver {
+    private static class EntityResolverIgnoringDTD implements EntityResolver {
+        @Override
         public InputSource resolveEntity(String publicId, String systemId) throws SAXException, IOException {
             if (systemId.contains("coarse-all-words.dtd")) {
                 return new InputSource(new StringReader(""));

@@ -7,9 +7,8 @@ import org.getalp.lexsema.ontolex.LexicalSense;
 import org.getalp.lexsema.ontolex.NullLexicalSense;
 import org.getalp.lexsema.ontolex.graph.OntologyModel;
 import org.getalp.lexsema.similarity.measures.SimilarityMeasure;
-import org.getalp.lexsema.similarity.signatures.NullSemanticSignature;
+import org.getalp.lexsema.similarity.signatures.DefaultSemanticSignatureFactory;
 import org.getalp.lexsema.similarity.signatures.SemanticSignature;
-import org.getalp.lexsema.similarity.signatures.SemanticSignatureImpl;
 import org.getalp.lexsema.util.Language;
 
 import java.util.Collections;
@@ -17,26 +16,26 @@ import java.util.HashMap;
 import java.util.Map;
 
 
-public class SenseImpl implements Sense {
+class SenseImpl implements Sense {
     private SemanticSignature semanticSignature;
     private String id = "";
     private LexicalSense lexicalSense = new NullLexicalSense();
     private final Map<String, SemanticSignature> relatedSignatures;
 
-    public SenseImpl(String id) {
+    SenseImpl(String id) {
         this.id = id;
         relatedSignatures = new HashMap<>();
-        semanticSignature = NullSemanticSignature.getInstance();
+        semanticSignature = DefaultSemanticSignatureFactory.DEFAULT.createNullSemanticSignature();
     }
 
-    public SenseImpl(LexicalSense sense) {
+    SenseImpl(LexicalSense sense) {
         if (!lexicalSense.isNull()) {
             final Node node = sense.getNode();
             id = node.getURI();
         }
         lexicalSense = sense;
         relatedSignatures = new HashMap<>();
-        semanticSignature = new SemanticSignatureImpl(lexicalSense.getDefinition());
+        semanticSignature = DefaultSemanticSignatureFactory.DEFAULT.createSemanticSignature(lexicalSense.getDefinition());
         setLanguage(lexicalSense.getLanguage());
     }
 

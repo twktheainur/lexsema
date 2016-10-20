@@ -1,8 +1,10 @@
 package org.getalp.lexsema.similarity;
 
-public class SentenceImpl extends DocumentImpl implements Sentence {
+class SentenceImpl extends DocumentImpl implements Sentence {
 
-    public SentenceImpl(String id) {
+    private Text parentText;
+
+    SentenceImpl(String id) {
         super();
         setId(id);
     }
@@ -21,7 +23,17 @@ public class SentenceImpl extends DocumentImpl implements Sentence {
 
     @Override
     public boolean isNull() {
+        super.isNull();
         return false;
     }
 
+    @Override
+    public Text getParentText() {
+        return parentText;
+    }
+
+    @Override
+    public void setParentText(Text text) {
+        parentText = text;
+    }
 }

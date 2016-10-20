@@ -6,15 +6,15 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 
-public class TextImpl extends DocumentImpl implements Text {
+class TextImpl extends DocumentImpl implements Text {
 
     private final Collection<Sentence> sentences;
 
-    public TextImpl() {
+    TextImpl() {
         sentences = new ArrayList<>();
     }
 
-    public TextImpl(Language language) {
+    TextImpl(Language language) {
         super(language);
         sentences = new ArrayList<>();
     }

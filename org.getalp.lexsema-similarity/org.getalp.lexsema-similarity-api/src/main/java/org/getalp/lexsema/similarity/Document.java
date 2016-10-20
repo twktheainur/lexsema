@@ -52,4 +52,6 @@ public interface Document extends Iterable<Word>, Serializable {
     Collection<Word> words();
 
     boolean isAlreadyLoaded();
+
+    boolean isNull();
 }

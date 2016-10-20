@@ -4,14 +4,10 @@ import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
 import org.getalp.lexsema.io.resource.LRLoader;
 import org.getalp.lexsema.io.thesaurus.AnnotatedTextThesaurus;
-import org.getalp.lexsema.similarity.Document;
-import org.getalp.lexsema.similarity.Sense;
-import org.getalp.lexsema.similarity.Word;
-import org.getalp.lexsema.similarity.WordImpl;
+import org.getalp.lexsema.similarity.*;
+import org.getalp.lexsema.similarity.signatures.DefaultSemanticSignatureFactory;
 import org.getalp.lexsema.similarity.signatures.IndexedSemanticSignature;
-import org.getalp.lexsema.similarity.signatures.IndexedSemanticSignatureImpl;
 import org.getalp.lexsema.similarity.signatures.SemanticSignature;
-import org.getalp.lexsema.similarity.signatures.SemanticSignatureImpl;
 import org.getalp.lexsema.similarity.signatures.enrichment.SignatureEnrichment;
 import org.getalp.lexsema.similarity.signatures.index.SymbolIndex;
 import org.getalp.lexsema.similarity.signatures.index.SymbolIndexImpl;
@@ -26,7 +22,9 @@ import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLReaderFactory;
 
-import java.io.*;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.text.MessageFormat;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -36,12 +34,13 @@ import java.util.stream.IntStream;
 @SuppressWarnings("BooleanParameter")
 public class DictionaryLRLoader implements LRLoader {
 
+    private static final DocumentFactory DOCUMENT_FACTORY = DefaultDocumentFactory.DEFAULT_DOCUMENT_FACTORY;
     private static final Logger logger = LoggerFactory.getLogger(DictionaryLRLoader.class);
 
     private final Map<String, List<Sense>> wordSenses;
-    private boolean useIndex = false;
-    private boolean indexed = false;
-    private boolean distributed = false;
+    private boolean useIndex;
+    private final boolean indexed;
+    private boolean distributed;
 
     private final SignatureEnrichment signatureEnrichment;
     private boolean usesStopWords;
@@ -88,39 +87,43 @@ public class DictionaryLRLoader implements LRLoader {
 
     @Override
     public List<Sense> getSenses(Word w) {
+        List<Sense> senses = Collections.emptyList();
         String lemma = w.getLemma();
         String partOfSpeech = w.getPartOfSpeech();
         partOfSpeech = processPOS(partOfSpeech);
-        if (partOfSpeech == "x") return new ArrayList<>();
-        String tag = MessageFormat.format("{0}%{1}", lemma, partOfSpeech);
-        if (wordSenses.get(tag) == null) {
-            tag = MessageFormat.format("{0}%{1}", lemma.toLowerCase(), partOfSpeech);
-        }
-        List<Sense> senses = wordSenses.get(tag);
-        if (senses == null) return new ArrayList<>();
-        for (Sense sense : senses) {
-            if (!indexed) {
-                SemanticSignature semanticSignature = sense.getSemanticSignature();
-                if (usesStopWords) {
-                    semanticSignature = removeStopWords(semanticSignature);
+        if (!partOfSpeech.equals("x")) {
+            String tag = MessageFormat.format("{0}%{1}", lemma.toLowerCase(), partOfSpeech);
+            if (wordSenses.get(tag) != null) {
+                tag = MessageFormat.format("{0}%{1}", lemma, partOfSpeech);
+            }
+            senses = wordSenses.get(tag);
+            if (senses != null) {
+                for (Sense sense : senses) {
+                    if (!indexed) {
+                        SemanticSignature semanticSignature = sense.getSemanticSignature();
+                        if (usesStopWords) {
+                            semanticSignature = removeStopWords(semanticSignature);
+                        }
+                        if (signatureEnrichment != null) {
+                            semanticSignature = signatureEnrichment.enrichSemanticSignature(semanticSignature);
+                        }
+                        if (usesStemming) {
+                            semanticSignature = stemSignatureWords(semanticSignature);
+                        }
+                        if (useIndex) {
+                            semanticSignature = indexSignature(semanticSignature);
+                        }
+                        sense.setSemanticSignature(semanticSignature);
+                    }
                 }
-                if (signatureEnrichment != null) {
-                    semanticSignature = signatureEnrichment.enrichSemanticSignature(semanticSignature);
-                }
-                if (usesStemming) {
-                    semanticSignature = stemSignatureWords(semanticSignature);
-                }
-                if (useIndex) {
-                    semanticSignature = indexSignature(semanticSignature);
-                }
-                sense.setSemanticSignature(semanticSignature);
             }
         }
         return senses;
     }
 
     private SemanticSignature indexSignature(Iterable<SemanticSymbol> signature) {
-        IndexedSemanticSignature indexedSignature = new IndexedSemanticSignatureImpl(symbolIndex);
+        IndexedSemanticSignature indexedSignature = DefaultSemanticSignatureFactory.DEFAULT.
+                createIndexedSemanticSignature(symbolIndex);
         for (SemanticSymbol symbol : signature) {
             indexedSignature.addSymbol(symbol);
         }
@@ -129,7 +132,7 @@ public class DictionaryLRLoader implements LRLoader {
     }
 
     private SemanticSignature removeStopWords(Iterable<SemanticSymbol> signature) {
-        SemanticSignature newSignature = new SemanticSignatureImpl();
+        SemanticSignature newSignature = DefaultSemanticSignatureFactory.DEFAULT.createSemanticSignature();
         for (SemanticSymbol symbol : signature) {
             if (!StopList.isStopWord(symbol.getSymbol())) {
                 newSignature.addSymbol(symbol);
@@ -139,7 +142,7 @@ public class DictionaryLRLoader implements LRLoader {
     }
 
     private SemanticSignature stemSignatureWords(Iterable<SemanticSymbol> signature) {
-        SemanticSignature newSignature = new SemanticSignatureImpl();
+        SemanticSignature newSignature = DefaultSemanticSignatureFactory.DEFAULT.createSemanticSignature();
         EnglishStemmer stemmer = new EnglishStemmer();
         for (SemanticSymbol symbol : signature) {
             stemmer.setCurrent(symbol.getSymbol());
@@ -159,7 +162,7 @@ public class DictionaryLRLoader implements LRLoader {
 
         wordSenses.keySet().parallelStream().forEach(word -> {
             String[] idParts = word.split("%");
-            Word w = new WordImpl(word, idParts[0], idParts[0], idParts[1]);
+            Word w = DOCUMENT_FACTORY.createWord(word, idParts[0], idParts[0], idParts[1]);
             senses.put(w, wordSenses.get(word));
         });
         return senses;

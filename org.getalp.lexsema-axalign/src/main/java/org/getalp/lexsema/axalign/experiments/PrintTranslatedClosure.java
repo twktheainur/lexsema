@@ -18,9 +18,9 @@ import org.getalp.lexsema.ontolex.graph.storage.JenaTDBStore;
 import org.getalp.lexsema.ontolex.graph.storage.StoreHandler;
 import org.getalp.lexsema.ontolex.graph.store.Store;
 import org.getalp.lexsema.similarity.Sense;
+import org.getalp.lexsema.similarity.signatures.DefaultSemanticSignatureFactory;
 import org.getalp.lexsema.similarity.signatures.SemanticSignature;
-import org.getalp.lexsema.similarity.signatures.SemanticSignatureImpl;
-import org.getalp.lexsema.similarity.signatures.symbols.SemanticSymbolImpl;
+import org.getalp.lexsema.similarity.signatures.symbols.DefaultSemanticSymbolFactory;
 import org.getalp.lexsema.translation.BingAPITranslator;
 import org.getalp.lexsema.translation.CachedTranslator;
 import org.getalp.lexsema.translation.Translator;
@@ -39,9 +39,9 @@ import static java.io.File.separator;
 
 
 public final class PrintTranslatedClosure {
-    public static final String DB_PATH = String.format("%sVolumes%sRAMDisk", separator, separator);
+    private static final String DB_PATH = String.format("%sVolumes%sRAMDisk", separator, separator);
     public static final String ONTOLOGY_PROPERTIES = String.format("data%sontology.properties", separator);
-    public static final File CLOSURE_SAVE_PATH = new File(String.format("..%sdata%sclosure_river", separator, separator));
+    private static final File CLOSURE_SAVE_PATH = new File(String.format("..%sdata%sclosure_river", separator, separator));
     /**
      * twk.theainur@live.co.uk account
      */
@@ -51,16 +51,16 @@ public final class PrintTranslatedClosure {
     /**
      * ainuros@outlook.com account
      */
-    public static final String BING_APP_ID = "dbnary_hyper";
-    public static final String BING_APP_KEY = "IecT6H4OjaWo3OtH2pijfeNIx1y1bML3grXz/Gjo/+w=";
+    private static final String BING_APP_ID = "dbnary_hyper";
+    private static final String BING_APP_KEY = "IecT6H4OjaWo3OtH2pijfeNIx1y1bML3grXz/Gjo/+w=";
 
-    public static final int DEPTH = 1;
-    static Language[] loadLanguages = {
+    private static final int DEPTH = 1;
+    private static final Language[] loadLanguages = {
             Language.FRENCH, Language.ENGLISH, Language.ITALIAN, Language.SPANISH,
             Language.PORTUGUESE, Language.BULGARIAN, Language.CATALAN, Language.FINNISH,
             Language.GERMAN, Language.RUSSIAN, Language.GREEK, Language.TURKISH
     };
-    private static Logger logger = LoggerFactory.getLogger(PrintTranslatedClosure.class);
+    private static final Logger logger = LoggerFactory.getLogger(PrintTranslatedClosure.class);
 
 
     private PrintTranslatedClosure() {
@@ -69,7 +69,7 @@ public final class PrintTranslatedClosure {
     }
 
 
-    public static void main(String[] args) throws IOException, NoSuchVocableException {
+    public static void main(String... args) throws IOException, NoSuchVocableException {
         try {
             logger.info("Generating or Loading Closure...");
             Set<Sense> closureSet = generateTranslationClosureWithSignatures(instantiateDBNary());
@@ -97,11 +97,11 @@ public final class PrintTranslatedClosure {
         } else {
             Vocable v = dbNary.getVocable("river", Language.ENGLISH);
             List<LexicalEntry> ventries = dbNary.getLexicalEntries(v);
-            if (!ventries.isEmpty()) {
+            if (ventries.isEmpty()) {
+                closure = new LexicalResourceTranslationClosureImpl();
+            } else {
                 TranslationClosureGenerator gtc = TranslationClosureGeneratorFactory.createVocablePOSGenerator(v, "http://www.lexinfo.net/ontology/2.0/lexinfo#noun", dbNary);
                 closure = generateLexicalSenseClosure(gtc, DEPTH);
-            } else {
-                closure = new LexicalResourceTranslationClosureImpl();
             }
         }
         TranslationClosureSemanticSignatureGenerator semanticSignatureGenerator =
@@ -125,15 +125,15 @@ public final class PrintTranslatedClosure {
     }
 
     @SuppressWarnings("FeatureEnvy")
-    private synchronized static void printTranslatedClosure(Iterable<Sense> closure, Translator translator, Language targetLanguage) {
+    private static synchronized void printTranslatedClosure(Iterable<Sense> closure, Translator translator, Language targetLanguage) {
         for (Sense sense : closure) {
             SemanticSignature originalSignature = sense.getSemanticSignature();
             String definition = sense.getDefinition();
             String translatedDefinition = translator.translate(definition, sense.getLanguage(), targetLanguage);
-            SemanticSignature translatedSignature = new SemanticSignatureImpl();
+            SemanticSignature translatedSignature = DefaultSemanticSignatureFactory.DEFAULT.createSemanticSignature();
             StringTokenizer tokenizer = new StringTokenizer(translatedDefinition);
             while (tokenizer.hasMoreTokens()) {
-                translatedSignature.addSymbol(new SemanticSymbolImpl(tokenizer.nextToken(), 1d));
+                translatedSignature.addSymbol(DefaultSemanticSymbolFactory.DEFAULT_FACTORY.createSemanticSymbol(tokenizer.nextToken(), 1d));
             }
             sense.setSemanticSignature(translatedSignature);
             logger.info(sense.toString());

@@ -1,27 +1,20 @@
 package org.getalp.lexsema.similarity;
 
-
 import org.getalp.lexsema.util.Language;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
-final class NullSentence implements Sentence{
-
-    @Override
-    public boolean isNull() {
-        return true;
-    }
-
+final class NullDocument implements Document{
     @Override
     public String getId() {
-        return "";
+        return null;
     }
 
     @Override
     public void setId(String id) {
+
     }
 
     @Override
@@ -31,33 +24,37 @@ final class NullSentence implements Sentence{
 
     @Override
     public Word getWord(int index) {
-        return new NullWord();
+        return null;
     }
 
     @Override
     public void addWord(Word word) {
+
     }
 
     @Override
     public void addWordSenses(Iterable<Sense> senses) {
+
     }
 
     @Override
     public void addWords(Iterable<Word> words) {
+
     }
 
     @Override
     public void addWordsSenses(Iterable<Iterable<Sense>> senses) {
+
     }
 
     @Override
     public List<Sense> getSenses(int offset, int index) {
-        return Collections.emptyList();
+        return null;
     }
 
     @Override
     public List<Sense> getSenses(int index) {
-        return Collections.emptyList();
+        return null;
     }
 
     @Override
@@ -87,27 +84,21 @@ final class NullSentence implements Sentence{
 
     @Override
     public Collection<Word> words() {
-        return Collections.emptyList();
+        return null;
     }
 
     @Override
     public boolean isAlreadyLoaded() {
+        return false;
+    }
+
+    @Override
+    public boolean isNull() {
         return true;
     }
 
     @Override
     public Iterator<Word> iterator() {
-        final List<Word> emptyList = Collections.emptyList();
-        return emptyList.iterator();
-    }
-
-    @Override
-    public Text getParentText() {
         return null;
-    }
-
-    @Override
-    public void setParentText(Text text) {
-
     }
 }

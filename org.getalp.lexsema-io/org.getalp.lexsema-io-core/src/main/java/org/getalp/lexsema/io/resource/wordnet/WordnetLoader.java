@@ -10,10 +10,7 @@ import org.getalp.lexsema.similarity.*;
 import org.getalp.lexsema.similarity.Word;
 import org.getalp.lexsema.similarity.cache.SenseCache;
 import org.getalp.lexsema.similarity.cache.SenseCacheImpl;
-import org.getalp.lexsema.similarity.signatures.IndexedSemanticSignature;
-import org.getalp.lexsema.similarity.signatures.IndexedSemanticSignatureImpl;
-import org.getalp.lexsema.similarity.signatures.SemanticSignature;
-import org.getalp.lexsema.similarity.signatures.SemanticSignatureImpl;
+import org.getalp.lexsema.similarity.signatures.*;
 import org.getalp.lexsema.similarity.signatures.enrichment.IndexingSignatureEnrichment;
 import org.getalp.lexsema.similarity.signatures.enrichment.SignatureEnrichment;
 import org.getalp.lexsema.similarity.signatures.enrichment.StemmingSignatureEnrichment;
@@ -22,6 +19,7 @@ import org.getalp.lexsema.util.distribution.SparkSingleton;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
 import java.text.MessageFormat;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -31,6 +29,8 @@ import java.util.regex.Pattern;
 
 public class WordnetLoader implements LRLoader {
 
+    private static final DocumentFactory DOCUMENT_FACTORY = DefaultDocumentFactory.DEFAULT_DOCUMENT_FACTORY;
+
     private static final Logger logger = LoggerFactory.getLogger(WordnetLoader.class);
 
     private static final Pattern WHITESPACE = Pattern.compile("\\s+");
@@ -39,7 +39,7 @@ public class WordnetLoader implements LRLoader {
 
     private final Dictionary dictionary;
 
-    private List<SignatureEnrichment> signatureEnrichments;
+    private final List<SignatureEnrichment> signatureEnrichments;
 
     private boolean loadDefinitions;
 
@@ -85,7 +85,7 @@ public class WordnetLoader implements LRLoader {
         if (dictionary != null && !dictionary.isOpen()) {
             try {
                 dictionary.open();
-            } catch (Exception e) {
+            } catch (IOException e) {
                 logger.info(e.getLocalizedMessage());
             }
         }
@@ -93,7 +93,7 @@ public class WordnetLoader implements LRLoader {
     }
 
     private SemanticSignature createSignature() {
-        return new SemanticSignatureImpl();
+        return DefaultSemanticSignatureFactory.DEFAULT.createSemanticSignature();
     }
 
     private String processPOS(String pos) {
@@ -127,7 +127,7 @@ public class WordnetLoader implements LRLoader {
                         String synsetOffset = String.format("%08d", word.getSynset().getOffset()) + word.getPOS().getTag();
                         senseKeyToSynsetOffset.put(senseKeyString, synsetOffset);
                     }
-                    Sense sense = new SenseImpl(senseKeyString);
+                    Sense sense = DOCUMENT_FACTORY.createSense(senseKeyString);
                     SemanticSignature signature = createSignature();
                     final ISynset wordSynset = word.getSynset();
                     if (loadDefinitions) {
@@ -245,7 +245,7 @@ public class WordnetLoader implements LRLoader {
 
         Consumer<IIndexWord> processor = iidx -> {
             List<Sense> senseList = getSenses(iidx.getLemma(), String.valueOf(iidx.getPOS().getTag()));
-            Word word = new WordImpl(iidx.getID().toString(), iidx.getLemma(), iidx.getLemma(), String.valueOf(iidx.getPOS().getTag()));
+            Word word = DOCUMENT_FACTORY.createWord(iidx.getID().toString(), iidx.getLemma(), iidx.getLemma(), String.valueOf(iidx.getPOS().getTag()));
             senses.put(word, senseList);
         };
         nounIIndexWordIterator.forEachRemaining(processor);
@@ -310,9 +310,9 @@ public class WordnetLoader implements LRLoader {
             }
         }
         for (String clusteredSense : clusteredSenses.keySet()) {
-            Sense newSense = new SenseImpl(clusteredSense);
+            Sense newSense = DOCUMENT_FACTORY.createSense(clusteredSense);
             if (clusteredSenses.get(clusteredSense).get(0).getSemanticSignature() instanceof IndexedSemanticSignature) {
-                IndexedSemanticSignature newSignature = new IndexedSemanticSignatureImpl();
+                IndexedSemanticSignature newSignature = DefaultSemanticSignatureFactory.DEFAULT.createIndexedSemanticSignature();
                 for (Sense senseInCluster : clusteredSenses.get(clusteredSense)) {
                     IndexedSemanticSignature signatureInCluster = (IndexedSemanticSignature) senseInCluster.getSemanticSignature();
                     newSignature.addIndexedSymbols(signatureInCluster.getIndexedSymbols());
@@ -321,7 +321,7 @@ public class WordnetLoader implements LRLoader {
                 newSense.setSemanticSignature(newSignature);
             }
             else {
-                SemanticSignature newSignature = new SemanticSignatureImpl();
+                SemanticSignature newSignature = DefaultSemanticSignatureFactory.DEFAULT.createSemanticSignature();
                 for (Sense senseInCluster : clusteredSenses.get(clusteredSense)) {
                     newSignature.addSymbols(senseInCluster.getSemanticSignature().getSymbols());
                 }

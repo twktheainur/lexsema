@@ -1,8 +1,9 @@
 package org.getalp.lexsema.io.resource.dictionary;
 
 
+import org.getalp.lexsema.similarity.DefaultDocumentFactory;
+import org.getalp.lexsema.similarity.DocumentFactory;
 import org.getalp.lexsema.similarity.Sense;
-import org.getalp.lexsema.similarity.SenseImpl;
 import org.getalp.lexsema.similarity.signatures.*;
 import org.getalp.lexsema.similarity.signatures.index.SymbolIndex;
 import org.getalp.lexsema.similarity.signatures.index.SymbolIndexImpl;
@@ -21,15 +22,16 @@ import java.util.StringTokenizer;
 
 public class DictionaryParser implements ContentHandler {
 
-    Map<String, List<Sense>> dico;
-    String word = null;
+    private static final DocumentFactory DOCUMENT_FACTORY = DefaultDocumentFactory.DEFAULT_DOCUMENT_FACTORY;
 
-    List<Sense> mws = null;
-    Sense mw = null;
-    boolean emptyDef;
-    boolean ids, def;
-    boolean indexed;
-    boolean vectorized;
+    private final Map<String, List<Sense>> dictionary;
+    private String word;
+
+    private List<Sense> mws;
+    private Sense mw;
+    private boolean ids, def;
+    private final boolean indexed;
+    private final boolean vectorized;
     @SuppressWarnings("unused")
     private Locator locator;
     private String currentSemanticSignature = "";
@@ -38,11 +40,10 @@ public class DictionaryParser implements ContentHandler {
 
     public DictionaryParser(Map<String, List<Sense>> senseMap, boolean indexed, boolean vectorized) throws FileNotFoundException {
         super();
-        dico = senseMap;
+        dictionary = senseMap;
         ids = false;
         def = false;
         locator = new LocatorImpl();
-        emptyDef = false;
         this.indexed = indexed;
         this.vectorized = vectorized;
     }
@@ -99,7 +100,7 @@ public class DictionaryParser implements ContentHandler {
     public void endElement(String uri, String localName, String qName) throws SAXException {
         switch (localName) {
             case "word":
-                dico.put(word, mws);
+                dictionary.put(word, mws);
                 break;
             case "sense":
                 if (mw.getSemanticSignature() != null) {
@@ -108,19 +109,19 @@ public class DictionaryParser implements ContentHandler {
                 break;
             case "ids":
                 ids = false;
-                mw = new SenseImpl(currentId.trim());
+                mw = DOCUMENT_FACTORY.createSense(currentId.trim());
                 break;
             case "def":
                 def = false;
                 if (indexed) {
-                    IndexedSemanticSignature semanticSignature = new IndexedSemanticSignatureImpl(symbolIndex);
+                    IndexedSemanticSignature semanticSignature = DefaultSemanticSignatureFactory.DEFAULT.createIndexedSemanticSignature(symbolIndex);
                     StringTokenizer st = new StringTokenizer(currentSemanticSignature);
                     while (st.hasMoreTokens()) {
                         semanticSignature.addIndexedSymbol(Integer.valueOf(st.nextToken()));
                     }
                     mw.setSemanticSignature(semanticSignature);
                 } else if (vectorized) {
-                    VectorizedSemanticSignature semanticSignature = new VectorizedSemanticSignature();
+                    VectorizedSemanticSignature semanticSignature = DefaultSemanticSignatureFactory.DEFAULT.createVectorizedSemanticSignature();
                     StringTokenizer st = new StringTokenizer(currentSemanticSignature);
                     while (st.hasMoreTokens()) {
                         semanticSignature.addSymbol(st.nextToken());

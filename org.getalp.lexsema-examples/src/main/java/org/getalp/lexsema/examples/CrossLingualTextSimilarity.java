@@ -3,8 +3,8 @@ package org.getalp.lexsema.examples;
 import org.getalp.lexsema.similarity.measures.SimilarityMeasure;
 import org.getalp.lexsema.similarity.measures.crosslingual.TranslatorCrossLingualSimilarity;
 import org.getalp.lexsema.similarity.measures.tverski.TverskiIndexSimilarityMeasureBuilder;
+import org.getalp.lexsema.similarity.signatures.DefaultSemanticSignatureFactory;
 import org.getalp.lexsema.similarity.signatures.SemanticSignature;
-import org.getalp.lexsema.similarity.signatures.SemanticSignatureImpl;
 import org.getalp.lexsema.translation.GoogleWebTranslator;
 import org.getalp.lexsema.translation.Translator;
 import org.getalp.lexsema.util.Language;
@@ -24,9 +24,9 @@ public class CrossLingualTextSimilarity {
         Language source = Language.fromCode(args[0]);
         Language target = Language.fromCode(args[1]);
 
-        SemanticSignature signature1 = new SemanticSignatureImpl(args[2]);
+        SemanticSignature signature1 = DefaultSemanticSignatureFactory.DEFAULT.createSemanticSignature(args[2]);
         signature1.setLanguage(source);
-        SemanticSignature signature2 = new SemanticSignatureImpl(args[3]);
+        SemanticSignature signature2 = DefaultSemanticSignatureFactory.DEFAULT.createSemanticSignature(args[3]);
         signature2.setLanguage(target);
 
         Translator translator = new GoogleWebTranslator();

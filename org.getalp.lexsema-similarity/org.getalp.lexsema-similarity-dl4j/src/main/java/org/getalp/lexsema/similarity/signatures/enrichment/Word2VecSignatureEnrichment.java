@@ -2,9 +2,9 @@ package org.getalp.lexsema.similarity.signatures.enrichment;
 
 
 import org.deeplearning4j.models.word2vec.Word2Vec;
-import org.getalp.lexsema.util.Language;
+import org.getalp.lexsema.similarity.signatures.DefaultSemanticSignatureFactory;
 import org.getalp.lexsema.similarity.signatures.SemanticSignature;
-import org.getalp.lexsema.similarity.signatures.SemanticSignatureImpl;
+import org.getalp.lexsema.util.Language;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -28,7 +28,7 @@ public class Word2VecSignatureEnrichment extends SignatureEnrichmentAbstract {
 
     @Override
     public SemanticSignature enrichSemanticSignature(SemanticSignature semanticSignature) {
-        SemanticSignature finalSig = new SemanticSignatureImpl();
+        SemanticSignature finalSig = DefaultSemanticSignatureFactory.DEFAULT.createSemanticSignature();
         for (Map.Entry<Language, SignatureEnrichment> languageSignatureEnrichmentEntry : processors.entrySet()) {
             finalSig.appendSignature(languageSignatureEnrichmentEntry.getValue().enrichSemanticSignature(semanticSignature));
         }

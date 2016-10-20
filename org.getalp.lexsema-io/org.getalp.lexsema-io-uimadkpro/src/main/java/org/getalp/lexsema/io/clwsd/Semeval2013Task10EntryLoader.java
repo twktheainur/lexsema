@@ -3,8 +3,9 @@ package org.getalp.lexsema.io.clwsd;
 import edu.stanford.nlp.util.Pair;
 import org.getalp.lexsema.io.text.EnglishDKPTextProcessor;
 import org.getalp.lexsema.io.text.TextProcessor;
+import org.getalp.lexsema.similarity.DefaultDocumentFactory;
+import org.getalp.lexsema.similarity.DocumentFactory;
 import org.getalp.lexsema.similarity.Text;
-import org.getalp.lexsema.similarity.WordImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.*;
@@ -16,12 +17,14 @@ import java.util.Iterator;
 @SuppressWarnings({"BooleanParameter", "ClassWithTooManyFields"})
 public class Semeval2013Task10EntryLoader implements ContentHandler, TargetEntryLoader {
 
-    private Logger logger = LoggerFactory.getLogger(Semeval2013Task10EntryLoader.class);
+    private static final DocumentFactory DOCUMENT_FACTORY = DefaultDocumentFactory.DEFAULT_DOCUMENT_FACTORY;
 
-    private String path;
-    private TextProcessor textProcessor;
+    private static final Logger logger = LoggerFactory.getLogger(Semeval2013Task10EntryLoader.class);
 
-    private boolean inContext = false;
+    private final String path;
+    private final TextProcessor textProcessor;
+
+    private boolean inContext;
     private int numberOfSpacesInContext;
     private String contextString = "";
 
@@ -69,7 +72,7 @@ public class Semeval2013Task10EntryLoader implements ContentHandler, TargetEntry
                 targetWordId = atts.getValue("item");
                 String lemma = targetWordId.split("\\.")[0];
                 String pos = targetWordId.split("\\.")[1];
-                entry = new TargetWordEntryImpl(new WordImpl(targetWordId, lemma, lemma, pos));
+                entry = new TargetWordEntryImpl(DOCUMENT_FACTORY.createWord(targetWordId, lemma, lemma, pos));
                 logger.info(String.format("Loading %s ...", targetWordId));
                 break;
             case "instance":

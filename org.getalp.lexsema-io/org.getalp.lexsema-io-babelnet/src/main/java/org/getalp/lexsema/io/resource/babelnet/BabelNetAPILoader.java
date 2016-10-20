@@ -9,8 +9,8 @@ import org.getalp.lexsema.io.thesaurus.AnnotatedTextThesaurus;
 import org.getalp.lexsema.similarity.*;
 import org.getalp.lexsema.similarity.cache.SenseCache;
 import org.getalp.lexsema.similarity.cache.SenseCacheImpl;
+import org.getalp.lexsema.similarity.signatures.DefaultSemanticSignatureFactory;
 import org.getalp.lexsema.similarity.signatures.SemanticSignature;
-import org.getalp.lexsema.similarity.signatures.SemanticSignatureImpl;
 import org.getalp.lexsema.util.Language;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,7 +21,9 @@ import java.util.*;
 
 @SuppressWarnings("OverlyCoupledClass")
 public class BabelNetAPILoader implements LRLoader {
+    private static final DocumentFactory DOCUMENT_FACTORY = DefaultDocumentFactory.DEFAULT_DOCUMENT_FACTORY;
     private static final Logger logger = LoggerFactory.getLogger(BabelNetAPILoader.class);
+
     private final SenseCache senseCache;
     private final BabelNet babelNet;
     private final Language language;
@@ -55,7 +57,7 @@ public class BabelNetAPILoader implements LRLoader {
 
 
             for (BabelSense bs : babelSenses) {
-                SemanticSignature signature = new SemanticSignatureImpl();
+                SemanticSignature signature = DefaultSemanticSignatureFactory.DEFAULT.createSemanticSignature();
                 if (loadDefinitions) {
                     StringBuilder def = new StringBuilder();
                     List<BabelGloss> glosses = bs.getSynset().getGlosses(toBabelNetLanguage(language));
@@ -65,7 +67,7 @@ public class BabelNetAPILoader implements LRLoader {
                     addToSignature(signature, def.toString());
                 }
 
-                Sense sense = new SenseImpl(bs.getSynset().getId());
+                Sense sense = DOCUMENT_FACTORY.createSense(bs.getSynset().getId());
 
                 if (loadRelated) {
                     Map<IPointer, List<BabelSynset>> related = bs.getSynset().getRelatedMap();
@@ -76,7 +78,7 @@ public class BabelNetAPILoader implements LRLoader {
                             for (BabelGloss rbg : relatedGlosses) {
                                 localDef.append(rbg.getGloss());
                             }
-                            SemanticSignature localSignature = new SemanticSignatureImpl();
+                            SemanticSignature localSignature = DefaultSemanticSignatureFactory.DEFAULT.createSemanticSignature();
                             addToSignature(localSignature, localDef.toString());
                             if (hasExtendedSignature) {
                                 signature.appendSignature(localSignature);
@@ -115,7 +117,7 @@ public class BabelNetAPILoader implements LRLoader {
     public Map<Word, List<Sense>> getAllSenses() {
         Map<Word, List<Sense>> allSenses = new HashMap<>();
         babelNet.getLexiconIterator().forEachRemaining(w -> {
-            Word word = new WordImpl(w.getId(),w.getWord(),w.getWord(),w.getPOS().toString());
+            Word word = DOCUMENT_FACTORY.createWord(w.getId(),w.getWord(),w.getWord(),w.getPOS().toString());
                 allSenses.put(word, getSenses(w.getWord(), w.getPOS().toString(), word));
         });
         return allSenses;

@@ -1,7 +1,6 @@
 package org.getalp.lexsema.similarity;
 
 import com.hp.hpl.jena.graph.Node;
-import lombok.EqualsAndHashCode;
 import org.getalp.lexsema.ontolex.LexicalEntry;
 import org.getalp.lexsema.ontolex.LexicalResource;
 import org.getalp.lexsema.ontolex.LexicalResourceEntity;
@@ -11,8 +10,7 @@ import org.getalp.lexsema.util.Language;
 
 import java.util.*;
 
-@EqualsAndHashCode
-public class WordImpl implements Word {
+class WordImpl implements Word {
     private final String id;
     private final String surfaceForm;
     private String textPos;
@@ -25,7 +23,7 @@ public class WordImpl implements Word {
     private final int end;
     private final List<Sense> senses = new ArrayList<>();
 
-    public WordImpl(String id, String lemma, String surfaceForm, String pos) {
+    WordImpl(String id, String lemma, String surfaceForm, String pos) {
         this.id = id;
         this.lemma = lemma;
         this.surfaceForm = surfaceForm;
@@ -38,18 +36,13 @@ public class WordImpl implements Word {
         }
     }
 
-    public WordImpl(String id, String lemma, String surfaceForm, String pos, int begin, int end) {
+    WordImpl(String id, String lemma, String surfaceForm, String pos, int begin, int end) {
         this.id = id;
         this.lemma = lemma;
         this.surfaceForm = surfaceForm;
         textPos = pos;
         this.begin = begin;
-
-        if (surfaceForm != null) {
-            this.end = surfaceForm.length();
-        } else {
-            this.end = 0;
-        }
+        this.end = end;
     }
 
 

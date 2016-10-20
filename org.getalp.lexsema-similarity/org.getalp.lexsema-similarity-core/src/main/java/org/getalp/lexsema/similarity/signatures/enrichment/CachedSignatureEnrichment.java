@@ -1,6 +1,6 @@
 package org.getalp.lexsema.similarity.signatures.enrichment;
+import org.getalp.lexsema.similarity.signatures.DefaultSemanticSignatureFactory;
 import org.getalp.lexsema.similarity.signatures.SemanticSignature;
-import org.getalp.lexsema.similarity.signatures.SemanticSignatureImpl;
 import org.getalp.lexsema.util.caching.Cache;
 import org.getalp.lexsema.util.caching.CachePool;
 import org.slf4j.Logger;
@@ -35,7 +35,7 @@ public class CachedSignatureEnrichment extends SignatureEnrichmentAbstract {
     }
 
     private SemanticSignature signatureFromCachedString(String cachedString) {
-        SemanticSignature semanticSignature = new SemanticSignatureImpl();
+        SemanticSignature semanticSignature = DefaultSemanticSignatureFactory.DEFAULT.createSemanticSignature();
 
         semanticSignature.addSymbolString(new ArrayList<>(Arrays.asList(cachedString.split(" "))));
         return semanticSignature;

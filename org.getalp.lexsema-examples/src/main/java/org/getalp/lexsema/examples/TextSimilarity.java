@@ -2,8 +2,8 @@ package org.getalp.lexsema.examples;
 
 import org.getalp.lexsema.similarity.measures.SimilarityMeasure;
 import org.getalp.lexsema.similarity.measures.tverski.TverskiIndexSimilarityMeasureBuilder;
+import org.getalp.lexsema.similarity.signatures.DefaultSemanticSignatureFactory;
 import org.getalp.lexsema.similarity.signatures.SemanticSignature;
-import org.getalp.lexsema.similarity.signatures.SemanticSignatureImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,8 +19,8 @@ public final class TextSimilarity {
         if (args.length <2) {
             usage();
         }
-        SemanticSignature signature1 = new SemanticSignatureImpl(args[0]);
-        SemanticSignature signature2 = new SemanticSignatureImpl(args[1]);
+        SemanticSignature signature1 = DefaultSemanticSignatureFactory.DEFAULT.createSemanticSignature(args[0]);
+        SemanticSignature signature2 = DefaultSemanticSignatureFactory.DEFAULT.createSemanticSignature(args[1]);
 
         @SuppressWarnings("LawOfDemeter") SimilarityMeasure similarityMeasure = new TverskiIndexSimilarityMeasureBuilder()
                 .alpha(1d).beta(0).gamma(0).computeRatio(false).fuzzyMatching(false).normalize(true).regularizeOverlapInput(true).build();

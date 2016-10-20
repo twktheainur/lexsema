@@ -13,7 +13,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
-public class NullWord implements Word{
+final class NullWord implements Word{
 
     @Override
     public void addPrecedingInstance(Word precedingNonInstance) {
@@ -80,7 +80,7 @@ public class NullWord implements Word{
 
     @Override
     public Iterator<Sense> iterator() {
-        final List<Sense> emptyList = Collections.<Sense>emptyList();
+        final List<Sense> emptyList = Collections.emptyList();
         return emptyList.iterator();
     }
 
