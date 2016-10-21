@@ -1,22 +1,22 @@
 package org.getalp.lexsema.io.document.loader;
 
+import edu.mit.jwi.Dictionary;
+import edu.mit.jwi.item.IIndexWord;
+import edu.mit.jwi.item.IWord;
+import edu.mit.jwi.item.IWordID;
+import edu.mit.jwi.item.POS;
+import org.getalp.lexsema.similarity.*;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.util.Scanner;
 
-import org.getalp.lexsema.similarity.Sentence;
-import org.getalp.lexsema.similarity.SentenceImpl;
-import org.getalp.lexsema.similarity.Text;
-import org.getalp.lexsema.similarity.TextImpl;
-import org.getalp.lexsema.similarity.Word;
-import org.getalp.lexsema.similarity.WordImpl;
-
-import edu.mit.jwi.Dictionary;
-import edu.mit.jwi.item.*;
-
 public class OldDSOCorpusLoader extends CorpusLoaderImpl
 {
+
+    private static final DocumentFactory DOCUMENT_FACTORY = DefaultDocumentFactory.DEFAULT_DOCUMENT_FACTORY;
+
     private String pathToDSO;
     
     private Dictionary wordnet;
@@ -80,33 +80,30 @@ public class OldDSOCorpusLoader extends CorpusLoaderImpl
     
     private void processSentenceInWord(String sentence, String wordLemma, String wordPOS)
     {
-        Scanner scan = new Scanner(sentence);
-        scan.next(); // get rid of the file identification
-        scan.next(); // get rid of the sentence number
-        int senseNumber = 0;
-        Sentence txtSentence = new SentenceImpl("");
-        while (scan.hasNext())
-        {
-            String tmp = scan.next();
-            if (tmp.equals(">>"))
-            {
-                String surfaceForm = scan.next();
-                senseNumber = scan.nextInt();
-                scan.next(); // get rid of "<<"
-                Word txtWord = new WordImpl("", wordLemma, surfaceForm, wordPOS);
-                txtWord.setSemanticTag(getSemanticTag(wordLemma, wordPOS, senseNumber));
-                txtWord.setEnclosingSentence(txtSentence);
-                txtSentence.addWord(txtWord);
+        try (Scanner scan = new Scanner(sentence)) {
+            scan.next(); // get rid of the file identification
+            scan.next(); // get rid of the sentence number
+            int senseNumber = 0;
+            Sentence txtSentence = DOCUMENT_FACTORY.createSentence("");
+            while (scan.hasNext()) {
+                String tmp = scan.next();
+                if (tmp.equals(">>")) {
+                    String surfaceForm = scan.next();
+                    senseNumber = scan.nextInt();
+                    scan.next(); // get rid of "<<"
+                    Word txtWord = DOCUMENT_FACTORY.createWord("", wordLemma, surfaceForm, wordPOS);
+                    txtWord.setSemanticTag(getSemanticTag(wordLemma, wordPOS, senseNumber));
+                    txtWord.setEnclosingSentence(txtSentence);
+                    txtSentence.addWord(txtWord);
+                } else {
+                    Word txtWord = DOCUMENT_FACTORY.createWord("", "", tmp, "");
+                    txtWord.setEnclosingSentence(txtSentence);
+                    txtSentence.addWord(txtWord);
+                }
             }
-            else
-            {
-                Word txtWord = new WordImpl("", "", tmp, "");
-                txtWord.setEnclosingSentence(txtSentence);
-                txtSentence.addWord(txtWord);
-            }
+            text.addSentence(txtSentence);
+            scan.close();
         }
-        text.addSentence(txtSentence);
-        scan.close();
     }
     
     private String getSemanticTag(String lemma, String pos, int senseNumber)
@@ -130,7 +127,7 @@ public class OldDSOCorpusLoader extends CorpusLoaderImpl
     public void load()
     {
         open(wordnet);
-        text = new TextImpl();
+        text = DOCUMENT_FACTORY.createText();
         text.setId("");
         processList("vlist.txt", "v");
         processList("nlist.txt", "n");

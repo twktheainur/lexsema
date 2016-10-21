@@ -5,8 +5,10 @@ import com.trickl.cluster.KMeans;
 import org.getalp.lexsema.axalign.cli.org.getalp.lexsema.acceptali.acceptions.*;
 import org.getalp.lexsema.axalign.closure.similarity.PairwiseSimilarityMatrixGenerator;
 import org.getalp.lexsema.axalign.closure.similarity.PairwiseSimilarityMatrixGeneratorSim;
+import org.getalp.lexsema.ml.matrix.filters.Filter;
+import org.getalp.lexsema.ml.matrix.filters.NMFKLMatrixFactorizationFilter;
+import org.getalp.lexsema.ml.matrix.filters.normalization.ZSignificanceNormalizationFilter;
 import org.getalp.lexsema.ontolex.LexicalEntry;
-import org.getalp.lexsema.ontolex.LexicalSense;
 import org.getalp.lexsema.ontolex.dbnary.DBNary;
 import org.getalp.lexsema.ontolex.dbnary.Vocable;
 import org.getalp.lexsema.ontolex.dbnary.exceptions.NoSuchVocableException;
@@ -16,17 +18,15 @@ import org.getalp.lexsema.ontolex.graph.OntologyModel;
 import org.getalp.lexsema.ontolex.graph.storage.JenaTDBStore;
 import org.getalp.lexsema.ontolex.graph.storage.StoreHandler;
 import org.getalp.lexsema.ontolex.graph.store.Store;
+import org.getalp.lexsema.similarity.DefaultDocumentFactory;
+import org.getalp.lexsema.similarity.DocumentFactory;
 import org.getalp.lexsema.similarity.Sense;
-import org.getalp.lexsema.similarity.SenseImpl;
 import org.getalp.lexsema.similarity.measures.SimilarityMeasure;
 import org.getalp.lexsema.similarity.measures.crosslingual.TranslatorCrossLingualSimilarity;
 import org.getalp.lexsema.similarity.measures.tverski.TverskiIndexSimilarityMeasureBuilder;
 import org.getalp.lexsema.translation.GoogleWebTranslator;
 import org.getalp.lexsema.translation.Translator;
 import org.getalp.lexsema.util.Language;
-import org.getalp.lexsema.ml.matrix.filters.Filter;
-import org.getalp.lexsema.ml.matrix.filters.NMFKLMatrixFactorizationFilter;
-import org.getalp.lexsema.ml.matrix.filters.normalization.ZSignificanceNormalizationFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -34,8 +34,12 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public final class SenseClustering {
+
+    private static final DocumentFactory DOCUMENT_FACTORY = DefaultDocumentFactory.DEFAULT_DOCUMENT_FACTORY;
+
 
     public static final String ONTOLOGY_PROPERTIES = "data" + File.separator + "ontology.properties";
     private static final Language[] languages = {Language.ENGLISH, Language.BULGARIAN, Language.CATALAN, Language.BULGARIAN,
@@ -106,9 +110,7 @@ public final class SenseClustering {
     public static Set<Sense> vocableSenses(Vocable vocable, DBNary dbNary){
         Set<Sense> localSenses = new TreeSet<>();
         for(LexicalEntry lexicalEntry: dbNary.getLexicalEntries(vocable)){
-            for(LexicalSense lexicalSense: dbNary.getLexicalSenses(lexicalEntry)){
-                localSenses.add(new SenseImpl(lexicalSense));
-            }
+            localSenses.addAll(dbNary.getLexicalSenses(lexicalEntry).stream().map(DOCUMENT_FACTORY::createSense).collect(Collectors.toList()));
         }
         return localSenses;
     }

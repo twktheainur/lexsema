@@ -1,12 +1,10 @@
 package org.getalp.lexsema.similarity.signatures.enrichment;
 
-import org.getalp.lexsema.util.word2vec.Word2VecClient;
-
-
+import org.getalp.lexsema.similarity.signatures.DefaultSemanticSignatureFactory;
 import org.getalp.lexsema.similarity.signatures.SemanticSignature;
-import org.getalp.lexsema.similarity.signatures.SemanticSignatureImpl;
 import org.getalp.lexsema.similarity.signatures.symbols.SemanticSymbol;
 import org.getalp.lexsema.util.VectorOperation;
+import org.getalp.lexsema.util.word2vec.Word2VecClient;
 
 import java.util.Collection;
 
@@ -41,7 +39,7 @@ public class Word2VecSignatureEnrichment32 extends SignatureEnrichmentAbstract {
     	double[] senseVector = constructSenseVector(semanticSignature, id);
     	if (senseVector == null) return semanticSignature;
         Collection<String> nearests = Word2VecClient.getMostSimilarWords(senseVector, topN);
-        SemanticSignature newSignature = new SemanticSignatureImpl();
+        SemanticSignature newSignature = DefaultSemanticSignatureFactory.DEFAULT.createSemanticSignature();
         for (String word : semanticSignature.getStringSymbols()) {
             newSignature.addSymbol(word);
         }

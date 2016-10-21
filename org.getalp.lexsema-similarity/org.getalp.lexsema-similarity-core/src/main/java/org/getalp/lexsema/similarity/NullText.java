@@ -8,9 +8,9 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
-public final class NullText implements Text{
+final class NullText implements Text{
 
-    private Word nullWord = new NullWord();
+    private final Word nullWord = new NullWord();
 
     @Override
     public String getId() {
@@ -95,6 +95,11 @@ public final class NullText implements Text{
     @Override
     public boolean isAlreadyLoaded() {
         return false;
+    }
+
+    @Override
+    public boolean isNull() {
+        return true;
     }
 
     @Override

@@ -1,23 +1,17 @@
 package org.getalp.lexsema.similarity.signatures;
 
 import org.getalp.lexsema.similarity.measures.SimilarityMeasure;
-import org.getalp.lexsema.similarity.signatures.symbols.SemanticSymbol;
-import org.getalp.lexsema.similarity.signatures.symbols.SemanticSymbolImpl;
-import org.getalp.lexsema.similarity.signatures.symbols.VectorizedSemanticSymbol;
+import org.getalp.lexsema.similarity.signatures.symbols.*;
 import org.getalp.lexsema.util.Language;
 import org.getalp.lexsema.util.VectorOperation;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+
+import java.util.*;
 import java.util.stream.Collectors;
 
-public class VectorizedSemanticSignature implements SemanticSignature 
-{
-    public static final double DEFAULT_WEIGHT = 1d;
-    private List<VectorizedSemanticSymbol> symbols;
-    private Language language = null;
+class VectorizedSemanticSignatureImpl implements VectorizedSemanticSignature {
+    private static final double DEFAULT_WEIGHT = 1d;
+    private final List<VectorizedSemanticSymbol> symbols;
+    private Language language;
 
     @Override
     public Language getLanguage() {
@@ -29,12 +23,12 @@ public class VectorizedSemanticSignature implements SemanticSignature
         this.language = language;
     }
 
-    public VectorizedSemanticSignature() {
+    VectorizedSemanticSignatureImpl() {
         this(new ArrayList<>());
     }
 
-    public VectorizedSemanticSignature(List<VectorizedSemanticSymbol> symbols) {
-        this.symbols = symbols;
+    VectorizedSemanticSignatureImpl(List<VectorizedSemanticSymbol> symbols) {
+        this.symbols = Collections.unmodifiableList(symbols);
     }
 
     @Override
@@ -48,7 +42,7 @@ public class VectorizedSemanticSignature implements SemanticSignature
 
     @Override
     public VectorizedSemanticSignature copy() {
-        return new VectorizedSemanticSignature(symbols);
+        return new VectorizedSemanticSignatureImpl(symbols);
     }
 
     @Override
@@ -58,7 +52,7 @@ public class VectorizedSemanticSignature implements SemanticSignature
     
     @Override
     public void addSymbol(String symbol, double weight) {
-        symbols.add(new VectorizedSemanticSymbol(VectorOperation.to_vector(symbol), weight));
+        symbols.add(DefaultSemanticSymbolFactory.DEFAULT_FACTORY.createVectorizedSemanticSymbol(VectorOperation.to_vector(symbol), weight));
     }
 
     @Override
@@ -74,15 +68,15 @@ public class VectorizedSemanticSignature implements SemanticSignature
     }
 
     @Override
-    public void addSymbolString(List<String> string, List<Double> weights) {
-        for (int i = 0; i < Math.min(string.size(), weights.size()); i++) {
-            addSymbol(string.get(i), weights.get(i));
+    public void addSymbolString(List<String> symbolString, List<Double> weights) {
+        for (int i = 0; i < Math.min(symbolString.size(), weights.size()); i++) {
+            addSymbol(symbolString.get(i), weights.get(i));
         }
     }
 
     @Override
-    public void addSymbolString(List<String> string) {
-        for (String aString : string) {
+    public void addSymbolString(List<String> symbolString) {
+        for (String aString : symbolString) {
             addSymbol(aString, 1.0);
         }
     }
@@ -114,7 +108,7 @@ public class VectorizedSemanticSignature implements SemanticSignature
     public Iterator<SemanticSymbol> iterator() {
         final Collection<SemanticSymbol> stringSymbols = new ArrayList<>();
         for(VectorizedSemanticSymbol semanticSymbol: symbols){
-            stringSymbols.add(new SemanticSymbolImpl(semanticSymbol.getSymbol(), semanticSymbol.getWeight()));
+            stringSymbols.add(DefaultSemanticSymbolFactory.DEFAULT_FACTORY.createSemanticSymbol(semanticSymbol.getSymbol(), semanticSymbol.getWeight()));
         }
         return stringSymbols.iterator();
     }
@@ -137,7 +131,7 @@ public class VectorizedSemanticSignature implements SemanticSignature
 
     @Override
     public SemanticSignature mergeSignatures(SemanticSignature other) {
-        final SemanticSignature semanticSymbols = new VectorizedSemanticSignature(symbols);
+        final SemanticSignature semanticSymbols = new VectorizedSemanticSignatureImpl(symbols);
         return semanticSymbols.appendSignature(other);
     }
 
@@ -160,8 +154,9 @@ public class VectorizedSemanticSignature implements SemanticSignature
         }
     }
     
+    @Override
     public List<VectorizedSemanticSymbol> getVectorizedSymbols() {
-        return symbols;
+        return Collections.unmodifiableList(symbols);
     }
 
 }

@@ -1,8 +1,8 @@
 package org.getalp.lexsema.similarity.signatures;
 
 import org.getalp.lexsema.similarity.measures.SimilarityMeasure;
+import org.getalp.lexsema.similarity.signatures.symbols.DefaultSemanticSymbolFactory;
 import org.getalp.lexsema.similarity.signatures.symbols.SemanticSymbol;
-import org.getalp.lexsema.similarity.signatures.symbols.SemanticSymbolImpl;
 import org.getalp.lexsema.util.Language;
 
 import java.util.Collections;
@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 
-public final class NullSemanticSignature implements SemanticSignature{
+final class NullSemanticSignature implements SemanticSignature{
     private static final SemanticSignature instance = new NullSemanticSignature();
 
     public static SemanticSignature getInstance() {
@@ -62,12 +62,12 @@ public final class NullSemanticSignature implements SemanticSignature{
     }
 
     @Override
-    public void addSymbolString(List<String> string, List<Double> weights) {
+    public void addSymbolString(List<String> symbolString, List<Double> weights) {
 
     }
 
     @Override
-    public void addSymbolString(List<String> string) {
+    public void addSymbolString(List<String> symbolString) {
 
     }
 
@@ -103,7 +103,7 @@ public final class NullSemanticSignature implements SemanticSignature{
 
     @Override
     public SemanticSymbol getSymbol(int index) {
-        return new SemanticSymbolImpl("",0);
+        return DefaultSemanticSymbolFactory.DEFAULT_FACTORY.createSemanticSymbol("",0);
     }
 
     @Override

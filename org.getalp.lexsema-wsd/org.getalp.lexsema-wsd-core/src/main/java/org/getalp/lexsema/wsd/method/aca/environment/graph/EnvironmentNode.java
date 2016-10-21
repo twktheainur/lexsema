@@ -2,8 +2,8 @@ package org.getalp.lexsema.wsd.method.aca.environment.graph;
 
 
 import cern.jet.random.engine.MersenneTwister;
+import org.getalp.lexsema.similarity.signatures.DefaultSemanticSignatureFactory;
 import org.getalp.lexsema.similarity.signatures.SemanticSignature;
-import org.getalp.lexsema.similarity.signatures.SemanticSignatureImpl;
 import org.getalp.lexsema.similarity.signatures.symbols.SemanticSymbol;
 
 import java.util.ArrayList;
@@ -25,7 +25,7 @@ public class EnvironmentNode extends AbstractNode {
 
     @Override
     public synchronized SemanticSignature getSemanticSignature(){
-        SemanticSignature semanticSignature = new SemanticSignatureImpl();
+        SemanticSignature semanticSignature = DefaultSemanticSignatureFactory.DEFAULT.createSemanticSignature();
         semanticSignature.addSymbols(signatureVector.stream().filter(symbol -> symbol != null).collect(Collectors.toList()));
         return semanticSignature;
     }

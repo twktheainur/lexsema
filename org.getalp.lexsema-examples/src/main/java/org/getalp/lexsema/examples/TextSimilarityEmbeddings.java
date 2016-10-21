@@ -4,8 +4,8 @@ import org.getalp.lexsema.io.word2vec.MultilingualSerializedModelWord2VecLoader;
 import org.getalp.lexsema.io.word2vec.MultilingualWord2VecLoader;
 import org.getalp.lexsema.similarity.measures.SimilarityMeasure;
 import org.getalp.lexsema.similarity.measures.word2vec.Word2VecGlossCosineSimilarity;
+import org.getalp.lexsema.similarity.signatures.DefaultSemanticSignatureFactory;
 import org.getalp.lexsema.similarity.signatures.SemanticSignature;
-import org.getalp.lexsema.similarity.signatures.SemanticSignatureImpl;
 import org.getalp.lexsema.util.Language;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,8 +24,8 @@ public final class TextSimilarityEmbeddings {
         if (args.length <2) {
             usage();
         }
-        SemanticSignature signature1 = new SemanticSignatureImpl(args[0]);
-        SemanticSignature signature2 = new SemanticSignatureImpl(args[1]);
+        SemanticSignature signature1 = DefaultSemanticSignatureFactory.DEFAULT.createSemanticSignature(args[0]);
+        SemanticSignature signature2 = DefaultSemanticSignatureFactory.DEFAULT.createSemanticSignature(args[1]);
 
         MultilingualWord2VecLoader word2VecLoader = new MultilingualSerializedModelWord2VecLoader();
         word2VecLoader.loadGoogle(new File(args[2]),true);

@@ -1,16 +1,12 @@
 package org.getalp.lexsema.similarity.signatures.enrichment;
 
 import org.deeplearning4j.models.embeddings.wordvectors.WordVectors;
+import org.getalp.lexsema.similarity.signatures.DefaultSemanticSignatureFactory;
 import org.getalp.lexsema.similarity.signatures.SemanticSignature;
-import org.getalp.lexsema.similarity.signatures.SemanticSignatureImpl;
+import org.getalp.lexsema.similarity.signatures.symbols.DefaultSemanticSymbolFactory;
 import org.getalp.lexsema.similarity.signatures.symbols.SemanticSymbol;
-import org.getalp.lexsema.similarity.signatures.symbols.SemanticSymbolImpl;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -22,7 +18,7 @@ public class Word2VecLocalSignatureEnrichment extends SignatureEnrichmentAbstrac
     private final WordVectors word2Vec;
     private final int topN;
     
-    private static final HashMap<String, List<SemanticSymbol>> symbolsCache = new HashMap<>();
+    private static final Map<String, List<SemanticSymbol>> symbolsCache = new HashMap<>();
 
 
     public Word2VecLocalSignatureEnrichment(WordVectors word2Vec) {
@@ -45,7 +41,7 @@ public class Word2VecLocalSignatureEnrichment extends SignatureEnrichmentAbstrac
         List<SemanticSymbol> symbols = new ArrayList<>();
         symbols.add(semanticSymbol);
         for (String sword : relatedSorted) {
-            symbols.add(new SemanticSymbolImpl(sword, 1.0));
+            symbols.add(DefaultSemanticSymbolFactory.DEFAULT_FACTORY.createSemanticSymbol(sword));
         }
         symbolsCache.put(word, symbols);
         return symbols;
@@ -53,22 +49,20 @@ public class Word2VecLocalSignatureEnrichment extends SignatureEnrichmentAbstrac
 
     @Override
     public SemanticSignature enrichSemanticSignature(SemanticSignature semanticSignature) {
-        SemanticSignature newSignature = new SemanticSignatureImpl();
+        SemanticSignature newSignature = DefaultSemanticSignatureFactory.DEFAULT.createSemanticSignature();
         for (SemanticSymbol semanticSymbol : semanticSignature) {
             newSignature.addSymbols(enrichSemanticSymbol(semanticSymbol));
         }
         return newSignature;
     }
 
-    public List<String> sortRelatedList(String word, Collection<String> related) {
+    private List<String> sortRelatedList(String word, Collection<String> related) {
         List<String> relatedSorted = new ArrayList<>(related);
-        relatedSorted.sort(new Comparator<String>(){
-            public int compare(String arg0, String arg1) {
-                if (word2Vec.similarity(word, arg0) > word2Vec.similarity(word, arg1)) {
-                    return -1;
-                } else {
-                    return 1;
-                }
+        relatedSorted.sort((arg0, arg1) -> {
+            if (word2Vec.similarity(word, arg0) > word2Vec.similarity(word, arg1)) {
+                return -1;
+            } else {
+                return 1;
             }
         });
         return relatedSorted;

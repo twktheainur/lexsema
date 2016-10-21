@@ -5,7 +5,7 @@ public class IndexedSemanticSymbolImpl implements IndexedSemanticSymbol {
     private final Integer symbol;
     private final double weight;
 
-    public IndexedSemanticSymbolImpl(Integer symbol, double weight) {
+    IndexedSemanticSymbolImpl(Integer symbol, double weight) {
         this.weight = weight;
         this.symbol = symbol;
     }

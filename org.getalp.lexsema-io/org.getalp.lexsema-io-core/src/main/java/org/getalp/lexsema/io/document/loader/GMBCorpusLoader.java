@@ -19,6 +19,8 @@ import java.util.List;
 
 public class GMBCorpusLoader extends CorpusLoaderImpl implements ContentHandler {
 
+    private static final DocumentFactory DOCUMENT_FACTORY = DefaultDocumentFactory.DEFAULT_DOCUMENT_FACTORY;
+
     private static final Logger logger = LoggerFactory.getLogger(GMBCorpusLoader.class);
 
     private final String path;
@@ -59,8 +61,8 @@ public class GMBCorpusLoader extends CorpusLoaderImpl implements ContentHandler 
         currentPos = "";
         currentLemma = "";
         currentSenseID = "";
-        currentSentence = new NullSentence();
-        currentText = new NullText();
+        currentSentence = DOCUMENT_FACTORY.nullSentence();
+        currentText = DOCUMENT_FACTORY.nullText();
     }
 
     @Override
@@ -113,8 +115,8 @@ public class GMBCorpusLoader extends CorpusLoaderImpl implements ContentHandler 
     public void startElement(String uri, String localName, String qName, Attributes atts) throws SAXException {
         switch (localName) {
             case "taggedtokens":
-                currentText = new TextImpl();
-                currentSentence = new SentenceImpl("");
+                currentText = DOCUMENT_FACTORY.createText();
+                currentSentence = DOCUMENT_FACTORY.createSentence("");
                 inSurfaceForm = false;
                 inPos = false;
                 inLemma = false;
@@ -157,7 +159,7 @@ public class GMBCorpusLoader extends CorpusLoaderImpl implements ContentHandler 
                 addText(currentText);
                 break;
             case "tagtoken":
-                Word w = new WordImpl("", currentLemma, currentSurfaceForm.trim(), currentPos);
+                Word w = DOCUMENT_FACTORY.createWord("", currentLemma, currentSurfaceForm.trim(), currentPos);
                 if (!currentSenseID.isEmpty()) {
                     String[] tokens = currentSenseID.split("\\.");
                     if (tokens.length == 3) {
@@ -169,7 +171,7 @@ public class GMBCorpusLoader extends CorpusLoaderImpl implements ContentHandler 
                 currentSentence.addWord(w);
                 if (currentLemma.equals(".")) {
                     currentText.addSentence(currentSentence);
-                    currentSentence = new SentenceImpl("");
+                    currentSentence = DOCUMENT_FACTORY.createSentence("");
                 }
                 currentLemma = "";
                 currentPos = "";

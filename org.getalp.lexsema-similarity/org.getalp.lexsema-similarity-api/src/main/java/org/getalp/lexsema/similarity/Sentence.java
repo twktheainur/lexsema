@@ -1,5 +1,6 @@
 package org.getalp.lexsema.similarity;
 
 public interface Sentence extends Document {
-    boolean isNull();
+    Text getParentText();
+    void setParentText(Text text);
 }

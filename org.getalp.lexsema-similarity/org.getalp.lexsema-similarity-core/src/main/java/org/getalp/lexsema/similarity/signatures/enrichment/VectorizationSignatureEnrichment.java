@@ -1,16 +1,17 @@
 package org.getalp.lexsema.similarity.signatures.enrichment;
 
+import org.getalp.lexsema.similarity.signatures.DefaultSemanticSignatureFactory;
 import org.getalp.lexsema.similarity.signatures.SemanticSignature;
-import org.getalp.lexsema.similarity.signatures.SemanticSignatureImpl;
 import org.getalp.lexsema.similarity.signatures.symbols.SemanticSymbol;
 import org.getalp.lexsema.util.word2vec.Word2VecClient;
+
 import java.util.Arrays;
 
 public class VectorizationSignatureEnrichment extends SignatureEnrichmentAbstract {
 
     @Override
     public SemanticSignature enrichSemanticSignature(SemanticSignature signature) {
-        SemanticSignature newSignature = new SemanticSignatureImpl();
+        SemanticSignature newSignature = DefaultSemanticSignatureFactory.DEFAULT.createSemanticSignature();
         for (SemanticSymbol symbol : signature) {
         	String symbolStr = symbol.getSymbol().toLowerCase().trim();
             double[] vector = Word2VecClient.getWordVector(symbolStr);

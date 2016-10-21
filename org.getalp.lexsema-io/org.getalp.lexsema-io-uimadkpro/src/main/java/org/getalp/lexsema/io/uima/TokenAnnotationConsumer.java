@@ -14,7 +14,13 @@ import java.util.Collection;
 
 public class TokenAnnotationConsumer extends CasConsumer_ImplBase implements TokenConsumer {
 
-    private Text text = new NullText();
+    private static final DocumentFactory DOCUMENT_FACTORY = DefaultDocumentFactory.DEFAULT_DOCUMENT_FACTORY;
+
+    private Text text;
+
+    public TokenAnnotationConsumer() {
+        text = DOCUMENT_FACTORY.nullText();
+    }
 
     @Override
     public void process(CAS aCAS) throws AnalysisEngineProcessException {
@@ -22,8 +28,8 @@ public class TokenAnnotationConsumer extends CasConsumer_ImplBase implements Tok
         Type TOKEN_ANNOTATION = aCAS.getTypeSystem().getType("de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Token");
         Collection<AnnotationFS> tokens = CasUtil.select(aCAS, TOKEN_ANNOTATION);
 
-        text = new TextImpl();
-        Sentence sentence = new SentenceImpl("");
+        text = DOCUMENT_FACTORY.createText();
+        Sentence sentence = DOCUMENT_FACTORY.createSentence("");
         for (AnnotationFS tokenAnnot : tokens) {
             Token token = (Token) tokenAnnot;
             String lemma = token.getLemma().getValue();
@@ -31,7 +37,7 @@ public class TokenAnnotationConsumer extends CasConsumer_ImplBase implements Tok
             String sform = token.getCoveredText();
             int begin = token.getBegin();
             int end = token.getEnd();
-            Word lexEnt = new WordImpl("", lemma, sform, pos, begin, end);
+            Word lexEnt = DOCUMENT_FACTORY.createWord("", lemma, sform, pos, begin, end);
             text.addWord(lexEnt);
             sentence.addWord(lexEnt);
             lexEnt.setEnclosingSentence(sentence);

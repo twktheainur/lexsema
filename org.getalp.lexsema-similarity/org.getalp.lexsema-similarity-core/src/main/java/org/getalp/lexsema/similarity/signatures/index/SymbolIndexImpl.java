@@ -1,10 +1,11 @@
 package org.getalp.lexsema.similarity.signatures.index;
 
 import java.util.HashMap;
+import java.util.Map;
 
 public class SymbolIndexImpl implements SymbolIndex {
     
-    private final HashMap<String, Integer> indexMap = new HashMap<>();
+    private final Map<String, Integer> indexMap = new HashMap<>();
     
     private int currentSymbol = 0;
     

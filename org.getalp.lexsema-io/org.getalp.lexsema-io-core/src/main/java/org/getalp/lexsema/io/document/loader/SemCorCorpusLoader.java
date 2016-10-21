@@ -12,7 +12,8 @@ import java.io.IOException;
 @SuppressWarnings({"BooleanParameter", "ClassWithTooManyFields"})
 public class SemCorCorpusLoader extends CorpusLoaderImpl implements ContentHandler {
 
-    private Logger logger = LoggerFactory.getLogger(SemCorCorpusLoader.class);
+    private static final DocumentFactory DOCUMENT_FACTORY = DefaultDocumentFactory.DEFAULT_DOCUMENT_FACTORY;
+    private final Logger logger = LoggerFactory.getLogger(SemCorCorpusLoader.class);
 
     private boolean inWord;
     private String currentSurfaceForm;
@@ -21,7 +22,7 @@ public class SemCorCorpusLoader extends CorpusLoaderImpl implements ContentHandl
     private String currentId;
     private String currentSemanticTag;
 
-    private String path;
+    private final String path;
 
 
     private Sentence currentSentence;
@@ -68,11 +69,11 @@ public class SemCorCorpusLoader extends CorpusLoaderImpl implements ContentHandl
     public void startElement(String uri, String localName, String qName, Attributes atts) throws SAXException {
         switch (localName) {
             case "context":
-                currentDocument = new TextImpl();
+                currentDocument = DOCUMENT_FACTORY.createText();
                 currentDocument.setId(atts.getValue("filename"));
                 break;
             case "s":
-                currentSentence = new SentenceImpl(atts.getValue("snum"));
+                currentSentence = DOCUMENT_FACTORY.createSentence(atts.getValue("snum"));
                 break;
             case "wf":
                 inWord = true;
@@ -103,7 +104,7 @@ public class SemCorCorpusLoader extends CorpusLoaderImpl implements ContentHandl
                 if(currentLemma==null){
                     currentLemma = "";
                 }
-                Word w = new WordImpl(currentId, currentLemma, currentSurfaceForm, currentPos);
+                Word w = DOCUMENT_FACTORY.createWord(currentId, currentLemma, currentSurfaceForm, currentPos);
                 w.setSemanticTag(currentSemanticTag);
                 w.setEnclosingSentence(currentSentence);
                 currentSentence.addWord(w);
@@ -155,13 +156,12 @@ public class SemCorCorpusLoader extends CorpusLoaderImpl implements ContentHandl
     @Override
     public void load() {
         try {
-            System.out.println("SemCor parsing");
+            logger.info("SemCor parsing");
             XMLReader saxReader = XMLReaderFactory.createXMLReader();
             saxReader.setContentHandler(this);
             saxReader.parse(path);
-            System.out.println("End of SemCor parsing");
+            logger.info("End of SemCor parsing");
         } catch (IOException | SAXException t) {
-            t.printStackTrace();
             logger.error(t.getLocalizedMessage());
         }
     }

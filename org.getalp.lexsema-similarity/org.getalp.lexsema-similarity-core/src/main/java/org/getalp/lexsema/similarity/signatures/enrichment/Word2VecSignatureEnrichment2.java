@@ -1,11 +1,10 @@
 package org.getalp.lexsema.similarity.signatures.enrichment;
 
-import org.getalp.lexsema.util.word2vec.Word2VecClient;
-
+import org.getalp.lexsema.similarity.signatures.DefaultSemanticSignatureFactory;
 import org.getalp.lexsema.similarity.signatures.SemanticSignature;
-import org.getalp.lexsema.similarity.signatures.SemanticSignatureImpl;
+import org.getalp.lexsema.similarity.signatures.symbols.DefaultSemanticSymbolFactory;
 import org.getalp.lexsema.similarity.signatures.symbols.SemanticSymbol;
-import org.getalp.lexsema.similarity.signatures.symbols.SemanticSymbolImpl;
+import org.getalp.lexsema.util.word2vec.Word2VecClient;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -21,11 +20,11 @@ public class Word2VecSignatureEnrichment2 extends SignatureEnrichmentAbstract {
 
     @Override
     public SemanticSignature enrichSemanticSignature(SemanticSignature semanticSignature) {
-        List<List<SemanticSymbol>> newSymbols = new ArrayList<>();
+        Collection<List<SemanticSymbol>> newSymbols = new ArrayList<>();
         for (SemanticSymbol symbol : semanticSignature) {
             newSymbols.add(enrichSemanticSymbol(symbol));
         }
-        SemanticSignature newSignature = new SemanticSignatureImpl();
+        SemanticSignature newSignature = DefaultSemanticSignatureFactory.DEFAULT.createSemanticSignature();
         for (String word : semanticSignature.getStringSymbols()) {
             newSignature.addSymbol(word);
         }
@@ -41,7 +40,7 @@ public class Word2VecSignatureEnrichment2 extends SignatureEnrichmentAbstract {
         List<SemanticSymbol> ret = new ArrayList<>();
         Collection<String> words = Word2VecClient.getMostSimilarWords(semanticSymbol.getSymbol(), topN);
         for (String word : words) {
-            ret.add(new SemanticSymbolImpl(word, 1));
+            ret.add(DefaultSemanticSymbolFactory.DEFAULT_FACTORY.createSemanticSymbol(word));
         }
         return ret;
     }

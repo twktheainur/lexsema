@@ -1,13 +1,10 @@
 package org.getalp.lexsema.similarity.signatures.symbols;
 
-import lombok.Data;
-
-@Data
 public class SemanticSymbolImpl implements SemanticSymbol {
     private final String symbol;
     private final Double weight;
 
-    public SemanticSymbolImpl(String symbol, double weight) {
+    SemanticSymbolImpl(String symbol, double weight) {
         this.weight = weight;
         this.symbol = symbol;
     }

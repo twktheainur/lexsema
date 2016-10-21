@@ -3,8 +3,8 @@ package org.getalp.lexsema.similarity.signatures.enrichment;
 import org.deeplearning4j.berkeley.Counter;
 import org.deeplearning4j.models.word2vec.Word2Vec;
 import org.deeplearning4j.models.word2vec.wordstore.VocabCache;
+import org.getalp.lexsema.similarity.signatures.DefaultSemanticSignatureFactory;
 import org.getalp.lexsema.similarity.signatures.SemanticSignature;
-import org.getalp.lexsema.similarity.signatures.SemanticSignatureImpl;
 import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.ops.transforms.Transforms;
 
@@ -34,7 +34,7 @@ public class Word2VecPerGlobalSignatureEnrichment extends SignatureEnrichmentAbs
 
     @Override
     public SemanticSignature enrichSemanticSignature(SemanticSignature semanticSignature) {
-        SemanticSignature newSignature = new SemanticSignatureImpl();
+        SemanticSignature newSignature = DefaultSemanticSignatureFactory.DEFAULT.createSemanticSignature();
         INDArray definitionVector = word2Vec.getVectorizer().transform(semanticSignature.toString());
         Counter<String> distances = new Counter<>();
         for (String s : vocab().words()) {

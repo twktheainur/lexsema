@@ -5,10 +5,11 @@ import org.getalp.lexsema.axalign.closure.LexicalResourceTranslationClosure;
 import org.getalp.lexsema.axalign.closure.LexicalResourceTranslationClosureWithSignatures;
 import org.getalp.lexsema.ontolex.LexicalEntry;
 import org.getalp.lexsema.ontolex.LexicalSense;
+import org.getalp.lexsema.similarity.DefaultDocumentFactory;
+import org.getalp.lexsema.similarity.DocumentFactory;
 import org.getalp.lexsema.similarity.Sense;
-import org.getalp.lexsema.similarity.SenseImpl;
+import org.getalp.lexsema.similarity.signatures.DefaultSemanticSignatureFactory;
 import org.getalp.lexsema.similarity.signatures.SemanticSignature;
-import org.getalp.lexsema.similarity.signatures.SemanticSignatureImpl;
 import org.getalp.lexsema.util.Language;
 
 import java.util.Map;
@@ -16,14 +17,16 @@ import java.util.Set;
 import java.util.StringTokenizer;
 
 public class TranslationClosureSemanticSignatureGeneratorImpl implements TranslationClosureSemanticSignatureGenerator {
+    private static final DocumentFactory DOCUMENT_FACTORY = DefaultDocumentFactory.DEFAULT_DOCUMENT_FACTORY;
+
     @Override
     public LexicalResourceTranslationClosure<Sense> generateSemanticSignatures(LexicalResourceTranslationClosure<LexicalSense> rawClosure) {
         LexicalResourceTranslationClosure<Sense> outputClosure = new LexicalResourceTranslationClosureWithSignatures();
         Map<Language, Map<LexicalEntry, Set<LexicalSense>>> otherClosureData = rawClosure.senseClosureByLanguageAndEntry();
-        for (Language language : otherClosureData.keySet()) {
-            for (LexicalEntry localLexicalEntry : otherClosureData.get(language).keySet()) {
-                for (LexicalSense ls : otherClosureData.get(language).get(localLexicalEntry)) {
-                    outputClosure.addSense(language, localLexicalEntry, buildSense(ls));
+        for (Map.Entry<Language, Map<LexicalEntry, Set<LexicalSense>>> languageMapEntry : otherClosureData.entrySet()) {
+            for (LexicalEntry localLexicalEntry : languageMapEntry.getValue().keySet()) {
+                for (LexicalSense ls : languageMapEntry.getValue().get(localLexicalEntry)) {
+                    outputClosure.addSense(languageMapEntry.getKey(), localLexicalEntry, buildSense(ls));
                 }
             }
         }
@@ -31,8 +34,8 @@ public class TranslationClosureSemanticSignatureGeneratorImpl implements Transla
     }
 
     private Sense buildSense(LexicalSense lexicalSense) {
-        Sense sense = new SenseImpl(lexicalSense);
-        SemanticSignature semanticSignature = new SemanticSignatureImpl();
+        Sense sense = DOCUMENT_FACTORY.createSense(lexicalSense);
+        SemanticSignature semanticSignature = DefaultSemanticSignatureFactory.DEFAULT.createSemanticSignature();
         String definition = lexicalSense.getDefinition();
         addToSignature(semanticSignature, definition);
         sense.setSemanticSignature(semanticSignature);

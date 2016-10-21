@@ -14,7 +14,8 @@ import java.util.List;
 
 public class Semeval2013Task12CorpusLoader extends CorpusLoaderImpl implements ContentHandler {
 
-    private final Logger logger = LoggerFactory.getLogger(Semeval2013Task12CorpusLoader.class);
+    private static final DocumentFactory DOCUMENT_FACTORY = DefaultDocumentFactory.DEFAULT_DOCUMENT_FACTORY;
+    private static final Logger logger = LoggerFactory.getLogger(Semeval2013Task12CorpusLoader.class);
 
     private boolean inWord;
     private String currentSurfaceForm;
@@ -85,18 +86,18 @@ public class Semeval2013Task12CorpusLoader extends CorpusLoaderImpl implements C
                 language = Language.fromCode(atts.getValue("lang"));
                 break;
             case "text":
-                currentDocument = new TextImpl(language);
+                currentDocument = DOCUMENT_FACTORY.createText(language);
                 currentDocument.setId(atts.getValue("id"));
                 break;
             case "sentence":
-                currentSentence = new SentenceImpl(atts.getValue("id"));
+                currentSentence = DOCUMENT_FACTORY.createSentence(atts.getValue("id"));
                 currentSentence.setLanguage(language);
                 break;
             case "wf":
                 currentPos = atts.getValue("pos");
                 currentLemma = atts.getValue(lemmaAttribute);
                 currentId = "";
-                currentPrecedingWords.add(new WordImpl("non-target", currentLemma, currentSurfaceForm, currentPos));
+                currentPrecedingWords.add(DOCUMENT_FACTORY.createWord("non-target", currentLemma, currentSurfaceForm, currentPos));
                 inWord = true;
                 break;
             case "instance":
@@ -126,7 +127,7 @@ public class Semeval2013Task12CorpusLoader extends CorpusLoaderImpl implements C
                 break;
             case "instance":
                 inWord = false;
-                Word w = new WordImpl(currentId, currentLemma, currentSurfaceForm, currentPos);
+                Word w = DOCUMENT_FACTORY.createWord(currentId, currentLemma, currentSurfaceForm, currentPos);
                 for (Word pw : currentPrecedingWords) {
                     w.addPrecedingInstance(pw);
                 }

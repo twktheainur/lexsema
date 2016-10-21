@@ -1,21 +1,18 @@
 package org.getalp.lexsema.ws.wsdforsmt;
 
-import java.io.FileInputStream;
-import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
-import java.util.concurrent.ConcurrentHashMap;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import edu.stanford.nlp.ling.CoreAnnotations.LemmaAnnotation;
+import edu.stanford.nlp.ling.CoreAnnotations.PartOfSpeechAnnotation;
+import edu.stanford.nlp.ling.CoreAnnotations.SentencesAnnotation;
+import edu.stanford.nlp.ling.CoreAnnotations.TokensAnnotation;
+import edu.stanford.nlp.ling.CoreLabel;
+import edu.stanford.nlp.pipeline.Annotation;
+import edu.stanford.nlp.pipeline.StanfordCoreNLP;
+import edu.stanford.nlp.util.CoreMap;
 import org.getalp.lexsema.io.resource.dictionary.DictionaryLRLoader;
+import org.getalp.lexsema.similarity.DefaultDocumentFactory;
 import org.getalp.lexsema.similarity.Document;
-import org.getalp.lexsema.similarity.DocumentImpl;
+import org.getalp.lexsema.similarity.DocumentFactory;
 import org.getalp.lexsema.similarity.Word;
-import org.getalp.lexsema.similarity.WordImpl;
 import org.getalp.lexsema.similarity.measures.lesk.IndexedLeskSimilarity;
 import org.getalp.lexsema.ws.core.WebServiceServlet;
 import org.getalp.lexsema.wsd.configuration.Configuration;
@@ -24,30 +21,35 @@ import org.getalp.lexsema.wsd.method.LargeDocumentDisambiguator;
 import org.getalp.lexsema.wsd.method.MultiThreadCuckooSearch;
 import org.getalp.lexsema.wsd.score.ConfigurationScorer;
 import org.getalp.lexsema.wsd.score.ConfigurationScorerWithCache;
-import edu.stanford.nlp.ling.CoreLabel;
-import edu.stanford.nlp.ling.CoreAnnotations.LemmaAnnotation;
-import edu.stanford.nlp.ling.CoreAnnotations.PartOfSpeechAnnotation;
-import edu.stanford.nlp.ling.CoreAnnotations.SentencesAnnotation;
-import edu.stanford.nlp.ling.CoreAnnotations.TokensAnnotation;
-import edu.stanford.nlp.pipeline.Annotation;
-import edu.stanford.nlp.pipeline.StanfordCoreNLP;
-import edu.stanford.nlp.util.CoreMap;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.FileInputStream;
+import java.io.UnsupportedEncodingException;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 @SuppressWarnings("serial")
 public class WSDForSMTWebService1  extends WebServiceServlet
 {
+
+    private static final Logger logger = LoggerFactory.getLogger(WSDForSMTWebService1.class);
+
     private static StanfordCoreNLP stanford = null;
     
     private static DictionaryLRLoader dictionary = null;
     
     private static Disambiguator disambiguator = null;
     
-    private static Map<String, String> cache = new ConcurrentHashMap<>();
+    private static final Map<String, String> cache = new ConcurrentHashMap<>();
     
     private static boolean verbose = true;
+
+    private static final DocumentFactory DOCUMENT_FACTORY = DefaultDocumentFactory.DEFAULT_DOCUMENT_FACTORY;
     
-    protected void handle(HttpServletRequest request, HttpServletResponse response) throws Exception
-    {
+    protected void handle(HttpServletRequest request, HttpServletResponse response) throws Exception, UnsupportedEncodingException, java.io.IOException {
         setHeaders(request, response);
         loadStanford();
         loadDictionary();
@@ -58,37 +60,37 @@ public class WSDForSMTWebService1  extends WebServiceServlet
         
         if (cache.containsKey(rawText))
         {
-            if (verbose) System.out.println("Found in cache");
+            if (verbose) logger.debug("Found in cache");
             output = cache.get(rawText);
         }
         else
         {
-            if (verbose) System.out.println("Got the following input of size " + rawText.length() + " characters:");
-            if (verbose) System.out.println(rawText);
+            if (verbose) logger.debug("Got the following input of size {} characters:",rawText.length());
+            if (verbose) logger.debug(rawText);
 
             List<String> tokenizedText = Arrays.asList(rawText.split(" "));
             
-            if (verbose) System.out.println("Input has " + tokenizedText.size() + " words");
+            if (verbose) logger.debug("Input has {} words", tokenizedText.size());
             
-            if (verbose) System.out.println("Parsing input...");
+            if (verbose) logger.debug("Parsing input...");
             Document txt = rawToText(rawText);
-            if (verbose) System.out.println("Parsed " + txt.size() + " words");
+            if (verbose) logger.debug("Parsed {} words", txt.size());
 
-            if (verbose) System.out.println("Loading senses...");
+            if (verbose) logger.debug("Loading senses...");
             dictionary.loadSenses(txt);
 
-            if (verbose) System.out.println("Disambiguating...");
+            if (verbose) logger.debug("Disambiguating...");
             Configuration c = disambiguator.disambiguate(txt);
             disambiguator.release();
             
-            if (verbose) System.out.println("Aligning disambiguation...");
+            if (verbose) logger.debug("Aligning disambiguation...");
             List<String> realDisambiguation = alignDisambiguation(txt, c, tokenizedText);
             
             if (verbose)
             {
                 for (int i = 0 ; i < tokenizedText.size() ; i++) 
                 {
-                    System.out.println("Word " + i + " : \"" + tokenizedText.get(i) + "\" [" + realDisambiguation.get(i) + "]");
+                    logger.debug("Word {} : \"{}\" [{}]", i, tokenizedText.get(i), realDisambiguation.get(i));
                 }
             }
             output = Arrays.toString(realDisambiguation.toArray());
@@ -180,7 +182,8 @@ public class WSDForSMTWebService1  extends WebServiceServlet
 
     private static Document rawToText(String raw)
     {
-        Document txt = new DocumentImpl();
+
+        Document txt = DOCUMENT_FACTORY.createDocument();
         Annotation document = new Annotation(raw);
         stanford.annotate(document);
         List<CoreMap> sentences = document.get(SentencesAnnotation.class);
@@ -191,7 +194,7 @@ public class WSDForSMTWebService1  extends WebServiceServlet
                 String lemma = token.getString(LemmaAnnotation.class);
                 String surfaceForm = token.originalText();
                 String pos = token.getString(PartOfSpeechAnnotation.class);
-                Word word = new WordImpl("", lemma, surfaceForm, pos);
+                Word word = DOCUMENT_FACTORY.createWord("", lemma, surfaceForm, pos);
                 txt.addWord(word);
             }
         }

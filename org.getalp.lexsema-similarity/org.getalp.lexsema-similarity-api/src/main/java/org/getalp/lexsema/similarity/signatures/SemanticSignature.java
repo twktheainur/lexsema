@@ -44,19 +44,19 @@ public interface SemanticSignature extends Iterable<SemanticSymbol>, Serializabl
     void addSymbols(List<SemanticSymbol> symbols);
 
     /**
-     * Add a string of symbols and their associated weights as a collection
+     * Add a symbolString of symbols and their associated weights as a collection
      *
-     * @param string  The symbol string
+     * @param symbolString  The symbol symbolString
      * @param weights The respective weights of the symbols
      */
-    void addSymbolString(List<String> string, List<Double> weights);
+    void addSymbolString(List<String> symbolString, List<Double> weights);
 
     /**
-     * Add a string of symbols
+     * Add a symbolString of symbols
      *
-     * @param string  The symbol string
+     * @param symbolString  The symbol symbolString
      */
-    void addSymbolString(List<String> string);
+    void addSymbolString(List<String> symbolString);
 
 
     SemanticSignature appendSignature(SemanticSignature other);
