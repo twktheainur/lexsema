@@ -48,6 +48,17 @@ public class Semeval2007CorpusLoader extends CorpusLoaderImpl implements Content
         currentSurfaceForm = "";
         extraWords = "";
     }
+    
+    private void addExtraWords() {
+        for (String e : extraWords.trim().split(System.getProperty("line.separator"))) {
+            if (!e.isEmpty()) {
+             	Word wextra = new WordImpl("non-target", "", e, "");
+            	wextra.setEnclosingSentence(currentSentence);
+            	currentSentence.addWord(wextra);
+            }
+        }
+        extraWords = "";
+    }
 
     @Override
     public void setDocumentLocator(Locator locator) {
@@ -101,17 +112,17 @@ public class Semeval2007CorpusLoader extends CorpusLoaderImpl implements Content
                 break;
             case "sentence":
                 currentDocument.addSentence(currentSentence);
+                if (loadExtra) {
+                	addExtraWords();
+                }
+
                 break;
             case "instance":
                 inWord = false;
                 Word w = new WordImpl(currentId, currentLemma, currentSurfaceForm, currentPos);
 
                 if (loadExtra) {
-                    for (String e : extraWords.trim().split(System.getProperty("line.separator"))) {
-                        if (!e.isEmpty()) {
-                            w.addPrecedingInstance(new WordImpl("non-target", "", e, ""));
-                        }
-                    }
+                	addExtraWords();
                 }
 
                 w.setEnclosingSentence(currentSentence);

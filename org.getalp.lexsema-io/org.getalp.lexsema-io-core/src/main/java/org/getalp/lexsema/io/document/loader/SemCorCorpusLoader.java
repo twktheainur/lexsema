@@ -26,6 +26,8 @@ public class SemCorCorpusLoader extends CorpusLoaderImpl implements ContentHandl
 
     private Sentence currentSentence;
     private Text currentDocument;
+    
+    private boolean loadPunc;
 
     public SemCorCorpusLoader(String path) {
         inWord = false;
@@ -34,6 +36,7 @@ public class SemCorCorpusLoader extends CorpusLoaderImpl implements ContentHandl
         currentLemma = "";
         currentPos = "";
         currentSurfaceForm = "";
+        loadPunc = false;
     }
 
     @Override
@@ -78,6 +81,11 @@ public class SemCorCorpusLoader extends CorpusLoaderImpl implements ContentHandl
                 currentId = "";
                 currentSemanticTag = atts.getValue("lexsn");
                 break;
+            case "punc":
+            	if (loadPunc) {
+            		inWord = true;
+            	}
+            	break;
         }
     }
 
@@ -104,6 +112,18 @@ public class SemCorCorpusLoader extends CorpusLoaderImpl implements ContentHandl
                 currentPos = "";
                 currentSurfaceForm = "";
                 break;
+            case "punc":
+            	if (loadPunc) {
+	                Word w2 = new WordImpl("", "", currentSurfaceForm, "");
+	                w2.setEnclosingSentence(currentSentence);
+	                currentSentence.addWord(w2);
+	                currentId = "";
+	                currentLemma = "";
+	                currentPos = "";
+	                currentSurfaceForm = "";
+	                inWord = false;
+            	}
+            	break;
         }
 
     }
@@ -149,6 +169,11 @@ public class SemCorCorpusLoader extends CorpusLoaderImpl implements ContentHandl
     @Override
     public CorpusLoader loadNonInstances(boolean loadExtra) {
         return this;
+    }
+    
+    public CorpusLoader loadPunctuation(boolean loadPunc) {
+    	this.loadPunc = loadPunc;
+    	return this;
     }
 
 }
