@@ -115,7 +115,7 @@ public class SemCorCorpusLoader extends CorpusLoaderImpl implements ContentHandl
                 break;
             case "punc":
             	if (loadPunc) {
-	                Word w2 = new WordImpl("", "", currentSurfaceForm, "");
+	                Word w2 = DOCUMENT_FACTORY.createWord("", "", currentSurfaceForm, "");
 	                w2.setEnclosingSentence(currentSentence);
 	                currentSentence.addWord(w2);
 	                currentId = "";
