@@ -33,11 +33,11 @@ import static java.io.File.separator;
 @SuppressWarnings("OverlyCoupledClass")
 public final class DbNaryCrossLingualDocumentTransfer {
 
-    public static final int CUCKOO_ITERATION=50000;
-    public static final double CUCKOO_LEVY_LOCATION=1d;
-    public static final double CUCKOO_MAX_LEVY_LOCATION=1d;
-    public static final double CUCKOO_MIN_LEVY_SCALE =.5d;
-    public static final double CUCKOO_MAX_LEVY_SCALE =1.5d;
+    private static final int CUCKOO_ITERATION=50000;
+    private static final double CUCKOO_LEVY_LOCATION=1d;
+    private static final double CUCKOO_MAX_LEVY_LOCATION=1d;
+    private static final double CUCKOO_MIN_LEVY_SCALE =.5d;
+    private static final double CUCKOO_MAX_LEVY_SCALE =1.5d;
 
     public static final String ONTOLOGY_PROPERTIES = String.format("data%sontology.properties", separator);
     private static final Pattern SEPARATOR_PATTERN = Pattern.compile("|");

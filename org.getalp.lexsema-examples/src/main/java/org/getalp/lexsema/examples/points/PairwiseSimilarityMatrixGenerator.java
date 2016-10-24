@@ -5,7 +5,7 @@ import org.getalp.lexsema.ml.matrix.filters.Filter;
 
 
 public interface PairwiseSimilarityMatrixGenerator {
-    public DoubleMatrix2D getScoreMatrix();
-    public DoubleMatrix2D getScoreMatrix(Filter filter);
-    public void generateMatrix();
+    DoubleMatrix2D getScoreMatrix();
+    DoubleMatrix2D getScoreMatrix(Filter filter);
+    void generateMatrix();
 }

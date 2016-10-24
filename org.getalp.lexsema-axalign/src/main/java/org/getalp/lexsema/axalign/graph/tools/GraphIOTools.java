@@ -6,7 +6,10 @@ import org.jgrapht.graph.DefaultEdge ;
 
 import java.util.Set;
 
-public class ToolGraph {
+public final class GraphIOTools {
+
+    private GraphIOTools() {
+    }
 
     public static Graph<LexicalEntry,DefaultEdge> importGraph(Graph<LexicalEntry,DefaultEdge> mainGraph, Graph<LexicalEntry,DefaultEdge> g){
         Set<LexicalEntry> colVertex = g.vertexSet() ;

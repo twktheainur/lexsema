@@ -1,6 +1,6 @@
 package org.getalp.lexsema.axalign.graph.generator;
 
-import org.getalp.lexsema.axalign.graph.tools.ToolGraph;
+import org.getalp.lexsema.axalign.graph.tools.GraphIOTools;
 import org.getalp.lexsema.ontolex.LexicalEntry;
 import org.getalp.lexsema.ontolex.dbnary.DBNary;
 import org.getalp.lexsema.ontolex.dbnary.Translation;
@@ -66,13 +66,13 @@ public class TranslationGraphGeneratorImpl implements TranslationGraphGenerator 
                         localTranslation.addEdge(entity,le) ;
                         if (topLevel && includeStartingSet) {
                             //localClosure = recurseClosure(le, startingLanguage, degree, false);
-                            localTranslation = ToolGraph.importGraph(localTranslation,recurseTranslation(le, startingLanguage, degree, false)) ;
+                            localTranslation = GraphIOTools.importGraph(localTranslation,recurseTranslation(le, startingLanguage, degree, false)) ;
                         } else {
                             //localClosure = recurseClosure(le, startingLanguage, degree - 1, false);
-                            localTranslation = ToolGraph.importGraph(localTranslation,recurseTranslation(le, startingLanguage, degree - 1, false));
+                            localTranslation = GraphIOTools.importGraph(localTranslation,recurseTranslation(le, startingLanguage, degree - 1, false));
                         }
                         //closure.importClosure(localClosure);
-                        translationGraph = ToolGraph.importGraph(translationGraph,localTranslation) ;
+                        translationGraph = GraphIOTools.importGraph(translationGraph,localTranslation) ;
                     }
                 }
             }

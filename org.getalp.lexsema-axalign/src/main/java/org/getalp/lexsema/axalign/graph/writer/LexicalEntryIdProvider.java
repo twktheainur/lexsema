@@ -4,8 +4,10 @@ import org.getalp.lexsema.ontolex.LexicalEntry;
 import org.jgrapht.ext.VertexNameProvider;
 
 public class LexicalEntryIdProvider implements VertexNameProvider<LexicalEntry>{
+
+    @SuppressWarnings("FeatureEnvy,LawOfDemeter")
+    @Override
     public String getVertexName(LexicalEntry vertex){
-        String id = "\""+vertex.getLemma()+"_"+vertex.getNumber()+"_"+vertex.getPartOfSpeech().split("#")[1]+"\\n"+vertex.getLanguage().getISO2Code()+"\"" ;
-        return id ;
+        return String.format("\"%s_%d_%s\\n%s\"", vertex.getLemma(), vertex.getNumber(), vertex.getPartOfSpeech().split("#")[1], vertex.getLanguage().getISO2Code());
     }
 }

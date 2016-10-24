@@ -1,15 +1,13 @@
 package org.getalp.lexsema.axalign.experiments;
 
 import cern.colt.matrix.tdouble.DoubleMatrix2D;
-import com.trickl.cluster.FuzzyCMeans;
-import org.getalp.lexsema.axalign.cli.org.getalp.lexsema.acceptali.acceptions.SenseCluster;
-import org.getalp.lexsema.axalign.cli.org.getalp.lexsema.acceptali.acceptions.SenseClusterer;
-import org.getalp.lexsema.axalign.cli.org.getalp.lexsema.acceptali.acceptions.TricklSenseClusterer;
 import org.getalp.lexsema.axalign.closure.LexicalResourceTranslationClosure;
 import org.getalp.lexsema.axalign.closure.generator.TranslationClosureGenerator;
 import org.getalp.lexsema.axalign.closure.generator.TranslationClosureGeneratorFactory;
 import org.getalp.lexsema.axalign.closure.generator.TranslationClosureSemanticSignatureGenerator;
 import org.getalp.lexsema.axalign.closure.generator.TranslationClosureSemanticSignatureGeneratorImpl;
+import org.getalp.lexsema.axalign.closure.similarity.PairwiseCLSimilarityMatrixGeneratorFile;
+import org.getalp.lexsema.axalign.closure.similarity.PairwiseSimilarityMatrixGenerator;
 import org.getalp.lexsema.ontolex.LexicalSense;
 import org.getalp.lexsema.ontolex.dbnary.DBNary;
 import org.getalp.lexsema.ontolex.dbnary.exceptions.NoSuchVocableException;
@@ -20,10 +18,7 @@ import org.getalp.lexsema.ontolex.graph.storage.JenaTDBStore;
 import org.getalp.lexsema.ontolex.graph.storage.StoreHandler;
 import org.getalp.lexsema.ontolex.graph.store.Store;
 import org.getalp.lexsema.similarity.Sense;
-import org.getalp.lexsema.axalign.closure.similarity.PairwiseCLSimilarityMatrixGeneratorFile;
-import org.getalp.lexsema.axalign.closure.similarity.PairwiseSimilarityMatrixGenerator;
 import org.getalp.lexsema.util.Language;
-import org.getalp.lexsema.ml.matrix.filters.NeuralICAMatrixFactorizationFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -38,16 +33,18 @@ import static java.io.File.separator;
 
 
 public final class AcceptionClusteringExperimentFromFile {
-    public static final String DB_PATH = String.format("%sVolumes%sRAMDisk", separator, separator);
+    private static final String DB_PATH = String.format("%sVolumes%sRAMDisk", separator, separator);
     public static final String ONTOLOGY_PROPERTIES = String.format("data%sontology.properties", separator);
-    public static final File CLOSURE_SAVE_PATH = new File(String.format("..%sdata%sclosure_river", separator, separator));
-    public static final String MATRIX_PATH = ".." + separator + "data" + separator + "acception_matrices";
-    public static final String SIM_MATRIX_PATH = String.format("%s%ssource.dat", MATRIX_PATH, separator);
+    private static final File CLOSURE_SAVE_PATH = new File(String.format("..%sdata%sclosure_river", separator, separator));
+    private static final String MATRIX_PATH = ".." + separator + "data" + separator + "acception_matrices";
+    private static final String SIM_MATRIX_PATH = String.format("%s%ssource.dat", MATRIX_PATH, separator);
 
     public static final int DEPTH = 1;
     private static final double CLUSTERING_THRESHOLD = .5;
 
-    static Language[] loadLanguages = {
+    private static final double THETA = .8d;
+
+    private static Language[] loadLanguages = {
             Language.FRENCH, Language.ENGLISH, Language.ITALIAN, Language.SPANISH,
             Language.PORTUGUESE, Language.BULGARIAN, Language.CATALAN, Language.FINNISH,
             Language.GERMAN, Language.RUSSIAN, Language.GREEK, Language.TURKISH
@@ -65,19 +62,32 @@ public final class AcceptionClusteringExperimentFromFile {
 
 
         try {
-            Set<Sense> closureSet = generateTranslationClosureWithSignatures(instantiateDBNary());
+            List<Sense> closureSet = new ArrayList<>(generateTranslationClosureWithSignatures(instantiateDBNary()));
             PairwiseSimilarityMatrixGenerator matrixGenerator =
                     new PairwiseCLSimilarityMatrixGeneratorFile(SIM_MATRIX_PATH);
             matrixGenerator.generateMatrix();
-            SenseClusterer clusterer = new TricklSenseClusterer(new FuzzyCMeans(), CLUSTERING_THRESHOLD);
-            clusterer.setKernelFilter(new NeuralICAMatrixFactorizationFilter(5));
-            DoubleMatrix2D inputData = matrixGenerator.getScoreMatrix();
-            //inputData.normalize();
-            List<SenseCluster> clusters = clusterer.cluster(inputData, 10, new ArrayList<>(closureSet));
 
-            for(SenseCluster sc: clusters){
-                logger.info(sc.toString());
+            DoubleMatrix2D scoreMatrix = matrixGenerator.getScoreMatrix();
+
+
+            for(int i=0; i<scoreMatrix.rows();i++){
+                for(int j=0; j<scoreMatrix.columns(); j++){
+                    if(i!=j && closureSet.get(i).getLanguage() != closureSet.get(j).getLanguage()){
+                        logger.info("[{}] |{}--{}|", scoreMatrix.get(i,j), closureSet.get(i).toString(),closureSet.get(j).getId());
+                    }
+                }
             }
+
+            //logger.info(matrixGenerator.getScoreMatrix().toString());
+            //SenseClusterer clusterer = new TricklSenseClusterer(new FuzzyCMeans(), CLUSTERING_THRESHOLD);
+            //clusterer.setKernelFilter(new NeuralICAMatrixFactorizationFilter(5));
+            //DoubleMatrix2D inputData = matrixGenerator.getScoreMatrix();
+            //inputData.normalize();
+            //List<SenseCluster> clusters = clusterer.cluster(inputData, 10, new ArrayList<>(closureSet));
+
+            /*for(SenseCluster sc: clusters){
+                logger.info(sc.toString());
+            }*/
 
         } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException |
                 InstantiationException | ClassNotFoundException e) {

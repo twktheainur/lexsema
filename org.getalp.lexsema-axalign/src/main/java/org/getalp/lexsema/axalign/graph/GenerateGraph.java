@@ -5,7 +5,7 @@ import org.apache.commons.cli.*;
 import org.getalp.lexsema.axalign.graph.generator.TranslationGraphGenerator;
 import org.getalp.lexsema.axalign.graph.generator.TranslationGraphGeneratorImpl;
 import org.getalp.lexsema.axalign.graph.processing.TranslationProcessing;
-import org.getalp.lexsema.axalign.graph.tools.ToolGraph;
+import org.getalp.lexsema.axalign.graph.tools.GraphIOTools;
 import org.getalp.lexsema.axalign.graph.writer.LexicalEntryIdProvider;
 import org.getalp.lexsema.ontolex.LexicalEntry;
 import org.getalp.lexsema.ontolex.dbnary.DBNary;
@@ -92,8 +92,8 @@ public final class GenerateGraph {
         TranslationProcessing tp = new TranslationProcessing() ;
         Collection<Set<LexicalEntry>> cliques = tp.getCliques(g) ;
         Collection<Set<LexicalEntry>> ambigSets = tp.getAmbiguitySets(cliques) ;
-        System.out.println("\nAmbiguity Sets : "+tp.seeSets(ambigSets)+"\n") ;
-        System.out.println(tp.getAmbiguityInfos(ambigSets)) ;
+        System.out.println("\nAmbiguity Sets : "+tp.displaySetsAsString(ambigSets)+"\n") ;
+        System.out.println(tp.displayAmbiguityInfo(ambigSets)) ;
         /*int ng = 2000 ;
         int nr = 1000 ;
         double pe = 0.9 ;
@@ -228,7 +228,7 @@ public final class GenerateGraph {
                 System.out.println("entree : "+lexicalEntry.getLemma()+"_"+lexicalEntry.getNumber()+"_"+lexicalEntry.getPartOfSpeech()) ;
                 TranslationGraphGenerator gtg = TranslationGraphGeneratorImpl.createTranslationGraphGenerator(dbNary, lexicalEntry);
                 //translations.put(lexicalEntry,generateEntryGraph(gtg));
-                translations = ToolGraph.importGraph(translations,generateEntryGraph(gtg)) ;
+                translations = GraphIOTools.importGraph(translations,generateEntryGraph(gtg)) ;
             }
             System.out.println("traitement de toutes les entrees termine") ;
             return translations ;
