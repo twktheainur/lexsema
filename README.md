@@ -2,6 +2,7 @@ LexSemA
 ========
 
 The lexSemA project is a toolkit for lexico-semantic language resources at several levels: 
+    
     - lexsema-io: I/O opérations on corpora and lexical resources
     - lexsema-ontolex: An API to access ontolex lexical resources and more particularly DBNary
     - lexsema-translation: An API to access online machine translation systems
@@ -26,6 +27,7 @@ mvn install
 LexSemA is released under the terms of the GNU General Public License version 3.0
 
 #Contributors
+
     - Andon Tchechmedjiev
     - Loïc Vial
     - Didier Schwab
