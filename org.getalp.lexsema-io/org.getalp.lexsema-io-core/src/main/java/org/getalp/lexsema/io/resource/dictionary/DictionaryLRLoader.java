@@ -117,6 +117,9 @@ public class DictionaryLRLoader implements LRLoader {
                     }
                 }
             }
+            else {
+            	senses = Collections.emptyList();
+            }
         }
         return senses;
     }
