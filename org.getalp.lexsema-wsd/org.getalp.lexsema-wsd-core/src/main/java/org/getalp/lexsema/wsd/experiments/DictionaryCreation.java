@@ -329,13 +329,22 @@ public class DictionaryCreation
 		dict.loadOnlySemeval2007Task7Senses = false;
         dict.withStopwords = true;
         dict.withStemming = true;
-        dict.withIndexing = true;
-        dict.withShuffling = true;
-		dict.withSenseClusters = false;
+        dict.withIndexing = false;
+        dict.withShuffling = false;
+		dict.withSenseClusters = true;
         dict.withDefinitions = true;
         dict.withExtendedDefinitions = true;
         dict.verbose = false;
-
+        
+		dict.withSemcorThesaurus = true;
+		dict.withDSOThesaurus = false;
+		dict.withWNGTThesaurus = true;
+		dict.withGMBThesaurus = false;
+		dict.numberOfWordsFromThesauri = 200;
+		dict.write("../data/lesk_dict/all/coarse/5_200");
+		dict.numberOfWordsFromThesauri = 300;
+		dict.write("../data/lesk_dict/all/coarse/5_300");
+        /*
         for (int i = 1 ; i <= 15 ; i++) 
         {
         	for (int j = 50 ; j <= 300 ; j += 50) 
@@ -345,7 +354,7 @@ public class DictionaryCreation
         		dict.withWNGTThesaurus = (i & 4) == 4;
         		dict.withGMBThesaurus = (i & 8) == 8;
         		dict.numberOfWordsFromThesauri = j;
-        		dict.write("../data/lesk_dict/all/fine_def/" + i + "_" + j);
+        		dict.write("../data/lesk_dict/all/coarse/" + i + "_" + j);
         	}
         }
 /*
