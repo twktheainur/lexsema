@@ -330,7 +330,7 @@ public class DictionaryCreation
         dict.withStopwords = true;
         dict.withStemming = true;
         dict.withIndexing = false;
-        dict.withShuffling = false;
+        dict.withShuffling = true;
 		dict.withSenseClusters = true;
         dict.withDefinitions = true;
         dict.withExtendedDefinitions = true;
@@ -340,11 +340,40 @@ public class DictionaryCreation
 		dict.withDSOThesaurus = false;
 		dict.withWNGTThesaurus = true;
 		dict.withGMBThesaurus = false;
+
+        dict.withShuffling = true;
+        dict.withSenseClusters = true;
+		dict.numberOfWordsFromThesauri = 200;
+		dict.write("../data/lesk_dict/all/coarse/5_200_shuffle");
+		dict.numberOfWordsFromThesauri = 300;
+		dict.write("../data/lesk_dict/all/coarse/5_300_shuffle");
+        
+
+        dict.withShuffling = false;
+        dict.withSenseClusters = true;
 		dict.numberOfWordsFromThesauri = 200;
 		dict.write("../data/lesk_dict/all/coarse/5_200");
 		dict.numberOfWordsFromThesauri = 300;
 		dict.write("../data/lesk_dict/all/coarse/5_300");
-        /*
+        
+
+        dict.withShuffling = true;
+        dict.withSenseClusters = false;
+		dict.numberOfWordsFromThesauri = 200;
+		dict.write("../data/lesk_dict/all/fine/5_200_shuffle");
+		dict.numberOfWordsFromThesauri = 300;
+		dict.write("../data/lesk_dict/all/fine/5_300_shuffle");
+        
+
+        dict.withShuffling = false;
+        dict.withSenseClusters = false;
+		dict.numberOfWordsFromThesauri = 200;
+		dict.write("../data/lesk_dict/all/fine/5_200_shuffle");
+		dict.numberOfWordsFromThesauri = 300;
+		dict.write("../data/lesk_dict/all/fine/5_300_shuffle");
+        
+
+		/*
         for (int i = 1 ; i <= 15 ; i++) 
         {
         	for (int j = 50 ; j <= 300 ; j += 50) 
