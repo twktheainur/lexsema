@@ -3,7 +3,9 @@ package org.getalp.lexsema.wsd.score;
 import org.getalp.lexsema.similarity.Document;
 import org.getalp.lexsema.similarity.Sense;
 import org.getalp.lexsema.wsd.configuration.Configuration;
-import java.util.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class SemEval2007Task7PerfectConfigurationScorer implements PerfectConfigurationScorer
 {

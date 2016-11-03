@@ -1,10 +1,10 @@
 package org.getalp.lexsema.supervised.entrydisambiguator;
 
 
+import org.getalp.lexsema.ml.supervised.ClassificationOutput;
 import org.getalp.lexsema.similarity.Document;
 import org.getalp.lexsema.similarity.Sense;
 import org.getalp.lexsema.similarity.Word;
-import org.getalp.lexsema.ml.supervised.ClassificationOutput;
 import org.getalp.lexsema.supervised.features.TrainingDataExtractor;
 import org.getalp.lexsema.supervised.features.extractors.LocalTextFeatureExtractor;
 import org.getalp.lexsema.wsd.configuration.Configuration;

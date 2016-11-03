@@ -1,11 +1,5 @@
 package org.getalp.lexsema.wsd.experiments;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.PrintWriter;
-import java.util.Locale;
-import java.util.Scanner;
-
 import org.getalp.lexsema.io.document.loader.CorpusLoader;
 import org.getalp.lexsema.io.document.loader.Semeval2007CorpusLoader;
 import org.getalp.lexsema.io.resource.LRLoader;
@@ -19,6 +13,12 @@ import org.getalp.lexsema.wsd.method.StopCondition;
 import org.getalp.lexsema.wsd.method.genetic.GeneticAlgorithmDisambiguator;
 import org.getalp.lexsema.wsd.score.ConfigurationScorer;
 import org.getalp.lexsema.wsd.score.SemEval2007Task7PerfectConfigurationScorer;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.PrintWriter;
+import java.util.Locale;
+import java.util.Scanner;
 
 public class AlgorithmsComparison
 {

@@ -3,7 +3,11 @@ package org.getalp.lexsema.wsd.score;
 import org.getalp.lexsema.similarity.Document;
 import org.getalp.lexsema.similarity.Sense;
 import org.getalp.lexsema.wsd.configuration.Configuration;
-import java.util.*;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class SemEval2013Task12PerfectConfigurationScorer2 implements PerfectConfigurationScorer
 {

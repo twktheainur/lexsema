@@ -1,13 +1,11 @@
 package org.getalp.lexsema.wsd.experiments;
 
 import com.wcohen.ss.ScaledLevenstein;
-
 import edu.mit.jwi.Dictionary;
-
 import org.getalp.lexsema.io.dictionary.DictionaryWriter;
 import org.getalp.lexsema.io.dictionary.DocumentDictionaryWriter;
-import org.getalp.lexsema.io.document.loader.Semeval2007CorpusLoader;
 import org.getalp.lexsema.io.document.loader.CorpusLoader;
+import org.getalp.lexsema.io.document.loader.Semeval2007CorpusLoader;
 import org.getalp.lexsema.io.resource.LRLoader;
 import org.getalp.lexsema.io.resource.wordnet.WordnetLoader;
 import org.getalp.lexsema.similarity.Document;

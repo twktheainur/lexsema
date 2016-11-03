@@ -1,12 +1,5 @@
 package org.getalp.lexsema.wsd.parameters.annealing;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
-
 import org.getalp.lexsema.io.document.loader.CorpusLoader;
 import org.getalp.lexsema.similarity.Document;
 import org.getalp.lexsema.wsd.configuration.Configuration;
@@ -16,6 +9,13 @@ import org.getalp.lexsema.wsd.method.StopCondition;
 import org.getalp.lexsema.wsd.parameters.method.Parameters;
 import org.getalp.lexsema.wsd.parameters.method.ParametersScorer;
 import org.getalp.lexsema.wsd.score.ConfigurationScorer;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 public class AnnealingParametersScorer implements ParametersScorer
 {

@@ -1,9 +1,9 @@
 package org.getalp.lexsema.wsd.parameters.annealing;
 
-import java.util.Random;
-
 import org.getalp.lexsema.wsd.parameters.ScalarParameter;
 import org.getalp.lexsema.wsd.parameters.method.Parameters;
+
+import java.util.Random;
 
 public class AnnealingParameters implements Parameters
 {

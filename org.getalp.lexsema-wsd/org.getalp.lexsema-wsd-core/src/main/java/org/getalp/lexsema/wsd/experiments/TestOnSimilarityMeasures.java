@@ -1,28 +1,27 @@
 package org.getalp.lexsema.wsd.experiments;
 
-import java.io.FileInputStream;
-import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.List;
-
+import com.google.common.math.DoubleMath;
+import org.apache.commons.math3.stat.descriptive.moment.StandardDeviation;
 import org.apache.commons.math3.stat.inference.MannWhitneyUTest;
+import org.getalp.lexsema.io.document.loader.CorpusLoader;
 import org.getalp.lexsema.io.document.loader.Semeval2007CorpusLoader;
 import org.getalp.lexsema.io.document.loader.Semeval2013Task12CorpusLoader;
-import org.getalp.lexsema.io.document.loader.CorpusLoader;
 import org.getalp.lexsema.io.resource.LRLoader;
 import org.getalp.lexsema.io.resource.dictionary.DictionaryLRLoader;
 import org.getalp.lexsema.similarity.Document;
-import org.getalp.lexsema.similarity.Word;
 import org.getalp.lexsema.similarity.measures.SimilarityMeasure;
 import org.getalp.lexsema.similarity.measures.lesk.IndexedLeskSimilarity;
 import org.getalp.lexsema.similarity.measures.lesk.SimpleLeskSimilarity;
 import org.getalp.lexsema.similarity.measures.lesk.VectorizedLeskSimilarity;
 import org.getalp.lexsema.wsd.configuration.Configuration;
-import org.getalp.lexsema.wsd.method.*;
+import org.getalp.lexsema.wsd.method.Disambiguator;
+import org.getalp.lexsema.wsd.method.MultiThreadCuckooSearch;
 import org.getalp.lexsema.wsd.score.*;
-import com.google.common.math.DoubleMath;
 
-import org.apache.commons.math3.stat.descriptive.moment.StandardDeviation;
+import java.io.FileInputStream;
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.List;
 
 public class TestOnSimilarityMeasures
 {

@@ -1,11 +1,11 @@
 package org.getalp.lexsema.supervised;
 
+import org.getalp.lexsema.ml.supervised.weka.WekaClassifier;
+import org.getalp.lexsema.ml.supervised.weka.WekaClassifierSetUp;
 import org.getalp.lexsema.similarity.Document;
 import org.getalp.lexsema.supervised.entrydisambiguator.WekaLexicalEntryDisambiguator;
 import org.getalp.lexsema.supervised.features.TrainingDataExtractor;
 import org.getalp.lexsema.supervised.features.extractors.LocalTextFeatureExtractor;
-import org.getalp.lexsema.ml.supervised.weka.WekaClassifier;
-import org.getalp.lexsema.ml.supervised.weka.WekaClassifierSetUp;
 import org.getalp.lexsema.wsd.configuration.Configuration;
 import org.getalp.lexsema.wsd.method.sequencial.SequentialDisambiguator;
 import org.getalp.lexsema.wsd.method.sequencial.entrydisambiguators.SequentialLexicalEntryDisambiguator;

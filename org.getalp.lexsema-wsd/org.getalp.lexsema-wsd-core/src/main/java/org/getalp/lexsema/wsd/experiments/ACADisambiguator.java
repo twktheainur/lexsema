@@ -1,7 +1,6 @@
 package org.getalp.lexsema.wsd.experiments;
 
 import edu.mit.jwi.Dictionary;
-
 import org.getalp.lexsema.io.annotresult.SemevalWriter;
 import org.getalp.lexsema.io.document.loader.CorpusLoader;
 import org.getalp.lexsema.io.document.loader.Semeval2007CorpusLoader;
@@ -9,12 +8,7 @@ import org.getalp.lexsema.io.resource.LRLoader;
 import org.getalp.lexsema.io.resource.wordnet.WordnetLoader;
 import org.getalp.lexsema.similarity.Document;
 import org.getalp.lexsema.similarity.measures.SimilarityMeasure;
-import org.getalp.lexsema.similarity.measures.lesk.ACExtendedLeskSimilarity;
 import org.getalp.lexsema.similarity.measures.lesk.AnotherLeskSimilarity;
-import org.getalp.lexsema.similarity.measures.lesk.IndexedOverlapSimilarity;
-import org.getalp.lexsema.similarity.measures.tverski.TverskiIndexSimilarityMeasure;
-import org.getalp.lexsema.similarity.measures.tverski.TverskiIndexSimilarityMeasureBuilder;
-import org.getalp.lexsema.similarity.measures.tverski.TverskiIndexSimilarityMeasureMatrixImplBuilder;
 import org.getalp.lexsema.wsd.configuration.Configuration;
 import org.getalp.lexsema.wsd.evaluation.Evaluation;
 import org.getalp.lexsema.wsd.evaluation.GoldStandard;

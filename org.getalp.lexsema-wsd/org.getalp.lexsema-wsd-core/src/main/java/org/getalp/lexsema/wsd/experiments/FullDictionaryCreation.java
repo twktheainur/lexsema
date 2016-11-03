@@ -7,7 +7,6 @@ import org.getalp.lexsema.io.document.loader.*;
 import org.getalp.lexsema.io.resource.LRLoader;
 import org.getalp.lexsema.io.resource.wordnet.WordnetLoader;
 import org.getalp.lexsema.io.thesaurus.AnnotatedTextThesaurusImpl;
-import org.getalp.lexsema.similarity.Text;
 
 import java.io.File;
 import java.io.FileNotFoundException;

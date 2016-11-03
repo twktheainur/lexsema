@@ -1,8 +1,5 @@
 package org.getalp.lexsema.wsd.method;
 
-import java.io.PrintWriter;
-import java.util.Random;
-
 import org.apache.commons.math3.distribution.LevyDistribution;
 import org.getalp.lexsema.similarity.Document;
 import org.getalp.lexsema.wsd.configuration.Configuration;
@@ -10,6 +7,9 @@ import org.getalp.lexsema.wsd.configuration.ContinuousConfiguration;
 import org.getalp.lexsema.wsd.score.ConfigurationScorer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.io.PrintWriter;
+import java.util.Random;
 
 public class MultiThreadCuckooSearch implements Disambiguator {
 

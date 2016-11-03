@@ -1,12 +1,12 @@
 package org.getalp.lexsema.wsd.method.genetic;
 
-import java.io.PrintWriter;
-
 import org.apache.commons.math3.genetics.Chromosome;
 import org.getalp.lexsema.similarity.Document;
 import org.getalp.lexsema.wsd.configuration.ContinuousConfiguration;
 import org.getalp.lexsema.wsd.method.StopCondition;
 import org.getalp.lexsema.wsd.score.ConfigurationScorer;
+
+import java.io.PrintWriter;
 
 public class GeneticConfigurationChromosome extends Chromosome
 {

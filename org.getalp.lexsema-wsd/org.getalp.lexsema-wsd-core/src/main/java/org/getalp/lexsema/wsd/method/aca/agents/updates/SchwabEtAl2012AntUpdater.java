@@ -7,7 +7,10 @@ import org.getalp.lexsema.similarity.signatures.symbols.SemanticSymbol;
 import org.getalp.lexsema.wsd.method.aca.agents.Ant;
 import org.getalp.lexsema.wsd.method.aca.environment.Environment;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 

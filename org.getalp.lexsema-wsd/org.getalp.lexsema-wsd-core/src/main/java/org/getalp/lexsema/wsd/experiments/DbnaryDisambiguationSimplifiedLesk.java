@@ -2,8 +2,8 @@ package org.getalp.lexsema.wsd.experiments;
 
 import com.wcohen.ss.ScaledLevenstein;
 import org.getalp.lexsema.io.annotresult.SemevalWriter;
-import org.getalp.lexsema.io.document.loader.Semeval2013Task12CorpusLoader;
 import org.getalp.lexsema.io.document.loader.CorpusLoader;
+import org.getalp.lexsema.io.document.loader.Semeval2013Task12CorpusLoader;
 import org.getalp.lexsema.io.resource.LRLoader;
 import org.getalp.lexsema.io.resource.dbnary.DBNaryLoaderImpl;
 import org.getalp.lexsema.similarity.Document;

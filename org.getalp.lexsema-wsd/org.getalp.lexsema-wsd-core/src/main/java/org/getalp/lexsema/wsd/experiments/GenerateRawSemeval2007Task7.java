@@ -1,13 +1,13 @@
 package org.getalp.lexsema.wsd.experiments;
 
-import java.io.FileInputStream;
-import java.io.PrintWriter;
-
 import org.getalp.lexsema.io.document.loader.CorpusLoader;
 import org.getalp.lexsema.io.document.loader.Semeval2007CorpusLoader;
 import org.getalp.lexsema.similarity.Sentence;
 import org.getalp.lexsema.similarity.Text;
 import org.getalp.lexsema.similarity.Word;
+
+import java.io.FileInputStream;
+import java.io.PrintWriter;
 
 public class GenerateRawSemeval2007Task7 
 {

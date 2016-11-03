@@ -1,15 +1,16 @@
 package org.getalp.lexsema.supervised.entrydisambiguator;
 
 
-import org.getalp.lexsema.similarity.Document;
-import org.getalp.lexsema.similarity.Sense;
 import org.getalp.lexsema.ml.supervised.ClassificationOutput;
 import org.getalp.lexsema.ml.supervised.Classifier;
 import org.getalp.lexsema.ml.supervised.FeatureIndex;
 import org.getalp.lexsema.ml.supervised.FeatureIndexImpl;
+import org.getalp.lexsema.ml.supervised.weka.WekaClassifier;
+import org.getalp.lexsema.ml.supervised.weka.WekaClassifierImpl;
+import org.getalp.lexsema.ml.supervised.weka.WekaClassifierSetUp;
+import org.getalp.lexsema.similarity.Document;
 import org.getalp.lexsema.supervised.features.TrainingDataExtractor;
 import org.getalp.lexsema.supervised.features.extractors.LocalTextFeatureExtractor;
-import org.getalp.lexsema.ml.supervised.weka.*;
 import org.getalp.lexsema.wsd.configuration.Configuration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,7 +21,6 @@ import java.text.MessageFormat;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 
 public class WekaLexicalEntryDisambiguator extends SupervisedSequentialLexicalEntryDisambiguator {
