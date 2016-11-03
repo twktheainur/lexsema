@@ -330,7 +330,7 @@ public class DictionaryCreation
         dict.withStopwords = true;
         dict.withStemming = true;
         dict.withIndexing = false;
-        dict.withShuffling = false;
+        dict.withShuffling = true;
 		dict.withSenseClusters = true;
         dict.withDefinitions = true;
         dict.withExtendedDefinitions = true;
@@ -343,24 +343,24 @@ public class DictionaryCreation
 
         dict.withSenseClusters = true;
 		dict.numberOfWordsFromThesauri = 200;
-		dict.write("../data/lesk_dict/sem7_wn21_coarse_5_200");
+		dict.write("../data/lesk_dict/sem7_wn21_coarse_shuffle_5_200");
 		dict.numberOfWordsFromThesauri = 300;
-		dict.write("../data/lesk_dict/sem7_wn21_coarse_5_300");
+		dict.write("../data/lesk_dict/sem7_wn21_coarse_shuffle_5_300");
         
         dict.withSenseClusters = false;
 		dict.numberOfWordsFromThesauri = 200;
-		dict.write("../data/lesk_dict/sem7_wn21_fine_5_200");
+		dict.write("../data/lesk_dict/sem7_wn21_fine_shuffle_5_200");
 		dict.numberOfWordsFromThesauri = 300;
-		dict.write("../data/lesk_dict/sem7_wn21_fine_5_300");
+		dict.write("../data/lesk_dict/sem7_wn21_fine_shuffle_5_300");
 
 		dict.withSemcorThesaurus = false;
 		dict.withWNGTThesaurus = false;
 		
         dict.withSenseClusters = true;
-		dict.write("../data/lesk_dict/sem7_wn21_coarse_0");
+		dict.write("../data/lesk_dict/sem7_wn21_coarse_shuffle_0");
 
         dict.withSenseClusters = false;
-		dict.write("../data/lesk_dict/sem7_wn21_fine_0");
+		dict.write("../data/lesk_dict/sem7_wn21_fine_shuffle_0");
         
 
 		/*
