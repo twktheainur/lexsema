@@ -82,7 +82,7 @@ public class ArabicNUSPTDisambiguation {
         for (Document d : dl) {
 
             System.err.println("Starting document " + d.getId());
-            System.err.println("\tLoading senses...");
+            System.err.println("\tLoading senses... ");
             lrloader.loadSenses(d);
 
             Configuration c = disambiguator.disambiguate(d);
