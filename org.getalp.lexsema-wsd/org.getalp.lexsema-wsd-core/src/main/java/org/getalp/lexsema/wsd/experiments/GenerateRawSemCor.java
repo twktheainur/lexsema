@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.PrintWriter;
 
 import org.getalp.lexsema.io.document.loader.SemCorCorpusLoader;
-import org.getalp.lexsema.io.resource.wordnet.WordnetLoader;
 import org.getalp.lexsema.similarity.Sentence;
 import org.getalp.lexsema.similarity.Text;
 import org.getalp.lexsema.similarity.Word;
@@ -12,7 +11,6 @@ import org.getalp.lexsema.similarity.Word;
 import edu.mit.jwi.Dictionary;
 import edu.mit.jwi.data.parse.*;
 import edu.mit.jwi.item.ISenseEntry;
-import edu.mit.jwi.item.ISenseKey;
 
 public class GenerateRawSemCor 
 {
@@ -26,12 +24,13 @@ public class GenerateRawSemCor
 
     public static int notFound = 0;
 
-    public static String clean(String word)
+    public static String clean(String str)
     {
-    	if (word == null) word = "";
-    	word = word.toLowerCase();
-    	word = word.replace("%", "");
-    	return word;
+    	if (str == null) str = "";
+    	str = str.toLowerCase();
+    	str = str.replace("%", "");
+    	str = str.replace(" ", "");
+    	return str;
     }
 
     public static String surfaceForm(Word word)
