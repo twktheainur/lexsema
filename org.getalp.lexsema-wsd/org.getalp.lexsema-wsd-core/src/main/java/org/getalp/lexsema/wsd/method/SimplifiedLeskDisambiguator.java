@@ -1,14 +1,18 @@
 package org.getalp.lexsema.wsd.method;
 
-import java.util.*;
-import org.getalp.lexsema.similarity.*;
-import org.getalp.lexsema.similarity.signatures.DefaultSemanticSignatureFactory;
+import org.getalp.lexsema.similarity.Document;
+import org.getalp.lexsema.similarity.Sense;
+import org.getalp.lexsema.similarity.Sentence;
+import org.getalp.lexsema.similarity.Word;
 import org.getalp.lexsema.similarity.signatures.SemanticSignature;
 import org.getalp.lexsema.similarity.signatures.symbols.SemanticSymbol;
 import org.getalp.lexsema.util.StopList;
 import org.getalp.lexsema.wsd.configuration.Configuration;
 import org.getalp.lexsema.wsd.configuration.ContinuousConfiguration;
 import org.tartarus.snowball.ext.EnglishStemmer;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class SimplifiedLeskDisambiguator implements Disambiguator
 {

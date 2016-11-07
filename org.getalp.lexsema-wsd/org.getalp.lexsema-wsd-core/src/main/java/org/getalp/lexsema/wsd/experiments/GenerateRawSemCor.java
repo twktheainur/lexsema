@@ -1,8 +1,8 @@
 package org.getalp.lexsema.wsd.experiments;
 
-import java.io.File;
-import java.io.PrintWriter;
-
+import edu.mit.jwi.Dictionary;
+import edu.mit.jwi.data.parse.SenseKeyParser;
+import edu.mit.jwi.item.ISenseEntry;
 import org.getalp.lexsema.io.document.loader.SemCorCorpusLoader;
 import org.getalp.lexsema.similarity.Sentence;
 import org.getalp.lexsema.similarity.Text;
@@ -11,6 +11,8 @@ import org.getalp.lexsema.similarity.Word;
 import edu.mit.jwi.Dictionary;
 import edu.mit.jwi.data.parse.*;
 import edu.mit.jwi.item.ISenseEntry;
+import java.io.File;
+import java.io.PrintWriter;
 
 public class GenerateRawSemCor 
 {

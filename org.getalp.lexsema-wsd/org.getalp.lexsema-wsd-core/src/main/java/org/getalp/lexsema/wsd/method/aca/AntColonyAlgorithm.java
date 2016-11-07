@@ -1,7 +1,6 @@
 package org.getalp.lexsema.wsd.method.aca;
 
 import cern.jet.random.engine.MersenneTwister;
-
 import org.getalp.lexsema.similarity.Document;
 import org.getalp.lexsema.similarity.Text;
 import org.getalp.lexsema.similarity.measures.SimilarityMeasure;
@@ -15,8 +14,8 @@ import org.getalp.lexsema.wsd.method.aca.agents.factories.AntFactory;
 import org.getalp.lexsema.wsd.method.aca.agents.factories.SchwabEtAl2012AntFactory;
 import org.getalp.lexsema.wsd.method.aca.agents.updates.AntUpdater;
 import org.getalp.lexsema.wsd.method.aca.agents.updates.SchwabEtAl2012AntUpdater;
-import org.getalp.lexsema.wsd.method.aca.environment.factories.DocumentEnvironmentFactory;
 import org.getalp.lexsema.wsd.method.aca.environment.Environment;
+import org.getalp.lexsema.wsd.method.aca.environment.factories.DocumentEnvironmentFactory;
 import org.getalp.lexsema.wsd.method.aca.environment.factories.EnvironmentFactory;
 import org.getalp.lexsema.wsd.method.aca.environment.factories.TextEnvironmentFactory;
 import org.getalp.lexsema.wsd.method.aca.environment.solution.MaxNumberOfPathsSolutionGenerator;

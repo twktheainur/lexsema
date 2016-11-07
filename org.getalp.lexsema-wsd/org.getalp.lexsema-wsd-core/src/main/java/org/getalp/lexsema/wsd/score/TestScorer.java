@@ -1,10 +1,10 @@
 package org.getalp.lexsema.wsd.score;
 
-import java.io.FileNotFoundException;
-import java.io.PrintWriter;
-
 import org.getalp.lexsema.similarity.Document;
 import org.getalp.lexsema.wsd.configuration.Configuration;
+
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 
 public class TestScorer implements ConfigurationScorer
 {

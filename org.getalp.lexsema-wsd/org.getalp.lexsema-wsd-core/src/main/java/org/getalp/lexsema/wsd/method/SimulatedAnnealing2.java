@@ -1,12 +1,12 @@
 package org.getalp.lexsema.wsd.method;
 
-import java.io.PrintWriter;
-import java.util.Random;
-
 import org.getalp.lexsema.similarity.Document;
 import org.getalp.lexsema.wsd.configuration.Configuration;
 import org.getalp.lexsema.wsd.configuration.ContinuousConfiguration;
 import org.getalp.lexsema.wsd.score.ConfigurationScorer;
+
+import java.io.PrintWriter;
+import java.util.Random;
 
 public class SimulatedAnnealing2 implements Disambiguator
 {

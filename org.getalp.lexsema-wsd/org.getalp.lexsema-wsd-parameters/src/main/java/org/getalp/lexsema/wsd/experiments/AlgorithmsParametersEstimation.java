@@ -1,10 +1,7 @@
 package org.getalp.lexsema.wsd.experiments;
 
-import java.io.FileInputStream;
-import java.io.PrintWriter;
-
-import org.getalp.lexsema.io.document.loader.Semeval2007CorpusLoader;
 import org.getalp.lexsema.io.document.loader.CorpusLoader;
+import org.getalp.lexsema.io.document.loader.Semeval2007CorpusLoader;
 import org.getalp.lexsema.io.resource.LRLoader;
 import org.getalp.lexsema.io.resource.dictionary.DictionaryLRLoader;
 import org.getalp.lexsema.similarity.Document;
@@ -24,6 +21,9 @@ import org.getalp.lexsema.wsd.parameters.genetic.GeneticParametersScorer;
 import org.getalp.lexsema.wsd.parameters.method.CuckooSearchParameterEstimator;
 import org.getalp.lexsema.wsd.score.ConfigurationScorer;
 import org.getalp.lexsema.wsd.score.SemEval2007Task7PerfectConfigurationScorer;
+
+import java.io.FileInputStream;
+import java.io.PrintWriter;
 
 public class AlgorithmsParametersEstimation
 {

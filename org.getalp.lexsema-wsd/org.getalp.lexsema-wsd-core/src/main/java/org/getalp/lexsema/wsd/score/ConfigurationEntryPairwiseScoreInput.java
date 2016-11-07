@@ -1,13 +1,13 @@
 package org.getalp.lexsema.wsd.score;
 
 import cern.colt.matrix.tdouble.impl.DenseDoubleMatrix1D;
+import org.getalp.lexsema.ml.optimization.functions.input.FunctionInput;
+import org.getalp.lexsema.ml.optimization.functions.setfunctions.input.AbstractSetFunctionInput;
+import org.getalp.lexsema.ml.optimization.functions.setfunctions.input.Interval;
 import org.getalp.lexsema.similarity.Document;
 import org.getalp.lexsema.similarity.Sense;
 import org.getalp.lexsema.similarity.measures.SimilarityMeasure;
 import org.getalp.lexsema.wsd.configuration.Configuration;
-import org.getalp.lexsema.ml.optimization.functions.input.FunctionInput;
-import org.getalp.lexsema.ml.optimization.functions.setfunctions.input.AbstractSetFunctionInput;
-import org.getalp.lexsema.ml.optimization.functions.setfunctions.input.Interval;
 
 import java.util.List;
 

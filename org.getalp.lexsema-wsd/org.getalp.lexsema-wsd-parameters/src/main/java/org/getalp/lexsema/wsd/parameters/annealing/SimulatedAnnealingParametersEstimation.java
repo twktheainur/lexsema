@@ -1,8 +1,5 @@
 package org.getalp.lexsema.wsd.parameters.annealing;
 
-import java.io.FileInputStream;
-import java.io.PrintWriter;
-
 import org.getalp.lexsema.io.document.loader.CorpusLoader;
 import org.getalp.lexsema.io.document.loader.Semeval2007CorpusLoader;
 import org.getalp.lexsema.io.resource.LRLoader;
@@ -13,6 +10,9 @@ import org.getalp.lexsema.wsd.parameters.method.CuckooSearchParameterEstimator;
 import org.getalp.lexsema.wsd.parameters.method.Parameters;
 import org.getalp.lexsema.wsd.score.ConfigurationScorer;
 import org.getalp.lexsema.wsd.score.SemEval2007Task7PerfectConfigurationScorer;
+
+import java.io.FileInputStream;
+import java.io.PrintWriter;
 
 public class SimulatedAnnealingParametersEstimation
 {

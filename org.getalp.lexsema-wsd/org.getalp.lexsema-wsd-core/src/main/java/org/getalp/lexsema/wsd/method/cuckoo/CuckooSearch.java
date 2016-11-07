@@ -1,8 +1,9 @@
 package org.getalp.lexsema.wsd.method.cuckoo;
 
-import java.util.Random;
 import org.apache.commons.math3.distribution.LevyDistribution;
 import org.getalp.lexsema.wsd.method.StopCondition;
+
+import java.util.Random;
 
 public class CuckooSearch 
 {

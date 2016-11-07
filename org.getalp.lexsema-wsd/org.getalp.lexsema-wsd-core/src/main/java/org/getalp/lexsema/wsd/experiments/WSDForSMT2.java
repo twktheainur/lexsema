@@ -1,5 +1,7 @@
 package org.getalp.lexsema.wsd.experiments;
 
+import org.apache.commons.io.IOUtils;
+
 import java.io.File;
 import java.io.InputStream;
 import java.io.OutputStreamWriter;
@@ -7,7 +9,6 @@ import java.io.PrintStream;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
-import org.apache.commons.io.IOUtils;
 
 public class WSDForSMT2
 {

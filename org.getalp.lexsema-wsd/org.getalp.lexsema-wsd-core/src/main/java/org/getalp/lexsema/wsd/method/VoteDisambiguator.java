@@ -1,11 +1,12 @@
 package org.getalp.lexsema.wsd.method;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 import org.getalp.lexsema.similarity.Document;
 import org.getalp.lexsema.wsd.configuration.Configuration;
 import org.getalp.lexsema.wsd.configuration.ContinuousConfiguration;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 public class VoteDisambiguator implements Disambiguator
 {

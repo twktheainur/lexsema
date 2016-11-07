@@ -1,16 +1,13 @@
 package org.getalp.lexsema.wsd.method.genetic;
 
-import java.io.PrintWriter;
-import org.apache.commons.math3.genetics.ElitisticListPopulation;
-import org.apache.commons.math3.genetics.GeneticAlgorithm;
-import org.apache.commons.math3.genetics.Population;
-import org.apache.commons.math3.genetics.StoppingCondition;
-import org.apache.commons.math3.genetics.TournamentSelection;
+import org.apache.commons.math3.genetics.*;
 import org.getalp.lexsema.similarity.Document;
 import org.getalp.lexsema.wsd.configuration.Configuration;
 import org.getalp.lexsema.wsd.method.Disambiguator;
 import org.getalp.lexsema.wsd.method.StopCondition;
 import org.getalp.lexsema.wsd.score.ConfigurationScorer;
+
+import java.io.PrintWriter;
 
 public class GeneticAlgorithmDisambiguator implements Disambiguator
 {

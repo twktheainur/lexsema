@@ -3,14 +3,14 @@ package org.getalp.lexsema.wsd.score;
 
 import cern.colt.matrix.tdouble.DoubleMatrix2D;
 import cern.colt.matrix.tdouble.impl.DenseDoubleMatrix2D;
+import org.getalp.lexsema.ml.matrix.filters.Filter;
+import org.getalp.lexsema.ml.matrix.score.MatrixScorer;
 import org.getalp.lexsema.similarity.Document;
 import org.getalp.lexsema.similarity.Sense;
 import org.getalp.lexsema.similarity.measures.SimilarityMeasure;
 import org.getalp.lexsema.util.dataitems.Triple;
 import org.getalp.lexsema.util.dataitems.TripleImpl;
 import org.getalp.lexsema.wsd.configuration.Configuration;
-import org.getalp.lexsema.ml.matrix.filters.Filter;
-import org.getalp.lexsema.ml.matrix.score.MatrixScorer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -8,11 +8,11 @@ import org.getalp.lexsema.io.document.loader.SemCorCorpusLoader;
 import org.getalp.lexsema.io.document.loader.Semeval2007CorpusLoader;
 import org.getalp.lexsema.io.resource.LRLoader;
 import org.getalp.lexsema.io.resource.wordnet.WordnetLoader;
+import org.getalp.lexsema.ml.supervised.weka.NaiveBayesSetUp;
 import org.getalp.lexsema.similarity.Document;
 import org.getalp.lexsema.supervised.WekaDisambiguator;
 import org.getalp.lexsema.supervised.features.*;
 import org.getalp.lexsema.supervised.features.extractors.*;
-import org.getalp.lexsema.ml.supervised.weka.NaiveBayesSetUp;
 import org.getalp.lexsema.wsd.configuration.Configuration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,7 +20,6 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -83,7 +82,7 @@ public class ArabicNUSPTDisambiguation {
         for (Document d : dl) {
 
             System.err.println("Starting document " + d.getId());
-            System.err.println("\tLoading senses...");
+            System.err.println("\tLoading senses... ");
             lrloader.loadSenses(d);
 
             Configuration c = disambiguator.disambiguate(d);

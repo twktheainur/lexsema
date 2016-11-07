@@ -1,9 +1,9 @@
 package org.getalp.lexsema.wsd.parameters.genetic;
 
-import java.util.Random;
-
 import org.getalp.lexsema.wsd.parameters.ScalarParameter;
 import org.getalp.lexsema.wsd.parameters.method.Parameters;
+
+import java.util.Random;
 
 public class GeneticParameters implements Parameters
 {
