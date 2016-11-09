@@ -14,40 +14,39 @@ public interface LexicalResourceEntity extends Comparable<LexicalResourceEntity>
     /**
      * @return The lexical resource the Entity belongs to
      */
-    public LexicalResource getLexicalResource();
+    LexicalResource getLexicalResource();
 
     /**
      * Returns the ontology model associated with the lexical resource and the entity
      *
      * @return the ontology model associated with the lexical resource and the entity
      */
-    public OntologyModel getOntologyModel();
+    OntologyModel getOntologyModel();
 
     /**
      * Get the graph model node
      *
      * @return The graph model node that corresponds to the entity
      */
-    public Node getNode();
+    Node getNode();
 
     /**
      * Returns the parent LexicalResourceEntity of this entity, null if there is none
      *
      * @return Returns the parent LexicalResourceEntity of this entity, null if there is none
      */
-    public LexicalResourceEntity getParent();
+    LexicalResourceEntity getParent();
 
     /**
      * Returns the language of the LexicalResourceEntity, Language.UNSUPPORTED if none
      *
      * @return the language of the lexical resource entity
      */
-    public Language getLanguage();
+    Language getLanguage();
 
     /**
      * Returns the language of the LexicalResourceEntity, Language.UNSUPPORTED if none
      *
-     * @return the language of the lexical resource entity
      */
-    public void setLanguage(Language language);
+    void setLanguage(Language language);
 }

@@ -4,13 +4,13 @@ import org.getalp.lexsema.io.resource.LRLoader;
 import org.getalp.lexsema.io.resource.dbnary.DBNaryLoaderImpl;
 import org.getalp.lexsema.io.text.TextProcessor;
 import org.getalp.lexsema.ontolex.LexicalEntry;
-import org.getalp.lexsema.ontolex.LexicalResourceEntity;
-import org.getalp.lexsema.ontolex.LexicalSense;
+import org.getalp.lexsema.ontolex.LexicalSenseImpl;
 import org.getalp.lexsema.ontolex.dbnary.DBNary;
 import org.getalp.lexsema.ontolex.dbnary.Translation;
 import org.getalp.lexsema.ontolex.dbnary.Vocable;
 import org.getalp.lexsema.ontolex.dbnary.exceptions.NoSuchVocableException;
 import org.getalp.lexsema.similarity.Document;
+import org.getalp.lexsema.similarity.Sense;
 import org.getalp.lexsema.similarity.Text;
 import org.getalp.lexsema.similarity.Word;
 import org.getalp.lexsema.util.Language;
@@ -18,7 +18,6 @@ import org.getalp.lexsema.wsd.configuration.Configuration;
 import org.getalp.lexsema.wsd.method.Disambiguator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
@@ -97,7 +96,7 @@ public class DbNaryDisambiguatingTranslator implements Translator {
         Collection<String> uniqueTranslations = new TreeSet<>();
         String lemma = getWordLemma(d.getWord(0, index));
         if (selectedSense >= 0 && !targetStopList.contains(lemma)) {
-            LexicalSense sense = getAssignedSense(d, index, selectedSense);
+            Sense sense = getAssignedSense(d, index, selectedSense);
             if (sense != null) {
                 translations = getDBNarySenseTranslation(sense, targetLanguage);
             }
@@ -127,7 +126,7 @@ public class DbNaryDisambiguatingTranslator implements Translator {
         return outputBuilder.toString();
     }
 
-    private String getWordLemma(LexicalEntry w) {
+    private String getWordLemma(Word w) {
         return w.getLemma();
     }
 
@@ -140,15 +139,15 @@ public class DbNaryDisambiguatingTranslator implements Translator {
         return translations;
     }
 
-    private List<Translation> getDBNarySenseTranslation(LexicalResourceEntity sense, Language targetLanguage) {
+    private List<Translation> getDBNarySenseTranslation(Sense sense, Language targetLanguage) {
         List<Translation> translations = new ArrayList<>();
-        translations.addAll(dbNary.getTranslations(sense, targetLanguage));
+        translations.addAll(dbNary.getTranslations(new LexicalSenseImpl(dbNary,sense.getId(),null,""), targetLanguage));
         return translations;
     }
 
-    private LexicalSense getAssignedSense(Document d, int index, int senseIndex) {
-        if (d.getSenses(index).size() > index) {
-            return d.getSenses(index).get(senseIndex);
+    private Sense getAssignedSense(Document document, int index, int senseIndex) {
+        if (document.getSenses(index).size() > index) {
+            return document.getSenses(index).get(senseIndex);
         } else {
             return null;
         }

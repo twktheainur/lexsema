@@ -1,6 +1,5 @@
 package org.getalp.lexsema.similarity;
 
-import org.getalp.lexsema.ontolex.LexicalSense;
 import org.getalp.lexsema.util.Language;
 
 public class DefaultDocumentFactory implements DocumentFactory {
@@ -25,6 +24,11 @@ public class DefaultDocumentFactory implements DocumentFactory {
     @Override
     public Sentence createSentence(String id) {
         return  new SentenceImpl(id);
+    }
+
+    @Override
+    public Sentence createSentence(String id, Language language) {
+        return new SentenceImpl(id,language);
     }
 
     @Override
@@ -58,6 +62,16 @@ public class DefaultDocumentFactory implements DocumentFactory {
     }
 
     @Override
+    public Word createWord(String id, String lemma, String surfaceForm, String pos, Language language) {
+        return new WordImpl(id,lemma,surfaceForm,pos,language);
+    }
+
+    @Override
+    public Word createWord(String id, String lemma, String surfaceForm, String pos, Language language, int begin, int end) {
+        return new WordImpl(id,lemma,surfaceForm,pos,language,begin,end);
+    }
+
+    @Override
     public Word nullWord() {
         return new NullWord();
     }
@@ -68,8 +82,8 @@ public class DefaultDocumentFactory implements DocumentFactory {
     }
 
     @Override
-    public Sense createSense(LexicalSense lexicalSense){
-        return new SenseImpl(lexicalSense);
+    public Sense createSense(String id, Language language) {
+        return null;
     }
 
     @Override

@@ -98,7 +98,6 @@ public class DBNaryLoaderImpl implements DBNaryLoader {
                     size--;
                 } else {
                     returnEntry = le;
-                    targetWord.setLexicalEntry(le);
                     //noinspection BreakStatement
                     break;
                 }
@@ -117,7 +116,7 @@ public class DBNaryLoaderImpl implements DBNaryLoader {
         List<Sense> senses = new ArrayList<>();
         if (lexicalEntry != null) {
             for (LexicalSense ls : dbnary.getLexicalSenses(lexicalEntry)) {
-                Sense sense = DOCUMENT_FACTORY.createSense(ls);
+                Sense sense = DOCUMENT_FACTORY.createSense(ls.getNode().toString());
                 SemanticSignature signature = DefaultSemanticSignatureFactory.DEFAULT.createSemanticSignature();
                 if (loadDefinitions) {
                     String def = ls.getDefinition();

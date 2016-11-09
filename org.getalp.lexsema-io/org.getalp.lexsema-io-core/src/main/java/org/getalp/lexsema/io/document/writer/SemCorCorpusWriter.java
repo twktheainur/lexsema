@@ -4,23 +4,20 @@ import org.getalp.lexsema.similarity.Sentence;
 import org.getalp.lexsema.similarity.Text;
 import org.getalp.lexsema.similarity.Word;
 
-import java.io.File;
-import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.PrintWriter;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.text.MessageFormat;
 
 public class SemCorCorpusWriter implements CorpusWriter {
 
 
-    public SemCorCorpusWriter() {
-    }
-
-
     @Override
-    public void writeCorpus(File outputFile, Iterable<Text> texts) throws FileNotFoundException {
-        try (PrintWriter corpusPrintWriter = new PrintWriter(outputFile)) {
+    public void writeCorpus(Path file, Iterable<Text> texts) throws IOException {
+        try(PrintWriter corpusPrintWriter = new PrintWriter(Files.newOutputStream(file))) {
             corpusPrintWriter.println("\t<semcor>");
-            for(Text text: texts){
+            for (Text text : texts) {
                 writeText(text, corpusPrintWriter);
             }
             corpusPrintWriter.println("\t</semcor>");
@@ -28,21 +25,21 @@ public class SemCorCorpusWriter implements CorpusWriter {
 
     }
 
-    private void writeText(Text text, PrintWriter corpusPrintWriter){
+    private void writeText(Text text, PrintWriter corpusPrintWriter) {
         corpusPrintWriter.println("\t<context filename=\"\" paras=\"yes\">");
         int sentenceNumber = 0;
-        for(Sentence sentence: text.sentences()){
-            writeSentence(sentence,corpusPrintWriter,sentenceNumber);
+        for (Sentence sentence : text.sentences()) {
+            writeSentence(sentence, corpusPrintWriter, sentenceNumber);
             sentenceNumber++;
         }
         corpusPrintWriter.println("\t</context>");
     }
 
-    private void writeSentence(Iterable<Word> sentence, PrintWriter corpusPrintWriter, int sentenceNumber){
+    private void writeSentence(Iterable<Word> sentence, PrintWriter corpusPrintWriter, int sentenceNumber) {
 
         corpusPrintWriter.println(MessageFormat.format("\t\t<p pnum=\"{0}\">", String.valueOf(sentenceNumber)));
         corpusPrintWriter.println(MessageFormat.format("\t\t\t<s snum=\"{0}\">", String.valueOf(sentenceNumber)));
-        for(Word word: sentence) {
+        for (Word word : sentence) {
             writeWord(word, corpusPrintWriter);
         }
         corpusPrintWriter.println("\t\t\t</s>");

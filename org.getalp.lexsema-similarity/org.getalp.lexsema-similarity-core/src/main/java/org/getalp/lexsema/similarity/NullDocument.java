@@ -98,6 +98,11 @@ final class NullDocument implements Document{
     }
 
     @Override
+    public String asString() {
+        return "";
+    }
+
+    @Override
     public Iterator<Word> iterator() {
         return null;
     }

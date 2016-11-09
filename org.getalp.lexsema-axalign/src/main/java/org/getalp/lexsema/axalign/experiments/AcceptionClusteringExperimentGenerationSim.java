@@ -53,23 +53,23 @@ import static java.io.File.separator;
 
 
 public final class AcceptionClusteringExperimentGenerationSim {
-    public static final String DB_PATH = String.format("%sVolumes%sRAMDisk", separator, separator);
-    public static final String ONTOLOGY_PROPERTIES = String.format("data%sontology.properties", separator);
-    public static final File CLOSURE_SAVE_PATH = new File(String.format("..%sdata%sclosure_river", separator, separator));
-    public static final String MATRIX_PATH = ".." + separator + "data" + separator + "acception_matrices";
-    public static final String SIM_MATRIX_PATH = String.format("%s%ssource.dat", MATRIX_PATH, separator);
-    public static final String WORD_2_VEC_MODEL = String.format("..%sdata%sword2vec", File.separator, File.separator);
-    public static final int NUMBER_OF_TOP_LEVEL_CLUSTERS = 30;
-    public static final int SIMILARITY_DIMENSIONS = 20;
-    public static final int CL_DIMENSIONS = 20;
-    public static final int ENRICHMENT_SIZE = 20;
+    private static final String DB_PATH = String.format("%sVolumes%sRAMDisk", separator, separator);
+    private static final String ONTOLOGY_PROPERTIES = String.format("data%sontology.properties", separator);
+    private static final File CLOSURE_SAVE_PATH = new File(String.format("..%sdata%sclosure_river", separator, separator));
+    private static final String MATRIX_PATH = ".." + separator + "data" + separator + "acception_matrices";
+    private static final String SIM_MATRIX_PATH = String.format("%s%ssource.dat", MATRIX_PATH, separator);
+    private static final String WORD_2_VEC_MODEL = String.format("..%sdata%sword2vec",separator, separator);
+    private static final int NUMBER_OF_TOP_LEVEL_CLUSTERS = 30;
+    private static final int SIMILARITY_DIMENSIONS = 20;
+    private static final int CL_DIMENSIONS = 20;
+    private static final int ENRICHMENT_SIZE = 20;
     /**
      * ainuros@outlook.com account
      */
-    public static final String BING_APP_ID = "dbnary_hyper";
-    public static final String BING_APP_KEY = "IecT6H4OjaWo3OtH2pijfeNIx1y1bML3grXz/Gjo/+w=";
-    public static final int DEPTH = 1;
-    static Language[] loadLanguages = {
+    private static final String BING_APP_ID = "dbnary_hyper";
+    private static final String BING_APP_KEY = "IecT6H4OjaWo3OtH2pijfeNIx1y1bML3grXz/Gjo/+w=";
+    private static final int DEPTH = 1;
+    private static Language[] loadLanguages = {
             Language.FRENCH, Language.ENGLISH, Language.ITALIAN, Language.SPANISH,
             Language.PORTUGUESE, Language.BULGARIAN, Language.CATALAN, Language.FINNISH,
             Language.GERMAN, Language.RUSSIAN, Language.GREEK, Language.TURKISH
@@ -188,9 +188,6 @@ public final class AcceptionClusteringExperimentGenerationSim {
         }
     }
 
-    private static Set<Sense> flatSenseClosure(LexicalResourceTranslationClosure<Sense> closure) {
-        return closure.senseFlatClosure();
-    }
 
     @SuppressWarnings({"LawOfDemeter", "MagicNumber", "FeatureEnvy"})
     private static SimilarityMeasure createSimilarityMeasure(WordVectors word2Vec) {
@@ -228,9 +225,9 @@ public final class AcceptionClusteringExperimentGenerationSim {
         }
         TranslationClosureSemanticSignatureGenerator semanticSignatureGenerator =
                 new TranslationClosureSemanticSignatureGeneratorImpl();
-        LexicalResourceTranslationClosure<Sense> sigClosure = semanticSignatureGenerator.generateSemanticSignatures(closure);
+        Set<Sense> sigClosure = semanticSignatureGenerator.generateSemanticSignatures(closure);
         logger.info(sigClosure.toString());
-        return flatSenseClosure(sigClosure);
+        return sigClosure;
     }
 
     private static LexicalResourceTranslationClosure<LexicalSense> generateLexicalSenseClosure(TranslationClosureGenerator ctg, int degree) {

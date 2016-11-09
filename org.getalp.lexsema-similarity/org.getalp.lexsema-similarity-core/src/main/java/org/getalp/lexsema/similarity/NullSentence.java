@@ -16,6 +16,11 @@ final class NullSentence implements Sentence{
     }
 
     @Override
+    public String asString() {
+        return "";
+    }
+
+    @Override
     public String getId() {
         return "";
     }

@@ -54,4 +54,6 @@ public interface Document extends Iterable<Word>, Serializable {
     boolean isAlreadyLoaded();
 
     boolean isNull();
+
+    String asString();
 }

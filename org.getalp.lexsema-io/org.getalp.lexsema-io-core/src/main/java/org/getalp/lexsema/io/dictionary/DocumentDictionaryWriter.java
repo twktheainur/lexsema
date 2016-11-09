@@ -1,6 +1,5 @@
 package org.getalp.lexsema.io.dictionary;
 
-import org.getalp.lexsema.ontolex.LexicalEntry;
 import org.getalp.lexsema.similarity.Document;
 import org.getalp.lexsema.similarity.Sense;
 import org.getalp.lexsema.similarity.Text;
@@ -11,20 +10,16 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 
 public class DocumentDictionaryWriter implements DictionaryWriter {
 
     private static final Logger logger = LoggerFactory.getLogger(DocumentDictionaryWriter.class);
 
-    List<Text> documents;
+    private final List<Text> documents;
     
-    Set<String> wordTagAlreadyWritten = new HashSet<String>();
+    private final Collection<String> wordTagAlreadyWritten = new HashSet<>();
 
     private boolean allowDuplicate = true;
 
@@ -56,7 +51,7 @@ public class DocumentDictionaryWriter implements DictionaryWriter {
             for (Document document : documents) {
                 for (int wordIndex = 0; wordIndex < document.size(); wordIndex++) {
                     Word w = document.getWord(0, wordIndex);
-                    String wordTag = w.getLemma() + "%" + w.getPartOfSpeech();
+                    String wordTag = String.format("%s%%%s", w.getLemma(), w.getPartOfSpeech());
                     if (allowDuplicate || !wordTagAlreadyWritten.contains(wordTag)) {
                         writeWordStartTag(printWriter, w);
                         for (Sense sense : document.getSenses(wordIndex)) {
@@ -67,7 +62,7 @@ public class DocumentDictionaryWriter implements DictionaryWriter {
                         writeWordEndTag(printWriter);
                         wordTagAlreadyWritten.add(wordTag);
                     }
-                    logger.trace("Word {} ({}/{})", w.getLemma() ,wordIndex, document.size());
+                    logger.trace("Word {} ({}/{})", w ,wordIndex, document.size());
                 }
             }
             printWriter.println("</dict>");
@@ -77,7 +72,7 @@ public class DocumentDictionaryWriter implements DictionaryWriter {
 
     }
 
-    private void writeWordStartTag(final PrintWriter pw, final LexicalEntry word) {
+    private void writeWordStartTag(final PrintWriter pw, final Word word) {
         pw.println(String.format("<word tag=\"%s%%%s\">", word.getLemma(), word.getPartOfSpeech()));
     }
 
