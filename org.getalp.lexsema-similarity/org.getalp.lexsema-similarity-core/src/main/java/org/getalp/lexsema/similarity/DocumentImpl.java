@@ -163,7 +163,7 @@ class DocumentImpl implements Document {
     @Override
     public String toString() {
         StringBuilder output = new StringBuilder();
-        output.append("Document ").append(getId()).append(" [\n");
+        output.append(" ").append(getId()).append(" [\n");
         for (Word word : lexicalEntries) {
             output.append("\t").append(word.toString());
         }

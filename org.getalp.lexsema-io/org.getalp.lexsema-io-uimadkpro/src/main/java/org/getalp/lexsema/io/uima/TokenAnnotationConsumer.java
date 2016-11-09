@@ -28,8 +28,6 @@ public class TokenAnnotationConsumer extends CasConsumer_ImplBase implements Tok
 
     @Override
     public void process(CAS aCAS) throws AnalysisEngineProcessException {
-
-
         Type SENTENCE_ANNOTATION = aCAS.getTypeSystem().getType("de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Sentence");
         Collection<AnnotationFS> sentences = CasUtil.select(aCAS, SENTENCE_ANNOTATION);
         Iterator<AnnotationFS> sentenceIterator = sentences.iterator();
