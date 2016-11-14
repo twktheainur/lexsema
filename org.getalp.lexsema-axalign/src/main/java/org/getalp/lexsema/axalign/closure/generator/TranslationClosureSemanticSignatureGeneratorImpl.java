@@ -17,7 +17,7 @@ import java.util.Set;
 import java.util.StringTokenizer;
 
 public class TranslationClosureSemanticSignatureGeneratorImpl implements TranslationClosureSemanticSignatureGenerator {
-    private static final DocumentFactory DOCUMENT_FACTORY = DefaultDocumentFactory.DEFAULT_DOCUMENT_FACTORY;
+    private static final DocumentFactory DOCUMENT_FACTORY = DefaultDocumentFactory.DEFAULT;
 
     @Override
     public Set<Sense> generateSemanticSignatures(LexicalResourceTranslationClosure<LexicalSense> rawClosure) {

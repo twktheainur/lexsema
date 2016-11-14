@@ -37,19 +37,20 @@ public class WSDForSMTWebService1  extends WebServiceServlet
 
     private static final Logger logger = LoggerFactory.getLogger(WSDForSMTWebService1.class);
 
-    private static StanfordCoreNLP stanford = null;
-    
-    private static DictionaryLRLoader dictionary = null;
-    
-    private static Disambiguator disambiguator = null;
+    private static StanfordCoreNLP stanford;
+
+    private static DictionaryLRLoader dictionary;
+
+    private static Disambiguator disambiguator;
     
     private static final Map<String, String> cache = new ConcurrentHashMap<>();
-    
-    private static boolean verbose = true;
 
-    private static final DocumentFactory DOCUMENT_FACTORY = DefaultDocumentFactory.DEFAULT_DOCUMENT_FACTORY;
-    
-    protected void handle(HttpServletRequest request, HttpServletResponse response) throws Exception, UnsupportedEncodingException, java.io.IOException {
+    private static final boolean verbose = true;
+
+    private static final DocumentFactory DOCUMENT_FACTORY = DefaultDocumentFactory.DEFAULT;
+
+    @Override
+    protected void handle(HttpServletRequest request, HttpServletResponse response) throws Exception {
         setHeaders(request, response);
         loadStanford();
         loadDictionary();

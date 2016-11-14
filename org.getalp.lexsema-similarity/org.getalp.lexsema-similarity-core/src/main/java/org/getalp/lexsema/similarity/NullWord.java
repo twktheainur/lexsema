@@ -1,6 +1,7 @@
 package org.getalp.lexsema.similarity;
 
 
+import org.getalp.lexsema.similarity.annotation.Annotations;
 import org.getalp.lexsema.util.Language;
 
 import java.util.Collection;
@@ -101,4 +102,28 @@ final class NullWord implements Word{
         return Language.UNSUPPORTED;
     }
 
+    @Override
+    public Annotation getAnnotation(int index) {
+        return Annotations.createNullAnnotation();
+    }
+
+    @Override
+    public void addAnnotation(Annotation annotation) {
+
+    }
+
+    @Override
+    public int annotationCount() {
+        return 0;
+    }
+
+    @Override
+    public Iterable<Annotation> annotations() {
+        return Collections.emptyList();
+    }
+
+    @Override
+    public Iterable<Annotation> annotations(String annotationType) {
+        return Collections.emptyList();
+    }
 }

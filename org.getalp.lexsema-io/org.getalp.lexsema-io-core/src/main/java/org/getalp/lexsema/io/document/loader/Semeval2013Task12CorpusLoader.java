@@ -14,7 +14,7 @@ import java.util.List;
 
 public class Semeval2013Task12CorpusLoader extends CorpusLoaderImpl implements ContentHandler {
 
-    private static final DocumentFactory DOCUMENT_FACTORY = DefaultDocumentFactory.DEFAULT_DOCUMENT_FACTORY;
+    private static final DocumentFactory DOCUMENT_FACTORY = DefaultDocumentFactory.DEFAULT;
     private static final Logger logger = LoggerFactory.getLogger(Semeval2013Task12CorpusLoader.class);
 
     private boolean inWord;
@@ -30,7 +30,7 @@ public class Semeval2013Task12CorpusLoader extends CorpusLoaderImpl implements C
     private Sentence currentSentence;
     private Text currentDocument;
 
-    private String lemmaAttribute;
+    private final String lemmaAttribute;
 
     public Semeval2013Task12CorpusLoader(String path) {
         this.path = path;

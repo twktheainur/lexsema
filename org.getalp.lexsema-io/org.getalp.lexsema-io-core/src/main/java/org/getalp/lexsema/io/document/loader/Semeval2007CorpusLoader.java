@@ -11,7 +11,7 @@ import java.io.*;
 
 public class Semeval2007CorpusLoader extends CorpusLoaderImpl implements ContentHandler {
 
-    private static final DocumentFactory DOCUMENT_FACTORY = DefaultDocumentFactory.DEFAULT_DOCUMENT_FACTORY;
+    private static final DocumentFactory DOCUMENT_FACTORY = DefaultDocumentFactory.DEFAULT;
     private static final Logger logger = LoggerFactory.getLogger(Semeval2007CorpusLoader.class);
 
     private boolean inWord;

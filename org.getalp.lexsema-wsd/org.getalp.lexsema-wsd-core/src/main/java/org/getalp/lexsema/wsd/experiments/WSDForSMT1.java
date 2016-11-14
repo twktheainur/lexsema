@@ -33,7 +33,7 @@ import java.util.Properties;
 
 public class WSDForSMT1
 {
-	private static final DocumentFactory DOCUMENT_FACTORY = DefaultDocumentFactory.DEFAULT_DOCUMENT_FACTORY;
+    private static final DocumentFactory DOCUMENT_FACTORY = DefaultDocumentFactory.DEFAULT;
 
 	/**
 	 * Input: <raw text> (e.g. "this is a cat")

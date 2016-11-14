@@ -20,7 +20,7 @@ import java.util.Map;
 
 public class WordnetGlossTagEnrichment extends SignatureEnrichmentAbstract implements ContentHandler
 {
-    private static final DocumentFactory DOCUMENT_FACTORY = DefaultDocumentFactory.DEFAULT_DOCUMENT_FACTORY;
+    private static final DocumentFactory DOCUMENT_FACTORY = DefaultDocumentFactory.DEFAULT;
     private static final Logger logger = LoggerFactory.getLogger(WordnetGlossTagEnrichment.class);
 
     private final Map<String, Sentence> synset;

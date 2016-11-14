@@ -28,7 +28,7 @@ public class DSOCorpusLoader extends CorpusLoaderImpl {
     private static final Logger logger = LoggerFactory.getLogger(DSOCorpusLoader.class);
     private final String pathToDSO;
 
-    private static final DocumentFactory DOCUMENT_FACTORY = DefaultDocumentFactory.DEFAULT_DOCUMENT_FACTORY;
+    private static final DocumentFactory DOCUMENT_FACTORY = DefaultDocumentFactory.DEFAULT;
 
     private Dictionary wordnet;
 

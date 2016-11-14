@@ -4,7 +4,7 @@ import org.getalp.lexsema.util.Language;
 
 public class DefaultDocumentFactory implements DocumentFactory {
 
-    public static final DocumentFactory DEFAULT_DOCUMENT_FACTORY = new DefaultDocumentFactory();
+    public static final DocumentFactory DEFAULT = new DefaultDocumentFactory();
 
     @Override
     public Document createDocument() {

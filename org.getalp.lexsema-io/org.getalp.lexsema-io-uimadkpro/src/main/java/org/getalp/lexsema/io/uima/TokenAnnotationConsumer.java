@@ -16,7 +16,7 @@ import java.util.Iterator;
 
 public class TokenAnnotationConsumer extends CasConsumer_ImplBase implements TokenConsumer {
 
-    private static final DocumentFactory DOCUMENT_FACTORY = DefaultDocumentFactory.DEFAULT_DOCUMENT_FACTORY;
+    private static final DocumentFactory DOCUMENT_FACTORY = DefaultDocumentFactory.DEFAULT;
 
     private Text text;
     private final Language language;

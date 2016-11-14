@@ -1,7 +1,9 @@
 package org.getalp.lexsema.io.text;
 
 
-import org.getalp.lexsema.similarity.*;
+import org.getalp.lexsema.similarity.DefaultDocumentFactory;
+import org.getalp.lexsema.similarity.DocumentFactory;
+import org.getalp.lexsema.similarity.Text;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -9,7 +11,7 @@ import java.io.*;
 import java.text.MessageFormat;
 
 public class RussianPythonTextProcessor implements TextProcessor {
-    private static final DocumentFactory DOCUMENT_FACTORY = DefaultDocumentFactory.DEFAULT_DOCUMENT_FACTORY;
+    private static final DocumentFactory DOCUMENT_FACTORY = DefaultDocumentFactory.DEFAULT;
     private static final Logger logger = LoggerFactory.getLogger(RussianPythonTextProcessor.class);
     @Override
     public Text process(String sentenceText, String documentId) {

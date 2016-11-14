@@ -40,7 +40,7 @@ import java.util.stream.Collectors;
 
 public final class SenseClustering {
 
-    private static final DocumentFactory DOCUMENT_FACTORY = DefaultDocumentFactory.DEFAULT_DOCUMENT_FACTORY;
+    private static final DocumentFactory DOCUMENT_FACTORY = DefaultDocumentFactory.DEFAULT;
 
 
     public static final String ONTOLOGY_PROPERTIES = "data" + File.separator + "ontology.properties";

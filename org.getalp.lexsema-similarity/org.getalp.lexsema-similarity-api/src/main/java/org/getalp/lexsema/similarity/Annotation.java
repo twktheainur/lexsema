@@ -9,4 +9,8 @@ public interface Annotation extends Serializable {
     String type();
 
     String source();
+
+    default boolean isNull() {
+        return false;
+    }
 }

@@ -2,17 +2,17 @@ package org.getalp.lexsema.similarity.annotation;
 
 import org.getalp.lexsema.similarity.Annotation;
 
-public class DefaultAnnotation implements Annotation {
+class DefaultAnnotation implements Annotation {
 
     private final String annotation;
     private final String type;
     private final String source;
 
-    public DefaultAnnotation(String annotation, String type) {
+    DefaultAnnotation(String annotation, String type) {
         this(annotation, type, "");
     }
 
-    public DefaultAnnotation(String annotation, String type, String source) {
+    DefaultAnnotation(String annotation, String type, String source) {
         this.annotation = annotation;
         this.type = type;
         this.source = source;
@@ -31,5 +31,14 @@ public class DefaultAnnotation implements Annotation {
     @Override
     public String source() {
         return source;
+    }
+
+    @Override
+    public String toString() {
+        return "Annotation{" +
+                "annotation='" + annotation + '\'' +
+                ", type='" + type + '\'' +
+                ", source='" + source + '\'' +
+                '}';
     }
 }

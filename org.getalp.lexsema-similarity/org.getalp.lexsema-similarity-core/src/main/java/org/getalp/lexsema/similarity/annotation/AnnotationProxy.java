@@ -45,4 +45,11 @@ public class AnnotationProxy implements AnnotableElement {
             return type.equals(annotationType);
         }).collect(Collectors.toList());
     }
+
+    @Override
+    public String toString() {
+        StringBuilder appender = new StringBuilder();
+        annotations.forEach(annotation -> appender.append(annotation.toString()).append("\n"));
+        return appender.toString();
+    }
 }

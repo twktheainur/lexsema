@@ -145,7 +145,7 @@ class WordImpl implements Word {
 
     @Override
     public String toString() {
-        return String.format("Word (%d -> %d) |%s#%s|", begin, end, lemma, textPos);
+        return String.format("Word (%d -> %d) |%s#%s| {\n %s }\n", begin, end, lemma, textPos, annotationProxy.toString());
     }
 
     @Override

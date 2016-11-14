@@ -17,7 +17,7 @@ import java.util.Iterator;
 @SuppressWarnings({"BooleanParameter", "ClassWithTooManyFields"})
 public class Semeval2013Task10EntryLoader implements ContentHandler, TargetEntryLoader {
 
-    private static final DocumentFactory DOCUMENT_FACTORY = DefaultDocumentFactory.DEFAULT_DOCUMENT_FACTORY;
+    private static final DocumentFactory DOCUMENT_FACTORY = DefaultDocumentFactory.DEFAULT;
 
     private static final Logger logger = LoggerFactory.getLogger(Semeval2013Task10EntryLoader.class);
 
@@ -161,6 +161,7 @@ public class Semeval2013Task10EntryLoader implements ContentHandler, TargetEntry
         return entry.iterator();
     }
 
+    @Override
     public TargetWordEntry getEntry() {
         return entry;
     }

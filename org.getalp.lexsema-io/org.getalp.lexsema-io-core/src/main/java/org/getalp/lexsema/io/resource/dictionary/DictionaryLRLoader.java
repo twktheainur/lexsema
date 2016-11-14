@@ -34,7 +34,7 @@ import java.util.stream.IntStream;
 @SuppressWarnings("BooleanParameter")
 public class DictionaryLRLoader implements LRLoader {
 
-    private static final DocumentFactory DOCUMENT_FACTORY = DefaultDocumentFactory.DEFAULT_DOCUMENT_FACTORY;
+    private static final DocumentFactory DOCUMENT_FACTORY = DefaultDocumentFactory.DEFAULT;
     private static final Logger logger = LoggerFactory.getLogger(DictionaryLRLoader.class);
 
     private final Map<String, List<Sense>> wordSenses;

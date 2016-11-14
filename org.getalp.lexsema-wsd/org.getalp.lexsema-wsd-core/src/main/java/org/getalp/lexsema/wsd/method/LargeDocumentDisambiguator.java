@@ -12,7 +12,7 @@ import java.util.List;
 
 public class LargeDocumentDisambiguator implements Disambiguator
 {
-    private static final DocumentFactory DOCUMENT_FACTORY = DefaultDocumentFactory.DEFAULT_DOCUMENT_FACTORY;
+    private static final DocumentFactory DOCUMENT_FACTORY = DefaultDocumentFactory.DEFAULT;
 
     private static final Logger logger = LoggerFactory.getLogger(LargeDocumentDisambiguator.class);
 

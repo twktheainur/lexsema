@@ -12,7 +12,7 @@ import java.text.MessageFormat;
 public class WordnetGlossTagCorpusLoader extends CorpusLoaderImpl implements ContentHandler {
 
     private static final Logger logger = LoggerFactory.getLogger(WordnetGlossTagCorpusLoader.class);
-    private static final DocumentFactory DOCUMENT_FACTORY = DefaultDocumentFactory.DEFAULT_DOCUMENT_FACTORY;
+    private static final DocumentFactory DOCUMENT_FACTORY = DefaultDocumentFactory.DEFAULT;
 
     private final String path;
 
