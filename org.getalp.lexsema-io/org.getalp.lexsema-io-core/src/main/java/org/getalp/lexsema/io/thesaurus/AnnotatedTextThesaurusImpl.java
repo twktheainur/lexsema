@@ -6,6 +6,7 @@ import org.getalp.lexsema.similarity.Word;
 import org.getalp.lexsema.util.StopList;
 
 import java.util.*;
+import java.util.regex.Pattern;
 
 /**
  * This class provides the N most frequent words used in sentences
@@ -15,8 +16,9 @@ import java.util.*;
 @SuppressWarnings("ClassWithoutLogger")
 public class AnnotatedTextThesaurusImpl implements AnnotatedTextThesaurus {
 
+    private static final Pattern NOT_ALPHABETIC_PATTERN = Pattern.compile("[^\\p{L} ]");
     private final Map<String, Map<String, Integer>> map;
-    
+
     private final int n;
 
     /**
@@ -33,19 +35,20 @@ public class AnnotatedTextThesaurusImpl implements AnnotatedTextThesaurus {
      * the giving word represented by its semantic tag
      */
     @Override
-    public List<String> getRelatedWords(String semanticTag)
-    {
-        if (!map.containsKey(semanticTag)) return new ArrayList<String>();
-        Map<String, Integer> wordMap = sortByValue(map.get(semanticTag));
-        ArrayList<String> ret = new ArrayList<String>();
-        int i = 0;
-        for (String word2 : wordMap.keySet())
-        {
-            if (i >= n) break;
-            ret.add(word2);
-            i++;
+    public List<String> getRelatedWords(String semanticTag) {
+        if (map.containsKey(semanticTag)) {
+            Map<String, Integer> wordMap = sortByValue(map.get(semanticTag));
+            List<String> ret = new ArrayList<>();
+            int i = 0;
+            for (String word2 : wordMap.keySet()) {
+                if (i >= n) break;
+                ret.add(word2);
+                i++;
+            }
+            return ret;
+        } else {
+            return Collections.emptyList();
         }
-        return ret;
     }
 
     /**
@@ -54,33 +57,24 @@ public class AnnotatedTextThesaurusImpl implements AnnotatedTextThesaurus {
      * we keep all the words that are in the same sentence,
      * associated with their occurrence values
      */
-    private static Map<String, Map<String, Integer>> initMap(Iterable<Text> texts)
-    {
+    private static Map<String, Map<String, Integer>> initMap(Iterable<Text> texts) {
         Map<String, Map<String, Integer>> map = new HashMap<>();
-        for (Text txt : texts)
-        {
-            for (Sentence stc : txt.sentences())
-            {
-                for (Word w : stc)
-                {
-                    if (w.getLemma() != null && w.getSenseAnnotation() != null)
-                    {
-                        String wordStr = w.getLemma() + "%" + w.getSenseAnnotation();
-                        if (!map.containsKey(wordStr))
-                        {
+        for (Text txt : texts) {
+            for (Sentence stc : txt.sentences()) {
+                for (Word w : stc) {
+                    if (w.getLemma() != null && w.getSenseAnnotation() != null) {
+                        String wordStr = String.format("%s%%%s", w.getLemma(), w.getSenseAnnotation());
+                        if (!map.containsKey(wordStr)) {
                             map.put(wordStr, new HashMap<String, Integer>());
                         }
                         Map<String, Integer> wordMap = map.get(wordStr);
-                        for (Word w2 : stc)
-                        {
-                            String word2Str = w2.getSurfaceForm().replaceAll("[^\\p{IsAlphabetic} ]", "");
-                            if (w != w2 && !StopList.isStopWord(word2Str))
-                            {
-                                if (!wordMap.containsKey(word2Str))
-                                {
+                        for (Word w2 : stc) {
+                            String word2Str = NOT_ALPHABETIC_PATTERN.matcher(w2.getSurfaceForm()).replaceAll("");
+                            if (w != w2 && !StopList.isStopWord(word2Str)) {
+                                if (!wordMap.containsKey(word2Str)) {
                                     wordMap.put(word2Str, 0);
                                 }
-                                wordMap.put(word2Str, wordMap.get(word2Str).intValue() + 1);
+                                wordMap.put(word2Str, wordMap.get(word2Str) + 1);
                             }
                         }
                     }
@@ -89,24 +83,16 @@ public class AnnotatedTextThesaurusImpl implements AnnotatedTextThesaurus {
         }
         return map;
     }
-    
+
     /**
      * Sorts a map following a descendant order (from the biggest to the smallest value)
      * regarding its values (not its keys)
      */
-    private static Map<String, Integer> sortByValue(Map<String, Integer> map)
-    {
-        List<Map.Entry<String, Integer>> list = new LinkedList<Map.Entry<String, Integer>>(map.entrySet());
-        Collections.sort(list, new Comparator<Map.Entry<String, Integer>>()
-        {
-            public int compare(Map.Entry<String, Integer> o1, Map.Entry<String, Integer> o2)
-            {
-                return (o2.getValue()).compareTo(o1.getValue());
-            }
-        });
-        Map<String, Integer> result = new LinkedHashMap<String, Integer>();
-        for (Map.Entry<String, Integer> entry : list)
-        {
+    private static Map<String, Integer> sortByValue(Map<String, Integer> map) {
+        List<Map.Entry<String, Integer>> list = new LinkedList<>(map.entrySet());
+        Collections.sort(list, (o1, o2) -> o2.getValue().compareTo(o1.getValue()));
+        Map<String, Integer> result = new LinkedHashMap<>();
+        for (Map.Entry<String, Integer> entry : list) {
             result.put(entry.getKey(), entry.getValue());
         }
         return result;

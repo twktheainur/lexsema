@@ -1,6 +1,6 @@
 package org.getalp.lexsema.similarity;
 
-public interface Sentence extends Document {
+public interface Sentence extends Document, AnnotableElement {
     Text getParentText();
     void setParentText(Text text);
 }

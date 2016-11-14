@@ -3,11 +3,10 @@ package org.getalp.lexsema.similarity;
 
 import org.getalp.lexsema.util.Language;
 
-import java.io.Serializable;
 import java.util.Collection;
 
 
-public interface Word extends Iterable<Sense>, Serializable {
+public interface Word extends Iterable<Sense>, AnnotableElement {
 
     String getLemma();
 

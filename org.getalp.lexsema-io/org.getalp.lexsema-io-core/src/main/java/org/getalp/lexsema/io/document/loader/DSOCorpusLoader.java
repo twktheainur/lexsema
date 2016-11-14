@@ -1,6 +1,7 @@
 package org.getalp.lexsema.io.document.loader;
 
 import edu.mit.jwi.Dictionary;
+import edu.mit.jwi.data.IHasLifecycle;
 import edu.mit.jwi.item.IIndexWord;
 import edu.mit.jwi.item.IWord;
 import edu.mit.jwi.item.IWordID;
@@ -34,8 +35,6 @@ public class DSOCorpusLoader extends CorpusLoaderImpl {
     private final TextProcessor textProcessor;
     private final Text text;
 
-    private int nbWords=0;
-
 
     public DSOCorpusLoader(String pathToDSO, String pathToWordnet) {
         this(pathToDSO, pathToWordnet, false);
@@ -58,7 +57,7 @@ public class DSOCorpusLoader extends CorpusLoaderImpl {
         //}
     }
 
-    private static void open(Dictionary wordnet) {
+    private static void open(IHasLifecycle wordnet) {
         try {
             wordnet.open();
         } catch (IOException e) {
@@ -118,7 +117,6 @@ public class DSOCorpusLoader extends CorpusLoaderImpl {
             currentWord++;
         }
         synchronized (text) {
-            nbWords++;
             text.addSentence(cleanSentence);
         }
     }
