@@ -15,18 +15,18 @@ import java.util.Scanner;
 public class OldDSOCorpusLoader extends CorpusLoaderImpl
 {
 
-    private static final DocumentFactory DOCUMENT_FACTORY = DefaultDocumentFactory.DEFAULT_DOCUMENT_FACTORY;
+    private static final DocumentFactory DOCUMENT_FACTORY = DefaultDocumentFactory.DEFAULT;
 
-    private String pathToDSO;
-    
-    private Dictionary wordnet;
+    private final String pathToDSO;
+
+    private final Dictionary wordnet;
     
     private Text text;
     
     public OldDSOCorpusLoader(String pathToDSO, String pathToWordnet)
     {
         this.pathToDSO = pathToDSO;
-        this.wordnet = new Dictionary(new File(pathToWordnet));
+        wordnet = new Dictionary(new File(pathToWordnet));
     }
     
     private static void open(Dictionary wordnet)
@@ -124,6 +124,7 @@ public class OldDSOCorpusLoader extends CorpusLoaderImpl
         return null;
     }
 
+    @Override
     public void load()
     {
         open(wordnet);
@@ -134,6 +135,7 @@ public class OldDSOCorpusLoader extends CorpusLoaderImpl
         addText(text);
     }
 
+    @Override
     public CorpusLoader loadNonInstances(boolean loadExtra)
     {
         return this;

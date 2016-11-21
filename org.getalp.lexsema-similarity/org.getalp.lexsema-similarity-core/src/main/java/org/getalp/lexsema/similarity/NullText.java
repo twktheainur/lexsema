@@ -103,6 +103,11 @@ final class NullText implements Text{
     }
 
     @Override
+    public String asString() {
+        return "";
+    }
+
+    @Override
     public boolean isEmpty() {
         return true;
     }

@@ -84,7 +84,7 @@ public final class PrintTranslatedClosure {
         }
     }
 
-    private static Set<Sense> flatSenseClosure(LexicalResourceTranslationClosure<Sense> closure) {
+    private static Set<LexicalSense> flatSenseClosure(LexicalResourceTranslationClosure<LexicalSense> closure) {
         return closure.senseFlatClosure();
     }
 
@@ -106,9 +106,9 @@ public final class PrintTranslatedClosure {
         }
         TranslationClosureSemanticSignatureGenerator semanticSignatureGenerator =
                 new TranslationClosureSemanticSignatureGeneratorImpl();
-        LexicalResourceTranslationClosure<Sense> sigClosure = semanticSignatureGenerator.generateSemanticSignatures(closure);
+        Set<Sense> sigClosure = semanticSignatureGenerator.generateSemanticSignatures(closure);
         logger.info(sigClosure.toString());
-        return flatSenseClosure(sigClosure);
+        return sigClosure;
     }
 
     private static LexicalResourceTranslationClosure<LexicalSense> generateLexicalSenseClosure(TranslationClosureGenerator ctg, int degree) {
@@ -128,16 +128,22 @@ public final class PrintTranslatedClosure {
     private static synchronized void printTranslatedClosure(Iterable<Sense> closure, Translator translator, Language targetLanguage) {
         for (Sense sense : closure) {
             SemanticSignature originalSignature = sense.getSemanticSignature();
-            String definition = sense.getDefinition();
+            String definition = sense.getSemanticSignature().toString();
             String translatedDefinition = translator.translate(definition, sense.getLanguage(), targetLanguage);
             SemanticSignature translatedSignature = DefaultSemanticSignatureFactory.DEFAULT.createSemanticSignature();
-            StringTokenizer tokenizer = new StringTokenizer(translatedDefinition);
-            while (tokenizer.hasMoreTokens()) {
-                translatedSignature.addSymbol(DefaultSemanticSymbolFactory.DEFAULT_FACTORY.createSemanticSymbol(tokenizer.nextToken(), 1d));
-            }
+            addToSignature(translatedDefinition,translatedSignature);
             sense.setSemanticSignature(translatedSignature);
             logger.info(sense.toString());
             sense.setSemanticSignature(originalSignature);
         }
     }
+
+    private static  void addToSignature(String translatedDefinition, SemanticSignature semanticSignature){
+
+        StringTokenizer tokenizer = new StringTokenizer(translatedDefinition);
+        while (tokenizer.hasMoreTokens()) {
+            semanticSignature.addSymbol(DefaultSemanticSymbolFactory.DEFAULT_FACTORY.createSemanticSymbol(tokenizer.nextToken(), 1d));
+        }
+    }
+
 }

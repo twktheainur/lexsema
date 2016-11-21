@@ -21,16 +21,16 @@ import java.util.*;
 
 @SuppressWarnings("OverlyCoupledClass")
 public class BabelNetAPILoader implements LRLoader {
-    private static final DocumentFactory DOCUMENT_FACTORY = DefaultDocumentFactory.DEFAULT_DOCUMENT_FACTORY;
+    private static final DocumentFactory DOCUMENT_FACTORY = DefaultDocumentFactory.DEFAULT;
     private static final Logger logger = LoggerFactory.getLogger(BabelNetAPILoader.class);
 
     private final SenseCache senseCache;
     private final BabelNet babelNet;
     private final Language language;
-    private boolean shuffle = false;
+    private boolean shuffle;
     private boolean hasExtendedSignature = true;
     private boolean loadDefinitions = true;
-    private boolean loadRelated = false;
+    private boolean loadRelated;
 
     public BabelNetAPILoader(String configurationFilePath, final Language language) {
         senseCache = SenseCacheImpl.getInstance();

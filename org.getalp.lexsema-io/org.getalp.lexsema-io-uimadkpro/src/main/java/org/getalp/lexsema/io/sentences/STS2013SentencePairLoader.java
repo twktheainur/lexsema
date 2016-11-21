@@ -20,6 +20,7 @@ import org.getalp.lexsema.io.resource.LRLoader;
 import org.getalp.lexsema.io.uima.TokenAnnotationConsumer;
 import org.getalp.lexsema.io.uima.TokenConsumer;
 import org.getalp.lexsema.similarity.Text;
+import org.getalp.lexsema.util.Language;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -66,7 +67,7 @@ public class STS2013SentencePairLoader extends SentencePairLoader {
 
         try {
             // Process
-            TokenConsumer sac = new TokenAnnotationConsumer();
+            TokenConsumer sac = new TokenAnnotationConsumer(Language.ENGLISH);
             while (reader.hasNext()) {
                 reader.getNext(cas);
                 aae.process(cas);

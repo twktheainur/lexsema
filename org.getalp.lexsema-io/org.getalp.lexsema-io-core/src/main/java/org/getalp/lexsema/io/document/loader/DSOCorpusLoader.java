@@ -1,13 +1,13 @@
 package org.getalp.lexsema.io.document.loader;
 
 import edu.mit.jwi.Dictionary;
+import edu.mit.jwi.data.IHasLifecycle;
 import edu.mit.jwi.item.IIndexWord;
 import edu.mit.jwi.item.IWord;
 import edu.mit.jwi.item.IWordID;
 import edu.mit.jwi.item.POS;
 import org.getalp.lexsema.io.text.SpaceSegmentingTextProcessor;
 import org.getalp.lexsema.io.text.TextProcessor;
-import org.getalp.lexsema.ontolex.LexicalEntry;
 import org.getalp.lexsema.similarity.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,14 +28,12 @@ public class DSOCorpusLoader extends CorpusLoaderImpl {
     private static final Logger logger = LoggerFactory.getLogger(DSOCorpusLoader.class);
     private final String pathToDSO;
 
-    private static final DocumentFactory DOCUMENT_FACTORY = DefaultDocumentFactory.DEFAULT_DOCUMENT_FACTORY;
+    private static final DocumentFactory DOCUMENT_FACTORY = DefaultDocumentFactory.DEFAULT;
 
     private Dictionary wordnet;
 
     private final TextProcessor textProcessor;
     private final Text text;
-
-    private int nbWords=0;
 
 
     public DSOCorpusLoader(String pathToDSO, String pathToWordnet) {
@@ -59,7 +57,7 @@ public class DSOCorpusLoader extends CorpusLoaderImpl {
         //}
     }
 
-    private static void open(Dictionary wordnet) {
+    private static void open(IHasLifecycle wordnet) {
         try {
             wordnet.open();
         } catch (IOException e) {
@@ -76,7 +74,7 @@ public class DSOCorpusLoader extends CorpusLoaderImpl {
                 lines.add(line);
             }
             //lines.parallelStream().forEach(line -> processWordInList(line, pos));
-            lines.stream().forEach(line -> processWordInList(line, pos));
+            lines.forEach(line -> processWordInList(line, pos));
         } catch (IOException e) {
             logger.error(MessageFormat.format("Error while processing DSO list file:{0}", e.getLocalizedMessage()));
         }
@@ -119,12 +117,11 @@ public class DSOCorpusLoader extends CorpusLoaderImpl {
             currentWord++;
         }
         synchronized (text) {
-            nbWords++;
             text.addSentence(cleanSentence);
         }
     }
 
-    private void setPos(LexicalEntry word, String pos) {
+    private void setPos(Word word, String pos) {
         word.setPartOfSpeech(pos);
     }
 

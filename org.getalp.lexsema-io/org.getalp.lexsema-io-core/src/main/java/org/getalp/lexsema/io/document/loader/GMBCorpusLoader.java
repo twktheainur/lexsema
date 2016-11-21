@@ -19,7 +19,7 @@ import java.util.List;
 
 public class GMBCorpusLoader extends CorpusLoaderImpl implements ContentHandler {
 
-    private static final DocumentFactory DOCUMENT_FACTORY = DefaultDocumentFactory.DEFAULT_DOCUMENT_FACTORY;
+    private static final DocumentFactory DOCUMENT_FACTORY = DefaultDocumentFactory.DEFAULT;
 
     private static final Logger logger = LoggerFactory.getLogger(GMBCorpusLoader.class);
 

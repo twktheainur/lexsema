@@ -9,6 +9,7 @@ import org.getalp.lexsema.ml.matrix.filters.Filter;
 import org.getalp.lexsema.ml.matrix.filters.NMFKLMatrixFactorizationFilter;
 import org.getalp.lexsema.ml.matrix.filters.normalization.ZSignificanceNormalizationFilter;
 import org.getalp.lexsema.ontolex.LexicalEntry;
+import org.getalp.lexsema.ontolex.LexicalSense;
 import org.getalp.lexsema.ontolex.dbnary.DBNary;
 import org.getalp.lexsema.ontolex.dbnary.Vocable;
 import org.getalp.lexsema.ontolex.dbnary.exceptions.NoSuchVocableException;
@@ -24,6 +25,7 @@ import org.getalp.lexsema.similarity.Sense;
 import org.getalp.lexsema.similarity.measures.SimilarityMeasure;
 import org.getalp.lexsema.similarity.measures.crosslingual.TranslatorCrossLingualSimilarity;
 import org.getalp.lexsema.similarity.measures.tverski.TverskiIndexSimilarityMeasureBuilder;
+import org.getalp.lexsema.similarity.signatures.DefaultSemanticSignatureFactory;
 import org.getalp.lexsema.translation.GoogleWebTranslator;
 import org.getalp.lexsema.translation.Translator;
 import org.getalp.lexsema.util.Language;
@@ -38,7 +40,7 @@ import java.util.stream.Collectors;
 
 public final class SenseClustering {
 
-    private static final DocumentFactory DOCUMENT_FACTORY = DefaultDocumentFactory.DEFAULT_DOCUMENT_FACTORY;
+    private static final DocumentFactory DOCUMENT_FACTORY = DefaultDocumentFactory.DEFAULT;
 
 
     public static final String ONTOLOGY_PROPERTIES = "data" + File.separator + "ontology.properties";
@@ -107,12 +109,22 @@ public final class SenseClustering {
 
     }
 
-    public static Set<Sense> vocableSenses(Vocable vocable, DBNary dbNary){
+    private static Set<Sense> vocableSenses(Vocable vocable, DBNary dbNary){
         Set<Sense> localSenses = new TreeSet<>();
         for(LexicalEntry lexicalEntry: dbNary.getLexicalEntries(vocable)){
-            localSenses.addAll(dbNary.getLexicalSenses(lexicalEntry).stream().map(DOCUMENT_FACTORY::createSense).collect(Collectors.toList()));
+            localSenses.addAll(dbNary.getLexicalSenses(lexicalEntry).stream().map(SenseClustering::createSense).collect(Collectors.toList()));
         }
         return localSenses;
+    }
+
+    private static Sense createSense(LexicalSense lexicalSense){
+        Sense sense = DOCUMENT_FACTORY.createSense(lexicalSense.getNode().toString(),lexicalSense.getLanguage());
+        createSignature(lexicalSense,sense);
+        return sense;
+    }
+
+    private static void createSignature(LexicalSense lexicalSense, Sense sense){
+        sense.setSemanticSignature(DefaultSemanticSignatureFactory.DEFAULT.createSemanticSignature(lexicalSense.getDefinition()));
     }
 
 }

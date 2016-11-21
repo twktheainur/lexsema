@@ -9,23 +9,25 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
-import java.util.List;
-import java.util.Map;
+import java.util.Collection;
 
-public class RestfulQuery {
+public final class RestfulQuery {
 
 
-    public static URLConnection restfulQuery(String uri, List<Pair<String, String>> parameters) throws IOException {
+    private RestfulQuery() {
+    }
+
+    public static URLConnection restfulQuery(String uri, Collection<Pair<String, String>> parameters) throws IOException {
 
         StringBuilder params = new StringBuilder();
         if (!parameters.isEmpty()) {
             params.append("?");
             boolean first= true;
             for (Pair <String, String> pair : parameters) {
-                if(!first){
-                    params.append("&");
-                } else {
+                if (first) {
                     first = false;
+                } else {
+                    params.append("&");
                 }
                 params.append(pair.first()).append("=").append(URLEncoder.encode(pair.second().trim(),"UTF-8"));
             }
@@ -38,15 +40,16 @@ public class RestfulQuery {
     }
 
     public static String getRequestOutput(URLConnection urlConnection) throws IOException{
-        BufferedReader br = new BufferedReader(new InputStreamReader(urlConnection
-                .getInputStream()));
-        String l = br.readLine();
-        String output = "";
-        while (l != null) {
-            output +=l;
-            l = br.readLine();
+        StringBuilder output = new StringBuilder();
+        try (BufferedReader br = new BufferedReader(new InputStreamReader(urlConnection
+                .getInputStream()))) {
+            String line = br.readLine();
+            while (line != null) {
+                output.append(line);
+                line = br.readLine();
+            }
+            br.close();
         }
-        br.close();
-        return output.trim();
+        return output.toString().trim();
     }
 }

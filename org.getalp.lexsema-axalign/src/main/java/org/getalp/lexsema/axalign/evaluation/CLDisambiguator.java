@@ -8,7 +8,8 @@ import org.getalp.lexsema.io.clwsd.TargetWordEntry;
 import org.getalp.lexsema.io.clwsd.TargetedWSDLoader;
 import org.getalp.lexsema.io.resource.dbnary.DBNaryLoader;
 import org.getalp.lexsema.io.resource.dbnary.DBNaryLoaderImpl;
-import org.getalp.lexsema.ontolex.LexicalEntry;
+import org.getalp.lexsema.ontolex.LexicalEntryImpl;
+import org.getalp.lexsema.ontolex.LexicalSenseImpl;
 import org.getalp.lexsema.ontolex.dbnary.DBNary;
 import org.getalp.lexsema.ontolex.dbnary.Translation;
 import org.getalp.lexsema.ontolex.factories.resource.LexicalResourceFactory;
@@ -155,25 +156,25 @@ public final class CLDisambiguator {
 
                         List<Translation> translations;
 
-                        translations = sourceDbnary.getTranslations(targetSense, loadLanguages);
+                        translations = sourceDbnary.getTranslations(new LexicalSenseImpl(dbnaryMap.get(targetSense.getLanguage()),targetSense.getId(),null,""), loadLanguages);
                         Translation translation = null;
-                        if (!translations.isEmpty()) {
+                        if (translations.isEmpty()) {
+                            translations = sourceDbnary.getTranslations(new LexicalEntryImpl(sourceDbnary, targetWord.getId(), null, targetWord.getLemma(), targetWord.getPartOfSpeech()), loadLanguages);
                             for (Language targetLanguage : loadLanguages) {
-                                for (Translation candidateTranslation : translations) {
-                                    Language candidateLanguage = candidateTranslation.getLanguage();
-                                    if (candidateLanguage.equals(targetLanguage)) {
-                                        translation = candidateTranslation;
-                                        break;
-                                    }
-                                }
+                                translation = selectFirstTranslation(translations, targetLanguage);
                                 if (translation != null) {
                                     writer.writeEntry(targetWord, contextIndex, translation, targetLanguage);
                                 }
                             }
                         } else {
-                            translations = sourceDbnary.getTranslations(targetWord, loadLanguages);
                             for (Language targetLanguage : loadLanguages) {
-                                translation = selectFirstTranslation(translations, targetLanguage);
+                                for (Translation candidateTranslation : translations) {
+                                    Language candidateLanguage = candidateTranslation.getLanguage();
+                                    if (candidateLanguage == targetLanguage) {
+                                        translation = candidateTranslation;
+                                        break;
+                                    }
+                                }
                                 if (translation != null) {
                                     writer.writeEntry(targetWord, contextIndex, translation, targetLanguage);
                                 }
@@ -187,7 +188,7 @@ public final class CLDisambiguator {
     }
 
 
-    private Translation selectFirstTranslation(List<Translation> translations, Language targetLanguage) {
+    private Translation selectFirstTranslation(Iterable<Translation> translations, Language targetLanguage) {
         List<Translation> targetTrans = extractTargetLanguageTranslation(translations, targetLanguage);
         if (!targetTrans.isEmpty()) {
             return targetTrans.get(0);
@@ -195,20 +196,14 @@ public final class CLDisambiguator {
         return null;
     }
 
-    private List<Translation> extractTargetLanguageTranslation(List<Translation> translations, Language targetLanguage) {
+    private List<Translation> extractTargetLanguageTranslation(Iterable<Translation> translations, Language targetLanguage) {
         List<Translation> translationList = new ArrayList<>();
         for (Translation t : translations) {
-            if (t.getLanguage().equals(targetLanguage)) {
+            if (t.getLanguage() == targetLanguage) {
                 translationList.add(t);
             }
         }
         return translationList;
-    }
-
-
-    @SuppressWarnings("LawOfDemeter")
-    private boolean matchLemma(LexicalEntry a, LexicalEntry b) {
-        return a.getLemma().equals(b.getLemma());
     }
 
     private void loggerInfoTargetWordProgress(Word targetWord) {

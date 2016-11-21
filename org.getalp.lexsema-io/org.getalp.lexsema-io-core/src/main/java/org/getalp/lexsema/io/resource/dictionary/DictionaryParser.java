@@ -22,7 +22,7 @@ import java.util.StringTokenizer;
 
 public class DictionaryParser implements ContentHandler {
 
-    private static final DocumentFactory DOCUMENT_FACTORY = DefaultDocumentFactory.DEFAULT_DOCUMENT_FACTORY;
+    private static final DocumentFactory DOCUMENT_FACTORY = DefaultDocumentFactory.DEFAULT;
 
     private final Map<String, List<Sense>> dictionary;
     private String word;

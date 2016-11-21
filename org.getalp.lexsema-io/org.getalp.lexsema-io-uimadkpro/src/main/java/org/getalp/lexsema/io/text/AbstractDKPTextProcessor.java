@@ -14,8 +14,8 @@ import org.apache.uima.resource.ResourceInitializationException;
 import org.apache.uima.resource.ResourceManager;
 import org.apache.uima.resource.ResourceSpecifier;
 import org.apache.uima.util.CasCreationUtils;
-import org.getalp.lexsema.io.uima.TokenConsumer;
 import org.getalp.lexsema.io.uima.TokenAnnotationConsumer;
+import org.getalp.lexsema.io.uima.TokenConsumer;
 import org.getalp.lexsema.similarity.Text;
 import org.getalp.lexsema.util.Language;
 import org.slf4j.Logger;
@@ -24,8 +24,6 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 
 import static java.util.Arrays.asList;
-import static org.apache.uima.fit.factory.AnalysisEngineFactory.createEngineDescription;
-import static org.apache.uima.fit.factory.CollectionReaderFactory.createReaderDescription;
 
 public abstract class AbstractDKPTextProcessor implements TextProcessor {
 
@@ -53,8 +51,7 @@ public abstract class AbstractDKPTextProcessor implements TextProcessor {
         reader.typeSystemInit(cas.getTypeSystem());
 
         try {
-            // Process
-            TokenConsumer sac = new TokenAnnotationConsumer();
+            TokenConsumer sac = new TokenAnnotationConsumer(language);
             while (reader.hasNext()) {
                 reader.getNext(cas);
                 aae.process(cas);

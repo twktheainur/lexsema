@@ -12,7 +12,7 @@ import java.io.IOException;
 @SuppressWarnings({"BooleanParameter", "ClassWithTooManyFields"})
 public class SemCorCorpusLoader extends CorpusLoaderImpl implements ContentHandler {
 
-    private static final DocumentFactory DOCUMENT_FACTORY = DefaultDocumentFactory.DEFAULT_DOCUMENT_FACTORY;
+    private static final DocumentFactory DOCUMENT_FACTORY = DefaultDocumentFactory.DEFAULT;
     private final Logger logger = LoggerFactory.getLogger(SemCorCorpusLoader.class);
 
     private boolean inWord;

@@ -114,12 +114,9 @@ public final class AcceptionClusteringExperimentFromFile {
         TranslationClosureSemanticSignatureGenerator semanticSignatureGenerator =
                 new TranslationClosureSemanticSignatureGeneratorImpl();
 
-        return flatSenseClosure(semanticSignatureGenerator.generateSemanticSignatures(closure));
+        return semanticSignatureGenerator.generateSemanticSignatures(closure);
     }
 
-    private static Set<Sense> flatSenseClosure(LexicalResourceTranslationClosure<Sense> closure){
-        return closure.senseFlatClosure();
-    }
 
     private static LexicalResourceTranslationClosure<LexicalSense> generateLexicalSenseClosure(TranslationClosureGenerator ctg, int degree) {
         return ctg.generateClosure(degree);

@@ -1,5 +1,9 @@
 package org.getalp.lexsema.similarity;
 
+import org.getalp.lexsema.similarity.annotation.AnnotationProxy;
+import org.getalp.lexsema.util.Language;
+
+
 class SentenceImpl extends DocumentImpl implements Sentence {
 
     private Text parentText;
@@ -9,16 +13,9 @@ class SentenceImpl extends DocumentImpl implements Sentence {
         setId(id);
     }
 
-    @Override
-    public String toString() {
-        StringBuilder output = new StringBuilder();
-        for (Word le : this) {
-            final String lemma = le.getLemma();
-            output.append(lemma.trim());
-            output.append(" ");
-        }
-        final String s = output.toString();
-        return s.trim();
+    SentenceImpl(String id, Language language) {
+        super(language);
+        setId(id);
     }
 
     @Override
@@ -26,6 +23,7 @@ class SentenceImpl extends DocumentImpl implements Sentence {
         super.isNull();
         return false;
     }
+
 
     @Override
     public Text getParentText() {
@@ -35,5 +33,32 @@ class SentenceImpl extends DocumentImpl implements Sentence {
     @Override
     public void setParentText(Text text) {
         parentText = text;
+    }
+
+    private final AnnotableElement annotationProxy = new AnnotationProxy();
+
+    @Override
+    public Annotation getAnnotation(int index) {
+        return annotationProxy.getAnnotation(index);
+    }
+
+    @Override
+    public void addAnnotation(Annotation annotation) {
+        annotationProxy.addAnnotation(annotation);
+    }
+
+    @Override
+    public int annotationCount() {
+        return annotationProxy.annotationCount();
+    }
+
+    @Override
+    public Iterable<Annotation> annotations() {
+        return annotationProxy.annotations();
+    }
+
+    @Override
+    public Iterable<Annotation> annotations(String annotationType) {
+        return annotationProxy.annotations(annotationType);
     }
 }

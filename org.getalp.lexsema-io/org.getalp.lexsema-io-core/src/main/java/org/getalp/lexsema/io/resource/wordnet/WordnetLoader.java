@@ -10,7 +10,9 @@ import org.getalp.lexsema.similarity.*;
 import org.getalp.lexsema.similarity.Word;
 import org.getalp.lexsema.similarity.cache.SenseCache;
 import org.getalp.lexsema.similarity.cache.SenseCacheImpl;
-import org.getalp.lexsema.similarity.signatures.*;
+import org.getalp.lexsema.similarity.signatures.DefaultSemanticSignatureFactory;
+import org.getalp.lexsema.similarity.signatures.IndexedSemanticSignature;
+import org.getalp.lexsema.similarity.signatures.SemanticSignature;
 import org.getalp.lexsema.similarity.signatures.enrichment.IndexingSignatureEnrichment;
 import org.getalp.lexsema.similarity.signatures.enrichment.SignatureEnrichment;
 import org.getalp.lexsema.similarity.signatures.enrichment.StemmingSignatureEnrichment;
@@ -29,7 +31,7 @@ import java.util.regex.Pattern;
 
 public class WordnetLoader implements LRLoader {
 
-    private static final DocumentFactory DOCUMENT_FACTORY = DefaultDocumentFactory.DEFAULT_DOCUMENT_FACTORY;
+    private static final DocumentFactory DOCUMENT_FACTORY = DefaultDocumentFactory.DEFAULT;
 
     private static final Logger logger = LoggerFactory.getLogger(WordnetLoader.class);
 
@@ -414,7 +416,7 @@ public class WordnetLoader implements LRLoader {
             int last_percentage = 0;
         	for (int i = 0 ; i < document.size() ; i++) {
         		if (verbose) {
-                    int current_percentage = ((int) ((((double) (i + 1)) / ((double) (document.size()))) * 100.0));
+                    int current_percentage = (int) (((double) (i + 1) / (double) document.size()) * 100.0);
                     if (current_percentage > last_percentage) System.out.println("Loading senses... (" + current_percentage + "%)\r");
                     last_percentage = current_percentage;
         		}

@@ -1,6 +1,7 @@
 package org.getalp.lexsema.supervised.entrydisambiguator;
 
 
+import edu.mit.jwi.item.POS;
 import org.getalp.lexsema.ml.supervised.ClassificationOutput;
 import org.getalp.lexsema.ml.supervised.Classifier;
 import org.getalp.lexsema.ml.supervised.FeatureIndex;
@@ -19,6 +20,7 @@ import java.io.File;
 import java.io.IOException;
 import java.text.MessageFormat;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -43,9 +45,10 @@ public class WekaLexicalEntryDisambiguator extends SupervisedSequentialLexicalEn
     }
 
     @Override
-    protected final List<ClassificationOutput> runClassifier(String lemma, List<String> instance) {
+    protected final List<ClassificationOutput> runClassifier(String lemma, String pos, List<String> instance) {
 
-        logger.debug(MessageFormat.format("disambiguation of {0}", lemma));
+        logger.debug(MessageFormat.format("disambiguation of {0} : {1}", lemma, pos));
+        //System.out.println(lemma + " " + pos);
         WekaClassifier classifier;
         List<ClassificationOutput> result = Collections.emptyList();
         boolean trainingSuccessful = false;
@@ -59,14 +62,34 @@ public class WekaLexicalEntryDisambiguator extends SupervisedSequentialLexicalEn
 
                     logger.debug(MessageFormat.format("TrainingInstances {0}", trainingInstances));
 
+                    List<List<String>> FiltredTrainingInstances = new LinkedList<List<String>>();
+
                     if (trainingInstances != null) {
 
-                        /***** ICI ? ******
-                        for(List<String> l: trainingInstances){
 
-                            System.out.println("l = "+l);
+
+                        POS posJWI = null;
+
+                        if(pos !=null && !pos.isEmpty()) { //Filtrage par POS
+
+                            posJWI = POS.getPartOfSpeech(pos.charAt(0));
+
+                            int number = posJWI.getNumber();
+
+                            for (List<String> l : trainingInstances) {
+
+                               // System.out.println("l = " + l);
+
+                                if (l.get(0).contains("%" + number)) {
+
+
+                                    FiltredTrainingInstances.add(l);
+                                }
+                            }
+
+                            trainingInstances = FiltredTrainingInstances;
                         }
-                        /***** ICI ? *******/
+                       // System.exit(0);
 
                         logger.debug(MessageFormat.format("Number of examples :{0}", trainingInstances.size()));
                         if(trainingInstances.size() <= 5000) {

@@ -184,11 +184,12 @@ public enum Language implements Cloneable, Serializable {
     ZHUANG("zha","za","Zhuang; Chuang"),
     CHINESE("zho","zh","Chinese"),
     ZULU("zul","zu","Zulu"),
-    UNSUPPORTED("", "", "");
+    UNSUPPORTED("", "", "Unsupported"),
+    NONE("","","None");
 
-    private String iso3Code;
-    private String iso2Code;
-    private String languageName;
+    private final String iso3Code;
+    private final String iso2Code;
+    private final String languageName;
 
 
     Language(String iso3Code, String iso2Code, String languageName) {
@@ -199,9 +200,9 @@ public enum Language implements Cloneable, Serializable {
 
     public static Language fromCode(String code) {
         try {
-            for (Language l : Language.values()) {
-                if (code.equals(l.getISO2Code()) || code.equals(l.getISO3Code()) || code.equals(l.getLanguageName())) {
-                    return l;
+            for (Language language : Language.values()) {
+                if (code.equals(language.getISO2Code()) || code.equals(language.getISO3Code()) || code.equals(language.getLanguageName())) {
+                    return language;
                 }
             }
         } catch (NullPointerException ignored) {

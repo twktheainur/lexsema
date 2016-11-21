@@ -1,20 +1,28 @@
 package org.getalp.lexsema.similarity;
 
 
-import org.getalp.lexsema.ontolex.LexicalEntry;
+import org.getalp.lexsema.util.Language;
 
-import java.io.Serializable;
 import java.util.Collection;
 
 
-public interface Word extends LexicalEntry, Iterable<Sense>, Serializable {
+public interface Word extends Iterable<Sense>, AnnotableElement {
+
+    String getLemma();
+
+    void setLemma(String lemma);
+
+    String getPartOfSpeech();
+
+    void setPartOfSpeech(String partOfSpeech);
+
+    boolean isNull();
+
     void addPrecedingInstance(Word precedingNonInstance);
 
     Sentence getEnclosingSentence();
 
     void setEnclosingSentence(Sentence enclosingSentence);
-
-    void setLexicalEntry(LexicalEntry le);
 
     String getId();
 
@@ -31,5 +39,7 @@ public interface Word extends LexicalEntry, Iterable<Sense>, Serializable {
     Iterable<Word> precedingNonInstances();
 
     void loadSenses(Collection<Sense> senses);
+
+    Language getLanguage();
 }
 

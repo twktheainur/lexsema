@@ -1,11 +1,7 @@
 package org.getalp.lexsema.similarity;
 
 
-import com.hp.hpl.jena.graph.Node;
-import org.getalp.lexsema.ontolex.LexicalEntry;
-import org.getalp.lexsema.ontolex.LexicalResource;
-import org.getalp.lexsema.ontolex.LexicalResourceEntity;
-import org.getalp.lexsema.ontolex.graph.OntologyModel;
+import org.getalp.lexsema.similarity.annotation.Annotations;
 import org.getalp.lexsema.util.Language;
 
 import java.util.Collection;
@@ -29,9 +25,6 @@ final class NullWord implements Word{
     public void setEnclosingSentence(Sentence enclosingSentence) {
     }
 
-    @Override
-    public void setLexicalEntry(LexicalEntry le) {
-    }
 
     @Override
     public String getId() {
@@ -105,47 +98,32 @@ final class NullWord implements Word{
     }
 
     @Override
-    public int getNumber() {
-        return 0;
-    }
-
-    @Override
-    public void setNumber(int number) {
-
-    }
-
-    @Override
-    public LexicalResource getLexicalResource() {
-        return null;
-    }
-
-    @Override
-    public OntologyModel getOntologyModel() {
-        return null;
-    }
-
-    @Override
-    public Node getNode() {
-        return null;
-    }
-
-    @Override
-    public LexicalResourceEntity getParent() {
-        return null;
-    }
-
-    @Override
     public Language getLanguage() {
         return Language.UNSUPPORTED;
     }
 
     @Override
-    public void setLanguage(Language language) {
+    public Annotation getAnnotation(int index) {
+        return Annotations.createNullAnnotation();
+    }
+
+    @Override
+    public void addAnnotation(Annotation annotation) {
 
     }
 
     @Override
-    public int compareTo(LexicalResourceEntity o) {
+    public int annotationCount() {
         return 0;
+    }
+
+    @Override
+    public Iterable<Annotation> annotations() {
+        return Collections.emptyList();
+    }
+
+    @Override
+    public Iterable<Annotation> annotations(String annotationType) {
+        return Collections.emptyList();
     }
 }

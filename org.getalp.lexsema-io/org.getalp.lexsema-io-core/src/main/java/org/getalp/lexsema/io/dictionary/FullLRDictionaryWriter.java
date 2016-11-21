@@ -1,10 +1,7 @@
 package org.getalp.lexsema.io.dictionary;
 
 import org.getalp.lexsema.io.resource.LRLoader;
-import org.getalp.lexsema.ontolex.LexicalEntry;
-import org.getalp.lexsema.similarity.Document;
 import org.getalp.lexsema.similarity.Sense;
-import org.getalp.lexsema.similarity.Text;
 import org.getalp.lexsema.similarity.Word;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -54,7 +51,7 @@ public class FullLRDictionaryWriter implements DictionaryWriter {
 
     }
 
-    private void writeWordStartTag(final PrintWriter pw, final LexicalEntry word) {
+    private void writeWordStartTag(final PrintWriter pw, final Word word) {
         pw.println(String.format("<word tag=\"%s%%%s\">", word.getLemma(), word.getPartOfSpeech()));
     }
 

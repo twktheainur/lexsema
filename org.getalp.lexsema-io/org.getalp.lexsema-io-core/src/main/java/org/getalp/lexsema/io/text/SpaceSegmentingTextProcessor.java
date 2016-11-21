@@ -6,7 +6,7 @@ import org.getalp.lexsema.util.Language;
 
 public class SpaceSegmentingTextProcessor implements TextProcessor {
 
-    private static final DocumentFactory DOCUMENT_FACTORY = DefaultDocumentFactory.DEFAULT_DOCUMENT_FACTORY;
+    private static final DocumentFactory DOCUMENT_FACTORY = DefaultDocumentFactory.DEFAULT;
 
     @Override
     public Text process(String sentenceText, String documentId) {

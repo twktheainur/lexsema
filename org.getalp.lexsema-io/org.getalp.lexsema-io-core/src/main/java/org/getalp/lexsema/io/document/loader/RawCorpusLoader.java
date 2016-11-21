@@ -2,13 +2,19 @@ package org.getalp.lexsema.io.document.loader;
 
 
 import org.getalp.lexsema.io.text.TextProcessor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.Reader;
 
 public class RawCorpusLoader extends CorpusLoaderImpl {
 
-    Reader reader;
-    TextProcessor processor;
+    private final Reader reader;
+    private final TextProcessor processor;
+    private static final Logger logger = LoggerFactory.getLogger(RawCorpusLoader.class);
 
     public RawCorpusLoader(Reader reader, TextProcessor processor) {
         this.reader = reader;
@@ -26,9 +32,9 @@ public class RawCorpusLoader extends CorpusLoaderImpl {
                 line = inputReader.readLine();
             }
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            logger.error("File not found - {}", e.getLocalizedMessage());
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error("Cannot read file: {}", e.getLocalizedMessage());
         }
         addText(processor.process(text.toString(),""));
     }

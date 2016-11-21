@@ -68,7 +68,7 @@ class DocumentImpl implements Document {
             logger.debug("Exception caught: {}", e);
             logger.debug("When trying to add the following senses:");
             for (Sense sense : senses) {
-                logger.debug("{} : {}", sense.getId(), sense.getDefinition());
+                logger.debug("{} : {}", sense.getId(), sense.getSemanticSignature());
             }
             logger.debug("lexicalEntries size: {}", lexicalEntries.size());
             logger.debug("senses size: {}", this.senses.size());
@@ -84,6 +84,18 @@ class DocumentImpl implements Document {
     @Override
     public boolean isNull() {
         return false;
+    }
+
+    @Override
+    public String asString() {
+        StringBuilder output = new StringBuilder();
+        for (Word le : this) {
+            final String lemma = le.getLemma();
+            output.append(lemma.trim());
+            output.append(" ");
+        }
+        final String s = output.toString();
+        return s.trim();
     }
 
 
@@ -146,5 +158,16 @@ class DocumentImpl implements Document {
     @Override
     public Collection<Word> words() {
         return Collections.unmodifiableCollection(lexicalEntries);
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder output = new StringBuilder();
+        output.append(" ").append(getId()).append(" [\n");
+        for (Word word : lexicalEntries) {
+            output.append("\t").append(word.toString());
+        }
+        output.append("]\n");
+        return output.toString();
     }
 }

@@ -30,12 +30,12 @@ import java.util.*;
 
 @SuppressWarnings("OverlyCoupledClass")
 public class DBNaryLoaderImpl implements DBNaryLoader {
-    private static final DocumentFactory DOCUMENT_FACTORY = DefaultDocumentFactory.DEFAULT_DOCUMENT_FACTORY;
+    private static final DocumentFactory DOCUMENT_FACTORY = DefaultDocumentFactory.DEFAULT;
     private static final Logger logger = LoggerFactory.getLogger(DBNaryLoaderImpl.class);
 
     private final DBNary dbnary;
     private final OntologyModel model;
-    private SenseCache senseCache;
+    private final SenseCache senseCache;
     private boolean shuffle;
     private boolean loadDefinitions = true;
     private final Language language;
@@ -98,7 +98,6 @@ public class DBNaryLoaderImpl implements DBNaryLoader {
                     size--;
                 } else {
                     returnEntry = le;
-                    targetWord.setLexicalEntry(le);
                     //noinspection BreakStatement
                     break;
                 }
@@ -117,7 +116,7 @@ public class DBNaryLoaderImpl implements DBNaryLoader {
         List<Sense> senses = new ArrayList<>();
         if (lexicalEntry != null) {
             for (LexicalSense ls : dbnary.getLexicalSenses(lexicalEntry)) {
-                Sense sense = DOCUMENT_FACTORY.createSense(ls);
+                Sense sense = DOCUMENT_FACTORY.createSense(ls.getNode().toString());
                 SemanticSignature signature = DefaultSemanticSignatureFactory.DEFAULT.createSemanticSignature();
                 if (loadDefinitions) {
                     String def = ls.getDefinition();
