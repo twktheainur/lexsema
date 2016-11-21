@@ -22,26 +22,33 @@ public class Semeval2007CorpusLoader extends CorpusLoaderImpl implements Content
     private String currentId;
     private String extraWords;
 
+    private String path;
+    
     private InputStream inputStream;
 
     private Sentence currentSentence;
     private Text currentDocument;
 
     public Semeval2007CorpusLoader(InputStream inputStream) {
+    	this.path = null;
         this.inputStream = inputStream;
         init();
     }
 
     public Semeval2007CorpusLoader(String path) {
-        try {
-            inputStream = new FileInputStream(path);
-        } catch (FileNotFoundException e) {
-            logger.error(e.getLocalizedMessage());
-        }
+        this.path = path;
+        this.inputStream = null;
         init();
     }
 
     private void init() {
+    	if (path != null) {
+	        try {
+	            inputStream = new FileInputStream(path);
+	        } catch (FileNotFoundException e) {
+	            logger.error(e.getLocalizedMessage());
+	        }
+    	}
         inWord = false;
         currentId = "";
         currentLemma = "";
