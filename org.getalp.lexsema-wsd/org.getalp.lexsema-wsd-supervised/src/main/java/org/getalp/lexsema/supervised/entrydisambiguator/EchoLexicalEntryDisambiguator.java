@@ -27,7 +27,7 @@ public class EchoLexicalEntryDisambiguator extends SupervisedSequentialLexicalEn
         featureIndex = new FeatureIndexImpl();
     }
 
-    protected final List<ClassificationOutput> runClassifier(String lemma, List<String> instance) {
+    protected final List<ClassificationOutput> runClassifier(String lemma, String pos, List<String> instance) {
 
         File dataFile = new File(String.format("%s%c%s.csv", dataPath, File.separatorChar, lemma.toLowerCase()));
         if (dataFile.exists()) {

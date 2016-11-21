@@ -43,6 +43,8 @@ public abstract class SequentialDisambiguator implements Disambiguator {
     @Override
     public Configuration disambiguate(Document document, Configuration c) {
 
+
+
         boolean progressChecked = false;
         if (c == null) {
             c = new ConfidenceConfiguration(document);

@@ -31,13 +31,15 @@ public abstract class SupervisedSequentialLexicalEntryDisambiguator extends Sequ
     @Override
     public void run() {
         try {
+
             Word targetWord = getDocument().getWord(0, getCurrentIndex());
             String targetLemma = targetWord.getLemma();
+
 
             //getConfiguration().setSense(getCurrentIndex(), -1);
             if (!targetWord.getId().isEmpty()) {
                 List<String> features = featureExtractor.getFeatures(getDocument(), getCurrentIndex());
-                List<ClassificationOutput> results = runClassifier(targetLemma, features);
+                List<ClassificationOutput> results = runClassifier(targetLemma, targetWord.getPartOfSpeech(), features);
                 if (!results.isEmpty()) {
                     getConfiguration().setSenseId(getCurrentIndex(),results.get(0).getKey());
 //                    int s = -1;
@@ -92,5 +94,5 @@ public abstract class SupervisedSequentialLexicalEntryDisambiguator extends Sequ
     }
 
 
-    protected abstract List<ClassificationOutput> runClassifier(String lemma, List<String> instance);
+    protected abstract List<ClassificationOutput> runClassifier(String lemma, String pos, List<String> instance);
 }
