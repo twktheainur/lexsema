@@ -2333,9 +2333,11 @@ public class SemEval2007Task7PerfectConfigurationScorer implements PerfectConfig
     		}
     		Sense sense = document.getSenses(i).get(assignment);
     		String senseKey = sense.getId();
+    		if (senseKey.contains("%5")) senseKey = senseKey.replace("%5", "%3");
     		ArrayList<String> answers = data.get(i);
     		for (String answer : answers)
     		{
+    			if (answer.contains("%5")) answer = answer.replace("%5", "%3");
     			if (senseKey.toLowerCase().equals(answer.toLowerCase()))
     			{
     				score += 1;
@@ -2373,9 +2375,11 @@ public class SemEval2007Task7PerfectConfigurationScorer implements PerfectConfig
 	    		}
 	    		Sense sense = document.getSenses(j).get(assignment);
 	    		String senseKey = sense.getId();
+	    		if (senseKey.contains("%5")) senseKey = senseKey.replace("%5", "%3");
 	    		ArrayList<String> answers = data.get(j);
 	    		for (String answer : answers)
 	    		{
+	    			if (answer.contains("%5")) answer = answer.replace("%5", "%3");
 	    			if (senseKey.toLowerCase().equals(answer.toLowerCase()))
 	    			{
 	    				score += 1;
