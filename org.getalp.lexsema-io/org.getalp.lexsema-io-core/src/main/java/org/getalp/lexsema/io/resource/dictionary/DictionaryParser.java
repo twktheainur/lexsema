@@ -82,7 +82,7 @@ public class DictionaryParser implements ContentHandler {
     public void startElement(String uri, String localName, String qName, Attributes atts) throws SAXException {
         switch (localName) {
             case "word":
-                word = atts.getValue("tag");
+                word = atts.getValue("tag").toLowerCase();
                 mws = new ArrayList<>();
                 break;
             case "ids":
@@ -109,7 +109,7 @@ public class DictionaryParser implements ContentHandler {
                 break;
             case "ids":
                 ids = false;
-                mw = DOCUMENT_FACTORY.createSense(currentId.trim());
+                mw = DOCUMENT_FACTORY.createSense(currentId.trim().toLowerCase());
                 break;
             case "def":
                 def = false;
