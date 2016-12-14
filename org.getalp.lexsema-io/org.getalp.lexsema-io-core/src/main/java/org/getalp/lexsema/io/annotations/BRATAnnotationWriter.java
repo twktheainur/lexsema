@@ -6,6 +6,8 @@ import org.getalp.lexsema.similarity.Word;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import jersey.repackaged.com.google.common.collect.Iterables;
+
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.file.Files;
@@ -29,7 +31,7 @@ public class BRATAnnotationWriter implements AnnotationWriter {
                         previousAnnotation = annotation;
                     }
                 }
-                if(!word.annotations().isEmpty()){
+                if(!Iterables.isEmpty(word.annotations())){
                     termCounter++;
                 }
             }

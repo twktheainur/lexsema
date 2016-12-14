@@ -88,11 +88,11 @@ public class DictionaryLRLoader implements LRLoader {
     @Override
     public List<Sense> getSenses(Word w) {
         List<Sense> senses = Collections.emptyList();
-        String lemma = w.getLemma();
+        String lemma = w.getLemma().toLowerCase();
         String partOfSpeech = w.getPartOfSpeech();
         partOfSpeech = processPOS(partOfSpeech);
         if (!partOfSpeech.equals("x")) {
-            String tag = MessageFormat.format("{0}%{1}", lemma.toLowerCase(), partOfSpeech);
+            String tag = MessageFormat.format("{0}%{1}", lemma, partOfSpeech);
             if (wordSenses.get(tag) != null) {
                 tag = MessageFormat.format("{0}%{1}", lemma, partOfSpeech);
             }
