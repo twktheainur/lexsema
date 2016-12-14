@@ -1,4 +1,4 @@
-package annotations;
+package org.getalp.lexsema.io.annotations;
 
 import org.getalp.lexsema.similarity.Annotation;
 import org.getalp.lexsema.similarity.Document;

@@ -2,6 +2,7 @@ package org.getalp.lexsema.similarity;
 
 
 import java.io.Serializable;
+import java.util.Collection;
 
 public interface AnnotableElement extends Serializable {
     Annotation getAnnotation(int index);
@@ -10,7 +11,7 @@ public interface AnnotableElement extends Serializable {
 
     int annotationCount();
 
-    Iterable<Annotation> annotations();
+    Collection<Annotation> annotations();
 
-    Iterable<Annotation> annotations(String annotationType);
+    Collection<Annotation> annotations(String annotationType);
 }

@@ -61,12 +61,12 @@ class WordImpl implements Word {
     }
 
     @Override
-    public Iterable<Annotation> annotations() {
+    public Collection<Annotation> annotations() {
         return annotationProxy.annotations();
     }
 
     @Override
-    public Iterable<Annotation> annotations(String annotationType) {
+    public Collection<Annotation> annotations(String annotationType) {
         return annotationProxy.annotations(annotationType);
     }
 

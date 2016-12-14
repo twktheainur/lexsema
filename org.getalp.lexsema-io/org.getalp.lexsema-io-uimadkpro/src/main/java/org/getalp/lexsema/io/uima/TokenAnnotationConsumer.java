@@ -19,11 +19,13 @@ public class TokenAnnotationConsumer extends CasConsumer_ImplBase implements Tok
     private static final DocumentFactory DOCUMENT_FACTORY = DefaultDocumentFactory.DEFAULT;
 
     private Text text;
+    private String textId;
     private final Language language;
 
-    public TokenAnnotationConsumer(Language language) {
+    public TokenAnnotationConsumer(Language language, String textId) {
         text = DOCUMENT_FACTORY.nullText();
         this.language = language;
+        this.textId = textId;
     }
 
     @Override
@@ -39,6 +41,7 @@ public class TokenAnnotationConsumer extends CasConsumer_ImplBase implements Tok
         Collection<AnnotationFS> tokens = CasUtil.select(aCAS, TOKEN_ANNOTATION);
 
         text = DOCUMENT_FACTORY.createText(language);
+        text.setId(textId);
         Sentence sentence = DOCUMENT_FACTORY.createSentence(String.format("s%d",sentenceNumber),language);
         for (AnnotationFS tokenAnnot : tokens) {
             Token token = (Token) tokenAnnot;

@@ -3,6 +3,8 @@ package org.getalp.lexsema.similarity;
 import org.getalp.lexsema.similarity.annotation.AnnotationProxy;
 import org.getalp.lexsema.util.Language;
 
+import java.util.Collection;
+
 
 class SentenceImpl extends DocumentImpl implements Sentence {
 
@@ -53,12 +55,12 @@ class SentenceImpl extends DocumentImpl implements Sentence {
     }
 
     @Override
-    public Iterable<Annotation> annotations() {
+    public Collection<Annotation> annotations() {
         return annotationProxy.annotations();
     }
 
     @Override
-    public Iterable<Annotation> annotations(String annotationType) {
+    public Collection<Annotation> annotations(String annotationType) {
         return annotationProxy.annotations(annotationType);
     }
 }

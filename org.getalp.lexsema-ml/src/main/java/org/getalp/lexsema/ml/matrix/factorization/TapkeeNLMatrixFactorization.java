@@ -8,24 +8,25 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.*;
+import java.nio.file.Path;
 
 
 public class TapkeeNLMatrixFactorization implements MatrixFactorization {
 
-    private static Logger logger = LoggerFactory.getLogger(TapkeeNLMatrixFactorization.class);
+    private static final Logger logger = LoggerFactory.getLogger(TapkeeNLMatrixFactorization.class);
 
     private DoubleMatrix2D A;
     private DoubleMatrix2D U;
     private DoubleMatrix2D V;
-    private Method method;
+    private final Method method;
     private int dimensions = -1;
+    private Path tapkeePath;
 
-    public TapkeeNLMatrixFactorization(DoubleMatrix2D a, Method method) {
-        A = a;
-        this.method = method;
+    TapkeeNLMatrixFactorization(Path tapkeePath, DoubleMatrix2D a, Method method) {
+        this(tapkeePath, a, method, -1);
     }
 
-    public TapkeeNLMatrixFactorization(DoubleMatrix2D a, Method method, int dimensions) {
+    TapkeeNLMatrixFactorization(Path tapkeePath, DoubleMatrix2D a, Method method, int dimensions) {
         A = a;
         this.method = method;
         this.dimensions = dimensions;
@@ -53,10 +54,8 @@ public class TapkeeNLMatrixFactorization implements MatrixFactorization {
         } else {
             long time = System.currentTimeMillis();
             File tmpDir = new File(".tmpdata");
-            if (!tmpDir.exists()) {
-                if (!tmpDir.mkdirs()) {
-                    logger.error("Cannot create temporary output location");
-                }
+            if (!tmpDir.exists() && !tmpDir.mkdirs()) {
+                logger.error("Cannot create temporary output location");
             }
             File input = new File(tmpDir, String.format("%d_source.dat", time));
             File output = new File(tmpDir, String.format("%d_output.dat", time));
@@ -67,7 +66,8 @@ public class TapkeeNLMatrixFactorization implements MatrixFactorization {
             Runtime r = Runtime.getRuntime();
             Process p = null;
             try {
-                String command = String.format("tapkee-nle-server%stapkee_nle_server -i %s -o %s -opmat %s -m %s",
+                String command = String.format("%s%stapkee_nle_server -i %s -o %s -opmat %s -m %s",
+                        tapkeePath.toAbsolutePath().toString(),
                         File.separator,
                         input.getAbsolutePath(), // -i
                         output.getAbsolutePath(), // -o
@@ -135,13 +135,13 @@ public class TapkeeNLMatrixFactorization implements MatrixFactorization {
 
     private String readInputStream(InputStream in) {
         StringBuilder stringBuilder = new StringBuilder();
-        try (BufferedReader b = new BufferedReader(new InputStreamReader(in))) {
-            String line = b.readLine();
+        try (BufferedReader br = new BufferedReader(new InputStreamReader(in))) {
+            String line = br.readLine();
             while (line != null) {
                 stringBuilder.append(line);
-                line = b.readLine();
+                line = br.readLine();
             }
-            b.close();
+            br.close();
         } catch (IOException e) {
             logger.error(e.getLocalizedMessage());
         }
@@ -179,8 +179,8 @@ public class TapkeeNLMatrixFactorization implements MatrixFactorization {
         T_SNE("t Stochastic Neighbourhood Embedding", "t-sne"),
         MS("Manifold Sculpting", "ms");
 
-        private String description;
-        private String command;
+        private final String description;
+        private final String command;
 
         Method(String description, String command) {
             this.description = description;

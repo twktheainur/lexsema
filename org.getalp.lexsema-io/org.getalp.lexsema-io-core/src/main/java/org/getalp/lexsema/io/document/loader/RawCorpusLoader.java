@@ -28,7 +28,7 @@ public class RawCorpusLoader extends CorpusLoaderImpl {
         try (BufferedReader inputReader = new BufferedReader(reader)) {
             String line = "";
             while(line!=null){
-                text.append(" ").append(line);
+                text.append(" ").append(line).append("\n");
                 line = inputReader.readLine();
             }
         } catch (FileNotFoundException e) {
@@ -36,7 +36,7 @@ public class RawCorpusLoader extends CorpusLoaderImpl {
         } catch (IOException e) {
             logger.error("Cannot read file: {}", e.getLocalizedMessage());
         }
-        addText(processor.process(text.toString(),""));
+        addText(processor.process(text.toString(),"RawText"));
     }
 
     @Override

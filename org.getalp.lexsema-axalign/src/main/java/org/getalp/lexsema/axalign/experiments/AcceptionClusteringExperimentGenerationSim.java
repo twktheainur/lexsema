@@ -44,6 +44,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.lang.reflect.InvocationTargetException;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -58,7 +59,7 @@ public final class AcceptionClusteringExperimentGenerationSim {
     private static final File CLOSURE_SAVE_PATH = new File(String.format("..%sdata%sclosure_river", separator, separator));
     private static final String MATRIX_PATH = ".." + separator + "data" + separator + "acception_matrices";
     private static final String SIM_MATRIX_PATH = String.format("%s%ssource.dat", MATRIX_PATH, separator);
-    private static final String WORD_2_VEC_MODEL = String.format("..%sdata%sword2vec",separator, separator);
+    private static final String WORD_2_VEC_MODEL = String.format("..%sdata%sword2vec", separator, separator);
     private static final int NUMBER_OF_TOP_LEVEL_CLUSTERS = 30;
     private static final int SIMILARITY_DIMENSIONS = 20;
     private static final int CL_DIMENSIONS = 20;
@@ -69,7 +70,7 @@ public final class AcceptionClusteringExperimentGenerationSim {
     private static final String BING_APP_ID = "dbnary_hyper";
     private static final String BING_APP_KEY = "IecT6H4OjaWo3OtH2pijfeNIx1y1bML3grXz/Gjo/+w=";
     private static final int DEPTH = 1;
-    private static Language[] loadLanguages = {
+    private static final Language[] loadLanguages = {
             Language.FRENCH, Language.ENGLISH, Language.ITALIAN, Language.SPANISH,
             Language.PORTUGUESE, Language.BULGARIAN, Language.CATALAN, Language.FINNISH,
             Language.GERMAN, Language.RUSSIAN, Language.GREEK, Language.TURKISH
@@ -77,13 +78,12 @@ public final class AcceptionClusteringExperimentGenerationSim {
     private static String dbPath = DB_PATH;
 
 
-
     private static int numberOfTopLevelClusters = NUMBER_OF_TOP_LEVEL_CLUSTERS;
     private static int similarityDimensions = SIMILARITY_DIMENSIONS;
     private static int clDimensions = CL_DIMENSIONS;
     private static int enrichmentSize = ENRICHMENT_SIZE;
     private static String word2VecModel = WORD_2_VEC_MODEL;
-    private static Logger logger = LoggerFactory.getLogger(AcceptionClusteringExperimentGenerationSim.class);
+    private static final Logger logger = LoggerFactory.getLogger(AcceptionClusteringExperimentGenerationSim.class);
 
 
     private AcceptionClusteringExperimentGenerationSim() {
@@ -98,11 +98,11 @@ public final class AcceptionClusteringExperimentGenerationSim {
             loadProperties();
 
             logger.info("Generating or Loading Closure...");
-            Set<Sense> closureSet =  generateTranslationClosureWithSignatures(instantiateDBNary());
+            Set<Sense> closureSet = generateTranslationClosureWithSignatures(instantiateDBNary());
 
             logger.info("Loading Word2VecImpl...");
             MultilingualWord2VecLoader word2VecLoader = new MultilingualSerializedModelWord2VecLoader();
-            word2VecLoader.loadGoogle(new File(WORD_2_VEC_MODEL),true);
+            word2VecLoader.loadGoogle(new File(WORD_2_VEC_MODEL), true);
 
             long matrix_time = System.currentTimeMillis();
 
@@ -122,7 +122,7 @@ public final class AcceptionClusteringExperimentGenerationSim {
 
             logger.info("Generating matrix...");
             PairwiseSimilarityMatrixGenerator matrixGenerator =
-                    new PairwiseSimilarityMatrixGeneratorSim(crossLingualSimilarity, closureSet,"newcross2");
+                    new PairwiseSimilarityMatrixGeneratorSim(crossLingualSimilarity, closureSet, "newcross2");
             matrixGenerator.generateMatrix();
 
             logger.info("Clustering...");
@@ -131,7 +131,7 @@ public final class AcceptionClusteringExperimentGenerationSim {
             inputData.normalize();
 
             //Filter filter = new MatrixFactorizationFilter(new NonnegativeMatrixFactorizationKLFactory(),20);
-            Filter filter2 = new MatrixFactorizationFilter(new TapkeeNLMatrixFactorizationFactory(TapkeeNLMatrixFactorization.Method.HLLE), clDimensions);
+            Filter filter2 = new MatrixFactorizationFilter(new TapkeeNLMatrixFactorizationFactory(TapkeeNLMatrixFactorization.Method.HLLE, Paths.get("..", "tapkee-nle-server")), clDimensions);
 
             //filter.apply(inputData);
             filter2.apply(inputData);
@@ -203,7 +203,7 @@ public final class AcceptionClusteringExperimentGenerationSim {
                         //.filter(new NormalizationFilter())
                         //.filter(new MatrixFactorizationFilter(new TapkeeNLMatrixFactorizationFactory(Method.HLLE)))
                 .build();*/
-        return  new Word2VecGlossCosineSimilarity(word2Vec,true);
+        return new Word2VecGlossCosineSimilarity(word2Vec, true);
 
     }
 

@@ -2,12 +2,16 @@ package org.getalp.lexsema.ml.matrix.factorization;
 
 import cern.colt.matrix.tdouble.DoubleMatrix2D;
 
+import java.nio.file.Path;
+
 public class TapkeeNLMatrixFactorizationFactory implements MatrixFactorizationFactory {
-    TapkeeNLMatrixFactorization.Method method;
+    private final Path tapkeePath;
+    private final TapkeeNLMatrixFactorization.Method method;
     int k = -1;
 
-    public TapkeeNLMatrixFactorizationFactory(TapkeeNLMatrixFactorization.Method method) {
+    public TapkeeNLMatrixFactorizationFactory(TapkeeNLMatrixFactorization.Method method, Path tapkeePath) {
         this.method = method;
+        this.tapkeePath = tapkeePath;
     }
 
     @Override
@@ -15,9 +19,9 @@ public class TapkeeNLMatrixFactorizationFactory implements MatrixFactorizationFa
 
         MatrixFactorization fac;
         if(k>0){
-            fac = new TapkeeNLMatrixFactorization(A, method,k);
+            fac = new TapkeeNLMatrixFactorization(tapkeePath,A, method,k);
         } else {
-            fac = new TapkeeNLMatrixFactorization(A, method);
+            fac = new TapkeeNLMatrixFactorization(tapkeePath,A, method);
         }
         fac.compute();
         return fac;

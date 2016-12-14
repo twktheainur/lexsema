@@ -5,6 +5,7 @@ import org.getalp.lexsema.similarity.AnnotableElement;
 import org.getalp.lexsema.similarity.Annotation;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -34,12 +35,12 @@ public class AnnotationProxy implements AnnotableElement {
     }
 
     @Override
-    public Iterable<Annotation> annotations() {
+    public Collection<Annotation> annotations() {
         return Collections.unmodifiableCollection(annotations);
     }
 
     @Override
-    public Iterable<Annotation> annotations(String annotationType) {
+    public Collection<Annotation> annotations(String annotationType) {
         return annotations.stream().filter(annotation -> {
             final String type = annotation.type();
             return type.equals(annotationType);

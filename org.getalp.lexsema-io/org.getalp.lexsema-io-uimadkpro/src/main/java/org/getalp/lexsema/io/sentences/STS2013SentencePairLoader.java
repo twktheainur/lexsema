@@ -67,7 +67,7 @@ public class STS2013SentencePairLoader extends SentencePairLoader {
 
         try {
             // Process
-            TokenConsumer sac = new TokenAnnotationConsumer(Language.ENGLISH);
+            TokenConsumer sac = new TokenAnnotationConsumer(Language.ENGLISH, "");
             while (reader.hasNext()) {
                 reader.getNext(cas);
                 aae.process(cas);

@@ -900,7 +900,7 @@
         <rdfs:label xml:lang="es">Valor</rdfs:label>
         <rdfs:label xml:lang="fr">Valeur</rdfs:label>
         <rdfs:label xml:lang="nl">Waarde</rdfs:label>
-        <rdfs:comment xml:lang="en">This indicates the value of first pseudo-data node. An example of this is definition where the value would generally be first string but it would not be possible to add further annotations, such as source or creation date.</rdfs:comment>
+        <rdfs:comment xml:lang="en">This indicates the value of first pseudo-data node. An example of this is definition where the value would generally be first string but it would not be possible to add further org.getalp.lexsema.io.annotations, such as source or creation date.</rdfs:comment>
     </rdf:Property>
     
 

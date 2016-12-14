@@ -25,16 +25,16 @@ import java.io.IOException;
 
 import static java.util.Arrays.asList;
 
-public abstract class AbstractDKPTextProcessor implements TextProcessor {
+abstract class AbstractDKPTextProcessor implements TextProcessor {
 
     private final Logger logger = LoggerFactory.getLogger(AbstractDKPTextProcessor.class);
     private final Language language;
 
-    protected AbstractDKPTextProcessor(Language language) {
+    AbstractDKPTextProcessor(Language language) {
         this.language = language;
     }
 
-    private Text processSentence(final ResourceSpecifier readerDesc,
+    private Text processSentence(String textId,final ResourceSpecifier readerDesc,
                                      AnalysisEngineDescription... engineDescriptions) throws IOException, org.apache.uima.analysis_engine.AnalysisEngineProcessException, org.apache.uima.collection.CollectionException, ResourceInitializationException {
         ResourceManager resMgr = UIMAFramework.newDefaultResourceManager();
 
@@ -51,7 +51,7 @@ public abstract class AbstractDKPTextProcessor implements TextProcessor {
         reader.typeSystemInit(cas.getTypeSystem());
 
         try {
-            TokenConsumer sac = new TokenAnnotationConsumer(language);
+            TokenConsumer sac = new TokenAnnotationConsumer(language, textId);
             while (reader.hasNext()) {
                 reader.getNext(cas);
                 aae.process(cas);
@@ -78,7 +78,7 @@ public abstract class AbstractDKPTextProcessor implements TextProcessor {
                     StringReader.PARAM_DOCUMENT_ID, documentId,
                     StringReader.PARAM_DOCUMENT_TEXT, sentenceText,
                     StringReader.PARAM_LANGUAGE, language.getISO2Code());
-            return processSentence(cr, defineAnalysisEngine());
+            return processSentence(documentId, cr, defineAnalysisEngine());
         } catch (UIMAException | IOException e) {
             logger.error(e.getLocalizedMessage());
         }
