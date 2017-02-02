@@ -121,8 +121,6 @@ public class DictionaryCreation
         lrloader.setloadSynsetOffsetInsteadOfSenseKey(withSynsetOffsetInsteadOfSenseKey);
         lrloader.setVerbose(verbose);
 
-        //lrloader.addSignatureEnrichment(new WordnetGlossTagEnrichment(wordnetGlossTagPath));
-
         ArrayList<Text> corpora = new ArrayList<Text>();
         
         if (withSemcorThesaurus)
@@ -278,7 +276,7 @@ public class DictionaryCreation
         Scanner sc = new Scanner(new File(senseClustersPath));
         while (sc.hasNextLine())
         {
-            String line = sc.nextLine();
+            String line = sc.nextLine().toLowerCase();
             String[] tokens = line.split(" ");
             List<String> senses = new ArrayList<>(Arrays.asList(tokens));
             senseClusters.add(senses);
@@ -329,20 +327,24 @@ public class DictionaryCreation
 		dict.loadOnlySemeval2007Task7Senses = true;
         dict.withStopwords = true;
         dict.withStemming = true;
-        dict.withIndexing = false;
+        dict.withIndexing = true;
         dict.withShuffling = true;
 		dict.withSenseClusters = true;
         dict.withDefinitions = true;
         dict.withExtendedDefinitions = true;
         dict.verbose = false;
         
-		dict.withSemcorThesaurus = true;
+		dict.withSemcorThesaurus = false;
 		dict.withDSOThesaurus = false;
-		dict.withWNGTThesaurus = true;
+		dict.withWNGTThesaurus = false;
 		dict.withGMBThesaurus = false;
 
+		dict.numberOfWordsFromThesauri = 10;
+
+		dict.write("/home/coyl/lab/wsd/data/dict/test2");
+
+/*
         dict.withSenseClusters = true;
-		dict.numberOfWordsFromThesauri = 200;
 		dict.write("../data/lesk_dict/sem7_wn21_coarse_shuffle_5_200");
 		dict.numberOfWordsFromThesauri = 300;
 		dict.write("../data/lesk_dict/sem7_wn21_coarse_shuffle_5_300");
@@ -361,7 +363,7 @@ public class DictionaryCreation
 
         dict.withSenseClusters = false;
 		dict.write("../data/lesk_dict/sem7_wn21_fine_shuffle_0");
-        
+  */      
 
 		/*
         for (int i = 1 ; i <= 15 ; i++) 

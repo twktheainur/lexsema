@@ -81,6 +81,12 @@ public class SemCorCorpusLoader extends CorpusLoaderImpl implements ContentHandl
                 currentLemma = atts.getValue("lemma");
                 currentId = "";
                 currentSemanticTag = atts.getValue("lexsn");
+                
+                if (currentSemanticTag != null && currentSemanticTag.contains(";"))
+                {
+                    currentSemanticTag = currentSemanticTag.substring(0, currentSemanticTag.indexOf(";"));
+                }
+                
                 break;
             case "punc":
             	if (loadPunc) {
