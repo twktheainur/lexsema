@@ -16,9 +16,9 @@ public final class CachePool {
 
     public static final CacheProvider DEFAULT_CACHE_PROVIDER = CacheProvider.DUMMY;
     private static CacheProvider provider = DEFAULT_CACHE_PROVIDER;
-    private static Logger logger = LoggerFactory.getLogger(CachePool.class);
-    public final static String DEFAULT_HOST = "localhost";
-    private final static CachePooledResourceProvider CACHE_POOLED_RESOURCE_PROVIDER = buildProvider();
+    private static final Logger logger = LoggerFactory.getLogger(CachePool.class);
+    public static final String DEFAULT_HOST = "localhost";
+    private static final CachePooledResourceProvider CACHE_POOLED_RESOURCE_PROVIDER = buildProvider();
 
 
     private static String host = DEFAULT_HOST;
@@ -75,7 +75,7 @@ public final class CachePool {
         return resourceProvider;
     }
 
-    public synchronized static Cache getResource() {
+    public static synchronized Cache getResource() {
         return CACHE_POOLED_RESOURCE_PROVIDER.getResource();
     }
 

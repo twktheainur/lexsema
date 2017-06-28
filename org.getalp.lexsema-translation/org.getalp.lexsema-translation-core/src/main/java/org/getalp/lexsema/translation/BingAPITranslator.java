@@ -7,7 +7,7 @@ import org.slf4j.LoggerFactory;
 
 public class BingAPITranslator implements Translator {
 
-    Logger logger = LoggerFactory.getLogger(BingAPITranslator.class);
+    private final Logger logger = LoggerFactory.getLogger(BingAPITranslator.class);
 
     public BingAPITranslator(String translatorId, String translatorPass) {
         Translate.setClientId(translatorId);

@@ -6,7 +6,7 @@ import java.util.Map;
 
 public class GenericPooledResourceProvider implements CachePooledResourceProvider {
 
-    Map<String, Cache> caches = new HashMap<>();
+    private final Map<String, Cache> caches = new HashMap<>();
 
     @Override
     public synchronized Cache getResource() {

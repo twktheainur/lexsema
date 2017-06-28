@@ -5,7 +5,7 @@ import java.util.Map;
 
 
 public class MapCache implements Cache {
-    private Map<String, String> map = new HashMap<>();
+    private final Map<String, String> map = new HashMap<>();
 
     @Override
     public String get(String key) {
@@ -22,9 +22,9 @@ public class MapCache implements Cache {
         String ret;
         ret = map.remove(key);
         if (ret == null) {
-            return 0l;
+            return 0L;
         } else {
-            return 1l;
+            return 1L;
         }
     }
 
@@ -35,7 +35,7 @@ public class MapCache implements Cache {
 
     @Override
     public Long expire(String key, int seconds) {
-        return 0l;
+        return 0L;
     }
 
     @Override

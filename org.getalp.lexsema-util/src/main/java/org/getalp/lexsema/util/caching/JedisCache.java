@@ -11,10 +11,10 @@ import java.lang.ref.WeakReference;
  * Wrapper for Jedis
  */
 class JedisCache implements Cache {
-    private Jedis cache;
-    private WeakReference<JedisPool> parentPool;
+    private final Jedis cache;
+    private final WeakReference<JedisPool> parentPool;
 
-    public JedisCache(Jedis cache, JedisPool parentPool) {
+    JedisCache(Jedis cache, JedisPool parentPool) {
         this.cache = cache;
         this.parentPool = new WeakReference<>(parentPool);
     }

@@ -15,7 +15,7 @@ import java.util.concurrent.Future;
 public class MultiThreadConfigurationScorerWithCache implements ConfigurationScorer
 {
     private final SimilarityMeasure similarityMeasure;
-    
+
     private double[][][][] cache;
     
     private Document currentDocument;
