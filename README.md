@@ -22,7 +22,7 @@ In order to install it, you fist need to clone the repository and enter the lexs
 ```
 mvn install 
 ```
-
+ 
 #License
 LexSemA is released under the terms of the GNU General Public License version 3.0
 
