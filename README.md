@@ -14,7 +14,7 @@ The lexSemA project is a toolkit for lexico-semantic language resources at sever
 
 The project was mainly developed in the GETALP NLP research group in Grenoble, France. 
 
-#Installation
+##Installation
 
 Lexsema is a multi-module maven project. You will need a Java 1.8 JDK as well as apache-maven 3.x installed.
 
@@ -23,10 +23,10 @@ In order to install it, you fist need to clone the repository and enter the lexs
 mvn install 
 ```
  
-#License
+##License
 LexSemA is released under the terms of the GNU General Public License version 3.0
 
-#Contributors
+##Contributors
 
     - Andon Tchechmedjiev
     - Loïc Vial
