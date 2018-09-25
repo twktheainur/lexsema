@@ -15,11 +15,11 @@ import java.util.List;
  */
 public final class LexicalSensesOfLexicalEntryQueryProcessor extends AbstractQueryProcessor<LexicalSense> {
 
-    LexicalEntry lexicalEntry;
-    LexicalResourceEntityFactory lexicalResourceEntityFactory;
+    private final LexicalEntry lexicalEntry;
+    private final LexicalResourceEntityFactory lexicalResourceEntityFactory;
 
-    public LexicalSensesOfLexicalEntryQueryProcessor(LexicalResource lexicalResource,
-                                                     LexicalEntry lexicalEntry) {
+    public LexicalSensesOfLexicalEntryQueryProcessor(final LexicalResource lexicalResource,
+                                                     final LexicalEntry lexicalEntry) {
         super(lexicalResource.getGraph());
         lexicalResourceEntityFactory = lexicalResource.getLexicalResourceEntityFactory();
         this.lexicalEntry = lexicalEntry;
@@ -27,28 +27,28 @@ public final class LexicalSensesOfLexicalEntryQueryProcessor extends AbstractQue
     }
 
     @Override
-    protected final void defineQuery() {
+    protected void defineQuery() {
         setQuery(new ARQSelectQueryImpl());
-        String resultVar = "ls";
+        final String resultVar = "ls";
         addTriple(Var.alloc(resultVar),
                 getNode("rdf:type"),
-                getNode("lemon:LexicalSense"));
+                getNode("ontolex:LexicalSense"));
         addTriple(lexicalEntry.getNode(),
-                getNode("lemon:sense"),
+                getNode("ontolex:sense"),
                 Var.alloc(resultVar));
         addResultVar(resultVar);
     }
 
-    private LexicalResourceEntity getEntity(Class<? extends LexicalResourceEntity> productType, String uri, LexicalResourceEntity parent) {
+    private LexicalResourceEntity getEntity(final Class<? extends LexicalResourceEntity> productType, final String uri, final LexicalResourceEntity parent) {
         return lexicalResourceEntityFactory.getEntity(productType, uri, parent);
     }
 
     @Override
     public List<LexicalSense> processResults() {
-        List<LexicalSense> senses = new ArrayList<>();
+        final List<LexicalSense> senses = new ArrayList<>();
         while (hasNextResult()) {
-            QuerySolution qs = nextSolution();
-            RDFNode resultUri = qs.get("ls");
+            final QuerySolution qs = nextSolution();
+            final RDFNode resultUri = qs.get("ls");
             senses.add((LexicalSense) getEntity(LexicalSense.class, resultUri.toString(), lexicalEntry));
         }
         return senses;

@@ -14,7 +14,7 @@ public interface ARQQuery {
      * Run a SPARQL Query
      *
      * @param limit Maximum number of results retrieved
-     * @return Returns a set of a number <code>limit</code> of the results
+     * @return Returns a set of a number {@code limit} of the results
      */
     ResultSet runQuery(int limit);
 
@@ -28,61 +28,61 @@ public interface ARQQuery {
     /**
      * Adds a variable as a annotresult variable in the ResultSet
      *
-     * @param var The variable name to add
+     * @param resultVariable The variable name to add
      */
-    void addResult(String var);
+    void addResult(String resultVariable);
 
     /**
-     * Adds a from statement having for target the URI in <code>Graph</code> <code>g</code>
+     * Adds a from statement having for target the URI in {@code Graph} {@code graph}
      *
-     * @param g the graph the uri of which is to be added to the query
+     * @param graph the graph the uri of which is to be added to the query
      */
-    void addToFromStatement(Graph g);
+    void addToFromStatement(Graph graph);
 
     /**
-     * Initialize the query on <code>Graph</code> <code>g</code> with where statement <code>Triple</code> defined in <code>triples</code>
-     * and annotresult variables defined in <code>resultVars</code>
+     * Initialize the query on {@code Graph} {@code graph} with where statement {@code Triple} defined in {@code triples}
+     * and annotresult variables defined in {@code resultVars}
      *
-     * @param g          The <code>Graph</code> from which to query
+     * @param graph          The {@code Graph} from which to query
      * @param triples    The triples to add to the WHERE statement
      * @param resultVars Result variables to consider for the output
      * @return The results of the query
      */
-    public ResultSet runQuery(Graph g, Iterable<Triple> triples, Iterable<Triple> optionalTriples, Iterable<String> resultVars);
+    public ResultSet runQuery(Graph graph, Iterable<Triple> triples, Iterable<Triple> optionalTriples, Iterable<String> resultVars);
 
     /**
-     * Initialize the query on <code>Graph</code> <code>g</code> with where statement <code>Triple</code> defined in <code>triples</code>
-     * and annotresult variables defined in <code>resultVars</code>. <code>filters</code> is a list of FILTER expressions for
+     * Initialize the query on {@code Graph} {@code graph} with where statement {@code Triple} defined in {@code triples}
+     * and annotresult variables defined in {@code resultVars}. {@code filters} is a list of FILTER expressions for
      * the query.
      *
-     * @param g          The <code>Graph</code> from which to query
+     * @param graph          The {@code Graph} from which to query
      * @param triples    The triples to add to the WHERE statement
      * @param resultVars Result variables to consider for the output
      * @param filters    The filter list.
      * @return The results of the query
      */
-    public ResultSet runQuery(Graph g, Iterable<Triple> triples, Iterable<Triple> optionalTriples, Iterable<String> resultVars, Iterable<Expr> filters);
+    public ResultSet runQuery(Graph graph, Iterable<Triple> triples, Iterable<Triple> optionalTriples, Iterable<String> resultVars, Iterable<Expr> filters);
 
     /**
-     * Initialize the query on <code>Graph</code> <code>g</code> with where statement <code>Triple</code> defined in <code>triples</code>
-     * and annotresult variables defined in <code>resultVars</code>
+     * Initialize the query on {@code Graph} {@code graph} with where statement {@code Triple} defined in {@code triples}
+     * and annotresult variables defined in {@code resultVars}
      *
-     * @param g          The <code>Graph</code> from which to query
+     * @param graph          The {@code Graph} from which to query
      * @param triples    The triples to add to the WHERE statement
      * @param resultVars Result variables to consider for the output
      */
-    public void initialize(Graph g, Iterable<Triple> triples, Iterable<Triple> optionalTriples, Iterable<String> resultVars);
+    public void initialize(Graph graph, Iterable<Triple> triples, Iterable<Triple> optionalTriples, Iterable<String> resultVars);
 
     /**
-     * Initialize the query on <code>Graph</code> <code>g</code> with where statement <code>Triple</code> defined in <code>triples</code>
-     * and annotresult variables defined in <code>resultVars</code>. <code>filters</code> is a list of FILTER expressions for
+     * Initialize the query on {@code Graph} {@code graph} with where statement {@code Triple} defined in {@code triples}
+     * and annotresult variables defined in {@code resultVars}. {@code filters} is a list of FILTER expressions for
      * the query.
      *
-     * @param g          The <code>Graph</code> from which to query.
+     * @param graph          The {@code Graph} from which to query.
      * @param triples    The triples to add to the WHERE statement.
      * @param resultVars Result variables to consider for the output.
      * @param filters    The filter list.
      */
-    public void initialize(Graph g, Iterable<Triple> triples, Iterable<Triple> optionalTriples, Iterable<String> resultVars, Iterable<Expr> filters);
+    public void initialize(Graph graph, Iterable<Triple> triples, Iterable<Triple> optionalTriples, Iterable<String> resultVars, Iterable<Expr> filters);
 
 }

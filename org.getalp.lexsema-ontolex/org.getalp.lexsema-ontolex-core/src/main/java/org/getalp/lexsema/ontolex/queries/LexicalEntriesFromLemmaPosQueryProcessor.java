@@ -9,12 +9,11 @@ import com.hp.hpl.jena.sparql.expr.E_Str;
 import com.hp.hpl.jena.sparql.expr.Expr;
 import com.hp.hpl.jena.sparql.expr.ExprVar;
 import com.hp.hpl.jena.sparql.expr.nodevalue.NodeValueString;
-import org.getalp.lexsema.ontolex.LexicalResource;
-import org.getalp.lexsema.util.Language;
 import org.getalp.lexsema.ontolex.LexicalEntry;
+import org.getalp.lexsema.ontolex.LexicalResource;
 import org.getalp.lexsema.ontolex.LexicalResourceEntity;
 import org.getalp.lexsema.ontolex.factories.entities.LexicalResourceEntityFactory;
-import org.getalp.lexsema.ontolex.Graph;
+import org.getalp.lexsema.util.Language;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -29,15 +28,15 @@ public final class LexicalEntriesFromLemmaPosQueryProcessor extends AbstractQuer
 
     private static final String ENTRY_RESULT_VAR = "le";
     private static final String WRITTEN_REP_VAR = "wf";
-    LexicalResourceEntityFactory lexicalResourceEntityFactory;
+    private final LexicalResourceEntityFactory lexicalResourceEntityFactory;
 
     private String lemma = "";
     private String pos = "";
     private final Language language;
 
     @SuppressWarnings("FeatureEnvy")
-    public LexicalEntriesFromLemmaPosQueryProcessor(LexicalResource lexicalResource,
-                                                    String lemma, String pos) {
+    public LexicalEntriesFromLemmaPosQueryProcessor(final LexicalResource lexicalResource,
+                                                    final String lemma, final String pos) {
         super(lexicalResource.getGraph());
         lexicalResourceEntityFactory = lexicalResource.getLexicalResourceEntityFactory();
         this.lemma = lemma;
@@ -47,49 +46,48 @@ public final class LexicalEntriesFromLemmaPosQueryProcessor extends AbstractQuer
     }
 
     @Override
-    protected final void defineQuery() {
-
-        String LEMMA_CF_VAR = "cf";
+    protected void defineQuery() {
 
         setQuery(new ARQSelectQueryImpl());
         addTriple(Var.alloc(ENTRY_RESULT_VAR),
                 getNode("rdf:type"),
-                getNode("lemon:LexicalEntry"));
+                getNode("ontolex:LexicalEntry"));
+        final String LEMMA_CF_VAR = "cf";
         addTriple(Var.alloc(ENTRY_RESULT_VAR),
-                getNode("lemon:canonicalForm"),
+                getNode("ontolex:canonicalForm"),
                 Var.alloc(LEMMA_CF_VAR));
         if (language != null) {
             addTriple(Var.alloc(LEMMA_CF_VAR),
-                    getNode("lemon:writtenRep"),
+                    getNode("ontolex:writtenRep"),
                     NodeFactory.createLiteral(lemma, language.getISO2Code(), null));
         } else {
             addTriple(Var.alloc(LEMMA_CF_VAR),
-                    getNode("lemon:writtenRep"),
+                    getNode("ontolex:writtenRep"),
                     Var.alloc(WRITTEN_REP_VAR));
-            Expr lemmaRegexMatch = new E_Equals(new E_Str(new ExprVar(WRITTEN_REP_VAR)), new NodeValueString(lemma));
+            final Expr lemmaRegexMatch = new E_Equals(new E_Str(new ExprVar(WRITTEN_REP_VAR)), new NodeValueString(lemma));
             addFilter(lemmaRegexMatch);
         }
 
         addTriple(Var.alloc(ENTRY_RESULT_VAR),
-                getNode("lexinfo:partOfSpeech"),
+                getNode("ontolex:partOfSpeech"),
                 getNode(pos));
         addResultVar(ENTRY_RESULT_VAR);
         //addResultVar(WRITTEN_REP_VAR);
     }
 
-    private LexicalEntry getEntity(String uri, LexicalResourceEntity parent, Map<String, String> parameters) {
+    private LexicalEntry getEntity(final String uri, final LexicalResourceEntity parent, final Map<String, String> parameters) {
         return (LexicalEntry) lexicalResourceEntityFactory.getEntity(LexicalEntry.class, uri, parent, parameters);
     }
 
     @Override
     public List<LexicalEntry> processResults() {
-        List<LexicalEntry> entries = new ArrayList<>();
+        final List<LexicalEntry> entries = new ArrayList<>();
         while (hasNextResult()) {
-            QuerySolution qs = nextSolution();
-            RDFNode resultUri = qs.get(ENTRY_RESULT_VAR);
-            String[] le = String.valueOf(resultUri).split("/");
+            final QuerySolution qs = nextSolution();
+            final RDFNode resultUri = qs.get(ENTRY_RESULT_VAR);
+            final String[] le = String.valueOf(resultUri).split("/");
 
-            Map<String, String> properties = new HashMap<>();
+            final Map<String, String> properties = new HashMap<>();
             properties.put("canonicalFormWrittenRep", lemma);
             properties.put("partOfSpeech", pos);
 

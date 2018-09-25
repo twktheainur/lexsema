@@ -10,19 +10,19 @@ public interface ARQSelectQuery extends ARQQuery {
     /**
      * Sets whether or not the results of the SELECT query should be distinct by adding the DISTINCT keyword
      *
-     * @param b Add the distinct keyword to the query?
+     * @param isDistinct Add the distinct keyword to the query?
      */
     @SuppressWarnings("BooleanParameter")
-    void setDistinct(boolean b);
+    void setDistinct(boolean isDistinct);
 
     public void addOptionalToWhereStatement(Triple t);
 
     /**
      * Add a condition triple to the where statement the query
      *
-     * @param t The triple to add to the where statement
+     * @param triple The triple to add to the where statement
      */
-    void addToWhereStatement(Triple t);
+    void addToWhereStatement(Triple triple);
 
     /**
      * Adds an expression as a filter to the query

@@ -27,7 +27,7 @@ public abstract class AbstractQueryProcessor<T> implements QueryProcessor<T> {
     private final Collection<String> resultVars = new ArrayList<>();
     private final Collection<Expr> filters = new ArrayList<>();
 
-    protected AbstractQueryProcessor(Graph graph) {
+    protected AbstractQueryProcessor(final Graph graph) {
         this.graph = graph;
         model = graph.getModel();
     }
@@ -38,7 +38,7 @@ public abstract class AbstractQueryProcessor<T> implements QueryProcessor<T> {
     }
 
 
-    protected Node getNode(String uri) {
+    protected Node getNode(final String uri) {
         return model.getNode(uri);
     }
 
@@ -47,19 +47,19 @@ public abstract class AbstractQueryProcessor<T> implements QueryProcessor<T> {
         query.initialize(graph, triples, optionalTriples, resultVars, filters);
     }
 
-    protected void addTriple(Node first, Node second, Node third) {
+    protected void addTriple(final Node first, final Node second, final Node third) {
         triples.add(Triple.create(first, second, third));
     }
 
-    protected void addOptionalTriple(Node first, Node second, Node third) {
+    protected void addOptionalTriple(final Node first, final Node second, final Node third) {
         optionalTriples.add(Triple.create(first, second, third));
     }
 
-    protected void addFilter(Expr e) {
+    protected void addFilter(final Expr e) {
         filters.add(e);
     }
 
-    protected void addResultVar(String variable) {
+    protected void addResultVar(final String variable) {
         resultVars.add(variable);
     }
 
@@ -78,7 +78,7 @@ public abstract class AbstractQueryProcessor<T> implements QueryProcessor<T> {
         return query;
     }
 
-    protected void setQuery(ARQQuery query) {
+    protected void setQuery(final ARQQuery query) {
         this.query = query;
     }
 

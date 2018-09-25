@@ -1,14 +1,7 @@
 package org.getalp.lexsema.ontolex;
 
 
+@FunctionalInterface
 public interface RelationType {
-    String getFilter();
-
-    String getPrefix();
-
-    RelationType getType();
-
-    RelationType getInverseType();
-
     String getURI();
 }

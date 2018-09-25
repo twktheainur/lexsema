@@ -8,7 +8,7 @@ public interface LexicalConcept extends LexicalResourceEntity {
 
     void setDefinition(String definition);
 
-    LexicalSense getLexicalizingSense();
+    LexicalSense getLexicalizedSense();
 
     boolean isNull();
 }

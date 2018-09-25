@@ -21,11 +21,11 @@ import java.util.List;
  */
 public class ARQSelectQueryImpl implements ARQSelectQuery {
 
-    private Query query;
-    private ElementTriplesBlock whereBlock;
-    private List<ElementTriplesBlock> optionalBlocks;
-    private List<Expr> filters;
-    private Store store;
+    private final Query query;
+    private final ElementTriplesBlock whereBlock;
+    private final List<ElementTriplesBlock> optionalBlocks;
+    private final List<Expr> filters;
+    private final Store store;
 
     /*
      * Internal Initializations
@@ -38,22 +38,19 @@ public class ARQSelectQueryImpl implements ARQSelectQuery {
         filters = new ArrayList<>();
     }
 
-    public ARQSelectQueryImpl() {
-    }
-
     @Override
     public ResultSet runQuery() {
         return runQuery(0);
     }
 
     @Override
-    public ResultSet runQuery(int limit) {
-        ElementGroup eg = new ElementGroup();
+    public ResultSet runQuery(final int limit) {
+        final ElementGroup eg = new ElementGroup();
         eg.addElement(whereBlock);
-        for (ElementTriplesBlock ob : optionalBlocks) {
+        for (final ElementTriplesBlock ob : optionalBlocks) {
             eg.addElement(new ElementOptional(ob));
         }
-        for (Expr filter : filters) {
+        for (final Expr filter : filters) {
             eg.addElementFilter(new ElementFilter(filter));
         }
         query.setQueryPattern(eg);
@@ -65,30 +62,30 @@ public class ARQSelectQueryImpl implements ARQSelectQuery {
     }
 
     @Override
-    public void addToWhereStatement(Triple t) {
-        whereBlock.addTriple(t);
+    public void addToWhereStatement(final Triple triple) {
+        whereBlock.addTriple(triple);
     }
 
     @Override
-    public void addOptionalToWhereStatement(Triple t) {
-        ElementTriplesBlock optionalBlock = new ElementTriplesBlock();
+    public void addOptionalToWhereStatement(final Triple t) {
+        final ElementTriplesBlock optionalBlock = new ElementTriplesBlock();
         optionalBlock.addTriple(t);
         optionalBlocks.add(optionalBlock);
     }
 
     @Override
-    public void addResult(String var) {
-        query.addResultVar(var);
+    public void addResult(final String resultVariable) {
+        query.addResultVar(resultVariable);
     }
 
     @Override
-    public void addFilter(Expr filter) {
+    public void addFilter(final Expr filter) {
         filters.add(filter);
     }
 
     @Override
-    public void addToFromStatement(Graph g) {
-        String uri = g.getJenaNode().toString();
+    public void addToFromStatement(final Graph graph) {
+        final String uri = graph.getJenaNode().toString();
         //query.addGraphURI(uri.substring(0,uri.length()-1));
         //query.addGraphURI(uri);
     }
@@ -96,25 +93,25 @@ public class ARQSelectQueryImpl implements ARQSelectQuery {
     /**
      * Set whether the annotresult n-uple should be distinct
      *
-     * @param b when b is true, the DISTINCT keyword is added to the query.
+     * @param isDistinct when b is true, the DISTINCT keyword is added to the query.
      */
     @SuppressWarnings("all") /*Boolean parameter not recommended unless used in a setter*/
     @Override
-    public void setDistinct(boolean b) {
-        query.setDistinct(b);
+    public void setDistinct(boolean isDistinct) {
+        query.setDistinct(isDistinct);
     }
 
 
     @Override
-    public ResultSet runQuery(Graph g, Iterable<Triple> triples, Iterable<Triple> optionalTriples, Iterable<String> resultVars) {
-        initialize(g, triples, optionalTriples, resultVars);
+    public ResultSet runQuery(final Graph graph, final Iterable<Triple> triples, final Iterable<Triple> optionalTriples, final Iterable<String> resultVars) {
+        initialize(graph, triples, optionalTriples, resultVars);
         return runQuery();
     }
 
     @Override
-    public void initialize(Graph g, Iterable<Triple> triples, Iterable<Triple> optionalTriples, Iterable<String> resultVars) {
-        addToFromStatement(g);
-        for (Triple t : triples) {
+    public void initialize(final Graph graph, final Iterable<Triple> triples, final Iterable<Triple> optionalTriples, final Iterable<String> resultVars) {
+        addToFromStatement(graph);
+        for (final Triple t : triples) {
             addToWhereStatement(t);
         }
         if (optionalTriples != null && optionalTriples.iterator().hasNext()) {
@@ -129,14 +126,14 @@ public class ARQSelectQueryImpl implements ARQSelectQuery {
 
 
     @Override
-    public ResultSet runQuery(Graph g, Iterable<Triple> triples, Iterable<Triple> optionalTriples, Iterable<String> resultVars, Iterable<Expr> filters) {
-        initialize(g, triples, optionalTriples, resultVars, filters);
+    public ResultSet runQuery(Graph graph, Iterable<Triple> triples, Iterable<Triple> optionalTriples, Iterable<String> resultVars, Iterable<Expr> filters) {
+        initialize(graph, triples, optionalTriples, resultVars, filters);
         return runQuery();
     }
 
     @Override
-    public void initialize(Graph g, Iterable<Triple> triples, Iterable<Triple> optionalTriples, Iterable<String> resultVars, Iterable<Expr> filters) {
-        addToFromStatement(g);
+    public void initialize(Graph graph, Iterable<Triple> triples, Iterable<Triple> optionalTriples, Iterable<String> resultVars, Iterable<Expr> filters) {
+        addToFromStatement(graph);
         for (Triple t : triples) {
             addToWhereStatement(t);
         }
